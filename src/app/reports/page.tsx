@@ -29,7 +29,7 @@ export default function ReportsPage() {
   }, [isAdmin]);
 
   return (
-    <div className="space-y-6 w-full max-w-full overflow-x-hidden">
+    <div className="space-y-6">
       <PageTitle
         description="Comprehensive daily, weekly, monthly, and yearly habit consistency analytics and adherence reports."
         eyebrow="Reports & Analytics (रिपोर्ट्स और विश्लेषण)"

@@ -38,7 +38,7 @@ export default function TimelinePage() {
   }
 
   return (
-    <div className="space-y-6 w-full max-w-full overflow-x-hidden">
+    <div className="space-y-6">
       <PageTitle
         eyebrow="Timeline · एकीकृत स्वास्थ्य यात्रा"
         title="मेरी स्वास्थ्य यात्रा"
