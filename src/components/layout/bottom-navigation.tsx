@@ -11,7 +11,7 @@ export function BottomNavigation() {
   return (
     <nav
       aria-label="Mobile navigation"
-      className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-surface/95 backdrop-blur-md lg:hidden"
+      className="frost fixed inset-x-0 bottom-0 z-40 border-t border-line lg:hidden"
     >
       <div className="mx-auto grid max-w-md grid-cols-5 gap-1 px-2 pt-1.5 pb-[max(0.5rem,env(safe-area-inset-bottom))]">
         {primaryNavigation.map((item) => {
@@ -26,7 +26,7 @@ export function BottomNavigation() {
                 // minimum tap target (§44).
                 "pressable flex min-h-14 flex-col items-center justify-center gap-0.5 rounded-control px-1",
                 active
-                  ? "bg-brand-soft text-brand-ink"
+                  ? "bg-brand-soft text-brand-ink shadow-e1"
                   : "text-ink-muted hover:bg-surface-sunken hover:text-ink",
               )}
               href={item.href}

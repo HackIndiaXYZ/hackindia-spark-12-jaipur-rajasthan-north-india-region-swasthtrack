@@ -2630,6 +2630,17 @@ export interface DashboardOverview {
   todayMedicineLogs: MedicineLogEntry[];
   todayWeight: WeightLogEntry | null;
   todaySleep: SleepLogEntry | null;
+  /**
+   * Trailing series for the dashboard sparklines, oldest to newest. Only real
+   * readings are included — gaps are omitted rather than interpolated, so a
+   * sparkline never draws a line through a day that was not measured (§43).
+   */
+  trends: {
+    systolic: number[];
+    weight: number[];
+    steps: number[];
+    calories: number[];
+  };
   checklist: DailyChecklistEntry[];
   isRealDatabaseConnected: boolean;
 }
@@ -2677,6 +2688,36 @@ export async function getDashboardOverview(patientId?: string): Promise<Dashboar
   const todayActivity = actList.find((a) => a.date === today) || null;
   const todaySleep = sleepList.find((sl) => sl.date === today) || null;
 
+  // Services return newest-first; sparklines read left to right in time.
+  const caloriesByDay = new Map<string, number>();
+  foodList.forEach((f) => {
+    const day = f.consumed_at.slice(0, 10);
+    caloriesByDay.set(day, (caloriesByDay.get(day) || 0) + Number(f.calories || 0));
+  });
+
+  const trends = {
+    systolic: bpList
+      .slice(0, 8)
+      .map((b) => Number(b.systolic))
+      .filter((n) => Number.isFinite(n) && n > 0)
+      .reverse(),
+    weight: weightList
+      .slice(0, 8)
+      .map((w) => Number(w.weight_kg))
+      .filter((n) => Number.isFinite(n) && n > 0)
+      .reverse(),
+    steps: actList
+      .slice(0, 8)
+      .map((a) => Number(a.steps))
+      .filter((n) => Number.isFinite(n) && n > 0)
+      .reverse(),
+    calories: Array.from(caloriesByDay.entries())
+      .sort((a, b) => (a[0] < b[0] ? -1 : 1))
+      .slice(-8)
+      .map(([, kcal]) => Math.round(kcal))
+      .filter((n) => n > 0),
+  };
+
   const activeMeds = medicines.filter((m) => m.active);
   
   // Find the latest log for each medicine today
@@ -2713,6 +2754,7 @@ export async function getDashboardOverview(patientId?: string): Promise<Dashboar
     todayMedicineLogs: medLogs,
     todayWeight,
     todaySleep,
+    trends,
     checklist,
     isRealDatabaseConnected: isSupabaseConfigured,
   };

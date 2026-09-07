@@ -56,6 +56,14 @@ export const DEFAULT_SETTINGS: PatientSettings = {
   },
 };
 
+/**
+ * `patient_settings` is queried by the app but exists in no migration, so every
+ * read returned 404 and the dashboard fired the same failing request on each
+ * load. Once the table is confirmed missing we stop asking for the rest of the
+ * session and serve the local fallback directly (§47).
+ */
+let _remoteSettingsUnavailable = false;
+
 let _settingsCache: PatientSettings | null = null;
 let _settingsCacheTime = 0;
 const SETTINGS_CACHE_TTL = 60000; // 1 minute
@@ -79,13 +87,18 @@ export async function getPatientSettings(patientId?: string): Promise<PatientSet
 
   let settings: PatientSettings | null = null;
 
-  if (isSupabaseConfigured) {
+  if (isSupabaseConfigured && !_remoteSettingsUnavailable) {
     try {
       const { data, error } = await (supabase as any)
         .from("patient_settings")
         .select("*")
         .eq("patient_id", pid)
         .single();
+
+      // PGRST205 / 42P01 both mean "no such table".
+      if (error && (error.code === "PGRST205" || error.code === "42P01")) {
+        _remoteSettingsUnavailable = true;
+      }
 
       if (!error && data) {
         settings = {
@@ -104,7 +117,7 @@ export async function getPatientSettings(patientId?: string): Promise<PatientSet
         };
       }
     } catch {
-      // Supabase table might not exist yet, fallback gracefully
+      _remoteSettingsUnavailable = true;
     }
   }
 

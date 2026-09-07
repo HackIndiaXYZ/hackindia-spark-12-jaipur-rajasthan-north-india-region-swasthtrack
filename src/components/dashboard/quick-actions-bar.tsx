@@ -12,6 +12,7 @@ import {
 import type { LucideIcon } from "lucide-react";
 import { Card, metricChipClasses, type MetricTone } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Pressable, Reveal, Stagger } from "@/components/motion/primitives";
 import { cn } from "@/lib/utils";
 
 type QuickActionsBarProps = {
@@ -29,6 +30,8 @@ type QuickAction = {
   hint: string;
   icon: LucideIcon;
   tone: MetricTone;
+  /** Coloured ambient shadow on hover — one per vital. */
+  glow: string;
   onClick: () => void;
 };
 
@@ -53,6 +56,7 @@ export function QuickActionsBar({
       hint: "ऊपर / नीचे वाला",
       icon: HeartPulse,
       tone: "bp",
+      glow: "hover:shadow-glow-bp",
       onClick: onOpenBP,
     },
     {
@@ -61,6 +65,7 @@ export function QuickActionsBar({
       hint: "kg में मापें",
       icon: Scale,
       tone: "weight",
+      glow: "hover:shadow-glow-weight",
       onClick: onOpenWeight,
     },
     {
@@ -69,6 +74,7 @@ export function QuickActionsBar({
       hint: "रोटी, दाल, फल…",
       icon: Utensils,
       tone: "food",
+      glow: "hover:shadow-glow-food",
       onClick: onOpenFood,
     },
     {
@@ -77,6 +83,7 @@ export function QuickActionsBar({
       hint: "खुराक व समय",
       icon: Pill,
       tone: "meds",
+      glow: "hover:shadow-glow-meds",
       onClick: onOpenMedicine,
     },
     {
@@ -85,6 +92,7 @@ export function QuickActionsBar({
       hint: "सैर व टहलना",
       icon: Footprints,
       tone: "activity",
+      glow: "hover:shadow-glow-activity",
       onClick: onOpenActivity,
     },
     {
@@ -93,58 +101,73 @@ export function QuickActionsBar({
       hint: "रात की नींद",
       icon: Moon,
       tone: "sleep",
+      glow: "hover:shadow-glow-sleep",
       onClick: onOpenSleep,
     },
   ];
 
   return (
-    <Card>
-      <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+    <Card className="surface-lift" tone="default">
+      <div className="mb-3.5 flex flex-wrap items-center justify-between gap-2">
         <h2 className="flex items-center gap-2 text-base font-semibold text-ink">
-          <PlusCircle aria-hidden className="h-4.5 w-4.5 text-brand" />
+          <span className="grid h-7 w-7 place-items-center rounded-field grad-spring text-white shadow-e1">
+            <PlusCircle aria-hidden className="h-4 w-4" />
+          </span>
           <span lang="hi">आज क्या दर्ज करना है?</span>
         </h2>
         <Badge variant="brand">Quick Log · 1 टैप</Badge>
       </div>
 
-      <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-6">
-        {actions.map((action) => {
+      <Stagger className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-6">
+        {actions.map((action, i) => {
           const Icon = action.icon;
           return (
-            <button
-              type="button"
-              key={action.label}
-              onClick={action.onClick}
-              aria-label={`${action.label} दर्ज करें — ${action.hindiLabel}`}
-              className={cn(
-                "pressable flex min-h-24 cursor-pointer flex-col items-center justify-center gap-1.5",
-                "rounded-card border border-line bg-surface p-3 text-center",
-                "hover:border-brand-line hover:bg-brand-softer",
-              )}
-            >
-              <span
+            <Reveal key={action.label} index={i}>
+              <Pressable
+                onClick={action.onClick}
+                ariaLabel={`${action.label} दर्ज करें — ${action.hindiLabel}`}
                 className={cn(
-                  "grid h-9 w-9 place-items-center rounded-control",
-                  metricChipClasses[action.tone],
+                  "group surface-lift relative flex h-full w-full flex-col items-center",
+                  "justify-center gap-2 overflow-hidden rounded-card p-3.5 text-center",
+                  "transition-shadow duration-200",
+                  action.glow,
                 )}
               >
-                <Icon aria-hidden className="h-4.5 w-4.5" />
-              </span>
-              <span className="w-full">
+                {/* Colour wash that blooms on hover. At rest the tile is
+                    white, so six of them side by side stay calm. */}
                 <span
-                  lang="hi"
-                  className="block truncate text-sm font-semibold leading-tight text-ink"
+                  aria-hidden
+                  className={cn(
+                    "pointer-events-none absolute inset-x-0 -bottom-8 h-16 opacity-0 blur-2xl",
+                    "transition-opacity duration-300 group-hover:opacity-70",
+                    metricChipClasses[action.tone],
+                  )}
+                />
+                <span
+                  className={cn(
+                    "relative grid h-11 w-11 place-items-center rounded-control shadow-e1",
+                    "transition-transform duration-200 group-hover:scale-105",
+                    metricChipClasses[action.tone],
+                  )}
                 >
-                  {action.hindiLabel}
+                  <Icon aria-hidden className="h-5 w-5" />
                 </span>
-                <span className="block truncate text-2xs text-ink-subtle">
-                  {action.hint}
+                <span className="relative w-full">
+                  <span
+                    lang="hi"
+                    className="block truncate text-sm font-semibold leading-tight text-ink"
+                  >
+                    {action.hindiLabel}
+                  </span>
+                  <span className="block truncate text-2xs text-ink-subtle">
+                    {action.hint}
+                  </span>
                 </span>
-              </span>
-            </button>
+              </Pressable>
+            </Reveal>
           );
         })}
-      </div>
+      </Stagger>
     </Card>
   );
 }

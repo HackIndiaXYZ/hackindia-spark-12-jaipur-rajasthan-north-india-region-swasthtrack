@@ -5,9 +5,11 @@ import { cn } from "@/lib/utils";
 type CardTone = "default" | "sunken" | "raised";
 
 const toneClasses: Record<CardTone, string> = {
-  default: "bg-surface shadow-e1",
+  // Every card carries the same top highlight as the rest of the product, so
+  // surfaces read as lit from one direction (§38).
+  default: "bg-surface shadow-e2",
   sunken: "bg-surface-sunken shadow-none",
-  raised: "bg-surface shadow-e2",
+  raised: "surface-lift",
 };
 
 type CardProps = ComponentProps<"section"> & {
@@ -31,7 +33,8 @@ export function Card({
   return (
     <section
       className={cn(
-        "rounded-card border border-line",
+        "rounded-card",
+        tone === "raised" ? "" : "border border-line",
         toneClasses[tone],
         !flush && "p-4 sm:p-5",
         className,

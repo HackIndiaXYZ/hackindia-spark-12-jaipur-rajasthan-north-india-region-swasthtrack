@@ -15,6 +15,14 @@ import {
 import { calculatePersonalBaseline } from "./personal-baseline-service";
 import { getPatientSettings } from "./settings-service";
 
+/**
+ * `health_predictions` is written by this service but exists in no migration,
+ * so every dashboard load produced a failing upsert. Once confirmed missing we
+ * stop writing for the rest of the session; predictions are still cached
+ * locally and still returned to the caller.
+ */
+let _remotePredictionsUnavailable = false;
+
 export type ConfidenceLevel = "High" | "Medium" | "Low";
 
 export interface HealthPrediction {
@@ -249,13 +257,16 @@ export async function generateHealthPredictions(
   }
 
   // Store in LocalStorage and Supabase if configured
-  if (isSupabaseConfigured) {
+  if (isSupabaseConfigured && !_remotePredictionsUnavailable) {
     try {
       const validPredictionsToSave = predictions.filter((p) => p.isAvailable);
-      for (const p of validPredictionsToSave) {
+
+      // One request per prediction, serially, was up to six round trips on
+      // every dashboard load. A single upsert writes them together (§47).
+      if (validPredictionsToSave.length > 0) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        await (supabase as any).from("health_predictions").upsert(
-          {
+        const { error } = await (supabase as any).from("health_predictions").upsert(
+          validPredictionsToSave.map((p) => ({
             patient_id: p.patientId,
             prediction_type: p.predictionType,
             lower_bound: p.lowerBound,
@@ -266,12 +277,16 @@ export async function generateHealthPredictions(
             model_version: p.modelVersion,
             created_at: p.generatedAt,
             expires_at: p.expiresAt,
-          },
+          })),
           { onConflict: "patient_id,prediction_type" },
         );
+
+        if (error && (error.code === "PGRST205" || error.code === "42P01")) {
+          _remotePredictionsUnavailable = true;
+        }
       }
     } catch {
-      // Supabase table fallback
+      _remotePredictionsUnavailable = true;
     }
   }
 

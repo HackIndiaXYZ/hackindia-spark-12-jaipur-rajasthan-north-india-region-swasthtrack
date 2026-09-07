@@ -57,7 +57,7 @@ export function Header() {
   const patientName = profile?.name || "SwasthTrack";
 
   return (
-    <header className="sticky top-0 z-30 border-b border-line bg-surface/95 backdrop-blur-md">
+    <header className="frost sticky top-0 z-30 border-b border-line">
       {/* ---------- MOBILE ----------
           Two actions only. The previous header packed six 34px icon buttons
           into the right edge; they were below the 44px tap minimum and gave no

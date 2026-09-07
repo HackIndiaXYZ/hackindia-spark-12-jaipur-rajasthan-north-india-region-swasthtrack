@@ -14,7 +14,9 @@ export function PageBody({
   className?: string;
 }) {
   return (
-    <div className={cn("space-y-5 sm:space-y-6", className)}>{children}</div>
+    <div className={cn("page-body space-y-5 sm:space-y-6", className)}>
+      {children}
+    </div>
   );
 }
 
@@ -47,7 +49,8 @@ export function PageHeader({
     >
       <div className="min-w-0">
         {eyebrow ? (
-          <p className="text-2xs font-semibold uppercase tracking-wide text-brand">
+          <p className="flex items-center gap-2 text-2xs font-semibold uppercase tracking-wide text-brand">
+            <span aria-hidden className="h-px w-6 rounded-full grad-spring" />
             {eyebrow}
           </p>
         ) : null}
@@ -99,7 +102,8 @@ export function Section({
         <div className="flex items-end justify-between gap-3">
           <div className="min-w-0">
             {title ? (
-              <h2 className="text-base font-semibold tracking-tight text-ink">
+              <h2 className="flex items-center gap-2 text-base font-semibold tracking-tight text-ink">
+                <span aria-hidden className="h-4 w-0.5 rounded-full grad-spring" />
                 {title}
               </h2>
             ) : null}

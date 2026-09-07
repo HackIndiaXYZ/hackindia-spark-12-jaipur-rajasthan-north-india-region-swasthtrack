@@ -15,10 +15,13 @@ type ButtonSize = "sm" | "md" | "lg";
  * the same: Save is `primary`, Cancel is `secondary`, Delete is `danger`.
  */
 const variantClasses: Record<ButtonVariant, string> = {
+  // The signature gradient plus a top inner highlight: the button reads as a
+  // lit, raised surface rather than a flat fill.
   primary:
-    "bg-brand text-ink-inverse shadow-e1 hover:bg-brand-strong active:bg-brand-strong",
+    "grad-spring text-white shadow-[0_1px_2px_rgba(16,32,28,.12),0_6px_16px_-6px_rgba(16,185,129,.5),inset_0_1px_0_rgba(255,255,255,.35)] " +
+    "hover:brightness-105 hover:shadow-glow-brand active:brightness-95",
   secondary:
-    "border border-line-strong bg-surface text-ink shadow-e1 hover:border-brand-line hover:bg-brand-softer",
+    "surface-lift text-ink hover:border-brand-line hover:bg-brand-softer",
   ghost:
     "text-ink-muted hover:bg-surface-sunken hover:text-ink",
   quiet:
@@ -56,6 +59,7 @@ export function Button({
         // three lines inside fixed-height buttons.
         "pressable inline-flex shrink-0 cursor-pointer items-center justify-center",
         "whitespace-nowrap rounded-control font-semibold leading-none",
+        "transition-[transform,box-shadow,background-color,border-color,filter]",
         "disabled:pointer-events-none disabled:opacity-50",
         sizeClasses[size],
         variantClasses[variant],
