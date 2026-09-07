@@ -131,26 +131,26 @@ export function TimelineEventCard({
 
           <div className="space-y-0.5">
             <div className="flex flex-wrap items-center gap-2">
-              <h4 className="text-sm sm:text-base font-black text-slate-950 tracking-tight">
+              <h4 className="text-sm sm:text-base font-bold text-slate-950 tracking-tight">
                 {event.titleHi}
               </h4>
               {event.statusBadge && (
-                <Badge variant={event.statusBadgeTone || "blue"} className="text-[10px] font-black">
+                <Badge variant={event.statusBadgeTone || "blue"} className="text-2xs font-bold">
                   {event.statusBadge}
                 </Badge>
               )}
             </div>
 
             {event.statusText && (
-              <p className="text-xs font-bold text-slate-600">
+              <p className="text-xs font-semibold text-slate-600">
                 {event.statusText}
               </p>
             )}
 
-            <div className="flex items-center gap-2 text-[11px] font-semibold text-slate-400 pt-0.5">
+            <div className="flex items-center gap-2 text-xs font-semibold text-slate-400 pt-0.5">
               <span>{event.displayTime}</span>
               <span>•</span>
-              <span className="bg-slate-100 px-1.5 py-0.5 rounded text-slate-600 font-bold border border-slate-200/80">
+              <span className="bg-slate-100 px-1.5 py-0.5 rounded text-slate-600 font-semibold border border-slate-200/80">
                 {event.source}
               </span>
             </div>
@@ -159,12 +159,14 @@ export function TimelineEventCard({
 
         {/* VALUE BADGE */}
         <div className="text-right shrink-0">
-          <span className="text-base sm:text-lg font-black text-slate-950 block">
-            {event.value}
-          </span>
+          {event.value ? (
+            <span className="tabular block text-base font-semibold text-ink sm:text-lg">
+              {event.value}
+            </span>
+          ) : null}
           <button
             type="button"
-            className="text-[11px] font-bold text-slate-400 hover:text-slate-700 inline-flex items-center gap-0.5 mt-0.5"
+            className="text-xs font-semibold text-slate-400 hover:text-slate-700 inline-flex items-center gap-0.5 mt-0.5"
           >
             <span>विवरण</span>
             {isExpanded ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
@@ -175,7 +177,7 @@ export function TimelineEventCard({
       {/* EXPANDABLE DETAIL */}
       {isExpanded && (
         <div className="mt-3 pt-3 border-t border-slate-100 text-xs text-slate-600 space-y-1.5 animate-in fade-in">
-          <div className="flex items-center justify-between text-slate-500 font-bold text-[11px]">
+          <div className="flex items-center justify-between text-slate-500 font-semibold text-xs">
             <span>तारीख: {event.dateStr}</span>
             <span>स्रोत: {event.source === "Manual" ? "उपयोगकर्ता द्वारा दर्ज (Manual)" : "सिस्टम द्वारा आकलित"}</span>
           </div>
@@ -184,7 +186,7 @@ export function TimelineEventCard({
               📝 {event.detailNote}
             </p>
           ) : (
-            <p className="text-[11px] text-slate-400 italic">
+            <p className="text-xs text-slate-400 italic">
               कोई अतिरिक्त टिप्पणी नहीं है।
             </p>
           )}

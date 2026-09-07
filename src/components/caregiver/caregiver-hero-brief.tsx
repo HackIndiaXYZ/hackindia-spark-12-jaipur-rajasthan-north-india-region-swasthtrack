@@ -160,7 +160,7 @@ export function CaregiverHeroBrief({
               }
             }}
             className={cn(
-              "flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs sm:text-sm font-black transition-all",
+              "flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs sm:text-sm font-bold transition-all",
               authorizedPatients.length > 1
                 ? "bg-slate-800 hover:bg-slate-700 cursor-pointer border border-slate-700"
                 : "bg-slate-800/60 border border-slate-800"
@@ -179,7 +179,7 @@ export function CaregiverHeroBrief({
           {/* PATIENT DROPDOWN */}
           {isPatientDropdownOpen && authorizedPatients.length > 1 && (
             <div className="absolute left-0 top-full mt-2 w-64 rounded-2xl bg-white text-slate-900 border-2 border-slate-200 shadow-2xl z-30 p-2 space-y-1">
-              <span className="text-[10px] font-bold text-slate-400 px-3 py-1 block uppercase">
+              <span className="text-2xs font-semibold text-slate-400 px-3 py-1 block uppercase">
                 Authorized Patients (मरीज़ चुनें)
               </span>
               {authorizedPatients.map((p) => (
@@ -191,7 +191,7 @@ export function CaregiverHeroBrief({
                     setIsPatientDropdownOpen(false);
                   }}
                   className={cn(
-                    "w-full text-left px-3 py-2 rounded-xl text-xs font-black transition-colors flex items-center justify-between",
+                    "w-full text-left px-3 py-2 rounded-xl text-xs font-bold transition-colors flex items-center justify-between",
                     p.id === patient.id
                       ? "bg-emerald-50 text-emerald-900 border border-emerald-200"
                       : "hover:bg-slate-100 text-slate-700"
@@ -212,7 +212,7 @@ export function CaregiverHeroBrief({
               type="button"
               onClick={() => setSelectedDate(todayStr)}
               className={cn(
-                "px-2.5 py-1 rounded-lg text-xs font-black transition-all cursor-pointer",
+                "px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer",
                 selectedDate === todayStr
                   ? "bg-emerald-600 text-white shadow-2xs"
                   : "text-slate-400 hover:text-white"
@@ -224,7 +224,7 @@ export function CaregiverHeroBrief({
               type="button"
               onClick={() => setSelectedDate(yesterdayStr)}
               className={cn(
-                "px-2.5 py-1 rounded-lg text-xs font-black transition-all cursor-pointer",
+                "px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer",
                 selectedDate === yesterdayStr
                   ? "bg-emerald-600 text-white shadow-2xs"
                   : "text-slate-400 hover:text-white"
@@ -252,7 +252,7 @@ export function CaregiverHeroBrief({
           type="button"
           onClick={() => setViewMode("daily")}
           className={cn(
-            "flex-1 py-2 rounded-xl text-xs sm:text-sm font-black transition-all cursor-pointer text-center",
+            "flex-1 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer text-center",
             viewMode === "daily"
               ? "bg-white text-slate-950 shadow-xs border border-slate-200"
               : "text-slate-600 hover:text-slate-950"
@@ -264,7 +264,7 @@ export function CaregiverHeroBrief({
           type="button"
           onClick={() => setViewMode("weekly")}
           className={cn(
-            "flex-1 py-2 rounded-xl text-xs sm:text-sm font-black transition-all cursor-pointer text-center",
+            "flex-1 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer text-center",
             viewMode === "weekly"
               ? "bg-white text-slate-950 shadow-xs border border-slate-200"
               : "text-slate-600 hover:text-slate-950"
@@ -276,7 +276,7 @@ export function CaregiverHeroBrief({
           type="button"
           onClick={() => setViewMode("monthly")}
           className={cn(
-            "flex-1 py-2 rounded-xl text-xs sm:text-sm font-black transition-all cursor-pointer text-center",
+            "flex-1 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer text-center",
             viewMode === "monthly"
               ? "bg-white text-slate-950 shadow-xs border border-slate-200"
               : "text-slate-600 hover:text-slate-950"
@@ -311,7 +311,7 @@ export function CaregiverHeroBrief({
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <h2 className="text-base sm:text-xl font-black text-slate-950 tracking-tight">
+                  <h2 className="text-base sm:text-xl font-bold text-slate-950 tracking-tight">
                     {cardTitle}
                   </h2>
                   <Badge
@@ -322,12 +322,12 @@ export function CaregiverHeroBrief({
                         ? "amber"
                         : "neutral"
                     }
-                    className="text-[10px] font-black"
+                    className="text-2xs font-bold"
                   >
                     {dailyBrief.routineStatusHi}
                   </Badge>
                 </div>
-                <p className="text-xs font-bold text-slate-500 mt-0.5">
+                <p className="text-xs font-semibold text-slate-500 mt-0.5">
                   Daily Health Summary · {dailyBrief.dateLabelHi}
                 </p>
               </div>
@@ -336,17 +336,17 @@ export function CaregiverHeroBrief({
             {/* ROUTINE SCORE & LAST UPDATED */}
             <div className="flex items-center gap-3 self-start sm:self-auto">
               <div className="text-right">
-                <span className="text-[10px] font-bold text-slate-400 block uppercase">
+                <span className="text-2xs font-semibold text-slate-400 block uppercase">
                   रूटीन स्कोर
                 </span>
-                <span className="text-lg font-black text-slate-900">
-                  {dailyBrief.routineScore} <span className="text-xs font-bold text-slate-400">/ 100</span>
+                <span className="text-lg font-bold text-slate-900">
+                  {dailyBrief.routineScore} <span className="text-xs font-semibold text-slate-400">/ 100</span>
                 </span>
               </div>
               <div className="h-8 w-px bg-slate-200" />
               <div className="text-xs text-slate-400 font-semibold">
                 <span>अंतिम अपडेट:</span>
-                <span className="font-bold text-slate-600 block">{dailyBrief.cachedAt}</span>
+                <span className="font-semibold text-slate-600 block">{dailyBrief.cachedAt}</span>
               </div>
             </div>
           </div>
@@ -358,10 +358,10 @@ export function CaregiverHeroBrief({
                 <Info className="h-3.5 w-3.5" />
               </div>
               <div className="space-y-1">
-                <span className="text-xs font-black text-purple-950 block">
+                <span className="text-xs font-bold text-purple-950 block">
                   संक्षिप्त दिनचर्या सारांश (Daily Overview):
                 </span>
-                <p className="text-xs sm:text-sm font-bold text-purple-900 leading-relaxed">
+                <p className="text-xs sm:text-sm font-semibold text-purple-900 leading-relaxed">
                   {dailyBrief.naturalLanguageSummaryHi}
                 </p>
               </div>
@@ -370,11 +370,11 @@ export function CaregiverHeroBrief({
 
           {/* C. DATA COMPLETENESS TRACKER (§34, §35) */}
           <div className="p-3 rounded-2xl bg-white border border-slate-200 shadow-2xs space-y-1.5">
-            <div className="flex items-center justify-between text-xs font-bold">
+            <div className="flex items-center justify-between text-xs font-semibold">
               <span className="text-slate-700">
                 दैनिक ट्रैकिंग पूर्णता: {dailyBrief.completenessLabelHi}
               </span>
-              <span className="text-emerald-700 font-black">
+              <span className="text-emerald-700 font-bold">
                 {dailyBrief.completenessPercent}%
               </span>
             </div>
@@ -384,14 +384,14 @@ export function CaregiverHeroBrief({
                 style={{ width: `${dailyBrief.completenessPercent}%` }}
               />
             </div>
-            <p className="text-[10px] font-semibold text-slate-400">
+            <p className="text-2xs font-semibold text-slate-400">
               * यह माप केवल डेटा प्रविष्टि की पूर्णता को दर्शाता है, स्वास्थ्य की स्थिति को नहीं।
             </p>
           </div>
 
           {/* D. 6-VITAL SNAPSHOT GRID (§6) */}
           <div>
-            <h4 className="text-xs font-black text-slate-500 uppercase tracking-wider mb-2.5">
+            <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2.5">
               आज के मुख्य रिकॉर्ड्स (Snapshot)
             </h4>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
@@ -408,18 +408,18 @@ export function CaregiverHeroBrief({
                     )}
                   >
                     <div className="flex items-center justify-between mb-1.5">
-                      <span className="text-[11px] font-black text-slate-500 truncate">
+                      <span className="text-xs font-bold text-slate-500 truncate">
                         {vital.labelHi}
                       </span>
                       <Icon className="h-3.5 w-3.5 text-slate-400" />
                     </div>
 
-                    <div className="text-sm sm:text-base font-black text-slate-950">
+                    <div className="text-sm sm:text-base font-bold text-slate-950">
                       {vital.value}
                     </div>
 
                     {vital.subtext && (
-                      <p className="text-[10px] font-bold text-slate-500 truncate mt-0.5">
+                      <p className="text-2xs font-semibold text-slate-500 truncate mt-0.5">
                         {vital.subtext}
                       </p>
                     )}
@@ -433,15 +433,15 @@ export function CaregiverHeroBrief({
           <div className="grid sm:grid-cols-2 gap-3.5 pt-1">
             {/* POSITIVE HIGHLIGHTS */}
             <div className="p-3.5 rounded-2xl bg-emerald-50/50 border border-emerald-200/90 space-y-2">
-              <div className="flex items-center gap-1.5 text-emerald-950 font-black text-xs sm:text-sm">
+              <div className="flex items-center gap-1.5 text-emerald-950 font-bold text-xs sm:text-sm">
                 <CheckCircle2 className="h-4 w-4 text-emerald-700" />
                 <span>आज के मुख्य सकारात्मक बिंदु (Highlights)</span>
               </div>
               {dailyBrief.highlights.length > 0 ? (
-                <ul className="space-y-1.5 text-xs text-emerald-900 font-bold">
+                <ul className="space-y-1.5 text-xs text-emerald-900 font-semibold">
                   {dailyBrief.highlights.map((h, i) => (
                     <li key={i} className="flex items-start gap-1.5">
-                      <span className="text-emerald-600 font-black">•</span>
+                      <span className="text-emerald-600 font-bold">•</span>
                       <span>{h}</span>
                     </li>
                   ))}
@@ -454,7 +454,7 @@ export function CaregiverHeroBrief({
             {/* NEEDS ATTENTION */}
             <div className="p-3.5 rounded-2xl bg-amber-50/50 border border-amber-200/90 space-y-2">
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-1.5 text-amber-950 font-black text-xs sm:text-sm">
+                <div className="flex items-center gap-1.5 text-amber-950 font-bold text-xs sm:text-sm">
                   <AlertTriangle className="h-4 w-4 text-amber-700" />
                   <span>ध्यान देने योग्य बिंदु (Needs Attention)</span>
                 </div>
@@ -462,7 +462,7 @@ export function CaregiverHeroBrief({
                   <button
                     type="button"
                     onClick={() => setShowAllAttention(!showAllAttention)}
-                    className="text-[11px] font-black text-amber-800 hover:underline cursor-pointer"
+                    className="text-xs font-bold text-amber-800 hover:underline cursor-pointer"
                   >
                     {showAllAttention ? "कम देखें ↑" : "सभी देखें ↓"}
                   </button>
@@ -470,17 +470,17 @@ export function CaregiverHeroBrief({
               </div>
 
               {dailyBrief.attentionItems.length > 0 ? (
-                <ul className="space-y-1.5 text-xs text-amber-900 font-bold">
+                <ul className="space-y-1.5 text-xs text-amber-900 font-semibold">
                   {(showAllAttention
                     ? dailyBrief.attentionItems
                     : dailyBrief.attentionItems.slice(0, 3)
                   ).map((item) => (
                     <li key={item.id} className="flex items-start gap-1.5">
-                      <span className="text-amber-600 font-black">⚠</span>
+                      <span className="text-amber-600 font-bold">⚠</span>
                       <div>
                         <span>{item.textHi}</span>
                         {item.detail && (
-                          <span className="text-[10px] text-amber-800/80 block font-normal">
+                          <span className="text-2xs text-amber-800/80 block font-normal">
                             {item.detail}
                           </span>
                         )}
@@ -499,7 +499,7 @@ export function CaregiverHeroBrief({
           {/* F. TODAY VS USUAL BASELINE COMPARISON (§12, §13) */}
           {dailyBrief.todayVsUsual.length > 0 && (
             <div className="space-y-2 pt-1">
-              <h4 className="text-xs font-black text-slate-500 uppercase tracking-wider">
+              <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider">
                 आज बनाम सामान्य पैटर्न (Today vs Usual)
               </h4>
               <div className="grid sm:grid-cols-3 gap-2.5">
@@ -508,19 +508,19 @@ export function CaregiverHeroBrief({
                     key={c.metric}
                     className="p-3 rounded-2xl bg-white border border-slate-200 shadow-2xs space-y-1"
                   >
-                    <div className="flex items-center justify-between text-xs font-black text-slate-800">
+                    <div className="flex items-center justify-between text-xs font-bold text-slate-800">
                       <span>{c.metricHi}</span>
-                      <span className="text-[10px] text-slate-400 font-bold">
+                      <span className="text-2xs text-slate-400 font-semibold">
                         विश्वास: {c.confidence === "High" ? "उच्च" : "मध्यम"}
                       </span>
                     </div>
-                    <div className="text-xs font-bold text-slate-600">
+                    <div className="text-xs font-semibold text-slate-600">
                       <span>आज: {c.todayValueStr}</span>
-                      <span className="text-[11px] text-slate-400 ml-1">
+                      <span className="text-xs text-slate-400 ml-1">
                         (सामान्य: {c.usualValueStr})
                       </span>
                     </div>
-                    <div className="text-[11px] font-black text-emerald-700">
+                    <div className="text-xs font-bold text-emerald-700">
                       {c.comparisonTextHi}
                     </div>
                   </div>
@@ -531,7 +531,7 @@ export function CaregiverHeroBrief({
 
           {/* G. WHAT CHANGED REUSE & TIMELINE LINKS (§14, §15) */}
           <div className="pt-2 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3">
-            <div className="flex items-center gap-2 text-xs font-bold text-slate-600">
+            <div className="flex items-center gap-2 text-xs font-semibold text-slate-600">
               <Sparkles className="h-4 w-4 text-purple-600" />
               <span>
                 <strong>What Changed:</strong> {dailyBrief.whatChangedCompactHi.slice(0, 75)}...
@@ -541,13 +541,13 @@ export function CaregiverHeroBrief({
             <div className="flex items-center gap-2 self-stretch sm:self-auto">
               <Link
                 href="/insights/changes"
-                className="flex-1 sm:flex-none text-center px-3 py-1.5 rounded-xl bg-purple-50 hover:bg-purple-100 border border-purple-200 text-xs font-black text-purple-900 transition-colors"
+                className="flex-1 sm:flex-none text-center px-3 py-1.5 rounded-xl bg-purple-50 hover:bg-purple-100 border border-purple-200 text-xs font-bold text-purple-900 transition-colors"
               >
                 बदलाव विवरण देखें →
               </Link>
               <Link
                 href="/timeline"
-                className="flex-1 sm:flex-none text-center px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-xs font-black text-emerald-900 transition-colors flex items-center justify-center gap-1"
+                className="flex-1 sm:flex-none text-center px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-xs font-bold text-emerald-900 transition-colors flex items-center justify-center gap-1"
               >
                 <History className="h-3.5 w-3.5" />
                 <span>स्वास्थ्य यात्रा</span>
@@ -561,7 +561,7 @@ export function CaregiverHeroBrief({
               type="button"
               onClick={() => setIsQuickLogOpen(true)}
               variant="primary"
-              className="w-full sm:w-auto px-6 py-2.5 rounded-xl text-xs sm:text-sm font-black shadow-md"
+              className="w-full sm:w-auto px-6 py-2.5 rounded-xl text-xs sm:text-sm font-bold shadow-md"
             >
               <PlusCircle className="h-4 w-4 mr-1.5" />
               पापा के लिए नया रिकॉर्ड जोड़ें (Quick Log for Papa)
@@ -573,45 +573,45 @@ export function CaregiverHeroBrief({
         <DepthCard depth={2} className="p-5 sm:p-6 bg-white border-2 border-slate-200 space-y-4">
           <div className="flex items-center justify-between pb-3 border-b border-slate-100">
             <div>
-              <h3 className="text-base sm:text-lg font-black text-slate-950">
+              <h3 className="text-base sm:text-lg font-bold text-slate-950">
                 पापा — इस सप्ताह का स्वास्थ्य सारांश (Papa — This Week)
               </h3>
-              <p className="text-xs font-bold text-slate-500">
+              <p className="text-xs font-semibold text-slate-500">
                 साप्ताहिक औसत व निरंतरता विश्लेषण
               </p>
             </div>
-            <Badge variant="blue" className="text-xs font-black">
+            <Badge variant="blue" className="text-xs font-bold">
               रूटीन स्कोर: {weeklyBrief.routineScore}
             </Badge>
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
             <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200">
-              <span className="text-[10px] font-bold text-slate-400 block uppercase">औसत BP</span>
-              <span className="text-sm font-black text-slate-900">{weeklyBrief.avgBP}</span>
+              <span className="text-2xs font-semibold text-slate-400 block uppercase">औसत BP</span>
+              <span className="text-sm font-bold text-slate-900">{weeklyBrief.avgBP}</span>
             </div>
             <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200">
-              <span className="text-[10px] font-bold text-slate-400 block uppercase">औसत कदम</span>
-              <span className="text-sm font-black text-slate-900">
+              <span className="text-2xs font-semibold text-slate-400 block uppercase">औसत कदम</span>
+              <span className="text-sm font-bold text-slate-900">
                 {weeklyBrief.avgSteps.toLocaleString()} / दिन
               </span>
             </div>
             <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200">
-              <span className="text-[10px] font-bold text-slate-400 block uppercase">औसत नींद</span>
-              <span className="text-sm font-black text-slate-900">{weeklyBrief.avgSleepHours} घंटे</span>
+              <span className="text-2xs font-semibold text-slate-400 block uppercase">औसत नींद</span>
+              <span className="text-sm font-bold text-slate-900">{weeklyBrief.avgSleepHours} घंटे</span>
             </div>
             <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200">
-              <span className="text-[10px] font-bold text-slate-400 block uppercase">दवा पालन</span>
-              <span className="text-sm font-black text-emerald-700">
+              <span className="text-2xs font-semibold text-slate-400 block uppercase">दवा पालन</span>
+              <span className="text-sm font-bold text-emerald-700">
                 {weeklyBrief.medAdherencePercent}%
               </span>
             </div>
           </div>
 
           <div className="p-3.5 rounded-2xl bg-purple-50/60 border border-purple-200 text-xs space-y-1">
-            <span className="font-black text-purple-950 block">साप्ताहिक मुख्य बदलाव:</span>
+            <span className="font-bold text-purple-950 block">साप्ताहिक मुख्य बदलाव:</span>
             {weeklyBrief.topChanges.map((c, i) => (
-              <p key={i} className="font-bold text-purple-900">
+              <p key={i} className="font-semibold text-purple-900">
                 • {c}
               </p>
             ))}
@@ -622,20 +622,20 @@ export function CaregiverHeroBrief({
         <DepthCard depth={2} className="p-5 sm:p-6 bg-white border-2 border-slate-200 space-y-4">
           <div className="flex items-center justify-between pb-3 border-b border-slate-100">
             <div>
-              <h3 className="text-base sm:text-lg font-black text-slate-950">
+              <h3 className="text-base sm:text-lg font-bold text-slate-950">
                 पापा — मासिक स्वास्थ्य रुझान (Papa — This Month)
               </h3>
-              <p className="text-xs font-bold text-slate-500">{monthlyBrief.monthLabel}</p>
+              <p className="text-xs font-semibold text-slate-500">{monthlyBrief.monthLabel}</p>
             </div>
-            <Badge variant="green" className="text-xs font-black">
+            <Badge variant="green" className="text-xs font-bold">
               मासिक स्कोर: {monthlyBrief.routineScore}
             </Badge>
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
             <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200">
-              <span className="text-[10px] font-bold text-slate-400 block uppercase">वजन ट्रेंड</span>
-              <span className="text-sm font-black text-slate-900">
+              <span className="text-2xs font-semibold text-slate-400 block uppercase">वजन ट्रेंड</span>
+              <span className="text-sm font-bold text-slate-900">
                 {monthlyBrief.weightTrend === "Stable"
                   ? "स्थिर (Stable)"
                   : monthlyBrief.weightTrend === "Gaining"
@@ -644,27 +644,27 @@ export function CaregiverHeroBrief({
               </span>
             </div>
             <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200">
-              <span className="text-[10px] font-bold text-slate-400 block uppercase">BP ट्रेंड</span>
-              <span className="text-sm font-black text-slate-900">{monthlyBrief.bpTrend}</span>
+              <span className="text-2xs font-semibold text-slate-400 block uppercase">BP ट्रेंड</span>
+              <span className="text-sm font-bold text-slate-900">{monthlyBrief.bpTrend}</span>
             </div>
             <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200">
-              <span className="text-[10px] font-bold text-slate-400 block uppercase">मासिक औसत कदम</span>
-              <span className="text-sm font-black text-slate-900">
+              <span className="text-2xs font-semibold text-slate-400 block uppercase">मासिक औसत कदम</span>
+              <span className="text-sm font-bold text-slate-900">
                 {monthlyBrief.stepsAvg.toLocaleString()}
               </span>
             </div>
             <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200">
-              <span className="text-[10px] font-bold text-slate-400 block uppercase">दवा निरंतरता</span>
-              <span className="text-sm font-black text-emerald-700">
+              <span className="text-2xs font-semibold text-slate-400 block uppercase">दवा निरंतरता</span>
+              <span className="text-sm font-bold text-emerald-700">
                 {monthlyBrief.medAdherencePercent}%
               </span>
             </div>
           </div>
 
           <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 text-xs space-y-1.5">
-            <span className="font-black text-slate-900 block">मासिक प्रमुख बिंदु:</span>
+            <span className="font-bold text-slate-900 block">मासिक प्रमुख बिंदु:</span>
             {monthlyBrief.notableChanges.map((item, idx) => (
-              <p key={idx} className="font-bold text-slate-700">
+              <p key={idx} className="font-semibold text-slate-700">
                 ✓ {item}
               </p>
             ))}

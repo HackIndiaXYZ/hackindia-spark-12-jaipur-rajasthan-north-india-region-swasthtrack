@@ -1,9 +1,31 @@
 import type { Metadata, Viewport } from "next";
+import { Inter, Noto_Sans_Devanagari } from "next/font/google";
 import { AppShell } from "@/components/layout/app-shell";
 import "./globals.css";
 
+/**
+ * Latin UI face. Variable weights 400–800 cover the whole type scale.
+ */
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-ui-latin",
+  display: "swap",
+  weight: ["400", "500", "600", "700", "800"],
+});
+
+/**
+ * Devanagari face. Roughly half of SwasthTrack's copy is Hindi, so this is a
+ * first-class UI font, not a fallback.
+ */
+const notoDevanagari = Noto_Sans_Devanagari({
+  subsets: ["devanagari", "latin"],
+  variable: "--font-ui-devanagari",
+  display: "swap",
+  weight: ["400", "500", "600", "700"],
+});
+
 export const viewport: Viewport = {
-  themeColor: "#059669",
+  themeColor: "#0F8A5F",
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
@@ -36,7 +58,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="hi" className="h-full antialiased font-sans">
+    <html
+      lang="hi"
+      className={`h-full antialiased ${inter.variable} ${notoDevanagari.variable}`}
+    >
       <head>
         <link rel="manifest" href="/manifest.json" />
         <meta name="mobile-web-app-capable" content="yes" />
@@ -44,7 +69,7 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="SwasthTrack" />
       </head>
-      <body className="min-h-full bg-slate-50 text-slate-900 selection:bg-emerald-500 selection:text-white">
+      <body className="min-h-full bg-canvas text-ink font-sans">
         <AppShell>{children}</AppShell>
       </body>
     </html>

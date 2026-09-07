@@ -100,10 +100,10 @@ export default function OnboardingPage() {
               className="h-full w-full object-cover"
             />
           </div>
-          <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">
+          <span className="text-xs font-semibold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">
             Initial Health Setup · स्वास्थ्य प्रोफाइल सेटअप
           </span>
-          <h1 className="text-xl sm:text-2xl font-black text-slate-900 mt-2">
+          <h1 className="text-xl sm:text-2xl font-bold text-slate-900 mt-2">
             अपनी स्वास्थ्य प्रोफाइल बनाएं
           </h1>
           <p className="text-xs sm:text-sm text-slate-500 mt-1">
@@ -120,13 +120,13 @@ export default function OnboardingPage() {
         <form onSubmit={handleSubmit} className="space-y-4 text-xs">
           {/* PERSONAL INFO */}
           <Card className="p-4 border-slate-200 bg-white space-y-3">
-            <h3 className="font-bold text-slate-900 flex items-center gap-1.5 text-sm">
+            <h3 className="font-semibold text-slate-900 flex items-center gap-1.5 text-sm">
               <User className="h-4 w-4 text-emerald-600" />
               व्यक्तिगत जानकारी (Personal Info)
             </h3>
 
             <div>
-              <label className="block font-bold text-slate-700 mb-1">
+              <label className="block font-semibold text-slate-700 mb-1">
                 मरीज़ का नाम (Patient Name) *
               </label>
               <input
@@ -134,29 +134,29 @@ export default function OnboardingPage() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="e.g. Raj Kishore Gupta / Rajiv Sharma"
-                className="w-full rounded-xl border border-slate-300 px-3 py-2.5 text-sm font-bold text-slate-900 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+                className="w-full rounded-xl border border-slate-300 px-3 py-2.5 text-sm font-semibold text-slate-900 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
                 required
               />
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
               <div>
-                <label className="block font-bold text-slate-700 mb-1">उम्र (Age)</label>
+                <label className="block font-semibold text-slate-700 mb-1">उम्र (Age)</label>
                 <input
                   type="number"
                   value={age}
                   onChange={(e) => setAge(e.target.value)}
-                  className="w-full rounded-xl border border-slate-300 px-3 py-2 text-xs font-bold text-slate-900"
+                  className="w-full rounded-xl border border-slate-300 px-3 py-2 text-xs font-semibold text-slate-900"
                   required
                 />
               </div>
 
               <div>
-                <label className="block font-bold text-slate-700 mb-1">लिंग (Gender)</label>
+                <label className="block font-semibold text-slate-700 mb-1">लिंग (Gender)</label>
                 <select
                   value={gender}
                   onChange={(e) => setGender(e.target.value)}
-                  className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-xs font-bold text-slate-900"
+                  className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-xs font-semibold text-slate-900"
                 >
                   <option value="Male">पुरुष (Male)</option>
                   <option value="Female">महिला (Female)</option>
@@ -165,12 +165,12 @@ export default function OnboardingPage() {
               </div>
 
               <div className="col-span-2 sm:col-span-1">
-                <label className="block font-bold text-slate-700 mb-1">ऊंचाई (Height cm)</label>
+                <label className="block font-semibold text-slate-700 mb-1">ऊंचाई (Height cm)</label>
                 <input
                   type="number"
                   value={heightCm}
                   onChange={(e) => setHeightCm(e.target.value)}
-                  className="w-full rounded-xl border border-slate-300 px-3 py-2 text-xs font-bold text-slate-900"
+                  className="w-full rounded-xl border border-slate-300 px-3 py-2 text-xs font-semibold text-slate-900"
                   required
                 />
               </div>
@@ -179,43 +179,43 @@ export default function OnboardingPage() {
 
           {/* WEIGHT & CALORIE TARGETS */}
           <Card className="p-4 border-slate-200 bg-white space-y-3">
-            <h3 className="font-bold text-slate-900 flex items-center gap-1.5 text-sm">
+            <h3 className="font-semibold text-slate-900 flex items-center gap-1.5 text-sm">
               <Scale className="h-4 w-4 text-sky-600" />
               वजन एवं पोषण लक्ष्य (Weight & Calorie Goals)
             </h3>
 
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
               <div>
-                <label className="block font-bold text-slate-700 mb-1">वर्तमान वजन (Current kg)</label>
+                <label className="block font-semibold text-slate-700 mb-1">वर्तमान वजन (Current kg)</label>
                 <input
                   type="number"
                   step="0.1"
                   value={currentWeight}
                   onChange={(e) => setCurrentWeight(e.target.value)}
-                  className="w-full rounded-xl border border-slate-300 px-3 py-2 text-xs font-bold text-slate-900"
+                  className="w-full rounded-xl border border-slate-300 px-3 py-2 text-xs font-semibold text-slate-900"
                   required
                 />
               </div>
 
               <div>
-                <label className="block font-bold text-slate-700 mb-1">लक्ष्य वजन (Target kg)</label>
+                <label className="block font-semibold text-slate-700 mb-1">लक्ष्य वजन (Target kg)</label>
                 <input
                   type="number"
                   step="0.1"
                   value={targetWeight}
                   onChange={(e) => setTargetWeight(e.target.value)}
-                  className="w-full rounded-xl border border-slate-300 px-3 py-2 text-xs font-bold text-slate-900"
+                  className="w-full rounded-xl border border-slate-300 px-3 py-2 text-xs font-semibold text-slate-900"
                   required
                 />
               </div>
 
               <div className="col-span-2 sm:col-span-1">
-                <label className="block font-bold text-slate-700 mb-1">दैनिक कैलोरी (kcal)</label>
+                <label className="block font-semibold text-slate-700 mb-1">दैनिक कैलोरी (kcal)</label>
                 <input
                   type="number"
                   value={calorieTarget}
                   onChange={(e) => setCalorieTarget(e.target.value)}
-                  className="w-full rounded-xl border border-slate-300 px-3 py-2 text-xs font-bold text-slate-900"
+                  className="w-full rounded-xl border border-slate-300 px-3 py-2 text-xs font-semibold text-slate-900"
                   required
                 />
               </div>
@@ -224,11 +224,11 @@ export default function OnboardingPage() {
 
           {/* MEDICAL CONDITIONS */}
           <Card className="p-4 border-slate-200 bg-white space-y-2.5">
-            <h3 className="font-bold text-slate-900 flex items-center gap-1.5 text-sm">
+            <h3 className="font-semibold text-slate-900 flex items-center gap-1.5 text-sm">
               <Activity className="h-4 w-4 text-rose-600" />
               स्वास्थ्य स्थितियां (Medical Conditions)
             </h3>
-            <p className="text-[11px] text-slate-500">
+            <p className="text-xs text-slate-500">
               लागू होने वाली सभी स्थितियां चुनें (यदि कोई हो):
             </p>
 
@@ -242,7 +242,7 @@ export default function OnboardingPage() {
                     onClick={() => toggleCondition(cond)}
                     className={`flex items-center gap-2 p-2.5 rounded-xl border text-left text-xs font-medium transition-all ${
                       isSelected
-                        ? "border-emerald-600 bg-emerald-50 text-emerald-950 font-bold"
+                        ? "border-emerald-600 bg-emerald-50 text-emerald-950 font-semibold"
                         : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
                     }`}
                   >
@@ -267,7 +267,7 @@ export default function OnboardingPage() {
             variant="primary"
             type="submit"
             disabled={loading}
-            className="w-full h-12 text-sm font-bold rounded-2xl shadow-md"
+            className="w-full h-12 text-sm font-semibold rounded-2xl shadow-md"
           >
             {loading ? (
               "प्रोफाइल बनाई जा रही है..."

@@ -66,39 +66,39 @@ export default function ReportsPage() {
               <div className="grid gap-4 grid-cols-2 md:grid-cols-3 xl:grid-cols-5">
                 <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-xs">
                   <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Total Food Items</p>
-                  <p className="mt-1 text-2xl font-black text-slate-900">{report.totalFoods}</p>
-                  <p className="text-[10px] text-slate-400 mt-0.5">कुल खाद्य पदार्थ</p>
+                  <p className="mt-1 text-2xl font-bold text-slate-900">{report.totalFoods}</p>
+                  <p className="text-2xs text-slate-400 mt-0.5">कुल खाद्य पदार्थ</p>
                 </div>
 
                 <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-xs">
                   <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Duplicate Names</p>
-                  <p className="mt-1 text-2xl font-black text-slate-900">{report.duplicateNamesCount}</p>
-                  <p className="text-[10px] text-slate-400 mt-0.5">दोहरे नाम वाले व्यंजन</p>
+                  <p className="mt-1 text-2xl font-bold text-slate-900">{report.duplicateNamesCount}</p>
+                  <p className="text-2xs text-slate-400 mt-0.5">दोहरे नाम वाले व्यंजन</p>
                 </div>
 
                 <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-xs">
                   <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Missing Calories</p>
-                  <p className="mt-1 text-2xl font-black text-slate-900">{report.missingCaloriesCount}</p>
-                  <p className="text-[10px] text-slate-400 mt-0.5">बिना कैलोरी वैल्यू वाले</p>
+                  <p className="mt-1 text-2xl font-bold text-slate-900">{report.missingCaloriesCount}</p>
+                  <p className="text-2xs text-slate-400 mt-0.5">बिना कैलोरी वैल्यू वाले</p>
                 </div>
 
                 <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-xs">
                   <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Calorie Variants</p>
-                  <p className="mt-1 text-2xl font-black text-slate-900">{report.duplicateVariantsCount}</p>
-                  <p className="text-[10px] text-slate-400 mt-0.5">कैलोरी के विभिन्न प्रकार</p>
+                  <p className="mt-1 text-2xl font-bold text-slate-900">{report.duplicateVariantsCount}</p>
+                  <p className="text-2xs text-slate-400 mt-0.5">कैलोरी के विभिन्न प्रकार</p>
                 </div>
 
                 <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-xs">
                   <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Missing Portions</p>
-                  <p className="mt-1 text-2xl font-black text-slate-900">{report.missingPortionsCount}</p>
-                  <p className="text-[10px] text-slate-400 mt-0.5">बिना मात्रा अनुपात (Portion)</p>
+                  <p className="mt-1 text-2xl font-bold text-slate-900">{report.missingPortionsCount}</p>
+                  <p className="text-2xs text-slate-400 mt-0.5">बिना मात्रा अनुपात (Portion)</p>
                 </div>
               </div>
 
               {/* Verification status warnings */}
               <div className="grid gap-5 md:grid-cols-2">
                 <div className="space-y-2">
-                  <h4 className="font-bold text-slate-800 text-sm flex items-center gap-1.5">
+                  <h4 className="font-semibold text-slate-800 text-sm flex items-center gap-1.5">
                     <AlertCircle className="h-4.5 w-4.5 text-amber-600" />
                     Needs Verification / Custom Entries ({report.requireVerificationCount}):
                   </h4>
@@ -117,7 +117,7 @@ export default function ReportsPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <h4 className="font-bold text-slate-800 text-sm flex items-center gap-1.5">
+                  <h4 className="font-semibold text-slate-800 text-sm flex items-center gap-1.5">
                     <AlertCircle className="h-4.5 w-4.5 text-rose-600" />
                     Missing Calories ({report.missingCaloriesCount}):
                   </h4>
@@ -148,7 +148,7 @@ export default function ReportsPage() {
           <ShieldAlert className="h-4 w-4 text-slate-400 shrink-0" />
           <span>स्वास्थट्रैक रिपोर्ट एक वेलनेस ट्रैकिंग रिकॉर्ड है, यह चिकित्सकीय सलाह या डॉक्टर के निदान का स्थान नहीं लेता है।</span>
         </div>
-        <a href="/medical-disclaimer" className="font-bold text-emerald-700 hover:underline shrink-0">
+        <a href="/medical-disclaimer" className="font-semibold text-emerald-700 hover:underline shrink-0">
           Medical Disclaimer →
         </a>
       </div>

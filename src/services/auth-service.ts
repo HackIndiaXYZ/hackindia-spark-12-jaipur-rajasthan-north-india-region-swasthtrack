@@ -68,7 +68,17 @@ const INVITATIONS_KEY = "swasthtrack_caregiver_invitations";
 export const DEFAULT_PATIENT_ID = "patient-empty";
 
 /**
- * Salted SHA-256 hash representation for secure authentication
+ * NOT A CRYPTOGRAPHIC HASH.
+ *
+ * This is a salted DJB2/31 digest kept only so existing local test accounts
+ * keep working. It is reversible by brute force in milliseconds, and the
+ * result is stored in `localStorage` alongside the phone number, so anyone
+ * with access to the device or to injected script can read it.
+ *
+ * The whole local auth path (accounts, memberships, OTPs) is a development
+ * stand-in and MUST be replaced with Supabase Auth plus row-level security
+ * before this product handles anyone's real health data. See the audit report
+ * for the migration path.
  */
 export function hashPassword(password: string): string {
   const salt = "swasthtrack_v2026_salted_hash_key_";

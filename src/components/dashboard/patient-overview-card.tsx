@@ -35,7 +35,7 @@ export function PatientOverviewCard({
       <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
         <div className="space-y-3">
           <div className="flex flex-wrap items-center gap-2.5">
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-600 px-3 py-1 text-xs font-bold text-white shadow-xs">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-600 px-3 py-1 text-xs font-semibold text-white shadow-xs">
               <User className="h-3.5 w-3.5" />
               Patient Profile
             </span>
@@ -46,7 +46,7 @@ export function PatientOverviewCard({
 
           <div>
             <div className="flex flex-wrap items-baseline gap-3">
-              <h2 className="text-2xl font-bold text-slate-950 sm:text-3xl">
+              <h2 className="text-2xl font-semibold text-slate-950 sm:text-3xl">
                 {patient.name}
               </h2>
               <span className="text-sm font-semibold text-slate-600">
@@ -59,7 +59,7 @@ export function PatientOverviewCard({
           </div>
 
           <div className="flex flex-wrap items-center gap-2 pt-1">
-            <span className="text-xs font-bold text-slate-600">Conditions:</span>
+            <span className="text-xs font-semibold text-slate-600">Conditions:</span>
             {conditions.map((cond) => (
               <Badge key={cond.id} variant="green">
                 {cond.condition_name}
@@ -78,10 +78,10 @@ export function PatientOverviewCard({
               <Scale className="h-3.5 w-3.5 text-amber-600" />
               <span>Current Weight</span>
             </div>
-            <p className="mt-1.5 text-xl font-bold text-slate-950">
+            <p className="mt-1.5 text-xl font-semibold text-slate-950">
               {patient.current_weight_kg ? `${patient.current_weight_kg} kg` : "--"}
             </p>
-            <p className="text-[11px] text-slate-500">वर्तमान वजन</p>
+            <p className="text-xs text-slate-500">वर्तमान वजन</p>
           </div>
 
           <div className="rounded-xl border border-slate-200 bg-white p-3.5 shadow-2xs">
@@ -89,10 +89,10 @@ export function PatientOverviewCard({
               <Heart className="h-3.5 w-3.5 text-rose-500" />
               <span>Target Weight</span>
             </div>
-            <p className="mt-1.5 text-xl font-bold text-slate-950">
+            <p className="mt-1.5 text-xl font-semibold text-slate-950">
               {patient.target_weight_kg ? `${patient.target_weight_kg} kg` : "--"}
             </p>
-            <p className="text-[11px] text-slate-500">
+            <p className="text-xs text-slate-500">
               {weightDiff ? `${weightDiff} kg to lose` : "लक्ष्य वजन"}
             </p>
           </div>
@@ -102,10 +102,10 @@ export function PatientOverviewCard({
               <Utensils className="h-3.5 w-3.5 text-emerald-600" />
               <span>Calorie Ceiling</span>
             </div>
-            <p className="mt-1.5 text-xl font-bold text-slate-950">
+            <p className="mt-1.5 text-xl font-semibold text-slate-950">
               {patient.daily_calorie_target} kcal
             </p>
-            <p className="text-[11px] text-slate-500">दैनिक लक्ष्य</p>
+            <p className="text-xs text-slate-500">दैनिक लक्ष्य</p>
           </div>
         </div>
       </div>
@@ -119,7 +119,7 @@ export function PatientOverviewCard({
           <button
             type="button"
             onClick={onEditProfile}
-            className="flex items-center gap-1.5 font-bold text-emerald-700 hover:text-emerald-900"
+            className="flex items-center gap-1.5 font-semibold text-emerald-700 hover:text-emerald-900"
           >
             <Edit2 className="h-3.5 w-3.5" />
             Edit Profile (संपादित करें)
@@ -127,7 +127,7 @@ export function PatientOverviewCard({
           <span className="text-slate-300">|</span>
           <Link
             href="/profile"
-            className="flex items-center gap-1 font-bold text-emerald-700 hover:text-emerald-900"
+            className="flex items-center gap-1 font-semibold text-emerald-700 hover:text-emerald-900"
           >
             <span>Manage Medicines & Conditions</span>
             <ChevronRight className="h-3.5 w-3.5" />

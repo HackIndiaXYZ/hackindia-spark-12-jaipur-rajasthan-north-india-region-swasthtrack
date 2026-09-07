@@ -28,7 +28,7 @@ function CustomTooltip({ active, payload }: any) {
     const data = payload[0].payload;
     return (
       <div className="rounded-lg border border-slate-200 bg-white p-3 shadow-lg text-xs">
-        <p className="font-bold text-slate-900">{data.weight} kg</p>
+        <p className="font-semibold text-slate-900">{data.weight} kg</p>
         <p className="text-slate-500">{data.fullDate}</p>
         {data.targetDiff !== null && (
           <p className={`mt-1 font-semibold ${data.targetDiff > 0 ? "text-amber-600" : "text-emerald-600"}`}>
@@ -129,7 +129,7 @@ export function WeightTrendChart({ logs, targetWeight }: WeightTrendChartProps) 
       </ResponsiveContainer>
 
       {/* Legend */}
-      <div className="mt-2 flex flex-wrap items-center justify-center gap-4 text-xs font-bold text-slate-700">
+      <div className="mt-2 flex flex-wrap items-center justify-center gap-4 text-xs font-semibold text-slate-700">
         <span className="flex items-center gap-1.5">
           <span className="inline-block h-2.5 w-4 rounded bg-amber-500" /> Weight (वजन)
         </span>

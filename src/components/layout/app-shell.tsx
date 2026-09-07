@@ -18,17 +18,30 @@ function AppShellContent({ children }: PropsWithChildren) {
   }
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="flex min-h-screen flex-col bg-canvas">
       <Sidebar />
-      <div className="min-h-screen lg:pl-72 flex flex-col justify-between">
-        <div>
-          <Header />
-          <main className="mx-auto w-full max-w-7xl px-3.5 sm:px-6 lg:px-8 pt-3 sm:pt-6 pb-24 sm:pb-28 lg:pb-12 overflow-x-hidden">
-            {children}
-          </main>
-        </div>
+
+      {/* The sidebar is fixed at 17rem on lg+, so the content column is inset
+          rather than overlapped. */}
+      <div className="flex min-h-screen flex-1 flex-col lg:pl-68">
+        <Header />
+
+        {/*
+          One container, one set of gutters, one max width for every screen
+          (§14). There is deliberately no `overflow-x-hidden` here: any
+          sideways scroll is a real layout bug and must be visible so it gets
+          fixed at the source (§8).
+        */}
+        <main
+          id="main-content"
+          className="mx-auto w-full max-w-6xl flex-1 px-4 pt-4 pb-28 sm:px-6 sm:pt-6 lg:px-8 lg:pb-10"
+        >
+          {children}
+        </main>
+
         <Footer />
       </div>
+
       <BottomNavigation />
     </div>
   );

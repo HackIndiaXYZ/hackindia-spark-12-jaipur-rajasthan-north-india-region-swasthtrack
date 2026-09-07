@@ -400,9 +400,12 @@ export async function getHealthTimelineEvents(
         titleHi: al.titleHi || al.title,
         displayTime: formatTimeIST(time),
         dateStr,
-        value: al.severity,
-        statusBadge: al.severity,
-        statusBadgeTone: al.severity === "IMPORTANT" ? "red" : "amber",
+        // The severity used to fill both `value` and `statusBadge`, so every
+        // alert row rendered "IMPORTANT" twice (§28).
+        value: "",
+        statusBadge: al.severity === "IMPORTANT" ? "ज़रूरी" : al.severity === "ATTENTION" ? "ध्यान दें" : "जानकारी",
+        statusBadgeTone:
+          al.severity === "IMPORTANT" ? "red" : al.severity === "ATTENTION" ? "amber" : "neutral",
         source: "Calculated",
         calculationStatus: "Aggregated",
         confidence: "High",

@@ -191,7 +191,7 @@ export function FoodLogList({
           >
             <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5 text-slate-600" />
           </Button>
-          <div className="flex items-center gap-1.5 font-bold text-slate-800 text-xs sm:text-base min-w-0 text-center justify-center">
+          <div className="flex items-center gap-1.5 font-semibold text-slate-800 text-xs sm:text-base min-w-0 text-center justify-center">
             <Calendar className="h-4 w-4 text-emerald-600 shrink-0" />
             <span className="truncate">{selectedDate === new Date().toISOString().split("T")[0] ? "आज (Today)" : selectedDate}</span>
           </div>
@@ -208,10 +208,10 @@ export function FoodLogList({
         {/* Dynamic target calorie indicator */}
         <div className="text-right">
           <span className="text-xs text-slate-400 font-semibold block">आज का कैलोरी उपयोग (Calorie Budget)</span>
-          <span className="text-lg font-black text-slate-900">
+          <span className="text-lg font-bold text-slate-900">
             {totalCalories} / {dailyCalorieTarget} kcal
           </span>
-          <span className="text-[11px] font-bold text-emerald-700 block mt-0.5">
+          <span className="text-xs font-semibold text-emerald-700 block mt-0.5">
             Total Protein: {totalProtein} g
           </span>
           {logs.length > 0 && (
@@ -255,10 +255,10 @@ export function FoodLogList({
                   {/* Meal Group Header */}
                   <div className="bg-slate-50/70 border-b border-slate-100 px-4 py-3 flex items-center justify-between">
                     <div>
-                      <h4 className="font-bold text-slate-800 text-sm">
+                      <h4 className="font-semibold text-slate-800 text-sm">
                         {MEAL_LABELS_HI[mealName] || mealName}
                       </h4>
-                      <span className="text-[10px] text-slate-400 font-semibold block mt-0.5">
+                      <span className="text-2xs text-slate-400 font-semibold block mt-0.5">
                         {mealItems.length} items logged
                       </span>
                     </div>
@@ -268,13 +268,13 @@ export function FoodLogList({
                         type="button"
                         onClick={() => handleCopyMeal(mealName)}
                         disabled={isCopying}
-                        className="text-[11px] font-bold text-emerald-700 bg-emerald-50 hover:bg-emerald-100/80 border border-emerald-200/50 px-2.5 py-1 rounded-lg flex items-center gap-1 transition-all disabled:opacity-50"
+                        className="text-xs font-semibold text-emerald-700 bg-emerald-50 hover:bg-emerald-100/80 border border-emerald-200/50 px-2.5 py-1 rounded-lg flex items-center gap-1 transition-all disabled:opacity-50"
                         title="कल के इस भोजन को आज दोहराएं"
                       >
                         <Copy className="h-3 w-3" />
                         कल का कॉपी करें
                       </button>
-                      <span className="font-bold text-slate-900 text-sm">
+                      <span className="font-semibold text-slate-900 text-sm">
                         ~{mealTotal} kcal
                       </span>
                     </div>
@@ -292,11 +292,11 @@ export function FoodLogList({
                           <div className="space-y-1">
                             <div className="flex items-center gap-2 flex-wrap">
                               <span className="text-xl shrink-0">{getExactFoodEmoji(item.food_name)}</span>
-                              <span className="font-bold text-slate-900">{item.food_name}</span>
+                              <span className="font-semibold text-slate-900">{item.food_name}</span>
                               <Badge variant={item.calorie_confidence === "High" ? "green" : item.calorie_confidence === "Medium" ? "blue" : "amber"}>
                                 {item.calorie_confidence} confidence
                               </Badge>
-                              <span className="text-[11px] text-slate-400 font-semibold bg-slate-100 px-1.5 py-0.5 rounded">
+                              <span className="text-xs text-slate-400 font-semibold bg-slate-100 px-1.5 py-0.5 rounded">
                                 🕐 {new Date(item.consumed_at).toLocaleTimeString("hi-IN", { hour: "2-digit", minute: "2-digit" })}
                               </span>
                             </div>
@@ -310,7 +310,7 @@ export function FoodLogList({
                               )}
                             </div>
                             {item.notes && (
-                              <p className="text-[11px] text-amber-700 font-medium italic flex items-center gap-1 bg-amber-50/40 p-1.5 rounded border border-amber-100/50">
+                              <p className="text-xs text-amber-700 font-medium italic flex items-center gap-1 bg-amber-50/40 p-1.5 rounded border border-amber-100/50">
                                 <AlertCircle className="h-3.5 w-3.5 text-amber-600 flex-shrink-0" />
                                 {item.notes}
                               </p>
@@ -319,7 +319,7 @@ export function FoodLogList({
 
                           {/* Actions */}
                           <div className="flex items-center justify-between sm:justify-end gap-4">
-                            <span className="font-black text-slate-900 text-base">
+                            <span className="font-bold text-slate-900 text-base">
                               ~{item.calories} kcal
                             </span>
                             <div className="flex gap-1.5 items-center">
@@ -379,7 +379,7 @@ export function FoodLogList({
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4">
           <div className="bg-white rounded-2xl w-full max-w-md overflow-hidden shadow-2xl border border-slate-100 flex flex-col">
             <div className="bg-emerald-600 px-6 py-4 text-white">
-              <h3 className="font-bold text-lg">प्रविष्टि संपादित करें (Edit Logged Food)</h3>
+              <h3 className="font-semibold text-lg">प्रविष्टि संपादित करें (Edit Logged Food)</h3>
               <p className="text-emerald-100 text-xs mt-0.5">{editingItem.food_name}</p>
             </div>
 

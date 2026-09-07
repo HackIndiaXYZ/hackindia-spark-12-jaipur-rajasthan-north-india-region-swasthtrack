@@ -1005,18 +1005,38 @@ export const DAILY_PAPA_MESSAGES: DailyPapaMessage[] = [
 // TIME-AWARE HINDI GREETING BUILDER
 // ----------------------------------------------------
 
-export function getTimeAwareGreeting(patientName = "पापा"): string {
-  const hour = new Date().getHours();
+export type DayPart = "morning" | "afternoon" | "evening" | "night";
+
+export interface GreetingParts {
+  part: DayPart;
+  hindi: string;
+  english: string;
+}
+
+/**
+ * The single source of truth for time-of-day greetings (§57).
+ *
+ * The dashboard hero used to compute its own greeting with no night branch,
+ * so between midnight and 4am it said "सुप्रभात (Good Morning)" directly above
+ * this function's "शुभ रात्रि". Both surfaces now read from here.
+ */
+export function getGreetingParts(at: Date = new Date()): GreetingParts {
+  const hour = at.getHours();
+
   if (hour >= 4 && hour < 12) {
-    return `शुभ प्रभात ${patientName} ❤️`;
+    return { part: "morning", hindi: "शुभ प्रभात", english: "Good Morning" };
   }
   if (hour >= 12 && hour < 17) {
-    return `शुभ दोपहर ${patientName} ❤️`;
+    return { part: "afternoon", hindi: "शुभ दोपहर", english: "Good Afternoon" };
   }
   if (hour >= 17 && hour < 21) {
-    return `शुभ संध्या ${patientName} ❤️`;
+    return { part: "evening", hindi: "शुभ संध्या", english: "Good Evening" };
   }
-  return `शुभ रात्रि ${patientName} ❤️`;
+  return { part: "night", hindi: "शुभ रात्रि", english: "Good Night" };
+}
+
+export function getTimeAwareGreeting(patientName = "पापा"): string {
+  return `${getGreetingParts().hindi} ${patientName} ❤️`;
 }
 
 // ----------------------------------------------------

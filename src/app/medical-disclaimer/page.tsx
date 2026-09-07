@@ -27,14 +27,14 @@ export default function MedicalDisclaimerPage() {
       <div className="rounded-2xl border-2 border-emerald-300 bg-emerald-50/70 p-6 sm:p-7 space-y-3">
         <div className="flex items-center gap-2.5">
           <ShieldAlert className="h-6 w-6 text-emerald-700 shrink-0" />
-          <h2 className="text-base sm:text-lg font-black text-slate-900">
+          <h2 className="text-base sm:text-lg font-bold text-slate-900">
             For Informational &amp; Personal Tracking Purposes Only
           </h2>
         </div>
         <p className="text-sm text-slate-800 leading-relaxed font-medium">
           SwasthTrack is a digital health tracking and daily wellness companion designed to help patients and families keep organized personal records of their health routines.
         </p>
-        <p className="text-sm text-slate-800 leading-relaxed font-bold">
+        <p className="text-sm text-slate-800 leading-relaxed font-semibold">
           SwasthTrack is NOT a medical device, hospital, licensed diagnostic laboratory, doctor, or emergency medical service provider.
         </p>
       </div>
@@ -43,7 +43,7 @@ export default function MedicalDisclaimerPage() {
       <div className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 space-y-6 text-xs sm:text-sm text-slate-700 leading-relaxed">
         {/* 1. Not a Substitute for Medical Advice */}
         <section className="space-y-2">
-          <h3 className="text-base font-bold text-slate-900">
+          <h3 className="text-base font-semibold text-slate-900">
             1. No Substitute for Professional Healthcare
           </h3>
           <p>
@@ -56,7 +56,7 @@ export default function MedicalDisclaimerPage() {
 
         {/* 2. Medication & Prescription Decisions */}
         <section className="space-y-2">
-          <h3 className="text-base font-bold text-slate-900">
+          <h3 className="text-base font-semibold text-slate-900">
             2. Prescriptions and Medications
           </h3>
           <p>
@@ -70,7 +70,7 @@ export default function MedicalDisclaimerPage() {
 
         {/* 3. Predictive Insights & Estimates */}
         <section className="space-y-2">
-          <h3 className="text-base font-bold text-slate-900">
+          <h3 className="text-base font-semibold text-slate-900">
             3. Pattern Insights & Estimates
           </h3>
           <p>
@@ -80,21 +80,21 @@ export default function MedicalDisclaimerPage() {
 
         {/* 4. Emergency Situations */}
         <section className="rounded-xl border border-rose-200 bg-rose-50/70 p-5 space-y-3">
-          <div className="flex items-center gap-2 text-rose-900 font-bold text-sm">
+          <div className="flex items-center gap-2 text-rose-900 font-semibold text-sm">
             <PhoneCall className="h-4 w-4 text-rose-600 shrink-0" />
             <span>Medical Emergencies</span>
           </div>
           <p className="text-xs sm:text-sm text-rose-950 leading-relaxed font-medium">
             If you or your family member believe you are experiencing a medical emergency (such as severe chest pain, shortness of breath, sudden numbness, weakness in the face or arms, speech difficulty, or an extreme hypertensive spike):
           </p>
-          <div className="rounded-lg bg-white/80 border border-rose-200 p-3 text-rose-900 font-bold text-center text-sm">
+          <div className="rounded-lg bg-white/80 border border-rose-200 p-3 text-rose-900 font-semibold text-center text-sm">
             🚨 Call your local emergency medical service immediately (e.g. 112 / 108 in India) or visit the nearest hospital emergency room.
           </div>
         </section>
 
         {/* 5. Doctor Checkup Reports */}
         <section className="space-y-2">
-          <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
+          <h3 className="text-base font-semibold text-slate-900 flex items-center gap-2">
             <CheckCircle className="h-4 w-4 text-emerald-600" />
             5. Use During Doctor Visits
           </h3>

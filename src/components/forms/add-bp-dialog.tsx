@@ -100,21 +100,21 @@ export function AddBPDialog({
     >
       <form onSubmit={handleSubmit} className="space-y-5">
         {error ? (
-          <div className="rounded-xl border border-rose-200 bg-rose-50 p-3.5 text-sm font-bold text-rose-800">
+          <div className="rounded-xl border border-rose-200 bg-rose-50 p-3.5 text-sm font-semibold text-rose-800">
             {error}
           </div>
         ) : null}
 
         {/* 1. TIME OF DAY (Morning vs Evening) */}
         <div className="space-y-2">
-          <label className="block text-sm font-black text-slate-900">
+          <label className="block text-sm font-bold text-slate-900">
             ⭐ नापने का समय (Reading Time):
           </label>
           <div className="grid grid-cols-2 gap-3">
             <button
               type="button"
               onClick={() => setReadingType("Morning")}
-              className={`p-3 rounded-2xl border-2 text-sm sm:text-base font-black transition-all flex items-center justify-center gap-2 cursor-pointer ${
+              className={`p-3 rounded-2xl border-2 text-sm sm:text-base font-bold transition-all flex items-center justify-center gap-2 cursor-pointer ${
                 readingType === "Morning"
                   ? "border-amber-500 bg-amber-50 text-amber-950 ring-2 ring-amber-400/30 shadow-xs"
                   : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
@@ -125,7 +125,7 @@ export function AddBPDialog({
             <button
               type="button"
               onClick={() => setReadingType("Evening")}
-              className={`p-3 rounded-2xl border-2 text-sm sm:text-base font-black transition-all flex items-center justify-center gap-2 cursor-pointer ${
+              className={`p-3 rounded-2xl border-2 text-sm sm:text-base font-bold transition-all flex items-center justify-center gap-2 cursor-pointer ${
                 readingType === "Evening"
                   ? "border-indigo-600 bg-indigo-50 text-indigo-950 ring-2 ring-indigo-500/30 shadow-xs"
                   : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
@@ -138,7 +138,7 @@ export function AddBPDialog({
 
         {/* 2. 1-TAP PRESETS */}
         <div className="space-y-2">
-          <label className="block text-sm font-black text-slate-900">
+          <label className="block text-sm font-bold text-slate-900">
             ⭐ 1-टैप त्वरित मान (Quick Presets):
           </label>
           <div className="grid grid-cols-2 gap-2">
@@ -154,12 +154,12 @@ export function AddBPDialog({
                   }}
                   className={`p-2.5 rounded-xl border-2 text-left transition-all cursor-pointer ${
                     isSelected
-                      ? "border-rose-600 bg-rose-50 text-rose-950 font-black ring-2 ring-rose-500/30 shadow-2xs"
-                      : "border-slate-200 bg-white text-slate-800 hover:bg-slate-50 font-bold"
+                      ? "border-rose-600 bg-rose-50 text-rose-950 font-bold ring-2 ring-rose-500/30 shadow-2xs"
+                      : "border-slate-200 bg-white text-slate-800 hover:bg-slate-50 font-semibold"
                   }`}
                 >
-                  <p className="text-base font-black leading-tight">{p.label}</p>
-                  <p className="text-[11px] font-bold text-slate-500">{p.hint}</p>
+                  <p className="text-base font-bold leading-tight">{p.label}</p>
+                  <p className="text-xs font-semibold text-slate-500">{p.hint}</p>
                 </button>
               );
             })}
@@ -168,19 +168,19 @@ export function AddBPDialog({
 
         {/* 3. STEPPERS & DIRECT MANUAL INPUTS FOR SYSTOLIC & DIASTOLIC */}
         <div className="space-y-3 pt-2 border-t border-slate-200">
-          <p className="text-xs font-black uppercase tracking-wider text-slate-500">
+          <p className="text-xs font-bold uppercase tracking-wider text-slate-500">
             सटीक मान (टाइप करें या + / - बटन दबाएं):
           </p>
 
           <div className="grid grid-cols-2 gap-3">
             <div className="p-3.5 rounded-2xl border-2 border-slate-200 bg-slate-50/80 text-center">
-              <p className="text-xs font-black text-slate-600 uppercase">ऊपर वाला (Systolic)</p>
+              <p className="text-xs font-bold text-slate-600 uppercase">ऊपर वाला (Systolic)</p>
               <div className="my-2">
                 <input
                   type="number"
                   value={systolic}
                   onChange={(e) => setSystolic(e.target.value)}
-                  className="w-full text-center text-3xl font-black text-rose-700 bg-white border border-slate-300 rounded-xl py-1 focus:ring-2 focus:ring-rose-500 focus:outline-none"
+                  className="w-full text-center text-3xl font-bold text-rose-700 bg-white border border-slate-300 rounded-xl py-1 focus:ring-2 focus:ring-rose-500 focus:outline-none"
                   placeholder="120"
                 />
               </div>
@@ -188,14 +188,14 @@ export function AddBPDialog({
                 <button
                   type="button"
                   onClick={() => adjustSystolic(-5)}
-                  className="h-10 w-11 rounded-xl bg-white border-2 border-slate-300 font-black text-base text-slate-800 hover:bg-slate-100 flex items-center justify-center active:scale-95 shadow-2xs"
+                  className="h-10 w-11 rounded-xl bg-white border-2 border-slate-300 font-bold text-base text-slate-800 hover:bg-slate-100 flex items-center justify-center active:scale-95 shadow-2xs"
                 >
                   -5
                 </button>
                 <button
                   type="button"
                   onClick={() => adjustSystolic(+5)}
-                  className="h-10 w-11 rounded-xl bg-white border-2 border-slate-300 font-black text-base text-slate-800 hover:bg-slate-100 flex items-center justify-center active:scale-95 shadow-2xs"
+                  className="h-10 w-11 rounded-xl bg-white border-2 border-slate-300 font-bold text-base text-slate-800 hover:bg-slate-100 flex items-center justify-center active:scale-95 shadow-2xs"
                 >
                   +5
                 </button>
@@ -203,13 +203,13 @@ export function AddBPDialog({
             </div>
 
             <div className="p-3.5 rounded-2xl border-2 border-slate-200 bg-slate-50/80 text-center">
-              <p className="text-xs font-black text-slate-600 uppercase">नीचे वाला (Diastolic)</p>
+              <p className="text-xs font-bold text-slate-600 uppercase">नीचे वाला (Diastolic)</p>
               <div className="my-2">
                 <input
                   type="number"
                   value={diastolic}
                   onChange={(e) => setDiastolic(e.target.value)}
-                  className="w-full text-center text-3xl font-black text-rose-700 bg-white border border-slate-300 rounded-xl py-1 focus:ring-2 focus:ring-rose-500 focus:outline-none"
+                  className="w-full text-center text-3xl font-bold text-rose-700 bg-white border border-slate-300 rounded-xl py-1 focus:ring-2 focus:ring-rose-500 focus:outline-none"
                   placeholder="80"
                 />
               </div>
@@ -217,14 +217,14 @@ export function AddBPDialog({
                 <button
                   type="button"
                   onClick={() => adjustDiastolic(-5)}
-                  className="h-10 w-11 rounded-xl bg-white border-2 border-slate-300 font-black text-base text-slate-800 hover:bg-slate-100 flex items-center justify-center active:scale-95 shadow-2xs"
+                  className="h-10 w-11 rounded-xl bg-white border-2 border-slate-300 font-bold text-base text-slate-800 hover:bg-slate-100 flex items-center justify-center active:scale-95 shadow-2xs"
                 >
                   -5
                 </button>
                 <button
                   type="button"
                   onClick={() => adjustDiastolic(+5)}
-                  className="h-10 w-11 rounded-xl bg-white border-2 border-slate-300 font-black text-base text-slate-800 hover:bg-slate-100 flex items-center justify-center active:scale-95 shadow-2xs"
+                  className="h-10 w-11 rounded-xl bg-white border-2 border-slate-300 font-bold text-base text-slate-800 hover:bg-slate-100 flex items-center justify-center active:scale-95 shadow-2xs"
                 >
                   +5
                 </button>
@@ -239,7 +239,7 @@ export function AddBPDialog({
                 placeholder="उदा. 72"
                 value={pulse}
                 onChange={(e) => setPulse(e.target.value)}
-                className="text-base font-bold"
+                className="text-base font-semibold"
               />
             </Field>
 
@@ -260,7 +260,7 @@ export function AddBPDialog({
             variant="primary"
             type="submit"
             disabled={loading}
-            className="w-full min-h-12 text-base font-black rounded-2xl bg-rose-600 hover:bg-rose-700 text-white shadow-md shadow-rose-600/20"
+            className="w-full min-h-12 text-base font-bold rounded-2xl bg-rose-600 hover:bg-rose-700 text-white shadow-md shadow-rose-600/20"
           >
             <HeartPulse className="h-5 w-5 mr-2" />
             {loading ? "सेव हो रहा है..." : `🩺 BP ${systolic}/${diastolic} सेव करें (Save BP)`}

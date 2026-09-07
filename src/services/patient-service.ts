@@ -2629,6 +2629,7 @@ export interface DashboardOverview {
   todayMedicineTotalCount: number;
   todayMedicineLogs: MedicineLogEntry[];
   todayWeight: WeightLogEntry | null;
+  todaySleep: SleepLogEntry | null;
   checklist: DailyChecklistEntry[];
   isRealDatabaseConnected: boolean;
 }
@@ -2638,17 +2639,27 @@ export async function getDashboardOverview(patientId?: string): Promise<Dashboar
   const pid = patientId || profile.id;
   const today = getTodayDateString();
 
-  const [conditions, medicines, bpList, weightList, foodList, actList, medLogs, checklist] =
-    await Promise.all([
-      getMedicalConditions(pid),
-      getMedicines(pid),
-      getBloodPressureLogs(pid, 5),
-      getWeightLogs(pid, 5),
-      getFoodLogs(pid, 50),
-      getActivityLogs(pid, 5),
-      getTodayMedicineLogs(pid),
-      getDailyChecklist(pid, today),
-    ]);
+  const [
+    conditions,
+    medicines,
+    bpList,
+    weightList,
+    foodList,
+    actList,
+    sleepList,
+    medLogs,
+    checklist,
+  ] = await Promise.all([
+    getMedicalConditions(pid),
+    getMedicines(pid),
+    getBloodPressureLogs(pid, 10),
+    getWeightLogs(pid, 10),
+    getFoodLogs(pid, 60),
+    getActivityLogs(pid, 7),
+    getSleepLogs(pid, 7),
+    getTodayMedicineLogs(pid),
+    getDailyChecklist(pid, today),
+  ]);
 
   const todayBPs = bpList.filter((b) => isSameLocalDay(b.measured_at, today));
   const todayMorningBP = todayBPs.find((b) => b.reading_type === "Morning") || null;
@@ -2664,6 +2675,7 @@ export async function getDashboardOverview(patientId?: string): Promise<Dashboar
     : null;
 
   const todayActivity = actList.find((a) => a.date === today) || null;
+  const todaySleep = sleepList.find((sl) => sl.date === today) || null;
 
   const activeMeds = medicines.filter((m) => m.active);
   
@@ -2700,6 +2712,7 @@ export async function getDashboardOverview(patientId?: string): Promise<Dashboar
     todayMedicineTotalCount,
     todayMedicineLogs: medLogs,
     todayWeight,
+    todaySleep,
     checklist,
     isRealDatabaseConnected: isSupabaseConfigured,
   };

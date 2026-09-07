@@ -265,7 +265,7 @@ export default function SettingsPage() {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <User className="h-4 w-4 text-emerald-600" />
-                <CardTitle className="text-sm font-bold text-slate-900">
+                <CardTitle className="text-sm font-semibold text-slate-900">
                   Patient Profile Summary (मरीज़ का परिचय)
                 </CardTitle>
               </div>
@@ -278,20 +278,20 @@ export default function SettingsPage() {
 
           <div className="grid gap-3 sm:grid-cols-3 text-xs">
             <div className="rounded-xl border border-slate-100 bg-slate-50 p-3">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Patient Name</span>
-              <p className="font-bold text-slate-900 text-sm mt-0.5">{patient?.name}</p>
+              <span className="text-2xs font-semibold uppercase tracking-wider text-slate-400">Patient Name</span>
+              <p className="font-semibold text-slate-900 text-sm mt-0.5">{patient?.name}</p>
               <p className="text-slate-500">{patient?.age} yrs · {patient?.gender}</p>
             </div>
 
             <div className="rounded-xl border border-slate-100 bg-slate-50 p-3">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Weight Status</span>
-              <p className="font-bold text-slate-900 text-sm mt-0.5">{patient?.current_weight_kg} kg</p>
+              <span className="text-2xs font-semibold uppercase tracking-wider text-slate-400">Weight Status</span>
+              <p className="font-semibold text-slate-900 text-sm mt-0.5">{patient?.current_weight_kg} kg</p>
               <p className="text-slate-500">Target Goal: {patient?.target_weight_kg} kg</p>
             </div>
 
             <div className="rounded-xl border border-slate-100 bg-slate-50 p-3">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Timezone</span>
-              <p className="font-bold text-slate-900 text-sm mt-0.5">{timezone}</p>
+              <span className="text-2xs font-semibold uppercase tracking-wider text-slate-400">Timezone</span>
+              <p className="font-semibold text-slate-900 text-sm mt-0.5">{timezone}</p>
               <p className="text-slate-500">Asia/Kolkata (IST Standard)</p>
             </div>
           </div>
@@ -302,7 +302,7 @@ export default function SettingsPage() {
           <CardHeader className="p-0 pb-4">
             <div className="flex items-center gap-2">
               <Utensils className="h-4 w-4 text-emerald-600" />
-              <CardTitle className="text-sm font-bold text-slate-900">
+              <CardTitle className="text-sm font-semibold text-slate-900">
                 Nutrition & Calorie Target (दैनिक कैलोरी लक्ष्य)
               </CardTitle>
             </div>
@@ -315,7 +315,7 @@ export default function SettingsPage() {
             <div className="rounded-xl border border-amber-200 bg-amber-50/60 p-3 text-xs text-amber-900 flex items-start gap-2">
               <AlertCircle className="h-4 w-4 text-amber-700 shrink-0 mt-0.5" />
               <div>
-                <p className="font-bold">Medical Plan Note / डॉक्टर का परामर्श:</p>
+                <p className="font-semibold">Medical Plan Note / डॉक्टर का परामर्श:</p>
                 <p className="mt-0.5 leading-relaxed text-amber-800">
                   This target is currently based on your prescribed plan. Changing it should be discussed with your healthcare professional. (यह लक्ष्य आपकी योजना पर आधारित है। बदलाव से पहले डॉक्टर से परामर्श लें।)
                 </p>
@@ -324,14 +324,14 @@ export default function SettingsPage() {
 
             <div className="grid gap-3 sm:grid-cols-2">
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">
+                <label className="block text-xs font-semibold text-slate-700 mb-1">
                   Daily Calorie Target (kcal/day)
                 </label>
                 <input
                   type="number"
                   value={calorieTarget}
                   onChange={(e) => setCalorieTarget(e.target.value)}
-                  className="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm font-bold text-slate-900 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+                  className="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-900 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
                   placeholder="1600"
                   required
                 />
@@ -343,7 +343,7 @@ export default function SettingsPage() {
                     key={preset}
                     type="button"
                     onClick={() => setCalorieTarget(String(preset))}
-                    className={`rounded-lg border px-2.5 py-1.5 text-xs font-bold transition-colors ${
+                    className={`rounded-lg border px-2.5 py-1.5 text-xs font-semibold transition-colors ${
                       calorieTarget === String(preset)
                         ? "border-emerald-600 bg-emerald-50 text-emerald-800"
                         : "border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100"
@@ -357,8 +357,8 @@ export default function SettingsPage() {
 
             <div className="pt-3 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2">
               <div>
-                <p className="text-xs font-bold text-slate-800">Personalized Quick Foods (सीखे गए त्वरित भोजन)</p>
-                <p className="text-[11px] text-slate-500">
+                <p className="text-xs font-semibold text-slate-800">Personalized Quick Foods (सीखे गए त्वरित भोजन)</p>
+                <p className="text-xs text-slate-500">
                   Resets learned eating frequency rankings without deleting your past food log history. (लॉग इतिहास डिलीट किए बिना केवल रैंकिंग रीसेट करें)
                 </p>
               </div>
@@ -370,7 +370,7 @@ export default function SettingsPage() {
                     showToast("Personalized Quick Food preferences reset successfully. (क्विक फूड प्राथमिकताएं रीसेट कर दी गईं)");
                   }
                 }}
-                className="flex items-center gap-1.5 rounded-lg border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-bold text-slate-700 hover:border-slate-300 hover:bg-slate-100 transition-colors"
+                className="flex items-center gap-1.5 rounded-lg border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-semibold text-slate-700 hover:border-slate-300 hover:bg-slate-100 transition-colors"
               >
                 <RotateCcw className="h-3.5 w-3.5 text-slate-500" />
                 Reset Quick Foods
@@ -384,7 +384,7 @@ export default function SettingsPage() {
           <CardHeader className="p-0 pb-4">
             <div className="flex items-center gap-2">
               <Footprints className="h-4 w-4 text-sky-600" />
-              <CardTitle className="text-sm font-bold text-slate-900">
+              <CardTitle className="text-sm font-semibold text-slate-900">
                 Activity & Step Goal (दैनिक कदम लक्ष्य)
               </CardTitle>
             </div>
@@ -396,21 +396,21 @@ export default function SettingsPage() {
           <div className="space-y-3">
             <div className="grid gap-3 sm:grid-cols-2">
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">
+                <label className="block text-xs font-semibold text-slate-700 mb-1">
                   Daily Step Goal (कदम / दिन)
                 </label>
                 <input
                   type="number"
                   value={stepGoal}
                   onChange={(e) => setStepGoal(e.target.value)}
-                  className="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm font-bold text-slate-900 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+                  className="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-900 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
                   placeholder="6000"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-500 mb-1">
+                <label className="block text-xs font-semibold text-slate-500 mb-1">
                   Quick Presets:
                 </label>
                 <div className="flex flex-wrap gap-1.5">
@@ -419,7 +419,7 @@ export default function SettingsPage() {
                       key={preset}
                       type="button"
                       onClick={() => setStepGoal(String(preset))}
-                      className={`rounded-lg border px-2.5 py-1.5 text-xs font-bold transition-colors ${
+                      className={`rounded-lg border px-2.5 py-1.5 text-xs font-semibold transition-colors ${
                         stepGoal === String(preset)
                           ? "border-sky-600 bg-sky-50 text-sky-800"
                           : "border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100"
@@ -431,7 +431,7 @@ export default function SettingsPage() {
                 </div>
               </div>
             </div>
-            <p className="text-[11px] text-slate-500">
+            <p className="text-xs text-slate-500">
               * Note: Changing your step goal dynamically evaluates current & future scores. Historical step records remain unchanged.
             </p>
           </div>
@@ -442,7 +442,7 @@ export default function SettingsPage() {
           <CardHeader className="p-0 pb-4">
             <div className="flex items-center gap-2">
               <Moon className="h-4 w-4 text-indigo-600" />
-              <CardTitle className="text-sm font-bold text-slate-900">
+              <CardTitle className="text-sm font-semibold text-slate-900">
                 Sleep Duration Target (नींद का लक्ष्य - घंटे)
               </CardTitle>
             </div>
@@ -453,7 +453,7 @@ export default function SettingsPage() {
 
           <div className="grid gap-3 sm:grid-cols-2">
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">
+              <label className="block text-xs font-semibold text-slate-700 mb-1">
                 Target Hours / Night
               </label>
               <input
@@ -461,14 +461,14 @@ export default function SettingsPage() {
                 step="0.5"
                 value={sleepTarget}
                 onChange={(e) => setSleepTarget(e.target.value)}
-                className="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm font-bold text-slate-900 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+                className="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-900 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
                 placeholder="7.0"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-500 mb-1">
+              <label className="block text-xs font-semibold text-slate-500 mb-1">
                 Quick Presets:
               </label>
               <div className="flex flex-wrap gap-1.5">
@@ -477,7 +477,7 @@ export default function SettingsPage() {
                     key={preset}
                     type="button"
                     onClick={() => setSleepTarget(String(preset))}
-                    className={`rounded-lg border px-2.5 py-1.5 text-xs font-bold transition-colors ${
+                    className={`rounded-lg border px-2.5 py-1.5 text-xs font-semibold transition-colors ${
                       sleepTarget === String(preset)
                         ? "border-indigo-600 bg-indigo-50 text-indigo-800"
                         : "border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100"
@@ -496,7 +496,7 @@ export default function SettingsPage() {
           <CardHeader className="p-0 pb-4">
             <div className="flex items-center gap-2">
               <HeartPulse className="h-4 w-4 text-rose-600" />
-              <CardTitle className="text-sm font-bold text-slate-900">
+              <CardTitle className="text-sm font-semibold text-slate-900">
                 Blood Pressure Monitoring Schedule (BP निगरानी कार्यक्रम)
               </CardTitle>
             </div>
@@ -515,7 +515,7 @@ export default function SettingsPage() {
                 key={opt.id}
                 className={`flex items-center gap-2.5 rounded-xl border p-3 cursor-pointer transition-colors ${
                   bpSchedule === opt.id
-                    ? "border-rose-600 bg-rose-50/50 text-rose-950 font-bold"
+                    ? "border-rose-600 bg-rose-50/50 text-rose-950 font-semibold"
                     : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
                 }`}
               >
@@ -528,7 +528,7 @@ export default function SettingsPage() {
                 />
                 <div>
                   <span className="block">{opt.label}</span>
-                  <span className="text-[10px] text-slate-500 font-normal">{opt.labelHi}</span>
+                  <span className="text-2xs text-slate-500 font-normal">{opt.labelHi}</span>
                 </div>
               </label>
             ))}
@@ -540,7 +540,7 @@ export default function SettingsPage() {
           <CardHeader className="p-0 pb-4">
             <div className="flex items-center gap-2">
               <Bell className="h-4 w-4 text-amber-600" />
-              <CardTitle className="text-sm font-bold text-slate-900">
+              <CardTitle className="text-sm font-semibold text-slate-900">
                 Health Alerts & Reminders (सूचनाएं एवं रिमाइंडर्स)
               </CardTitle>
             </div>
@@ -615,7 +615,7 @@ export default function SettingsPage() {
                 type="button"
                 onClick={handleEnablePushNotifs}
                 disabled={notifPermission === "granted"}
-                className={`w-full py-2.5 px-4 rounded-xl font-bold text-xs flex items-center justify-center gap-2 border transition-all ${
+                className={`w-full py-2.5 px-4 rounded-xl font-semibold text-xs flex items-center justify-center gap-2 border transition-all ${
                   notifPermission === "granted"
                     ? "bg-emerald-50 border-emerald-200 text-emerald-800"
                     : "bg-amber-50 hover:bg-amber-100 border-amber-300 text-amber-900 cursor-pointer shadow-2xs"
@@ -637,7 +637,7 @@ export default function SettingsPage() {
           <CardHeader className="p-0 pb-4">
             <div className="flex items-center gap-2">
               <Download className="h-4 w-4 text-sky-600" />
-              <CardTitle className="text-sm font-bold text-slate-900">
+              <CardTitle className="text-sm font-semibold text-slate-900">
                 Full Data Export & Backup (सम्पूर्ण डेटा बैकअप)
               </CardTitle>
             </div>
@@ -650,7 +650,7 @@ export default function SettingsPage() {
             <button
               type="button"
               onClick={() => patient && exportAllDataAsCsv(patient.id)}
-              className="flex-1 py-2.5 px-4 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-800 font-bold text-xs flex items-center justify-center gap-2 shadow-2xs active:scale-98 transition-all cursor-pointer"
+              className="flex-1 py-2.5 px-4 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-800 font-semibold text-xs flex items-center justify-center gap-2 shadow-2xs active:scale-98 transition-all cursor-pointer"
             >
               <Download className="h-4 w-4 text-emerald-600" />
               <span>CSV फ़ाइल डाउनलोड करें (Export CSV)</span>
@@ -659,7 +659,7 @@ export default function SettingsPage() {
             <button
               type="button"
               onClick={() => patient && exportAllDataAsJson(patient.id)}
-              className="flex-1 py-2.5 px-4 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-800 font-bold text-xs flex items-center justify-center gap-2 shadow-2xs active:scale-98 transition-all cursor-pointer"
+              className="flex-1 py-2.5 px-4 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-800 font-semibold text-xs flex items-center justify-center gap-2 shadow-2xs active:scale-98 transition-all cursor-pointer"
             >
               <Download className="h-4 w-4 text-sky-600" />
               <span>JSON फ़ाइल डाउनलोड करें (Export JSON)</span>
@@ -672,7 +672,7 @@ export default function SettingsPage() {
           <CardHeader className="p-0 pb-4">
             <div className="flex items-center gap-2">
               <Ruler className="h-4 w-4 text-emerald-600" />
-              <CardTitle className="text-sm font-bold text-slate-900">
+              <CardTitle className="text-sm font-semibold text-slate-900">
                 Units & Display Preferences (इकाई और भाषा)
               </CardTitle>
             </div>
@@ -683,11 +683,11 @@ export default function SettingsPage() {
 
           <div className="grid gap-3 sm:grid-cols-3 text-xs">
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">Weight Unit</label>
+              <label className="block text-xs font-semibold text-slate-700 mb-1">Weight Unit</label>
               <select
                 value={weightUnit}
                 onChange={(e) => setWeightUnit(e.target.value as WeightUnit)}
-                className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-xs font-bold text-slate-800"
+                className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-xs font-semibold text-slate-800"
               >
                 <option value="kg">Kilograms (kg)</option>
                 <option value="lb">Pounds (lb)</option>
@@ -695,11 +695,11 @@ export default function SettingsPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">Height Unit</label>
+              <label className="block text-xs font-semibold text-slate-700 mb-1">Height Unit</label>
               <select
                 value={heightUnit}
                 onChange={(e) => setHeightUnit(e.target.value as HeightUnit)}
-                className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-xs font-bold text-slate-800"
+                className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-xs font-semibold text-slate-800"
               >
                 <option value="cm">Centimeters (cm)</option>
                 <option value="ft_in">Feet & Inches (ft-in)</option>
@@ -707,11 +707,11 @@ export default function SettingsPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">Language</label>
+              <label className="block text-xs font-semibold text-slate-700 mb-1">Language</label>
               <select
                 value={language}
                 onChange={(e) => setLanguage(e.target.value as LanguagePref)}
-                className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-xs font-bold text-slate-800"
+                className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-xs font-semibold text-slate-800"
               >
                 <option value="bilingual">Bilingual (हिन्दी + English)</option>
                 <option value="hi">हिन्दी (Hindi)</option>
@@ -727,7 +727,7 @@ export default function SettingsPage() {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Users className="h-4 w-4 text-emerald-600" />
-                <CardTitle className="text-sm font-bold text-slate-900">
+                <CardTitle className="text-sm font-semibold text-slate-900">
                   Account & Caregiver Access (खाता एवं केयरगिवर प्रबंधन)
                 </CardTitle>
               </div>
@@ -754,8 +754,8 @@ export default function SettingsPage() {
                   <Phone className="h-4 w-4" />
                 </div>
                 <div>
-                  <p className="font-bold text-slate-900">{user?.phone || "+91 98765 43210"}</p>
-                  <p className="text-[11px] text-slate-500">
+                  <p className="font-semibold text-slate-900">{user?.phone || "+91 98765 43210"}</p>
+                  <p className="text-xs text-slate-500">
                     Role: {profile?.role === "caregiver" ? "Caregiver (केयरगिवर)" : "Primary Patient (मरीज़)"}
                   </p>
                 </div>
@@ -765,7 +765,7 @@ export default function SettingsPage() {
 
             {/* Caregivers List */}
             <div>
-              <span className="block font-bold text-slate-700 mb-2">
+              <span className="block font-semibold text-slate-700 mb-2">
                 Authorized Caregivers (आपकी स्वास्थ्य जानकारी देखने वाले लोग):
               </span>
               {caregivers.length > 0 ? (
@@ -776,13 +776,13 @@ export default function SettingsPage() {
                       className="flex items-center justify-between p-3 rounded-xl border border-slate-200 bg-white shadow-2xs"
                     >
                       <div>
-                        <p className="font-bold text-slate-900">{cg.display_name}</p>
-                        <p className="text-[11px] text-slate-500">{cg.phone} · Added {new Date(cg.added_at).toLocaleDateString("en-IN")}</p>
+                        <p className="font-semibold text-slate-900">{cg.display_name}</p>
+                        <p className="text-xs text-slate-500">{cg.phone} · Added {new Date(cg.added_at).toLocaleDateString("en-IN")}</p>
                       </div>
                       <button
                         type="button"
                         onClick={() => handleRevokeCaregiver(cg.user_id)}
-                        className="text-xs font-bold text-rose-600 hover:text-rose-800 hover:bg-rose-50 px-2.5 py-1.5 rounded-lg transition-colors flex items-center gap-1"
+                        className="text-xs font-semibold text-rose-600 hover:text-rose-800 hover:bg-rose-50 px-2.5 py-1.5 rounded-lg transition-colors flex items-center gap-1"
                       >
                         <Trash2 className="h-3 w-3" />
                         Remove Access (हटाएं)
@@ -791,7 +791,7 @@ export default function SettingsPage() {
                   ))}
                 </div>
               ) : (
-                <div className="p-3 rounded-xl border border-slate-100 bg-slate-50 text-slate-500 text-[11px]">
+                <div className="p-3 rounded-xl border border-slate-100 bg-slate-50 text-slate-500 text-xs">
                   कोई केयरगिवर नहीं जुड़ा है। परिवार के सदस्य को जोड़ने के लिए &quot;Add Caregiver&quot; पर क्लिक करें।
                 </div>
               )}
@@ -825,16 +825,16 @@ export default function SettingsPage() {
         {/* SECTION 9: ABOUT, CONTACT & LEGAL POLICIES */}
         <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5 text-xs text-slate-600 space-y-3">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-1.5 font-bold text-slate-800">
+            <div className="flex items-center gap-1.5 font-semibold text-slate-800">
               <ShieldCheck className="h-4 w-4 text-emerald-700" />
               <span>SwasthTrack Health Companion · Version 7.0</span>
             </div>
-            <span className="text-[11px] text-slate-400">Created by Pawan Kumar</span>
+            <span className="text-xs text-slate-400">Created by Pawan Kumar</span>
           </div>
           <p className="text-slate-500 leading-relaxed">
             Your health records are privately synchronized with Supabase and protected with Row-Level Security (RLS). All analytics are rule-based for supportive tracking.
           </p>
-          <div className="pt-2 border-t border-slate-200 flex flex-wrap items-center gap-x-4 gap-y-2 font-bold text-emerald-800">
+          <div className="pt-2 border-t border-slate-200 flex flex-wrap items-center gap-x-4 gap-y-2 font-semibold text-emerald-800">
             <Link href="/about" className="hover:underline">
               About SwasthTrack
             </Link>
@@ -859,7 +859,7 @@ export default function SettingsPage() {
             variant="primary"
             type="submit"
             disabled={saving}
-            className="w-full sm:w-auto px-6 h-11 text-sm font-bold"
+            className="w-full sm:w-auto px-6 h-11 text-sm font-semibold"
           >
             <Save className="h-4 w-4" />
             {saving ? "Saving Preferences..." : "Save All Settings (सेटिंग्स सुरक्षित करें)"}

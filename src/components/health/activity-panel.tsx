@@ -46,7 +46,7 @@ export function ActivityPanel({
                 <div className="h-8 w-8 rounded-xl bg-sky-600 text-white flex items-center justify-center shadow-xs">
                   <Footprints className="h-4.5 w-4.5" />
                 </div>
-                <CardTitle className="text-lg font-black text-slate-900">
+                <CardTitle className="text-lg font-bold text-slate-900">
                   Daily Physical Activity (कदम व टहलना)
                 </CardTitle>
                 <Badge variant="blue">गतिविधि ट्रैकर</Badge>
@@ -58,7 +58,7 @@ export function ActivityPanel({
 
             <Button
               onClick={() => setIsDialogOpen(true)}
-              className="bg-sky-600 hover:bg-sky-700 text-white font-bold rounded-xl h-10 px-4 shadow-xs"
+              className="bg-sky-600 hover:bg-sky-700 text-white font-semibold rounded-xl h-10 px-4 shadow-xs"
             >
               <Plus className="h-4 w-4 mr-1.5" />
               + Log Walk (कदम दर्ज करें)
@@ -71,52 +71,52 @@ export function ActivityPanel({
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
             <div className="p-4 rounded-2xl border border-sky-100 bg-sky-50/50 flex flex-col justify-between">
               <div className="flex items-center justify-between text-slate-600">
-                <span className="text-xs font-black uppercase tracking-wider text-sky-900">
+                <span className="text-xs font-bold uppercase tracking-wider text-sky-900">
                   औसत दैनिक कदम (Avg Steps)
                 </span>
                 <Footprints className="h-4 w-4 text-sky-600" />
               </div>
               <div className="mt-2 flex items-baseline gap-1.5">
-                <span className="text-3xl font-black text-sky-950">{avgSteps.toLocaleString("en-IN")}</span>
-                <span className="text-sm font-bold text-sky-800">कदम</span>
+                <span className="text-3xl font-bold text-sky-950">{avgSteps.toLocaleString("en-IN")}</span>
+                <span className="text-sm font-semibold text-sky-800">कदम</span>
               </div>
-              <span className="text-[11px] font-semibold text-sky-700 mt-1">
+              <span className="text-xs font-semibold text-sky-700 mt-1">
                 दैनिक लक्ष्य: {targetSteps.toLocaleString("en-IN")} कदम
               </span>
             </div>
 
             <div className="p-4 rounded-2xl border border-amber-100 bg-amber-50/50 flex flex-col justify-between">
               <div className="flex items-center justify-between text-slate-600">
-                <span className="text-xs font-black uppercase tracking-wider text-amber-900">
+                <span className="text-xs font-bold uppercase tracking-wider text-amber-900">
                   कुल बर्न कैलोरी (Burned)
                 </span>
                 <Flame className="h-4 w-4 text-amber-600" />
               </div>
               <div className="mt-2 flex items-baseline gap-1.5">
-                <span className="text-3xl font-black text-amber-950">{Math.round(totalCalories)}</span>
-                <span className="text-sm font-bold text-amber-800">kcal</span>
+                <span className="text-3xl font-bold text-amber-950">{Math.round(totalCalories)}</span>
+                <span className="text-sm font-semibold text-amber-800">kcal</span>
               </div>
-              <span className="text-[11px] font-semibold text-amber-700 mt-1">
+              <span className="text-xs font-semibold text-amber-700 mt-1">
                 पिछले 14 दिनों की कुल एक्टिविटी
               </span>
             </div>
 
             <div className="p-4 rounded-2xl border border-slate-200 bg-slate-50/70 flex flex-col justify-between">
               <div className="flex items-center justify-between text-slate-600">
-                <span className="text-xs font-black uppercase tracking-wider text-slate-700">
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-700">
                   हालिया वॉक (Latest Walk)
                 </span>
                 <Clock className="h-4 w-4 text-slate-600" />
               </div>
               <div className="mt-2 flex items-baseline gap-1.5">
-                <span className="text-3xl font-black text-slate-900">
+                <span className="text-3xl font-bold text-slate-900">
                   {latestLog ? `${latestLog.steps} कदम` : "--"}
                 </span>
-                <span className="text-xs font-bold text-slate-500">
+                <span className="text-xs font-semibold text-slate-500">
                   {latestLog ? `(${latestLog.distance_km || 0} km)` : ""}
                 </span>
               </div>
-              <span className="text-[11px] font-semibold text-slate-600 mt-1">
+              <span className="text-xs font-semibold text-slate-600 mt-1">
                 {latestLog ? `${latestLog.walking_minutes || 0} मिनट टहले · ${latestLog.date}` : "नियमित टहलें"}
               </span>
             </div>
@@ -125,11 +125,11 @@ export function ActivityPanel({
           {/* ACTIVITY HISTORY LIST */}
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <h4 className="text-sm font-black text-slate-900 flex items-center gap-2">
+              <h4 className="text-sm font-bold text-slate-900 flex items-center gap-2">
                 <Calendar className="h-4 w-4 text-sky-600" />
                 टहलने का इतिहास (Activity History)
               </h4>
-              <span className="text-xs font-bold text-slate-500">
+              <span className="text-xs font-semibold text-slate-500">
                 कुल {logs.length} रिकॉर्ड
               </span>
             </div>
@@ -137,7 +137,7 @@ export function ActivityPanel({
             {logs.length === 0 ? (
               <div className="text-center py-8 rounded-2xl border border-dashed border-slate-200 bg-slate-50/50">
                 <Footprints className="h-8 w-8 text-slate-300 mx-auto mb-2" />
-                <p className="text-sm font-bold text-slate-700">कोई गतिविधि रिकॉर्ड नहीं है</p>
+                <p className="text-sm font-semibold text-slate-700">कोई गतिविधि रिकॉर्ड नहीं है</p>
                 <p className="text-xs text-slate-500 mt-0.5">ऊपर दिए गए बटन से अपने कदम दर्ज करें।</p>
               </div>
             ) : (
@@ -153,17 +153,17 @@ export function ActivityPanel({
                         <div
                           className={`h-11 w-11 rounded-xl flex flex-col items-center justify-center shrink-0 border ${
                             metGoal
-                              ? "bg-emerald-50 border-emerald-200 text-emerald-950 font-black"
-                              : "bg-sky-50 border-sky-200 text-sky-950 font-black"
+                              ? "bg-emerald-50 border-emerald-200 text-emerald-950 font-bold"
+                              : "bg-sky-50 border-sky-200 text-sky-950 font-bold"
                           }`}
                         >
-                          <span className="text-sm font-black leading-none">{log.steps}</span>
-                          <span className="text-[9px] font-bold uppercase text-slate-500">कदम</span>
+                          <span className="text-sm font-bold leading-none">{log.steps}</span>
+                          <span className="text-2xs font-semibold uppercase text-slate-500">कदम</span>
                         </div>
 
                         <div>
                           <div className="flex items-center gap-2 flex-wrap">
-                            <span className="text-sm font-bold text-slate-900">
+                            <span className="text-sm font-semibold text-slate-900">
                               {new Date(log.date).toLocaleDateString("hi-IN", {
                                 weekday: "short",
                                 day: "numeric",
@@ -182,14 +182,14 @@ export function ActivityPanel({
                             ) : null}
                             <span>
                               ⏱️ समय: {log.walking_minutes && log.walking_minutes > 0 ? (
-                                <strong className="text-slate-800 font-bold">{log.walking_minutes} min (दर्ज)</strong>
+                                <strong className="text-slate-800 font-semibold">{log.walking_minutes} min (दर्ज)</strong>
                               ) : (
                                 <span className="text-slate-400">~{Math.round(log.steps / 125)}–{Math.round(log.steps / 95)} min (अनुमानित)</span>
                               )}
                             </span>
                             <span>
                               🔥 सक्रिय बर्न: {log.estimated_calories_burned && log.estimated_calories_burned > 0 ? (
-                                <strong className="text-amber-800 font-bold">{log.estimated_calories_burned} kcal</strong>
+                                <strong className="text-amber-800 font-semibold">{log.estimated_calories_burned} kcal</strong>
                               ) : (
                                 <span className="text-slate-400">उपलब्ध नहीं</span>
                               )}

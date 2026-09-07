@@ -72,7 +72,7 @@ export default function HealthChangesPage() {
       <div className="flex flex-wrap items-center justify-between gap-3">
         <Link
           href="/"
-          className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-black text-slate-600 hover:text-emerald-800 transition-colors"
+          className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-slate-600 hover:text-emerald-800 transition-colors"
         >
           <ArrowLeft className="h-4 w-4" />
           <span>डैशबोर्ड पर लौटें (Back)</span>
@@ -83,7 +83,7 @@ export default function HealthChangesPage() {
           type="button"
           onClick={() => setIsCaregiverMode(!isCaregiverMode)}
           className={cn(
-            "flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-black transition-all cursor-pointer",
+            "flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-bold transition-all cursor-pointer",
             isCaregiverMode
               ? "bg-purple-100 border-purple-300 text-purple-900 shadow-2xs"
               : "bg-white border-slate-200 text-slate-600 hover:border-slate-300"
@@ -111,7 +111,7 @@ export default function HealthChangesPage() {
             }
           }}
           className={cn(
-            "flex-1 py-2 rounded-xl text-xs sm:text-sm font-black transition-all cursor-pointer text-center",
+            "flex-1 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer text-center",
             period === "7d"
               ? "bg-white text-slate-950 shadow-sm border border-slate-200/60"
               : "text-slate-600 hover:text-slate-900"
@@ -128,7 +128,7 @@ export default function HealthChangesPage() {
             }
           }}
           className={cn(
-            "flex-1 py-2 rounded-xl text-xs sm:text-sm font-black transition-all cursor-pointer text-center",
+            "flex-1 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer text-center",
             period === "30d"
               ? "bg-white text-slate-950 shadow-sm border border-slate-200/60"
               : "text-slate-600 hover:text-slate-900"
@@ -147,10 +147,10 @@ export default function HealthChangesPage() {
       ) : !data || !data.dataSufficiency.isSufficient ? (
         <DepthCard depth={1} className="p-8 text-center bg-white rounded-2xl border-2 border-slate-200">
           <Info className="mx-auto h-10 w-10 text-slate-300 mb-2" />
-          <h3 className="text-base font-black text-slate-800">
+          <h3 className="text-base font-bold text-slate-800">
             {data?.dataSufficiency.reasonHi || "अभी पर्याप्त health history नहीं है।"}
           </h3>
-          <p className="text-xs font-bold text-slate-500 mt-1">
+          <p className="text-xs font-semibold text-slate-500 mt-1">
             सटीक तुलना के लिए नियमित रूप से भोजन, BP, कदम व दवाइयाँ दर्ज करते रहें।
           </p>
         </DepthCard>
@@ -161,11 +161,11 @@ export default function HealthChangesPage() {
             <DepthCard depth={2} className="p-4 sm:p-5 border-purple-200 bg-purple-50/60 shadow-sm">
               <div className="flex items-center gap-2 mb-1.5">
                 <UserCheck className="h-4 w-4 text-purple-700" />
-                <h4 className="text-sm font-black text-purple-950">
+                <h4 className="text-sm font-bold text-purple-950">
                   केयरगिवर सारांश (What Changed for Papa?)
                 </h4>
               </div>
-              <p className="text-xs sm:text-sm font-bold text-purple-900 leading-relaxed">
+              <p className="text-xs sm:text-sm font-semibold text-purple-900 leading-relaxed">
                 {data.caregiverSummaryHi}
               </p>
             </DepthCard>
@@ -179,10 +179,10 @@ export default function HealthChangesPage() {
                   <Sparkles className="h-5 w-5 stroke-[2.2]" />
                 </div>
                 <div>
-                  <h3 className="text-base sm:text-lg font-black text-slate-950 tracking-tight">
+                  <h3 className="text-base sm:text-lg font-bold text-slate-950 tracking-tight">
                     मुख्य बदलावों का संक्षिप्त सारांश
                   </h3>
-                  <p className="text-xs font-bold text-slate-500">
+                  <p className="text-xs font-semibold text-slate-500">
                     अवधि: {data.dateRange.recentStart} से {data.dateRange.recentEnd}
                   </p>
                 </div>
@@ -192,7 +192,7 @@ export default function HealthChangesPage() {
               <button
                 type="button"
                 onClick={() => setShowExplanation(!showExplanation)}
-                className="text-xs font-bold text-slate-600 hover:text-slate-950 flex items-center gap-1 bg-slate-100 px-2.5 py-1 rounded-lg border border-slate-200 cursor-pointer"
+                className="text-xs font-semibold text-slate-600 hover:text-slate-950 flex items-center gap-1 bg-slate-100 px-2.5 py-1 rounded-lg border border-slate-200 cursor-pointer"
               >
                 <HelpCircle className="h-3.5 w-3.5 text-slate-500" />
                 <span>तुलना का आधार</span>
@@ -203,7 +203,7 @@ export default function HealthChangesPage() {
             {/* EXPANDABLE METHODOLOGY */}
             {showExplanation && (
               <div className="mt-3.5 p-3.5 rounded-xl border border-emerald-200 bg-emerald-50/50 text-xs text-emerald-950 space-y-2 animate-in fade-in">
-                <p className="font-bold flex items-center gap-1.5">
+                <p className="font-semibold flex items-center gap-1.5">
                   <Info className="h-4 w-4 text-emerald-700 shrink-0" />
                   <span>सांख्यिकीय विश्लेषण नियम (Statistical Rules):</span>
                 </p>
@@ -217,7 +217,7 @@ export default function HealthChangesPage() {
 
             {/* SUMMARY BULLETS */}
             <div className="mt-4 p-3.5 rounded-xl bg-white border border-slate-200/80 shadow-2xs">
-              <pre className="text-xs sm:text-sm font-bold text-slate-800 whitespace-pre-wrap font-sans leading-relaxed">
+              <pre className="text-xs sm:text-sm font-semibold text-slate-800 whitespace-pre-wrap font-sans leading-relaxed">
                 {data.compactSummaryHi}
               </pre>
             </div>
@@ -258,22 +258,22 @@ export default function HealthChangesPage() {
                         <Icon className="h-4.5 w-4.5" />
                       </div>
                       <div>
-                        <h4 className="text-sm sm:text-base font-black text-slate-950 tracking-tight">
+                        <h4 className="text-sm sm:text-base font-bold text-slate-950 tracking-tight">
                           {m.metricHi}
                         </h4>
-                        <span className="text-[11px] font-bold text-slate-400">
+                        <span className="text-xs font-semibold text-slate-400">
                           {m.dataPoints} रिकॉर्ड्स · {m.confidenceLabelHi}
                         </span>
                       </div>
                     </div>
 
                     {m.isSufficient ? (
-                      <Badge variant={dirBadgeTone[m.direction]} className="text-[10px] sm:text-xs font-black flex items-center gap-1">
+                      <Badge variant={dirBadgeTone[m.direction]} className="text-2xs sm:text-xs font-bold flex items-center gap-1">
                         <DirIcon className="h-3 w-3" />
                         <span>{m.directionLabelHi}</span>
                       </Badge>
                     ) : (
-                      <Badge variant="neutral" className="text-[10px] font-bold">
+                      <Badge variant="neutral" className="text-2xs font-semibold">
                         डेटा प्रतीक्षारत
                       </Badge>
                     )}
@@ -281,11 +281,11 @@ export default function HealthChangesPage() {
 
                   {m.isSufficient ? (
                     <div className="space-y-2">
-                      <p className="text-xs sm:text-sm font-bold text-slate-800 leading-snug">
+                      <p className="text-xs sm:text-sm font-semibold text-slate-800 leading-snug">
                         {m.explanationHi}
                       </p>
 
-                      <div className="flex flex-wrap items-center justify-between text-[11px] font-bold text-slate-500 pt-2 border-t border-slate-100">
+                      <div className="flex flex-wrap items-center justify-between text-xs font-semibold text-slate-500 pt-2 border-t border-slate-100">
                         {m.personalPatternRange && (
                           <span>सामान्य दायरा: {m.personalPatternRange}</span>
                         )}
@@ -299,26 +299,26 @@ export default function HealthChangesPage() {
                         <div className="mt-3 pt-3 border-t border-slate-200 text-xs text-slate-600 space-y-1.5 animate-in fade-in">
                           <div className="grid grid-cols-2 gap-2 p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-center">
                             <div>
-                              <span className="text-[10px] font-bold text-slate-400 block">हालिया मध्यमान</span>
-                              <span className="text-sm font-black text-slate-900">
+                              <span className="text-2xs font-semibold text-slate-400 block">हालिया मध्यमान</span>
+                              <span className="text-sm font-bold text-slate-900">
                                 {m.recentValue.toLocaleString()} {m.unit}
                               </span>
                             </div>
                             <div>
-                              <span className="text-[10px] font-bold text-slate-400 block">पिछला संदर्भ मध्यमान</span>
-                              <span className="text-sm font-black text-slate-900">
+                              <span className="text-2xs font-semibold text-slate-400 block">पिछला संदर्भ मध्यमान</span>
+                              <span className="text-sm font-bold text-slate-900">
                                 {m.referenceValue.toLocaleString()} {m.unit}
                               </span>
                             </div>
                           </div>
-                          <p className="text-[11px] text-slate-500 font-semibold pt-1">
+                          <p className="text-xs text-slate-500 font-semibold pt-1">
                             • अंतर: {m.difference > 0 ? "+" : ""}{m.difference} {m.unit} ({m.percentChange > 0 ? "+" : ""}{m.percentChange}%)
                           </p>
                         </div>
                       )}
                     </div>
                   ) : (
-                    <div className="mt-2 text-xs font-bold text-slate-500 bg-slate-100/80 p-2.5 rounded-xl border border-slate-200">
+                    <div className="mt-2 text-xs font-semibold text-slate-500 bg-slate-100/80 p-2.5 rounded-xl border border-slate-200">
                       ⚠️ {m.insufficientReasonHi || "इस metric के लिए अभी पर्याप्त data उपलब्ध नहीं है।"}
                     </div>
                   )}
@@ -329,7 +329,7 @@ export default function HealthChangesPage() {
 
           {/* MEDICAL SAFETY DISCLAIMER */}
           <div className="p-4 rounded-2xl bg-amber-50/70 border border-amber-200 text-xs text-amber-900 space-y-1">
-            <p className="font-black flex items-center gap-1.5 text-amber-950">
+            <p className="font-bold flex items-center gap-1.5 text-amber-950">
               <Info className="h-4 w-4 text-amber-700 shrink-0" />
               <span>चिकित्सीय सुरक्षा व निष्पक्षता सूचना:</span>
             </p>

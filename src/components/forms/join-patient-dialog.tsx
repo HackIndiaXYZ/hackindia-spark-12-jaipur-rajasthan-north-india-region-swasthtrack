@@ -73,7 +73,7 @@ export function JoinPatientDialog({
         )}
 
         <div>
-          <label className="block text-xs font-bold text-slate-700 mb-1.5">
+          <label className="block text-xs font-semibold text-slate-700 mb-1.5">
             6-अंकों का इनविटेशन कोड (Pairing Code)
           </label>
           <div className="relative flex items-center">
@@ -84,12 +84,12 @@ export function JoinPatientDialog({
               placeholder="e.g. 849201"
               value={code}
               onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))}
-              className="w-full rounded-2xl border border-slate-300 px-4 py-3 text-center text-xl font-black tracking-widest text-slate-900 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
+              className="w-full rounded-2xl border border-slate-300 px-4 py-3 text-center text-xl font-bold tracking-widest text-slate-900 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
               required
             />
             <KeyRound className="absolute right-3.5 h-4 w-4 text-slate-400" />
           </div>
-          <p className="mt-1.5 text-[11px] text-slate-500">
+          <p className="mt-1.5 text-xs text-slate-500">
             मरीज़ के फोन में Settings &gt; Add Caregiver से कोड प्राप्त करें।
           </p>
         </div>

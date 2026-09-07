@@ -25,10 +25,10 @@ type QuickMarkMedicineDialogProps = {
 type StatusType = "taken" | "late" | "missed" | "pending";
 
 const statusStyles: Record<StatusType, string> = {
-  taken: "border-emerald-500 bg-emerald-600 text-white font-black shadow-md ring-2 ring-emerald-600/30",
-  late: "border-amber-500 bg-amber-500 text-white font-black shadow-md ring-2 ring-amber-500/30",
-  missed: "border-rose-500 bg-rose-600 text-white font-black shadow-md ring-2 ring-rose-600/30",
-  pending: "border-slate-300 bg-white text-slate-800 hover:bg-slate-50 hover:border-slate-400 font-bold shadow-2xs",
+  taken: "border-emerald-500 bg-emerald-600 text-white font-bold shadow-md ring-2 ring-emerald-600/30",
+  late: "border-amber-500 bg-amber-500 text-white font-bold shadow-md ring-2 ring-amber-500/30",
+  missed: "border-rose-500 bg-rose-600 text-white font-bold shadow-md ring-2 ring-rose-600/30",
+  pending: "border-slate-300 bg-white text-slate-800 hover:bg-slate-50 hover:border-slate-400 font-semibold shadow-2xs",
 };
 
 function getMedicinePeriod(timeStr: string): "Morning" | "Afternoon" | "Evening" | "Night" {
@@ -205,13 +205,13 @@ export function QuickMarkMedicineDialog({
     >
       <div className="space-y-4 max-w-full overflow-hidden">
         {errorMsg && (
-          <div className="rounded-xl border border-rose-200 bg-rose-50 p-3 text-xs sm:text-sm font-bold text-rose-800 animate-in fade-in">
+          <div className="rounded-xl border border-rose-200 bg-rose-50 p-3 text-xs sm:text-sm font-semibold text-rose-800 animate-in fade-in">
             ⚠️ {errorMsg}
           </div>
         )}
 
         {successMsg && (
-          <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-xs sm:text-sm font-bold text-emerald-800 animate-in fade-in">
+          <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-xs sm:text-sm font-semibold text-emerald-800 animate-in fade-in">
             {successMsg}
           </div>
         )}
@@ -220,7 +220,7 @@ export function QuickMarkMedicineDialog({
         {activeMedsCount > 0 && (
           <div className="rounded-2xl border-2 border-emerald-300 bg-gradient-to-r from-emerald-50 via-teal-50 to-emerald-50 p-3.5 sm:p-4 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-sm">
             <div>
-              <p className="text-sm sm:text-base font-black text-emerald-950 flex items-center gap-1.5">
+              <p className="text-sm sm:text-base font-bold text-emerald-950 flex items-center gap-1.5">
                 <CheckCheck className="h-4.5 w-4.5 text-emerald-600 shrink-0" />
                 <span>1-टैप में सभी दवाइयाँ मार्क करें:</span>
               </p>
@@ -231,7 +231,7 @@ export function QuickMarkMedicineDialog({
             <button
               type="button"
               onClick={handleMarkAllTaken}
-              className="w-full sm:w-auto min-h-11 px-5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 active:scale-98 text-white font-black text-xs sm:text-sm flex items-center justify-center gap-2 shadow-md transition-all cursor-pointer shrink-0"
+              className="w-full sm:w-auto min-h-11 px-5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 active:scale-98 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-md transition-all cursor-pointer shrink-0"
             >
               <CheckCheck className="h-4 w-4" />
               ✓ आज की सभी दवाइयाँ ले लीं (Mark All)
@@ -242,11 +242,11 @@ export function QuickMarkMedicineDialog({
         {/* MEDICINES LIST BY TIME PERIOD */}
         <div className="space-y-4 max-h-[60vh] overflow-y-auto pr-1">
           {loading ? (
-            <div className="p-8 text-center text-sm font-bold text-slate-500">
+            <div className="p-8 text-center text-sm font-semibold text-slate-500">
               दवाइयों की सूची लोड हो रही है...
             </div>
           ) : activeMedsCount === 0 ? (
-            <div className="p-6 text-center text-sm font-bold text-slate-500 bg-slate-50 rounded-2xl border border-slate-200">
+            <div className="p-6 text-center text-sm font-semibold text-slate-500 bg-slate-50 rounded-2xl border border-slate-200">
               कोई सक्रिय दवाई दर्ज नहीं है।
             </div>
           ) : (
@@ -266,11 +266,11 @@ export function QuickMarkMedicineDialog({
               return (
                 <div key={period} className="rounded-2xl border-2 border-slate-200/90 bg-slate-50/70 p-3.5 sm:p-4 space-y-3">
                   <div className="flex items-center justify-between border-b border-slate-200 pb-2">
-                    <h4 className="font-black text-slate-900 text-sm sm:text-base flex items-center gap-2">
+                    <h4 className="font-bold text-slate-900 text-sm sm:text-base flex items-center gap-2">
                       <span className="h-2.5 w-2.5 rounded-full bg-emerald-600" />
                       {periodHi}
                     </h4>
-                    <span className="text-xs font-bold text-slate-500">
+                    <span className="text-xs font-semibold text-slate-500">
                       {periodMeds.length} दवाइयाँ
                     </span>
                   </div>
@@ -292,27 +292,27 @@ export function QuickMarkMedicineDialog({
                           <div className="flex items-start justify-between gap-2">
                             <div>
                               <div className="flex flex-wrap items-center gap-2">
-                                <p className="font-black text-slate-950 text-sm sm:text-base">
+                                <p className="font-bold text-slate-950 text-sm sm:text-base">
                                   {medicine.medicine_name}
                                 </p>
-                                <span className="text-[11px] font-black text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-md">
+                                <span className="text-xs font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-md">
                                   {medicine.dose}
                                 </span>
                               </div>
-                              <p className="text-xs font-bold text-slate-600 mt-0.5 flex items-center gap-1.5">
+                              <p className="text-xs font-semibold text-slate-600 mt-0.5 flex items-center gap-1.5">
                                 <span>{medicine.meal_relation ? medicine.meal_relation.replace("_", " ") : "भोजन के बाद"}</span>
                                 <span className="text-slate-300">·</span>
                                 <span className="text-slate-500">{medicine.frequency}</span>
                               </p>
                               {currentStatus !== "pending" && (
-                                <p className="text-[11px] font-black text-purple-950 bg-purple-100 px-2.5 py-0.5 rounded-md inline-flex items-center gap-1 border border-purple-300 mt-1 animate-in fade-in">
+                                <p className="text-xs font-bold text-purple-950 bg-purple-100 px-2.5 py-0.5 rounded-md inline-flex items-center gap-1 border border-purple-300 mt-1 animate-in fade-in">
                                   <span>🕒</span>
                                   <span>मार्क समय (Marked Time): {markedTime || "हाल ही में दर्ज (Just Now)"}</span>
                                 </p>
                               )}
                             </div>
 
-                            <div className="flex items-center gap-1 text-xs font-black text-slate-800 bg-slate-100 px-2.5 py-1 rounded-lg border border-slate-200 shrink-0">
+                            <div className="flex items-center gap-1 text-xs font-bold text-slate-800 bg-slate-100 px-2.5 py-1 rounded-lg border border-slate-200 shrink-0">
                               <Clock className="h-3.5 w-3.5 text-emerald-600" />
                               <span>{medicine.scheduled_time.slice(0, 5)}</span>
                             </div>
@@ -325,7 +325,7 @@ export function QuickMarkMedicineDialog({
                               type="button"
                               onClick={() => handleMarkAuto(medicine)}
                               className={cn(
-                                "flex-1 min-h-10 rounded-xl border-2 px-3 text-xs font-black transition-all flex items-center justify-center gap-1 cursor-pointer active:scale-98 shadow-2xs",
+                                "flex-1 min-h-10 rounded-xl border-2 px-3 text-xs font-bold transition-all flex items-center justify-center gap-1 cursor-pointer active:scale-98 shadow-2xs",
                                 currentStatus === "taken"
                                   ? statusStyles.taken
                                   : currentStatus === "late"
@@ -348,10 +348,10 @@ export function QuickMarkMedicineDialog({
                               type="button"
                               onClick={() => handleMarkMissed(medicine)}
                               className={cn(
-                                "flex-1 min-h-10 rounded-xl border-2 px-3 text-xs font-black transition-all flex items-center justify-center gap-1 cursor-pointer active:scale-98 shadow-2xs",
+                                "flex-1 min-h-10 rounded-xl border-2 px-3 text-xs font-bold transition-all flex items-center justify-center gap-1 cursor-pointer active:scale-98 shadow-2xs",
                                 currentStatus === "missed"
                                   ? statusStyles.missed
-                                  : "border-slate-200 bg-slate-50 text-slate-700 hover:bg-rose-50 hover:text-rose-800 hover:border-rose-300 font-bold"
+                                  : "border-slate-200 bg-slate-50 text-slate-700 hover:bg-rose-50 hover:text-rose-800 hover:border-rose-300 font-semibold"
                               )}
                             >
                               <span>✕</span>
@@ -377,7 +377,7 @@ export function QuickMarkMedicineDialog({
           <button
             type="button"
             onClick={() => setIsAddModalOpen(true)}
-            className="text-xs sm:text-sm font-bold text-slate-600 hover:text-emerald-700 flex items-center gap-1 cursor-pointer"
+            className="text-xs sm:text-sm font-semibold text-slate-600 hover:text-emerald-700 flex items-center gap-1 cursor-pointer"
           >
             <Plus className="h-3.5 w-3.5" />
             + नई दवाई जोड़ें (Add New Medicine)
@@ -386,7 +386,7 @@ export function QuickMarkMedicineDialog({
           <button
             type="button"
             onClick={onClose}
-            className="min-h-10 px-5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs sm:text-sm active:scale-98 cursor-pointer shadow-xs"
+            className="min-h-10 px-5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs sm:text-sm active:scale-98 cursor-pointer shadow-xs"
           >
             Done (पूर्ण)
           </button>

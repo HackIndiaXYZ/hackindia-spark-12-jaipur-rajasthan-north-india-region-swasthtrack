@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { EmptyState } from "@/components/ui/page";
 import { cn } from "@/lib/utils";
 import {
   Card,
@@ -196,7 +197,7 @@ export function DashboardSections({
             <div className="rounded-xl border border-emerald-100 bg-emerald-50/60 p-4">
               <div className="flex items-center justify-between text-sm">
                 <span className="font-semibold text-slate-800">Total Calories:</span>
-                <span className="font-bold text-emerald-800">{todayFoodCalories} kcal</span>
+                <span className="font-semibold text-emerald-800">{todayFoodCalories} kcal</span>
               </div>
               <div className="mt-1 flex items-center justify-between text-xs text-slate-600">
                 <span>Total Protein:</span>
@@ -210,19 +211,17 @@ export function DashboardSections({
             />
           </div>
         ) : (
-          <div className="rounded-xl border border-dashed border-slate-200 bg-slate-50/70 p-6 text-center">
-            <Utensils className="mx-auto h-8 w-8 text-slate-300" />
-            <p className="mt-2 text-sm font-semibold text-slate-700">
-              No data recorded today
-            </p>
-            <p className="mt-0.5 text-xs text-slate-500">
-              आज कोई भोजन दर्ज नहीं किया गया है।
-            </p>
-            <Button variant="secondary" onClick={onOpenFood} className="mt-4 text-xs">
-              <Plus className="h-3.5 w-3.5" />
-              Log Breakfast / Lunch / Snack
-            </Button>
-          </div>
+          <EmptyState
+            icon={Utensils}
+            title="No meals logged today"
+            hindiTitle="आज कोई भोजन दर्ज नहीं किया गया है।"
+            action={
+              <Button variant="secondary" onClick={onOpenFood}>
+                <Plus aria-hidden className="h-4 w-4" />
+                भोजन दर्ज करें
+              </Button>
+            }
+          />
         )}
       </Card>
 
@@ -244,7 +243,7 @@ export function DashboardSections({
             <Button
               variant="secondary"
               onClick={() => setIsManageOpen(true)}
-              className="flex-1 sm:flex-none h-9 px-3 text-xs font-bold border border-slate-300 hover:bg-slate-100 cursor-pointer"
+              className="flex-1 sm:flex-none h-9 px-3 text-xs font-semibold border border-slate-300 hover:bg-slate-100 cursor-pointer"
             >
               <Settings className="h-3.5 w-3.5 text-slate-700 shrink-0" />
               <span>⚙️ Edit</span>
@@ -252,7 +251,7 @@ export function DashboardSections({
             <Button
               variant="secondary"
               onClick={onOpenMedicine}
-              className="flex-1 sm:flex-none h-9 px-3 text-xs font-bold cursor-pointer"
+              className="flex-1 sm:flex-none h-9 px-3 text-xs font-semibold cursor-pointer"
             >
               <Plus className="h-3.5 w-3.5 shrink-0" />
               <span>Tracker</span>
@@ -273,7 +272,7 @@ export function DashboardSections({
               <button
                 type="button"
                 onClick={handleMarkAllMedicinesTaken}
-                className="flex-1 py-2.5 px-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 active:scale-98 text-white font-black text-xs sm:text-sm flex items-center justify-center gap-1.5 shadow-md hover:shadow-lg transition-all cursor-pointer"
+                className="flex-1 py-2.5 px-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 active:scale-98 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-1.5 shadow-md hover:shadow-lg transition-all cursor-pointer"
               >
                 <CheckCheck className="h-4 w-4" />
                 ✓ सभी ली गईं (Mark All)
@@ -282,7 +281,7 @@ export function DashboardSections({
               <button
                 type="button"
                 onClick={handleResetAllMedicines}
-                className="py-2.5 px-3 rounded-xl border border-slate-300 bg-white hover:bg-rose-50 text-slate-700 hover:text-rose-800 font-bold text-xs flex items-center justify-center gap-1 shadow-2xs active:scale-98 transition-all cursor-pointer shrink-0"
+                className="py-2.5 px-3 rounded-xl border border-slate-300 bg-white hover:bg-rose-50 text-slate-700 hover:text-rose-800 font-semibold text-xs flex items-center justify-center gap-1 shadow-2xs active:scale-98 transition-all cursor-pointer shrink-0"
                 title="आज की सभी एंट्री रीसेट / अनमार्क करें"
               >
                 <RotateCcw className="h-3.5 w-3.5 text-rose-600" />
@@ -305,18 +304,18 @@ export function DashboardSections({
                     >
                       <div className="space-y-0.5">
                         <div className="flex flex-wrap items-center gap-2">
-                          <p className="text-sm sm:text-base font-black text-slate-950">
+                          <p className="text-sm sm:text-base font-bold text-slate-950">
                             {medicine.medicine_name}
                           </p>
-                          <span className="text-[11px] font-black text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-md shrink-0">
+                          <span className="text-xs font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-md shrink-0">
                             {medicine.dose}
                           </span>
                         </div>
-                        <p className="text-xs font-bold text-slate-600">
+                        <p className="text-xs font-semibold text-slate-600">
                           ⏰ {medicine.scheduled_time.slice(0, 5)} · {medicine.meal_relation ? medicine.meal_relation.replace("_", " ") : "With water"}
                         </p>
                         {currentStatus && (
-                          <p className="text-[11px] font-black text-purple-950 bg-purple-100 px-2.5 py-0.5 rounded-md inline-flex items-center gap-1 border border-purple-300 mt-1 animate-in fade-in">
+                          <p className="text-xs font-bold text-purple-950 bg-purple-100 px-2.5 py-0.5 rounded-md inline-flex items-center gap-1 border border-purple-300 mt-1 animate-in fade-in">
                             <span>🕒</span>
                             <span>
                               मार्क समय (Marked Time):{" "}
@@ -334,12 +333,12 @@ export function DashboardSections({
                           type="button"
                           onClick={() => handleMarkMedicine(medicine)}
                           className={cn(
-                            "min-h-9 px-3 py-1 rounded-xl border-2 text-xs font-black transition-all cursor-pointer active:scale-98 shadow-xs flex items-center gap-1",
+                            "min-h-9 px-3 py-1 rounded-xl border-2 text-xs font-bold transition-all cursor-pointer active:scale-98 shadow-xs flex items-center gap-1",
                             currentStatus === "taken"
-                              ? "border-emerald-600 bg-emerald-600 text-white font-black shadow-md ring-2 ring-emerald-600/30"
+                              ? "border-emerald-600 bg-emerald-600 text-white font-bold shadow-md ring-2 ring-emerald-600/30"
                               : currentStatus === "late"
-                              ? "border-amber-500 bg-amber-500 text-white font-black shadow-md ring-2 ring-amber-500/30"
-                              : "border-slate-300 bg-white text-slate-800 hover:bg-slate-50 hover:border-slate-400 font-bold shadow-2xs",
+                              ? "border-amber-500 bg-amber-500 text-white font-bold shadow-md ring-2 ring-amber-500/30"
+                              : "border-slate-300 bg-white text-slate-800 hover:bg-slate-50 hover:border-slate-400 font-semibold shadow-2xs",
                           )}
                         >
                           <span>✓</span>
@@ -357,10 +356,10 @@ export function DashboardSections({
                           type="button"
                           onClick={() => handleMarkMedicineMissed(medicine)}
                           className={cn(
-                            "min-h-9 px-3 py-1 rounded-xl border-2 text-xs font-black transition-all cursor-pointer active:scale-98 shadow-xs flex items-center gap-1",
+                            "min-h-9 px-3 py-1 rounded-xl border-2 text-xs font-bold transition-all cursor-pointer active:scale-98 shadow-xs flex items-center gap-1",
                             currentStatus === "missed"
-                              ? "border-rose-600 bg-rose-600 text-white font-black"
-                              : "border-slate-200 bg-slate-50 text-slate-700 hover:bg-rose-50 hover:text-rose-800 hover:border-rose-300 font-bold",
+                              ? "border-rose-600 bg-rose-600 text-white font-bold"
+                              : "border-slate-200 bg-slate-50 text-slate-700 hover:bg-rose-50 hover:text-rose-800 hover:border-rose-300 font-semibold",
                           )}
                         >
                           <span>✕</span>
@@ -377,15 +376,12 @@ export function DashboardSections({
             </div>
           </div>
         ) : (
-          <div className="rounded-xl border border-dashed border-slate-200 bg-slate-50/70 p-6 text-center">
-            <Pill className="mx-auto h-8 w-8 text-slate-300" />
-            <p className="mt-2 text-sm font-semibold text-slate-700">
-              No active medicines
-            </p>
-            <p className="mt-0.5 text-xs text-slate-500">
-              कोई सक्रिय दवाई नहीं है।
-            </p>
-          </div>
+          <EmptyState
+            icon={Pill}
+            title="No active medicines"
+            hindiTitle="कोई सक्रिय दवाई नहीं है।"
+            description="Add a prescription on the Medicines page to start tracking doses."
+          />
         )}
       </Card>
 
@@ -411,7 +407,7 @@ export function DashboardSections({
           <div className="grid gap-3 sm:grid-cols-2">
             {/* Morning BP */}
             <div className={`rounded-xl border p-4 ${todayMorningBP ? "border-rose-100 bg-rose-50/40" : "border-dashed border-slate-200 bg-slate-50/70"}`}>
-              <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">सुबह · Morning</p>
+              <p className="text-2xs font-semibold uppercase tracking-wider text-slate-400 mb-1">सुबह · Morning</p>
               {todayMorningBP ? (
                 <>
                   <p className="text-2xl font-extrabold text-slate-950">
@@ -428,7 +424,7 @@ export function DashboardSections({
             </div>
             {/* Evening BP */}
             <div className={`rounded-xl border p-4 ${todayEveningBP ? "border-rose-100 bg-rose-50/40" : "border-dashed border-slate-200 bg-slate-50/70"}`}>
-              <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">शाम · Evening</p>
+              <p className="text-2xs font-semibold uppercase tracking-wider text-slate-400 mb-1">शाम · Evening</p>
               {todayEveningBP ? (
                 <>
                   <p className="text-2xl font-extrabold text-slate-950">
@@ -445,19 +441,17 @@ export function DashboardSections({
             </div>
           </div>
         ) : (
-          <div className="rounded-xl border border-dashed border-slate-200 bg-slate-50/70 p-6 text-center">
-            <HeartPulse className="mx-auto h-8 w-8 text-slate-300" />
-            <p className="mt-2 text-sm font-semibold text-slate-700">
-              No data recorded today
-            </p>
-            <p className="mt-0.5 text-xs text-slate-500">
-              आज का BP दर्ज नहीं किया गया है।
-            </p>
-            <Button variant="secondary" onClick={onOpenBP} className="mt-4 text-xs">
-              <Plus className="h-3.5 w-3.5" />
-              Record Blood Pressure
-            </Button>
-          </div>
+          <EmptyState
+            icon={HeartPulse}
+            title="No BP recorded today"
+            hindiTitle="आज का BP दर्ज नहीं किया गया है।"
+            action={
+              <Button variant="secondary" onClick={onOpenBP}>
+                <Plus aria-hidden className="h-4 w-4" />
+                BP दर्ज करें
+              </Button>
+            }
+          />
         )}
       </Card>
 
@@ -503,19 +497,22 @@ export function DashboardSections({
             </div>
           </div>
         ) : (
-          <div className="rounded-xl border border-dashed border-slate-200 bg-slate-50/70 p-6 text-center">
-            <Scale className="mx-auto h-8 w-8 text-slate-300" />
-            <p className="mt-2 text-sm font-semibold text-slate-700">
-              No data recorded today
-            </p>
-            <p className="mt-0.5 text-xs text-slate-500">
-              Profile weight: {patient.current_weight_kg ? `${patient.current_weight_kg} kg` : "--"}
-            </p>
-            <Button variant="secondary" onClick={onOpenWeight} className="mt-4 text-xs">
-              <Plus className="h-3.5 w-3.5" />
-              Record Today&apos;s Weight
-            </Button>
-          </div>
+          <EmptyState
+            icon={Scale}
+            title="No weight recorded today"
+            hindiTitle="आज का वजन दर्ज नहीं किया गया है।"
+            description={
+              patient.current_weight_kg
+                ? `Last known weight: ${patient.current_weight_kg} kg`
+                : undefined
+            }
+            action={
+              <Button variant="secondary" onClick={onOpenWeight}>
+                <Plus aria-hidden className="h-4 w-4" />
+                वजन दर्ज करें
+              </Button>
+            }
+          />
         )}
       </Card>
 
@@ -542,7 +539,7 @@ export function DashboardSections({
               <p className="mt-1 text-2xl font-extrabold text-slate-950">
                 {todayActivity.steps.toLocaleString()}
               </p>
-              <p className="text-[11px] text-slate-500">कदम</p>
+              <p className="text-xs text-slate-500">कदम</p>
             </div>
 
             <div className="rounded-xl bg-sky-50 p-4">
@@ -550,7 +547,7 @@ export function DashboardSections({
               <p className="mt-1 text-2xl font-extrabold text-slate-950">
                 {todayActivity.distance_km} km
               </p>
-              <p className="text-[11px] text-slate-500">दूरी</p>
+              <p className="text-xs text-slate-500">दूरी</p>
             </div>
 
             <div className="rounded-xl bg-slate-50 p-4">
@@ -558,23 +555,21 @@ export function DashboardSections({
               <p className="mt-1 text-2xl font-extrabold text-slate-950">
                 {todayActivity.walking_minutes || 0} min
               </p>
-              <p className="text-[11px] text-slate-500">समय</p>
+              <p className="text-xs text-slate-500">समय</p>
             </div>
           </div>
         ) : (
-          <div className="rounded-xl border border-dashed border-slate-200 bg-slate-50/70 p-6 text-center">
-            <Footprints className="mx-auto h-8 w-8 text-slate-300" />
-            <p className="mt-2 text-sm font-semibold text-slate-700">
-              No data recorded today
-            </p>
-            <p className="mt-0.5 text-xs text-slate-500">
-              आज की चाल या कदम दर्ज नहीं किए गए हैं।
-            </p>
-            <Button variant="secondary" onClick={onOpenActivity} className="mt-4 text-xs">
-              <Plus className="h-3.5 w-3.5" />
-              Log Steps / Walk
-            </Button>
-          </div>
+          <EmptyState
+            icon={Footprints}
+            title="No activity recorded today"
+            hindiTitle="आज के कदम दर्ज नहीं किए गए हैं।"
+            action={
+              <Button variant="secondary" onClick={onOpenActivity}>
+                <Plus aria-hidden className="h-4 w-4" />
+                कदम दर्ज करें
+              </Button>
+            }
+          />
         )}
       </Card>
 

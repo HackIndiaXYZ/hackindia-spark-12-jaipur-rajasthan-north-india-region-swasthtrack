@@ -1,188 +1,214 @@
-import { useEffect, useState } from "react";
+"use client";
+
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
-import {
-  CalendarDays,
-  FlaskConical,
-  History,
-  MessageSquareText,
-  Settings,
-  UserCheck,
-  UserCircle,
-} from "lucide-react";
+import { CalendarDays, MessageSquareText, Menu, X } from "lucide-react";
 import { CurrentDate } from "@/components/layout/current-date";
+import {
+  informationNavigation,
+  secondaryNavigation,
+} from "@/components/layout/navigation-items";
 import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 import { getPatientProfile, type PatientProfile } from "@/services/patient-service";
 
 export function Header() {
   const pathname = usePathname();
   const [profile, setProfile] = useState<PatientProfile | null>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    getPatientProfile().then(setProfile);
+    let active = true;
+    getPatientProfile()
+      .then((p) => {
+        if (active) setProfile(p);
+      })
+      .catch(() => {
+        /* header identity is non-critical; the page below reports load errors */
+      });
+    return () => {
+      active = false;
+    };
   }, [pathname]);
 
+  useEffect(() => {
+    if (!menuOpen) return;
+
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMenuOpen(false);
+    };
+    const onClick = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("keydown", onKey);
+    document.addEventListener("mousedown", onClick);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.removeEventListener("mousedown", onClick);
+    };
+  }, [menuOpen]);
+
+  const patientName = profile?.name || "SwasthTrack";
+
   return (
-    <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/95 backdrop-blur-md">
-      {/* MOBILE HEADER (Clear & Readable: ~54px height) */}
-      <div className="flex h-14 items-center justify-between px-3.5 lg:hidden">
-        {/* Left: Brand Logo + Patient Name */}
-        <Link href="/" className="flex items-center gap-2.5 min-w-0" aria-label="Go to Dashboard">
+    <header className="sticky top-0 z-30 border-b border-line bg-surface/95 backdrop-blur-md">
+      {/* ---------- MOBILE ----------
+          Two actions only. The previous header packed six 34px icon buttons
+          into the right edge; they were below the 44px tap minimum and gave no
+          hint of what they opened. Secondary destinations now live in one
+          labelled menu (§16). */}
+      <div className="flex h-14 items-center justify-between gap-2 px-4 lg:hidden">
+        <Link
+          href="/"
+          className="flex min-w-0 items-center gap-2.5"
+          aria-label="Dashboard"
+        >
           <Image
             src="/logo.jpg"
-            alt="SwasthTrack"
-            width={36}
-            height={36}
-            className="h-9 w-9 shrink-0 rounded-xl object-cover border border-slate-200 shadow-2xs"
+            alt=""
+            width={72}
+            height={72}
+            sizes="36px"
+            priority
+            className="h-9 w-9 shrink-0 rounded-control border border-line object-cover"
           />
-          <div className="min-w-0">
-            <p className="text-sm font-black text-slate-950 truncate leading-tight">
-              {profile?.name || "SwasthTrack"}
-            </p>
-            <p className="text-xs font-bold text-emerald-800 leading-none mt-0.5">
-              {profile?.daily_calorie_target ? `${profile.daily_calorie_target} kcal` : "Active"}
-            </p>
-          </div>
+          <span className="min-w-0">
+            <span className="block truncate text-sm font-semibold leading-tight text-ink">
+              {patientName}
+            </span>
+            <span lang="hi" className="block text-2xs leading-tight text-ink-subtle">
+              स्वास्थ्य साथी
+            </span>
+          </span>
         </Link>
 
-        {/* Right: Quick Action Icons (Timeline, Ask, Caregiver, Lab, Settings, Profile) */}
-        <div className="flex items-center gap-1.5 shrink-0">
-          <Link
-            href="/timeline"
-            title="स्वास्थ्य यात्रा (Timeline)"
-            aria-label="Timeline / स्वास्थ यात्रा"
-            className={`flex h-8.5 w-8.5 items-center justify-center rounded-xl border transition-colors ${
-              pathname === "/timeline"
-                ? "border-emerald-600 bg-emerald-100 text-emerald-900 shadow-2xs"
-                : "border-slate-300 bg-slate-100 text-slate-700 hover:bg-slate-200"
-            }`}
-          >
-            <History className="h-4 w-4" />
-          </Link>
-
+        <div className="flex shrink-0 items-center gap-1.5">
           <Link
             href="/ask"
-            title="Ask SwasthTrack (डेटा से पूछें)"
-            aria-label="Ask SwasthTrack"
-            className={`flex h-8.5 w-8.5 items-center justify-center rounded-xl border transition-colors ${
+            aria-label="Ask SwasthTrack — डेटा से पूछें"
+            className={cn(
+              "pressable grid h-11 w-11 place-items-center rounded-control border",
               pathname === "/ask"
-                ? "border-purple-600 bg-purple-100 text-purple-900 shadow-2xs"
-                : "border-purple-200 bg-purple-50 text-purple-700 hover:bg-purple-100"
-            }`}
+                ? "border-meds bg-meds-soft text-meds"
+                : "border-line bg-surface text-ink-muted",
+            )}
           >
-            <MessageSquareText className="h-4 w-4" />
+            <MessageSquareText aria-hidden className="h-5 w-5" />
           </Link>
 
-          <Link
-            href="/simulation-lab"
-            title="Simulation Lab (सिमुलेशन लैब)"
-            aria-label="Simulation Lab / सिमुलेशन लैब"
-            className={`flex h-8.5 w-8.5 items-center justify-center rounded-xl border transition-colors ${
-              pathname === "/simulation-lab"
-                ? "border-indigo-600 bg-indigo-100 text-indigo-900 shadow-2xs"
-                : "border-slate-300 bg-slate-100 text-slate-700 hover:bg-slate-200"
-            }`}
-          >
-            <FlaskConical className="h-4 w-4 text-indigo-700" />
-          </Link>
+          <div className="relative" ref={menuRef}>
+            <button
+              type="button"
+              onClick={() => setMenuOpen((open) => !open)}
+              aria-expanded={menuOpen}
+              aria-haspopup="menu"
+              aria-label={menuOpen ? "Close menu" : "Open menu — और विकल्प"}
+              className="pressable grid h-11 w-11 place-items-center rounded-control border border-line bg-surface text-ink-muted"
+            >
+              {menuOpen ? (
+                <X aria-hidden className="h-5 w-5" />
+              ) : (
+                <Menu aria-hidden className="h-5 w-5" />
+              )}
+            </button>
 
-          <Link
-            href="/caregiver"
-            title="Caregiver"
-            aria-label="Caregiver Portal"
-            className={`flex h-8.5 w-8.5 items-center justify-center rounded-xl border transition-colors ${
-              pathname === "/caregiver"
-                ? "border-emerald-600 bg-emerald-100 text-emerald-900"
-                : "border-slate-300 bg-slate-100 text-slate-700 hover:bg-slate-200"
-            }`}
-          >
-            <UserCheck className="h-4 w-4" />
-          </Link>
-
-          <Link
-            href="/settings"
-            title="Settings"
-            aria-label="Settings / सेटिंग्स"
-            className={`flex h-8.5 w-8.5 items-center justify-center rounded-xl border transition-colors ${
-              pathname === "/settings"
-                ? "border-emerald-600 bg-emerald-100 text-emerald-900"
-                : "border-slate-300 bg-slate-100 text-slate-700 hover:bg-slate-200"
-            }`}
-          >
-            <Settings className="h-4 w-4" />
-          </Link>
-
-          <Link
-            href="/profile"
-            title="Profile"
-            aria-label="Profile / प्रोफ़ाइल"
-            className={`flex h-8.5 w-8.5 items-center justify-center rounded-xl border transition-colors ${
-              pathname === "/profile"
-                ? "border-emerald-600 bg-emerald-100 text-emerald-900"
-                : "border-slate-300 bg-slate-100 text-slate-700 hover:bg-slate-200"
-            }`}
-          >
-            <UserCircle className="h-4 w-4" />
-          </Link>
+            {menuOpen ? (
+              <div
+                role="menu"
+                className="reveal absolute right-0 top-13 z-50 w-64 overflow-hidden rounded-card border border-line bg-surface shadow-e3"
+              >
+                <ul className="py-1.5">
+                  {secondaryNavigation.map((item) => {
+                    const Icon = item.icon;
+                    const active = pathname === item.href;
+                    return (
+                      <li key={item.href}>
+                        <Link
+                          role="menuitem"
+                          href={item.href}
+                          onClick={() => setMenuOpen(false)}
+                          className={cn(
+                            "flex min-h-11 items-center gap-3 px-3.5 text-sm",
+                            active
+                              ? "bg-brand-soft font-semibold text-brand-ink"
+                              : "text-ink hover:bg-surface-sunken",
+                          )}
+                        >
+                          <Icon aria-hidden className="h-4.5 w-4.5 shrink-0 text-ink-subtle" />
+                          <span className="min-w-0 flex-1 truncate">{item.label}</span>
+                          <span lang="hi" className="shrink-0 text-2xs text-ink-subtle">
+                            {item.hindiLabel}
+                          </span>
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
+                <ul className="border-t border-line py-1.5">
+                  {informationNavigation.map((item) => (
+                    <li key={item.href}>
+                      <Link
+                        role="menuitem"
+                        href={item.href}
+                        onClick={() => setMenuOpen(false)}
+                        className="flex min-h-11 items-center gap-3 px-3.5 text-sm text-ink-muted hover:bg-surface-sunken"
+                      >
+                        <item.icon aria-hidden className="h-4.5 w-4.5 shrink-0 text-ink-subtle" />
+                        <span className="truncate">{item.label}</span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
+          </div>
         </div>
       </div>
 
-      {/* DESKTOP HEADER (Full Spacious Layout) */}
-      <div className="hidden lg:flex items-center justify-between px-8 py-3.5">
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+      {/* ---------- DESKTOP ---------- */}
+      <div className="hidden items-center justify-between gap-6 px-8 py-3 lg:flex">
+        <div className="min-w-0">
+          <p className="text-2xs font-semibold uppercase tracking-wide text-ink-subtle">
             Patient overview · स्वास्थ्य निगरानी
           </p>
-          <div className="mt-1 flex flex-wrap items-center gap-3">
+          <div className="mt-0.5 flex flex-wrap items-center gap-2.5">
             <Link
               href="/profile"
-              className="text-xl font-bold text-slate-950 hover:text-emerald-700 transition-colors"
+              className="text-lg font-semibold text-ink hover:text-brand"
             >
               {profile?.name || "Patient"}
             </Link>
-            <Badge variant="green">
-              {profile?.daily_calorie_target || 1600} kcal/day target
-            </Badge>
+            {profile?.daily_calorie_target ? (
+              <Badge variant="brand">
+                {profile.daily_calorie_target} kcal/day target
+              </Badge>
+            ) : null}
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
-          <Link
-            href="/timeline"
-            className={`flex min-h-10 items-center gap-2 rounded-xl border px-3 py-1.5 text-xs font-semibold transition-colors ${
-              pathname === "/timeline"
-                ? "border-emerald-600 bg-emerald-100 text-emerald-900 shadow-2xs"
-                : "border-slate-200 bg-white text-slate-700 hover:border-emerald-300 hover:bg-emerald-50"
-            }`}
-          >
-            <History className="h-4 w-4 text-emerald-600" />
-            <span>Timeline (यात्रा)</span>
-          </Link>
-
-          <Link
-            href="/ask"
-            className={`flex min-h-10 items-center gap-2 rounded-xl border px-3 py-1.5 text-xs font-semibold transition-colors ${
-              pathname === "/ask"
-                ? "border-purple-600 bg-purple-100 text-purple-900 shadow-2xs"
-                : "border-purple-200 bg-purple-50 text-purple-700 hover:border-purple-300 hover:bg-purple-100"
-            }`}
-          >
-            <MessageSquareText className="h-4 w-4 text-purple-600" />
-            <span>Ask Data (डेटा से पूछें)</span>
-          </Link>
-
-          <div className="flex min-h-10 items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-700">
-            <CalendarDays aria-hidden className="h-4 w-4 text-emerald-600" />
+        <div className="flex shrink-0 items-center gap-2.5">
+          <div className="flex min-h-11 items-center gap-2 rounded-control border border-line bg-surface px-3 text-sm text-ink-muted">
+            <CalendarDays aria-hidden className="h-4 w-4 text-brand" />
             <CurrentDate />
           </div>
 
           <Link
-            href="/profile"
-            className="flex min-h-10 items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:border-emerald-300 hover:bg-emerald-50 transition-colors"
+            href="/ask"
+            className={cn(
+              "pressable flex min-h-11 items-center gap-2 rounded-control border px-3.5 text-sm font-semibold",
+              pathname === "/ask"
+                ? "border-meds bg-meds-soft text-meds"
+                : "border-line bg-surface text-ink-muted hover:border-meds-line hover:text-meds",
+            )}
           >
-            <UserCircle aria-hidden className="h-4 w-4 text-emerald-600" />
-            <span>Profile (प्रोफाइल)</span>
+            <MessageSquareText aria-hidden className="h-4 w-4" />
+            <span>Ask SwasthTrack</span>
           </Link>
         </div>
       </div>

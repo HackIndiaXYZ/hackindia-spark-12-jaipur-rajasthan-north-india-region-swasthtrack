@@ -1,25 +1,50 @@
 import type { ComponentProps } from "react";
 import { cn } from "@/lib/utils";
 
-type ButtonVariant = "primary" | "secondary" | "ghost" | "danger";
+type ButtonVariant =
+  | "primary"
+  | "secondary"
+  | "ghost"
+  | "danger"
+  | "quiet";
 
+type ButtonSize = "sm" | "md" | "lg";
+
+/**
+ * One button system for the whole product (§45). A given action always looks
+ * the same: Save is `primary`, Cancel is `secondary`, Delete is `danger`.
+ */
 const variantClasses: Record<ButtonVariant, string> = {
   primary:
-    "bg-gradient-to-b from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white shadow-md shadow-emerald-950/20 border-t border-white/40 active:translate-y-0.5 active:shadow-inner",
+    "bg-brand text-ink-inverse shadow-e1 hover:bg-brand-strong active:bg-brand-strong",
   secondary:
-    "border-2 border-slate-300/80 bg-white text-slate-800 hover:border-emerald-400 hover:bg-emerald-50/70 shadow-xs border-t-white active:translate-y-0.5 active:shadow-inner",
-  ghost: "text-slate-700 hover:bg-slate-100 hover:text-slate-950 active:translate-y-0.5",
+    "border border-line-strong bg-surface text-ink shadow-e1 hover:border-brand-line hover:bg-brand-softer",
+  ghost:
+    "text-ink-muted hover:bg-surface-sunken hover:text-ink",
+  quiet:
+    "border border-line bg-surface-sunken text-ink-muted hover:bg-surface hover:text-ink",
   danger:
-    "bg-gradient-to-b from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700 text-white shadow-md shadow-rose-950/20 border-t border-white/40 active:translate-y-0.5 active:shadow-inner",
+    "border border-critical-line bg-critical-soft text-critical shadow-e1 hover:bg-critical hover:text-ink-inverse",
+};
+
+const sizeClasses: Record<ButtonSize, string> = {
+  sm: "min-h-control-sm px-3 text-xs gap-1.5",
+  md: "min-h-control px-4 text-sm gap-2",
+  lg: "min-h-control-lg px-5 text-base gap-2",
 };
 
 type ButtonProps = ComponentProps<"button"> & {
   variant?: ButtonVariant;
+  size?: ButtonSize;
+  /** Stretch to the container width — the default on mobile forms. */
+  block?: boolean;
 };
 
 export function Button({
   className,
   variant = "secondary",
+  size = "md",
+  block = false,
   type = "button",
   ...props
 }: ButtonProps) {
@@ -27,7 +52,40 @@ export function Button({
     <button
       type={type}
       className={cn(
-        "inline-flex min-h-11 items-center justify-center gap-2 rounded-xl px-4 text-sm font-bold transition-all cursor-pointer active:scale-[0.98] active:translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-500 disabled:cursor-not-allowed disabled:opacity-60 btn-3d",
+        // `whitespace-nowrap` is deliberate: bilingual labels used to wrap to
+        // three lines inside fixed-height buttons.
+        "pressable inline-flex shrink-0 cursor-pointer items-center justify-center",
+        "whitespace-nowrap rounded-control font-semibold leading-none",
+        "disabled:pointer-events-none disabled:opacity-50",
+        sizeClasses[size],
+        variantClasses[variant],
+        block && "w-full",
+        className,
+      )}
+      {...props}
+    />
+  );
+}
+
+/**
+ * Square icon-only button. Always needs an aria-label.
+ */
+export function IconButton({
+  className,
+  variant = "quiet",
+  size = "md",
+  type = "button",
+  ...props
+}: Omit<ButtonProps, "block">) {
+  const box = size === "sm" ? "h-9 w-9" : size === "lg" ? "h-13 w-13" : "h-11 w-11";
+
+  return (
+    <button
+      type={type}
+      className={cn(
+        "pressable inline-flex shrink-0 cursor-pointer items-center justify-center",
+        "rounded-control disabled:pointer-events-none disabled:opacity-50",
+        box,
         variantClasses[variant],
         className,
       )}

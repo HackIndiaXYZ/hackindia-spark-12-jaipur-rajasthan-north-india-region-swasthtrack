@@ -38,7 +38,7 @@ export function SleepPanel({ patientId, logs, onSuccess }: SleepPanelProps) {
                 <div className="h-8 w-8 rounded-xl bg-indigo-600 text-white flex items-center justify-center shadow-xs">
                   <Moon className="h-4.5 w-4.5" />
                 </div>
-                <CardTitle className="text-lg font-black text-slate-900">
+                <CardTitle className="text-lg font-bold text-slate-900">
                   Sleep Tracker (नींद मॉनिटरिंग)
                 </CardTitle>
                 <Badge variant="blue">दैनिक रिकॉर्ड</Badge>
@@ -50,7 +50,7 @@ export function SleepPanel({ patientId, logs, onSuccess }: SleepPanelProps) {
 
             <Button
               onClick={() => setIsDialogOpen(true)}
-              className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl h-10 px-4 shadow-xs"
+              className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl h-10 px-4 shadow-xs"
             >
               <Plus className="h-4 w-4 mr-1.5" />
               + Log Sleep (नींद दर्ज करें)
@@ -63,52 +63,52 @@ export function SleepPanel({ patientId, logs, onSuccess }: SleepPanelProps) {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
             <div className="p-4 rounded-2xl border border-indigo-100 bg-indigo-50/50 flex flex-col justify-between">
               <div className="flex items-center justify-between text-slate-600">
-                <span className="text-xs font-black uppercase tracking-wider text-indigo-900">
+                <span className="text-xs font-bold uppercase tracking-wider text-indigo-900">
                   औसत नींद (Average)
                 </span>
                 <Clock className="h-4 w-4 text-indigo-600" />
               </div>
               <div className="mt-2 flex items-baseline gap-1.5">
-                <span className="text-3xl font-black text-indigo-950">{avgSleepHours}</span>
-                <span className="text-sm font-bold text-indigo-800">घंटे / रात</span>
+                <span className="text-3xl font-bold text-indigo-950">{avgSleepHours}</span>
+                <span className="text-sm font-semibold text-indigo-800">घंटे / रात</span>
               </div>
-              <span className="text-[11px] font-semibold text-indigo-700 mt-1">
+              <span className="text-xs font-semibold text-indigo-700 mt-1">
                 लक्ष्य: 7 - 8 घंटे प्रतिदिन
               </span>
             </div>
 
             <div className="p-4 rounded-2xl border border-emerald-100 bg-emerald-50/50 flex flex-col justify-between">
               <div className="flex items-center justify-between text-slate-600">
-                <span className="text-xs font-black uppercase tracking-wider text-emerald-900">
+                <span className="text-xs font-bold uppercase tracking-wider text-emerald-900">
                   पर्याप्त नींद दर (Goal Met)
                 </span>
                 <CheckCircle2 className="h-4 w-4 text-emerald-600" />
               </div>
               <div className="mt-2 flex items-baseline gap-1.5">
-                <span className="text-3xl font-black text-emerald-950">{optimalPercentage}%</span>
-                <span className="text-sm font-bold text-emerald-800">दिन पूरे</span>
+                <span className="text-3xl font-bold text-emerald-950">{optimalPercentage}%</span>
+                <span className="text-sm font-semibold text-emerald-800">दिन पूरे</span>
               </div>
-              <span className="text-[11px] font-semibold text-emerald-700 mt-1">
+              <span className="text-xs font-semibold text-emerald-700 mt-1">
                 {optimalNights} में से {totalLogs} दिन लक्ष्य पूरा हुआ
               </span>
             </div>
 
             <div className="p-4 rounded-2xl border border-slate-200 bg-slate-50/70 flex flex-col justify-between">
               <div className="flex items-center justify-between text-slate-600">
-                <span className="text-xs font-black uppercase tracking-wider text-slate-700">
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-700">
                   हालिया रिकॉर्ड (Latest)
                 </span>
                 <BedDouble className="h-4 w-4 text-slate-600" />
               </div>
               <div className="mt-2 flex items-baseline gap-1.5">
-                <span className="text-3xl font-black text-slate-900">
+                <span className="text-3xl font-bold text-slate-900">
                   {latestLog ? `${latestLog.sleep_hours}h` : "--"}
                 </span>
-                <span className="text-xs font-bold text-slate-500">
+                <span className="text-xs font-semibold text-slate-500">
                   {latestLog ? `(${latestLog.date})` : ""}
                 </span>
               </div>
-              <span className="text-[11px] font-semibold text-slate-600 mt-1 truncate">
+              <span className="text-xs font-semibold text-slate-600 mt-1 truncate">
                 {latestLog?.notes || "समय पर गहरी नींद"}
               </span>
             </div>
@@ -117,11 +117,11 @@ export function SleepPanel({ patientId, logs, onSuccess }: SleepPanelProps) {
           {/* SLEEP HISTORY LIST */}
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <h4 className="text-sm font-black text-slate-900 flex items-center gap-2">
+              <h4 className="text-sm font-bold text-slate-900 flex items-center gap-2">
                 <Calendar className="h-4 w-4 text-indigo-600" />
                 नींद का इतिहास (Sleep Log History)
               </h4>
-              <span className="text-xs font-bold text-slate-500">
+              <span className="text-xs font-semibold text-slate-500">
                 कुल {logs.length} रिकॉर्ड
               </span>
             </div>
@@ -129,7 +129,7 @@ export function SleepPanel({ patientId, logs, onSuccess }: SleepPanelProps) {
             {logs.length === 0 ? (
               <div className="text-center py-8 rounded-2xl border border-dashed border-slate-200 bg-slate-50/50">
                 <Moon className="h-8 w-8 text-slate-300 mx-auto mb-2" />
-                <p className="text-sm font-bold text-slate-700">कोई नींद का रिकॉर्ड दर्ज नहीं है</p>
+                <p className="text-sm font-semibold text-slate-700">कोई नींद का रिकॉर्ड दर्ज नहीं है</p>
                 <p className="text-xs text-slate-500 mt-0.5">ऊपर दिए गए बटन से अपनी नींद दर्ज करें।</p>
               </div>
             ) : (
@@ -145,17 +145,17 @@ export function SleepPanel({ patientId, logs, onSuccess }: SleepPanelProps) {
                         <div
                           className={`h-11 w-11 rounded-xl flex flex-col items-center justify-center shrink-0 border ${
                             isGood
-                              ? "bg-indigo-50 border-indigo-200 text-indigo-950 font-black"
-                              : "bg-amber-50 border-amber-200 text-amber-950 font-black"
+                              ? "bg-indigo-50 border-indigo-200 text-indigo-950 font-bold"
+                              : "bg-amber-50 border-amber-200 text-amber-950 font-bold"
                           }`}
                         >
                           <span className="text-base leading-none">{log.sleep_hours}</span>
-                          <span className="text-[9px] font-bold uppercase text-slate-500">घंटे</span>
+                          <span className="text-2xs font-semibold uppercase text-slate-500">घंटे</span>
                         </div>
 
                         <div>
                           <div className="flex items-center gap-2 flex-wrap">
-                            <span className="text-sm font-bold text-slate-900">
+                            <span className="text-sm font-semibold text-slate-900">
                               {new Date(log.date).toLocaleDateString("hi-IN", {
                                 weekday: "short",
                                 day: "numeric",

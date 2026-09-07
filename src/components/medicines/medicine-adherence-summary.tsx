@@ -42,7 +42,7 @@ export function MedicineAdherenceSummary({
         <div className="flex items-start justify-between gap-4">
           <div>
             <div className="flex items-center gap-2">
-              <p className="text-xs font-bold uppercase tracking-wider text-slate-500">
+              <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
                 Today&apos;s Adherence
               </p>
               <Badge variant="green">दवा नियमिता</Badge>
@@ -66,7 +66,7 @@ export function MedicineAdherenceSummary({
       <Card className="flex items-start gap-3 border-sky-100 bg-sky-50/70">
         <ShieldCheck aria-hidden className="mt-1 h-5 w-5 shrink-0 text-sky-700" />
         <div>
-          <h2 className="font-bold text-slate-950">Medication Safety & Verification</h2>
+          <h2 className="font-semibold text-slate-950">Medication Safety & Verification</h2>
           <p className="mt-1.5 text-xs leading-relaxed text-slate-600">
             This module records patient-reported compliance to physician prescribed medicines. It does not replace clinical advice or authorize dosage alterations.
           </p>

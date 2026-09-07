@@ -24,7 +24,7 @@ export function SmartDailySummaryCard({ summary }: SmartDailySummaryProps) {
           <span className="flex h-6 w-6 items-center justify-center rounded-lg bg-emerald-100 text-emerald-800">
             <ListTodo className="h-3.5 w-3.5" />
           </span>
-          <h3 className="font-bold text-slate-900 text-sm sm:text-base">
+          <h3 className="font-semibold text-slate-900 text-sm sm:text-base">
             Today&apos;s Tracking Summary · आज का सारांश
           </h3>
         </div>
@@ -40,7 +40,7 @@ export function SmartDailySummaryCard({ summary }: SmartDailySummaryProps) {
         {/* Completed Items */}
         {completedItems.length > 0 && (
           <div className="rounded-xl border border-emerald-100 bg-emerald-50/40 p-3 space-y-2">
-            <p className="font-bold text-emerald-950 flex items-center gap-1.5 text-[11px] uppercase tracking-wider">
+            <p className="font-semibold text-emerald-950 flex items-center gap-1.5 text-xs uppercase tracking-wider">
               <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
               दर्ज की गई प्रविष्टियां ({completedItems.length}):
             </p>
@@ -58,7 +58,7 @@ export function SmartDailySummaryCard({ summary }: SmartDailySummaryProps) {
         {/* Missing Items with Direct Action Links */}
         {missingItems.length > 0 ? (
           <div className="rounded-xl border border-amber-200/70 bg-amber-50/40 p-3 space-y-2">
-            <p className="font-bold text-amber-950 flex items-center gap-1.5 text-[11px] uppercase tracking-wider">
+            <p className="font-semibold text-amber-950 flex items-center gap-1.5 text-xs uppercase tracking-wider">
               <AlertTriangle className="h-3.5 w-3.5 text-amber-600" />
               लॉग होना शेष ({missingItems.length}):
             </p>
@@ -72,7 +72,7 @@ export function SmartDailySummaryCard({ summary }: SmartDailySummaryProps) {
                   {item.actionUrl && (
                     <Link
                       href={item.actionUrl}
-                      className="inline-flex items-center gap-1 text-[10px] font-bold text-amber-800 hover:text-amber-950 hover:underline"
+                      className="inline-flex items-center gap-1 text-2xs font-semibold text-amber-800 hover:text-amber-950 hover:underline"
                     >
                       लॉग करें
                       <ArrowRight className="h-2.5 w-2.5" />

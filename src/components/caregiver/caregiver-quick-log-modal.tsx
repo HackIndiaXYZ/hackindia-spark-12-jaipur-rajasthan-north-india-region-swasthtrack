@@ -207,10 +207,10 @@ export function CaregiverQuickLogModal({
         <div className="mb-4 p-2.5 rounded-2xl bg-purple-50 border border-purple-200 flex items-center gap-2">
           <ShieldCheck className="h-4 w-4 text-purple-700 shrink-0" />
           <div className="text-xs">
-            <span className="font-bold text-purple-900 block">
+            <span className="font-semibold text-purple-900 block">
               Editing record for: {patientName}
             </span>
-            <span className="text-[11px] text-purple-700">
+            <span className="text-xs text-purple-700">
               यह रिकॉर्ड सीधे {patientName} की स्वास्थ्य प्रोफ़ाइल में सुरक्षित होगा।
             </span>
           </div>
@@ -222,7 +222,7 @@ export function CaregiverQuickLogModal({
             type="button"
             onClick={() => setActiveTab("bp")}
             className={cn(
-              "px-3 py-1.5 rounded-xl text-xs font-black transition-all cursor-pointer shrink-0 flex items-center gap-1",
+              "px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer shrink-0 flex items-center gap-1",
               activeTab === "bp" ? "bg-white text-slate-950 shadow-xs" : "text-slate-600 hover:text-slate-950"
             )}
           >
@@ -233,7 +233,7 @@ export function CaregiverQuickLogModal({
             type="button"
             onClick={() => setActiveTab("medicine")}
             className={cn(
-              "px-3 py-1.5 rounded-xl text-xs font-black transition-all cursor-pointer shrink-0 flex items-center gap-1",
+              "px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer shrink-0 flex items-center gap-1",
               activeTab === "medicine" ? "bg-white text-slate-950 shadow-xs" : "text-slate-600 hover:text-slate-950"
             )}
           >
@@ -244,7 +244,7 @@ export function CaregiverQuickLogModal({
             type="button"
             onClick={() => setActiveTab("food")}
             className={cn(
-              "px-3 py-1.5 rounded-xl text-xs font-black transition-all cursor-pointer shrink-0 flex items-center gap-1",
+              "px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer shrink-0 flex items-center gap-1",
               activeTab === "food" ? "bg-white text-slate-950 shadow-xs" : "text-slate-600 hover:text-slate-950"
             )}
           >
@@ -255,7 +255,7 @@ export function CaregiverQuickLogModal({
             type="button"
             onClick={() => setActiveTab("steps")}
             className={cn(
-              "px-3 py-1.5 rounded-xl text-xs font-black transition-all cursor-pointer shrink-0 flex items-center gap-1",
+              "px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer shrink-0 flex items-center gap-1",
               activeTab === "steps" ? "bg-white text-slate-950 shadow-xs" : "text-slate-600 hover:text-slate-950"
             )}
           >
@@ -266,7 +266,7 @@ export function CaregiverQuickLogModal({
             type="button"
             onClick={() => setActiveTab("sleep")}
             className={cn(
-              "px-3 py-1.5 rounded-xl text-xs font-black transition-all cursor-pointer shrink-0 flex items-center gap-1",
+              "px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer shrink-0 flex items-center gap-1",
               activeTab === "sleep" ? "bg-white text-slate-950 shadow-xs" : "text-slate-600 hover:text-slate-950"
             )}
           >
@@ -277,7 +277,7 @@ export function CaregiverQuickLogModal({
             type="button"
             onClick={() => setActiveTab("weight")}
             className={cn(
-              "px-3 py-1.5 rounded-xl text-xs font-black transition-all cursor-pointer shrink-0 flex items-center gap-1",
+              "px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer shrink-0 flex items-center gap-1",
               activeTab === "weight" ? "bg-white text-slate-950 shadow-xs" : "text-slate-600 hover:text-slate-950"
             )}
           >
@@ -292,7 +292,7 @@ export function CaregiverQuickLogModal({
             <form onSubmit={handleSubmit} className="space-y-3.5">
               <div className="grid grid-cols-2 gap-2.5">
                 <div>
-                  <label className="text-xs font-bold text-slate-600 block mb-1">
+                  <label className="text-xs font-semibold text-slate-600 block mb-1">
                     Systolic (ऊपरी)
                   </label>
                   <input
@@ -300,11 +300,11 @@ export function CaregiverQuickLogModal({
                     value={systolic}
                     onChange={(e) => setSystolic(e.target.value)}
                     required
-                    className="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm font-bold focus:outline-emerald-500"
+                    className="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm font-semibold focus:outline-emerald-500"
                   />
                 </div>
                 <div>
-                  <label className="text-xs font-bold text-slate-600 block mb-1">
+                  <label className="text-xs font-semibold text-slate-600 block mb-1">
                     Diastolic (निचला)
                   </label>
                   <input
@@ -312,27 +312,27 @@ export function CaregiverQuickLogModal({
                     value={diastolic}
                     onChange={(e) => setDiastolic(e.target.value)}
                     required
-                    className="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm font-bold focus:outline-emerald-500"
+                    className="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm font-semibold focus:outline-emerald-500"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-2.5">
                 <div>
-                  <label className="text-xs font-bold text-slate-600 block mb-1">Pulse (नाड़ी)</label>
+                  <label className="text-xs font-semibold text-slate-600 block mb-1">Pulse (नाड़ी)</label>
                   <input
                     type="number"
                     value={pulse}
                     onChange={(e) => setPulse(e.target.value)}
-                    className="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm font-bold focus:outline-emerald-500"
+                    className="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm font-semibold focus:outline-emerald-500"
                   />
                 </div>
                 <div>
-                  <label className="text-xs font-bold text-slate-600 block mb-1">समय</label>
+                  <label className="text-xs font-semibold text-slate-600 block mb-1">समय</label>
                   <select
                     value={bpType}
                     onChange={(e) => setBpType(e.target.value as "Morning" | "Evening")}
-                    className="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm font-bold focus:outline-emerald-500 bg-white"
+                    className="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm font-semibold focus:outline-emerald-500 bg-white"
                   >
                     <option value="Morning">सुबह (Morning)</option>
                     <option value="Evening">शाम (Evening)</option>
@@ -353,7 +353,7 @@ export function CaregiverQuickLogModal({
 
           {activeTab === "medicine" && (
             <div className="space-y-2">
-              <p className="text-xs font-bold text-slate-500 mb-2">
+              <p className="text-xs font-semibold text-slate-500 mb-2">
                 दवाई पर टैप करके तुरंत Taken (ली गई) मार्क करें:
               </p>
               {medicines.length === 0 ? (
@@ -365,8 +365,8 @@ export function CaregiverQuickLogModal({
                     className="p-3 rounded-2xl border border-slate-200 bg-slate-50 flex items-center justify-between gap-2"
                   >
                     <div>
-                      <h5 className="text-xs sm:text-sm font-black text-slate-900">{m.medicine_name}</h5>
-                      <p className="text-[11px] font-bold text-slate-500">
+                      <h5 className="text-xs sm:text-sm font-bold text-slate-900">{m.medicine_name}</h5>
+                      <p className="text-xs font-semibold text-slate-500">
                         {m.dose} · {m.scheduled_time} {m.meal_relation ? `(${m.meal_relation})` : ""}
                       </p>
                     </div>
@@ -376,7 +376,7 @@ export function CaregiverQuickLogModal({
                         disabled={submitting}
                         onClick={() => handleMarkMedicineTaken(m)}
                         variant="secondary"
-                        className="text-xs py-1.5 px-2.5 min-h-8 border-slate-300 bg-white text-slate-800 hover:bg-slate-50 hover:border-slate-400 font-bold shadow-2xs"
+                        className="text-xs py-1.5 px-2.5 min-h-8 border-slate-300 bg-white text-slate-800 hover:bg-slate-50 hover:border-slate-400 font-semibold shadow-2xs"
                       >
                         <CheckCircle2 className="h-3.5 w-3.5 mr-1 text-slate-500" />
                         Taken ✓
@@ -400,34 +400,34 @@ export function CaregiverQuickLogModal({
           {activeTab === "food" && (
             <form onSubmit={handleSubmit} className="space-y-3.5">
               <div>
-                <label className="text-xs font-bold text-slate-600 block mb-1">भोजन का नाम</label>
+                <label className="text-xs font-semibold text-slate-600 block mb-1">भोजन का नाम</label>
                 <input
                   type="text"
                   placeholder="उदा. रोटी, दाल, सब्जी"
                   value={foodName}
                   onChange={(e) => setFoodName(e.target.value)}
                   required
-                  className="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm font-bold focus:outline-emerald-500"
+                  className="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm font-semibold focus:outline-emerald-500"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-2.5">
                 <div>
-                  <label className="text-xs font-bold text-slate-600 block mb-1">कैलोरी (kcal)</label>
+                  <label className="text-xs font-semibold text-slate-600 block mb-1">कैलोरी (kcal)</label>
                   <input
                     type="number"
                     value={calories}
                     onChange={(e) => setCalories(e.target.value)}
                     required
-                    className="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm font-bold focus:outline-emerald-500"
+                    className="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm font-semibold focus:outline-emerald-500"
                   />
                 </div>
                 <div>
-                  <label className="text-xs font-bold text-slate-600 block mb-1">मील प्रकार</label>
+                  <label className="text-xs font-semibold text-slate-600 block mb-1">मील प्रकार</label>
                   <select
                     value={mealType}
                     onChange={(e) => setMealType(e.target.value as "Breakfast" | "Lunch" | "Dinner" | "Snack")}
-                    className="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm font-bold focus:outline-emerald-500 bg-white"
+                    className="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm font-semibold focus:outline-emerald-500 bg-white"
                   >
                     <option value="Breakfast">नाश्ता (Breakfast)</option>
                     <option value="Lunch">दोपहर (Lunch)</option>
@@ -451,25 +451,25 @@ export function CaregiverQuickLogModal({
           {activeTab === "steps" && (
             <form onSubmit={handleSubmit} className="space-y-3.5">
               <div>
-                <label className="text-xs font-bold text-slate-600 block mb-1">कुल कदम (Steps)</label>
+                <label className="text-xs font-semibold text-slate-600 block mb-1">कुल कदम (Steps)</label>
                 <input
                   type="number"
                   value={steps}
                   onChange={(e) => setSteps(e.target.value)}
                   required
-                  className="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm font-bold focus:outline-emerald-500"
+                  className="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm font-semibold focus:outline-emerald-500"
                 />
               </div>
 
               <div>
-                <label className="text-xs font-bold text-slate-600 block mb-1">
+                <label className="text-xs font-semibold text-slate-600 block mb-1">
                   पैदल चलने का समय (मिनट)
                 </label>
                 <input
                   type="number"
                   value={walkingMins}
                   onChange={(e) => setWalkingMins(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm font-bold focus:outline-emerald-500"
+                  className="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm font-semibold focus:outline-emerald-500"
                 />
               </div>
 
@@ -487,7 +487,7 @@ export function CaregiverQuickLogModal({
           {activeTab === "sleep" && (
             <form onSubmit={handleSubmit} className="space-y-3.5">
               <div>
-                <label className="text-xs font-bold text-slate-600 block mb-1">
+                <label className="text-xs font-semibold text-slate-600 block mb-1">
                   नींद की अवधि (घंटे)
                 </label>
                 <input
@@ -496,7 +496,7 @@ export function CaregiverQuickLogModal({
                   value={sleepHours}
                   onChange={(e) => setSleepHours(e.target.value)}
                   required
-                  className="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm font-bold focus:outline-emerald-500"
+                  className="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm font-semibold focus:outline-emerald-500"
                 />
               </div>
 
@@ -514,7 +514,7 @@ export function CaregiverQuickLogModal({
           {activeTab === "weight" && (
             <form onSubmit={handleSubmit} className="space-y-3.5">
               <div>
-                <label className="text-xs font-bold text-slate-600 block mb-1">
+                <label className="text-xs font-semibold text-slate-600 block mb-1">
                   शारीरिक वजन (kg)
                 </label>
                 <input
@@ -523,7 +523,7 @@ export function CaregiverQuickLogModal({
                   value={weightKg}
                   onChange={(e) => setWeightKg(e.target.value)}
                   required
-                  className="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm font-bold focus:outline-emerald-500"
+                  className="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm font-semibold focus:outline-emerald-500"
                 />
               </div>
 

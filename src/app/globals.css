@@ -1,35 +1,178 @@
 @import "tailwindcss";
 
-:root {
-  --background: #f6faf8;
-  --foreground: #15231f;
-  --elevation-0: none;
-  --elevation-1: 0 1px 3px rgba(15, 23, 42, 0.05), 0 2px 6px rgba(15, 23, 42, 0.04);
-  --elevation-2: 0 4px 14px rgba(15, 23, 42, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.75);
-  --elevation-3: 0 6px 20px rgba(15, 23, 42, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.9);
-  --elevation-floating: 0 12px 32px rgba(15, 23, 42, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.85);
+/* ==========================================================================
+   SWASTHTRACK DESIGN TOKENS — single source of truth
+   Light theme only. Calm, warm, clinical-but-human.
+   Every value below is referenced through Tailwind utilities
+   (bg-canvas, text-ink, rounded-card, shadow-e2, …) so screens never
+   hard-code one-off colours, radii or shadows.
+   ========================================================================== */
+
+@theme {
+  /* ---- Typography -------------------------------------------------------
+     Inter for Latin, Noto Sans Devanagari for Hindi. Both are loaded through
+     next/font in app/layout.tsx, so there is no external network request and
+     no layout shift. Devanagari is listed first for the shared glyphs it owns
+     (matras, danda) and Inter carries the Latin. */
+  --font-sans: var(--font-ui-latin), var(--font-ui-devanagari), ui-sans-serif,
+    system-ui, "Segoe UI", sans-serif;
+  --font-hindi: var(--font-ui-devanagari), var(--font-ui-latin), sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* Type scale. Nothing in the product is allowed below --text-2xs (11px):
+     the primary reader is a 50+ parent, often outdoors, often without
+     reading glasses. Devanagari needs more leading than Latin, hence the
+     generous line-heights. */
+  --text-2xs: 0.6875rem;      /* 11px — dense metadata only */
+  --text-2xs--line-height: 1.45;
+  --text-xs: 0.75rem;         /* 12px — labels, badges */
+  --text-xs--line-height: 1.5;
+  --text-sm: 0.8125rem;       /* 13px */
+  --text-sm--line-height: 1.55;
+  --text-base: 0.9375rem;     /* 15px — body default */
+  --text-base--line-height: 1.6;
+  --text-lg: 1.0625rem;       /* 17px — card titles */
+  --text-lg--line-height: 1.5;
+  --text-xl: 1.25rem;         /* 20px — section titles */
+  --text-xl--line-height: 1.4;
+  --text-2xl: 1.5rem;         /* 24px — page titles */
+  --text-2xl--line-height: 1.3;
+  --text-3xl: 1.875rem;       /* 30px — hero metrics */
+  --text-3xl--line-height: 1.2;
+  --text-4xl: 2.375rem;       /* 38px — the one number that matters */
+  --text-4xl--line-height: 1.1;
+
+  /* ---- Colour: neutrals -------------------------------------------------
+     A warm, very slightly green-tinted grey ramp. Cooler slate reads as
+     "admin dashboard"; this reads as calm and cared-for. */
+  --color-canvas: #f5f7f6;          /* app background */
+  --color-surface: #ffffff;         /* cards */
+  --color-surface-sunken: #f1f4f3;  /* wells, inputs, inactive tracks */
+  --color-surface-raised: #fbfcfc;  /* gradient card tops */
+
+  --color-line: #e3e8e6;            /* default border */
+  --color-line-strong: #cfd7d4;     /* emphasised border, dividers */
+
+  --color-ink: #14201d;             /* primary text */
+  --color-ink-muted: #52625d;       /* secondary text */
+  --color-ink-subtle: #7c8a85;      /* metadata, placeholders */
+  --color-ink-inverse: #ffffff;
+
+  /* ---- Colour: brand ----------------------------------------------------
+     A deeper, less saturated emerald than stock Tailwind. Passes 4.5:1 on
+     white at --color-brand and above. */
+  --color-brand: #0f8a5f;
+  --color-brand-strong: #0b6e4c;
+  --color-brand-soft: #e6f4ee;
+  --color-brand-softer: #f2faf6;
+  --color-brand-line: #b9dfcd;
+  --color-brand-ink: #0a5a3e;
+
+  /* ---- Colour: metric identity -----------------------------------------
+     Each vital keeps one hue across the whole product, so a colour always
+     means the same thing. */
+  --color-bp: #c2384c;              /* blood pressure  */
+  --color-bp-soft: #fdeef0;
+  --color-bp-line: #f4ccd3;
+
+  --color-weight: #2a6fb0;          /* weight          */
+  --color-weight-soft: #eaf2fa;
+  --color-weight-line: #c3ddf1;
+
+  --color-food: #b0710f;            /* food / calories */
+  --color-food-soft: #fdf3e3;
+  --color-food-line: #f0d9b0;
+
+  --color-meds: #6d4bb0;            /* medicines       */
+  --color-meds-soft: #f2eefb;
+  --color-meds-line: #d9cdf0;
+
+  --color-activity: #0d7d76;        /* activity        */
+  --color-activity-soft: #e5f4f3;
+  --color-activity-line: #b5ddd9;
+
+  --color-sleep: #45509b;           /* sleep           */
+  --color-sleep-soft: #eeeffa;
+  --color-sleep-line: #ccd0ee;
+
+  /* ---- Colour: status ---------------------------------------------------
+     Three levels only (§34). Never turn the whole screen red. */
+  --color-info: #2a6fb0;
+  --color-info-soft: #eaf2fa;
+  --color-info-line: #c3ddf1;
+
+  --color-attention: #a86a08;
+  --color-attention-soft: #fdf4e4;
+  --color-attention-line: #f0dcb2;
+
+  --color-critical: #c2384c;
+  --color-critical-soft: #fdeef0;
+  --color-critical-line: #f4ccd3;
+
+  --color-positive: #0f8a5f;
+  --color-positive-soft: #e6f4ee;
+  --color-positive-line: #b9dfcd;
+
+  /* ---- Radii ------------------------------------------------------------ */
+  --radius-field: 0.625rem;   /* 10px — inputs, small chips */
+  --radius-control: 0.75rem;  /* 12px — buttons, pills */
+  --radius-card: 1rem;        /* 16px — cards, panels */
+  --radius-panel: 1.25rem;    /* 20px — hero / featured surfaces */
+  --radius-sheet: 1.5rem;     /* 24px — modals, bottom sheets */
+
+  /* ---- Elevation --------------------------------------------------------
+     Four steps, all soft and tight. Depth is used to separate layers, never
+     for decoration (§38). */
+  --shadow-e1: 0 1px 2px rgba(20, 32, 29, 0.05), 0 1px 3px rgba(20, 32, 29, 0.04);
+  --shadow-e2: 0 2px 4px rgba(20, 32, 29, 0.04), 0 4px 12px rgba(20, 32, 29, 0.06);
+  --shadow-e3: 0 4px 8px rgba(20, 32, 29, 0.05), 0 12px 24px rgba(20, 32, 29, 0.08);
+  --shadow-e4: 0 8px 16px rgba(20, 32, 29, 0.07), 0 24px 48px rgba(20, 32, 29, 0.12);
+  --shadow-inset-field: inset 0 1px 2px rgba(20, 32, 29, 0.06);
+
+  /* ---- Control heights --------------------------------------------------
+     44px is the floor for anything tappable (§44). */
+  --spacing-control-sm: 2.25rem;  /* 36px — desktop-only, non-primary */
+  --spacing-control: 2.75rem;     /* 44px — the default */
+  --spacing-control-lg: 3.25rem;  /* 52px — quick-log, primary save */
+
+  /* ---- Motion -----------------------------------------------------------
+     Short, functional, never decorative (§39). */
+  --ease-out-soft: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --duration-tap: 100ms;
+  --duration-ui: 160ms;
+  --duration-reveal: 240ms;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+/* ==========================================================================
+   BASE
+   ========================================================================== */
 
 * {
   box-sizing: border-box;
+  min-width: 0; /* flex/grid children shrink instead of forcing page overflow */
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
 }
 
 html,
 body {
-  max-width: 100vw;
-  overflow-x: hidden;
-  position: relative;
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  background: var(--color-canvas);
+  color: var(--color-ink);
   -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: var(--text-base--line-height);
+  font-synthesis-weight: none;
+}
+
+/* Devanagari sits a touch small next to Inter at the same px size. */
+:lang(hi) {
+  font-family: var(--font-hindi);
 }
 
 button,
@@ -37,56 +180,153 @@ input,
 select,
 textarea {
   font: inherit;
+  color: inherit;
+}
+
+/* Visible, consistent focus for every interactive element (§44). */
+:focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 2px;
+  border-radius: 4px;
 }
 
 ::selection {
-  background: #bfe7d1;
-  color: #10201b;
+  background: var(--color-brand-soft);
+  color: var(--color-brand-ink);
 }
 
-/* 3D Soft-Elevated Utility Classes */
-.elevation-1 {
-  box-shadow: var(--elevation-1);
+/* Numeric health values line up in columns and never jitter while counting. */
+.tabular {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
 }
 
-.elevation-2 {
-  box-shadow: var(--elevation-2);
-  border-top: 1px solid rgba(255, 255, 255, 0.8);
+/* ==========================================================================
+   COMPONENT PRIMITIVES
+   ========================================================================== */
+
+/* Horizontal scrollers (tab strips, chip rows). Deliberate, contained
+   overflow — the page itself must never scroll sideways. */
+.scroll-x {
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity;
 }
 
-.elevation-3 {
-  box-shadow: var(--elevation-3);
-  border-top: 1px solid rgba(255, 255, 255, 0.9);
+.scroll-x::-webkit-scrollbar {
+  display: none;
 }
 
-.elevation-floating {
-  box-shadow: var(--elevation-floating);
+/* Expands a small control's touch target to ~44px without changing layout.
+   Used for the icon-sized remove buttons inside food chips, which were 16px
+   squares sitting next to the chip's own tap area (§44, §46). */
+.hit-target {
+  position: relative;
 }
 
-.btn-3d {
-  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.5);
-  transition: all 0.12s cubic-bezier(0.4, 0, 0.2, 1);
+.hit-target::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 44px;
+  height: 44px;
+  transform: translate(-50%, -50%);
 }
 
-.btn-3d:active {
-  transform: translateY(1px);
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.18);
+/* Tactile press for cards and quick actions. */
+.pressable {
+  transition:
+    transform var(--duration-tap) var(--ease-out-soft),
+    box-shadow var(--duration-ui) var(--ease-out-soft),
+    background-color var(--duration-ui) var(--ease-out-soft),
+    border-color var(--duration-ui) var(--ease-out-soft);
 }
 
-.input-inset {
-  box-shadow: inset 0 2px 4px rgba(15, 23, 42, 0.06);
+.pressable:active {
+  transform: translateY(1px) scale(0.99);
 }
 
-/* Dedicated Print Stylesheet (@media print) */
+/* Skeleton shimmer for loading states (§40). */
+@keyframes st-shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
+
+.skeleton {
+  background-image: linear-gradient(
+    90deg,
+    var(--color-surface-sunken) 0%,
+    #e8edeb 50%,
+    var(--color-surface-sunken) 100%
+  );
+  background-size: 200% 100%;
+  animation: st-shimmer 1.4s linear infinite;
+  border-radius: var(--radius-field);
+}
+
+/* Content reveal for async sections. */
+@keyframes st-rise {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.reveal {
+  animation: st-rise var(--duration-reveal) var(--ease-out-soft) both;
+}
+
+/* ==========================================================================
+   REDUCED MOTION (§39)
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .pressable:active {
+    transform: none;
+  }
+}
+
+/* ==========================================================================
+   PRINT — used by the Doctor Visit report (§33)
+   ========================================================================== */
+
 @media print {
+  :root {
+    --color-canvas: #ffffff;
+    --color-surface: #ffffff;
+  }
+
   body {
     background: #ffffff !important;
     color: #000000 !important;
+    font-size: 11pt;
   }
 
   header,
   nav,
   aside,
+  footer,
   button,
   .no-print,
   [aria-label="Mobile navigation"] {
@@ -105,5 +345,9 @@ textarea {
     box-shadow: none !important;
     border: 1px solid #cbd5e1 !important;
     page-break-inside: avoid;
+  }
+
+  a[href]::after {
+    content: "";
   }
 }

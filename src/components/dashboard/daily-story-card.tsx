@@ -116,10 +116,10 @@ export function DailyStoryCard({ data }: DailyStoryCardProps) {
       <div className="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
         <div>
           <div className="flex items-center gap-2">
-            <h3 className="text-base sm:text-lg font-black text-slate-950 tracking-tight">
+            <h3 className="text-base sm:text-lg font-bold text-slate-950 tracking-tight">
               आज का दिन · Your Day Story
             </h3>
-            <Badge variant="green" className="text-[11px] font-bold">
+            <Badge variant="green" className="text-xs font-semibold">
               दिनचर्या प्रवाह
             </Badge>
           </div>
@@ -153,24 +153,24 @@ export function DailyStoryCard({ data }: DailyStoryCardProps) {
                     <Icon className="h-4 w-4" />
                   </div>
                   <div>
-                    <h4 className="text-sm font-black text-slate-900 leading-none">{phase.label}</h4>
-                    <span className="text-[10px] font-bold text-slate-400">{phase.englishLabel}</span>
+                    <h4 className="text-sm font-bold text-slate-900 leading-none">{phase.label}</h4>
+                    <span className="text-2xs font-semibold text-slate-400">{phase.englishLabel}</span>
                   </div>
                 </div>
 
                 {phase.isComplete ? (
-                  <span className="flex items-center gap-1 text-[11px] font-black text-emerald-800 bg-emerald-100/90 px-2 py-0.5 rounded-md">
+                  <span className="flex items-center gap-1 text-xs font-bold text-emerald-800 bg-emerald-100/90 px-2 py-0.5 rounded-md">
                     <CheckCircle2 className="h-3 w-3" />
                     <span>पूरा</span>
                   </span>
                 ) : (
-                  <span className="text-[11px] font-bold text-slate-400 bg-white px-2 py-0.5 rounded-md border border-slate-200">
+                  <span className="text-xs font-semibold text-slate-400 bg-white px-2 py-0.5 rounded-md border border-slate-200">
                     प्रगति पर
                   </span>
                 )}
               </div>
 
-              <p className="text-xs font-bold text-slate-700 leading-snug mt-2">
+              <p className="text-xs font-semibold text-slate-700 leading-snug mt-2">
                 {phase.statusText}
               </p>
             </div>

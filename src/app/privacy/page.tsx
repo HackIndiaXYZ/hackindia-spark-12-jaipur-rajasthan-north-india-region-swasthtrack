@@ -28,7 +28,7 @@ export default function PrivacyPolicyPage() {
       <div className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 space-y-6 text-xs sm:text-sm text-slate-700 leading-relaxed">
         {/* Introduction */}
         <section className="space-y-2">
-          <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
+          <h2 className="text-base font-semibold text-slate-900 flex items-center gap-2">
             <Shield className="h-4 w-4 text-emerald-600" />
             1. Overview & Core Philosophy
           </h2>
@@ -42,7 +42,7 @@ export default function PrivacyPolicyPage() {
 
         {/* Information We Collect */}
         <section className="space-y-2">
-          <h2 className="text-base font-bold text-slate-900">2. Information Collected</h2>
+          <h2 className="text-base font-semibold text-slate-900">2. Information Collected</h2>
           <p>
             When you use SwasthTrack, you provide information to facilitate health tracking, routine adherence, and family caregiving:
           </p>
@@ -57,7 +57,7 @@ export default function PrivacyPolicyPage() {
 
         {/* How We Use Your Information */}
         <section className="space-y-2">
-          <h2 className="text-base font-bold text-slate-900">3. How Information Is Used</h2>
+          <h2 className="text-base font-semibold text-slate-900">3. How Information Is Used</h2>
           <p>Your information is used strictly to provide the features you request:</p>
           <ul className="list-disc list-inside space-y-1.5 pl-1 text-slate-800">
             <li>Displaying daily health summaries, streak scorecards, and tracking progress.</li>
@@ -70,7 +70,7 @@ export default function PrivacyPolicyPage() {
 
         {/* Data Storage & Security */}
         <section className="space-y-2">
-          <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
+          <h2 className="text-base font-semibold text-slate-900 flex items-center gap-2">
             <Lock className="h-4 w-4 text-emerald-600" />
             4. Data Storage & Security Measures
           </h2>
@@ -89,7 +89,7 @@ export default function PrivacyPolicyPage() {
 
         {/* Caregiver Access */}
         <section className="space-y-2">
-          <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
+          <h2 className="text-base font-semibold text-slate-900 flex items-center gap-2">
             <Users className="h-4 w-4 text-emerald-600" />
             5. Family Caregiver Access & Controls
           </h2>
@@ -104,7 +104,7 @@ export default function PrivacyPolicyPage() {
 
         {/* Intelligent Insights & Predictions */}
         <section className="space-y-2">
-          <h2 className="text-base font-bold text-slate-900">6. Pattern Insights & Estimates</h2>
+          <h2 className="text-base font-semibold text-slate-900">6. Pattern Insights & Estimates</h2>
           <p>
             Some features of SwasthTrack analyze your historical logs to identify trends, weekly averages, and potential habit patterns. These insights are strictly informational mathematical estimates and do not constitute clinical diagnoses or automated medical screening.
           </p>
@@ -112,7 +112,7 @@ export default function PrivacyPolicyPage() {
 
         {/* Data Retention & Account Deletion */}
         <section className="space-y-2">
-          <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
+          <h2 className="text-base font-semibold text-slate-900 flex items-center gap-2">
             <Trash2 className="h-4 w-4 text-rose-600" />
             7. Data Retention & Account Deletion
           </h2>
@@ -123,7 +123,7 @@ export default function PrivacyPolicyPage() {
 
         {/* Third-Party Service Providers */}
         <section className="space-y-2">
-          <h2 className="text-base font-bold text-slate-900">8. Third-Party Infrastructure</h2>
+          <h2 className="text-base font-semibold text-slate-900">8. Third-Party Infrastructure</h2>
           <p>
             We rely on trusted cloud infrastructure providers (such as Supabase for database persistence and Vercel for web application hosting) solely to host and operate the platform. These providers are bound by strict confidentiality and data protection obligations.
           </p>
@@ -131,7 +131,7 @@ export default function PrivacyPolicyPage() {
 
         {/* Contact Us */}
         <section className="space-y-2 pt-2 border-t border-slate-100">
-          <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
+          <h2 className="text-base font-semibold text-slate-900 flex items-center gap-2">
             <Mail className="h-4 w-4 text-emerald-600" />
             9. Privacy Questions & Contact
           </h2>

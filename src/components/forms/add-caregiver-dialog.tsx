@@ -71,19 +71,19 @@ export function AddCaregiverDialog({
     >
       <div className="space-y-4 text-xs">
         <div className="rounded-2xl border border-emerald-200 bg-emerald-50/50 p-5 text-center space-y-2">
-          <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">
+          <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">
             6-अंकों का पेयरिंग कोड (Pairing Code)
           </span>
 
           {loading ? (
             <div className="h-12 w-36 mx-auto rounded-xl bg-slate-200 animate-pulse" />
           ) : (
-            <div className="text-3xl font-black text-emerald-950 tracking-widest font-mono">
+            <div className="text-3xl font-bold text-emerald-950 tracking-widest font-mono">
               {invitation?.invite_code || "------"}
             </div>
           )}
 
-          <p className="text-[11px] text-slate-500">
+          <p className="text-xs text-slate-500">
             यह कोड 15 मिनट के लिए वैध (valid) है।
           </p>
         </div>
@@ -92,7 +92,7 @@ export function AddCaregiverDialog({
           <Button
             variant="secondary"
             onClick={handleCopy}
-            className="w-full h-10 text-xs font-bold"
+            className="w-full h-10 text-xs font-semibold"
             disabled={!invitation}
           >
             {copied ? (
@@ -109,8 +109,8 @@ export function AddCaregiverDialog({
           </Button>
         </div>
 
-        <div className="rounded-xl border border-slate-200 bg-slate-50 p-3 text-[11px] text-slate-600 space-y-1">
-          <p className="font-bold text-slate-800 flex items-center gap-1.5">
+        <div className="rounded-xl border border-slate-200 bg-slate-50 p-3 text-xs text-slate-600 space-y-1">
+          <p className="font-semibold text-slate-800 flex items-center gap-1.5">
             <KeyRound className="h-3.5 w-3.5 text-emerald-600" />
             केयरगिवर के लिए निर्देश:
           </p>

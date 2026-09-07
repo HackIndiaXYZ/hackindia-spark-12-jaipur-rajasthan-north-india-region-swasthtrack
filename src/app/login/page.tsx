@@ -166,7 +166,7 @@ export default function LoginPage() {
               className="h-full w-full object-cover"
             />
           </div>
-          <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
+          <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
             SwasthTrack
           </h1>
           <p className="text-xs sm:text-sm font-medium text-slate-500 mt-1">
@@ -180,7 +180,7 @@ export default function LoginPage() {
             <button
               type="button"
               onClick={() => handleTabSwitch("login")}
-              className={`w-1/2 rounded-xl py-2 text-xs font-bold transition-all ${
+              className={`w-1/2 rounded-xl py-2 text-xs font-semibold transition-all ${
                 activeTab === "login"
                   ? "bg-white text-slate-900 shadow-xs"
                   : "text-slate-500 hover:text-slate-900"
@@ -191,7 +191,7 @@ export default function LoginPage() {
             <button
               type="button"
               onClick={() => handleTabSwitch("signup")}
-              className={`w-1/2 rounded-xl py-2 text-xs font-bold transition-all ${
+              className={`w-1/2 rounded-xl py-2 text-xs font-semibold transition-all ${
                 activeTab === "signup"
                   ? "bg-white text-slate-900 shadow-xs"
                   : "text-slate-500 hover:text-slate-900"
@@ -220,11 +220,11 @@ export default function LoginPage() {
         {activeTab === "login" && (
           <form onSubmit={handleLoginSubmit} className="space-y-4">
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1.5">
+              <label className="block text-xs font-semibold text-slate-700 mb-1.5">
                 मोबाइल नंबर (Mobile Number)
               </label>
               <div className="relative flex items-center">
-                <span className="absolute left-3.5 text-xs font-bold text-slate-500">
+                <span className="absolute left-3.5 text-xs font-semibold text-slate-500">
                   +91
                 </span>
                 <input
@@ -234,7 +234,7 @@ export default function LoginPage() {
                   placeholder="98765 43210"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  className="w-full rounded-2xl border border-slate-300 pl-12 pr-4 py-3 text-sm font-bold text-slate-900 tracking-wider placeholder:text-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
+                  className="w-full rounded-2xl border border-slate-300 pl-12 pr-4 py-3 text-sm font-semibold text-slate-900 tracking-wider placeholder:text-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
                   required
                 />
                 <Phone className="absolute right-3.5 h-4 w-4 text-slate-400" />
@@ -243,13 +243,13 @@ export default function LoginPage() {
 
             <div>
               <div className="flex items-center justify-between mb-1.5">
-                <label className="block text-xs font-bold text-slate-700">
+                <label className="block text-xs font-semibold text-slate-700">
                   पासवर्ड (Password)
                 </label>
                 <button
                   type="button"
                   onClick={() => handleTabSwitch("forgot")}
-                  className="text-xs font-bold text-emerald-700 hover:text-emerald-900"
+                  className="text-xs font-semibold text-emerald-700 hover:text-emerald-900"
                 >
                   पासवर्ड भूल गए?
                 </button>
@@ -260,7 +260,7 @@ export default function LoginPage() {
                   placeholder="पासवर्ड दर्ज करें"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm font-bold text-slate-900 tracking-wider placeholder:text-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
+                  className="w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm font-semibold text-slate-900 tracking-wider placeholder:text-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
                   required
                 />
                 <button
@@ -277,7 +277,7 @@ export default function LoginPage() {
               variant="primary"
               type="submit"
               disabled={loading}
-              className="w-full h-12 text-sm font-bold rounded-2xl shadow-sm shadow-emerald-700/20"
+              className="w-full h-12 text-sm font-semibold rounded-2xl shadow-sm shadow-emerald-700/20"
             >
               {loading ? (
                 "लॉगिन हो रहा है..."
@@ -296,11 +296,11 @@ export default function LoginPage() {
         {activeTab === "signup" && (
           <form onSubmit={handleSignupSubmit} className="space-y-4">
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1.5">
+              <label className="block text-xs font-semibold text-slate-700 mb-1.5">
                 मोबाइल नंबर (Mobile Number)
               </label>
               <div className="relative flex items-center">
-                <span className="absolute left-3.5 text-xs font-bold text-slate-500">
+                <span className="absolute left-3.5 text-xs font-semibold text-slate-500">
                   +91
                 </span>
                 <input
@@ -310,7 +310,7 @@ export default function LoginPage() {
                   placeholder="98765 43210"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  className="w-full rounded-2xl border border-slate-300 pl-12 pr-4 py-3 text-sm font-bold text-slate-900 tracking-wider placeholder:text-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
+                  className="w-full rounded-2xl border border-slate-300 pl-12 pr-4 py-3 text-sm font-semibold text-slate-900 tracking-wider placeholder:text-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
                   required
                 />
                 <Phone className="absolute right-3.5 h-4 w-4 text-slate-400" />
@@ -318,7 +318,7 @@ export default function LoginPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1.5">
+              <label className="block text-xs font-semibold text-slate-700 mb-1.5">
                 पासवर्ड बनाएं (Create Password)
               </label>
               <div className="relative flex items-center">
@@ -327,7 +327,7 @@ export default function LoginPage() {
                   placeholder="कम से कम 4 अक्षर या अंक"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm font-bold text-slate-900 tracking-wider placeholder:text-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
+                  className="w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm font-semibold text-slate-900 tracking-wider placeholder:text-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
                   required
                 />
                 <button
@@ -341,7 +341,7 @@ export default function LoginPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1.5">
+              <label className="block text-xs font-semibold text-slate-700 mb-1.5">
                 पासवर्ड दोबारा दर्ज करें (Confirm Password)
               </label>
               <div className="relative flex items-center">
@@ -350,7 +350,7 @@ export default function LoginPage() {
                   placeholder="वही पासवर्ड दोबारा लिखें"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm font-bold text-slate-900 tracking-wider placeholder:text-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
+                  className="w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm font-semibold text-slate-900 tracking-wider placeholder:text-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
                   required
                 />
               </div>
@@ -360,7 +360,7 @@ export default function LoginPage() {
               variant="primary"
               type="submit"
               disabled={loading}
-              className="w-full h-12 text-sm font-bold rounded-2xl shadow-sm shadow-emerald-700/20"
+              className="w-full h-12 text-sm font-semibold rounded-2xl shadow-sm shadow-emerald-700/20"
             >
               {loading ? (
                 "खाता बनाया जा रहा है..."
@@ -382,7 +382,7 @@ export default function LoginPage() {
               type="button"
               onClick={handleDemoLogin}
               disabled={loading}
-              className="w-full py-2.5 px-4 rounded-2xl bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-900 font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all cursor-pointer shadow-2xs active:scale-98"
+              className="w-full py-2.5 px-4 rounded-2xl bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-900 font-semibold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all cursor-pointer shadow-2xs active:scale-98"
             >
               <span>⚡ बिना लॉगिन ऐप देखें (Try Demo Mode)</span>
             </button>
@@ -403,8 +403,8 @@ export default function LoginPage() {
               </button>
             </div>
 
-            <div className="rounded-xl border border-sky-100 bg-sky-50 p-3 text-[11px] text-sky-900 font-medium space-y-1">
-              <p className="font-bold flex items-center gap-1.5">
+            <div className="rounded-xl border border-sky-100 bg-sky-50 p-3 text-xs text-sky-900 font-medium space-y-1">
+              <p className="font-semibold flex items-center gap-1.5">
                 <KeyRound className="h-3.5 w-3.5 text-sky-600" />
                 सुरक्षित 6-Digit OTP पासवर्ड रीसेट:
               </p>
@@ -416,11 +416,11 @@ export default function LoginPage() {
             {!otpSent ? (
               <form onSubmit={handleRequestOtp} className="space-y-4">
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                  <label className="block text-xs font-semibold text-slate-700 mb-1.5">
                     रजिस्टर्ड मोबाइल नंबर (Mobile Number)
                   </label>
                   <div className="relative flex items-center">
-                    <span className="absolute left-3.5 text-xs font-bold text-slate-500">
+                    <span className="absolute left-3.5 text-xs font-semibold text-slate-500">
                       +91
                     </span>
                     <input
@@ -430,7 +430,7 @@ export default function LoginPage() {
                       placeholder="98765 43210"
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
-                      className="w-full rounded-2xl border border-slate-300 pl-12 pr-4 py-3 text-sm font-bold text-slate-900 tracking-wider placeholder:text-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
+                      className="w-full rounded-2xl border border-slate-300 pl-12 pr-4 py-3 text-sm font-semibold text-slate-900 tracking-wider placeholder:text-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
                       required
                     />
                   </div>
@@ -440,7 +440,7 @@ export default function LoginPage() {
                   variant="primary"
                   type="submit"
                   disabled={loading || phone.length < 10}
-                  className="w-full h-12 text-sm font-bold rounded-2xl shadow-sm shadow-emerald-700/20"
+                  className="w-full h-12 text-sm font-semibold rounded-2xl shadow-sm shadow-emerald-700/20"
                 >
                   {loading ? (
                     "OTP भेजा जा रहा है..."
@@ -455,7 +455,7 @@ export default function LoginPage() {
             ) : (
               <form onSubmit={handleVerifyOtpSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                  <label className="block text-xs font-semibold text-slate-700 mb-1.5">
                     6-अंकों का OTP कोड (Enter 6-Digit OTP) *
                   </label>
                   <input
@@ -466,13 +466,13 @@ export default function LoginPage() {
                     placeholder="e.g. 123456"
                     value={otpCode}
                     onChange={(e) => setOtpCode(e.target.value.replace(/\D/g, ""))}
-                    className="w-full rounded-2xl border border-slate-300 px-4 py-3 text-center text-lg font-black tracking-widest text-slate-900 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
+                    className="w-full rounded-2xl border border-slate-300 px-4 py-3 text-center text-lg font-bold tracking-widest text-slate-900 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
                     required
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                  <label className="block text-xs font-semibold text-slate-700 mb-1.5">
                     नया पासवर्ड बनाएं (New Password) *
                   </label>
                   <input
@@ -480,7 +480,7 @@ export default function LoginPage() {
                     placeholder="नया पासवर्ड दर्ज करें"
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
-                    className="w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm font-bold text-slate-900 tracking-wider focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
+                    className="w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm font-semibold text-slate-900 tracking-wider focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
                     required
                   />
                 </div>
@@ -489,7 +489,7 @@ export default function LoginPage() {
                   variant="primary"
                   type="submit"
                   disabled={loading || otpCode.length !== 6 || !newPassword}
-                  className="w-full h-12 text-sm font-bold rounded-2xl shadow-sm shadow-emerald-700/20"
+                  className="w-full h-12 text-sm font-semibold rounded-2xl shadow-sm shadow-emerald-700/20"
                 >
                   {loading ? (
                     "रीसेट हो रहा है..."
@@ -505,10 +505,15 @@ export default function LoginPage() {
           </div>
         )}
 
-        {/* TRUST BADGE */}
-        <div className="mt-8 pt-5 border-t border-slate-100 flex items-center justify-center gap-2 text-[11px] text-slate-500">
-          <ShieldCheck className="h-4 w-4 text-emerald-600" />
-          <span>सुरक्षित एन्क्रिप्टेड स्वास्थ्य सेवा</span>
+        {/*
+          This badge previously read "सुरक्षित एन्क्रिप्टेड स्वास्थ्य सेवा"
+          (secure encrypted health service). Sign-in credentials are currently
+          held in browser storage and are not encrypted, so the claim was not
+          accurate. It now states what is actually true.
+        */}
+        <div className="mt-8 flex items-center justify-center gap-2 border-t border-line pt-5 text-xs text-ink-subtle">
+          <ShieldCheck aria-hidden className="h-4 w-4 shrink-0 text-brand" />
+          <span lang="hi">आपका स्वास्थ्य डेटा केवल आपके परिवार के लिए</span>
         </div>
       </div>
     </div>

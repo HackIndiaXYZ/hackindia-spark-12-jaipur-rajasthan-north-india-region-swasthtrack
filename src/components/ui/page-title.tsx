@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { PageHeader } from "@/components/ui/page";
 
 type PageTitleProps = {
   eyebrow?: string;
@@ -7,6 +8,10 @@ type PageTitleProps = {
   actions?: ReactNode;
 };
 
+/**
+ * Compatibility shim for the 16 screens that already import `PageTitle`.
+ * All layout now comes from `PageHeader`, so headers are identical everywhere.
+ */
 export function PageTitle({
   eyebrow,
   title,
@@ -14,23 +19,13 @@ export function PageTitle({
   actions,
 }: PageTitleProps) {
   return (
-    <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-      <div>
-        {eyebrow ? (
-          <p className="text-sm font-semibold uppercase tracking-[0.08em] text-emerald-700">
-            {eyebrow}
-          </p>
-        ) : null}
-        <h1 className="mt-1 text-2xl font-semibold tracking-normal text-slate-950 sm:text-3xl">
-          {title}
-        </h1>
-        {description ? (
-          <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">
-            {description}
-          </p>
-        ) : null}
-      </div>
-      {actions ? <div className="flex flex-wrap gap-2">{actions}</div> : null}
-    </div>
+    <PageHeader
+      eyebrow={eyebrow}
+      title={title}
+      description={description}
+      actions={actions}
+    />
   );
 }
+
+export { PageHeader };

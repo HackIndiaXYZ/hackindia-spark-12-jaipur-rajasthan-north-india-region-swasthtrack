@@ -113,14 +113,14 @@ export function WhatChangedCard({ patientId }: WhatChangedCardProps) {
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h3 className="text-sm sm:text-base font-black text-slate-950 tracking-tight">
+              <h3 className="text-sm sm:text-base font-bold text-slate-950 tracking-tight">
                 पिछले 7 दिनों में क्या बदला?
               </h3>
-              <Badge variant="blue" className="text-[10px] font-bold">
+              <Badge variant="blue" className="text-2xs font-semibold">
                 What Changed
               </Badge>
             </div>
-            <p className="text-[11px] font-bold text-slate-500">
+            <p className="text-xs font-semibold text-slate-500">
               हालिया दौर बनाम संदर्भ दौर (Personal Comparison)
             </p>
           </div>
@@ -128,7 +128,7 @@ export function WhatChangedCard({ patientId }: WhatChangedCardProps) {
 
         <Link
           href="/insights/changes"
-          className="text-xs font-black text-purple-700 hover:text-purple-950 flex items-center gap-1 shrink-0"
+          className="text-xs font-bold text-purple-700 hover:text-purple-950 flex items-center gap-1 shrink-0"
         >
           <span>विस्तृत देखें →</span>
         </Link>
@@ -155,25 +155,25 @@ export function WhatChangedCard({ patientId }: WhatChangedCardProps) {
                   <div className="h-6 w-6 rounded-lg bg-white border border-slate-200 flex items-center justify-center shrink-0 shadow-2xs">
                     <Icon className="h-3.5 w-3.5 text-slate-700" />
                   </div>
-                  <span className="text-xs font-black text-slate-900 truncate">
+                  <span className="text-xs font-bold text-slate-900 truncate">
                     {c.metricHi}
                   </span>
                 </div>
-                <Badge variant={cfg.badgeTone} className="text-[9px] font-black px-1.5 py-0">
+                <Badge variant={cfg.badgeTone} className="text-2xs font-bold px-1.5 py-0">
                   <DirIcon className="h-2.5 w-2.5 inline mr-0.5" />
                   {c.direction === "up" ? "वृद्धि" : c.direction === "down" ? "कमी" : "स्थिर"}
                 </Badge>
               </div>
 
-              <div className="text-xs font-bold text-slate-800">
+              <div className="text-xs font-semibold text-slate-800">
                 <span>{c.recentValue.toLocaleString()} {c.unit}</span>
-                <span className="text-[10px] text-slate-400 font-semibold ml-1">
+                <span className="text-2xs text-slate-400 font-semibold ml-1">
                   (पूर्व: {c.referenceValue.toLocaleString()})
                 </span>
               </div>
 
               {c.personalPatternRange && (
-                <p className="text-[10px] text-slate-500 font-medium mt-0.5">
+                <p className="text-2xs text-slate-500 font-medium mt-0.5">
                   सामान्य: {c.personalPatternRange}
                 </p>
               )}
@@ -183,11 +183,11 @@ export function WhatChangedCard({ patientId }: WhatChangedCardProps) {
       </div>
 
       {/* FOOTER ACTION */}
-      <div className="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between text-[11px] font-bold text-slate-400">
+      <div className="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-slate-400">
         <span>* सांख्यिकीय मध्यमान पर आधारित तुलना</span>
         <Link
           href="/insights/changes"
-          className="text-purple-700 hover:text-purple-950 font-black"
+          className="text-purple-700 hover:text-purple-950 font-bold"
         >
           View all changes (सभी विश्लेषण) →
         </Link>

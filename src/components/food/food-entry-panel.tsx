@@ -46,6 +46,9 @@ import { getExactFoodEmoji } from "@/lib/utils";
 
 type FoodEntryPanelProps = {
   patientId: string;
+  /** Shown in the banner so the copy always matches the patient being logged. */
+  patientName?: string;
+  calorieTarget?: number | null;
   onSuccess?: () => void;
 };
 
@@ -60,7 +63,12 @@ function getMealTypeByTime(): string {
   return "Bedtime";                                       // 10:00 PM – 5:59 AM
 }
 
-export function FoodEntryPanel({ patientId, onSuccess }: FoodEntryPanelProps) {
+export function FoodEntryPanel({
+  patientId,
+  patientName,
+  calorieTarget,
+  onSuccess,
+}: FoodEntryPanelProps) {
   // Primary States
   const [mealType, setMealType] = useState(() => getMealTypeByTime());
   const [searchQuery, setSearchQuery] = useState("");
@@ -391,16 +399,23 @@ export function FoodEntryPanel({ patientId, onSuccess }: FoodEntryPanelProps) {
   };
 
   return (
-    <Card className="overflow-hidden border-slate-200">
-      {/* Head banner */}
-      <div className="bg-gradient-to-r from-emerald-600 to-teal-700 px-6 py-5 text-white">
-        <h2 className="text-2xl font-bold tracking-tight">आज क्या खाया? (Log Meal)</h2>
-        <p className="mt-1.5 text-xs text-emerald-100 font-medium">
-          52-वर्षीय राजीव जी के लिए डॉक्टर द्वारा निर्धारित 1600 kcal लक्ष्य को ट्रैक करें।
+    <Card flush className="overflow-hidden">
+      {/* Head banner. The subtitle used to name a different patient at a
+          different age with a hard-coded 1600 kcal target; it now reads from
+          the profile it is actually logging for. */}
+      <div className="bg-brand px-5 py-4 text-ink-inverse sm:px-6 sm:py-5">
+        <h2 lang="hi" className="text-xl font-semibold tracking-tight">
+          आज क्या खाया?
+          <span className="ml-2 text-base font-normal opacity-90">Log a meal</span>
+        </h2>
+        <p lang="hi" className="mt-1 text-xs opacity-90">
+          {calorieTarget
+            ? `${patientName ? `${patientName} ` : ""}का दैनिक लक्ष्य ${calorieTarget} kcal — हर भोजन यहाँ दर्ज करें।`
+            : "हर भोजन यहाँ दर्ज करें ताकि कैलोरी और प्रोटीन का हिसाब रहे।"}
         </p>
       </div>
 
-      <div className="p-6 space-y-6">
+      <div className="space-y-6 p-4 sm:p-6">
         {/* Error / Success Alerts */}
         {errorMsg && (
           <div className="rounded-xl border border-rose-200 bg-rose-50 p-4 text-sm font-medium text-rose-800 flex gap-2.5 items-start">
@@ -439,12 +454,12 @@ export function FoodEntryPanel({ patientId, onSuccess }: FoodEntryPanelProps) {
                 onClick={() => setMealType(meal.id)}
                 className={`py-2 px-1 rounded-xl text-center border-2 transition-all flex flex-col items-center justify-center ${
                   mealType === meal.id
-                    ? "border-emerald-600 bg-emerald-50/50 text-emerald-950 font-bold scale-[1.02]"
+                    ? "border-emerald-600 bg-emerald-50/50 text-emerald-950 font-semibold scale-[1.02]"
                     : "border-slate-200 hover:border-slate-300 text-slate-700 hover:bg-slate-50"
                 }`}
               >
                 <span className="text-sm">{meal.label}</span>
-                <span className="text-[10px] text-slate-400 font-medium">{meal.sub}</span>
+                <span className="text-2xs text-slate-400 font-medium">{meal.sub}</span>
               </button>
             ))}
           </div>
@@ -493,7 +508,7 @@ export function FoodEntryPanel({ patientId, onSuccess }: FoodEntryPanelProps) {
                           {getExactFoodEmoji(food.name, food.category)}
                         </span>
                         <div className="min-w-0">
-                          <span className="font-bold text-slate-900 group-hover:text-emerald-700 transition-colors truncate block">
+                          <span className="font-semibold text-slate-900 group-hover:text-emerald-700 transition-colors truncate block">
                             {food.name}
                           </span>
                           {food.name_hi && (
@@ -593,11 +608,11 @@ export function FoodEntryPanel({ patientId, onSuccess }: FoodEntryPanelProps) {
             {savedFoods.length > 0 && (
               <div className="space-y-2">
                 <div className="flex items-center justify-between gap-2">
-                  <div className="flex items-center gap-1.5 text-sm font-black text-indigo-950">
+                  <div className="flex items-center gap-1.5 text-sm font-bold text-indigo-950">
                     <Bookmark className="h-4 w-4 text-indigo-600" />
                     <span>आपके सेव किए गए भोजन (Your Saved Foods)</span>
                   </div>
-                  <span className="text-[11px] text-slate-400 font-medium">1-टैप में लोड करें</span>
+                  <span className="text-xs text-slate-400 font-medium">1-टैप में लोड करें</span>
                 </div>
 
                 <div className="flex flex-wrap gap-2">
@@ -630,11 +645,11 @@ export function FoodEntryPanel({ patientId, onSuccess }: FoodEntryPanelProps) {
                         });
                         setQuantity(String(s.default_quantity || 1));
                       }}
-                      className="inline-flex items-center gap-1.5 py-1.5 px-3 rounded-xl border-2 border-indigo-200 bg-indigo-50/70 hover:bg-indigo-100 text-indigo-950 font-bold text-xs transition-all cursor-pointer shadow-2xs"
+                      className="inline-flex items-center gap-1.5 py-1.5 px-3 rounded-xl border-2 border-indigo-200 bg-indigo-50/70 hover:bg-indigo-100 text-indigo-950 font-semibold text-xs transition-all cursor-pointer shadow-2xs"
                     >
                       <span>{getExactFoodEmoji(s.name)}</span>
                       <span>{s.name}</span>
-                      <span className="text-[10px] text-indigo-700 font-semibold">({s.default_calories} kcal)</span>
+                      <span className="text-2xs text-indigo-700 font-semibold">({s.default_calories} kcal)</span>
                       <button
                         type="button"
                         title="Remove from Saved Foods (इतिहास सुरक्षित रहेगा)"
@@ -643,7 +658,7 @@ export function FoodEntryPanel({ patientId, onSuccess }: FoodEntryPanelProps) {
                           removeSavedFood(patientId, s.id);
                           loadSavedFoodsList();
                         }}
-                        className="ml-1 text-indigo-400 hover:text-rose-600 p-0.5 rounded-sm"
+                        className="hit-target ml-1 rounded-sm p-0.5 text-ink-subtle hover:text-critical"
                       >
                         <Trash2 className="h-3 w-3" />
                       </button>
@@ -656,11 +671,11 @@ export function FoodEntryPanel({ patientId, onSuccess }: FoodEntryPanelProps) {
             {/* 3. PROMINENT PERSONALIZED QUICK FOODS SECTION */}
             <div>
               <div className="flex items-center justify-between gap-2 mb-2.5">
-                <div className="flex items-center gap-1.5 text-sm font-bold text-slate-800">
+                <div className="flex items-center gap-1.5 text-sm font-semibold text-slate-800">
                   <Sparkles className="h-4 w-4 text-emerald-600" />
                   <span>आपके नियमित भोजन · Quick Food Shortcuts</span>
                 </div>
-                <span className="text-[11px] text-slate-400 font-medium">
+                <span className="text-xs text-slate-400 font-medium">
                   {mealType ? `(${mealType} Relevance)` : "(Learned)"}
                 </span>
               </div>
@@ -727,7 +742,7 @@ export function FoodEntryPanel({ patientId, onSuccess }: FoodEntryPanelProps) {
                           hideQuickFood(patientId, q.name);
                           setQuickFoods((prev) => prev.filter((item) => item.canonicalKey !== q.canonicalKey));
                         }}
-                        className="absolute top-1.5 right-1.5 h-5 w-5 rounded-full bg-slate-100 hover:bg-rose-100 hover:text-rose-600 text-slate-400 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all text-[10px]"
+                        className="hit-target absolute top-1.5 right-1.5 flex h-6 w-6 items-center justify-center rounded-full bg-surface-sunken text-2xs text-ink-subtle transition-colors hover:bg-critical-soft hover:text-critical"
                         title="Remove from Quick Food"
                       >
                         <X className="h-3 w-3" />
@@ -735,11 +750,11 @@ export function FoodEntryPanel({ patientId, onSuccess }: FoodEntryPanelProps) {
 
                       <div className="flex items-center gap-1.5 min-w-0 pr-3">
                         <span className="text-lg shrink-0">{getExactFoodEmoji(q.name, q.category)}</span>
-                        <span className="text-xs font-bold text-slate-900 truncate">{q.name}</span>
+                        <span className="text-xs font-semibold text-slate-900 truncate">{q.name}</span>
                       </div>
-                      <div className="mt-1 flex items-center justify-between text-[11px] text-slate-500 font-hindi">
+                      <div className="mt-1 flex items-center justify-between text-xs text-slate-500 font-hindi">
                         <span className="truncate">{q.name_hi || `${q.distinctDays30d} days`}</span>
-                        <span className="text-emerald-700 font-black font-sans shrink-0 ml-1">~{q.defaultCal} cal</span>
+                        <span className="text-emerald-700 font-bold font-sans shrink-0 ml-1">~{q.defaultCal} cal</span>
                       </div>
                     </div>
                   ))}
@@ -749,7 +764,7 @@ export function FoodEntryPanel({ patientId, onSuccess }: FoodEntryPanelProps) {
                   <p className="text-xs font-semibold text-slate-700">
                     आपके बार-बार खाए जाने वाले भोजन यहाँ automatically सीख कर दिखाई देंगे।
                   </p>
-                  <p className="text-[11px] text-slate-400 mt-0.5">
+                  <p className="text-xs text-slate-400 mt-0.5">
                     (Your personalized frequently logged foods will adapt and appear here automatically.)
                   </p>
                 </div>
@@ -763,20 +778,20 @@ export function FoodEntryPanel({ patientId, onSuccess }: FoodEntryPanelProps) {
           <div className="bg-slate-50 rounded-xl p-5 border border-slate-200 space-y-4">
             <div className="flex items-start justify-between">
               <div>
-                <span className="text-xs font-bold uppercase tracking-wider text-emerald-700 bg-emerald-100/60 px-2 py-0.5 rounded">
+                <span className="text-xs font-semibold uppercase tracking-wider text-emerald-700 bg-emerald-100/60 px-2 py-0.5 rounded">
                   {selectedFood.category}
                 </span>
-                <h3 className="text-lg font-bold text-slate-900 mt-1">
+                <h3 className="text-lg font-semibold text-slate-900 mt-1">
                   {selectedFood.name} {selectedFood.name_hi ? `(${selectedFood.name_hi})` : ""}
                 </h3>
                 {selectedFood.source_note && (
-                  <p className="text-[11px] text-slate-400 mt-0.5">{selectedFood.source_note}</p>
+                  <p className="text-xs text-slate-400 mt-0.5">{selectedFood.source_note}</p>
                 )}
               </div>
               <button
                 type="button"
                 onClick={() => setSelectedFood(null)}
-                className="text-xs font-bold text-slate-500 hover:text-slate-700"
+                className="text-xs font-semibold text-slate-500 hover:text-slate-700"
               >
                 Change (बदलें)
               </button>
@@ -845,7 +860,7 @@ export function FoodEntryPanel({ patientId, onSuccess }: FoodEntryPanelProps) {
                     onClick={() => setOilQuantity(oil.id)}
                     className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${
                       oilQuantity === oil.id
-                        ? "border-emerald-600 bg-emerald-600 text-white font-bold"
+                        ? "border-emerald-600 bg-emerald-600 text-white font-semibold"
                         : "border-slate-200 hover:border-slate-300 text-slate-700 bg-white"
                     }`}
                   >
@@ -868,7 +883,7 @@ export function FoodEntryPanel({ patientId, onSuccess }: FoodEntryPanelProps) {
               <div>
                 <span className="text-xs text-slate-400 font-medium">अनुमानित कैलोरी (Estimated Calories):</span>
                 <div className="flex items-baseline gap-2">
-                  <span className="text-3xl font-black text-slate-900">
+                  <span className="text-3xl font-bold text-slate-900">
                     ~{calculateCalories()} kcal
                   </span>
                   <Badge variant={getConfidenceLevel() === "High" ? "green" : getConfidenceLevel() === "Medium" ? "blue" : "amber"}>
@@ -903,7 +918,7 @@ export function FoodEntryPanel({ patientId, onSuccess }: FoodEntryPanelProps) {
         {/* 5. ONLINE REFERENCE / CUSTOM FOOD MANUAL FORM */}
         {showCustomForm && (
           <form onSubmit={handleSaveCustomFood} className="bg-slate-50 rounded-xl p-5 border border-slate-200 space-y-4">
-            <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+            <h3 className="text-lg font-semibold text-slate-900 flex items-center gap-2">
               <Plus className="h-5 w-5 text-emerald-600" />
               {customSourceType === "web_reference" ? "Web Search Reference Entry" : "Add Custom Food (नया भोजन जोड़ें)"}
             </h3>
@@ -1032,7 +1047,7 @@ export function FoodEntryPanel({ patientId, onSuccess }: FoodEntryPanelProps) {
                   setSuccessMsg(`"${customName}" को "Your Foods" में सेव कर लिया गया है!`);
                   setShowCustomForm(false);
                 }}
-                className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl border-2 border-indigo-300 bg-indigo-50 text-indigo-950 font-bold text-xs sm:text-sm hover:bg-indigo-100 transition-colors cursor-pointer"
+                className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl border-2 border-indigo-300 bg-indigo-50 text-indigo-950 font-semibold text-xs sm:text-sm hover:bg-indigo-100 transition-colors cursor-pointer"
               >
                 <BookmarkPlus className="h-4 w-4 text-indigo-600" />
                 Save as My Food (भविष्य के लिए रखें)

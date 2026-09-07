@@ -146,14 +146,14 @@ export function TimelineView({ patientId }: TimelineViewProps) {
                 }
               }}
               className={cn(
-                "px-3 py-1.5 rounded-xl text-xs font-black transition-all cursor-pointer shrink-0",
+                "px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer shrink-0",
                 isActive
                   ? "bg-white text-slate-950 shadow-xs border border-slate-200/80 scale-[1.02]"
                   : "text-slate-600 hover:text-slate-950"
               )}
             >
               <span>{opt.hindiLabel}</span>
-              <span className="text-[10px] font-bold opacity-75 ml-1">({opt.label})</span>
+              <span className="text-2xs font-semibold opacity-75 ml-1">({opt.label})</span>
             </button>
           );
         })}
@@ -176,7 +176,7 @@ export function TimelineView({ patientId }: TimelineViewProps) {
                 }
               }}
               className={cn(
-                "flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-black transition-all cursor-pointer shrink-0 shadow-2xs",
+                "flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer shrink-0 shadow-2xs",
                 isActive
                   ? "bg-emerald-600 text-white shadow-xs scale-[1.02]"
                   : "bg-white border-2 border-slate-200 text-slate-700 hover:border-emerald-300 hover:bg-emerald-50/40"
@@ -199,8 +199,8 @@ export function TimelineView({ patientId }: TimelineViewProps) {
       ) : groups.length === 0 ? (
         <DepthCard depth={1} className="p-8 text-center bg-white rounded-2xl border-2 border-slate-200">
           <Calendar className="mx-auto h-10 w-10 text-slate-300 mb-2" />
-          <h4 className="text-base font-black text-slate-800">कोई रिकॉर्ड नहीं मिला</h4>
-          <p className="text-xs font-bold text-slate-500 mt-1">
+          <h4 className="text-base font-bold text-slate-800">कोई रिकॉर्ड नहीं मिला</h4>
+          <p className="text-xs font-semibold text-slate-500 mt-1">
             चुनी गई अवधि व श्रेणी के लिए अभी कोई इवेंट दर्ज नहीं है।
           </p>
         </DepthCard>
@@ -211,10 +211,10 @@ export function TimelineView({ patientId }: TimelineViewProps) {
               {/* GROUP SECTION HEADER */}
               <div className="flex items-center gap-2">
                 <span className="h-2.5 w-2.5 rounded-full bg-emerald-600 shadow-2xs" />
-                <h3 className="text-sm sm:text-base font-black text-slate-950 tracking-tight">
+                <h3 className="text-sm sm:text-base font-bold text-slate-950 tracking-tight">
                   {group.groupLabelHi}
                 </h3>
-                <span className="text-xs font-bold text-slate-400">
+                <span className="text-xs font-semibold text-slate-400">
                   · {group.events.length} रिकॉर्ड्स
                 </span>
               </div>
@@ -242,7 +242,7 @@ export function TimelineView({ patientId }: TimelineViewProps) {
                 type="button"
                 onClick={handleLoadMore}
                 disabled={loadingMore}
-                className="px-6 py-2.5 rounded-xl bg-white border-2 border-slate-200 hover:border-emerald-400 hover:bg-emerald-50 active:scale-98 text-xs sm:text-sm font-black text-slate-800 shadow-sm cursor-pointer transition-all disabled:opacity-50"
+                className="px-6 py-2.5 rounded-xl bg-white border-2 border-slate-200 hover:border-emerald-400 hover:bg-emerald-50 active:scale-98 text-xs sm:text-sm font-bold text-slate-800 shadow-sm cursor-pointer transition-all disabled:opacity-50"
               >
                 {loadingMore ? "लोड हो रहा है..." : "पूर्व के और रिकॉर्ड्स देखें (Load More)"}
               </button>

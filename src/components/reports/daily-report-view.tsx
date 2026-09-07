@@ -71,7 +71,7 @@ export function DailyReportView({ patientId }: DailyReportViewProps) {
         <div className="flex items-center gap-2">
           <Calendar className="h-5 w-5 text-emerald-600" />
           <div>
-            <h3 className="font-bold text-slate-900 text-sm sm:text-base">
+            <h3 className="font-semibold text-slate-900 text-sm sm:text-base">
               Daily Health & Adherence Summary · दैनिक स्वास्थ्य सारांश
             </h3>
             <p className="text-xs text-slate-500">
@@ -85,7 +85,7 @@ export function DailyReportView({ patientId }: DailyReportViewProps) {
             type="button"
             onClick={() => setSelectedDate("2026-08-26")}
             className={cn(
-              "px-3 py-1.5 rounded-xl text-xs font-black transition-all cursor-pointer shadow-2xs",
+              "px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer shadow-2xs",
               selectedDate === "2026-08-26"
                 ? "bg-emerald-600 text-white shadow-xs"
                 : "bg-white border border-slate-300 text-slate-700 hover:bg-slate-50",
@@ -97,7 +97,7 @@ export function DailyReportView({ patientId }: DailyReportViewProps) {
             type="button"
             onClick={() => setSelectedDate(getTodayDateString())}
             className={cn(
-              "px-3 py-1.5 rounded-xl text-xs font-black transition-all cursor-pointer shadow-2xs",
+              "px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer shadow-2xs",
               selectedDate === getTodayDateString()
                 ? "bg-emerald-600 text-white shadow-xs"
                 : "bg-white border border-slate-300 text-slate-700 hover:bg-slate-50",
@@ -134,7 +134,7 @@ export function DailyReportView({ patientId }: DailyReportViewProps) {
                   <span className="flex h-6 w-6 items-center justify-center rounded-lg bg-emerald-100 text-emerald-800">
                     <Sparkles className="h-3.5 w-3.5" />
                   </span>
-                  <h4 className="font-bold text-slate-900 text-base">
+                  <h4 className="font-semibold text-slate-900 text-base">
                     Daily Wellness & Tracking Score
                   </h4>
                 </div>
@@ -145,10 +145,10 @@ export function DailyReportView({ patientId }: DailyReportViewProps) {
 
               <div className="flex items-baseline gap-3">
                 <div className="flex items-baseline">
-                  <span className="text-4xl sm:text-5xl font-black text-slate-950">
+                  <span className="text-4xl sm:text-5xl font-bold text-slate-950">
                     {scoreResult.totalScore}
                   </span>
-                  <span className="text-base font-bold text-slate-400">/{scoreResult.maxScore}</span>
+                  <span className="text-base font-semibold text-slate-400">/{scoreResult.maxScore}</span>
                 </div>
                 <Badge variant={categoryInfo?.badgeTone || "blue"}>
                   {scoreResult.category}
@@ -160,7 +160,7 @@ export function DailyReportView({ patientId }: DailyReportViewProps) {
             <div className="mt-4 grid gap-3 md:grid-cols-2 pt-4 border-t border-slate-100 text-xs">
               {scoreResult.reasons.positive.length > 0 && (
                 <div className="rounded-xl border border-emerald-100 bg-emerald-50/50 p-3 space-y-1.5">
-                  <p className="font-bold text-emerald-900 flex items-center gap-1.5">
+                  <p className="font-semibold text-emerald-900 flex items-center gap-1.5">
                     <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
                     सफल ट्रैकिंग (+ Positive Points):
                   </p>
@@ -174,7 +174,7 @@ export function DailyReportView({ patientId }: DailyReportViewProps) {
 
               {scoreResult.reasons.deductions.length > 0 && (
                 <div className="rounded-xl border border-rose-100 bg-rose-50/50 p-3 space-y-1.5">
-                  <p className="font-bold text-rose-900 flex items-center gap-1.5">
+                  <p className="font-semibold text-rose-900 flex items-center gap-1.5">
                     <AlertCircle className="h-3.5 w-3.5 text-rose-600" />
                     छूटी हुई प्रविष्टियां (- Missing Logs):
                   </p>
@@ -195,9 +195,9 @@ export function DailyReportView({ patientId }: DailyReportViewProps) {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Pill className="h-4 w-4 text-emerald-600" />
-                  <h5 className="font-bold text-slate-900 text-sm">Medicine Adherence</h5>
+                  <h5 className="font-semibold text-slate-900 text-sm">Medicine Adherence</h5>
                 </div>
-                <span className="text-xs font-bold text-emerald-700">
+                <span className="text-xs font-semibold text-emerald-700">
                   {scoreResult.components.medicine.score}/{scoreResult.components.medicine.maxScore} pts
                 </span>
               </div>
@@ -211,9 +211,9 @@ export function DailyReportView({ patientId }: DailyReportViewProps) {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Utensils className="h-4 w-4 text-green-600" />
-                  <h5 className="font-bold text-slate-900 text-sm">Food Tracking</h5>
+                  <h5 className="font-semibold text-slate-900 text-sm">Food Tracking</h5>
                 </div>
-                <span className="text-xs font-bold text-green-700">
+                <span className="text-xs font-semibold text-green-700">
                   {scoreResult.components.food.score}/{scoreResult.components.food.maxScore} pts
                 </span>
               </div>
@@ -221,7 +221,7 @@ export function DailyReportView({ patientId }: DailyReportViewProps) {
                 {scoreResult.components.food.detailsHi}
               </p>
               {scoreResult.nutritionContext && (
-                <p className="mt-1 text-[11px] text-slate-500">
+                <p className="mt-1 text-xs text-slate-500">
                   {scoreResult.nutritionContext.caloriesConsumed} / {scoreResult.nutritionContext.calorieTarget} kcal
                 </p>
               )}
@@ -232,9 +232,9 @@ export function DailyReportView({ patientId }: DailyReportViewProps) {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Activity className="h-4 w-4 text-sky-600" />
-                  <h5 className="font-bold text-slate-900 text-sm">Activity & Steps</h5>
+                  <h5 className="font-semibold text-slate-900 text-sm">Activity & Steps</h5>
                 </div>
-                <span className="text-xs font-bold text-sky-700">
+                <span className="text-xs font-semibold text-sky-700">
                   {scoreResult.components.activity.score}/{scoreResult.components.activity.maxScore} pts
                 </span>
               </div>
@@ -248,9 +248,9 @@ export function DailyReportView({ patientId }: DailyReportViewProps) {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Moon className="h-4 w-4 text-indigo-600" />
-                  <h5 className="font-bold text-slate-900 text-sm">Sleep Logging</h5>
+                  <h5 className="font-semibold text-slate-900 text-sm">Sleep Logging</h5>
                 </div>
-                <span className="text-xs font-bold text-indigo-700">
+                <span className="text-xs font-semibold text-indigo-700">
                   {scoreResult.components.sleep.score}/{scoreResult.components.sleep.maxScore} pts
                 </span>
               </div>
@@ -264,9 +264,9 @@ export function DailyReportView({ patientId }: DailyReportViewProps) {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <HeartPulse className="h-4 w-4 text-rose-600" />
-                  <h5 className="font-bold text-slate-900 text-sm">BP Tracking</h5>
+                  <h5 className="font-semibold text-slate-900 text-sm">BP Tracking</h5>
                 </div>
-                <span className="text-xs font-bold text-rose-700">
+                <span className="text-xs font-semibold text-rose-700">
                   {scoreResult.components.bp.score}/{scoreResult.components.bp.maxScore} pts
                 </span>
               </div>
@@ -280,9 +280,9 @@ export function DailyReportView({ patientId }: DailyReportViewProps) {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Scale className="h-4 w-4 text-amber-600" />
-                  <h5 className="font-bold text-slate-900 text-sm">Weight Tracking</h5>
+                  <h5 className="font-semibold text-slate-900 text-sm">Weight Tracking</h5>
                 </div>
-                <span className="text-xs font-bold text-amber-700">
+                <span className="text-xs font-semibold text-amber-700">
                   {scoreResult.components.weight.score}/{scoreResult.components.weight.maxScore} pts
                 </span>
               </div>
@@ -296,7 +296,7 @@ export function DailyReportView({ patientId }: DailyReportViewProps) {
           {dayFoods.length > 0 && (
             <Card className="border-slate-200 bg-white p-5">
               <CardHeader className="p-0 pb-3">
-                <CardTitle className="text-sm font-bold text-slate-900">
+                <CardTitle className="text-sm font-semibold text-slate-900">
                   Meals Logged on {new Date(selectedDate).toLocaleDateString("en-IN", { month: "short", day: "numeric" })}
                 </CardTitle>
                 <CardDescription>
@@ -308,7 +308,7 @@ export function DailyReportView({ patientId }: DailyReportViewProps) {
                 {dayFoods.map((food) => (
                   <div key={food.id} className="py-2.5 flex items-center justify-between text-xs">
                     <div>
-                      <span className="font-bold text-slate-900">{food.food_name}</span>
+                      <span className="font-semibold text-slate-900">{food.food_name}</span>
                       <span className="ml-2 text-slate-500">
                         ({food.quantity} {food.unit}) · {food.meal_type}
                       </span>

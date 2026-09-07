@@ -1,7 +1,17 @@
 "use client";
 
 import { useEffect, useState, type FormEvent } from "react";
-import { Check, Clock, Edit3, HeartPulse, Lock, Plus, Trash2 } from "lucide-react";
+import {
+  Check,
+  Clock,
+  Edit3,
+  HeartPulse,
+  ListOrdered,
+  Lock,
+  Plus,
+  Trash2,
+  TrendingUp,
+} from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,7 +20,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Field, Select, TextInput } from "@/components/ui/form-field";
+import { Field, NumberInput, Select, TextInput } from "@/components/ui/form-field";
 import { BPTrendChart } from "@/components/health/bp-trend-chart";
 import { readingPeriods } from "@/lib/health-options";
 import {
@@ -261,14 +271,20 @@ export function BloodPressurePanel({ patientId, logs, onSuccess }: BloodPressure
   return (
     <Card>
       <CardHeader>
-        <div>
-          <div className="flex items-center gap-2">
-            <CardTitle>Blood Pressure</CardTitle>
-            <Badge variant="red">रक्तचाप</Badge>
+        <div className="flex min-w-0 items-center gap-3">
+          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-control bg-bp-soft text-bp">
+            <HeartPulse aria-hidden className="h-5 w-5" />
+          </span>
+          <div className="min-w-0">
+            <div className="flex flex-wrap items-center gap-2">
+              <CardTitle>Blood Pressure</CardTitle>
+              <Badge variant="critical">रक्तचाप</Badge>
+            </div>
+            <CardDescription>
+              Systolic, diastolic & pulse · सुबह / शाम
+            </CardDescription>
           </div>
-          <CardDescription>Track systolic, diastolic, pulse · Morning / Evening</CardDescription>
         </div>
-        <HeartPulse aria-hidden className="h-5 w-5 text-rose-500" />
       </CardHeader>
 
       {error ? (
@@ -287,7 +303,7 @@ export function BloodPressurePanel({ patientId, logs, onSuccess }: BloodPressure
       {/* Latest readings - Morning & Evening */}
       <div className="mb-5 grid gap-3 sm:grid-cols-2">
         <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
-          <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+          <p className="text-2xs font-semibold uppercase tracking-wider text-slate-400">
             सुबह · Morning
           </p>
           <p className="mt-1 text-3xl font-extrabold text-slate-950">
@@ -302,7 +318,7 @@ export function BloodPressurePanel({ patientId, logs, onSuccess }: BloodPressure
               {(() => {
                 const flag = getBPFlag(latestMorning.systolic, latestMorning.diastolic);
                 return (
-                  <p className={`mt-1 text-[10px] font-semibold ${flag.color}`}>
+                  <p className={`mt-1 text-2xs font-semibold ${flag.color}`}>
                     {flag.labelHi}
                   </p>
                 );
@@ -314,7 +330,7 @@ export function BloodPressurePanel({ patientId, logs, onSuccess }: BloodPressure
         </div>
 
         <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
-          <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+          <p className="text-2xs font-semibold uppercase tracking-wider text-slate-400">
             शाम · Evening
           </p>
           <p className="mt-1 text-3xl font-extrabold text-slate-950">
@@ -329,7 +345,7 @@ export function BloodPressurePanel({ patientId, logs, onSuccess }: BloodPressure
               {(() => {
                 const flag = getBPFlag(latestEvening.systolic, latestEvening.diastolic);
                 return (
-                  <p className={`mt-1 text-[10px] font-semibold ${flag.color}`}>
+                  <p className={`mt-1 text-2xs font-semibold ${flag.color}`}>
                     {flag.labelHi}
                   </p>
                 );
@@ -341,59 +357,86 @@ export function BloodPressurePanel({ patientId, logs, onSuccess }: BloodPressure
         </div>
       </div>
 
-      {/* Tab navigation */}
-      <div className="mb-4 flex gap-1 rounded-lg bg-slate-100 p-1">
+      {/* Panel view switch. Labels are single words and never wrap: the old
+          three-emoji labels broke onto two and three lines at 320px. */}
+      <div className="mb-4 grid grid-cols-3 gap-1 rounded-control bg-surface-sunken p-1">
         {(["form", "history", "chart"] as const).map((tab) => (
           <button
             key={tab}
             type="button"
+            role="tab"
+            aria-selected={activeTab === tab}
             onClick={() => setActiveTab(tab)}
-            className={`flex-1 rounded-md px-3 py-2 text-xs font-semibold transition-all ${
+            className={`pressable flex min-h-10 cursor-pointer items-center justify-center gap-1.5 whitespace-nowrap rounded-field px-2 text-sm font-medium ${
               activeTab === tab
-                ? "bg-white text-slate-900 shadow-sm"
-                : "text-slate-500 hover:text-slate-700"
+                ? "bg-surface text-ink shadow-e1"
+                : "text-ink-muted hover:text-ink"
             }`}
           >
-            {tab === "form" ? "➕ New Entry" : tab === "history" ? "📋 History" : "📈 Trend Chart"}
+            {tab === "form" ? (
+              <>
+                <Plus aria-hidden className="h-4 w-4 shrink-0" />
+                <span>New</span>
+              </>
+            ) : tab === "history" ? (
+              <>
+                <ListOrdered aria-hidden className="h-4 w-4 shrink-0" />
+                <span>History</span>
+              </>
+            ) : (
+              <>
+                <TrendingUp aria-hidden className="h-4 w-4 shrink-0" />
+                <span>Trend</span>
+              </>
+            )}
           </button>
         ))}
       </div>
 
       {/* FORM TAB */}
       {activeTab === "form" && (
-        <form onSubmit={handleSubmit} className="rounded-xl border border-slate-200 bg-white p-4">
-          <div className="mb-3 flex items-center gap-2 text-xs text-slate-500">
-            <Clock className="h-3.5 w-3.5" />
-            <span>
-              🕐 {new Date().toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" })} → Auto: {getDefaultReadingType() === "Morning" ? "सुबह" : "शाम"}
+        <form onSubmit={handleSubmit} className="rounded-card border border-line bg-surface p-4">
+          <p className="mb-3 flex items-center gap-1.5 text-xs text-ink-subtle">
+            <Clock aria-hidden className="h-3.5 w-3.5 shrink-0" />
+            <span className="tabular">
+              {new Date().toLocaleTimeString("en-IN", {
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
             </span>
-          </div>
+            <span lang="hi">
+              → स्वतः: {getDefaultReadingType() === "Morning" ? "सुबह" : "शाम"}
+            </span>
+          </p>
           <div className="grid gap-3 sm:grid-cols-2">
-            <Field label="Systolic (ऊपर वाला)" hint="mmHg">
-              <TextInput
-                inputMode="numeric"
-                placeholder="e.g. 128"
-                type="number"
-                value={systolic}
-                onChange={(e) => setSystolic(e.target.value)}
-                required
-              />
-            </Field>
-            <Field label="Diastolic (नीचे वाला)" hint="mmHg">
-              <TextInput
-                inputMode="numeric"
-                placeholder="e.g. 82"
-                type="number"
-                value={diastolic}
-                onChange={(e) => setDiastolic(e.target.value)}
-                required
-              />
-            </Field>
-            <Field label="Pulse (धड़कन)" hint="bpm · Optional">
-              <TextInput
-                inputMode="numeric"
-                placeholder="e.g. 74"
-                type="number"
+            {/* Systolic and diastolic sit side by side even on the narrowest
+                phone: they are read and entered as a pair. */}
+            <div className="col-span-full grid grid-cols-2 gap-3">
+              <Field label="Systolic (ऊपर वाला)" hint="mmHg" required>
+                <NumberInput
+                  placeholder="128"
+                  maxLength={3}
+                  value={systolic}
+                  onChange={(e) => setSystolic(e.target.value)}
+                  required
+                  className="text-xl font-semibold"
+                />
+              </Field>
+              <Field label="Diastolic (नीचे वाला)" hint="mmHg" required>
+                <NumberInput
+                  placeholder="82"
+                  maxLength={3}
+                  value={diastolic}
+                  onChange={(e) => setDiastolic(e.target.value)}
+                  required
+                  className="text-xl font-semibold"
+                />
+              </Field>
+            </div>
+            <Field label="Pulse (धड़कन)" hint="bpm · वैकल्पिक">
+              <NumberInput
+                placeholder="74"
+                maxLength={3}
                 value={pulse}
                 onChange={(e) => setPulse(e.target.value)}
               />
@@ -447,7 +490,7 @@ export function BloodPressurePanel({ patientId, logs, onSuccess }: BloodPressure
       {/* HISTORY TAB */}
       {activeTab === "history" && (
         <div className="rounded-xl border border-slate-200 bg-white p-4">
-          <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3">
+          <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-3">
             Recent BP History · हाल का इतिहास
           </h4>
           {logs.length > 0 ? (
@@ -460,13 +503,13 @@ export function BloodPressurePanel({ patientId, logs, onSuccess }: BloodPressure
                 if (isEditing) {
                   return (
                     <div key={log.id} className="py-3 space-y-2.5 bg-slate-50 border border-emerald-200 rounded-xl p-3 my-1">
-                      <p className="text-xs font-bold text-slate-800">
+                      <p className="text-xs font-semibold text-slate-800">
                         Edit BP Reading · रक्तचाप विवरण संपादित करें
                       </p>
 
                       <div className="grid grid-cols-2 gap-2">
                         <div>
-                          <label className="block text-[10px] font-bold text-slate-500 mb-1">Time of Day (समय)</label>
+                          <label className="block text-2xs font-semibold text-slate-500 mb-1">Time of Day (समय)</label>
                           <select
                             value={editReadingType}
                             onChange={(e) => setEditReadingType(e.target.value)}
@@ -482,7 +525,7 @@ export function BloodPressurePanel({ patientId, logs, onSuccess }: BloodPressure
 
                         <div className="grid grid-cols-2 gap-1.5">
                           <div>
-                            <label className="block text-[10px] font-bold text-slate-500 mb-1">Date</label>
+                            <label className="block text-2xs font-semibold text-slate-500 mb-1">Date</label>
                             <input
                               type="date"
                               value={editDate}
@@ -491,7 +534,7 @@ export function BloodPressurePanel({ patientId, logs, onSuccess }: BloodPressure
                             />
                           </div>
                           <div>
-                            <label className="block text-[10px] font-bold text-slate-500 mb-1">Time</label>
+                            <label className="block text-2xs font-semibold text-slate-500 mb-1">Time</label>
                             <input
                               type="time"
                               value={editTime}
@@ -504,27 +547,27 @@ export function BloodPressurePanel({ patientId, logs, onSuccess }: BloodPressure
 
                       <div className="grid grid-cols-3 gap-2">
                         <div>
-                          <label className="block text-[10px] font-bold text-slate-500 mb-1">Systolic (ऊपर)</label>
+                          <label className="block text-2xs font-semibold text-slate-500 mb-1">Systolic (ऊपर)</label>
                           <input
                             type="number"
                             value={editSystolic}
                             onChange={(e) => setEditSystolic(e.target.value)}
-                            className="w-full rounded-lg border border-slate-300 bg-white px-2 py-1.5 text-xs font-bold text-slate-900"
+                            className="w-full rounded-lg border border-slate-300 bg-white px-2 py-1.5 text-xs font-semibold text-slate-900"
                             placeholder="128"
                           />
                         </div>
                         <div>
-                          <label className="block text-[10px] font-bold text-slate-500 mb-1">Diastolic (नीचे)</label>
+                          <label className="block text-2xs font-semibold text-slate-500 mb-1">Diastolic (नीचे)</label>
                           <input
                             type="number"
                             value={editDiastolic}
                             onChange={(e) => setEditDiastolic(e.target.value)}
-                            className="w-full rounded-lg border border-slate-300 bg-white px-2 py-1.5 text-xs font-bold text-slate-900"
+                            className="w-full rounded-lg border border-slate-300 bg-white px-2 py-1.5 text-xs font-semibold text-slate-900"
                             placeholder="82"
                           />
                         </div>
                         <div>
-                          <label className="block text-[10px] font-bold text-slate-500 mb-1">Pulse (धड़कन)</label>
+                          <label className="block text-2xs font-semibold text-slate-500 mb-1">Pulse (धड़कन)</label>
                           <input
                             type="number"
                             value={editPulse}
@@ -536,7 +579,7 @@ export function BloodPressurePanel({ patientId, logs, onSuccess }: BloodPressure
                       </div>
 
                       <div>
-                        <label className="block text-[10px] font-bold text-slate-500 mb-1">Notes (टिप्पणी)</label>
+                        <label className="block text-2xs font-semibold text-slate-500 mb-1">Notes (टिप्पणी)</label>
                         <input
                           type="text"
                           value={editNotes}
@@ -550,7 +593,7 @@ export function BloodPressurePanel({ patientId, logs, onSuccess }: BloodPressure
                         <button
                           type="button"
                           onClick={handleSaveEdit}
-                          className="rounded-lg bg-emerald-600 px-3.5 py-1.5 text-xs font-bold text-white hover:bg-emerald-700 transition-colors"
+                          className="rounded-lg bg-emerald-600 px-3.5 py-1.5 text-xs font-semibold text-white hover:bg-emerald-700 transition-colors"
                         >
                           ✓ Save Changes (सुरक्षित करें)
                         </button>
@@ -560,7 +603,7 @@ export function BloodPressurePanel({ patientId, logs, onSuccess }: BloodPressure
                             setEditingId(null);
                             setError("");
                           }}
-                          className="rounded-lg bg-slate-200 px-3.5 py-1.5 text-xs font-bold text-slate-700 hover:bg-slate-300 transition-colors"
+                          className="rounded-lg bg-slate-200 px-3.5 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-300 transition-colors"
                         >
                           Cancel (रद्द करें)
                         </button>
@@ -573,11 +616,11 @@ export function BloodPressurePanel({ patientId, logs, onSuccess }: BloodPressure
                   <div key={log.id} className="py-2.5 flex items-center justify-between gap-2">
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-2">
-                        <p className="font-bold text-slate-900">
+                        <p className="font-semibold text-slate-900">
                           {log.systolic}/{log.diastolic}
                           <span className="text-xs font-normal text-slate-400"> mmHg</span>
                         </p>
-                        <span className={`text-[10px] font-semibold ${flag.color}`}>
+                        <span className={`text-2xs font-semibold ${flag.color}`}>
                           {flag.label}
                         </span>
                       </div>
@@ -585,7 +628,7 @@ export function BloodPressurePanel({ patientId, logs, onSuccess }: BloodPressure
                         Pulse {log.pulse || "--"} · {log.reading_type === "Morning" ? "सुबह" : log.reading_type === "Evening" ? "शाम" : log.reading_type || "Recorded"} · {new Date(log.measured_at).toLocaleDateString("en-IN", { day: "numeric", month: "short" })} {new Date(log.measured_at).toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" })}
                       </p>
                       {log.notes && (
-                        <p className="text-[10px] italic text-slate-400 truncate">{log.notes}</p>
+                        <p className="text-2xs italic text-slate-400 truncate">{log.notes}</p>
                       )}
                     </div>
                     <div className="flex items-center gap-1 shrink-0">
@@ -660,19 +703,19 @@ export function BloodPressurePanel({ patientId, logs, onSuccess }: BloodPressure
           {summaryStats && (
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
               <div className="rounded-xl bg-slate-50 p-3 text-center">
-                <p className="text-[10px] font-bold uppercase text-slate-400">Avg (औसत)</p>
+                <p className="text-2xs font-semibold uppercase text-slate-400">Avg (औसत)</p>
                 <p className="mt-1 text-lg font-extrabold text-slate-900">{summaryStats.avgSys}/{summaryStats.avgDia}</p>
               </div>
               <div className="rounded-xl bg-emerald-50 p-3 text-center">
-                <p className="text-[10px] font-bold uppercase text-emerald-600">Min (न्यूनतम)</p>
+                <p className="text-2xs font-semibold uppercase text-emerald-600">Min (न्यूनतम)</p>
                 <p className="mt-1 text-lg font-extrabold text-slate-900">{summaryStats.minSys}/{summaryStats.minDia}</p>
               </div>
               <div className="rounded-xl bg-rose-50 p-3 text-center">
-                <p className="text-[10px] font-bold uppercase text-rose-600">Max (अधिकतम)</p>
+                <p className="text-2xs font-semibold uppercase text-rose-600">Max (अधिकतम)</p>
                 <p className="mt-1 text-lg font-extrabold text-slate-900">{summaryStats.maxSys}/{summaryStats.maxDia}</p>
               </div>
               <div className="rounded-xl bg-blue-50 p-3 text-center">
-                <p className="text-[10px] font-bold uppercase text-blue-600">Readings (कुल)</p>
+                <p className="text-2xs font-semibold uppercase text-blue-600">Readings (कुल)</p>
                 <p className="mt-1 text-lg font-extrabold text-slate-900">{summaryStats.count}</p>
               </div>
             </div>

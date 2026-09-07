@@ -1,14 +1,34 @@
 import type { ComponentProps } from "react";
 import { cn } from "@/lib/utils";
 
-type BadgeVariant = "green" | "blue" | "amber" | "red" | "neutral";
+/**
+ * `green | blue | amber | red | neutral` are the historical names kept for the
+ * ~30 call sites that already use them; the semantic names below are what new
+ * code should use, so a colour always carries the same meaning (§34, §45).
+ */
+type BadgeVariant =
+  | "green"
+  | "blue"
+  | "amber"
+  | "red"
+  | "neutral"
+  | "positive"
+  | "info"
+  | "attention"
+  | "critical"
+  | "brand";
 
 const variantClasses: Record<BadgeVariant, string> = {
-  green: "border-emerald-200 bg-emerald-50 text-emerald-700",
-  blue: "border-sky-200 bg-sky-50 text-sky-700",
-  amber: "border-amber-200 bg-amber-50 text-amber-700",
-  red: "border-rose-200 bg-rose-50 text-rose-700",
-  neutral: "border-slate-200 bg-slate-50 text-slate-600",
+  green: "border-positive-line bg-positive-soft text-positive",
+  positive: "border-positive-line bg-positive-soft text-positive",
+  blue: "border-info-line bg-info-soft text-info",
+  info: "border-info-line bg-info-soft text-info",
+  amber: "border-attention-line bg-attention-soft text-attention",
+  attention: "border-attention-line bg-attention-soft text-attention",
+  red: "border-critical-line bg-critical-soft text-critical",
+  critical: "border-critical-line bg-critical-soft text-critical",
+  brand: "border-brand-line bg-brand-soft text-brand-ink",
+  neutral: "border-line bg-surface-sunken text-ink-muted",
 };
 
 type BadgeProps = ComponentProps<"span"> & {
@@ -23,11 +43,53 @@ export function Badge({
   return (
     <span
       className={cn(
-        "inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-medium",
+        "inline-flex max-w-full items-center gap-1 truncate rounded-full border",
+        "px-2.5 py-0.5 text-xs font-medium",
         variantClasses[variant],
         className,
       )}
       {...props}
     />
+  );
+}
+
+/**
+ * Provenance label (§43). Says where a number came from so an estimate is
+ * never mistaken for a measurement.
+ */
+export function SourceBadge({
+  source,
+  className,
+}: {
+  source: "recorded" | "synced" | "estimated" | "calculated" | "imported";
+  className?: string;
+}) {
+  const label: Record<typeof source, string> = {
+    recorded: "Recorded · दर्ज",
+    synced: "Synced · सिंक",
+    estimated: "Estimated · अनुमान",
+    calculated: "Calculated · गणना",
+    imported: "Imported · आयातित",
+  };
+
+  // Estimates are visually distinct from measurements on purpose.
+  const tone =
+    source === "estimated"
+      ? "border-attention-line bg-attention-soft text-attention"
+      : source === "calculated"
+        ? "border-info-line bg-info-soft text-info"
+        : "border-line bg-surface-sunken text-ink-subtle";
+
+  return (
+    <span
+      className={cn(
+        "inline-flex items-center rounded-full border px-2 py-0.5",
+        "text-2xs font-medium whitespace-nowrap",
+        tone,
+        className,
+      )}
+    >
+      {label[source]}
+    </span>
   );
 }

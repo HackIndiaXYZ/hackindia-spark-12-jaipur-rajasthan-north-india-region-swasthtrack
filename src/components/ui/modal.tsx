@@ -63,7 +63,7 @@ export function Modal({
         <div className="flex items-start justify-between gap-4 border-b border-slate-100 pb-4">
           <div>
             <div className="flex items-center gap-2">
-              <h2 className="text-xl font-bold text-slate-950">{title}</h2>
+              <h2 className="text-xl font-semibold text-slate-950">{title}</h2>
               {hindiTitle ? (
                 <span className="rounded-md bg-emerald-50 px-2 py-0.5 text-xs font-semibold text-emerald-700">
                   {hindiTitle}

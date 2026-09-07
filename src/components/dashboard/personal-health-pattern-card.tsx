@@ -46,10 +46,10 @@ export function PersonalHealthPatternCard({
             <Sparkles className="h-3.5 w-3.5" />
           </span>
           <div>
-            <h3 className="font-bold text-slate-900 text-sm sm:text-base">
+            <h3 className="font-semibold text-slate-900 text-sm sm:text-base">
               Personal Health Pattern · आपका हाल का पैटर्न
             </h3>
-            <p className="text-[11px] text-slate-500 font-medium">
+            <p className="text-xs text-slate-500 font-medium">
               Data-driven observational summary of recent logs (30-day baseline)
             </p>
           </div>
@@ -78,7 +78,7 @@ export function PersonalHealthPatternCard({
               {/* Feedback */}
               <div className="flex items-center gap-1 shrink-0 pt-0.5">
                 {isSubmitted ? (
-                  <span className="text-[10px] text-emerald-700 font-semibold flex items-center gap-1">
+                  <span className="text-2xs text-emerald-700 font-semibold flex items-center gap-1">
                     <CheckCircle2 className="h-3 w-3" />
                     धन्यवाद
                   </span>
@@ -115,7 +115,7 @@ export function PersonalHealthPatternCard({
           >
             <Activity className="h-4 w-4 text-sky-600 shrink-0 mt-0.5" />
             <div>
-              <span className="block font-bold text-[11px] text-sky-900 mb-0.5">
+              <span className="block font-semibold text-xs text-sky-900 mb-0.5">
                 Multi-Factor Observation ({mf.factors.join(" + ")}):
               </span>
               <p className="text-slate-700 font-medium leading-relaxed text-xs">
@@ -126,7 +126,7 @@ export function PersonalHealthPatternCard({
         ))}
       </div>
 
-      <p className="mt-3 text-[10px] text-slate-400 italic">
+      <p className="mt-3 text-2xs text-slate-400 italic">
         * यह अवलोकन आपकी हाल की प्रविष्टियों पर आधारित है और किसी चिकित्सीय निदान (Medical Diagnosis) का विकल्प नहीं है।
       </p>
     </Card>

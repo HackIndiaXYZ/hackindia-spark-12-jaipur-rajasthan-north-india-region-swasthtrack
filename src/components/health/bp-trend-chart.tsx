@@ -41,7 +41,7 @@ function CustomTooltip({ active, payload }: any) {
     const cat = getBPCategory(data.systolic, data.diastolic);
     return (
       <div className="rounded-lg border border-slate-200 bg-white p-3 shadow-lg text-xs">
-        <p className="font-bold text-slate-900">
+        <p className="font-semibold text-slate-900">
           {data.systolic}/{data.diastolic} mmHg
         </p>
         <p className="text-slate-600">
@@ -134,7 +134,7 @@ export function BPTrendChart({ logs }: BPTrendChartProps) {
       </ResponsiveContainer>
 
       {/* Legend */}
-      <div className="mt-2 flex flex-wrap items-center justify-center gap-4 text-xs font-bold text-slate-700">
+      <div className="mt-2 flex flex-wrap items-center justify-center gap-4 text-xs font-semibold text-slate-700">
         <span className="flex items-center gap-1.5">
           <span className="inline-block h-2.5 w-4 rounded bg-red-500" /> Systolic (ऊपर)
         </span>

@@ -179,7 +179,7 @@ export default function ProfilePage() {
               <User className="h-4 w-4 text-emerald-600" />
               <span>Full Name & Gender</span>
             </div>
-            <p className="mt-2 text-lg font-bold text-slate-950">{patient.name}</p>
+            <p className="mt-2 text-lg font-semibold text-slate-950">{patient.name}</p>
             <p className="text-sm font-medium text-slate-600">
               {patient.age} years · {patient.gender || "Not specified"}
             </p>
@@ -190,7 +190,7 @@ export default function ProfilePage() {
               <Scale className="h-4 w-4 text-amber-600" />
               <span>Weight & Height</span>
             </div>
-            <p className="mt-2 text-lg font-bold text-slate-950">
+            <p className="mt-2 text-lg font-semibold text-slate-950">
               {patient.current_weight_kg ? `${patient.current_weight_kg} kg` : "--"}
             </p>
             <p className="text-sm font-medium text-slate-600">
@@ -203,7 +203,7 @@ export default function ProfilePage() {
               <Heart className="h-4 w-4 text-rose-500" />
               <span>Target Weight</span>
             </div>
-            <p className="mt-2 text-lg font-bold text-slate-950">
+            <p className="mt-2 text-lg font-semibold text-slate-950">
               {patient.target_weight_kg ? `${patient.target_weight_kg} kg` : "--"}
             </p>
             <p className="text-sm font-medium text-slate-600">
@@ -218,7 +218,7 @@ export default function ProfilePage() {
               <Utensils className="h-4 w-4 text-emerald-600" />
               <span>Calorie Target</span>
             </div>
-            <p className="mt-2 text-lg font-bold text-slate-950">
+            <p className="mt-2 text-lg font-semibold text-slate-950">
               {patient.daily_calorie_target} kcal/day
             </p>
             <p className="text-sm font-medium text-slate-600">
@@ -258,7 +258,7 @@ export default function ProfilePage() {
             >
               <div>
                 <div className="flex items-start justify-between gap-2">
-                  <h3 className="text-base font-bold text-slate-950">
+                  <h3 className="text-base font-semibold text-slate-950">
                     {cond.condition_name}
                   </h3>
                   <button
@@ -285,7 +285,7 @@ export default function ProfilePage() {
                 ) : null}
               </div>
 
-              <div className="mt-4 pt-3 border-t border-slate-100 flex items-center gap-1 text-[11px] font-medium text-slate-400">
+              <div className="mt-4 pt-3 border-t border-slate-100 flex items-center gap-1 text-xs font-medium text-slate-400">
                 <ShieldCheck className="h-3.5 w-3.5 text-slate-400" />
                 <span>Monitored condition</span>
               </div>
@@ -344,7 +344,7 @@ export default function ProfilePage() {
                       <Pill className="h-4 w-4" />
                     </span>
                     <div>
-                      <h3 className="text-base font-bold text-slate-950">
+                      <h3 className="text-base font-semibold text-slate-950">
                         {med.medicine_name}
                       </h3>
                       <p className="text-xs font-semibold text-emerald-700">

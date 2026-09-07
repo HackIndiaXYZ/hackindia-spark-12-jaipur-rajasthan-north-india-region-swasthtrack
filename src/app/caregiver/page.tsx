@@ -151,12 +151,12 @@ export default function CaregiverPage() {
       <Card className="border-emerald-200 bg-linear-to-r from-emerald-500/10 via-emerald-50 to-white p-5">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-emerald-600 font-bold text-white shadow-sm text-base">
+            <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-emerald-600 font-semibold text-white shadow-sm text-base">
               <UserCheck className="h-6 w-6" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h2 className="text-base sm:text-lg font-bold text-slate-950">
+                <h2 className="text-base sm:text-lg font-semibold text-slate-950">
                   {patient.name}
                 </h2>
                 <Badge variant="green">Patient Active</Badge>
@@ -169,14 +169,14 @@ export default function CaregiverPage() {
 
           <div className="flex items-center gap-4 text-xs">
             <div className="rounded-xl border border-emerald-200 bg-white px-3 py-2 text-center shadow-2xs">
-              <span className="text-[10px] text-slate-400 block font-bold uppercase">Med Adherence</span>
-              <span className="text-sm font-black text-emerald-700">
+              <span className="text-2xs text-slate-400 block font-semibold uppercase">Med Adherence</span>
+              <span className="text-sm font-bold text-emerald-700">
                 {activeMeds.length > 0 ? `${Math.round((takenMedsCount / activeMeds.length) * 100)}%` : "100%"}
               </span>
             </div>
             <div className="rounded-xl border border-emerald-200 bg-white px-3 py-2 text-center shadow-2xs">
-              <span className="text-[10px] text-slate-400 block font-bold uppercase">Latest BP</span>
-              <span className="text-sm font-black text-slate-900">
+              <span className="text-2xs text-slate-400 block font-semibold uppercase">Latest BP</span>
+              <span className="text-sm font-bold text-slate-900">
                 {data.todayMorningBP ? `${data.todayMorningBP.systolic}/${data.todayMorningBP.diastolic}` : "--/--"}
               </span>
             </div>
@@ -192,13 +192,13 @@ export default function CaregiverPage() {
               <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-purple-100 text-purple-800 border border-purple-200">
                 <Sparkles className="h-4 w-4" />
               </span>
-              <h3 className="font-bold text-slate-900 text-sm sm:text-base">
+              <h3 className="font-semibold text-slate-900 text-sm sm:text-base">
                 What Changed for Papa? · पापा के स्वास्थ्य में क्या बदलाव आए?
               </h3>
             </div>
             <Link
               href="/insights/changes"
-              className="text-xs font-bold text-purple-700 hover:text-purple-950 underline self-start sm:self-auto"
+              className="text-xs font-semibold text-purple-700 hover:text-purple-950 underline self-start sm:self-auto"
             >
               विस्तृत विश्लेषण देखें →
             </Link>
@@ -215,7 +215,7 @@ export default function CaregiverPage() {
           <span className="flex h-6 w-6 items-center justify-center rounded-lg bg-amber-100 text-amber-800">
             <ShieldAlert className="h-3.5 w-3.5" />
           </span>
-          <h3 className="font-bold text-slate-900 text-sm sm:text-base">
+          <h3 className="font-semibold text-slate-900 text-sm sm:text-base">
             Caregiver Attention Items · ध्यान देने योग्य बिंदु
           </h3>
         </div>
@@ -234,7 +234,7 @@ export default function CaregiverPage() {
                 <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5 text-amber-600" />
                 <div>
                   <div className="flex items-center gap-2">
-                    <p className="font-bold">{anom.titleHi}</p>
+                    <p className="font-semibold">{anom.titleHi}</p>
                     <Badge variant={anom.severity === "IMPORTANT" ? "red" : "amber"}>
                       {anom.severity}
                     </Badge>
@@ -259,7 +259,7 @@ export default function CaregiverPage() {
         {/* Medicines */}
         <Card className="p-4 border-slate-200 bg-white">
           <div className="flex items-center justify-between pb-2 mb-2 border-b border-slate-100">
-            <span className="font-bold text-slate-900 flex items-center gap-1.5">
+            <span className="font-semibold text-slate-900 flex items-center gap-1.5">
               <Pill className="h-3.5 w-3.5 text-emerald-600" />
               दवाइयाँ (Medicines)
             </span>
@@ -274,7 +274,7 @@ export default function CaregiverPage() {
               return (
                 <li key={m.id} className="flex items-center justify-between">
                   <span>{m.medicine_name} ({m.dose})</span>
-                  <span className={taken ? "text-emerald-600 font-bold" : "text-amber-600 font-bold"}>
+                  <span className={taken ? "text-emerald-600 font-semibold" : "text-amber-600 font-semibold"}>
                     {taken ? "✓ Taken" : "Pending"}
                   </span>
                 </li>
@@ -286,7 +286,7 @@ export default function CaregiverPage() {
         {/* Blood Pressure */}
         <Card className="p-4 border-slate-200 bg-white">
           <div className="flex items-center justify-between pb-2 mb-2 border-b border-slate-100">
-            <span className="font-bold text-slate-900 flex items-center gap-1.5">
+            <span className="font-semibold text-slate-900 flex items-center gap-1.5">
               <HeartPulse className="h-3.5 w-3.5 text-rose-600" />
               रक्तचाप (Blood Pressure)
             </span>
@@ -295,13 +295,13 @@ export default function CaregiverPage() {
           <div className="space-y-2">
             <div className="flex justify-between items-center">
               <span className="text-slate-500">Morning BP:</span>
-              <span className="font-bold text-slate-900">
+              <span className="font-semibold text-slate-900">
                 {data.todayMorningBP ? `${data.todayMorningBP.systolic}/${data.todayMorningBP.diastolic} mmHg` : "Not recorded"}
               </span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-slate-500">Evening BP:</span>
-              <span className="font-bold text-slate-900">
+              <span className="font-semibold text-slate-900">
                 {data.todayEveningBP ? `${data.todayEveningBP.systolic}/${data.todayEveningBP.diastolic} mmHg` : "Not recorded"}
               </span>
             </div>
@@ -311,7 +311,7 @@ export default function CaregiverPage() {
         {/* Daily Summary */}
         <Card className="p-4 border-slate-200 bg-white">
           <div className="flex items-center justify-between pb-2 mb-2 border-b border-slate-100">
-            <span className="font-bold text-slate-900 flex items-center gap-1.5">
+            <span className="font-semibold text-slate-900 flex items-center gap-1.5">
               <Utensils className="h-3.5 w-3.5 text-amber-600" />
               भोजन एवं कैलोरी
             </span>
@@ -331,7 +331,7 @@ export default function CaregiverPage() {
           <CardHeader className="p-0 pb-3">
             <div className="flex items-center gap-2">
               <Sparkles className="h-4 w-4 text-emerald-600" />
-              <CardTitle className="text-sm font-bold text-slate-900">
+              <CardTitle className="text-sm font-semibold text-slate-900">
                 Weekly Pattern Summary · साप्ताहिक स्वास्थ्य सारांश
               </CardTitle>
             </div>
@@ -348,7 +348,7 @@ export default function CaregiverPage() {
       )}
 
       {/* FOOTER DISCLAIMER */}
-      <div className="p-3 text-[10px] text-slate-500 rounded-xl border border-slate-100 bg-slate-50">
+      <div className="p-3 text-2xs text-slate-500 rounded-xl border border-slate-100 bg-slate-50">
         * यह केयरगिवर सारांश केवल दैनिक आदतों की निगरानी एवं सहायता के लिए है। किसी भी चिकित्सीय निर्णय के लिए डॉक्टर से संपर्क करें।
       </div>
 

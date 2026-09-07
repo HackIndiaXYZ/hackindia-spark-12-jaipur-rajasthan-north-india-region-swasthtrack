@@ -112,13 +112,13 @@ export function HealthCard({
           )}
           <div>
             <div className="flex items-center gap-2">
-              <h3 className="text-base sm:text-lg font-black text-slate-950 tracking-tight">
+              <h3 className="text-base sm:text-lg font-bold text-slate-950 tracking-tight">
                 {title}
               </h3>
               {badge}
             </div>
             {hindiTitle && (
-              <p className="text-xs font-bold text-slate-500">{hindiTitle}</p>
+              <p className="text-xs font-semibold text-slate-500">{hindiTitle}</p>
             )}
           </div>
         </div>
@@ -188,13 +188,13 @@ export function InsightCard({
       <div className="flex flex-wrap items-center justify-between gap-2 mb-2.5">
         <div className="flex items-center gap-2">
           {tag && (
-            <span className={cn("text-[11px] font-black uppercase px-2 py-0.5 rounded-md border", currentTone.badge)}>
+            <span className={cn("text-xs font-bold uppercase px-2 py-0.5 rounded-md border", currentTone.badge)}>
               {tag}
             </span>
           )}
-          <h4 className="text-sm sm:text-base font-black text-slate-900">{title}</h4>
+          <h4 className="text-sm sm:text-base font-bold text-slate-900">{title}</h4>
         </div>
-        <div className="flex items-center gap-1.5 text-[11px] font-bold text-slate-500">
+        <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-500">
           {confidence && (
             <span className="bg-slate-100 px-2 py-0.5 rounded-md border border-slate-200">
               विश्वास: {confidence === "High" ? "उच्च (High)" : confidence === "Medium" ? "मध्यम (Medium)" : "कम (Low)"}
@@ -203,7 +203,7 @@ export function InsightCard({
           {source && <span>· {source}</span>}
         </div>
       </div>
-      {hindiTitle && <p className="text-xs font-bold text-slate-600 mb-2">{hindiTitle}</p>}
+      {hindiTitle && <p className="text-xs font-semibold text-slate-600 mb-2">{hindiTitle}</p>}
       <div className="text-sm font-medium text-slate-700 leading-relaxed">{children}</div>
     </div>
   );
@@ -283,8 +283,8 @@ export function QuickActionCard({
       <div className={cn("h-11 w-11 rounded-xl border flex items-center justify-center mb-2 shadow-2xs", t.iconBg)}>
         <Icon className="h-5 w-5 stroke-[2.2]" />
       </div>
-      <span className={cn("text-xs sm:text-sm font-black tracking-tight", t.text)}>{label}</span>
-      <span className="text-[11px] font-bold text-slate-500 mt-0.5">{hindiLabel}</span>
+      <span className={cn("text-xs sm:text-sm font-bold tracking-tight", t.text)}>{label}</span>
+      <span className="text-xs font-semibold text-slate-500 mt-0.5">{hindiLabel}</span>
     </button>
   );
 }
@@ -326,12 +326,12 @@ export function ProgressCard({
     <DepthCard depth={2} className={cn("p-4 sm:p-5", className)}>
       <div className="flex items-center justify-between mb-3">
         <div>
-          <h4 className="font-black text-slate-900 text-sm sm:text-base">{title}</h4>
-          {hindiTitle && <p className="text-xs font-bold text-slate-500">{hindiTitle}</p>}
+          <h4 className="font-bold text-slate-900 text-sm sm:text-base">{title}</h4>
+          {hindiTitle && <p className="text-xs font-semibold text-slate-500">{hindiTitle}</p>}
         </div>
         <div className="flex items-baseline gap-1">
-          <span className="text-2xl font-black text-slate-950">{value}</span>
-          <span className="text-xs font-bold text-slate-400">/{max} {unit}</span>
+          <span className="text-2xl font-bold text-slate-950">{value}</span>
+          <span className="text-xs font-semibold text-slate-400">/{max} {unit}</span>
         </div>
       </div>
 
@@ -344,7 +344,7 @@ export function ProgressCard({
       </div>
 
       {statusMessage && (
-        <p className="mt-2.5 text-xs font-bold text-slate-600 flex items-center gap-1.5">
+        <p className="mt-2.5 text-xs font-semibold text-slate-600 flex items-center gap-1.5">
           <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
           {statusMessage}
         </p>
