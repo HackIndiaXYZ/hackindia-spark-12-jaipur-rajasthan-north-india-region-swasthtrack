@@ -77,18 +77,18 @@ export function SleepPanel({ patientId, logs, onSuccess }: SleepPanelProps) {
               </span>
             </div>
 
-            <div className="p-4 rounded-card border border-emerald-100 bg-emerald-50/50 flex flex-col justify-between">
+            <div className="p-4 rounded-card border border-positive-line bg-positive-soft/50 flex flex-col justify-between">
               <div className="flex items-center justify-between text-ink-muted">
-                <span className="text-xs font-bold uppercase tracking-wider text-emerald-900">
+                <span className="text-xs font-bold uppercase tracking-wider text-positive">
                   पर्याप्त नींद दर (Goal Met)
                 </span>
-                <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+                <CheckCircle2 className="h-4 w-4 text-positive" />
               </div>
               <div className="mt-2 flex items-baseline gap-1.5">
-                <span className="text-3xl font-bold text-emerald-950">{optimalPercentage}%</span>
-                <span className="text-sm font-semibold text-emerald-800">दिन पूरे</span>
+                <span className="text-3xl font-bold text-positive">{optimalPercentage}%</span>
+                <span className="text-sm font-semibold text-positive">दिन पूरे</span>
               </div>
-              <span className="text-xs font-semibold text-emerald-700 mt-1">
+              <span className="text-xs font-semibold text-positive mt-1">
                 {optimalNights} में से {totalLogs} दिन लक्ष्य पूरा हुआ
               </span>
             </div>
@@ -145,8 +145,8 @@ export function SleepPanel({ patientId, logs, onSuccess }: SleepPanelProps) {
                         <div
                           className={`h-11 w-11 rounded-control flex flex-col items-center justify-center shrink-0 border ${
                             isGood
-                              ? "bg-indigo-50 border-indigo-200 text-indigo-950 font-bold"
-                              : "bg-amber-50 border-amber-200 text-amber-950 font-bold"
+                              ? "bg-positive-soft border-positive-line text-positive font-bold"
+                              : "bg-attention-soft border-attention-line text-attention font-bold"
                           }`}
                         >
                           <span className="text-base leading-none">{log.sleep_hours}</span>

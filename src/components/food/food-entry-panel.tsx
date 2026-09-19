@@ -435,7 +435,7 @@ export function FoodEntryPanel({
         <div>
           <div className="flex items-center justify-between mb-2">
             <label className="text-sm font-semibold text-ink-muted">भोजन का समय (Select Meal Slot):</label>
-            <span className="text-xs text-emerald-700 font-semibold bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-field">
+            <span className="text-xs text-brand-ink font-semibold bg-brand-soft border border-brand-line px-2.5 py-1 rounded-field">
               🕐 {new Date().toLocaleTimeString("hi-IN", { hour: "2-digit", minute: "2-digit" })} → {mealType}
             </span>
           </div>
@@ -454,7 +454,7 @@ export function FoodEntryPanel({
                 onClick={() => setMealType(meal.id)}
                 className={`py-2 px-1 rounded-control text-center border-2 transition-all flex flex-col items-center justify-center ${
                   mealType === meal.id
-                    ? "border-emerald-600 bg-emerald-50/50 text-emerald-950 font-semibold scale-[1.02]"
+                    ? "border-brand bg-brand-soft text-brand-ink font-semibold scale-[1.02]"
                     : "border-line hover:border-line-strong text-ink-muted hover:bg-surface-sunken"
                 }`}
               >
@@ -477,14 +477,14 @@ export function FoodEntryPanel({
                   placeholder="खोजें... (उदा: रोटी, दाल, सेब, Pizza...)"
                   value={searchQuery}
                   onChange={onSearchQueryChange}
-                  className="w-full pl-11 pr-4 py-3 rounded-field border border-line focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-surface-sunken focus:bg-surface text-base shadow-e1 transition-all"
+                  className="w-full pl-11 pr-4 py-3 rounded-field border border-line focus:outline-none focus:ring-2 focus:ring-brand bg-surface-sunken focus:bg-surface text-base shadow-e1 transition-all"
                 />
               </div>
             </div>
 
             {/* Typo Correction Suggestion */}
             {correctedQuery && (
-              <div className="flex items-center gap-2 text-sm text-amber-800 bg-amber-50 rounded-xl p-3 border border-amber-200">
+              <div className="flex items-center gap-2 text-sm text-amber-800 bg-amber-50 rounded-card p-3 border border-amber-200">
                 <Sparkles className="h-4.5 w-4.5 text-amber-600 flex-shrink-0" />
                 <span>
                   क्या आपका मतलब <strong>&quot;{correctedQuery}&quot;</strong> से है?
@@ -494,7 +494,7 @@ export function FoodEntryPanel({
 
             {/* Search Results / Suggestions list */}
             {(searchResults.length > 0 || suggestions.length > 0) && (
-              <div className="rounded-xl border border-line divide-y divide-line overflow-hidden bg-surface shadow-e1 max-h-80 overflow-y-auto">
+              <div className="rounded-card border border-line divide-y divide-line overflow-hidden bg-surface shadow-e1 max-h-80 overflow-y-auto">
                 {[...searchResults, ...suggestions].map((food) => {
                   const isFav = favorites.some(f => f.id === food.id);
                   return (
@@ -508,7 +508,7 @@ export function FoodEntryPanel({
                           {getExactFoodEmoji(food.name, food.category)}
                         </span>
                         <div className="min-w-0">
-                          <span className="font-semibold text-ink group-hover:text-emerald-700 transition-colors truncate block">
+                          <span className="font-semibold text-ink group-hover:text-brand-ink transition-colors truncate block">
                             {food.name}
                           </span>
                           {food.name_hi && (
@@ -525,7 +525,7 @@ export function FoodEntryPanel({
                         <button
                           type="button"
                           onClick={(e) => handleToggleFav(food, e)}
-                          className="p-2 text-ink-subtle hover:text-amber-500 transition-colors"
+                          className="hit-target p-2 text-ink-subtle hover:text-amber-500 transition-colors"
                           title="पसंदीदा सूची में जोड़ें"
                         >
                           <Star className={`h-5 w-5 ${isFav ? "fill-amber-500 text-amber-500" : ""}`} />
@@ -540,7 +540,7 @@ export function FoodEntryPanel({
 
             {/* Food Not Found Fallback */}
             {noFoodFound && searchQuery.trim().length > 0 && (
-              <div className="rounded-xl border border-line bg-surface-sunken p-5 text-center shadow-inner">
+              <div className="rounded-card border border-line bg-surface-sunken p-5 text-center shadow-inner">
                 <p className="text-ink-muted font-medium mb-3.5">
                   &quot;{searchQuery}&quot; हमारी लिस्ट में नहीं मिला। (Food not found in database)
                 </p>
@@ -645,7 +645,7 @@ export function FoodEntryPanel({
                         });
                         setQuantity(String(s.default_quantity || 1));
                       }}
-                      className="inline-flex items-center gap-1.5 py-1.5 px-3 rounded-xl border-2 border-indigo-200 bg-indigo-50/70 hover:bg-indigo-100 text-indigo-950 font-semibold text-xs transition-all cursor-pointer shadow-2xs"
+                      className="inline-flex items-center gap-1.5 py-1.5 px-3 rounded-control border-2 border-indigo-200 bg-indigo-50/70 hover:bg-indigo-100 text-indigo-950 font-semibold text-xs transition-all cursor-pointer shadow-2xs"
                     >
                       <span>{getExactFoodEmoji(s.name)}</span>
                       <span>{s.name}</span>
@@ -672,7 +672,7 @@ export function FoodEntryPanel({
             <div>
               <div className="flex items-center justify-between gap-2 mb-2.5">
                 <div className="flex items-center gap-1.5 text-sm font-semibold text-ink">
-                  <Sparkles className="h-4 w-4 text-emerald-600" />
+                  <Sparkles className="h-4 w-4 text-brand" />
                   <span>आपके नियमित भोजन · Quick Food Shortcuts</span>
                 </div>
                 <span className="text-xs text-ink-subtle font-medium">
@@ -683,7 +683,7 @@ export function FoodEntryPanel({
               {quickFoodsLoading ? (
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                   {[...Array(4)].map((_, i) => (
-                    <div key={i} className="h-20 rounded-xl bg-surface-sunken animate-pulse border border-line" />
+                    <div key={i} className="h-20 rounded-card bg-surface-sunken animate-pulse border border-line" />
                   ))}
                 </div>
               ) : quickFoods.length > 0 ? (
@@ -691,7 +691,7 @@ export function FoodEntryPanel({
                   {quickFoods.map((q) => (
                     <div
                       key={q.canonicalKey}
-                      className="group relative p-3 rounded-xl border border-line hover:border-emerald-300 bg-surface hover:bg-emerald-50/50 text-left transition-all shadow-2xs flex flex-col justify-between cursor-pointer"
+                      className="group relative p-3 rounded-card border border-line hover:border-brand-line bg-surface hover:bg-brand-soft/50 text-left transition-all shadow-2xs flex flex-col justify-between cursor-pointer"
                       onClick={async () => {
                         if (quickActionLockRef.current) return;
                         quickActionLockRef.current = true;
@@ -754,13 +754,13 @@ export function FoodEntryPanel({
                       </div>
                       <div className="mt-1 flex items-center justify-between text-xs text-ink-subtle font-hindi">
                         <span className="truncate">{q.name_hi || `${q.distinctDays30d} days`}</span>
-                        <span className="text-emerald-700 font-bold font-sans shrink-0 ml-1">~{q.defaultCal} cal</span>
+                        <span className="text-brand font-bold font-sans shrink-0 ml-1">~{q.defaultCal} cal</span>
                       </div>
                     </div>
                   ))}
                 </div>
               ) : (
-                <div className="rounded-xl border border-dashed border-line bg-surface-sunken/70 p-4 text-center">
+                <div className="rounded-card border border-dashed border-line bg-surface-sunken/70 p-4 text-center">
                   <p className="text-xs font-semibold text-ink-muted">
                     आपके बार-बार खाए जाने वाले भोजन यहाँ automatically सीख कर दिखाई देंगे।
                   </p>
@@ -775,10 +775,10 @@ export function FoodEntryPanel({
 
         {/* 4. SELECTION PORTIONS & OIL SECTOR (SAVING WORKFLOW) */}
         {selectedFood && (
-          <div className="bg-surface-sunken rounded-xl p-5 border border-line space-y-4">
+          <div className="bg-surface-sunken rounded-card p-5 border border-line space-y-4">
             <div className="flex items-start justify-between">
               <div>
-                <span className="text-xs font-semibold uppercase tracking-wider text-emerald-700 bg-emerald-100/60 px-2 py-0.5 rounded">
+                <span className="text-xs font-semibold uppercase tracking-wider text-brand-ink bg-brand-soft px-2 py-0.5 rounded">
                   {selectedFood.category}
                 </span>
                 <h3 className="text-lg font-semibold text-ink mt-1">
@@ -858,9 +858,9 @@ export function FoodEntryPanel({
                     key={oil.id}
                     type="button"
                     onClick={() => setOilQuantity(oil.id)}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${
+                    className={`px-3 py-1.5 rounded-control text-xs font-medium border transition-colors ${
                       oilQuantity === oil.id
-                        ? "border-emerald-600 bg-emerald-600 text-white font-semibold"
+                        ? "border-brand bg-brand text-ink-inverse font-semibold"
                         : "border-line hover:border-line-strong text-ink-muted bg-surface"
                     }`}
                   >
@@ -917,9 +917,9 @@ export function FoodEntryPanel({
 
         {/* 5. ONLINE REFERENCE / CUSTOM FOOD MANUAL FORM */}
         {showCustomForm && (
-          <form onSubmit={handleSaveCustomFood} className="bg-surface-sunken rounded-xl p-5 border border-line space-y-4">
+          <form onSubmit={handleSaveCustomFood} className="bg-surface-sunken rounded-card p-5 border border-line space-y-4">
             <h3 className="text-lg font-semibold text-ink flex items-center gap-2">
-              <Plus className="h-5 w-5 text-emerald-600" />
+              <Plus className="h-5 w-5 text-brand" />
               {customSourceType === "web_reference" ? "Web Search Reference Entry" : "Add Custom Food (नया भोजन जोड़ें)"}
             </h3>
 
@@ -1047,7 +1047,7 @@ export function FoodEntryPanel({
                   setSuccessMsg(`"${customName}" को "Your Foods" में सेव कर लिया गया है!`);
                   setShowCustomForm(false);
                 }}
-                className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl border-2 border-indigo-300 bg-indigo-50 text-indigo-950 font-semibold text-xs sm:text-sm hover:bg-indigo-100 transition-colors cursor-pointer"
+                className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-control border-2 border-indigo-300 bg-indigo-50 text-indigo-950 font-semibold text-xs sm:text-sm hover:bg-indigo-100 transition-colors cursor-pointer"
               >
                 <BookmarkPlus className="h-4 w-4 text-indigo-600" />
                 Save as My Food (भविष्य के लिए रखें)

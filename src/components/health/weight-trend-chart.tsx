@@ -31,7 +31,7 @@ function CustomTooltip({ active, payload }: any) {
         <p className="font-semibold text-ink">{data.weight} kg</p>
         <p className="text-ink-subtle">{data.fullDate}</p>
         {data.targetDiff !== null && (
-          <p className={`mt-1 font-semibold ${data.targetDiff > 0 ? "text-amber-600" : "text-emerald-600"}`}>
+          <p className={`mt-1 font-semibold ${data.targetDiff > 0 ? "text-attention" : "text-positive"}`}>
             Target से {data.targetDiff > 0 ? "+" : ""}{data.targetDiff} kg
           </p>
         )}

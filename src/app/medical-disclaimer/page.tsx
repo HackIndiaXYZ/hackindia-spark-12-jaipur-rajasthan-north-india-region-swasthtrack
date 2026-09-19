@@ -24,9 +24,9 @@ export default function MedicalDisclaimerPage() {
       />
 
       {/* CORE HIGHLIGHT BOX */}
-      <div className="rounded-card border-2 border-emerald-300 bg-emerald-50/70 p-6 sm:p-7 space-y-3">
+      <div className="rounded-card border-2 border-positive-line bg-positive-soft p-6 sm:p-7 space-y-3">
         <div className="flex items-center gap-2.5">
-          <ShieldAlert className="h-6 w-6 text-emerald-700 shrink-0" />
+          <ShieldAlert className="h-6 w-6 text-positive shrink-0" />
           <h2 className="text-base sm:text-lg font-bold text-ink">
             For Informational &amp; Personal Tracking Purposes Only
           </h2>
@@ -79,15 +79,15 @@ export default function MedicalDisclaimerPage() {
         </section>
 
         {/* 4. Emergency Situations */}
-        <section className="rounded-card border border-rose-200 bg-rose-50/70 p-5 space-y-3">
-          <div className="flex items-center gap-2 text-rose-900 font-semibold text-sm">
-            <PhoneCall className="h-4 w-4 text-rose-600 shrink-0" />
+        <section className="rounded-card border border-critical-line bg-critical-soft p-5 space-y-3">
+          <div className="flex items-center gap-2 text-critical font-semibold text-sm">
+            <PhoneCall className="h-4 w-4 text-critical shrink-0" />
             <span>Medical Emergencies</span>
           </div>
-          <p className="text-xs sm:text-sm text-rose-950 leading-relaxed font-medium">
+          <p className="text-xs sm:text-sm text-critical leading-relaxed font-medium">
             If you or your family member believe you are experiencing a medical emergency (such as severe chest pain, shortness of breath, sudden numbness, weakness in the face or arms, speech difficulty, or an extreme hypertensive spike):
           </p>
-          <div className="rounded-lg bg-surface/80 border border-rose-200 p-3 text-rose-900 font-semibold text-center text-sm">
+          <div className="rounded-control bg-surface/80 border border-critical-line p-3 text-critical font-semibold text-center text-sm">
             🚨 Call your local emergency medical service immediately (e.g. 112 / 108 in India) or visit the nearest hospital emergency room.
           </div>
         </section>
@@ -95,7 +95,7 @@ export default function MedicalDisclaimerPage() {
         {/* 5. Doctor Checkup Reports */}
         <section className="space-y-2">
           <h3 className="text-base font-semibold text-ink flex items-center gap-2">
-            <CheckCircle className="h-4 w-4 text-emerald-600" />
+            <CheckCircle className="h-4 w-4 text-positive" />
             5. Use During Doctor Visits
           </h3>
           <p>

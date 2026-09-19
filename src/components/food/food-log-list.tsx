@@ -187,19 +187,19 @@ export function FoodLogList({
             type="button"
             variant="ghost"
             onClick={() => adjustDate(-1)}
-            className="p-2 h-8 w-8 sm:h-9 sm:w-9 rounded-lg shrink-0"
+            className="p-2 h-8 w-8 sm:h-9 sm:w-9 rounded-control shrink-0"
           >
             <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5 text-ink-muted" />
           </Button>
           <div className="flex items-center gap-1.5 font-semibold text-ink text-xs sm:text-base min-w-0 text-center justify-center">
-            <Calendar className="h-4 w-4 text-emerald-600 shrink-0" />
+            <Calendar className="h-4 w-4 text-brand shrink-0" />
             <span className="truncate">{selectedDate === new Date().toISOString().split("T")[0] ? "आज (Today)" : selectedDate}</span>
           </div>
           <Button
             type="button"
             variant="ghost"
             onClick={() => adjustDate(1)}
-            className="p-2 h-8 w-8 sm:h-9 sm:w-9 rounded-lg shrink-0"
+            className="p-2 h-8 w-8 sm:h-9 sm:w-9 rounded-control shrink-0"
           >
             <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5 text-ink-muted" />
           </Button>
@@ -211,17 +211,17 @@ export function FoodLogList({
           <span className="text-lg font-bold text-ink">
             {totalCalories} / {dailyCalorieTarget} kcal
           </span>
-          <span className="text-xs font-semibold text-emerald-700 block mt-0.5">
+          <span className="text-xs font-semibold text-brand block mt-0.5">
             Total Protein: {totalProtein} g
           </span>
           {logs.length > 0 && (
             <span className="text-xs font-semibold block mt-0.5">
               {overTarget > 0 ? (
-                <span className="text-rose-600">
+                <span className="text-critical">
                   +{overTarget} kcal over target (आज calorie target से ऊपर रहा। कल portions/oil पर ध्यान दें।)
                 </span>
               ) : (
-                <span className="text-emerald-600">
+                <span className="text-positive">
                   Remaining: {Math.abs(overTarget)} kcal
                 </span>
               )}
@@ -233,14 +233,14 @@ export function FoodLogList({
       <div className="p-6 space-y-6">
         {/* Status indicators */}
         {errorMsg && (
-          <div className="rounded-xl border border-rose-200 bg-rose-50 p-3 text-sm font-semibold text-rose-700">
+          <div className="rounded-card border border-critical-line bg-critical-soft p-3 text-sm font-semibold text-critical">
             {errorMsg}
           </div>
         )}
 
         {successMsg && (
-          <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-sm font-semibold text-emerald-700 flex gap-2 items-center">
-            <Check className="h-4 w-4 text-emerald-600" />
+          <div className="rounded-card border border-positive-line bg-positive-soft p-3 text-sm font-semibold text-positive flex gap-2 items-center">
+            <Check className="h-4 w-4 text-positive" />
             {successMsg}
           </div>
         )}
@@ -251,7 +251,7 @@ export function FoodLogList({
             {Object.entries(groupedLogs).map(([mealName, mealItems]) => {
               const mealTotal = mealItems.reduce((sum, i) => sum + i.calories, 0);
               return (
-                <div key={mealName} className="rounded-xl border border-line bg-surface overflow-hidden shadow-xs">
+                <div key={mealName} className="rounded-card border border-line bg-surface overflow-hidden shadow-xs">
                   {/* Meal Group Header */}
                   <div className="bg-surface-sunken/70 border-b border-line px-4 py-3 flex items-center justify-between">
                     <div>
@@ -268,7 +268,7 @@ export function FoodLogList({
                         type="button"
                         onClick={() => handleCopyMeal(mealName)}
                         disabled={isCopying}
-                        className="text-xs font-semibold text-emerald-700 bg-emerald-50 hover:bg-emerald-100/80 border border-emerald-200/50 px-2.5 py-1 rounded-lg flex items-center gap-1 transition-all disabled:opacity-50"
+                        className="text-xs font-semibold text-brand-ink bg-brand-soft hover:bg-brand-soft/80 border border-brand-line/50 px-2.5 py-1 rounded-control flex items-center gap-1 transition-all disabled:opacity-50"
                         title="कल के इस भोजन को आज दोहराएं"
                       >
                         <Copy className="h-3 w-3" />
@@ -329,7 +329,7 @@ export function FoodLogList({
                                     type="button"
                                     variant="ghost"
                                     onClick={() => handleEditClick(item)}
-                                    className="p-2 h-11 w-11 text-ink-subtle hover:text-emerald-700 hover:bg-emerald-50 rounded-xl transition-colors"
+                                    className="p-2 h-11 w-11 text-ink-subtle hover:text-info hover:bg-info-soft rounded-control transition-colors"
                                     title="बदलाव करें (Edit entry)"
                                   >
                                     <Edit className="h-6 w-6" />
@@ -338,7 +338,7 @@ export function FoodLogList({
                                     type="button"
                                     variant="ghost"
                                     onClick={() => handleDeleteClick(item.id)}
-                                    className="p-2 h-11 w-11 text-ink-subtle hover:text-rose-600 hover:bg-rose-50 rounded-xl transition-colors"
+                                    className="p-2 h-11 w-11 text-ink-subtle hover:text-critical hover:bg-critical-soft rounded-control transition-colors"
                                     title="हटाएं (Delete entry)"
                                   >
                                     <Trash2 className="h-6 w-6" />
@@ -363,7 +363,7 @@ export function FoodLogList({
             })}
           </div>
         ) : (
-          <div className="rounded-2xl border-2 border-dashed border-line bg-surface-sunken/50 p-10 text-center">
+          <div className="rounded-card border-2 border-dashed border-line bg-surface-sunken/50 p-10 text-center">
             <p className="text-ink-subtle font-medium text-sm">
               आज अभी तक कोई भोजन प्रविष्टि नहीं की गई है। (No meals logged today)
             </p>
@@ -376,16 +376,16 @@ export function FoodLogList({
 
       {/* Structured Edit Modal */}
       {editingItem && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4">
-          <div className="bg-surface rounded-2xl w-full max-w-md overflow-hidden shadow-e4 border border-line flex flex-col">
-            <div className="bg-emerald-600 px-6 py-4 text-white">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-ink/60 backdrop-blur-xs p-4">
+          <div className="bg-surface rounded-sheet w-full max-w-md overflow-hidden shadow-e4 border border-line flex flex-col">
+            <div className="bg-brand px-6 py-4 text-ink-inverse">
               <h3 className="font-semibold text-lg">प्रविष्टि संपादित करें (Edit Logged Food)</h3>
-              <p className="text-emerald-100 text-xs mt-0.5">{editingItem.food_name}</p>
+              <p className="text-ink-inverse/80 text-xs mt-0.5">{editingItem.food_name}</p>
             </div>
 
             <div className="p-6 space-y-4">
               {errorMsg && (
-                <div className="rounded-xl border border-rose-200 bg-rose-50 p-3 text-xs font-semibold text-rose-700">
+                <div className="rounded-card border border-critical-line bg-critical-soft p-3 text-xs font-semibold text-critical">
                   {errorMsg}
                 </div>
               )}

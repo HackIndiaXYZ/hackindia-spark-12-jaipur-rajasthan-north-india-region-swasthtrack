@@ -585,7 +585,7 @@ export function DashboardSections({
               Check off daily habits and routines as you complete them
             </CardDescription>
           </div>
-          <CheckCircle2 aria-hidden className="h-5 w-5 text-emerald-600" />
+          <CheckCircle2 aria-hidden className="h-5 w-5 text-positive" />
         </CardHeader>
 
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
@@ -597,15 +597,15 @@ export function DashboardSections({
                 key={item.id}
                 className={`flex min-h-16 cursor-pointer items-center gap-3 rounded-card border p-3 text-sm font-medium transition-all ${
                   isCompleted
-                    ? "border-emerald-200 bg-emerald-50/80 text-emerald-950 shadow-2xs"
-                    : "border-line bg-surface text-ink-muted hover:border-emerald-200 hover:bg-surface-sunken"
+                    ? "border-positive-line bg-positive-soft/80 text-positive shadow-2xs"
+                    : "border-line bg-surface text-ink-muted hover:border-positive-line hover:bg-surface-sunken"
                 }`}
               >
                 <input
                   type="checkbox"
                   checked={isCompleted}
                   onChange={() => handleToggleChecklist(item.id, item.status)}
-                  className="h-5 w-5 rounded border-line-strong text-emerald-600 focus:ring-emerald-500"
+                  className="h-5 w-5 rounded border-line-strong text-positive focus:ring-positive"
                 />
                 <span className={isCompleted ? "line-through text-ink-subtle" : ""}>
                   {item.item_label}

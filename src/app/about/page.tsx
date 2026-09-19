@@ -165,16 +165,16 @@ export default function AboutPage() {
       </div>
 
       {/* MEDICAL DISCLAIMER NOTICE */}
-      <div className="rounded-card border border-amber-200 bg-amber-50/60 p-5 text-xs text-amber-950 flex items-start gap-3">
-        <ShieldAlert className="h-5 w-5 shrink-0 text-amber-700 mt-0.5" />
+      <div className="rounded-card border border-attention-line bg-attention-soft p-5 text-xs text-attention flex items-start gap-3">
+        <ShieldAlert className="h-5 w-5 shrink-0 text-attention mt-0.5" />
         <div className="space-y-1">
           <p className="font-semibold text-sm">Important Health Tool Notice</p>
-          <p className="leading-relaxed text-amber-900">
+          <p className="leading-relaxed text-attention">
             SwasthTrack is a supportive health tracking and habit-consistency tool. It is not a hospital, emergency service, or medical diagnosis platform. All health decisions and prescription adjustments should always be made under the direct guidance of qualified medical professionals.
           </p>
           <Link
             href="/medical-disclaimer"
-            className="inline-block pt-1 font-semibold text-amber-950 underline hover:text-amber-800"
+            className="inline-block pt-1 font-semibold text-attention underline hover:opacity-80 transition-opacity"
           >
             Read our full Medical Disclaimer →
           </Link>

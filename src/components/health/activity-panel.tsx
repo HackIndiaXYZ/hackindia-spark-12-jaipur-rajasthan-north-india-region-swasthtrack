@@ -153,8 +153,8 @@ export function ActivityPanel({
                         <div
                           className={`h-11 w-11 rounded-control flex flex-col items-center justify-center shrink-0 border ${
                             metGoal
-                              ? "bg-emerald-50 border-emerald-200 text-emerald-950 font-bold"
-                              : "bg-sky-50 border-sky-200 text-sky-950 font-bold"
+                              ? "bg-positive-soft border-positive-line text-positive font-bold"
+                              : "bg-info-soft border-info-line text-info font-bold"
                           }`}
                         >
                           <span className="text-sm font-bold leading-none">{log.steps}</span>

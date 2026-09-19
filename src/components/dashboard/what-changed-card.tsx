@@ -42,23 +42,23 @@ const dirConfig: Record<
   up: {
     badgeTone: "green",
     icon: ArrowUpRight,
-    color: "text-emerald-700",
-    border: "border-emerald-200",
-    bg: "bg-emerald-50/50",
+    color: "text-positive",
+    border: "border-positive-line",
+    bg: "bg-positive-soft/50",
   },
   stable: {
     badgeTone: "blue",
     icon: Minus,
-    color: "text-sky-700",
-    border: "border-sky-200",
-    bg: "bg-sky-50/50",
+    color: "text-info",
+    border: "border-info-line",
+    bg: "bg-info-soft/50",
   },
   down: {
     badgeTone: "amber",
     icon: ArrowDownRight,
-    color: "text-amber-700",
-    border: "border-amber-200",
-    bg: "bg-amber-50/50",
+    color: "text-attention",
+    border: "border-attention-line",
+    bg: "bg-attention-soft/50",
   },
 };
 
@@ -152,7 +152,7 @@ export function WhatChangedCard({ patientId }: WhatChangedCardProps) {
             >
               <div className="flex items-center justify-between mb-1.5">
                 <div className="flex items-center gap-1.5">
-                  <div className="h-6 w-6 rounded-lg bg-surface border border-line flex items-center justify-center shrink-0 shadow-2xs">
+                  <div className="h-6 w-6 rounded-control bg-surface border border-line flex items-center justify-center shrink-0 shadow-2xs">
                     <Icon className="h-3.5 w-3.5 text-ink-muted" />
                   </div>
                   <span className="text-xs font-bold text-ink truncate">

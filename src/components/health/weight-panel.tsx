@@ -278,8 +278,8 @@ export function WeightPanel({
           {targetWeight && latest && (
             <div className="text-right">
               <p className="text-2xs font-semibold uppercase tracking-wider text-ink-subtle">Target</p>
-              <p className="mt-1 text-lg font-extrabold text-emerald-700">{targetWeight} kg</p>
-              <p className={`text-xs font-semibold ${latest.weight_kg > targetWeight ? "text-amber-600" : "text-emerald-600"}`}>
+              <p className="mt-1 text-lg font-extrabold text-brand">{targetWeight} kg</p>
+              <p className={`text-xs font-semibold ${latest.weight_kg > targetWeight ? "text-attention" : "text-positive"}`}>
                 {latest.weight_kg > targetWeight
                   ? `${(latest.weight_kg - targetWeight).toFixed(1)} kg ज्यादा`
                   : latest.weight_kg < targetWeight
@@ -299,7 +299,7 @@ export function WeightPanel({
             </div>
             <div className="h-2 w-full rounded-full bg-surface-sunken overflow-hidden">
               <div
-                className="h-full rounded-full bg-gradient-to-r from-amber-400 to-emerald-500 transition-all"
+                className="h-full rounded-full bg-gradient-to-r from-attention to-positive transition-all"
                 style={{
                   // Show how much of the gap has been closed (assuming started at +10kg or more)
                   width: `${Math.min(100, Math.max(10, (1 - (latest.weight_kg - targetWeight) / 10) * 100))}%`,
@@ -436,7 +436,7 @@ export function WeightPanel({
                       <div className="flex items-center gap-2">
                         <span className="font-semibold text-ink">{log.weight_kg} kg</span>
                         {targetWeight && (
-                          <span className={`text-2xs font-semibold ${log.weight_kg > targetWeight ? "text-amber-600" : "text-emerald-600"}`}>
+                          <span className={`text-2xs font-semibold ${log.weight_kg > targetWeight ? "text-attention" : "text-positive"}`}>
                             ({log.weight_kg > targetWeight ? "+" : ""}{(log.weight_kg - targetWeight).toFixed(1)} kg)
                           </span>
                         )}
@@ -534,7 +534,7 @@ export function WeightPanel({
                     <div className="flex items-center gap-2">
                       <span className="text-sm font-semibold text-ink">{ws.avg} kg</span>
                       {ws.change !== null && (
-                        <span className={`text-2xs font-semibold ${ws.change > 0 ? "text-rose-600" : ws.change < 0 ? "text-emerald-600" : "text-ink-subtle"}`}>
+                        <span className={`text-2xs font-semibold ${ws.change > 0 ? "text-critical" : ws.change < 0 ? "text-positive" : "text-ink-subtle"}`}>
                           {ws.change > 0 ? "↑" : ws.change < 0 ? "↓" : "→"} {Math.abs(ws.change)} kg
                         </span>
                       )}

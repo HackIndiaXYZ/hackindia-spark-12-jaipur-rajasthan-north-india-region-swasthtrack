@@ -31,15 +31,15 @@ export function PatientOverviewCard({
       : null;
 
   return (
-    <Card className="border-emerald-200 bg-gradient-to-br from-surface via-emerald-50/40 to-surface-sunken p-5 sm:p-6 shadow-xs">
+    <Card className="border-brand-line bg-gradient-to-br from-surface via-brand-softer to-surface-sunken p-5 sm:p-6 shadow-xs">
       <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
         <div className="space-y-3">
           <div className="flex flex-wrap items-center gap-2.5">
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-600 px-3 py-1 text-xs font-semibold text-white shadow-xs">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-brand px-3 py-1 text-xs font-semibold text-ink-inverse shadow-xs">
               <User className="h-3.5 w-3.5" />
               Patient Profile
             </span>
-            <span className="text-xs font-semibold text-emerald-800 bg-emerald-100/80 px-2.5 py-0.5 rounded-full">
+            <span className="text-xs font-semibold text-brand-ink bg-brand-soft/80 px-2.5 py-0.5 rounded-full">
               मरीज़ प्रोफाइल
             </span>
           </div>
@@ -110,16 +110,16 @@ export function PatientOverviewCard({
         </div>
       </div>
 
-      <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-emerald-100 pt-4 text-xs">
+      <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-brand-line pt-4 text-xs">
         <div className="flex items-center gap-2 text-ink-muted">
-          <Shield className="h-4 w-4 text-emerald-600" />
+          <Shield className="h-4 w-4 text-brand" />
           <span>Real Database-backed health profile</span>
         </div>
         <div className="flex items-center gap-3">
           <button
             type="button"
             onClick={onEditProfile}
-            className="flex items-center gap-1.5 font-semibold text-emerald-700 hover:text-emerald-900"
+            className="flex items-center gap-1.5 font-semibold text-brand hover:text-brand-ink"
           >
             <Edit2 className="h-3.5 w-3.5" />
             Edit Profile (संपादित करें)
@@ -127,7 +127,7 @@ export function PatientOverviewCard({
           <span className="text-ink-subtle">|</span>
           <Link
             href="/profile"
-            className="flex items-center gap-1 font-semibold text-emerald-700 hover:text-emerald-900"
+            className="flex items-center gap-1 font-semibold text-brand hover:text-brand-ink"
           >
             <span>Manage Medicines & Conditions</span>
             <ChevronRight className="h-3.5 w-3.5" />

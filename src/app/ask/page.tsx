@@ -214,13 +214,13 @@ export default function AskSwasthTrackPage() {
   return (
     <div className="flex flex-col min-h-[calc(100vh-4rem)] max-w-3xl mx-auto px-3 sm:px-4 py-3 space-y-3.5">
       {/* 1. TOP HEADER & PATIENT SELECTOR CONTEXT (§42) */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-2 border-b border-slate-200">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-2 border-b border-line">
         <div className="flex items-center gap-2.5 min-w-0">
-          <div className="h-10 w-10 rounded-2xl bg-linear-to-br from-purple-600 to-indigo-700 text-white flex items-center justify-center shadow-xs shrink-0">
+          <div className="h-10 w-10 rounded-control bg-linear-to-br from-purple-600 to-indigo-700 text-white flex items-center justify-center shadow-xs shrink-0">
             <MessageSquareText className="h-5 w-5" />
           </div>
           <div className="min-w-0">
-            <h1 className="text-base sm:text-lg font-bold text-slate-950 truncate leading-tight">
+            <h1 className="text-base sm:text-lg font-bold text-ink truncate leading-tight">
               Ask SwasthTrack · स्वास्थ्य डेटा सहायक
             </h1>
             <p className="text-xs font-semibold text-purple-800 leading-tight truncate">
@@ -254,18 +254,18 @@ export default function AskSwasthTrackPage() {
             <button
               type="button"
               onClick={() => setIsPatientDropdownOpen(!isPatientDropdownOpen)}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-300 text-xs font-bold text-slate-800 transition-colors cursor-pointer"
+              className="flex items-center gap-2 px-3 py-1.5 rounded-control bg-surface-sunken hover:bg-line border border-line-strong text-xs font-bold text-ink transition-colors cursor-pointer"
             >
               <UserCheck className="h-3.5 w-3.5 text-purple-600 shrink-0" />
               <span className="truncate max-w-[150px]">
                 Viewing: {isPapa ? "पापा" : patient?.name || "Patient"}
               </span>
-              <ChevronDown className="h-3.5 w-3.5 text-slate-500 shrink-0" />
+              <ChevronDown className="h-3.5 w-3.5 text-ink-subtle shrink-0" />
             </button>
 
           {isPatientDropdownOpen && (
-            <div className="absolute right-0 top-full mt-1.5 w-56 bg-white rounded-2xl shadow-xl border border-slate-200 py-1 z-50 animate-in fade-in zoom-in-95 duration-100">
-              <div className="px-3 py-1.5 text-xs font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100">
+            <div className="absolute right-0 top-full mt-1.5 w-56 bg-surface rounded-card shadow-e3 border border-line py-1 z-50 animate-in fade-in zoom-in-95 duration-100">
+              <div className="px-3 py-1.5 text-xs font-bold text-ink-subtle uppercase tracking-wider border-b border-line">
                 मरीज़ का चयन करें
               </div>
               {authorizedPatients.length > 0 ? (
@@ -281,7 +281,7 @@ export default function AskSwasthTrackPage() {
                       "w-full text-left px-3 py-2 text-xs font-semibold flex items-center justify-between hover:bg-purple-50 transition-colors cursor-pointer",
                       patient?.id === p.id
                         ? "text-purple-700 bg-purple-50/60 font-bold"
-                        : "text-slate-700"
+                        : "text-ink-muted"
                     )}
                   >
                     <span className="truncate">
@@ -296,7 +296,7 @@ export default function AskSwasthTrackPage() {
                   </button>
                 ))
               ) : (
-                <div className="px-3 py-2 text-xs text-slate-500 font-semibold">
+                <div className="px-3 py-2 text-xs text-ink-subtle font-semibold">
                   {patient?.name || "Active Patient"}
                 </div>
               )}
@@ -315,7 +315,7 @@ export default function AskSwasthTrackPage() {
               type="button"
               disabled={loading}
               onClick={() => handleSendQuestion(prompt)}
-              className="shrink-0 px-3 py-1.5 rounded-xl bg-purple-50/80 hover:bg-purple-100 border border-purple-200 text-xs font-bold text-purple-900 shadow-2xs transition-all active:scale-95 cursor-pointer disabled:opacity-50"
+              className="shrink-0 px-3 py-1.5 rounded-control bg-purple-50/80 hover:bg-purple-100 border border-purple-200 text-xs font-bold text-purple-900 shadow-2xs transition-all active:scale-95 cursor-pointer disabled:opacity-50"
             >
               💬 {prompt}
             </button>
@@ -332,7 +332,7 @@ export default function AskSwasthTrackPage() {
           if (isUser) {
             return (
               <div key={msg.id} className="flex justify-end items-end gap-2">
-                <div className="max-w-[85%] sm:max-w-[75%] rounded-2xl rounded-br-sm bg-purple-700 text-white p-3.5 shadow-xs">
+                <div className="max-w-[85%] sm:max-w-[75%] rounded-card rounded-br-sm bg-purple-700 text-white p-3.5 shadow-xs">
                   <p className="text-xs sm:text-sm font-semibold leading-relaxed">{msg.content}</p>
                   <span className="text-2xs text-purple-200 block text-right mt-1 font-medium">
                     {msg.timestamp}
@@ -348,7 +348,7 @@ export default function AskSwasthTrackPage() {
           // Assistant Response Card
           return (
             <div key={msg.id} className="flex items-start gap-2.5">
-              <div className="h-8 w-8 rounded-xl bg-linear-to-br from-purple-600 to-indigo-700 text-white flex items-center justify-center shadow-2xs shrink-0 mt-1">
+              <div className="h-8 w-8 rounded-control bg-linear-to-br from-purple-600 to-indigo-700 text-white flex items-center justify-center shadow-2xs shrink-0 mt-1">
                 <Bot className="h-4 w-4" />
               </div>
 
@@ -358,8 +358,8 @@ export default function AskSwasthTrackPage() {
                   className={cn(
                     "p-4 border",
                     card?.intent.startsWith("SAFETY")
-                      ? "border-amber-300 bg-amber-50/50"
-                      : "border-slate-200 bg-white"
+                      ? "border-attention-line bg-attention-soft/50"
+                      : "border-line bg-surface"
                   )}
                 >
                   {/* Card Header & Intent Badge */}
@@ -399,27 +399,27 @@ export default function AskSwasthTrackPage() {
                           ? "सुरक्षा नियम (Safety)"
                           : "हेल्थ डेटा"}
                       </Badge>
-                      <span className="text-2xs text-slate-400 font-semibold">{msg.timestamp}</span>
+                      <span className="text-2xs text-ink-subtle font-semibold">{msg.timestamp}</span>
                     </div>
                   )}
 
                   {/* Natural Language Summary Text */}
-                  <p className="text-xs sm:text-sm font-semibold text-slate-900 leading-relaxed">
+                  <p className="text-xs sm:text-sm font-semibold text-ink leading-relaxed">
                     {msg.content}
                   </p>
 
                   {/* Main Metric Highlight Card (if available) */}
                   {card?.mainMetric && (
-                    <div className="mt-3 p-3 rounded-xl bg-slate-50 border border-slate-200/90 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div className="mt-3 p-3 rounded-card bg-surface-sunken border border-line/90 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                       <div>
-                        <span className="text-2xs font-semibold text-slate-500 uppercase tracking-wider block">
+                        <span className="text-2xs font-semibold text-ink-subtle uppercase tracking-wider block">
                           {card.mainMetric.labelHi}
                         </span>
-                        <span className="text-base sm:text-lg font-bold text-slate-950">
+                        <span className="text-base sm:text-lg font-bold text-ink">
                           {card.mainMetric.value}
                         </span>
                         {card.mainMetric.subvalue && (
-                          <span className="text-xs font-semibold text-slate-500 block mt-0.5">
+                          <span className="text-xs font-semibold text-ink-subtle block mt-0.5">
                             {card.mainMetric.subvalue}
                           </span>
                         )}
@@ -428,12 +428,12 @@ export default function AskSwasthTrackPage() {
                       {card.mainMetric.changeTextHi && (
                         <div
                           className={cn(
-                            "px-2.5 py-1 rounded-lg text-xs font-bold self-start sm:self-center border",
+                            "px-2.5 py-1 rounded-control text-xs font-bold self-start sm:self-center border",
                             card.mainMetric.changeDirection === "up"
-                              ? "bg-emerald-50 text-emerald-800 border-emerald-200"
+                              ? "bg-positive-soft text-positive border-positive-line"
                               : card.mainMetric.changeDirection === "down"
-                              ? "bg-blue-50 text-blue-800 border-blue-200"
-                              : "bg-slate-100 text-slate-700 border-slate-200"
+                              ? "bg-info-soft text-info border-info-line"
+                              : "bg-surface-sunken text-ink-muted border-line"
                           )}
                         >
                           {card.mainMetric.changeTextHi}
@@ -444,12 +444,12 @@ export default function AskSwasthTrackPage() {
 
                   {/* Actionable Health Solution & Guidance Card */}
                   {card?.healthSolutionHi && (
-                    <div className="mt-3 p-3 rounded-2xl bg-emerald-50/90 border border-emerald-200 text-emerald-950 text-xs font-semibold space-y-1">
-                      <p className="font-bold text-emerald-900 flex items-center gap-1.5">
-                        <Sparkles className="h-4 w-4 text-emerald-700 shrink-0" />
+                    <div className="mt-3 p-3 rounded-card bg-positive-soft/90 border border-positive-line text-positive text-xs font-semibold space-y-1">
+                      <p className="font-bold text-positive flex items-center gap-1.5">
+                        <Sparkles className="h-4 w-4 text-positive shrink-0" />
                         <span>स्वास्थ्य सुझाव एवं उपाय (Action Plan)</span>
                       </p>
-                      <p className="leading-relaxed text-emerald-950">
+                      <p className="leading-relaxed text-positive">
                         {card.healthSolutionHi.replace(/^💡\s*स्वास्थ्य\s*(सलाह|समाधान)\s*&\s*उपाय:\s*/, "")}
                       </p>
                     </div>
@@ -457,9 +457,9 @@ export default function AskSwasthTrackPage() {
 
                   {/* Bullet Points */}
                   {card?.bullets && card.bullets.length > 0 && (
-                    <div className="mt-2.5 space-y-1 bg-slate-50/60 p-2.5 rounded-xl border border-slate-100">
+                    <div className="mt-2.5 space-y-1 bg-surface-sunken/60 p-2.5 rounded-card border border-line">
                       {card.bullets.map((b, idx) => (
-                        <p key={idx} className="text-xs font-semibold text-slate-700 flex items-start gap-1.5">
+                        <p key={idx} className="text-xs font-semibold text-ink-muted flex items-start gap-1.5">
                           <span className="text-purple-600 font-bold">•</span>
                           <span>{b}</span>
                         </p>
@@ -469,15 +469,15 @@ export default function AskSwasthTrackPage() {
 
                   {/* Safety Disclaimer Banner */}
                   {card?.disclaimerHi && (
-                    <div className="mt-3 p-2.5 rounded-xl bg-amber-100/70 border border-amber-200 text-amber-900 text-xs font-semibold flex items-center gap-2">
-                      <ShieldAlert className="h-4 w-4 shrink-0 text-amber-700" />
+                    <div className="mt-3 p-2.5 rounded-card bg-attention-soft border border-attention-line text-attention text-xs font-semibold flex items-center gap-2">
+                      <ShieldAlert className="h-4 w-4 shrink-0 text-attention" />
                       <span>{card.disclaimerHi}</span>
                     </div>
                   )}
 
                   {/* Evidence & Confidence Bar (§30, §31) */}
                   {card && (
-                    <div className="mt-3 pt-2.5 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2 text-xs font-semibold text-slate-500">
+                    <div className="mt-3 pt-2.5 border-t border-line flex flex-wrap items-center justify-between gap-2 text-xs font-semibold text-ink-subtle">
                       <div className="flex items-center gap-1.5 flex-wrap">
                         <span>📊 {card.evidence.recordsEvaluated} मान्य रिकॉर्ड्स</span>
                         <span>·</span>
@@ -487,8 +487,8 @@ export default function AskSwasthTrackPage() {
                           className={cn(
                             "px-1.5 py-0.5 rounded text-2xs font-bold uppercase",
                             card.evidence.confidence === "High"
-                              ? "bg-emerald-100 text-emerald-900"
-                              : "bg-amber-100 text-amber-900"
+                              ? "bg-positive-soft text-positive"
+                              : "bg-attention-soft text-attention"
                           )}
                         >
                           विश्वास: {card.evidence.confidence}
@@ -517,16 +517,16 @@ export default function AskSwasthTrackPage() {
 
                   {/* Explanation on Demand Drawer (§46) */}
                   {card && expandedCalculationId === card.id && (
-                    <div className="mt-2.5 p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs space-y-1.5 animate-in fade-in duration-100">
-                      <p className="font-bold text-slate-900">
+                    <div className="mt-2.5 p-3 rounded-card bg-surface-sunken border border-line text-xs space-y-1.5 animate-in fade-in duration-100">
+                      <p className="font-bold text-ink">
                         विधि: {card.evidence.calculationMethodHi}
                       </p>
                       {card.evidence.formulaDetails && (
-                        <p className="font-semibold text-slate-600">
+                        <p className="font-semibold text-ink-muted">
                           तर्क: {card.evidence.formulaDetails}
                         </p>
                       )}
-                      <p className="font-semibold text-slate-500">
+                      <p className="font-semibold text-ink-subtle">
                         मूल्यांकित रिकॉर्ड्स: {card.evidence.recordsEvaluated} प्रविष्टियाँ
                       </p>
                     </div>
@@ -534,7 +534,7 @@ export default function AskSwasthTrackPage() {
 
                   {/* Action Link & Feedback Buttons (§47, §48) */}
                   {card && (
-                    <div className="mt-3 pt-2 border-t border-slate-100 flex flex-col gap-2">
+                    <div className="mt-3 pt-2 border-t border-line flex flex-col gap-2">
                       <div className="flex items-center justify-between gap-2 flex-wrap">
                         {card.evidence.relatedActionUrl ? (
                           <Link
@@ -548,14 +548,14 @@ export default function AskSwasthTrackPage() {
                           <div />
                         )}
 
-                        <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-600 bg-slate-100 px-2.5 py-1 rounded-xl border border-slate-200">
+                        <div className="flex items-center gap-1.5 text-xs font-semibold text-ink-muted bg-surface-sunken px-2.5 py-1 rounded-control border border-line">
                           <span className="text-xs font-bold">उपयोगी रहा?</span>
                           <button
                             type="button"
                             onClick={() => handleFeedback(card.id, "helpful")}
                             className={cn(
-                              "p-1 rounded-lg hover:bg-emerald-100 transition-colors cursor-pointer",
-                              feedbackMap[card.id] === "helpful" && "text-emerald-700 font-bold bg-emerald-100"
+                              "p-1 rounded-control hover:bg-positive-soft transition-colors cursor-pointer",
+                              feedbackMap[card.id] === "helpful" && "text-positive font-bold bg-positive-soft"
                             )}
                             title="हाँ, उपयोगी रहा"
                           >
@@ -565,8 +565,8 @@ export default function AskSwasthTrackPage() {
                             type="button"
                             onClick={() => handleFeedback(card.id, "not_helpful")}
                             className={cn(
-                              "p-1 rounded-lg hover:bg-rose-100 transition-colors cursor-pointer",
-                              feedbackMap[card.id] === "not_helpful" && "text-rose-700 font-bold bg-rose-100"
+                              "p-1 rounded-control hover:bg-critical-soft transition-colors cursor-pointer",
+                              feedbackMap[card.id] === "not_helpful" && "text-critical font-bold bg-critical-soft"
                             )}
                             title="नहीं"
                           >
@@ -577,12 +577,12 @@ export default function AskSwasthTrackPage() {
 
                       {/* Toast Feedback Feedback Confirmation */}
                       {feedbackMap[card.id] === "helpful" && (
-                        <p className="text-xs font-semibold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-200 animate-in fade-in">
+                        <p className="text-xs font-semibold text-positive bg-positive-soft px-2.5 py-1 rounded-control border border-positive-line animate-in fade-in">
                           👍 धन्यवाद! आपकी सकारात्मक प्रतिक्रिया AI मॉडल को और सटीक बनाने के लिए सहेज ली गई है।
                         </p>
                       )}
                       {feedbackMap[card.id] === "not_helpful" && (
-                        <p className="text-xs font-semibold text-amber-800 bg-amber-50 px-2.5 py-1 rounded-lg border border-amber-200 animate-in fade-in">
+                        <p className="text-xs font-semibold text-attention bg-attention-soft px-2.5 py-1 rounded-control border border-attention-line animate-in fade-in">
                           👎 धन्यवाद! आपकी प्रतिक्रिया दर्ज कर ली गई है। हमारी AI इंटेलिजेंस अगले उत्तर को बेहतर करने के लिए सीख रही है।
                         </p>
                       )}
@@ -619,11 +619,11 @@ export default function AskSwasthTrackPage() {
         })}
 
         {loading && (
-          <div className="flex items-center gap-2.5 p-3 rounded-2xl bg-white border border-slate-200 shadow-2xs w-fit">
-            <div className="h-6 w-6 rounded-lg bg-purple-600 text-white flex items-center justify-center animate-spin">
+          <div className="flex items-center gap-2.5 p-3 rounded-card bg-surface border border-line shadow-2xs w-fit">
+            <div className="h-6 w-6 rounded-control bg-purple-600 text-white flex items-center justify-center animate-spin">
               <Sparkles className="h-3.5 w-3.5" />
             </div>
-            <span className="text-xs font-bold text-slate-700">
+            <span className="text-xs font-bold text-ink-muted">
               वास्तविक स्वास्थ्य रिकॉर्ड्स विश्लेषित किए जा रहे हैं...
             </span>
           </div>
@@ -633,7 +633,7 @@ export default function AskSwasthTrackPage() {
       </div>
 
       {/* 4. STICKY INPUT BAR AT BOTTOM (§53 - Mobile-first, above keyboard) */}
-      <div className="sticky bottom-2 z-20 bg-white/95 backdrop-blur-md p-2 rounded-2xl border border-slate-300 shadow-lg">
+      <div className="sticky bottom-2 z-20 frost p-2 rounded-panel border border-line shadow-e2">
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -644,7 +644,7 @@ export default function AskSwasthTrackPage() {
           <button
             type="button"
             onClick={handleClearChat}
-            className="h-10 w-10 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center shrink-0 transition-colors cursor-pointer"
+            className="h-10 w-10 rounded-control bg-surface-sunken hover:bg-line text-ink-muted flex items-center justify-center shrink-0 transition-colors cursor-pointer"
             title="बातचीत साफ करें"
           >
             <Trash2 className="h-4 w-4" />
@@ -660,13 +660,13 @@ export default function AskSwasthTrackPage() {
                 : "स्वास्थ्य डेटा के बारे में पूछें..."
             }
             disabled={loading}
-            className="flex-1 h-10 px-3.5 rounded-xl border border-slate-300 bg-white text-xs sm:text-sm font-semibold text-slate-900 focus:outline-purple-600 focus:border-purple-600 placeholder:text-slate-400"
+            className="flex-1 h-10 px-3.5 rounded-control border border-line-strong bg-surface text-xs sm:text-sm font-semibold text-ink focus:outline-purple-600 focus:border-purple-600 placeholder:text-ink-subtle"
           />
 
           <button
             type="submit"
             disabled={!inputQuery.trim() || loading}
-            className="h-10 px-3.5 rounded-xl bg-purple-700 hover:bg-purple-800 disabled:opacity-40 text-white font-bold text-xs sm:text-sm flex items-center gap-1.5 shrink-0 transition-colors cursor-pointer"
+            className="h-10 px-3.5 rounded-control bg-purple-700 hover:bg-purple-800 disabled:opacity-40 text-white font-bold text-xs sm:text-sm flex items-center gap-1.5 shrink-0 transition-colors cursor-pointer"
           >
             <span>पूछें</span>
             <Send className="h-3.5 w-3.5" />

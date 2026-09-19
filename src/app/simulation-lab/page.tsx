@@ -75,7 +75,7 @@ export default function SimulationLabPage() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <Link
           href="/"
-          className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-slate-900 transition-colors"
+          className="inline-flex items-center gap-1.5 text-xs font-semibold text-ink-subtle hover:text-ink transition-colors"
         >
           <ArrowLeft className="h-3.5 w-3.5" />
           Back to Dashboard (डैशबोर्ड)
@@ -83,7 +83,7 @@ export default function SimulationLabPage() {
         <div className="inline-flex items-center gap-2 rounded-full border border-indigo-200 bg-indigo-50/80 px-3 py-1 text-xs font-semibold text-indigo-900">
           <FlaskConical className="h-3.5 w-3.5 text-indigo-600 animate-pulse" />
           <span>SOIE v2.0 Simulation &amp; Verification Lab</span>
-          <span className="rounded bg-indigo-600 px-1.5 py-0.2 text-2xs text-white">SYNTHETIC DATA</span>
+          <span className="rounded bg-indigo-600 px-1.5 py-0.2 text-2xs text-ink-inverse">SYNTHETIC DATA</span>
         </div>
       </div>
 
@@ -95,7 +95,7 @@ export default function SimulationLabPage() {
 
       {/* SYSTEM RELIABILITY VS WELLNESS DISTINCTION HEADER */}
       <div className="grid gap-4 sm:grid-cols-3">
-        <Card className="border-indigo-200 bg-gradient-to-br from-indigo-50/80 via-white to-sky-50/30 p-5 shadow-xs">
+        <Card className="border-indigo-200 bg-gradient-to-br from-indigo-50/80 via-surface to-sky-50/30 p-5 shadow-xs">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold uppercase text-indigo-900 flex items-center gap-1.5">
               <Gauge className="h-4 w-4 text-indigo-600" />
@@ -103,7 +103,7 @@ export default function SimulationLabPage() {
             </span>
             <Badge variant="blue">Model QA</Badge>
           </div>
-          <p className="mt-2 text-2xl sm:text-3xl font-bold text-slate-950">
+          <p className="mt-2 text-2xl sm:text-3xl font-bold text-ink">
             {reliability.score}%
           </p>
           <p className="mt-1 text-xs text-indigo-900/80 font-medium">
@@ -111,35 +111,35 @@ export default function SimulationLabPage() {
           </p>
         </Card>
 
-        <Card className="border-slate-200 bg-white p-5 shadow-xs">
+        <Card className="border-line bg-surface p-5 shadow-xs">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold uppercase text-slate-500 flex items-center gap-1.5">
+            <span className="text-xs font-semibold uppercase text-ink-subtle flex items-center gap-1.5">
               <Activity className="h-4 w-4 text-emerald-600" />
               Engine Latency (P95)
             </span>
             <Badge variant="green">Budget Compliant</Badge>
           </div>
-          <p className="mt-2 text-2xl sm:text-3xl font-bold text-slate-900">
-            {reliability.engineLatencyP95Ms} <span className="text-base font-semibold text-slate-500">ms</span>
+          <p className="mt-2 text-2xl sm:text-3xl font-bold text-ink">
+            {reliability.engineLatencyP95Ms} <span className="text-base font-semibold text-ink-subtle">ms</span>
           </p>
-          <p className="mt-1 text-xs text-slate-500 font-medium">
+          <p className="mt-1 text-xs text-ink-subtle font-medium">
             Max budget: 250ms per event
           </p>
         </Card>
 
-        <Card className="border-slate-200 bg-white p-5 shadow-xs">
+        <Card className="border-line bg-surface p-5 shadow-xs">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold uppercase text-slate-500 flex items-center gap-1.5">
+            <span className="text-xs font-semibold uppercase text-ink-subtle flex items-center gap-1.5">
               <ShieldCheck className="h-4 w-4 text-teal-600" />
               Privacy Safeguards
             </span>
             <Badge variant="green">Verified</Badge>
           </div>
-          <p className="mt-2 text-xl sm:text-2xl font-bold text-emerald-700 flex items-center gap-1.5">
+          <p className="mt-2 text-xl sm:text-2xl font-bold text-positive flex items-center gap-1.5">
             <CheckCircle2 className="h-5 w-5" />
             Active (Isolated)
           </p>
-          <p className="mt-1 text-xs text-slate-500 font-medium">
+          <p className="mt-1 text-xs text-ink-subtle font-medium">
             Zero raw-data mutation &amp; RLS enforced
           </p>
         </Card>
@@ -149,7 +149,7 @@ export default function SimulationLabPage() {
       <div className="grid gap-6 lg:grid-cols-12">
         {/* Left Column: 10 Standardized Scenarios (4 cols) */}
         <div className="lg:col-span-4 space-y-2.5">
-          <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-500 flex items-center gap-1.5 px-1">
+          <h3 className="text-xs font-semibold uppercase tracking-wider text-ink-subtle flex items-center gap-1.5 px-1">
             <Layers className="h-3.5 w-3.5 text-indigo-600" />
             Standardized Scenarios ({SIMULATION_SCENARIOS.length})
           </h3>
@@ -162,24 +162,24 @@ export default function SimulationLabPage() {
                   type="button"
                   key={sc.id}
                   onClick={() => handleRun(sc.id)}
-                  className={`w-full text-left p-3.5 rounded-2xl border-2 transition-all cursor-pointer ${
+                  className={`w-full text-left p-3.5 rounded-card border-2 transition-all cursor-pointer ${
                     isSelected
                       ? "border-indigo-600 bg-indigo-50/90 text-indigo-950 shadow-xs"
-                      : "border-slate-200 bg-white text-slate-800 hover:border-slate-300 hover:bg-slate-50/60"
+                      : "border-line bg-surface text-ink hover:border-line-strong hover:bg-surface-sunken/60"
                   }`}
                 >
                   <div className="flex items-start justify-between gap-2">
                     <span className="text-xs font-bold leading-snug">
                       {sc.name}
                     </span>
-                    <span className="rounded bg-slate-100 px-1.5 py-0.5 text-2xs font-semibold text-slate-600 shrink-0">
+                    <span className="rounded bg-surface-sunken px-1.5 py-0.5 text-2xs font-semibold text-ink-muted shrink-0">
                       {sc.stepsCount}d
                     </span>
                   </div>
-                  <p className="text-xs text-slate-600 font-hindi mt-1">
+                  <p className="text-xs text-ink-muted font-hindi mt-1">
                     {sc.nameHi}
                   </p>
-                  <p className="text-xs text-slate-500 line-clamp-2 mt-1 leading-relaxed">
+                  <p className="text-xs text-ink-subtle line-clamp-2 mt-1 leading-relaxed">
                     {sc.description}
                   </p>
                 </button>
@@ -193,18 +193,18 @@ export default function SimulationLabPage() {
           {runResult ? (
             <>
               {/* Header Box */}
-              <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs space-y-4">
-                <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-3">
+              <div className="rounded-card border border-line bg-surface p-5 shadow-xs space-y-4">
+                <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line pb-3">
                   <div>
                     <div className="flex items-center gap-2">
-                      <h4 className="text-base font-bold text-slate-900">
+                      <h4 className="text-base font-bold text-ink">
                         {runResult.scenario.name}
                       </h4>
                       <Badge variant={runResult.allPassed ? "green" : "red"}>
                         {runResult.allPassed ? "Rubric Passed" : "Check Failed"}
                       </Badge>
                     </div>
-                    <p className="text-xs text-slate-500 font-hindi mt-0.5">
+                    <p className="text-xs text-ink-subtle font-hindi mt-0.5">
                       {runResult.scenario.nameHi}
                     </p>
                   </div>
@@ -223,40 +223,40 @@ export default function SimulationLabPage() {
                 {/* Structured Output Contract Display (§48-49) */}
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-semibold uppercase text-slate-600 flex items-center gap-1.5">
+                    <span className="text-xs font-semibold uppercase text-ink-muted flex items-center gap-1.5">
                       <Cpu className="h-3.5 w-3.5 text-emerald-600" />
                       Structured Output Contract Output
                     </span>
-                    <span className="text-xs font-mono text-slate-400">
+                    <span className="text-xs font-mono text-ink-subtle">
                       Latency: {runResult.executionTimeMs}ms
                     </span>
                   </div>
 
                   {/* Highlight card depending on refusal / attention */}
                   <div
-                    className={`rounded-xl border p-4 space-y-2.5 ${
+                    className={`rounded-card border p-4 space-y-2.5 ${
                       runResult.output.isRefusal
-                        ? "border-amber-300 bg-amber-50/70 text-amber-950"
+                        ? "border-attention-line bg-attention-soft text-attention"
                         : runResult.output.safetyLevel === "attention"
-                        ? "border-rose-200 bg-rose-50/60 text-slate-900"
-                        : "border-emerald-200 bg-emerald-50/50 text-slate-900"
+                        ? "border-critical-line bg-critical-soft text-ink"
+                        : "border-positive-line bg-positive-soft text-ink"
                     }`}
                   >
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-semibold uppercase tracking-wider flex items-center gap-1">
                         {runResult.output.isRefusal ? (
                           <>
-                            <HelpCircle className="h-3.5 w-3.5 text-amber-700" />
+                            <HelpCircle className="h-3.5 w-3.5 text-attention" />
                             &apos;I Don&apos;t Know&apos; Honest Refusal
                           </>
                         ) : (
                           <>
-                            <Sparkles className="h-3.5 w-3.5 text-emerald-700" />
+                            <Sparkles className="h-3.5 w-3.5 text-positive" />
                             Verified Output Insight
                           </>
                         )}
                       </span>
-                      <span className="rounded-full bg-white/90 px-2 py-0.5 text-2xs font-semibold border border-slate-200">
+                      <span className="rounded-full bg-surface/90 px-2 py-0.5 text-2xs font-semibold border border-line">
                         Confidence: {runResult.output.confidence.toUpperCase()} ({Math.round(runResult.output.confidenceScore * 100)}%)
                       </span>
                     </div>
@@ -265,31 +265,31 @@ export default function SimulationLabPage() {
                       &ldquo;{runResult.output.observation}&rdquo;
                     </p>
                     {runResult.output.observationHi && (
-                      <p className="text-xs text-slate-600 font-hindi font-medium">
+                      <p className="text-xs text-ink-muted font-hindi font-medium">
                         {runResult.output.observationHi}
                       </p>
                     )}
 
-                    <div className="pt-2 border-t border-slate-200/60 grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs">
+                    <div className="pt-2 border-t border-line/60 grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs">
                       <div>
-                        <span className="text-slate-500 block text-2xs">Metric / Window:</span>
+                        <span className="text-ink-subtle block text-2xs">Metric / Window:</span>
                         <span className="font-semibold">{runResult.output.evidence.metric} ({runResult.output.evidence.window})</span>
                       </div>
                       <div>
-                        <span className="text-slate-500 block text-2xs">Baseline vs Current:</span>
+                        <span className="text-ink-subtle block text-2xs">Baseline vs Current:</span>
                         <span className="font-semibold">{String(runResult.output.comparison.baseline)} → {String(runResult.output.comparison.current)}</span>
                       </div>
                       <div>
-                        <span className="text-slate-500 block text-2xs">Safety Level:</span>
-                        <span className="font-semibold text-slate-800 uppercase text-xs">{runResult.output.safetyLevel}</span>
+                        <span className="text-ink-subtle block text-2xs">Safety Level:</span>
+                        <span className="font-semibold text-ink uppercase text-xs">{runResult.output.safetyLevel}</span>
                       </div>
                     </div>
                   </div>
                 </div>
 
                 {/* Acceptance Rubric Checklist (§88) */}
-                <div className="space-y-2 pt-2 border-t border-slate-100">
-                  <h5 className="text-xs font-semibold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
+                <div className="space-y-2 pt-2 border-t border-line">
+                  <h5 className="text-xs font-semibold uppercase tracking-wider text-ink-muted flex items-center gap-1.5">
                     <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
                     Acceptance Rubric Verification (§88)
                   </h5>
@@ -298,16 +298,16 @@ export default function SimulationLabPage() {
                     {runResult.rubricChecks.map((check) => (
                       <div
                         key={check.checkName}
-                        className="flex items-start gap-2.5 rounded-xl border border-slate-100 bg-slate-50/70 p-2.5 text-xs"
+                        className="flex items-start gap-2.5 rounded-card border border-line bg-surface-sunken/70 p-2.5 text-xs"
                       >
                         <CheckCircle2
                           className={`h-4 w-4 shrink-0 mt-0.5 ${
-                            check.passed ? "text-emerald-600" : "text-rose-600"
+                            check.passed ? "text-positive" : "text-critical"
                           }`}
                         />
                         <div>
-                          <p className="font-semibold text-slate-900">{check.checkName}</p>
-                          <p className="text-xs text-slate-500">{check.evidence}</p>
+                          <p className="font-semibold text-ink">{check.checkName}</p>
+                          <p className="text-xs text-ink-subtle">{check.evidence}</p>
                         </div>
                       </div>
                     ))}
@@ -315,25 +315,25 @@ export default function SimulationLabPage() {
                 </div>
 
                 {/* Multi-Agent Consensus Breakdown (§50-55) */}
-                <div className="space-y-2 pt-2 border-t border-slate-100">
-                  <h5 className="text-xs font-semibold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
+                <div className="space-y-2 pt-2 border-t border-line">
+                  <h5 className="text-xs font-semibold uppercase tracking-wider text-ink-muted flex items-center gap-1.5">
                     <Users className="h-3.5 w-3.5 text-indigo-600" />
                     Multi-Agent Consensus Layer
                   </h5>
 
-                  <div className="rounded-xl border border-slate-200 bg-slate-50/90 p-3 text-xs space-y-1.5">
+                  <div className="rounded-card border border-line bg-surface-sunken/90 p-3 text-xs space-y-1.5">
                     <div className="flex items-center justify-between">
-                      <span className="font-semibold text-slate-800">
+                      <span className="font-semibold text-ink">
                         Resolved Intervention: <strong className="text-indigo-800 uppercase">{runResult.consensus.resolvedInterventionLevel}</strong>
                       </span>
-                      <span className="text-xs text-slate-500 font-semibold">
+                      <span className="text-xs text-ink-subtle font-semibold">
                         Consensus: {Math.round(runResult.consensus.consensusScore * 100)}%
                       </span>
                     </div>
-                    <p className="text-xs text-slate-600">
+                    <p className="text-xs text-ink-muted">
                       <strong>Supporting Agents:</strong> {runResult.consensus.supportingAgents.join(", ")}
                     </p>
-                    <p className="text-xs text-slate-500 italic">
+                    <p className="text-xs text-ink-subtle italic">
                       {runResult.consensus.rationale}
                     </p>
                   </div>

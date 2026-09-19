@@ -463,7 +463,7 @@ export function MedicineSchedule({
                               <h4 className="font-bold text-ink text-base sm:text-lg tracking-tight">
                                 {medicine.medicine_name}
                               </h4>
-                              <span className="text-xs sm:text-sm font-bold text-emerald-800 bg-emerald-100/90 px-2.5 py-0.5 rounded-field shadow-2xs">
+                              <span className="text-xs sm:text-sm font-bold text-brand-ink bg-brand-soft px-2.5 py-0.5 rounded-field shadow-2xs">
                                 {medicine.dose}
                               </span>
                               {currentStatus !== "pending" && (
@@ -487,7 +487,7 @@ export function MedicineSchedule({
                               )}
                             </div>
                             <p className="text-sm sm:text-base font-semibold text-ink-muted flex items-center gap-1.5">
-                              <span className="text-emerald-700">●</span>
+                              <span className="text-brand">●</span>
                               {medicine.meal_relation ? medicine.meal_relation.replace("_", " ") : "भोजन के बाद"}
                               <span className="text-ink-subtle font-normal">·</span>
                               <span className="text-ink-muted font-semibold">{medicine.frequency}</span>
@@ -496,7 +496,7 @@ export function MedicineSchedule({
                             {/* MARKED TIME & SCHEDULED TIME HIGHLIGHT BANNER */}
                             <div className="mt-2.5 pt-1.5 flex flex-wrap items-center gap-2 text-xs font-semibold">
                               <span className="bg-surface-sunken text-ink px-2.5 py-1 rounded-field border border-line flex items-center gap-1.5 font-bold">
-                                <Clock className="h-3.5 w-3.5 text-emerald-700" />
+                                <Clock className="h-3.5 w-3.5 text-brand" />
                                 <span>निर्धारित समय (Scheduled): {medicine.scheduled_time.slice(0, 5)}</span>
                               </span>
 
@@ -516,7 +516,7 @@ export function MedicineSchedule({
 
                           <div className="flex items-center gap-2 self-start shrink-0">
                             <div className="flex items-center gap-1.5 text-xs sm:text-sm font-bold text-ink bg-surface-sunken px-3 py-1.5 rounded-control border border-line shadow-2xs">
-                              <Clock aria-hidden="true" className="h-4 w-4 text-emerald-700" />
+                              <Clock aria-hidden="true" className="h-4 w-4 text-brand" />
                               <span>{medicine.scheduled_time.slice(0, 5)}</span>
                             </div>
                           </div>

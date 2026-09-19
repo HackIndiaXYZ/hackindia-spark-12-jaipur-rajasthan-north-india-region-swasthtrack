@@ -502,7 +502,7 @@ export function BloodPressurePanel({ patientId, logs, onSuccess }: BloodPressure
 
                 if (isEditing) {
                   return (
-                    <div key={log.id} className="py-3 space-y-2.5 bg-surface-sunken border border-emerald-200 rounded-card p-3 my-1">
+                    <div key={log.id} className="py-3 space-y-2.5 bg-surface-sunken border border-brand-line rounded-card p-3 my-1">
                       <p className="text-xs font-semibold text-ink">
                         Edit BP Reading · रक्तचाप विवरण संपादित करें
                       </p>
@@ -706,16 +706,16 @@ export function BloodPressurePanel({ patientId, logs, onSuccess }: BloodPressure
                 <p className="text-2xs font-semibold uppercase text-ink-subtle">Avg (औसत)</p>
                 <p className="mt-1 text-lg font-extrabold text-ink">{summaryStats.avgSys}/{summaryStats.avgDia}</p>
               </div>
-              <div className="rounded-card bg-emerald-50 p-3 text-center">
-                <p className="text-2xs font-semibold uppercase text-emerald-600">Min (न्यूनतम)</p>
+              <div className="rounded-card bg-positive-soft p-3 text-center">
+                <p className="text-2xs font-semibold uppercase text-positive">Min (न्यूनतम)</p>
                 <p className="mt-1 text-lg font-extrabold text-ink">{summaryStats.minSys}/{summaryStats.minDia}</p>
               </div>
-              <div className="rounded-card bg-rose-50 p-3 text-center">
-                <p className="text-2xs font-semibold uppercase text-rose-600">Max (अधिकतम)</p>
+              <div className="rounded-card bg-critical-soft p-3 text-center">
+                <p className="text-2xs font-semibold uppercase text-critical">Max (अधिकतम)</p>
                 <p className="mt-1 text-lg font-extrabold text-ink">{summaryStats.maxSys}/{summaryStats.maxDia}</p>
               </div>
-              <div className="rounded-card bg-blue-50 p-3 text-center">
-                <p className="text-2xs font-semibold uppercase text-blue-600">Readings (कुल)</p>
+              <div className="rounded-card bg-info-soft p-3 text-center">
+                <p className="text-2xs font-semibold uppercase text-info">Readings (कुल)</p>
                 <p className="mt-1 text-lg font-extrabold text-ink">{summaryStats.count}</p>
               </div>
             </div>
