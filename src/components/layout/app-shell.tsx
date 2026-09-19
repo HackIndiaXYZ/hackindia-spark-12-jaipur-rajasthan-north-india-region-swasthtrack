@@ -1,6 +1,7 @@
 "use client";
 
 import type { PropsWithChildren } from "react";
+import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { BottomNavigation } from "@/components/layout/bottom-navigation";
 import { Header } from "@/components/layout/header";
@@ -48,6 +49,15 @@ function AppShellContent({ children }: PropsWithChildren) {
 }
 
 export function AppShell({ children }: PropsWithChildren) {
+  // Registers the offline app-shell caching worker (public/sw.js). This
+  // effect only runs client-side, so the 'serviceWorker' in navigator check
+  // is enough - no extra SSR guard needed.
+  useEffect(() => {
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("/sw.js").catch(() => {});
+    }
+  }, []);
+
   return (
     <AuthProvider>
       <AuthGuard>

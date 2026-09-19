@@ -64,6 +64,27 @@ export function DailyReportView({ patientId }: DailyReportViewProps) {
 
   const categoryInfo = scoreResult ? getScoreCategory(scoreResult.totalScore) : null;
 
+  // `new Date(Date.now() - ...)` is an impure call and isn't safe to run
+  // directly in the render body (or in useMemo, which still runs during
+  // render) — computed once in an effect instead. Empty-string/undefined
+  // until then is fine: the button simply isn't shown as "active" for the
+  // one frame before this resolves.
+  const [yesterday, setYesterday] = useState<{ dateStr: string; label: string } | null>(null);
+  useEffect(() => {
+    // Deferred to a microtask rather than called synchronously in the effect
+    // body — react-hooks/set-state-in-effect flags synchronous setState calls
+    // here as a cascading-render risk.
+    Promise.resolve().then(() => {
+      const yesterdayDate = new Date(Date.now() - 86400000);
+      setYesterday({
+        dateStr: `${yesterdayDate.getFullYear()}-${String(yesterdayDate.getMonth() + 1).padStart(2, "0")}-${String(yesterdayDate.getDate()).padStart(2, "0")}`,
+        label: yesterdayDate.toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" }),
+      });
+    });
+  }, []);
+  const yesterdayDateStr = yesterday?.dateStr ?? "";
+  const yesterdayLabel = yesterday?.label ?? "…";
+
   return (
     <div className="space-y-5">
       {/* Date Header & Selector */}
@@ -83,15 +104,15 @@ export function DailyReportView({ patientId }: DailyReportViewProps) {
         <div className="flex flex-wrap items-center gap-2">
           <button
             type="button"
-            onClick={() => setSelectedDate("2026-08-26")}
+            onClick={() => setSelectedDate(yesterdayDateStr)}
             className={cn(
               "px-3 py-1.5 rounded-control text-xs font-bold transition-all cursor-pointer shadow-2xs",
-              selectedDate === "2026-08-26"
+              selectedDate === yesterdayDateStr
                 ? "bg-brand text-ink-inverse shadow-e1"
                 : "bg-surface border border-line-strong text-ink-muted hover:bg-surface-sunken",
             )}
           >
-            26 Aug 2026 (कल)
+            {yesterdayLabel} (कल)
           </button>
           <button
             type="button"

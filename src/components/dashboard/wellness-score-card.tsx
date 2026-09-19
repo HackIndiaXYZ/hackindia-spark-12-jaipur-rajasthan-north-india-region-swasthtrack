@@ -170,7 +170,7 @@ export function WellnessScoreCard({ patientId, result }: WellnessScoreCardProps)
   ];
 
   return (
-    <Card className="border-line bg-surface p-5 shadow-xs transition-all">
+    <Card className="border-line bg-surface p-5 transition-all">
       {/* Top Banner */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>

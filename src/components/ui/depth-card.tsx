@@ -59,7 +59,7 @@ export function DepthCard({
   return (
     <div
       className={cn(
-        "rounded-2xl border-2 transition-all duration-150 relative overflow-hidden",
+        "rounded-card border-2 transition-all duration-150 relative overflow-hidden",
         depthStyles[depth],
         surfaceStyles[surface],
         glowStyles[glow],
@@ -115,7 +115,7 @@ export function HealthCard({
       <div className="flex items-start justify-between gap-3 mb-4">
         <div className="flex items-center gap-2.5">
           {Icon && (
-            <div className={cn("h-9 w-9 rounded-xl border flex items-center justify-center shrink-0 shadow-2xs", toneBg[iconTone])}>
+            <div className={cn("h-9 w-9 rounded-control border flex items-center justify-center shrink-0 shadow-2xs", toneBg[iconTone])}>
               <Icon className="h-5 w-5" />
             </div>
           )}
@@ -195,7 +195,7 @@ export function InsightCard({
   return (
     <div
       className={cn(
-        "rounded-2xl border-2 p-4 sm:p-5 shadow-e1 transition-all relative overflow-hidden",
+        "rounded-card border-2 p-4 sm:p-5 shadow-e1 transition-all relative overflow-hidden",
         currentTone.border,
         currentTone.bg,
         className
@@ -295,14 +295,14 @@ export function QuickActionCard({
       type="button"
       onClick={onClick}
       className={cn(
-        "flex flex-col items-center justify-center p-3 sm:p-4 rounded-2xl border-2 bg-surface shadow-e1 transition-all duration-150 cursor-pointer select-none",
+        "flex flex-col items-center justify-center p-3 sm:p-4 rounded-card border-2 bg-surface shadow-e1 transition-all duration-150 cursor-pointer select-none",
         "active:scale-[0.97] active:translate-y-0.5 hover:shadow-e2",
         t.border,
         t.bg,
         className
       )}
     >
-      <div className={cn("h-11 w-11 rounded-xl border flex items-center justify-center mb-2 shadow-2xs", t.iconBg)}>
+      <div className={cn("h-11 w-11 rounded-control border flex items-center justify-center mb-2 shadow-2xs", t.iconBg)}>
         <Icon className="h-5 w-5 stroke-[2.2]" />
       </div>
       <span className={cn("text-xs sm:text-sm font-bold tracking-tight", t.text)}>{label}</span>

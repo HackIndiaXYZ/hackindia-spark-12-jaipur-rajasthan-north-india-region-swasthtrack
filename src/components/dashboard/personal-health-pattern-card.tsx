@@ -39,7 +39,7 @@ export function PersonalHealthPatternCard({
   }
 
   return (
-    <Card className="border-brand-line/80 bg-linear-to-br from-brand-softer to-surface p-5 shadow-xs transition-all">
+    <Card className="border-brand-line/80 bg-linear-to-br from-brand-softer to-surface p-5 transition-all">
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-2">
           <span className="flex h-6 w-6 items-center justify-center rounded-control bg-brand text-ink-inverse shadow-xs">

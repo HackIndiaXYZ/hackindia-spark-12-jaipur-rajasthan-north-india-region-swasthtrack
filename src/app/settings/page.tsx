@@ -832,7 +832,7 @@ export default function SettingsPage() {
             <span className="text-xs text-ink-subtle">Created by Pawan Kumar</span>
           </div>
           <p className="text-ink-muted leading-relaxed">
-            Your health records are privately synchronized with Supabase and protected with Row-Level Security (RLS). All analytics are rule-based for supportive tracking.
+            Your health records are saved to Supabase. All analytics are rule-based for supportive tracking.
           </p>
           <div className="pt-2 border-t border-line flex flex-wrap items-center gap-x-4 gap-y-2 font-semibold text-brand-ink">
             <Link href="/about" className="hover:underline">

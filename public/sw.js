@@ -2,7 +2,7 @@
 const CACHE_NAME = "swasthtrack-v1-cache";
 const STATIC_ASSETS = [
   "/",
-  "/manifest.json",
+  "/manifest.webmanifest",
   "/favicon.png",
   "/logo.jpg",
   "/health",

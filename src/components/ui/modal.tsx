@@ -14,6 +14,12 @@ type ModalProps = {
   maxWidth?: "sm" | "md" | "lg" | "xl";
 };
 
+// Shared across every Modal instance so a nested modal (e.g. AddMedicineDialog
+// opened from inside QuickMarkMedicineDialog) closing doesn't re-enable body
+// scroll while an outer modal is still open. Only the 0->1 transition locks
+// scroll, and only the 1->0 transition restores it.
+let openModalCount = 0;
+
 export function Modal({
   isOpen,
   onClose,
@@ -24,13 +30,18 @@ export function Modal({
   maxWidth = "md",
 }: ModalProps) {
   useEffect(() => {
-    if (isOpen) {
+    if (!isOpen) return;
+
+    openModalCount += 1;
+    if (openModalCount === 1) {
       document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "unset";
     }
+
     return () => {
-      document.body.style.overflow = "unset";
+      openModalCount -= 1;
+      if (openModalCount === 0) {
+        document.body.style.overflow = "unset";
+      }
     };
   }, [isOpen]);
 

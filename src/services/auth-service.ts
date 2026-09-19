@@ -287,7 +287,7 @@ export async function sendPasswordResetOtp(
 
   return {
     success: true,
-    message: `6-अंकों का OTP कोड (${code}) आपके मोबाइल पर भेज दिया गया है!`,
+    message: "6-अंकों का OTP कोड आपके रजिस्टर्ड मोबाइल नंबर पर भेज दिया गया है!",
     simulatedOtp: code,
   };
 }

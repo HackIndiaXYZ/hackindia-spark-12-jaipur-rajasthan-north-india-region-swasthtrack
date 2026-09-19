@@ -49,22 +49,23 @@ export function CaregiverQuickLogModal({
   const [submitting, setSubmitting] = useState(false);
   const [medicines, setMedicines] = useState<MedicineItem[]>([]);
 
-  // Form states
-  const [systolic, setSystolic] = useState("130");
-  const [diastolic, setDiastolic] = useState("85");
-  const [pulse, setPulse] = useState("72");
+  // Form states — start empty so a caregiver must enter a real value before
+  // saving; placeholders show an example instead of pre-filling fabricated data.
+  const [systolic, setSystolic] = useState("");
+  const [diastolic, setDiastolic] = useState("");
+  const [pulse, setPulse] = useState("");
   const [bpType, setBpType] = useState<"Morning" | "Evening">("Morning");
 
   const [foodName, setFoodName] = useState("");
-  const [calories, setCalories] = useState("250");
+  const [calories, setCalories] = useState("");
   const [mealType, setMealType] = useState<"Breakfast" | "Lunch" | "Dinner" | "Snack">("Breakfast");
 
-  const [steps, setSteps] = useState("5000");
-  const [walkingMins, setWalkingMins] = useState("30");
+  const [steps, setSteps] = useState("");
+  const [walkingMins, setWalkingMins] = useState("");
 
-  const [sleepHours, setSleepHours] = useState("7.0");
+  const [sleepHours, setSleepHours] = useState("");
 
-  const [weightKg, setWeightKg] = useState("80.4");
+  const [weightKg, setWeightKg] = useState("");
 
   useEffect(() => {
     if (isOpen) {
@@ -96,7 +97,7 @@ export function CaregiverQuickLogModal({
           quantity: 1,
           unit: "serving",
           standardized_grams: 100,
-          calories: Number(calories) || 250,
+          calories: Number(calories),
           protein_g: 5,
           carbs_g: 30,
           fat_g: 5,
@@ -114,20 +115,20 @@ export function CaregiverQuickLogModal({
       } else if (activeTab === "steps") {
         await logActivity({
           patient_id: patientId,
-          steps: Number(steps) || 5000,
-          walking_minutes: Number(walkingMins) || 30,
+          steps: Number(steps),
+          walking_minutes: walkingMins ? Number(walkingMins) : 0,
           date: new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Kolkata" }),
         });
       } else if (activeTab === "sleep") {
         await logSleep({
           patient_id: patientId,
-          sleep_hours: Number(sleepHours) || 7.0,
+          sleep_hours: Number(sleepHours),
           date: new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Kolkata" }),
         });
       } else if (activeTab === "weight") {
         await logWeight({
           patient_id: patientId,
-          weight_kg: Number(weightKg) || 80.4,
+          weight_kg: Number(weightKg),
           measured_at: new Date().toISOString(),
         });
       }
@@ -299,6 +300,7 @@ export function CaregiverQuickLogModal({
                     type="number"
                     value={systolic}
                     onChange={(e) => setSystolic(e.target.value)}
+                    placeholder="e.g. 130"
                     required
                     className="w-full px-3 py-2 rounded-field border border-line-strong text-sm font-semibold focus:outline-brand"
                   />
@@ -311,6 +313,7 @@ export function CaregiverQuickLogModal({
                     type="number"
                     value={diastolic}
                     onChange={(e) => setDiastolic(e.target.value)}
+                    placeholder="e.g. 85"
                     required
                     className="w-full px-3 py-2 rounded-field border border-line-strong text-sm font-semibold focus:outline-brand"
                   />
@@ -324,6 +327,7 @@ export function CaregiverQuickLogModal({
                     type="number"
                     value={pulse}
                     onChange={(e) => setPulse(e.target.value)}
+                    placeholder="e.g. 72"
                     className="w-full px-3 py-2 rounded-field border border-line-strong text-sm font-semibold focus:outline-brand"
                   />
                 </div>
@@ -342,7 +346,7 @@ export function CaregiverQuickLogModal({
 
               <Button
                 type="submit"
-                disabled={submitting}
+                disabled={submitting || !systolic || !diastolic}
                 variant="primary"
                 className="w-full py-2.5 mt-2"
               >
@@ -418,6 +422,7 @@ export function CaregiverQuickLogModal({
                     type="number"
                     value={calories}
                     onChange={(e) => setCalories(e.target.value)}
+                    placeholder="e.g. 250"
                     required
                     className="w-full px-3 py-2 rounded-field border border-line-strong text-sm font-semibold focus:outline-brand"
                   />
@@ -439,7 +444,7 @@ export function CaregiverQuickLogModal({
 
               <Button
                 type="submit"
-                disabled={submitting}
+                disabled={submitting || !foodName.trim() || !calories}
                 variant="primary"
                 className="w-full py-2.5 mt-2"
               >
@@ -456,6 +461,7 @@ export function CaregiverQuickLogModal({
                   type="number"
                   value={steps}
                   onChange={(e) => setSteps(e.target.value)}
+                  placeholder="e.g. 5000"
                   required
                   className="w-full px-3 py-2 rounded-field border border-line-strong text-sm font-semibold focus:outline-brand"
                 />
@@ -469,13 +475,14 @@ export function CaregiverQuickLogModal({
                   type="number"
                   value={walkingMins}
                   onChange={(e) => setWalkingMins(e.target.value)}
+                  placeholder="e.g. 30"
                   className="w-full px-3 py-2 rounded-field border border-line-strong text-sm font-semibold focus:outline-brand"
                 />
               </div>
 
               <Button
                 type="submit"
-                disabled={submitting}
+                disabled={submitting || !steps}
                 variant="primary"
                 className="w-full py-2.5 mt-2"
               >
@@ -495,6 +502,7 @@ export function CaregiverQuickLogModal({
                   step="0.5"
                   value={sleepHours}
                   onChange={(e) => setSleepHours(e.target.value)}
+                  placeholder="e.g. 7.0"
                   required
                   className="w-full px-3 py-2 rounded-field border border-line-strong text-sm font-semibold focus:outline-brand"
                 />
@@ -502,7 +510,7 @@ export function CaregiverQuickLogModal({
 
               <Button
                 type="submit"
-                disabled={submitting}
+                disabled={submitting || !sleepHours}
                 variant="primary"
                 className="w-full py-2.5 mt-2"
               >
@@ -522,6 +530,7 @@ export function CaregiverQuickLogModal({
                   step="0.1"
                   value={weightKg}
                   onChange={(e) => setWeightKg(e.target.value)}
+                  placeholder="e.g. 80.4"
                   required
                   className="w-full px-3 py-2 rounded-field border border-line-strong text-sm font-semibold focus:outline-brand"
                 />
@@ -529,7 +538,7 @@ export function CaregiverQuickLogModal({
 
               <Button
                 type="submit"
-                disabled={submitting}
+                disabled={submitting || !weightKg}
                 variant="primary"
                 className="w-full py-2.5 mt-2"
               >

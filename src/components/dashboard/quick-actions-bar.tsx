@@ -110,7 +110,7 @@ export function QuickActionsBar({
     <Card className="surface-lift" tone="default">
       <div className="mb-3.5 flex flex-wrap items-center justify-between gap-2">
         <h2 className="flex items-center gap-2 text-base font-semibold text-ink">
-          <span className="grid h-7 w-7 place-items-center rounded-field grad-spring text-white shadow-e1">
+          <span className="grid h-7 w-7 place-items-center rounded-field grad-spring text-gold-ink shadow-e1">
             <PlusCircle aria-hidden className="h-4 w-4" />
           </span>
           <span lang="hi">आज क्या दर्ज करना है?</span>

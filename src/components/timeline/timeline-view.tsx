@@ -23,7 +23,11 @@ import {
   type TimelineDomain,
   type TimelineEvent,
   type TimelineGroup,
+  type TimelineTimeGroup,
 } from "@/services/timeline-service";
+
+// Canonical chronological order of timeline groups (mirrors timeline-service.ts).
+const GROUP_ORDER: TimelineTimeGroup[] = ["Today", "Yesterday", "This Week", "Older"];
 
 type TimelineViewProps = {
   patientId: string;
@@ -101,24 +105,36 @@ export function TimelineView({ patientId }: TimelineViewProps) {
     try {
       const res = await getHealthTimelineEvents(patientId, activeFilter, dateScope, nextOffset, LIMIT);
       setGroups((prev) => {
-        // Merge events
-        const newBuckets: Record<string, TimelineEvent[]> = {};
+        // Merge events, keyed by groupKey
+        const newBuckets: Partial<Record<TimelineTimeGroup, TimelineEvent[]>> = {};
+        const groupMeta: Partial<Record<TimelineTimeGroup, TimelineGroup>> = {};
+
+        // Start from the groups already on screen
         prev.forEach((g) => {
           newBuckets[g.groupKey] = [...g.events];
+          groupMeta[g.groupKey] = g;
         });
+
+        // Merge in the new page's groups — the union of previously-seen keys
+        // and this page's keys (e.g. "Older") is used below instead of only
+        // iterating over this page, so previously-shown groups like "Today"
+        // are never dropped from the UI on "Load More".
         res.groups.forEach((g) => {
           if (!newBuckets[g.groupKey]) {
             newBuckets[g.groupKey] = [];
           }
+          groupMeta[g.groupKey] = g;
           g.events.forEach((ev) => {
-            if (!newBuckets[g.groupKey].some((e) => e.id === ev.id)) {
-              newBuckets[g.groupKey].push(ev);
+            if (!newBuckets[g.groupKey]!.some((e) => e.id === ev.id)) {
+              newBuckets[g.groupKey]!.push(ev);
             }
           });
         });
-        return res.groups.map((g) => ({
-          ...g,
-          events: newBuckets[g.groupKey] || g.events,
+
+        return GROUP_ORDER.filter((key) => newBuckets[key]).map((key) => ({
+          ...groupMeta[key]!,
+          groupKey: key,
+          events: newBuckets[key]!,
         }));
       });
       setOffset(nextOffset);

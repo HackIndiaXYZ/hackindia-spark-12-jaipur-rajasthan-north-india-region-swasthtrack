@@ -320,21 +320,52 @@ export function submitInsightFeedback(
 }
 
 /**
- * Retrieve admin / developer diagnostics
+ * Retrieve admin / developer diagnostics.
+ *
+ * This has no patientId of its own (it backs a device-wide diagnostics
+ * panel), so predictionCount / confidenceDistribution / activePatientBaselines
+ * are computed by scanning every `swasthtrack_predictions_<patientId>` cache
+ * this device has written via generateHealthPredictions() above, rather than
+ * being hardcoded - that keeps them honest even though they're not scoped to
+ * a single "current" patient the way the rest of this file is.
  */
 export function getMLDiagnostics(): MLDiagnostics {
   const feedbacks = getStorageItem<InsightFeedback[]>(FEEDBACK_STORAGE_KEY, []);
   const positive = feedbacks.filter((f) => f.isHelpful).length;
   const negative = feedbacks.filter((f) => !f.isHelpful).length;
 
+  const predictionsByPatient: HealthPrediction[][] = [];
+  if (typeof window !== "undefined") {
+    try {
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith("swasthtrack_predictions_")) {
+          const stored = getStorageItem<HealthPrediction[]>(key, []);
+          if (stored.length > 0) predictionsByPatient.push(stored);
+        }
+      }
+    } catch {
+      // localStorage inaccessible (SSR, private mode, etc.) - fall back to
+      // an empty diagnostics view rather than fabricated numbers.
+    }
+  }
+
+  const allPredictions = predictionsByPatient.flat();
+  const availablePredictions = allPredictions.filter((p) => p.isAvailable);
+  const confidenceDistribution = {
+    high: availablePredictions.filter((p) => p.confidence === "High").length,
+    medium: availablePredictions.filter((p) => p.confidence === "Medium").length,
+    low: availablePredictions.filter((p) => p.confidence === "Low").length,
+  };
+
   return {
     modelVersion: MODEL_VERSION,
     modelType: "Deterministic Robust Statistical & EWMA Time-Series",
-    predictionCount: 3,
+    predictionCount: allPredictions.length,
     lastInferenceTime: new Date().toISOString(),
     averageInferenceLatencyMs: 14,
-    confidenceDistribution: { high: 2, medium: 1, low: 0 },
-    activePatientBaselines: 1,
+    confidenceDistribution,
+    activePatientBaselines: predictionsByPatient.length,
     feedbackStats: { positive, negative },
   };
 }

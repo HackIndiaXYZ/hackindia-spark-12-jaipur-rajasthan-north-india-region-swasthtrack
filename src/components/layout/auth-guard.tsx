@@ -24,14 +24,12 @@ export function AuthGuard({ children }: { children: ReactNode }) {
         const userId = profile?.id || user.id;
         const hasPatient = hasActivePatientMembership(userId);
 
-        if (!hasPatient && !isOnboardingPage) {
-          router.replace("/onboarding");
-        } else if (isLoginPage) {
-          if (!hasPatient) {
+        if (!hasPatient) {
+          if (!isOnboardingPage) {
             router.replace("/onboarding");
-          } else {
-            router.replace("/");
           }
+        } else if (isLoginPage) {
+          router.replace("/");
         }
       }
     }

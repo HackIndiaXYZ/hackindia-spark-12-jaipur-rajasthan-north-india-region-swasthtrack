@@ -8,9 +8,8 @@ import {
   getActivityLogs,
   getBloodPressureLogs,
   getFoodLogs,
-  getMedicines,
+  getMedicineLogsByDate,
   getSleepLogs,
-  getTodayMedicineLogs,
   getWeightLogs,
 } from "./patient-service";
 
@@ -54,6 +53,29 @@ export interface PatientPersonalBaseline {
 function getWindowDate(window: BaselineWindow): Date {
   const days = window === "7d" ? 7 : window === "14d" ? 14 : window === "30d" ? 30 : 90;
   return new Date(Date.now() - days * 24 * 60 * 60 * 1000);
+}
+
+/**
+ * Calendar-day strings (YYYY-MM-DD, local time) from windowStart through
+ * today inclusive, for windowing per-day medicine log lookups the same way
+ * every other metric in this baseline is windowed.
+ */
+function getDateStringsInWindow(windowStart: Date): string[] {
+  const dates: string[] = [];
+  const cursor = new Date(windowStart);
+  cursor.setHours(0, 0, 0, 0);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  while (cursor <= today) {
+    const year = cursor.getFullYear();
+    const month = String(cursor.getMonth() + 1).padStart(2, "0");
+    const day = String(cursor.getDate()).padStart(2, "0");
+    dates.push(`${year}-${month}-${day}`);
+    cursor.setDate(cursor.getDate() + 1);
+  }
+
+  return dates;
 }
 
 /**
@@ -111,24 +133,27 @@ export async function calculatePersonalBaseline(
   window: BaselineWindow = "30d",
 ): Promise<PatientPersonalBaseline> {
   const windowStart = getWindowDate(window);
+  const windowMedicineDates = getDateStringsInWindow(windowStart);
 
   const [
     rawBP,
     rawWeight,
     rawFood,
-    medicines,
-    todayMeds,
+    windowMedLogsByDate,
     rawActivity,
     rawSleep,
   ] = await Promise.all([
     getBloodPressureLogs(patientId, 100),
     getWeightLogs(patientId, 50),
     getFoodLogs(patientId, 150),
-    getMedicines(patientId),
-    getTodayMedicineLogs(patientId),
+    Promise.all(windowMedicineDates.map((d) => getMedicineLogsByDate(patientId, d))),
     getActivityLogs(patientId, 50),
     getSleepLogs(patientId, 50),
   ]);
+
+  // Dose-observations actually evaluated within windowStart..now, matching
+  // every other metric's windowing in this baseline (not just "today").
+  const windowMedicineLogs = windowMedLogsByDate.flat();
 
   // Apply data quality filtering
   const validBP = filterValidBPLogs(rawBP).filter(
@@ -365,15 +390,18 @@ export async function calculatePersonalBaseline(
     };
   }
 
-  // 8. Medicine Adherence Baseline
-  const activeMeds = medicines.filter((m) => m.active);
+  // 8. Medicine Adherence Baseline (window-scoped, same windowStart..now
+  // range as every other metric above; observationCount is the number of
+  // scheduled-dose observations actually evaluated in that window, not the
+  // count of currently-active prescriptions)
+  const doseObservations = windowMedicineLogs.length;
   const adherence =
-    activeMeds.length > 0
+    doseObservations > 0
       ? Number(
           (
-            (todayMeds.filter((m) => m.status === "taken" || m.status === "late")
+            (windowMedicineLogs.filter((m) => m.status === "taken" || m.status === "late")
               .length /
-              activeMeds.length) *
+              doseObservations) *
             100
           ).toFixed(0),
         )
@@ -381,8 +409,8 @@ export async function calculatePersonalBaseline(
 
   const medicineAdherence: MetricBaseline = {
     metricName: "Medicine Adherence",
-    isAvailable: activeMeds.length > 0,
-    observationCount: activeMeds.length,
+    isAvailable: doseObservations > 0,
+    observationCount: doseObservations,
     mean: adherence,
     median: adherence,
     min: adherence,

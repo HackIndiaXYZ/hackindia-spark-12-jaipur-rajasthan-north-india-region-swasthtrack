@@ -28,7 +28,6 @@ import {
   type PatientProfile,
 } from "@/services/patient-service";
 import {
-  answerHealthQuestion,
   executeAskPipeline,
   type ChatMessageItem,
   type AskResponseContract,
@@ -142,7 +141,9 @@ export default function AskSwasthTrackPage() {
 
     try {
       const contract = await executeAskPipeline(patient.id, query);
-      const card = (contract.cards[0] || (await answerHealthQuestion(patient.id, query))) as unknown as ChatMessageItem["card"];
+      // executeAskPipeline always returns exactly one card — including clinical-safety
+      // refusals — so it is the single source of truth here (see ask-data-service.ts).
+      const card = contract.cards[0] as unknown as ChatMessageItem["card"];
 
       const ansMsgId = getNextMessageId("msg-ans");
       setContractMap((prev) => ({ ...prev, [ansMsgId]: contract }));

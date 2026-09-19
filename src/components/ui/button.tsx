@@ -15,12 +15,16 @@ type ButtonSize = "sm" | "md" | "lg";
  * the same: Save is `primary`, Cancel is `secondary`, Delete is `danger`.
  */
 const variantClasses: Record<ButtonVariant, string> = {
-  // The signature gold gradient plus a top inner highlight: the button reads
-  // as a lit, raised surface rather than a flat fill. Dark ink text (not
-  // white) so it carries AA contrast against the gold foil, and a single
-  // light sweep on hover/focus is the product's one "premium shine" gesture.
+  // Gold gradient plus a top inner highlight: the button reads as a lit,
+  // raised surface rather than a flat fill. This uses `.grad-gold-button`
+  // (spring-1 -> gold-line), an AA-safe subset of the signature gradient —
+  // the full grad-spring range dips as low as ~1.8:1 contrast against
+  // gold-ink on its darker (bronze) stop, which a full-width label can sit
+  // on top of. Dark ink text so it carries AA contrast against the gold
+  // foil, and a single light sweep on hover/focus is the product's one
+  // "premium shine" gesture.
   primary:
-    "shine-sweep grad-spring text-gold-ink shadow-[0_1px_2px_rgba(16,32,28,.12),0_6px_16px_-6px_rgba(156,109,30,.5),inset_0_1px_0_rgba(255,255,255,.5)] " +
+    "shine-sweep grad-gold-button text-gold-ink shadow-[0_1px_2px_rgba(16,32,28,.12),0_6px_16px_-6px_rgba(156,109,30,.5),inset_0_1px_0_rgba(255,255,255,.5)] " +
     "hover:brightness-105 hover:shadow-glow-gold active:brightness-95",
   secondary:
     "surface-lift text-ink hover:border-brand-line hover:bg-brand-softer",

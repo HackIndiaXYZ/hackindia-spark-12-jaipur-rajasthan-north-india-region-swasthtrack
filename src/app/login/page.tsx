@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, type FormEvent } from "react";
+import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import {
   ArrowLeft,
@@ -20,7 +20,7 @@ import { useAuth } from "@/context/auth-context";
 
 export default function LoginPage() {
   const router = useRouter();
-  const { login, register, sendOtp, verifyOtp, loginDemo, user } = useAuth();
+  const { login, register, sendOtp, verifyOtp, loginDemo } = useAuth();
 
   const [activeTab, setActiveTab] = useState<"login" | "signup" | "forgot">("login");
   const [phone, setPhone] = useState("");
@@ -34,13 +34,6 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
-
-  // If already authenticated, go to home
-  useEffect(() => {
-    if (user) {
-      router.replace("/");
-    }
-  }, [user, router]);
 
   function handleTabSwitch(tab: "login" | "signup" | "forgot") {
     setActiveTab(tab);
@@ -382,14 +375,14 @@ export default function LoginPage() {
               type="button"
               onClick={handleDemoLogin}
               disabled={loading}
-              className="w-full py-2.5 px-4 rounded-control bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-900 font-semibold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all cursor-pointer shadow-2xs active:scale-98"
+              className="w-full py-2.5 px-4 rounded-control bg-gold-soft hover:brightness-95 border border-gold-line text-gold-ink font-semibold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all cursor-pointer shadow-2xs active:scale-98"
             >
               <span>⚡ बिना लॉगिन ऐप देखें (Try Demo Mode)</span>
             </button>
           </div>
         )}
 
-        {/* 3. FORGOT PASSWORD FORM (6-Digit Secure OTP) */}
+        {/* 3. FORGOT PASSWORD FORM (6-Digit OTP) */}
         {activeTab === "forgot" && (
           <div className="space-y-4">
             <div className="flex items-center justify-between mb-1">
@@ -406,7 +399,7 @@ export default function LoginPage() {
             <div className="rounded-card border border-info-line bg-info-soft p-3 text-xs text-info font-medium space-y-1">
               <p className="font-semibold flex items-center gap-1.5">
                 <KeyRound className="h-3.5 w-3.5 text-info" />
-                सुरक्षित 6-Digit OTP पासवर्ड रीसेट:
+                6-Digit OTP पासवर्ड रीसेट:
               </p>
               <p>
                 रजिस्टर्ड मोबाइल नंबर पर 6-अंकों का OTP प्राप्त कर नया पासवर्ड बनाएं।

@@ -94,6 +94,13 @@ const METRIC_SYNONYMS: Record<string, string> = {
   "रूटीन": "wellness_score",
 };
 
+// NOTE: Only single-token entries belong here. normalizeUserInput() tokenizes on
+// whitespace and looks up each token individually (§190-198), so a multi-word key
+// such as "last 7 days" can never match — no single token ever contains a space.
+// All temporal *phrase* resolution (today/yesterday/this week/last 7 days/explicit
+// dates/etc.) is handled exclusively by ask-temporal-resolver.ts's resolveTemporal(),
+// which receives the raw, untokenized phrase. Keep this dictionary limited to the
+// single-word relative-day terms it can actually resolve.
 const TIME_SYNONYMS: Record<string, string> = {
   today: "today",
   aaj: "today",
@@ -106,30 +113,6 @@ const TIME_SYNONYMS: Record<string, string> = {
 
   parso: "parso",
   "परसों": "parso",
-
-  "this week": "this_week",
-  "is week": "this_week",
-  "is hafte": "this_week",
-  "इस हफ्ते": "this_week",
-
-  "last week": "last_week",
-  "pichle week": "last_week",
-  "pichle hafte": "last_week",
-  "पिछले हफ्ते": "last_week",
-
-  "last 7 days": "last_7_days",
-  "pichhle 7 din": "last_7_days",
-  "7 days": "last_7_days",
-  "7 din": "last_7_days",
-
-  "last 30 days": "last_30_days",
-  "pichhle 30 din": "last_30_days",
-  "30 days": "last_30_days",
-  "30 din": "last_30_days",
-  "is mahine": "this_month",
-  "this month": "this_month",
-  "last month": "last_month",
-  "pichle mahine": "last_month",
 };
 
 // Compute Levenshtein distance between two strings

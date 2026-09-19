@@ -156,8 +156,14 @@ export function QuickMarkMedicineDialog({
     if (activeMeds.length === 0) return;
 
     const previousPending = new Map(pendingMarks);
+    const todayStr = getTodayDateString();
+    const evaluations = activeMeds.map((m) => ({
+      medicine: m,
+      evalResult: evaluateMedicineStatusAndMessage(m, todayStr),
+    }));
+
     const updated = new Map(pendingMarks);
-    activeMeds.forEach((m) => updated.set(m.id, "taken"));
+    evaluations.forEach(({ medicine, evalResult }) => updated.set(medicine.id, evalResult.computedStatus));
     setPendingMarks(updated);
 
     setSuccessMsg(`✓ आज की सभी ${activeMeds.length} दवाइयाँ Taken मार्क हो गईं!`);
@@ -165,14 +171,16 @@ export function QuickMarkMedicineDialog({
 
     try {
       await Promise.all(
-        activeMeds.map((m) =>
+        evaluations.map(({ medicine, evalResult }) =>
           logMedicineStatus({
-            medicine_id: m.id,
+            medicine_id: medicine.id,
             patient_id: patientId,
-            scheduled_time: new Date().toISOString(),
+            scheduled_time: `${todayStr}T${medicine.scheduled_time}`,
             taken_time: new Date().toISOString(),
-            status: "taken",
-            notes: "Quick Log 1-Tap All Taken",
+            status: evalResult.computedStatus,
+            notes: evalResult.isLate
+              ? "Auto-Late Evaluation: Marked taken after schedule window (1-Tap All)"
+              : "Quick Log 1-Tap All Taken",
           })
         )
       );

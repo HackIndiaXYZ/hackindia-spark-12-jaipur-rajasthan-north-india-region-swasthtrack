@@ -18,7 +18,7 @@ export function SmartDailySummaryCard({ summary }: SmartDailySummaryProps) {
   const { completedItems, missingItems, summaryTextHi } = summary;
 
   return (
-    <Card className="border-line bg-surface p-5 shadow-xs transition-all">
+    <Card className="border-line bg-surface p-5 transition-all">
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-2">
           <span className="flex h-6 w-6 items-center justify-center rounded-control bg-brand-soft text-brand-ink">

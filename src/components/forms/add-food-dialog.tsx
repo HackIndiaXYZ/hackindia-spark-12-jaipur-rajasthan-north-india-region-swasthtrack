@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef, type FormEvent } from "react";
 import { Bookmark, BookmarkPlus, Plus, Search, Sparkles, Trash2, Utensils, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Field, Select, TextInput } from "@/components/ui/form-field";
+import { Field, NumberInput, Select, TextInput } from "@/components/ui/form-field";
 import { Modal } from "@/components/ui/modal";
 import { mealTypes } from "@/lib/health-options";
 import { getExactFoodEmoji } from "@/lib/utils";
@@ -41,13 +41,17 @@ type UnifiedSearchResult = {
   isSaved?: boolean;
 };
 
-export function AddFoodDialog({
-  isOpen,
-  onClose,
+function FoodForm({
   patientId,
-  defaultMealType = "Breakfast",
+  defaultMealType,
+  onClose,
   onSuccess,
-}: AddFoodDialogProps) {
+}: {
+  patientId: string;
+  defaultMealType: string;
+  onClose: () => void;
+  onSuccess?: () => void;
+}) {
   const [mealType, setMealType] = useState(defaultMealType);
   const [searchQuery, setSearchQuery] = useState("");
   const [foodName, setFoodName] = useState("");
@@ -72,7 +76,7 @@ export function AddFoodDialog({
   );
 
   useEffect(() => {
-    if (isOpen && patientId) {
+    if (patientId) {
       setTimeout(() => {
         setSavedFoods(getSavedFoods(patientId));
       }, 0);
@@ -80,7 +84,7 @@ export function AddFoodDialog({
         .then(setPersonalizedQuickFoods)
         .catch(() => {});
     }
-  }, [isOpen, patientId, mealType]);
+  }, [patientId, mealType]);
 
   // Unified Search: Searches BOTH Saved Foods AND 2,600+ Master Database Foods
   useEffect(() => {
@@ -230,6 +234,16 @@ export function AddFoodDialog({
     const calNum = calories ? parseFloat(calories) : 150;
     const protNum = protein ? parseFloat(protein) : 0;
 
+    if (isNaN(calNum) || calNum < 0 || calNum > 5000) {
+      setError("कृपया सही कैलोरी दर्ज करें (0 से 5000 kcal के बीच)");
+      return;
+    }
+
+    if (isNaN(protNum) || protNum < 0 || protNum > 300) {
+      setError("कृपया सही प्रोटीन मात्रा दर्ज करें (0 से 300 g के बीच)");
+      return;
+    }
+
     try {
       setLoading(true);
       await logFood({
@@ -271,6 +285,294 @@ export function AddFoodDialog({
   }
 
   return (
+    <div className="space-y-4 sm:space-y-5 max-w-full overflow-hidden">
+      {error ? (
+        <div className="rounded-card border border-critical-line bg-critical-soft p-3 text-xs sm:text-sm font-semibold text-critical shadow-xs">
+          {error}
+        </div>
+      ) : null}
+
+      {successInfo ? (
+        <div className="rounded-card border border-positive-line bg-positive-soft p-3 text-xs sm:text-sm font-semibold text-positive shadow-xs">
+          ✓ {successInfo}
+        </div>
+      ) : null}
+
+      {/* SEARCH BAR WITH COMPREHENSIVE 2,600+ DATABASE AUTOCOMPLETE */}
+      <div className="space-y-1.5 w-full">
+        <div className="relative w-full">
+          <Search className="absolute left-3.5 top-3.5 h-4 w-4 text-ink-subtle" />
+          <input
+            type="text"
+            placeholder="भोजन खोजें (उदा. Roti, Dal, Khichdi, Apple, Milk, Dosa, Paneer)..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full rounded-field border-2 border-line bg-surface-sunken pl-10 pr-9 py-3 text-sm sm:text-base font-semibold text-ink placeholder:text-ink-subtle focus:bg-surface focus:outline-hidden focus:border-brand shadow-inset-field"
+          />
+          {searchQuery && (
+            <button
+              type="button"
+              onClick={() => {
+                setSearchQuery("");
+                setSearchResults([]);
+              }}
+              className="absolute right-3 top-3.5 text-ink-subtle hover:text-ink-muted cursor-pointer"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          )}
+        </div>
+
+        {/* INSTANT AUTOCOMPLETE DROPDOWN */}
+        {searchQuery.trim().length > 0 && (
+          <div className="rounded-card border-2 border-brand-line bg-surface p-2 shadow-e4 space-y-1 max-h-60 overflow-y-auto w-full z-20 animate-in fade-in">
+            {isSearching ? (
+              <div className="p-3 text-center text-xs text-ink-subtle font-semibold">
+                खोज रहे हैं... (Searching 2,600+ foods)
+              </div>
+            ) : searchResults.length > 0 ? (
+              searchResults.map((item) => (
+                <button
+                  type="button"
+                  key={item.id}
+                  onClick={() => handleSelectSearchResult(item)}
+                  className="w-full text-left p-2.5 rounded-control hover:bg-brand-softer active:bg-brand-soft flex items-center justify-between gap-2 text-xs sm:text-sm font-semibold text-ink transition-colors cursor-pointer border border-transparent hover:border-brand-line"
+                >
+                  <div className="flex items-center gap-2 min-w-0">
+                    <span className="text-base">{getExactFoodEmoji(item.name, item.category)}</span>
+                    <div className="min-w-0">
+                      <p className="truncate font-bold text-ink">
+                        {item.name} {item.name_hi ? `(${item.name_hi})` : ""}
+                      </p>
+                      <p className="text-xs text-ink-subtle font-medium">
+                        {item.isSaved ? "★ Your Saved Food" : "Database Food"}
+                      </p>
+                    </div>
+                  </div>
+                  <span className="text-brand-ink font-extrabold shrink-0 bg-brand-soft px-2 py-0.5 rounded-field">
+                    {item.calories} kcal
+                  </span>
+                </button>
+              ))
+            ) : (
+              <div className="p-3 text-center text-xs text-ink-muted">
+                <p className="font-semibold text-ink">&ldquo;{searchQuery}&rdquo; हमारी लिस्ट में नहीं मिला</p>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setFoodName(searchQuery);
+                    setSearchQuery("");
+                    setSearchResults([]);
+                  }}
+                  className="mt-2 inline-flex items-center gap-1.5 text-brand-ink bg-brand-soft hover:bg-brand-line/40 px-3 py-1.5 rounded-control font-bold text-xs transition-colors cursor-pointer"
+                >
+                  <Plus className="h-3.5 w-3.5" />
+                  + इस भोजन का विवरण नीचे भरें (&ldquo;{searchQuery}&rdquo;)
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* 1. SAVED FOODS SECTION ("Your Foods" / "My Foods") */}
+      {savedFoods.length > 0 && (
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <label className="text-xs font-bold uppercase tracking-wider text-indigo-900 flex items-center gap-1.5">
+              <Bookmark className="h-3.5 w-3.5 text-indigo-600" />
+              <span>आपके सेव किए गए भोजन (Your Saved Foods):</span>
+            </label>
+            <span className="text-xs text-ink-subtle font-medium">1-टैप में भरें</span>
+          </div>
+
+          <div className="flex flex-wrap gap-2 max-w-full">
+            {savedFoods.map((item) => {
+              const isSelected = foodName === item.name;
+              const emoji = getExactFoodEmoji(item.name);
+              return (
+                <div
+                  key={item.id}
+                  onClick={() => handleSelectSavedFood(item)}
+                  className={`inline-flex items-center gap-1.5 py-1.5 px-3 rounded-control border-2 text-xs font-bold transition-all cursor-pointer shadow-xs active:scale-97 ${
+                    isSelected
+                      ? "border-indigo-600 bg-indigo-100 text-indigo-950 ring-2 ring-indigo-500/20"
+                      : "border-indigo-200 bg-indigo-50/70 text-indigo-950 hover:bg-indigo-100/70"
+                  }`}
+                >
+                  <span>{emoji}</span>
+                  <span className="truncate max-w-40">{item.name}</span>
+                  <span className="text-2xs text-indigo-700 font-semibold shrink-0">({item.default_calories} kcal)</span>
+                  <button
+                    type="button"
+                    title="Remove from Saved Foods (इतिहास सुरक्षित रहेगा)"
+                    onClick={(e) => handleRemoveSaved(e, item.id)}
+                    className="ml-1 text-indigo-400 hover:text-rose-600 cursor-pointer p-0.5 rounded-sm hover:bg-surface"
+                  >
+                    <Trash2 className="h-3 w-3" />
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* 2. DYNAMIC LEARNED QUICK FOODS (Personalized Behavior) */}
+      {personalizedQuickFoods.length > 0 && (
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <label className="text-xs font-bold uppercase tracking-wider text-ink-muted flex items-center gap-1.5">
+              <Sparkles className="h-3.5 w-3.5 text-brand" />
+              <span>अक्सर खाया जाने वाला भोजन (Learned Quick Food):</span>
+            </label>
+            <span className="text-xs text-ink-subtle font-medium">व्यवहार से सीखा</span>
+          </div>
+
+          <div className="flex flex-wrap gap-2 max-w-full">
+            {personalizedQuickFoods.map((q) => {
+              const isSelected = foodName === q.name;
+              const emoji = getExactFoodEmoji(q.name, q.category);
+              return (
+                <button
+                  type="button"
+                  key={q.canonicalKey}
+                  onClick={() => handleSelectQuickFood(q)}
+                  className={`inline-flex items-center gap-1.5 py-1.5 px-3 rounded-control border text-xs font-semibold transition-all cursor-pointer shadow-xs active:scale-97 ${
+                    isSelected
+                      ? "border-brand bg-brand-soft text-brand-ink ring-2 ring-brand/20 font-bold"
+                      : "border-line bg-surface text-ink hover:border-brand-line hover:bg-brand-softer/50"
+                  }`}
+                >
+                  <span>{emoji}</span>
+                  <span className="truncate max-w-36">{q.name}</span>
+                  <span className="text-2xs text-brand-ink shrink-0">~{q.defaultCal} kcal</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* 3. CUSTOM EDITABLE DETAILS FORM */}
+      <form onSubmit={handleSubmitLog} className="space-y-4 pt-3 border-t border-line">
+        <p className="text-xs font-bold uppercase tracking-wider text-ink-subtle">
+          भोजन का विवरण (Food Details):
+        </p>
+
+        <Field label="भोजन का नाम (Food Name) *">
+          <TextInput
+            placeholder="उदा. 2 रोटी और दाल, सेब, खिचड़ी, चाय..."
+            value={foodName}
+            onChange={(e) => setFoodName(e.target.value)}
+            className="text-base font-semibold"
+            required
+          />
+        </Field>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <Field label="भोजन का समय (Meal Type)">
+            <Select
+              value={mealType}
+              onChange={(e) => setMealType(e.target.value)}
+              className="text-base font-semibold"
+            >
+              {mealTypes.map((type) => (
+                <option key={type} value={type}>
+                  {type}
+                </option>
+              ))}
+            </Select>
+          </Field>
+
+          <div className="grid grid-cols-2 gap-2">
+            <Field label="मात्रा (Quantity)">
+              <NumberInput
+                allowDecimal
+                placeholder="1"
+                value={quantity}
+                onChange={(e) => setQuantity(e.target.value)}
+                className="text-base font-semibold"
+              />
+            </Field>
+
+            <Field label="इकाई (Unit)">
+              <TextInput
+                placeholder="थाली/कटोरी/पीस"
+                value={unit}
+                onChange={(e) => setUnit(e.target.value)}
+                className="text-base font-semibold"
+              />
+            </Field>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <Field label="कैलोरी (Calories kcal) *" hint="उदा. 350">
+            <NumberInput
+              allowDecimal
+              placeholder="350"
+              value={calories}
+              onChange={(e) => setCalories(e.target.value)}
+              className="text-base font-semibold text-amber-950"
+              required
+            />
+          </Field>
+
+          <Field label="प्रोटीन (Protein grams - ऐच्छिक)" hint="उदा. 12">
+            <NumberInput
+              allowDecimal
+              placeholder="12"
+              value={protein}
+              onChange={(e) => setProtein(e.target.value)}
+              className="text-base font-semibold"
+            />
+          </Field>
+        </div>
+
+        <Field label="टिप्पणी / नोट्स (Notes - ऐच्छिक)">
+          <TextInput
+            placeholder="उदा. कम तेल में बना, ताजा फल..."
+            value={notes}
+            onChange={(e) => setNotes(e.target.value)}
+            className="text-xs sm:text-sm font-medium"
+          />
+        </Field>
+
+        {/* TWO DISTINCT ACTIONS: ADD TO FOOD LOG vs SAVE AS MY FOOD */}
+        <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
+          <Button
+            variant="primary"
+            type="submit"
+            disabled={loading}
+            className="flex-1 min-h-control-lg text-sm sm:text-base font-bold"
+          >
+            <Utensils className="h-4.5 w-4.5 mr-2 shrink-0" />
+            {loading ? "सेव हो रहा है..." : "✓ Add to Food Log (अभी दर्ज करें)"}
+          </Button>
+
+          <button
+            type="button"
+            onClick={handleSaveAsMyFood}
+            className="min-h-control-lg px-4 rounded-control border-2 border-indigo-300 bg-indigo-50/90 hover:bg-indigo-100 text-indigo-950 font-semibold text-xs sm:text-sm flex items-center justify-center gap-1.5 transition-all cursor-pointer active:scale-98 shadow-e1"
+          >
+            <BookmarkPlus className="h-4.5 w-4.5 text-indigo-600 shrink-0" />
+            Save as My Food (भविष्य के लिए रखें)
+          </button>
+        </div>
+      </form>
+    </div>
+  );
+}
+
+export function AddFoodDialog({
+  isOpen,
+  onClose,
+  patientId,
+  defaultMealType = "Breakfast",
+  onSuccess,
+}: AddFoodDialogProps) {
+  return (
     <Modal
       isOpen={isOpen}
       onClose={onClose}
@@ -279,284 +581,14 @@ export function AddFoodDialog({
       description="2,600+ भोजन खोजें, नया जोड़ें या भविष्य के लिए सेव करें।"
       maxWidth="lg"
     >
-      <div className="space-y-4 sm:space-y-5 max-w-full overflow-hidden">
-        {error ? (
-          <div className="rounded-card border border-critical-line bg-critical-soft p-3 text-xs sm:text-sm font-semibold text-critical shadow-xs">
-            {error}
-          </div>
-        ) : null}
-
-        {successInfo ? (
-          <div className="rounded-card border border-positive-line bg-positive-soft p-3 text-xs sm:text-sm font-semibold text-positive shadow-xs">
-            ✓ {successInfo}
-          </div>
-        ) : null}
-
-        {/* SEARCH BAR WITH COMPREHENSIVE 2,600+ DATABASE AUTOCOMPLETE */}
-        <div className="space-y-1.5 w-full">
-          <div className="relative w-full">
-            <Search className="absolute left-3.5 top-3.5 h-4 w-4 text-ink-subtle" />
-            <input
-              type="text"
-              placeholder="भोजन खोजें (उदा. Roti, Dal, Khichdi, Apple, Milk, Dosa, Paneer)..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full rounded-field border-2 border-line bg-surface-sunken pl-10 pr-9 py-3 text-sm sm:text-base font-semibold text-ink placeholder:text-ink-subtle focus:bg-surface focus:outline-hidden focus:border-brand shadow-inset-field"
-            />
-            {searchQuery && (
-              <button
-                type="button"
-                onClick={() => {
-                  setSearchQuery("");
-                  setSearchResults([]);
-                }}
-                className="absolute right-3 top-3.5 text-ink-subtle hover:text-ink-muted cursor-pointer"
-              >
-                <X className="h-4 w-4" />
-              </button>
-            )}
-          </div>
-
-          {/* INSTANT AUTOCOMPLETE DROPDOWN */}
-          {searchQuery.trim().length > 0 && (
-            <div className="rounded-card border-2 border-brand-line bg-surface p-2 shadow-e4 space-y-1 max-h-60 overflow-y-auto w-full z-20 animate-in fade-in">
-              {isSearching ? (
-                <div className="p-3 text-center text-xs text-ink-subtle font-semibold">
-                  खोज रहे हैं... (Searching 2,600+ foods)
-                </div>
-              ) : searchResults.length > 0 ? (
-                searchResults.map((item) => (
-                  <button
-                    type="button"
-                    key={item.id}
-                    onClick={() => handleSelectSearchResult(item)}
-                    className="w-full text-left p-2.5 rounded-control hover:bg-brand-softer active:bg-brand-soft flex items-center justify-between gap-2 text-xs sm:text-sm font-semibold text-ink transition-colors cursor-pointer border border-transparent hover:border-brand-line"
-                  >
-                    <div className="flex items-center gap-2 min-w-0">
-                      <span className="text-base">{getExactFoodEmoji(item.name, item.category)}</span>
-                      <div className="min-w-0">
-                        <p className="truncate font-bold text-ink">
-                          {item.name} {item.name_hi ? `(${item.name_hi})` : ""}
-                        </p>
-                        <p className="text-xs text-ink-subtle font-medium">
-                          {item.isSaved ? "★ Your Saved Food" : "Database Food"}
-                        </p>
-                      </div>
-                    </div>
-                    <span className="text-brand-ink font-extrabold shrink-0 bg-brand-soft px-2 py-0.5 rounded-field">
-                      {item.calories} kcal
-                    </span>
-                  </button>
-                ))
-              ) : (
-                <div className="p-3 text-center text-xs text-ink-muted">
-                  <p className="font-semibold text-ink">&ldquo;{searchQuery}&rdquo; हमारी लिस्ट में नहीं मिला</p>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setFoodName(searchQuery);
-                      setSearchQuery("");
-                      setSearchResults([]);
-                    }}
-                    className="mt-2 inline-flex items-center gap-1.5 text-brand-ink bg-brand-soft hover:bg-brand-line/40 px-3 py-1.5 rounded-control font-bold text-xs transition-colors cursor-pointer"
-                  >
-                    <Plus className="h-3.5 w-3.5" />
-                    + इस भोजन का विवरण नीचे भरें (&ldquo;{searchQuery}&rdquo;)
-                  </button>
-                </div>
-              )}
-            </div>
-          )}
-        </div>
-
-        {/* 1. SAVED FOODS SECTION ("Your Foods" / "My Foods") */}
-        {savedFoods.length > 0 && (
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <label className="text-xs font-bold uppercase tracking-wider text-indigo-900 flex items-center gap-1.5">
-                <Bookmark className="h-3.5 w-3.5 text-indigo-600" />
-                <span>आपके सेव किए गए भोजन (Your Saved Foods):</span>
-              </label>
-              <span className="text-xs text-ink-subtle font-medium">1-टैप में भरें</span>
-            </div>
-
-            <div className="flex flex-wrap gap-2 max-w-full">
-              {savedFoods.map((item) => {
-                const isSelected = foodName === item.name;
-                const emoji = getExactFoodEmoji(item.name);
-                return (
-                  <div
-                    key={item.id}
-                    onClick={() => handleSelectSavedFood(item)}
-                    className={`inline-flex items-center gap-1.5 py-1.5 px-3 rounded-control border-2 text-xs font-bold transition-all cursor-pointer shadow-xs active:scale-97 ${
-                      isSelected
-                        ? "border-indigo-600 bg-indigo-100 text-indigo-950 ring-2 ring-indigo-500/20"
-                        : "border-indigo-200 bg-indigo-50/70 text-indigo-950 hover:bg-indigo-100/70"
-                    }`}
-                  >
-                    <span>{emoji}</span>
-                    <span className="truncate max-w-40">{item.name}</span>
-                    <span className="text-2xs text-indigo-700 font-semibold shrink-0">({item.default_calories} kcal)</span>
-                    <button
-                      type="button"
-                      title="Remove from Saved Foods (इतिहास सुरक्षित रहेगा)"
-                      onClick={(e) => handleRemoveSaved(e, item.id)}
-                      className="ml-1 text-indigo-400 hover:text-rose-600 cursor-pointer p-0.5 rounded-sm hover:bg-surface"
-                    >
-                      <Trash2 className="h-3 w-3" />
-                    </button>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        )}
-
-        {/* 2. DYNAMIC LEARNED QUICK FOODS (Personalized Behavior) */}
-        {personalizedQuickFoods.length > 0 && (
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <label className="text-xs font-bold uppercase tracking-wider text-ink-muted flex items-center gap-1.5">
-                <Sparkles className="h-3.5 w-3.5 text-brand" />
-                <span>अक्सर खाया जाने वाला भोजन (Learned Quick Food):</span>
-              </label>
-              <span className="text-xs text-ink-subtle font-medium">व्यवहार से सीखा</span>
-            </div>
-
-            <div className="flex flex-wrap gap-2 max-w-full">
-              {personalizedQuickFoods.map((q) => {
-                const isSelected = foodName === q.name;
-                const emoji = getExactFoodEmoji(q.name, q.category);
-                return (
-                  <button
-                    type="button"
-                    key={q.canonicalKey}
-                    onClick={() => handleSelectQuickFood(q)}
-                    className={`inline-flex items-center gap-1.5 py-1.5 px-3 rounded-control border text-xs font-semibold transition-all cursor-pointer shadow-xs active:scale-97 ${
-                      isSelected
-                        ? "border-brand bg-brand-soft text-brand-ink ring-2 ring-brand/20 font-bold"
-                        : "border-line bg-surface text-ink hover:border-brand-line hover:bg-brand-softer/50"
-                    }`}
-                  >
-                    <span>{emoji}</span>
-                    <span className="truncate max-w-36">{q.name}</span>
-                    <span className="text-2xs text-brand-ink shrink-0">~{q.defaultCal} kcal</span>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        )}
-
-        {/* 3. CUSTOM EDITABLE DETAILS FORM */}
-        <form onSubmit={handleSubmitLog} className="space-y-4 pt-3 border-t border-line">
-          <p className="text-xs font-bold uppercase tracking-wider text-ink-subtle">
-            भोजन का विवरण (Food Details):
-          </p>
-
-          <Field label="भोजन का नाम (Food Name) *">
-            <TextInput
-              placeholder="उदा. 2 रोटी और दाल, सेब, खिचड़ी, चाय..."
-              value={foodName}
-              onChange={(e) => setFoodName(e.target.value)}
-              className="text-base font-semibold"
-              required
-            />
-          </Field>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <Field label="भोजन का समय (Meal Type)">
-              <Select
-                value={mealType}
-                onChange={(e) => setMealType(e.target.value)}
-                className="text-base font-semibold"
-              >
-                {mealTypes.map((type) => (
-                  <option key={type} value={type}>
-                    {type}
-                  </option>
-                ))}
-              </Select>
-            </Field>
-
-            <div className="grid grid-cols-2 gap-2">
-              <Field label="मात्रा (Quantity)">
-                <TextInput
-                  type="number"
-                  step="0.5"
-                  placeholder="1"
-                  value={quantity}
-                  onChange={(e) => setQuantity(e.target.value)}
-                  className="text-base font-semibold"
-                />
-              </Field>
-
-              <Field label="इकाई (Unit)">
-                <TextInput
-                  placeholder="थाली/कटोरी/पीस"
-                  value={unit}
-                  onChange={(e) => setUnit(e.target.value)}
-                  className="text-base font-semibold"
-                />
-              </Field>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <Field label="कैलोरी (Calories kcal) *" hint="उदा. 350">
-              <TextInput
-                type="number"
-                placeholder="350"
-                value={calories}
-                onChange={(e) => setCalories(e.target.value)}
-                className="text-base font-semibold text-amber-950"
-                required
-              />
-            </Field>
-
-            <Field label="प्रोटीन (Protein grams - ऐच्छिक)" hint="उदा. 12">
-              <TextInput
-                type="number"
-                placeholder="12"
-                value={protein}
-                onChange={(e) => setProtein(e.target.value)}
-                className="text-base font-semibold"
-              />
-            </Field>
-          </div>
-
-          <Field label="टिप्पणी / नोट्स (Notes - ऐच्छिक)">
-            <TextInput
-              placeholder="उदा. कम तेल में बना, ताजा फल..."
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-              className="text-xs sm:text-sm font-medium"
-            />
-          </Field>
-
-          {/* TWO DISTINCT ACTIONS: ADD TO FOOD LOG vs SAVE AS MY FOOD */}
-          <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
-            <Button
-              variant="primary"
-              type="submit"
-              disabled={loading}
-              className="flex-1 min-h-control-lg text-sm sm:text-base font-bold"
-            >
-              <Utensils className="h-4.5 w-4.5 mr-2 shrink-0" />
-              {loading ? "सेव हो रहा है..." : "✓ Add to Food Log (अभी दर्ज करें)"}
-            </Button>
-
-            <button
-              type="button"
-              onClick={handleSaveAsMyFood}
-              className="min-h-control-lg px-4 rounded-control border-2 border-indigo-300 bg-indigo-50/90 hover:bg-indigo-100 text-indigo-950 font-semibold text-xs sm:text-sm flex items-center justify-center gap-1.5 transition-all cursor-pointer active:scale-98 shadow-e1"
-            >
-              <BookmarkPlus className="h-4.5 w-4.5 text-indigo-600 shrink-0" />
-              Save as My Food (भविष्य के लिए रखें)
-            </button>
-          </div>
-        </form>
-      </div>
+      {isOpen ? (
+        <FoodForm
+          patientId={patientId}
+          defaultMealType={defaultMealType}
+          onClose={onClose}
+          onSuccess={onSuccess}
+        />
+      ) : null}
     </Modal>
   );
 }

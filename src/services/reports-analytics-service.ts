@@ -2,12 +2,11 @@ import {
   getActivityLogs,
   getBloodPressureLogs,
   getFoodLogs,
+  getMedicineLogsByDate,
   getMedicines,
   getPatientProfile,
   getSleepLogs,
-  getTodayDateString,
   getWeightLogs,
-  isSameLocalDay,
 } from "./patient-service";
 import {
   calculateDailyWellnessScore,
@@ -90,6 +89,21 @@ export interface YearlyReportSummary {
 }
 
 /**
+ * Convert a UTC timestamp (or Date) to a YYYY-MM-DD date string in Asia/Kolkata.
+ * Mirrors timeline-service.ts's getISTDateStr so every report's day-boundary
+ * comparison is explicitly IST-based instead of depending on the runtime's
+ * local timezone (as isSameLocalDay/getTodayDateString do).
+ */
+function getISTDateStr(dateOrIso: Date | string): string {
+  try {
+    const d = typeof dateOrIso === "string" ? new Date(dateOrIso) : dateOrIso;
+    return d.toLocaleDateString("en-CA", { timeZone: "Asia/Kolkata" });
+  } catch {
+    return String(dateOrIso).slice(0, 10);
+  }
+}
+
+/**
  * Generate 7 trailing dates leading up to targetDate (YYYY-MM-DD)
  */
 function get7TrailingDates(endDateStr: string): string[] {
@@ -165,7 +179,7 @@ export async function getWeeklyReportData(
 ): Promise<WeeklyReportSummary> {
   const profile = await getPatientProfile();
   const pid = patientId || profile.id;
-  const targetEnd = endDate || getTodayDateString();
+  const targetEnd = endDate || getISTDateStr(new Date());
   const dates = get7TrailingDates(targetEnd);
 
   const [foodLogs, bpLogs, weightLogs, activityLogs, sleepLogs, medicines] =
@@ -188,9 +202,9 @@ export async function getWeeklyReportData(
     });
 
     // Check if this date had any user logs
-    const hasFood = foodLogs.some((f) => isSameLocalDay(f.consumed_at, dStr));
-    const hasBP = bpLogs.some((b) => isSameLocalDay(b.measured_at, dStr));
-    const hasWeight = weightLogs.some((w) => isSameLocalDay(w.measured_at, dStr));
+    const hasFood = foodLogs.some((f) => getISTDateStr(f.consumed_at) === dStr);
+    const hasBP = bpLogs.some((b) => getISTDateStr(b.measured_at) === dStr);
+    const hasWeight = weightLogs.some((w) => getISTDateStr(w.measured_at) === dStr);
     const hasAct = activityLogs.some((a) => a.date === dStr);
     const hasSleep = sleepLogs.some((s) => s.date === dStr);
     const hasLogs = hasFood || hasBP || hasWeight || hasAct || hasSleep;
@@ -252,14 +266,12 @@ export async function getWeeklyReportData(
 
   // Food Logging Consistency
   const daysWithFood = dates.filter((dStr) =>
-    foodLogs.some((f) => isSameLocalDay(f.consumed_at, dStr)),
+    foodLogs.some((f) => getISTDateStr(f.consumed_at) === dStr),
   ).length;
-  const foodLoggingConsistencyPercent = Math.round((daysWithFood / 7) * 100);
+  const foodLoggingConsistencyPercent = Math.min(100, Math.round((daysWithFood / 7) * 100));
 
   // Average Calories
-  const weekFoodLogs = foodLogs.filter((f) =>
-    dates.some((dStr) => isSameLocalDay(f.consumed_at, dStr)),
-  );
+  const weekFoodLogs = foodLogs.filter((f) => dates.includes(getISTDateStr(f.consumed_at)));
   const totalCalories = weekFoodLogs.reduce(
     (sum, f) => sum + Number(f.calories || 0),
     0,
@@ -289,14 +301,12 @@ export async function getWeeklyReportData(
       : null;
 
   // BP Readings Count
-  const weekBPs = bpLogs.filter((b) =>
-    dates.some((dStr) => isSameLocalDay(b.measured_at, dStr)),
-  );
+  const weekBPs = bpLogs.filter((b) => dates.includes(getISTDateStr(b.measured_at)));
   const bpReadingsCount = weekBPs.length;
 
   // Weight Change
   const weekWeights = weightLogs
-    .filter((w) => dates.some((dStr) => isSameLocalDay(w.measured_at, dStr)))
+    .filter((w) => dates.includes(getISTDateStr(w.measured_at)))
     .sort((a, b) => new Date(a.measured_at).getTime() - new Date(b.measured_at).getTime());
 
   const startWeightKg = weekWeights[0]?.weight_kg || null;
@@ -361,48 +371,67 @@ export async function getMonthlyReportData(
       getSleepLogs(pid, 60),
     ]);
 
-  const now = new Date();
-  const past30DaysDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 30);
-  const startDateStr = past30DaysDate.toISOString().split("T")[0];
-  const endDateStr = now.toISOString().split("T")[0];
+  // Exactly-30-day inclusive window (day -29 .. day 0), explicitly IST-based
+  // so the boundary doesn't depend on the runtime's local timezone and never
+  // spans 31 calendar days the way a naive "today - 30" cutoff would.
+  const endDateStr = getISTDateStr(new Date());
+  const [endY, endM, endD] = endDateStr.split("-").map(Number);
+  const startDateObj = new Date(endY, endM - 1, endD - 29);
+  const startDateStr = `${startDateObj.getFullYear()}-${String(startDateObj.getMonth() + 1).padStart(2, "0")}-${String(startDateObj.getDate()).padStart(2, "0")}`;
+  const endDateObj = new Date(endY, endM - 1, endD);
 
-  const monthFood = foodLogs.filter(
-    (f) => new Date(f.consumed_at) >= past30DaysDate,
-  );
-  const monthBP = bpLogs.filter(
-    (b) => new Date(b.measured_at) >= past30DaysDate,
-  );
+  const inWindow = (dStr: string) => dStr >= startDateStr && dStr <= endDateStr;
+
+  const monthFood = foodLogs.filter((f) => inWindow(getISTDateStr(f.consumed_at)));
+  const monthBP = bpLogs.filter((b) => inWindow(getISTDateStr(b.measured_at)));
   const monthWeights = weightLogs
-    .filter((w) => new Date(w.measured_at) >= past30DaysDate)
+    .filter((w) => inWindow(getISTDateStr(w.measured_at)))
     .sort((a, b) => new Date(a.measured_at).getTime() - new Date(b.measured_at).getTime());
-  const monthAct = activityLogs.filter(
-    (a) => new Date(a.date) >= past30DaysDate,
-  );
-  const monthSleep = sleepLogs.filter(
-    (s) => new Date(s.date) >= past30DaysDate,
-  );
+  const monthAct = activityLogs.filter((a) => inWindow(a.date));
+  const monthSleep = sleepLogs.filter((s) => inWindow(s.date));
 
-  // Collect distinct days with logs
+  // Collect distinct days with logs (IST calendar day)
   const trackedDays = new Set<string>();
-  monthFood.forEach((f) => trackedDays.add(f.consumed_at.split("T")[0]));
-  monthBP.forEach((b) => trackedDays.add(b.measured_at.split("T")[0]));
-  monthWeights.forEach((w) => trackedDays.add(w.measured_at.split("T")[0]));
+  monthFood.forEach((f) => trackedDays.add(getISTDateStr(f.consumed_at)));
+  monthBP.forEach((b) => trackedDays.add(getISTDateStr(b.measured_at)));
+  monthWeights.forEach((w) => trackedDays.add(getISTDateStr(w.measured_at)));
   monthAct.forEach((a) => trackedDays.add(a.date));
   monthSleep.forEach((s) => trackedDays.add(s.date));
 
-  const daysTrackedCount = trackedDays.size;
+  // Safety net: the window is exactly 30 days, so this can never exceed 30,
+  // but clamp defensively against any future change to the window logic.
+  const daysTrackedCount = Math.min(30, trackedDays.size);
   const hasSufficientData = daysTrackedCount >= 7;
 
   // Averages & Percentages
-  const foodLoggingPercent = Math.min(100, Math.round((monthFood.length > 0 ? (new Set(monthFood.map(f => f.consumed_at.split("T")[0])).size / 30) * 100 : 0)));
-  const bpLoggingPercent = Math.min(100, Math.round((new Set(monthBP.map(b => b.measured_at.split("T")[0])).size / 30) * 100));
-  const weightLoggingPercent = Math.min(100, Math.round((new Set(monthWeights.map(w => w.measured_at.split("T")[0])).size / 30) * 100));
+  const foodLoggingPercent = Math.min(100, Math.round((new Set(monthFood.map(f => getISTDateStr(f.consumed_at))).size / 30) * 100));
+  const bpLoggingPercent = Math.min(100, Math.round((new Set(monthBP.map(b => getISTDateStr(b.measured_at))).size / 30) * 100));
+  const weightLoggingPercent = Math.min(100, Math.round((new Set(monthWeights.map(w => getISTDateStr(w.measured_at))).size / 30) * 100));
   const activityConsistencyPercent = Math.min(100, Math.round((monthAct.filter(a => a.steps > 0).length / 30) * 100));
   const sleepLoggingPercent = Math.min(100, Math.round((monthSleep.filter(s => Number(s.sleep_hours) > 0).length / 30) * 100));
-  const medicineAdherencePercent = 88; // Aggregate estimated
+
+  // Medicine Adherence — derived from real medicine logs across the 30-day
+  // window (taken / (taken + late + missed)), instead of a hardcoded
+  // constant. Mirrors the weekly report's use of real per-day medicine data.
+  const windowDates: string[] = [];
+  for (let i = 0; i < 30; i++) {
+    const d = new Date(startDateObj);
+    d.setDate(startDateObj.getDate() + i);
+    windowDates.push(`${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`);
+  }
+  const monthMedicineLogsByDay = await Promise.all(
+    windowDates.map((dStr) => getMedicineLogsByDate(pid, dStr)),
+  );
+  const monthMedicineLogs = monthMedicineLogsByDay.flat();
+  const takenDoses = monthMedicineLogs.filter((l) => l.status === "taken").length;
+  const lateDoses = monthMedicineLogs.filter((l) => l.status === "late").length;
+  const missedDoses = monthMedicineLogs.filter((l) => l.status === "missed").length;
+  const trackedDoses = takenDoses + lateDoses + missedDoses;
+  const medicineAdherencePercent =
+    trackedDoses > 0 ? Math.min(100, Math.round((takenDoses / trackedDoses) * 100)) : 100;
 
   const totalCal = monthFood.reduce((s, f) => s + Number(f.calories || 0), 0);
-  const foodDaysCount = new Set(monthFood.map(f => f.consumed_at.split("T")[0])).size;
+  const foodDaysCount = new Set(monthFood.map(f => getISTDateStr(f.consumed_at))).size;
   const averageCalories = foodDaysCount > 0 ? Math.round(totalCal / foodDaysCount) : null;
 
   const totalSteps = monthAct.reduce((s, a) => s + Number(a.steps || 0), 0);
@@ -424,7 +453,7 @@ export async function getMonthlyReportData(
     (medicineAdherencePercent * 0.2),
   );
 
-  const monthLabel = `${past30DaysDate.toLocaleDateString("en-IN", { day: "numeric", month: "short" })} – ${now.toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}`;
+  const monthLabel = `${startDateObj.toLocaleDateString("en-IN", { day: "numeric", month: "short" })} – ${endDateObj.toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}`;
 
   const insights: string[] = [
     `पिछले 30 दिनों में कुल ${daysTrackedCount} दिन सक्रिय ट्रैकिंग दर्ज की गई।`,
@@ -467,7 +496,10 @@ export async function getYearlyReportData(
 ): Promise<YearlyReportSummary> {
   const profile = await getPatientProfile();
   const pid = patientId || profile.id;
-  const year = targetYear || new Date().getFullYear();
+  const now = new Date();
+  const year = targetYear || now.getFullYear();
+  const currentYear = now.getFullYear();
+  const currentMonthIdx = now.getMonth();
 
   const [bpLogs, weightLogs] = await Promise.all([
     getBloodPressureLogs(pid, 200),
@@ -479,42 +511,83 @@ export async function getYearlyReportData(
     "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
   ];
 
-  const months: YearlyMonthSummary[] = monthNames.map((name, idx) => {
-    const bpInMonth = bpLogs.filter((b) => {
-      const d = new Date(b.measured_at);
-      return d.getFullYear() === year && d.getMonth() === idx;
-    });
+  const months: YearlyMonthSummary[] = await Promise.all(
+    monthNames.map(async (name, idx) => {
+      const bpInMonth = bpLogs.filter((b) => {
+        const d = new Date(b.measured_at);
+        return d.getFullYear() === year && d.getMonth() === idx;
+      });
 
-    const wtInMonth = weightLogs.filter((w) => {
-      const d = new Date(w.measured_at);
-      return d.getFullYear() === year && d.getMonth() === idx;
-    });
+      const wtInMonth = weightLogs.filter((w) => {
+        const d = new Date(w.measured_at);
+        return d.getFullYear() === year && d.getMonth() === idx;
+      });
 
-    const avgWt =
-      wtInMonth.length > 0
-        ? Number(
-            (wtInMonth.reduce((s, w) => s + w.weight_kg, 0) / wtInMonth.length).toFixed(1),
-          )
-        : null;
+      const avgWt =
+        wtInMonth.length > 0
+          ? Number(
+              (wtInMonth.reduce((s, w) => s + w.weight_kg, 0) / wtInMonth.length).toFixed(1),
+            )
+          : null;
 
-    const daysTracked = new Set([
-      ...bpInMonth.map((b) => b.measured_at.split("T")[0]),
-      ...wtInMonth.map((w) => w.measured_at.split("T")[0]),
-    ]).size;
+      const daysTracked = new Set([
+        ...bpInMonth.map((b) => b.measured_at.split("T")[0]),
+        ...wtInMonth.map((w) => w.measured_at.split("T")[0]),
+      ]).size;
 
-    const medAdh = daysTracked > 0 ? 85 : 0;
-    const avgScore = daysTracked > 0 ? 78 : 0;
+      // Real per-day aggregation via calculateDailyWellnessScore — the same
+      // "single source of truth" scorer the daily/weekly reports use —
+      // instead of fixed 85/78 constants. Only computed for months that
+      // already have tracked activity, and only over days that have
+      // occurred (never into the future).
+      let medAdh = 0;
+      let avgScore = 0;
 
-    return {
-      monthName: name,
-      monthNumber: idx + 1,
-      averageScore: avgScore,
-      medicineAdherencePercent: medAdh,
-      bpReadingsCount: bpInMonth.length,
-      averageWeightKg: avgWt,
-      daysTracked,
-    };
-  });
+      if (daysTracked > 0) {
+        const daysInMonth = new Date(year, idx + 1, 0).getDate();
+        const lastDay =
+          year === currentYear && idx === currentMonthIdx
+            ? now.getDate()
+            : year === currentYear && idx > currentMonthIdx
+            ? 0
+            : daysInMonth;
+
+        if (lastDay > 0) {
+          const dayStrings: string[] = [];
+          for (let day = 1; day <= lastDay; day++) {
+            dayStrings.push(
+              `${year}-${String(idx + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`,
+            );
+          }
+
+          const dailyResults = await Promise.all(
+            dayStrings.map((dStr) => calculateDailyWellnessScore(pid, dStr)),
+          );
+
+          avgScore = Math.round(
+            dailyResults.reduce((s, r) => s + r.totalScore, 0) / dailyResults.length,
+          );
+          medAdh = Math.min(
+            100,
+            Math.round(
+              dailyResults.reduce((s, r) => s + r.components.medicine.percent, 0) /
+                dailyResults.length,
+            ),
+          );
+        }
+      }
+
+      return {
+        monthName: name,
+        monthNumber: idx + 1,
+        averageScore: avgScore,
+        medicineAdherencePercent: medAdh,
+        bpReadingsCount: bpInMonth.length,
+        averageWeightKg: avgWt,
+        daysTracked,
+      };
+    }),
+  );
 
   const activeMonths = months.filter((m) => m.daysTracked > 0);
   const totalDaysTracked = months.reduce((s, m) => s + m.daysTracked, 0);

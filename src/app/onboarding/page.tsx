@@ -121,7 +121,7 @@ export default function OnboardingPage() {
           {/* PERSONAL INFO */}
           <Card className="p-4 space-y-3">
             <h3 className="font-semibold text-ink flex items-center gap-1.5 text-sm">
-              <User className="h-4 w-4 text-emerald-600" />
+              <User className="h-4 w-4 text-brand" />
               व्यक्तिगत जानकारी (Personal Info)
             </h3>
 
@@ -180,7 +180,7 @@ export default function OnboardingPage() {
           {/* WEIGHT & CALORIE TARGETS */}
           <Card className="p-4 space-y-3">
             <h3 className="font-semibold text-ink flex items-center gap-1.5 text-sm">
-              <Scale className="h-4 w-4 text-sky-600" />
+              <Scale className="h-4 w-4 text-brand" />
               वजन एवं पोषण लक्ष्य (Weight & Calorie Goals)
             </h3>
 
@@ -225,7 +225,7 @@ export default function OnboardingPage() {
           {/* MEDICAL CONDITIONS */}
           <Card className="p-4 space-y-2.5">
             <h3 className="font-semibold text-ink flex items-center gap-1.5 text-sm">
-              <Activity className="h-4 w-4 text-rose-600" />
+              <Activity className="h-4 w-4 text-brand" />
               स्वास्थ्य स्थितियां (Medical Conditions)
             </h3>
             <p className="text-xs text-ink-muted">

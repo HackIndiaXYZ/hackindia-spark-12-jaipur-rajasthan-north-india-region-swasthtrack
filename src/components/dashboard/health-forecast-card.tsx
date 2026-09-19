@@ -24,7 +24,7 @@ export function HealthForecastCard({
   if (!predictions || predictions.length === 0) return null;
 
   return (
-    <Card className="border-indigo-100 bg-linear-to-br from-indigo-50/30 to-surface p-5 shadow-xs transition-all">
+    <Card className="border-indigo-100 bg-linear-to-br from-indigo-50/30 to-surface p-5 transition-all">
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-2">
           <span className="flex h-6 w-6 items-center justify-center rounded-control bg-indigo-600 text-white shadow-xs">

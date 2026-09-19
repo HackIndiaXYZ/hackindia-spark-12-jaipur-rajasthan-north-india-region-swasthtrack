@@ -3,7 +3,7 @@
 import { useState, type FormEvent } from "react";
 import { Footprints, CheckCircle2, Calculator, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Field, TextInput } from "@/components/ui/form-field";
+import { Field, NumberInput, TextInput } from "@/components/ui/form-field";
 import { Modal } from "@/components/ui/modal";
 import { getTodayDateString, logActivity } from "@/services/patient-service";
 import { estimateActiveCaloriesBurned, buildActivityRecord } from "@/services/activity-calculation-service";
@@ -24,14 +24,19 @@ const ACTIVITY_PRESETS = [
   { label: "🚶 60 मिनट टहलना", steps: 6000, km: 4.2, min: 60, cal: 240, tag: "दैनिक लक्ष्य पूरा" },
 ];
 
-export function AddActivityDialog({
-  isOpen,
-  onClose,
+function ActivityForm({
   patientId,
-  initialSteps = 3000,
-  initialDistanceKm = 2.1,
+  initialSteps,
+  initialDistanceKm,
+  onClose,
   onSuccess,
-}: AddActivityDialogProps) {
+}: {
+  patientId: string;
+  initialSteps: number;
+  initialDistanceKm: number;
+  onClose: () => void;
+  onSuccess?: () => void;
+}) {
   const [date, setDate] = useState(getTodayDateString());
   const [steps, setSteps] = useState(String(initialSteps || 3000));
   const [distanceKm, setDistanceKm] = useState(String(initialDistanceKm || ""));
@@ -80,10 +85,28 @@ export function AddActivityDialog({
       setError("कृपया मान्य कदम संख्या दर्ज करें।");
       return;
     }
+    if (stepsNum > 100000) {
+      setError("कृपया सही कदम संख्या दर्ज करें (अधिकतम 100000 प्रति दिन)");
+      return;
+    }
 
     const distNum = distanceKm ? parseFloat(distanceKm) : null;
+    if (distNum !== null && (isNaN(distNum) || distNum < 0 || distNum > 500)) {
+      setError("कृपया सही दूरी दर्ज करें (0 से 500 km के बीच)");
+      return;
+    }
+
     const walkMinNum = walkingMinutes ? parseInt(walkingMinutes, 10) : null;
+    if (walkMinNum !== null && (isNaN(walkMinNum) || walkMinNum < 0 || walkMinNum > 1440)) {
+      setError("कृपया सही समय दर्ज करें (0 से 1440 मिनट के बीच)");
+      return;
+    }
+
     const calNum = caloriesBurned ? parseFloat(caloriesBurned) : null;
+    if (calNum !== null && (isNaN(calNum) || calNum < 0 || calNum > 5000)) {
+      setError("कृपया सही कैलोरी दर्ज करें (0 से 5000 kcal के बीच)");
+      return;
+    }
 
     // Use transparent activity record builder that preserves actual values
     const record = buildActivityRecord({
@@ -114,6 +137,156 @@ export function AddActivityDialog({
   }
 
   return (
+    <form onSubmit={handleSubmit} className="space-y-5">
+      {error ? (
+        <div className="rounded-card border border-critical-line bg-critical-soft p-3.5 text-sm font-semibold text-critical">
+          {error}
+        </div>
+      ) : null}
+
+      {/* 1. 1-TAP WALKING PRESETS */}
+      <div className="space-y-2">
+        <label className="block text-sm font-bold text-ink">
+          ⭐ आज कितनी देर टहले? (1-क्लिक प्रीसेट):
+        </label>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+          {ACTIVITY_PRESETS.map((p) => {
+            const isSelected = walkingMinutes === String(p.min) && steps === String(p.steps);
+            return (
+              <button
+                type="button"
+                key={p.min}
+                onClick={() => handleSelectPreset(p)}
+                className={`p-3 rounded-card border-2 text-left transition-all flex items-center justify-between cursor-pointer ${
+                  isSelected
+                    ? "border-sky-600 bg-sky-50 text-sky-950 font-bold ring-2 ring-sky-500/30 shadow-xs"
+                    : "border-line bg-surface text-ink hover:bg-surface-sunken font-semibold"
+                }`}
+              >
+                <div>
+                  <p className="text-base font-bold leading-tight">{p.label}</p>
+                  <p className="text-xs font-semibold text-sky-800 mt-0.5">
+                    ~{p.steps} कदम · {p.km} km ({p.tag})
+                  </p>
+                </div>
+                {isSelected && <CheckCircle2 className="h-5 w-5 text-sky-600 shrink-0" />}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* 2. DIRECT EDITABLE INPUTS (NO AUTO-OVERWRITE) */}
+      <div className="space-y-4 pt-2 border-t border-line">
+        <div className="flex items-center justify-between">
+          <p className="text-xs font-bold uppercase tracking-wider text-ink-subtle">
+            वास्तविक मान (Actual / Manual Entry):
+          </p>
+          <button
+            type="button"
+            onClick={handleCalculateEstimate}
+            className="text-xs font-semibold text-sky-700 hover:text-sky-900 flex items-center gap-1 cursor-pointer"
+          >
+            <Calculator className="h-3.5 w-3.5" />
+            कैलोरी का अनुमान लगाएं
+          </button>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <Field label="कुल कदम (Steps) *" hint="उदा. 7100 या 6600">
+            <NumberInput
+              value={steps}
+              onChange={(e) => {
+                setSteps(e.target.value);
+                setIsEstimated(false);
+              }}
+              className="text-lg font-bold text-sky-950"
+              placeholder="7100"
+              required
+            />
+          </Field>
+
+          <Field label="टहलने का समय (Minutes - ऐच्छिक)" hint="उदा. 69 मिनट">
+            <NumberInput
+              value={walkingMinutes}
+              onChange={(e) => setWalkingMinutes(e.target.value)}
+              className="text-lg font-bold text-sky-950"
+              placeholder="69"
+            />
+          </Field>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <Field
+            label={isEstimated ? "अनुमानित सक्रिय कैलोरी (Estimated kcal)" : "सक्रिय कैलोरी (Active Calories kcal)"}
+            hint={isEstimated ? "अनुमानित मान" : "उदा. 1564"}
+          >
+            <NumberInput
+              value={caloriesBurned}
+              onChange={(e) => {
+                setCaloriesBurned(e.target.value);
+                setIsEstimated(false);
+                setEstimateExplanation(null);
+              }}
+              className="text-base font-semibold text-amber-950"
+              placeholder="1564"
+            />
+          </Field>
+
+          <Field label="दूरी (km - ऐच्छिक)" hint="उदा. 4.5">
+            <NumberInput
+              allowDecimal
+              value={distanceKm}
+              onChange={(e) => setDistanceKm(e.target.value)}
+              className="text-base font-semibold"
+              placeholder="4.5"
+            />
+          </Field>
+        </div>
+
+        {estimateExplanation && (
+          <div className="rounded-card border border-sky-200 bg-sky-50/70 p-3 text-xs text-sky-900 flex items-start gap-2">
+            <Info className="h-4 w-4 shrink-0 text-sky-600 mt-0.5" />
+            <span>{estimateExplanation}</span>
+          </div>
+        )}
+
+        <Field label="दिनांक (Date)">
+          <TextInput
+            type="date"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+            className="text-base font-semibold"
+            required
+          />
+        </Field>
+      </div>
+
+      {/* SUBMIT BUTTON */}
+      <div className="pt-1">
+        <Button
+          variant="primary"
+          type="submit"
+          disabled={loading}
+          className="w-full min-h-control-lg text-base font-bold"
+        >
+          <Footprints className="h-5 w-5 mr-2" />
+          {loading ? "सेव हो रहा है..." : "✓ कदम व गतिविधि दर्ज करें (Save Walk)"}
+        </Button>
+      </div>
+    </form>
+  );
+}
+
+export function AddActivityDialog({
+  isOpen,
+  onClose,
+  patientId,
+  initialSteps = 3000,
+  initialDistanceKm = 2.1,
+  onSuccess,
+}: AddActivityDialogProps) {
+  return (
     <Modal
       isOpen={isOpen}
       onClose={onClose}
@@ -122,148 +295,15 @@ export function AddActivityDialog({
       description="वास्तविक मान दर्ज करें। यदि कैलोरी नहीं पता, तो अनुमान बटन दबाएं।"
       maxWidth="md"
     >
-      <form onSubmit={handleSubmit} className="space-y-5">
-        {error ? (
-          <div className="rounded-card border border-critical-line bg-critical-soft p-3.5 text-sm font-semibold text-critical">
-            {error}
-          </div>
-        ) : null}
-
-        {/* 1. 1-TAP WALKING PRESETS */}
-        <div className="space-y-2">
-          <label className="block text-sm font-bold text-ink">
-            ⭐ आज कितनी देर टहले? (1-क्लिक प्रीसेट):
-          </label>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-            {ACTIVITY_PRESETS.map((p) => {
-              const isSelected = walkingMinutes === String(p.min) && steps === String(p.steps);
-              return (
-                <button
-                  type="button"
-                  key={p.min}
-                  onClick={() => handleSelectPreset(p)}
-                  className={`p-3 rounded-card border-2 text-left transition-all flex items-center justify-between cursor-pointer ${
-                    isSelected
-                      ? "border-sky-600 bg-sky-50 text-sky-950 font-bold ring-2 ring-sky-500/30 shadow-xs"
-                      : "border-line bg-surface text-ink hover:bg-surface-sunken font-semibold"
-                  }`}
-                >
-                  <div>
-                    <p className="text-base font-bold leading-tight">{p.label}</p>
-                    <p className="text-xs font-semibold text-sky-800 mt-0.5">
-                      ~{p.steps} कदम · {p.km} km ({p.tag})
-                    </p>
-                  </div>
-                  {isSelected && <CheckCircle2 className="h-5 w-5 text-sky-600 shrink-0" />}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* 2. DIRECT EDITABLE INPUTS (NO AUTO-OVERWRITE) */}
-        <div className="space-y-4 pt-2 border-t border-line">
-          <div className="flex items-center justify-between">
-            <p className="text-xs font-bold uppercase tracking-wider text-ink-subtle">
-              वास्तविक मान (Actual / Manual Entry):
-            </p>
-            <button
-              type="button"
-              onClick={handleCalculateEstimate}
-              className="text-xs font-semibold text-sky-700 hover:text-sky-900 flex items-center gap-1 cursor-pointer"
-            >
-              <Calculator className="h-3.5 w-3.5" />
-              कैलोरी का अनुमान लगाएं
-            </button>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <Field label="कुल कदम (Steps) *" hint="उदा. 7100 या 6600">
-              <TextInput
-                type="number"
-                value={steps}
-                onChange={(e) => {
-                  setSteps(e.target.value);
-                  setIsEstimated(false);
-                }}
-                className="text-lg font-bold text-sky-950"
-                placeholder="7100"
-                required
-              />
-            </Field>
-
-            <Field label="टहलने का समय (Minutes - ऐच्छिक)" hint="उदा. 69 मिनट">
-              <TextInput
-                type="number"
-                value={walkingMinutes}
-                onChange={(e) => setWalkingMinutes(e.target.value)}
-                className="text-lg font-bold text-sky-950"
-                placeholder="69"
-              />
-            </Field>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <Field
-              label={isEstimated ? "अनुमानित सक्रिय कैलोरी (Estimated kcal)" : "सक्रिय कैलोरी (Active Calories kcal)"}
-              hint={isEstimated ? "अनुमानित मान" : "उदा. 1564"}
-            >
-              <TextInput
-                type="number"
-                value={caloriesBurned}
-                onChange={(e) => {
-                  setCaloriesBurned(e.target.value);
-                  setIsEstimated(false);
-                  setEstimateExplanation(null);
-                }}
-                className="text-base font-semibold text-amber-950"
-                placeholder="1564"
-              />
-            </Field>
-
-            <Field label="दूरी (km - ऐच्छिक)" hint="उदा. 4.5">
-              <TextInput
-                type="number"
-                step="0.1"
-                value={distanceKm}
-                onChange={(e) => setDistanceKm(e.target.value)}
-                className="text-base font-semibold"
-                placeholder="4.5"
-              />
-            </Field>
-          </div>
-
-          {estimateExplanation && (
-            <div className="rounded-card border border-sky-200 bg-sky-50/70 p-3 text-xs text-sky-900 flex items-start gap-2">
-              <Info className="h-4 w-4 shrink-0 text-sky-600 mt-0.5" />
-              <span>{estimateExplanation}</span>
-            </div>
-          )}
-
-          <Field label="दिनांक (Date)">
-            <TextInput
-              type="date"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-              className="text-base font-semibold"
-              required
-            />
-          </Field>
-        </div>
-
-        {/* SUBMIT BUTTON */}
-        <div className="pt-1">
-          <Button
-            variant="primary"
-            type="submit"
-            disabled={loading}
-            className="w-full min-h-control-lg text-base font-bold"
-          >
-            <Footprints className="h-5 w-5 mr-2" />
-            {loading ? "सेव हो रहा है..." : "✓ कदम व गतिविधि दर्ज करें (Save Walk)"}
-          </Button>
-        </div>
-      </form>
+      {isOpen ? (
+        <ActivityForm
+          patientId={patientId}
+          initialSteps={initialSteps}
+          initialDistanceKm={initialDistanceKm}
+          onClose={onClose}
+          onSuccess={onSuccess}
+        />
+      ) : null}
     </Modal>
   );
 }

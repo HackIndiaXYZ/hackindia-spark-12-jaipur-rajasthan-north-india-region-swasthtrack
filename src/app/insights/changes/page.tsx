@@ -158,14 +158,14 @@ export default function HealthChangesPage() {
         <div className="space-y-5">
           {/* CAREGIVER VIEW BANNER */}
           {isCaregiverMode && (
-            <DepthCard depth={2} className="p-4 sm:p-5 border-purple-200 bg-purple-50/60 shadow-e1">
+            <DepthCard depth={2} className="p-4 sm:p-5 border-info-line bg-info-soft shadow-e1">
               <div className="flex items-center gap-2 mb-1.5">
-                <UserCheck className="h-4 w-4 text-purple-700" />
-                <h4 className="text-sm font-bold text-purple-950">
+                <UserCheck className="h-4 w-4 text-info" />
+                <h4 className="text-sm font-bold text-info">
                   केयरगिवर सारांश (What Changed for Papa?)
                 </h4>
               </div>
-              <p className="text-xs sm:text-sm font-semibold text-purple-900 leading-relaxed">
+              <p className="text-xs sm:text-sm font-semibold text-info leading-relaxed">
                 {data.caregiverSummaryHi}
               </p>
             </DepthCard>

@@ -4,10 +4,12 @@
  */
 
 import {
+  getActivityLogs,
   getBloodPressureLogs,
   getFoodLogs,
   getMedicines,
   getPatientProfile,
+  getSleepLogs,
   getWeightLogs,
   getTodayDateString,
 } from "./patient-service";
@@ -25,17 +27,21 @@ export interface FullPatientExportData {
   bpLogs: unknown[];
   weightLogs: unknown[];
   foodLogs: unknown[];
+  sleepLogs: unknown[];
+  activityLogs: unknown[];
 }
 
 export async function exportAllDataAsJson(patientId?: string): Promise<void> {
   const profile = await getPatientProfile(patientId);
   const pid = patientId || profile.id;
 
-  const [meds, bp, weight, food] = await Promise.all([
+  const [meds, bp, weight, food, sleep, activity] = await Promise.all([
     getMedicines(pid),
     getBloodPressureLogs(pid),
     getWeightLogs(pid),
     getFoodLogs(pid),
+    getSleepLogs(pid),
+    getActivityLogs(pid),
   ]);
 
   const exportPayload: FullPatientExportData = {
@@ -51,6 +57,8 @@ export async function exportAllDataAsJson(patientId?: string): Promise<void> {
     bpLogs: bp,
     weightLogs: weight,
     foodLogs: food,
+    sleepLogs: sleep,
+    activityLogs: activity,
   };
 
   const jsonStr = JSON.stringify(exportPayload, null, 2);
@@ -69,10 +77,13 @@ export async function exportAllDataAsCsv(patientId?: string): Promise<void> {
   const profile = await getPatientProfile(patientId);
   const pid = patientId || profile.id;
 
-  const [bpList, weightList, foodList] = await Promise.all([
+  const [bpList, weightList, foodList, sleepList, activityList, medList] = await Promise.all([
     getBloodPressureLogs(pid),
     getWeightLogs(pid),
     getFoodLogs(pid),
+    getSleepLogs(pid),
+    getActivityLogs(pid),
+    getMedicines(pid),
   ]);
 
   const csvRows: string[] = [];
@@ -88,6 +99,18 @@ export async function exportAllDataAsCsv(patientId?: string): Promise<void> {
 
   foodList.forEach((f) => {
     csvRows.push(`Food,${f.created_at},"${f.food_name}",${f.calories || ""},, "${f.meal_type || ""}"`);
+  });
+
+  sleepList.forEach((s) => {
+    csvRows.push(`Sleep,${s.date},${s.sleep_hours},${s.bedtime || ""},${s.wake_time || ""},"${s.notes || ""}"`);
+  });
+
+  activityList.forEach((a) => {
+    csvRows.push(`Activity,${a.date},${a.steps},${a.distance_km || ""},${a.walking_minutes || ""},"${a.estimated_calories_burned || 0} kcal burned"`);
+  });
+
+  medList.forEach((m) => {
+    csvRows.push(`Medicine,${m.created_at},"${m.medicine_name}",${m.dose},${m.scheduled_time},"${m.active ? "Active" : "Inactive"}${m.meal_relation ? " · " + m.meal_relation : ""}"`);
   });
 
   const csvContent = csvRows.join("\n");

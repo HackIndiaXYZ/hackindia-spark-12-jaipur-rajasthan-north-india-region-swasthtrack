@@ -164,7 +164,7 @@ export function TimelineDetailDialog({
               }}
               className="flex-1 py-2.5 rounded-control bg-brand hover:bg-brand-strong text-ink-inverse text-xs font-bold cursor-pointer shadow-e1"
             >
-              विवरण सत्यापित ✓
+              ठीक है (Got it)
             </Button>
           )}
         </div>

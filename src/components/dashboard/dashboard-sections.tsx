@@ -194,10 +194,10 @@ export function DashboardSections({
 
         {todayFoodCalories !== null ? (
           <div className="space-y-3">
-            <div className="rounded-card border border-emerald-100 bg-emerald-50/60 p-4">
+            <div className="rounded-card border border-food-line bg-food-soft p-4">
               <div className="flex items-center justify-between text-sm">
                 <span className="font-semibold text-ink">Total Calories:</span>
-                <span className="font-semibold text-emerald-800">{todayFoodCalories} kcal</span>
+                <span className="font-semibold text-food">{todayFoodCalories} kcal</span>
               </div>
               <div className="mt-1 flex items-center justify-between text-xs text-ink-muted">
                 <span>Total Protein:</span>
@@ -406,7 +406,7 @@ export function DashboardSections({
         {todayMorningBP || todayEveningBP ? (
           <div className="grid gap-3 sm:grid-cols-2">
             {/* Morning BP */}
-            <div className={`rounded-card border p-4 ${todayMorningBP ? "border-rose-100 bg-rose-50/40" : "border-dashed border-line bg-surface-sunken"}`}>
+            <div className={`rounded-card border p-4 ${todayMorningBP ? "border-bp-line bg-bp-soft/60" : "border-dashed border-line bg-surface-sunken"}`}>
               <p className="text-2xs font-semibold uppercase tracking-wider text-ink-subtle mb-1">सुबह · Morning</p>
               {todayMorningBP ? (
                 <>
@@ -423,7 +423,7 @@ export function DashboardSections({
               )}
             </div>
             {/* Evening BP */}
-            <div className={`rounded-card border p-4 ${todayEveningBP ? "border-rose-100 bg-rose-50/40" : "border-dashed border-line bg-surface-sunken"}`}>
+            <div className={`rounded-card border p-4 ${todayEveningBP ? "border-bp-line bg-bp-soft/60" : "border-dashed border-line bg-surface-sunken"}`}>
               <p className="text-2xs font-semibold uppercase tracking-wider text-ink-subtle mb-1">शाम · Evening</p>
               {todayEveningBP ? (
                 <>
@@ -474,7 +474,7 @@ export function DashboardSections({
         </CardHeader>
 
         {todayWeight ? (
-          <div className="rounded-card border border-amber-100 bg-amber-50/50 p-4">
+          <div className="rounded-card border border-weight-line bg-weight-soft p-4">
             <div className="flex items-end justify-between">
               <div>
                 <p className="text-3xl font-extrabold text-ink">

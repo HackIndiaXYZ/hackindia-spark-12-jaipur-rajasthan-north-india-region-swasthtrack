@@ -25,7 +25,9 @@ const notoDevanagari = Noto_Sans_Devanagari({
 });
 
 export const viewport: Viewport = {
-  themeColor: "#0F8A5F",
+  // Kept in sync with theme_color in src/app/manifest.ts, the single source
+  // of truth for the web app manifest.
+  themeColor: "#059669",
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
@@ -35,7 +37,6 @@ export const metadata: Metadata = {
   title: "SwasthTrack — Health Intelligence & Family Care",
   description: "A personal health tracking and family care companion for parents and caregivers.",
   applicationName: "SwasthTrack",
-  manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
@@ -63,7 +64,9 @@ export default function RootLayout({
       className={`h-full antialiased ${inter.variable} ${notoDevanagari.variable}`}
     >
       <head>
-        <link rel="manifest" href="/manifest.json" />
+        {/* src/app/manifest.ts (the file-convention route) already injects
+            the <link rel="manifest"> tag pointing at /manifest.webmanifest;
+            a second manual tag here would compete with it. */}
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />

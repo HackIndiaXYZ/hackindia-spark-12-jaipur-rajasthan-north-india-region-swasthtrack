@@ -343,17 +343,18 @@ export async function answerHealthQuestionContract(
 
 /**
  * Execute Safe Structured Query Operations & Generate Explainable Answer Card
+ *
+ * NOTE: executeAskPipeline() (ask-orchestrator-service.ts) is the single live pipeline —
+ * it always returns exactly one card, including the clinical-safety refusal cases, so the
+ * `_answerHealthQuestionInternal` fallback below it used to be unreachable dead code and has
+ * been removed from this call path (the safety checks now live directly in the orchestrator).
  */
 export async function answerHealthQuestion(
   patientId: string,
   question: string
 ): Promise<AskDataAnswerCard> {
   const contract = await executeAskPipeline(patientId, question);
-  if (contract.cards.length > 0) {
-    return contract.cards[0] as unknown as AskDataAnswerCard;
-  }
-  const card = await _answerHealthQuestionInternal(patientId, question);
-  return attachHealthSolution(card);
+  return contract.cards[0] as unknown as AskDataAnswerCard;
 }
 
 async function _answerHealthQuestionInternal(

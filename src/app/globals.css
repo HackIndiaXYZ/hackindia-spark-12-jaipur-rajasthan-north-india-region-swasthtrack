@@ -375,6 +375,18 @@ textarea {
 }
 
 /*
+  AA-safe subset of the signature gradient, for the one spot text sits
+  directly on the fill (the primary button). gold-ink text only holds
+  >=4.5:1 contrast against the lighter half of grad-spring — against
+  --color-spring-2 it drops to ~3.7:1, and against --color-spring-3 to
+  ~1.8:1. This stays within spring-1..gold-line, both of which pass
+  (6.1:1 / 5.0:1), instead of reaching into the darker bronze stop.
+*/
+.grad-gold-button {
+  background-image: linear-gradient(115deg, var(--color-spring-1), var(--color-gold-line));
+}
+
+/*
   Light sweep across a gold surface on hover/focus — the one "shine" gesture
   in the product. Reserved for the primary button and hero-tier cards; used
   on more than a couple of elements per screen it stops reading as premium

@@ -17,7 +17,29 @@ import type {
 } from "./soie-types";
 import { getPatientMemories, consolidatePatientMemories } from "./soie-memory-service";
 import { createStructuredInsight } from "./soie-idontknow-service";
-import { determineIntervention } from "./soie-intervention-service";
+import { determineIntervention, type InterventionLevel } from "./soie-intervention-service";
+
+/**
+ * Derive the structured-output safetyLevel from the intervention engine's own
+ * least-intrusive-ladder decision, so the two can never disagree (a
+ * medium-urgency reading that earns an actionable_suggestion must not be
+ * reported as merely "info").
+ */
+function safetyLevelFromInterventionLevel(
+  level: InterventionLevel
+): "info" | "attention" | "escalate" {
+  switch (level) {
+    case "caregiver_notification":
+    case "important_attention":
+      return "escalate";
+    case "actionable_suggestion":
+      return "attention";
+    case "information":
+    case "gentle_reminder":
+    default:
+      return "info";
+  }
+}
 
 // Canonical Event Budgets (§4)
 export const EVENT_BUDGETS: Record<SOIEEventType, EventBudget> = {
@@ -204,7 +226,7 @@ export class IntelligenceOrchestrator {
           confidenceScore: 0.92,
           recommendedAction: "Take 5 minutes of quiet rest and log again in the evening.",
           recommendedActionHi: "5 मिनट शांत विश्राम करें और शाम को पुनः सामान्य रूप से बीपी मापें।",
-          safetyLevel: sys > 160 ? "attention" : "info",
+          safetyLevel: safetyLevelFromInterventionLevel(intervention.level),
         });
       } else {
         primaryInsight = createStructuredInsight({

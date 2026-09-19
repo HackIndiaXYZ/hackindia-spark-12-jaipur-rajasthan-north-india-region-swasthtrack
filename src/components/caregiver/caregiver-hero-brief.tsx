@@ -166,9 +166,9 @@ export function CaregiverHeroBrief({
                 : "bg-white/5 border border-white/10"
             )}
           >
-            <UserCheck className="h-4 w-4 text-emerald-400" />
+            <UserCheck className="h-4 w-4 text-brand" />
             <span>Viewing:</span>
-            <span className="text-emerald-300 underline underline-offset-2">
+            <span className="text-brand-line underline underline-offset-2">
               {dailyBrief?.isPapa ? "पापा (Raj Kishore Gupta)" : patient.name}
             </span>
             {authorizedPatients.length > 1 && (
@@ -241,7 +241,7 @@ export function CaregiverHeroBrief({
             className="h-9 w-9 rounded-control bg-white/10 hover:bg-white/15 border border-white/15 text-ink-inverse/70 flex items-center justify-center transition-colors cursor-pointer"
             title="रिफ्रेश करें"
           >
-            <RefreshCw className={cn("h-3.5 w-3.5", refreshing && "animate-spin text-emerald-400")} />
+            <RefreshCw className={cn("h-3.5 w-3.5", refreshing && "animate-spin text-brand")} />
           </button>
         </div>
       </div>
@@ -303,12 +303,12 @@ export function CaregiverHeroBrief({
           surface="gradient"
           glow="gold"
           highlight
-          className="p-4 sm:p-6 bg-linear-to-b from-purple-50/40 via-surface to-surface space-y-5"
+          className="p-4 sm:p-6 bg-linear-to-b from-brand-softer/40 via-surface to-surface space-y-5"
         >
           {/* A. HERO HEADER BAR */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-line">
             <div className="flex items-center gap-3">
-              <div className="h-12 w-12 rounded-card bg-purple-100 border border-purple-200 text-purple-800 flex items-center justify-center shrink-0 shadow-2xs">
+              <div className="h-12 w-12 rounded-card bg-info-soft border border-info-line text-info flex items-center justify-center shrink-0 shadow-2xs">
                 <Sparkles className="h-6 w-6 stroke-[2.2]" />
               </div>
               <div>
@@ -354,16 +354,16 @@ export function CaregiverHeroBrief({
           </div>
 
           {/* B. NATURAL LANGUAGE SUMMARY BANNER (§4, §10) */}
-          <div className="p-4 rounded-card bg-purple-50/70 border border-purple-200/90 shadow-2xs">
+          <div className="p-4 rounded-card bg-info-soft/70 border border-info-line/90 shadow-2xs">
             <div className="flex items-start gap-2.5">
-              <div className="h-6 w-6 rounded-lg bg-purple-200/80 text-purple-900 flex items-center justify-center shrink-0 mt-0.5">
+              <div className="h-6 w-6 rounded-lg bg-info-line/80 text-info flex items-center justify-center shrink-0 mt-0.5">
                 <Info className="h-3.5 w-3.5" />
               </div>
               <div className="space-y-1">
-                <span className="text-xs font-bold text-purple-950 block">
+                <span className="text-xs font-bold text-info block">
                   संक्षिप्त दिनचर्या सारांश (Daily Overview):
                 </span>
-                <p className="text-xs sm:text-sm font-semibold text-purple-900 leading-relaxed">
+                <p className="text-xs sm:text-sm font-semibold text-info leading-relaxed">
                   {dailyBrief.naturalLanguageSummaryHi}
                 </p>
               </div>
@@ -376,13 +376,13 @@ export function CaregiverHeroBrief({
               <span className="text-ink-muted">
                 दैनिक ट्रैकिंग पूर्णता: {dailyBrief.completenessLabelHi}
               </span>
-              <span className="text-emerald-700 font-bold">
+              <span className="text-positive font-bold">
                 {dailyBrief.completenessPercent}%
               </span>
             </div>
             <div className="h-2 w-full rounded-full bg-surface-sunken overflow-hidden">
               <div
-                className="h-full rounded-full bg-linear-to-r from-emerald-500 to-teal-500 transition-all duration-300"
+                className="h-full rounded-full bg-linear-to-r from-brand to-brand-strong transition-all duration-300"
                 style={{ width: `${dailyBrief.completenessPercent}%` }}
               />
             </div>
@@ -434,37 +434,37 @@ export function CaregiverHeroBrief({
           {/* E. HIGHLIGHTS & ATTENTION COLUMNS (§7, §8) */}
           <div className="grid sm:grid-cols-2 gap-3.5 pt-1">
             {/* POSITIVE HIGHLIGHTS */}
-            <div className="p-3.5 rounded-card bg-emerald-50/50 border border-emerald-200/90 space-y-2">
-              <div className="flex items-center gap-1.5 text-emerald-950 font-bold text-xs sm:text-sm">
-                <CheckCircle2 className="h-4 w-4 text-emerald-700" />
+            <div className="p-3.5 rounded-card bg-positive-soft/50 border border-positive-line/90 space-y-2">
+              <div className="flex items-center gap-1.5 text-positive font-bold text-xs sm:text-sm">
+                <CheckCircle2 className="h-4 w-4 text-positive" />
                 <span>आज के मुख्य सकारात्मक बिंदु (Highlights)</span>
               </div>
               {dailyBrief.highlights.length > 0 ? (
-                <ul className="space-y-1.5 text-xs text-emerald-900 font-semibold">
+                <ul className="space-y-1.5 text-xs text-positive font-semibold">
                   {dailyBrief.highlights.map((h, i) => (
                     <li key={i} className="flex items-start gap-1.5">
-                      <span className="text-emerald-600 font-bold">•</span>
+                      <span className="text-positive font-bold">•</span>
                       <span>{h}</span>
                     </li>
                   ))}
                 </ul>
               ) : (
-                <p className="text-xs text-emerald-800 font-semibold">नियमित दिनचर्या जारी है।</p>
+                <p className="text-xs text-positive font-semibold">नियमित दिनचर्या जारी है।</p>
               )}
             </div>
 
             {/* NEEDS ATTENTION */}
-            <div className="p-3.5 rounded-card bg-amber-50/50 border border-amber-200/90 space-y-2">
+            <div className="p-3.5 rounded-card bg-attention-soft/50 border border-attention-line/90 space-y-2">
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-1.5 text-amber-950 font-bold text-xs sm:text-sm">
-                  <AlertTriangle className="h-4 w-4 text-amber-700" />
+                <div className="flex items-center gap-1.5 text-attention font-bold text-xs sm:text-sm">
+                  <AlertTriangle className="h-4 w-4 text-attention" />
                   <span>ध्यान देने योग्य बिंदु (Needs Attention)</span>
                 </div>
                 {dailyBrief.attentionItems.length > 3 && (
                   <button
                     type="button"
                     onClick={() => setShowAllAttention(!showAllAttention)}
-                    className="text-xs font-bold text-amber-800 hover:underline cursor-pointer"
+                    className="text-xs font-bold text-attention hover:underline cursor-pointer"
                   >
                     {showAllAttention ? "कम देखें ↑" : "सभी देखें ↓"}
                   </button>
@@ -472,17 +472,17 @@ export function CaregiverHeroBrief({
               </div>
 
               {dailyBrief.attentionItems.length > 0 ? (
-                <ul className="space-y-1.5 text-xs text-amber-900 font-semibold">
+                <ul className="space-y-1.5 text-xs text-attention font-semibold">
                   {(showAllAttention
                     ? dailyBrief.attentionItems
                     : dailyBrief.attentionItems.slice(0, 3)
                   ).map((item) => (
                     <li key={item.id} className="flex items-start gap-1.5">
-                      <span className="text-amber-600 font-bold">⚠</span>
+                      <span className="text-attention font-bold">⚠</span>
                       <div>
                         <span>{item.textHi}</span>
                         {item.detail && (
-                          <span className="text-2xs text-amber-800/80 block font-normal">
+                          <span className="text-2xs text-attention/80 block font-normal">
                             {item.detail}
                           </span>
                         )}
@@ -491,7 +491,7 @@ export function CaregiverHeroBrief({
                   ))}
                 </ul>
               ) : (
-                <p className="text-xs text-amber-800 font-semibold">
+                <p className="text-xs text-attention font-semibold">
                   आज कोई लंबित चेतावनी नहीं है। सभी मुख्य रिकॉर्ड्स समय पर हैं।
                 </p>
               )}
@@ -522,7 +522,7 @@ export function CaregiverHeroBrief({
                         (सामान्य: {c.usualValueStr})
                       </span>
                     </div>
-                    <div className="text-xs font-bold text-emerald-700">
+                    <div className="text-xs font-bold text-positive">
                       {c.comparisonTextHi}
                     </div>
                   </div>
@@ -534,7 +534,7 @@ export function CaregiverHeroBrief({
           {/* G. WHAT CHANGED REUSE & TIMELINE LINKS (§14, §15) */}
           <div className="pt-2 border-t border-line flex flex-col sm:flex-row items-center justify-between gap-3">
             <div className="flex items-center gap-2 text-xs font-semibold text-ink-muted">
-              <Sparkles className="h-4 w-4 text-purple-600" />
+              <Sparkles className="h-4 w-4 text-info" />
               <span>
                 <strong>What Changed:</strong> {dailyBrief.whatChangedCompactHi.slice(0, 75)}...
               </span>
@@ -543,13 +543,13 @@ export function CaregiverHeroBrief({
             <div className="flex items-center gap-2 self-stretch sm:self-auto">
               <Link
                 href="/insights/changes"
-                className="flex-1 sm:flex-none text-center px-3 py-1.5 rounded-control bg-purple-50 hover:bg-purple-100 border border-purple-200 text-xs font-bold text-purple-900 transition-colors"
+                className="flex-1 sm:flex-none text-center px-3 py-1.5 rounded-control bg-info-soft hover:brightness-95 border border-info-line text-xs font-bold text-info transition-colors"
               >
                 बदलाव विवरण देखें →
               </Link>
               <Link
                 href="/timeline"
-                className="flex-1 sm:flex-none text-center px-3 py-1.5 rounded-control bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-xs font-bold text-emerald-900 transition-colors flex items-center justify-center gap-1"
+                className="flex-1 sm:flex-none text-center px-3 py-1.5 rounded-control bg-positive-soft hover:brightness-95 border border-positive-line text-xs font-bold text-positive transition-colors flex items-center justify-center gap-1"
               >
                 <History className="h-3.5 w-3.5" />
                 <span>स्वास्थ्य यात्रा</span>
@@ -604,16 +604,16 @@ export function CaregiverHeroBrief({
             </div>
             <div className="p-3 rounded-card bg-surface-sunken border border-line">
               <span className="text-2xs font-semibold text-ink-subtle block uppercase">दवा पालन</span>
-              <span className="text-sm font-bold text-emerald-700">
+              <span className="text-sm font-bold text-positive">
                 {weeklyBrief.medAdherencePercent}%
               </span>
             </div>
           </div>
 
-          <div className="p-3.5 rounded-card bg-purple-50/60 border border-purple-200 text-xs space-y-1">
-            <span className="font-bold text-purple-950 block">साप्ताहिक मुख्य बदलाव:</span>
+          <div className="p-3.5 rounded-card bg-info-soft/60 border border-info-line text-xs space-y-1">
+            <span className="font-bold text-info block">साप्ताहिक मुख्य बदलाव:</span>
             {weeklyBrief.topChanges.map((c, i) => (
-              <p key={i} className="font-semibold text-purple-900">
+              <p key={i} className="font-semibold text-info">
                 • {c}
               </p>
             ))}
@@ -657,7 +657,7 @@ export function CaregiverHeroBrief({
             </div>
             <div className="p-3 rounded-card bg-surface-sunken border border-line">
               <span className="text-2xs font-semibold text-ink-subtle block uppercase">दवा निरंतरता</span>
-              <span className="text-sm font-bold text-emerald-700">
+              <span className="text-sm font-bold text-positive">
                 {monthlyBrief.medAdherencePercent}%
               </span>
             </div>

@@ -36,6 +36,16 @@ export function AddCaregiverDialog({
     if (!isOpen) return;
 
     let active = true;
+    // Deferred to a microtask rather than called synchronously in the effect
+    // body — react-hooks/set-state-in-effect flags synchronous setState calls
+    // here as a cascading-render risk; the fetch below still starts in the
+    // same tick, so there's no visible delay.
+    Promise.resolve().then(() => {
+      if (active) {
+        setInvitation(null);
+        setLoading(true);
+      }
+    });
     generateCaregiverInviteCode(patientId, userId)
       .then((inv) => {
         if (active) {

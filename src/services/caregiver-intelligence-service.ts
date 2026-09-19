@@ -1,6 +1,7 @@
 import {
   getActivityLogs,
   getBloodPressureLogs,
+  getFoodLogs,
   getFoodLogsByDate,
   getMedicines,
   getMedicineLogsByDate,
@@ -177,6 +178,20 @@ function formatCurrentTimeIST(): string {
 }
 
 /**
+ * Build the list of IST date strings (YYYY-MM-DD, oldest first, inclusive of
+ * today) for the trailing N-day window ending today. Used so weekly/monthly
+ * briefs can aggregate real logs over a consistent window instead of relying
+ * on hardcoded stats.
+ */
+function getTrailingDateStrings(days: number): string[] {
+  const dates: string[] = [];
+  for (let i = days - 1; i >= 0; i--) {
+    dates.push(getISTDateStr(new Date(Date.now() - i * 24 * 60 * 60 * 1000)));
+  }
+  return dates;
+}
+
+/**
  * Clear cached caregiver brief for a patient
  */
 export function invalidateCaregiverCache(patientId?: string) {
@@ -253,8 +268,15 @@ export async function getCaregiverDailyBrief(
   // 1. EXTRACT TARGET DATE'S ACTUAL DATA
   // Filter BP for this local date
   const targetBPLogs = bpLogs.filter((b) => getISTDateStr(b.measured_at || b.created_at) === dateStr);
-  const morningBP = targetBPLogs.find((b) => b.reading_type === "Morning") || targetBPLogs[0] || null;
-  const eveningBP = targetBPLogs.find((b) => b.reading_type === "Evening" && b !== morningBP) || null;
+  // Only a reading explicitly typed "Morning" (or a single untyped/"Manual"
+  // reading) is treated as the morning slot — a reading typed "Evening" must
+  // never be relabeled as morning just because it happens to be first in the
+  // list.
+  const morningBP =
+    targetBPLogs.find((b) => b.reading_type === "Morning") ||
+    targetBPLogs.find((b) => !b.reading_type || b.reading_type === "Manual") ||
+    null;
+  const eveningBP = targetBPLogs.find((b) => b.reading_type === "Evening") || null;
 
   // Filter Activity
   const targetAct = actLogs.find((a) => a.date === dateStr) || null;
@@ -338,12 +360,17 @@ export async function getCaregiverDailyBrief(
       labelHi: "रक्तचाप (BP)",
       value: morningBP
         ? `${morningBP.systolic} / ${morningBP.diastolic}`
+        : eveningBP
+        ? `${eveningBP.systolic} / ${eveningBP.diastolic}`
         : "Not logged",
-      subtext: morningBP
-        ? eveningBP
+      subtext:
+        morningBP && eveningBP
           ? `सुबह: ${morningBP.systolic}/${morningBP.diastolic}, शाम: ${eveningBP.systolic}/${eveningBP.diastolic}`
-          : "सुबह का दर्ज · शाम का प्रतीक्षित"
-        : "आज दर्ज नहीं हुआ",
+          : morningBP
+          ? "सुबह का दर्ज · शाम का प्रतीक्षित"
+          : eveningBP
+          ? "शाम का दर्ज · सुबह का प्रतीक्षित"
+          : "आज दर्ज नहीं हुआ",
       isLogged: Boolean(morningBP || eveningBP),
       iconName: "HeartPulse",
     },
@@ -422,6 +449,15 @@ export async function getCaregiverDailyBrief(
       text: "Evening BP not logged.",
       textHi: "शाम का रक्तचाप (Evening BP) अभी दर्ज होना बाकी है।",
       detail: "शाम 6 से 8 बजे के बीच बीपी माप लेने से दैनिक रिकॉर्ड पूरा रहता है।",
+      category: "bp",
+    });
+  } else if (bpSchedule === "morning_evening" && eveningBP && !morningBP) {
+    attentionItems.push({
+      id: "att-morning-bp-missing",
+      level: "ATTENTION",
+      text: "Morning BP not logged.",
+      textHi: "सुबह का रक्तचाप (Morning BP) अभी दर्ज होना बाकी है।",
+      detail: "सुबह उठने के बाद बीपी माप लेने से दैनिक रिकॉर्ड पूरा रहता है।",
       category: "bp",
     });
   } else if (!morningBP && !eveningBP) {
@@ -556,6 +592,8 @@ export async function getCaregiverDailyBrief(
     summarySentences.push("सुबह और शाम दोनों समय का ब्लड प्रेशर दर्ज है।");
   } else if (morningBP) {
     summarySentences.push("सुबह का BP दर्ज हुआ है, शाम का रिकॉर्ड अभी प्रतीक्षित है।");
+  } else if (eveningBP) {
+    summarySentences.push("शाम का BP दर्ज हुआ है, सुबह का रिकॉर्ड अभी प्रतीक्षित है।");
   } else {
     summarySentences.push("आज का रक्तचाप अभी दर्ज नहीं हुआ है।");
   }
@@ -608,59 +646,126 @@ export async function getCaregiverWeeklyBrief(patientId?: string): Promise<Careg
   const profile = await getPatientProfile(patientId);
   const pid = patientId || profile.id;
 
-  const [actLogs, bpLogs, sleepLogs, weightLogs, whatChanged, wellness] = await Promise.all([
-    getActivityLogs(pid, 14),
-    getBloodPressureLogs(pid, 14),
-    getSleepLogs(pid, 14),
-    getWeightLogs(pid, 10),
-    getHealthChanges(pid, "7d"),
-    calculateDailyWellnessScore(pid, getISTDateStr()),
-  ]);
+  const weekDates = getTrailingDateStrings(7);
+
+  const [actLogs, bpLogs, sleepLogs, weightLogs, foodLogs, medicines, medLogsByDay, whatChanged, wellness] =
+    await Promise.all([
+      getActivityLogs(pid, 14),
+      getBloodPressureLogs(pid, 14),
+      getSleepLogs(pid, 14),
+      getWeightLogs(pid, 10),
+      getFoodLogs(pid, 100),
+      getMedicines(pid),
+      Promise.all(weekDates.map((d) => getMedicineLogsByDate(pid, d).catch(() => [] as MedicineLogEntry[]))),
+      getHealthChanges(pid, "7d"),
+      calculateDailyWellnessScore(pid, getISTDateStr()),
+    ]);
 
   // Compute averages
   const stepsAvg = actLogs.length > 0
     ? Math.round(actLogs.reduce((s, a) => s + (a.steps || 0), 0) / actLogs.length)
-    : 5900;
+    : 0;
 
   const sleepAvgHours = sleepLogs.length > 0
     ? Number((sleepLogs.reduce((s, a) => s + Number(a.sleep_hours || 0), 0) / sleepLogs.length).toFixed(1))
-    : 6.8;
+    : 0;
 
   const avgSys = bpLogs.length > 0
     ? Math.round(bpLogs.reduce((s, b) => s + (b.systolic || 0), 0) / bpLogs.length)
-    : 138;
+    : 0;
   const avgDia = bpLogs.length > 0
     ? Math.round(bpLogs.reduce((s, b) => s + (b.diastolic || 0), 0) / bpLogs.length)
-    : 86;
+    : 0;
 
-  const firstWeight = weightLogs[weightLogs.length - 1]?.weight_kg || 80.4;
-  const latestWeight = weightLogs[0]?.weight_kg || 80.4;
-  const weightDiff = Number((latestWeight - firstWeight).toFixed(1));
-  const weightChangeStr = weightDiff === 0 ? "वजन स्थिर (0.0 kg)" : `${weightDiff > 0 ? "+" : ""}${weightDiff} kg बदलाव`;
+  const firstWeight = weightLogs[weightLogs.length - 1]?.weight_kg ?? null;
+  const latestWeight = weightLogs[0]?.weight_kg ?? null;
+  const weightDiff =
+    firstWeight !== null && latestWeight !== null ? Number((latestWeight - firstWeight).toFixed(1)) : null;
+  const weightChangeStr =
+    weightDiff === null
+      ? "पर्याप्त डेटा नहीं"
+      : weightDiff === 0
+      ? "वजन स्थिर (0.0 kg)"
+      : `${weightDiff > 0 ? "+" : ""}${weightDiff} kg बदलाव`;
+
+  // Food: real calories logged within the week window, averaged per day actually logged
+  const weekFoodLogs = foodLogs.filter((f) => weekDates.includes(getISTDateStr(f.consumed_at)));
+  const foodDaysLogged = new Set(weekFoodLogs.map((f) => getISTDateStr(f.consumed_at)));
+  const totalWeekCalories = weekFoodLogs.reduce((s, f) => s + Number(f.calories || 0), 0);
+  const avgCalories = foodDaysLogged.size > 0 ? Math.round(totalWeekCalories / foodDaysLogged.size) : 0;
+
+  // Medicine adherence: real taken/expected doses across the week, same rule
+  // (status "taken" or "late" counts) as the Daily Brief above.
+  const activeMeds = medicines.filter((m) => m.active);
+  const medAdherencePercent =
+    activeMeds.length > 0
+      ? Math.round(
+          (medLogsByDay.reduce(
+            (takenCount, dayLogs) =>
+              takenCount +
+              activeMeds.filter((m) =>
+                dayLogs.some((l) => l.medicine_id === m.id && (l.status === "taken" || l.status === "late")),
+              ).length,
+            0,
+          ) /
+            (activeMeds.length * weekDates.length)) *
+            100,
+        )
+      : 100;
+
+  // Data completeness: share of days this week with at least one real vital logged
+  const daysWithAnyLog = weekDates.filter(
+    (d) =>
+      bpLogs.some((b) => getISTDateStr(b.measured_at || b.created_at) === d) ||
+      foodDaysLogged.has(d) ||
+      actLogs.some((a) => a.date === d && a.steps > 0) ||
+      sleepLogs.some((s) => s.date === d && Number(s.sleep_hours) > 0),
+  ).length;
+  const dataCompletenessPercent = Math.round((daysWithAnyLog / weekDates.length) * 100);
 
   const topChanges = whatChanged?.metrics
     ?.filter((m) => m.isSufficient && m.direction !== "stable")
     .map((m) => `${m.metricHi}: ${m.directionLabelHi} (${m.percentChange > 0 ? "+" : ""}${m.percentChange}%)`)
-    .slice(0, 3) || ["कदम: हालिया औसत स्थिर", "नींद: नियमित दायरा"];
+    .slice(0, 3) || ["इस सप्ताह कोई उल्लेखनीय बदलाव दर्ज नहीं हुआ।"];
+
+  // Top attention: only real, cheaply-derivable observations — no padding.
+  let eveningGapDays = 0;
+  weekDates.forEach((d) => {
+    const dayBP = bpLogs.filter((b) => getISTDateStr(b.measured_at || b.created_at) === d);
+    if (dayBP.some((b) => b.reading_type === "Morning") && !dayBP.some((b) => b.reading_type === "Evening")) {
+      eveningGapDays += 1;
+    }
+  });
+  const lowSleepDays = sleepLogs.filter(
+    (s) => weekDates.includes(s.date) && Number(s.sleep_hours) > 0 && Number(s.sleep_hours) < 6,
+  ).length;
+
+  const topAttention: string[] = [];
+  if (eveningGapDays > 0) {
+    topAttention.push(`शाम के बीपी रिकॉर्ड में ${eveningGapDays} दिन का अंतराल रहा`);
+  }
+  if (lowSleepDays > 0) {
+    topAttention.push(`इस सप्ताह ${lowSleepDays} दिन नींद की अवधि सामान्य से कम (6 घंटे से कम) रही`);
+  }
+  if (topAttention.length === 0) {
+    topAttention.push("इस सप्ताह कोई विशेष चेतावनी दर्ज नहीं हुई।");
+  }
 
   return {
     patientId: pid,
     patientName: profile.name,
     weekStartStr: "7 दिन पूर्व",
     weekEndStr: "आज",
-    avgBP: `${avgSys} / ${avgDia} mmHg`,
+    avgBP: bpLogs.length > 0 ? `${avgSys} / ${avgDia} mmHg` : "पर्याप्त डेटा नहीं",
     avgSteps: stepsAvg,
-    avgCalories: 1620,
+    avgCalories,
     avgSleepHours: sleepAvgHours,
-    medAdherencePercent: 96,
+    medAdherencePercent,
     weightChangeStr,
-    routineScore: wellness?.totalScore ?? 82,
-    dataCompletenessPercent: 88,
+    routineScore: wellness?.totalScore ?? 0,
+    dataCompletenessPercent,
     topChanges,
-    topAttention: [
-      "शाम के बीपी रिकॉर्ड में 2 दिन का अंतराल रहा",
-      "सप्ताह के मध्य में नींद की अवधि थोड़ी कम रही",
-    ],
+    topAttention,
   };
 }
 
@@ -671,20 +776,26 @@ export async function getCaregiverMonthlyBrief(patientId?: string): Promise<Care
   const profile = await getPatientProfile(patientId);
   const pid = patientId || profile.id;
 
-  const [actLogs, bpLogs, sleepLogs, weightLogs] = await Promise.all([
+  const monthDates = getTrailingDateStrings(30);
+
+  const [actLogs, bpLogs, sleepLogs, weightLogs, foodLogs, medicines, medLogsByDay, wellness] = await Promise.all([
     getActivityLogs(pid, 30),
     getBloodPressureLogs(pid, 30),
     getSleepLogs(pid, 30),
     getWeightLogs(pid, 15),
+    getFoodLogs(pid, 200),
+    getMedicines(pid),
+    Promise.all(monthDates.map((d) => getMedicineLogsByDate(pid, d).catch(() => [] as MedicineLogEntry[]))),
+    calculateDailyWellnessScore(pid, getISTDateStr()).catch(() => null),
   ]);
 
   const stepsAvg = actLogs.length > 0
     ? Math.round(actLogs.reduce((s, a) => s + (a.steps || 0), 0) / actLogs.length)
-    : 6100;
+    : 0;
 
   const sleepAvgHours = sleepLogs.length > 0
     ? Number((sleepLogs.reduce((s, a) => s + Number(a.sleep_hours || 0), 0) / sleepLogs.length).toFixed(1))
-    : 7.0;
+    : 0;
 
   let weightTrend: "Gaining" | "Losing" | "Stable" = "Stable";
   if (weightLogs.length >= 2) {
@@ -700,6 +811,51 @@ export async function getCaregiverMonthlyBrief(patientId?: string): Promise<Care
     else if (highReadings > 1) bpTrend = "Fluctuating";
   }
 
+  // Medicine adherence: real taken/expected doses across the month, same
+  // rule (status "taken" or "late" counts) as the Daily Brief above.
+  const activeMeds = medicines.filter((m) => m.active);
+  const medAdherencePercent =
+    activeMeds.length > 0
+      ? Math.round(
+          (medLogsByDay.reduce(
+            (takenCount, dayLogs) =>
+              takenCount +
+              activeMeds.filter((m) =>
+                dayLogs.some((l) => l.medicine_id === m.id && (l.status === "taken" || l.status === "late")),
+              ).length,
+            0,
+          ) /
+            (activeMeds.length * monthDates.length)) *
+            100,
+        )
+      : 100;
+
+  // Food consistency: share of days this month with at least one real food log
+  const monthFoodLogs = foodLogs.filter((f) => monthDates.includes(getISTDateStr(f.consumed_at)));
+  const foodDaysLogged = new Set(monthFoodLogs.map((f) => getISTDateStr(f.consumed_at))).size;
+  const foodConsistencyPercent = Math.round((foodDaysLogged / monthDates.length) * 100);
+
+  const notableChanges: string[] = [];
+  if (activeMeds.length > 0) {
+    notableChanges.push(`मासिक दवा नियमितता ${medAdherencePercent}% रही।`);
+  }
+  if (actLogs.length > 0) {
+    notableChanges.push(`औसत दैनिक कदम ${stepsAvg.toLocaleString()} रहे।`);
+  }
+  const latestWeight = weightLogs[0]?.weight_kg;
+  if (latestWeight !== undefined) {
+    if (weightTrend === "Stable") {
+      notableChanges.push(`वजन स्थिर बना हुआ है (${latestWeight} kg)।`);
+    } else if (weightTrend === "Gaining") {
+      notableChanges.push(`इस माह वजन में हल्की वृद्धि दर्ज हुई (${latestWeight} kg)।`);
+    } else {
+      notableChanges.push(`इस माह वजन में हल्की कमी दर्ज हुई (${latestWeight} kg)।`);
+    }
+  }
+  if (notableChanges.length === 0) {
+    notableChanges.push("इस माह पर्याप्त डेटा उपलब्ध नहीं है।");
+  }
+
   return {
     patientId: pid,
     patientName: profile.name,
@@ -708,13 +864,9 @@ export async function getCaregiverMonthlyBrief(patientId?: string): Promise<Care
     bpTrend,
     stepsAvg,
     sleepAvgHours,
-    medAdherencePercent: 94,
-    foodConsistencyPercent: 88,
-    routineScore: 84,
-    notableChanges: [
-      "मासिक दवा नियमबद्धता 94% पर उत्कृष्ट रही",
-      "शारीरिक सक्रियता में 30 दिनों में 12% की सकारात्मक वृद्धि",
-      "वजन 80.4 kg पर स्थिर बना हुआ है",
-    ],
+    medAdherencePercent,
+    foodConsistencyPercent,
+    routineScore: wellness?.totalScore ?? 0,
+    notableChanges,
   };
 }

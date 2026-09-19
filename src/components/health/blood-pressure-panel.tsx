@@ -681,7 +681,7 @@ export function BloodPressurePanel({ patientId, logs, onSuccess }: BloodPressure
                 onClick={() => setChartRange(range)}
                 className={`rounded-control px-3 py-1.5 text-xs font-semibold transition-all ${
                   chartRange === range
-                    ? "bg-rose-600 text-white shadow-e1"
+                    ? "bg-bp text-ink-inverse shadow-e1"
                     : "bg-surface-sunken text-ink-muted hover:bg-line-strong"
                 }`}
               >
@@ -693,7 +693,7 @@ export function BloodPressurePanel({ patientId, logs, onSuccess }: BloodPressure
           {/* Chart */}
           {chartLoading ? (
             <div className="flex h-48 items-center justify-center">
-              <div className="h-6 w-6 animate-spin rounded-full border-2 border-rose-500 border-t-transparent" />
+              <div className="h-6 w-6 animate-spin rounded-full border-2 border-bp border-t-transparent" />
             </div>
           ) : (
             <BPTrendChart logs={chartLogs} />

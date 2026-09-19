@@ -31,7 +31,7 @@ export function PatientOverviewCard({
       : null;
 
   return (
-    <Card className="border-brand-line bg-gradient-to-br from-surface via-brand-softer to-surface-sunken p-5 sm:p-6 shadow-xs">
+    <Card className="border-brand-line bg-gradient-to-br from-surface via-brand-softer to-surface-sunken p-5 sm:p-6">
       <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
         <div className="space-y-3">
           <div className="flex flex-wrap items-center gap-2.5">
