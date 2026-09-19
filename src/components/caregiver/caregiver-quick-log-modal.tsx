@@ -190,7 +190,7 @@ export function CaregiverQuickLogModal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/60 backdrop-blur-xs animate-in fade-in duration-200">
       <div
-        className="w-full max-w-md bg-surface rounded-sheet border-2 border-line shadow-2xl p-5 sm:p-6 overflow-hidden relative animate-in zoom-in-95 duration-150 max-h-[90vh] flex flex-col"
+        className="w-full max-w-md bg-surface rounded-sheet border-2 border-line shadow-e4 p-5 sm:p-6 overflow-hidden relative animate-in zoom-in-95 duration-150 max-h-[90vh] flex flex-col"
         role="dialog"
         aria-modal="true"
       >
@@ -300,7 +300,7 @@ export function CaregiverQuickLogModal({
                     value={systolic}
                     onChange={(e) => setSystolic(e.target.value)}
                     required
-                    className="w-full px-3 py-2 rounded-field border border-line-strong text-sm font-semibold focus:outline-emerald-500"
+                    className="w-full px-3 py-2 rounded-field border border-line-strong text-sm font-semibold focus:outline-brand"
                   />
                 </div>
                 <div>
@@ -312,7 +312,7 @@ export function CaregiverQuickLogModal({
                     value={diastolic}
                     onChange={(e) => setDiastolic(e.target.value)}
                     required
-                    className="w-full px-3 py-2 rounded-field border border-line-strong text-sm font-semibold focus:outline-emerald-500"
+                    className="w-full px-3 py-2 rounded-field border border-line-strong text-sm font-semibold focus:outline-brand"
                   />
                 </div>
               </div>
@@ -324,7 +324,7 @@ export function CaregiverQuickLogModal({
                     type="number"
                     value={pulse}
                     onChange={(e) => setPulse(e.target.value)}
-                    className="w-full px-3 py-2 rounded-field border border-line-strong text-sm font-semibold focus:outline-emerald-500"
+                    className="w-full px-3 py-2 rounded-field border border-line-strong text-sm font-semibold focus:outline-brand"
                   />
                 </div>
                 <div>
@@ -332,7 +332,7 @@ export function CaregiverQuickLogModal({
                   <select
                     value={bpType}
                     onChange={(e) => setBpType(e.target.value as "Morning" | "Evening")}
-                    className="w-full px-3 py-2 rounded-field border border-line-strong text-sm font-semibold focus:outline-emerald-500 bg-surface"
+                    className="w-full px-3 py-2 rounded-field border border-line-strong text-sm font-semibold focus:outline-brand bg-surface"
                   >
                     <option value="Morning">सुबह (Morning)</option>
                     <option value="Evening">शाम (Evening)</option>
@@ -386,7 +386,7 @@ export function CaregiverQuickLogModal({
                         disabled={submitting}
                         onClick={() => handleMarkMedicineMissed(m)}
                         variant="secondary"
-                        className="text-xs py-1.5 px-2.5 min-h-8 text-rose-700 border-rose-200 hover:bg-rose-50"
+                        className="text-xs py-1.5 px-2.5 min-h-8 text-critical border-critical-line hover:bg-critical-soft"
                       >
                         Missed ✕
                       </Button>
@@ -407,7 +407,7 @@ export function CaregiverQuickLogModal({
                   value={foodName}
                   onChange={(e) => setFoodName(e.target.value)}
                   required
-                  className="w-full px-3 py-2 rounded-field border border-line-strong text-sm font-semibold focus:outline-emerald-500"
+                  className="w-full px-3 py-2 rounded-field border border-line-strong text-sm font-semibold focus:outline-brand"
                 />
               </div>
 
@@ -419,7 +419,7 @@ export function CaregiverQuickLogModal({
                     value={calories}
                     onChange={(e) => setCalories(e.target.value)}
                     required
-                    className="w-full px-3 py-2 rounded-field border border-line-strong text-sm font-semibold focus:outline-emerald-500"
+                    className="w-full px-3 py-2 rounded-field border border-line-strong text-sm font-semibold focus:outline-brand"
                   />
                 </div>
                 <div>
@@ -427,7 +427,7 @@ export function CaregiverQuickLogModal({
                   <select
                     value={mealType}
                     onChange={(e) => setMealType(e.target.value as "Breakfast" | "Lunch" | "Dinner" | "Snack")}
-                    className="w-full px-3 py-2 rounded-field border border-line-strong text-sm font-semibold focus:outline-emerald-500 bg-surface"
+                    className="w-full px-3 py-2 rounded-field border border-line-strong text-sm font-semibold focus:outline-brand bg-surface"
                   >
                     <option value="Breakfast">नाश्ता (Breakfast)</option>
                     <option value="Lunch">दोपहर (Lunch)</option>
@@ -457,7 +457,7 @@ export function CaregiverQuickLogModal({
                   value={steps}
                   onChange={(e) => setSteps(e.target.value)}
                   required
-                  className="w-full px-3 py-2 rounded-field border border-line-strong text-sm font-semibold focus:outline-emerald-500"
+                  className="w-full px-3 py-2 rounded-field border border-line-strong text-sm font-semibold focus:outline-brand"
                 />
               </div>
 
@@ -469,7 +469,7 @@ export function CaregiverQuickLogModal({
                   type="number"
                   value={walkingMins}
                   onChange={(e) => setWalkingMins(e.target.value)}
-                  className="w-full px-3 py-2 rounded-field border border-line-strong text-sm font-semibold focus:outline-emerald-500"
+                  className="w-full px-3 py-2 rounded-field border border-line-strong text-sm font-semibold focus:outline-brand"
                 />
               </div>
 
@@ -496,7 +496,7 @@ export function CaregiverQuickLogModal({
                   value={sleepHours}
                   onChange={(e) => setSleepHours(e.target.value)}
                   required
-                  className="w-full px-3 py-2 rounded-field border border-line-strong text-sm font-semibold focus:outline-emerald-500"
+                  className="w-full px-3 py-2 rounded-field border border-line-strong text-sm font-semibold focus:outline-brand"
                 />
               </div>
 
@@ -523,7 +523,7 @@ export function CaregiverQuickLogModal({
                   value={weightKg}
                   onChange={(e) => setWeightKg(e.target.value)}
                   required
-                  className="w-full px-3 py-2 rounded-field border border-line-strong text-sm font-semibold focus:outline-emerald-500"
+                  className="w-full px-3 py-2 rounded-field border border-line-strong text-sm font-semibold focus:outline-brand"
                 />
               </div>
 

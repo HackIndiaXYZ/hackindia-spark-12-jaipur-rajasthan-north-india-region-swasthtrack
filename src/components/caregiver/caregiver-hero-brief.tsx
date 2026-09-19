@@ -150,7 +150,7 @@ export function CaregiverHeroBrief({
   return (
     <div className="space-y-4">
       {/* 1. PATIENT CONTEXT SELECTOR BAR (§16, §17) */}
-      <div className="flex flex-wrap items-center justify-between gap-2.5 p-3 rounded-card bg-slate-900 text-ink-inverse shadow-e2">
+      <div className="flex flex-wrap items-center justify-between gap-2.5 p-3 rounded-card bg-ink text-ink-inverse shadow-e2">
         <div className="relative">
           <button
             type="button"
@@ -162,8 +162,8 @@ export function CaregiverHeroBrief({
             className={cn(
               "flex items-center gap-2 px-3 py-1.5 rounded-control text-xs sm:text-sm font-bold transition-all",
               authorizedPatients.length > 1
-                ? "bg-slate-800 hover:bg-slate-700 cursor-pointer border border-slate-700"
-                : "bg-slate-800/60 border border-slate-800"
+                ? "bg-white/10 hover:bg-white/15 cursor-pointer border border-white/15"
+                : "bg-white/5 border border-white/10"
             )}
           >
             <UserCheck className="h-4 w-4 text-emerald-400" />
@@ -172,13 +172,13 @@ export function CaregiverHeroBrief({
               {dailyBrief?.isPapa ? "पापा (Raj Kishore Gupta)" : patient.name}
             </span>
             {authorizedPatients.length > 1 && (
-              <ChevronDown className="h-3.5 w-3.5 text-slate-400 ml-1" />
+              <ChevronDown className="h-3.5 w-3.5 text-ink-inverse/60 ml-1" />
             )}
           </button>
 
           {/* PATIENT DROPDOWN */}
           {isPatientDropdownOpen && authorizedPatients.length > 1 && (
-            <div className="absolute left-0 top-full mt-2 w-64 rounded-card bg-surface text-ink border-2 border-line shadow-2xl z-30 p-2 space-y-1">
+            <div className="absolute left-0 top-full mt-2 w-64 rounded-card bg-surface text-ink border-2 border-line shadow-e4 z-30 p-2 space-y-1">
               <span className="text-2xs font-semibold text-ink-subtle px-3 py-1 block uppercase">
                 Authorized Patients (मरीज़ चुनें)
               </span>
@@ -193,12 +193,12 @@ export function CaregiverHeroBrief({
                   className={cn(
                     "w-full text-left px-3 py-2 rounded-control text-xs font-bold transition-colors flex items-center justify-between",
                     p.id === patient.id
-                      ? "bg-emerald-50 text-emerald-900 border border-emerald-200"
+                      ? "bg-brand-soft text-brand-ink border border-brand-line"
                       : "hover:bg-surface-sunken text-ink-muted"
                   )}
                 >
                   <span>{p.name}</span>
-                  {p.id === patient.id && <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />}
+                  {p.id === patient.id && <CheckCircle2 className="h-3.5 w-3.5 text-brand" />}
                 </button>
               ))}
             </div>
@@ -207,15 +207,15 @@ export function CaregiverHeroBrief({
 
         {/* DATE SELECTOR (§18) & LIVE REFRESH */}
         <div className="flex items-center gap-2">
-          <div className="flex items-center bg-slate-800 p-1 rounded-control border border-slate-700">
+          <div className="flex items-center bg-white/10 p-1 rounded-control border border-white/15">
             <button
               type="button"
               onClick={() => setSelectedDate(todayStr)}
               className={cn(
                 "px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer",
                 selectedDate === todayStr
-                  ? "bg-emerald-600 text-ink-inverse shadow-2xs"
-                  : "text-slate-400 hover:text-ink-inverse"
+                  ? "bg-brand text-ink-inverse shadow-2xs"
+                  : "text-ink-inverse/60 hover:text-ink-inverse"
               )}
             >
               आज (Today)
@@ -226,8 +226,8 @@ export function CaregiverHeroBrief({
               className={cn(
                 "px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer",
                 selectedDate === yesterdayStr
-                  ? "bg-emerald-600 text-ink-inverse shadow-2xs"
-                  : "text-slate-400 hover:text-ink-inverse"
+                  ? "bg-brand text-ink-inverse shadow-2xs"
+                  : "text-ink-inverse/60 hover:text-ink-inverse"
               )}
             >
               कल (Yesterday)
@@ -238,7 +238,7 @@ export function CaregiverHeroBrief({
             type="button"
             onClick={triggerRefresh}
             disabled={refreshing}
-            className="h-8 w-8 rounded-control bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 flex items-center justify-center transition-colors cursor-pointer"
+            className="h-9 w-9 rounded-control bg-white/10 hover:bg-white/15 border border-white/15 text-ink-inverse/70 flex items-center justify-center transition-colors cursor-pointer"
             title="रिफ्रेश करें"
           >
             <RefreshCw className={cn("h-3.5 w-3.5", refreshing && "animate-spin text-emerald-400")} />
