@@ -81,7 +81,7 @@ export function AddConditionDialog({
     >
       <form onSubmit={handleSubmit} className="space-y-4">
         {error ? (
-          <div className="rounded-lg border border-rose-200 bg-rose-50 p-3 text-sm font-medium text-rose-700">
+          <div className="rounded-card border border-critical-line bg-critical-soft p-3 text-sm font-medium text-critical">
             {error}
           </div>
         ) : null}
@@ -103,7 +103,7 @@ export function AddConditionDialog({
               type="button"
               key={item}
               onClick={() => setConditionName(item)}
-              className="rounded-lg border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-800 hover:bg-emerald-100 transition-colors"
+              className="rounded-control border border-brand-line bg-brand-soft px-2.5 py-1 text-xs font-semibold text-brand-ink hover:bg-brand-line/40 transition-colors"
             >
               + {item}
             </button>

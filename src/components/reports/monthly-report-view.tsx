@@ -50,10 +50,10 @@ export function MonthlyReportView({ patientId }: MonthlyReportViewProps) {
   if (loading) {
     return (
       <div className="space-y-4 animate-pulse">
-        <div className="h-28 rounded-2xl bg-slate-100" />
+        <div className="h-28 rounded-card bg-surface-sunken" />
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {[...Array(6)].map((_, i) => (
-            <div key={i} className="h-28 rounded-xl bg-slate-100" />
+            <div key={i} className="h-28 rounded-control bg-surface-sunken" />
           ))}
         </div>
       </div>
@@ -73,33 +73,33 @@ export function MonthlyReportView({ patientId }: MonthlyReportViewProps) {
 
   return (
     <div className="space-y-5">
-      {/* Header Banner */}
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between rounded-2xl border border-slate-200 bg-white p-5 shadow-xs">
+      {/* Header Banner — hero: the one number the report exists to show */}
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between rounded-panel gold-edge p-5">
         <div>
           <div className="flex items-center gap-2">
-            <Calendar className="h-5 w-5 text-emerald-600" />
-            <h3 className="font-semibold text-slate-900 text-base">
+            <Calendar className="h-5 w-5 text-brand" />
+            <h3 className="font-semibold text-ink text-base">
               Monthly Health & Tracking Report · मासिक स्वास्थ्य रिपोर्ट
             </h3>
           </div>
-          <p className="mt-1 text-xs text-slate-500">
-            Window: <span className="font-semibold text-slate-800">{monthlyData.monthLabel}</span> · {monthlyData.daysTrackedCount} of 30 days active
+          <p className="mt-1 text-xs text-ink-subtle">
+            Window: <span className="font-semibold text-ink-muted">{monthlyData.monthLabel}</span> · {monthlyData.daysTrackedCount} of 30 days active
           </p>
         </div>
 
         <div className="text-right">
-          <p className="text-2xs font-semibold uppercase tracking-wider text-slate-400">Monthly Avg Score</p>
-          <p className="text-3xl font-bold text-slate-950">
+          <p className="text-2xs font-semibold uppercase tracking-wider text-ink-subtle">Monthly Avg Score</p>
+          <p className="grad-text text-3xl font-bold">
             {monthlyData.averageScore}
-            <span className="text-xs font-semibold text-slate-400">/100</span>
+            <span className="text-xs font-semibold text-ink-subtle">/100</span>
           </p>
         </div>
       </div>
 
       {/* 6 Adherence Progress Bars */}
-      <Card className="border-slate-200 bg-white p-5">
+      <Card className="p-5">
         <CardHeader className="p-0 pb-4">
-          <CardTitle className="text-sm font-semibold text-slate-900 flex items-center gap-2">
+          <CardTitle className="text-sm font-semibold text-ink flex items-center gap-2">
             <Activity className="h-4 w-4 text-emerald-600" />
             30-Day Habit Adherence Breakdown (30 दिवसीय निरंतरता)
           </CardTitle>
@@ -112,13 +112,13 @@ export function MonthlyReportView({ patientId }: MonthlyReportViewProps) {
           {adherenceItems.map((item) => {
             const Icon = item.icon;
             return (
-              <div key={item.label} className="rounded-xl border border-slate-100 bg-slate-50/70 p-3.5 space-y-2">
+              <div key={item.label} className="rounded-card border border-line bg-surface-sunken/70 p-3.5 space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-semibold text-slate-800 flex items-center gap-1.5">
-                    <Icon className="h-3.5 w-3.5 text-slate-600" />
+                  <span className="text-xs font-semibold text-ink-muted flex items-center gap-1.5">
+                    <Icon className="h-3.5 w-3.5 text-ink-muted" />
                     {item.label}
                   </span>
-                  <span className="text-xs font-bold text-slate-900">{item.val}%</span>
+                  <span className="text-xs font-bold text-ink">{item.val}%</span>
                 </div>
                 <ProgressBar
                   label={item.label}
@@ -133,50 +133,50 @@ export function MonthlyReportView({ patientId }: MonthlyReportViewProps) {
 
       {/* Monthly Key Metrics */}
       <div className="grid gap-3 grid-cols-2 sm:grid-cols-4">
-        <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-xs">
-          <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">Active Days</span>
-          <p className="mt-1 text-2xl font-bold text-slate-900">{monthlyData.daysTrackedCount}/30</p>
-          <p className="text-2xs text-slate-500 mt-0.5">सक्रिय ट्रैकिंग दिन</p>
+        <div className="rounded-card border border-line bg-surface p-4 shadow-e1">
+          <span className="text-xs font-semibold uppercase tracking-wider text-ink-subtle">Active Days</span>
+          <p className="mt-1 text-2xl font-bold text-ink">{monthlyData.daysTrackedCount}/30</p>
+          <p className="text-2xs text-ink-subtle mt-0.5">सक्रिय ट्रैकिंग दिन</p>
         </div>
 
-        <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-xs">
-          <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">Total BP Logs</span>
-          <p className="mt-1 text-2xl font-bold text-slate-900">{monthlyData.totalBpReadings}</p>
-          <p className="text-2xs text-slate-500 mt-0.5">रक्तचाप माप</p>
+        <div className="rounded-card border border-line bg-surface p-4 shadow-e1">
+          <span className="text-xs font-semibold uppercase tracking-wider text-ink-subtle">Total BP Logs</span>
+          <p className="mt-1 text-2xl font-bold text-ink">{monthlyData.totalBpReadings}</p>
+          <p className="text-2xs text-ink-subtle mt-0.5">रक्तचाप माप</p>
         </div>
 
-        <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-xs">
-          <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">Avg Steps</span>
-          <p className="mt-1 text-2xl font-bold text-slate-900">
+        <div className="rounded-card border border-line bg-surface p-4 shadow-e1">
+          <span className="text-xs font-semibold uppercase tracking-wider text-ink-subtle">Avg Steps</span>
+          <p className="mt-1 text-2xl font-bold text-ink">
             {monthlyData.averageSteps ? monthlyData.averageSteps.toLocaleString() : "N/A"}
           </p>
-          <p className="text-2xs text-slate-500 mt-0.5">मासिक औसत कदम</p>
+          <p className="text-2xs text-ink-subtle mt-0.5">मासिक औसत कदम</p>
         </div>
 
-        <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-xs">
-          <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">Weight Trend</span>
-          <p className="mt-1 text-2xl font-bold text-slate-900">
+        <div className="rounded-card border border-line bg-surface p-4 shadow-e1">
+          <span className="text-xs font-semibold uppercase tracking-wider text-ink-subtle">Weight Trend</span>
+          <p className="mt-1 text-2xl font-bold text-ink">
             {monthlyData.weightChangeKg !== null
               ? `${monthlyData.weightChangeKg > 0 ? "+" : ""}${monthlyData.weightChangeKg} kg`
               : "Stable"}
           </p>
-          <p className="text-2xs text-slate-500 mt-0.5">माह में शुद्ध बदलाव</p>
+          <p className="text-2xs text-ink-subtle mt-0.5">माह में शुद्ध बदलाव</p>
         </div>
       </div>
 
       {/* Rule-based insights */}
       {monthlyData.personalizedInsights.length > 0 && (
-        <Card className="border-emerald-100 bg-emerald-50/40 p-5">
+        <Card className="border-positive-line bg-positive-soft/40 p-5">
           <CardHeader className="p-0 pb-3">
-            <CardTitle className="text-sm font-semibold text-emerald-950 flex items-center gap-2">
-              <CheckCircle2 className="h-4 w-4 text-emerald-700" />
+            <CardTitle className="text-sm font-semibold text-positive flex items-center gap-2">
+              <CheckCircle2 className="h-4 w-4 text-positive" />
               Monthly Observations · मासिक अवलोकन
             </CardTitle>
           </CardHeader>
-          <div className="space-y-1.5 text-xs text-emerald-900 font-medium">
+          <div className="space-y-1.5 text-xs text-positive font-medium">
             {monthlyData.personalizedInsights.map((ins, idx) => (
               <div key={idx} className="flex items-start gap-2">
-                <span className="mt-1 h-1.5 w-1.5 rounded-full bg-emerald-600 shrink-0" />
+                <span className="mt-1 h-1.5 w-1.5 rounded-full bg-positive shrink-0" />
                 <span>{ins}</span>
               </div>
             ))}
@@ -185,7 +185,7 @@ export function MonthlyReportView({ patientId }: MonthlyReportViewProps) {
       )}
 
       {/* Disclaimer */}
-      <div className="flex items-center gap-1.5 text-xs text-slate-400">
+      <div className="flex items-center gap-1.5 text-xs text-ink-subtle">
         <AlertCircle className="h-3 w-3 shrink-0" />
         <span>
           यह मासिक विश्लेषण केवल व्यवहारिक आदतों (habit consistency) की समीक्षा है। यह कोई चिकित्सीय परामर्श नहीं है।

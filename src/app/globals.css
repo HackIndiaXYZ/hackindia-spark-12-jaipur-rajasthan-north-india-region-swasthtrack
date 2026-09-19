@@ -2,7 +2,10 @@
 
 /* ==========================================================================
    SWASTHTRACK DESIGN TOKENS — single source of truth
-   Light theme only. Calm, warm, clinical-but-human.
+   Light theme only. Calm, warm, clinical-but-human — with one deliberate
+   premium accent: a gold-foil signature gradient (grad-spring / the
+   --color-spring-* stops) carried through the wellness ring, primary
+   actions and hero surfaces.
    Every value below is referenced through Tailwind utilities
    (bg-canvas, text-ink, rounded-card, shadow-e2, …) so screens never
    hard-code one-off colours, radii or shadows.
@@ -68,12 +71,23 @@
   --color-brand-line: #b9dfcd;
   --color-brand-ink: #0a5a3e;
 
-  /* Signature gradient. The wellness ring, the primary button and the hero
-     accent all draw from these three stops, so the product has one
-     recognisable colour move rather than a different gradient per screen. */
-  --color-spring-1: #22d3ee;
-  --color-spring-2: #10b981;
-  --color-spring-3: #4ade80;
+  /* Signature gradient — premium gold foil. The wellness ring, the primary
+     button, quick actions and every hero accent draw from these three
+     stops, so the product has one recognisable colour move rather than a
+     different gradient per screen. Champagne highlight through to a deep
+     bronze shadow, so it reads as lit metal rather than flat yellow. */
+  --color-spring-1: #f6dfa0;
+  --color-spring-2: #d8a936;
+  --color-spring-3: #9c6d1e;
+
+  /* ---- Colour: gold accent -----------------------------------------------
+     For chrome that isn't the gradient itself — badges, hairline borders,
+     text — so gold reads consistently whether it's a fill, a stroke or a
+     label. --color-gold-ink carries AA text contrast on both white and
+     --color-gold-soft. */
+  --color-gold-soft: #fbf3da;
+  --color-gold-line: #e6c976;
+  --color-gold-ink: #6b4a0c;
 
   /* ---- Colour: metric identity -----------------------------------------
      Each vital keeps one hue across the whole product, so a colour always
@@ -157,7 +171,8 @@
 
   /* Coloured ambient glow. Used only on the hero ring and pressed quick
      actions — one accent moment per screen, never on every card. */
-  --shadow-glow-brand: 0 12px 32px -10px rgba(16, 185, 129, 0.45);
+  --shadow-glow-brand: 0 12px 32px -10px rgba(212, 169, 54, 0.5);
+  --shadow-glow-gold: 0 12px 32px -10px rgba(212, 169, 54, 0.5);
   --shadow-glow-bp: 0 12px 32px -10px rgba(194, 56, 76, 0.35);
   --shadow-glow-weight: 0 12px 32px -10px rgba(42, 111, 176, 0.35);
   --shadow-glow-food: 0 12px 32px -10px rgba(176, 113, 15, 0.35);
@@ -310,6 +325,27 @@ textarea {
   box-shadow: var(--shadow-e3);
 }
 
+/*
+  Premium surface: the same lit-edge idea as `.surface-lift`, but the border
+  itself is gold foil instead of a neutral highlight. Reserved for the one or
+  two hero surfaces per screen — a hairline gold edge on every card would
+  read as gaudy rather than premium.
+*/
+.gold-edge {
+  position: relative;
+  background:
+    linear-gradient(var(--color-surface), var(--color-surface)) padding-box,
+    linear-gradient(
+        135deg,
+        var(--color-spring-1),
+        var(--color-spring-2) 45%,
+        var(--color-spring-3)
+      )
+      border-box;
+  border: 1px solid transparent;
+  box-shadow: var(--shadow-e3);
+}
+
 /* Frosted overlay for sticky chrome. */
 .frost {
   background: color-mix(in srgb, var(--color-surface) 82%, transparent);
@@ -336,6 +372,48 @@ textarea {
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+}
+
+/*
+  Light sweep across a gold surface on hover/focus — the one "shine" gesture
+  in the product. Reserved for the primary button and hero-tier cards; used
+  on more than a couple of elements per screen it stops reading as premium
+  and starts reading as busy.
+*/
+@keyframes st-shine-sweep {
+  from {
+    transform: translateX(-140%) skewX(-18deg);
+  }
+  to {
+    transform: translateX(140%) skewX(-18deg);
+  }
+}
+
+.shine-sweep {
+  position: relative;
+  overflow: hidden;
+}
+
+.shine-sweep::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: 45%;
+  background: linear-gradient(
+    100deg,
+    transparent,
+    rgba(255, 255, 255, 0.5) 45%,
+    rgba(255, 255, 255, 0.85) 50%,
+    rgba(255, 255, 255, 0.5) 55%,
+    transparent
+  );
+  transform: translateX(-140%) skewX(-18deg);
+  pointer-events: none;
+}
+
+.shine-sweep:hover::after,
+.shine-sweep:focus-visible::after {
+  animation: st-shine-sweep 850ms var(--ease-out-soft);
 }
 
 /* Tactile press for cards and quick actions. */
@@ -468,7 +546,8 @@ textarea {
   .reveal,
   .grow-bar,
   .arc-sweep,
-  .page-body > * {
+  .page-body > *,
+  .shine-sweep::after {
     animation: none !important;
   }
 

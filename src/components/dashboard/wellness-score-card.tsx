@@ -71,18 +71,18 @@ export function WellnessScoreCard({ patientId, result }: WellnessScoreCardProps)
 
   if (loading) {
     return (
-      <Card className="p-5 border-slate-200 animate-pulse bg-white">
+      <Card className="p-5 border-line animate-pulse bg-surface">
         <div className="flex items-center justify-between">
-          <div className="h-4 w-40 rounded bg-slate-200" />
-          <div className="h-6 w-20 rounded bg-slate-200" />
+          <div className="h-4 w-40 rounded bg-surface-sunken" />
+          <div className="h-6 w-20 rounded bg-surface-sunken" />
         </div>
         <div className="mt-4 flex items-baseline gap-2">
-          <div className="h-10 w-24 rounded bg-slate-200" />
-          <div className="h-4 w-32 rounded bg-slate-200" />
+          <div className="h-10 w-24 rounded bg-surface-sunken" />
+          <div className="h-4 w-32 rounded bg-surface-sunken" />
         </div>
         <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-6">
           {[...Array(6)].map((_, i) => (
-            <div key={i} className="h-20 rounded-xl bg-slate-100 p-3" />
+            <div key={i} className="h-20 rounded-card bg-surface-sunken p-3" />
           ))}
         </div>
       </Card>
@@ -170,19 +170,19 @@ export function WellnessScoreCard({ patientId, result }: WellnessScoreCardProps)
   ];
 
   return (
-    <Card className="border-slate-200 bg-white p-5 shadow-xs transition-all">
+    <Card className="border-line bg-surface p-5 shadow-xs transition-all">
       {/* Top Banner */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <div className="flex items-center gap-2">
-            <span className="flex h-6 w-6 items-center justify-center rounded-lg bg-emerald-100 text-emerald-800">
+            <span className="flex h-6 w-6 items-center justify-center rounded-control bg-brand-soft text-brand-ink">
               <Sparkles className="h-3.5 w-3.5" />
             </span>
-            <h3 className="font-semibold text-slate-900 text-base sm:text-lg">
+            <h3 className="font-semibold text-ink text-base sm:text-lg">
               Today&apos;s Wellness Score · दैनिक ट्रैकिंग स्कोर
             </h3>
           </div>
-          <p className="mt-0.5 text-xs text-slate-500">
+          <p className="mt-0.5 text-xs text-ink-subtle">
             यह आपके daily tracking और healthy habits की consistency का score है। यह medical assessment नहीं है।
           </p>
         </div>
@@ -191,10 +191,10 @@ export function WellnessScoreCard({ patientId, result }: WellnessScoreCardProps)
           <button
             type="button"
             onClick={() => setShowCaregiverView(!showCaregiverView)}
-            className={`flex items-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-xs font-semibold transition-colors ${
+            className={`flex items-center gap-1.5 rounded-control border px-2.5 py-1.5 text-xs font-semibold transition-colors ${
               showCaregiverView
-                ? "border-emerald-600 bg-emerald-50 text-emerald-900 shadow-2xs"
-                : "border-slate-200 bg-white text-slate-600 hover:bg-slate-50"
+                ? "border-brand bg-brand-soft text-brand-ink shadow-2xs"
+                : "border-line bg-surface text-ink-muted hover:bg-surface-sunken"
             }`}
           >
             <UserCheck className="h-3.5 w-3.5" />
@@ -203,14 +203,14 @@ export function WellnessScoreCard({ patientId, result }: WellnessScoreCardProps)
         </div>
       </div>
 
-      {/* Main Score Hero Display */}
-      <div className="mt-4 flex flex-col gap-4 rounded-2xl border border-slate-100 bg-slate-50/80 p-4 sm:flex-row sm:items-center sm:justify-between">
+      {/* Main Score Hero Display — the one gold moment in this card */}
+      <div className="mt-4 flex flex-col gap-4 rounded-panel gold-edge p-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-baseline gap-3">
           <div className="flex items-baseline">
-            <span className="text-4xl sm:text-5xl font-bold tracking-tight text-slate-950">
+            <span className="grad-text text-4xl sm:text-5xl font-bold tracking-tight">
               {totalScore}
             </span>
-            <span className="text-sm sm:text-base font-semibold text-slate-400">
+            <span className="text-sm sm:text-base font-semibold text-ink-subtle">
               /{maxScore}
             </span>
           </div>
@@ -221,7 +221,7 @@ export function WellnessScoreCard({ patientId, result }: WellnessScoreCardProps)
                 {category}
               </Badge>
             </div>
-            <p className="text-xs font-medium text-slate-600">
+            <p className="text-xs font-medium text-ink-muted">
               {categoryHi}
             </p>
           </div>
@@ -231,43 +231,43 @@ export function WellnessScoreCard({ patientId, result }: WellnessScoreCardProps)
         <button
           type="button"
           onClick={() => setShowExplanation(!showExplanation)}
-          className="flex items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 shadow-2xs hover:border-emerald-200 hover:bg-slate-50 transition-all"
+          className="flex items-center justify-center gap-1.5 rounded-control border border-line bg-surface px-3 py-2 text-xs font-semibold text-ink-muted shadow-2xs hover:border-brand-line hover:bg-surface-sunken transition-all"
         >
-          <Info className="h-3.5 w-3.5 text-emerald-600" />
+          <Info className="h-3.5 w-3.5 text-brand" />
           <span>आज score क्यों मिला?</span>
           {showExplanation ? (
-            <ChevronUp className="h-3.5 w-3.5 text-slate-400" />
+            <ChevronUp className="h-3.5 w-3.5 text-ink-subtle" />
           ) : (
-            <ChevronDown className="h-3.5 w-3.5 text-slate-400" />
+            <ChevronDown className="h-3.5 w-3.5 text-ink-subtle" />
           )}
         </button>
       </div>
 
       {/* CAREGIVER QUICK SUMMARY CALLOUT */}
       {showCaregiverView && (
-        <div className="mt-3 rounded-xl border border-emerald-200 bg-emerald-50/70 p-4 animate-in fade-in">
+        <div className="mt-3 rounded-card border border-positive-line bg-positive-soft/70 p-4 animate-in fade-in">
           <div className="flex items-start gap-2">
-            <UserCheck className="mt-0.5 h-4 w-4 shrink-0 text-emerald-700" />
+            <UserCheck className="mt-0.5 h-4 w-4 shrink-0 text-positive" />
             <div className="space-y-1 text-xs">
-              <p className="font-semibold text-emerald-950">
+              <p className="font-semibold text-positive">
                 Caregiver Quick View · पारिवारिक सारांश
               </p>
               {missingDataItems.length > 0 ? (
                 <div>
-                  <p className="font-semibold text-emerald-900">
+                  <p className="font-semibold text-positive">
                     आज {missingDataItems.length} बातें दर्ज होना शेष हैं:
                   </p>
-                  <ul className="mt-1 list-disc list-inside space-y-0.5 text-slate-700 font-medium">
+                  <ul className="mt-1 list-disc list-inside space-y-0.5 text-ink-muted font-medium">
                     {missingDataItems.map((item, idx) => (
                       <li key={idx}>
-                        <span className="text-slate-800">{item}</span>
+                        <span className="text-ink">{item}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
               ) : (
-                <p className="font-semibold text-emerald-800 flex items-center gap-1">
-                  <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
+                <p className="font-semibold text-positive flex items-center gap-1">
+                  <CheckCircle2 className="h-3.5 w-3.5 text-positive" />
                   आज के सभी मुख्य ट्रैकिंग रिकॉर्ड सफलतापूर्वक पूर्ण हो चुके हैं!
                 </p>
               )}
@@ -278,16 +278,16 @@ export function WellnessScoreCard({ patientId, result }: WellnessScoreCardProps)
 
       {/* EXPANDABLE SCORE EXPLANATION (+ / -) */}
       {showExplanation && (
-        <div className="mt-3 space-y-2 rounded-xl border border-slate-200 bg-white p-4 text-xs animate-in fade-in">
-          <p className="font-semibold text-slate-900 text-xs uppercase tracking-wider mb-2">
+        <div className="mt-3 space-y-2 rounded-card border border-line bg-surface p-4 text-xs animate-in fade-in">
+          <p className="font-semibold text-ink text-xs uppercase tracking-wider mb-2">
             Score Breakdown Factors · मुख्य कारण
           </p>
 
           {reasons.positive.length > 0 && (
             <div className="space-y-1.5">
               {reasons.positive.map((pos, idx) => (
-                <div key={idx} className="flex items-start gap-2 text-emerald-800 font-medium">
-                  <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 font-bold text-xs">
+                <div key={idx} className="flex items-start gap-2 text-positive font-medium">
+                  <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-positive-soft text-positive font-bold text-xs">
                     +
                   </span>
                   <span>{pos}</span>
@@ -297,10 +297,10 @@ export function WellnessScoreCard({ patientId, result }: WellnessScoreCardProps)
           )}
 
           {reasons.deductions.length > 0 && (
-            <div className="mt-2 space-y-1.5 border-t border-slate-100 pt-2">
+            <div className="mt-2 space-y-1.5 border-t border-line pt-2">
               {reasons.deductions.map((ded, idx) => (
-                <div key={idx} className="flex items-start gap-2 text-rose-700 font-medium">
-                  <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-rose-100 text-rose-700 font-bold text-xs">
+                <div key={idx} className="flex items-start gap-2 text-critical font-medium">
+                  <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-critical-soft text-critical font-bold text-xs">
                     -
                   </span>
                   <span>{ded}</span>
@@ -310,8 +310,8 @@ export function WellnessScoreCard({ patientId, result }: WellnessScoreCardProps)
           )}
 
           {nutritionContext?.calorieStatusMessage && (
-            <div className="mt-2 rounded-lg bg-slate-50 p-2 text-xs text-slate-600 border border-slate-100">
-              <span className="font-semibold text-slate-700">Calorie Note: </span>
+            <div className="mt-2 rounded-card bg-surface-sunken p-2 text-xs text-ink-muted border border-line">
+              <span className="font-semibold text-ink-muted">Calorie Note: </span>
               {nutritionContext.calorieStatusMessage}
             </div>
           )}
@@ -328,42 +328,42 @@ export function WellnessScoreCard({ patientId, result }: WellnessScoreCardProps)
           return (
             <div
               key={comp.key}
-              className={`flex flex-col justify-between rounded-xl border p-3 transition-all ${
+              className={`flex flex-col justify-between rounded-card border p-3 transition-all ${
                 isComplete
-                  ? "border-slate-200 bg-white"
+                  ? "border-line bg-surface"
                   : isPartial
-                  ? "border-amber-200/80 bg-amber-50/30"
-                  : "border-slate-200 bg-slate-50/60 text-slate-400"
+                  ? "border-attention-line/80 bg-attention-soft/30"
+                  : "border-line bg-surface-sunken/60 text-ink-subtle"
               }`}
             >
               <div>
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-semibold text-slate-700">
+                  <span className="text-xs font-semibold text-ink-muted">
                     {comp.nameHi}
                   </span>
                   <Icon
                     className={`h-3.5 w-3.5 ${
                       isComplete
-                        ? "text-emerald-600"
+                        ? "text-positive"
                         : isPartial
-                        ? "text-amber-600"
-                        : "text-slate-400"
+                        ? "text-attention"
+                        : "text-ink-subtle"
                     }`}
                   />
                 </div>
 
                 <div className="mt-2 flex items-baseline justify-between">
-                  <span className="text-lg font-extrabold text-slate-900">
+                  <span className="text-lg font-extrabold text-ink">
                     {comp.score}
-                    <span className="text-xs font-medium text-slate-400">/{comp.max}</span>
+                    <span className="text-xs font-medium text-ink-subtle">/{comp.max}</span>
                   </span>
                   <span
                     className={`text-2xs font-semibold ${
                       isComplete
-                        ? "text-emerald-700"
+                        ? "text-positive"
                         : isPartial
-                        ? "text-amber-700"
-                        : "text-slate-400"
+                        ? "text-attention"
+                        : "text-ink-subtle"
                     }`}
                   >
                     {comp.percent}%
@@ -371,21 +371,21 @@ export function WellnessScoreCard({ patientId, result }: WellnessScoreCardProps)
                 </div>
 
                 {/* Progress bar line */}
-                <div className="mt-1.5 h-1.5 w-full rounded-full bg-slate-200 overflow-hidden">
+                <div className="mt-1.5 h-1.5 w-full rounded-full bg-surface-sunken overflow-hidden">
                   <div
                     className={`h-full rounded-full transition-all ${
                       isComplete
-                        ? "bg-emerald-500"
+                        ? "bg-positive"
                         : isPartial
-                        ? "bg-amber-500"
-                        : "bg-slate-300"
+                        ? "bg-attention"
+                        : "bg-line-strong"
                     }`}
                     style={{ width: `${comp.percent}%` }}
                   />
                 </div>
               </div>
 
-              <p className="mt-2 text-2xs text-slate-500 font-medium truncate" title={comp.details}>
+              <p className="mt-2 text-2xs text-ink-subtle font-medium truncate" title={comp.details}>
                 {comp.details}
               </p>
             </div>
@@ -394,7 +394,7 @@ export function WellnessScoreCard({ patientId, result }: WellnessScoreCardProps)
       </div>
 
       {/* Small medical disclaimer footnote */}
-      <div className="mt-3.5 flex items-center gap-1.5 text-xs text-slate-400">
+      <div className="mt-3.5 flex items-center gap-1.5 text-xs text-ink-subtle">
         <AlertCircle className="h-3 w-3 shrink-0" />
         <span>
           यह score केवल health tracking और habit consistency के लिए है। यह medical diagnosis या doctor की सलाह का विकल्प नहीं है।

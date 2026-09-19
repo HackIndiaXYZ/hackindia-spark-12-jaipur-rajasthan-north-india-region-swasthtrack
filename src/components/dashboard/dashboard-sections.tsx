@@ -194,14 +194,14 @@ export function DashboardSections({
 
         {todayFoodCalories !== null ? (
           <div className="space-y-3">
-            <div className="rounded-xl border border-emerald-100 bg-emerald-50/60 p-4">
+            <div className="rounded-card border border-emerald-100 bg-emerald-50/60 p-4">
               <div className="flex items-center justify-between text-sm">
-                <span className="font-semibold text-slate-800">Total Calories:</span>
+                <span className="font-semibold text-ink">Total Calories:</span>
                 <span className="font-semibold text-emerald-800">{todayFoodCalories} kcal</span>
               </div>
-              <div className="mt-1 flex items-center justify-between text-xs text-slate-600">
+              <div className="mt-1 flex items-center justify-between text-xs text-ink-muted">
                 <span>Total Protein:</span>
-                <span className="font-semibold text-slate-800">{todayProteinGrams || 0} g</span>
+                <span className="font-semibold text-ink">{todayProteinGrams || 0} g</span>
               </div>
             </div>
             <ProgressBar
@@ -243,9 +243,9 @@ export function DashboardSections({
             <Button
               variant="secondary"
               onClick={() => setIsManageOpen(true)}
-              className="flex-1 sm:flex-none h-9 px-3 text-xs font-semibold border border-slate-300 hover:bg-slate-100 cursor-pointer"
+              className="flex-1 sm:flex-none h-9 px-3 text-xs font-semibold border border-line-strong hover:bg-surface-sunken cursor-pointer"
             >
-              <Settings className="h-3.5 w-3.5 text-slate-700 shrink-0" />
+              <Settings className="h-3.5 w-3.5 text-ink-muted shrink-0" />
               <span>⚙️ Edit</span>
             </Button>
             <Button
@@ -272,7 +272,7 @@ export function DashboardSections({
               <button
                 type="button"
                 onClick={handleMarkAllMedicinesTaken}
-                className="flex-1 py-2.5 px-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 active:scale-98 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-1.5 shadow-md hover:shadow-lg transition-all cursor-pointer"
+                className="flex-1 py-2.5 px-3 rounded-control bg-positive hover:brightness-95 active:scale-98 text-ink-inverse font-bold text-xs sm:text-sm flex items-center justify-center gap-1.5 shadow-e2 hover:shadow-e3 transition-all cursor-pointer"
               >
                 <CheckCheck className="h-4 w-4" />
                 ✓ सभी ली गईं (Mark All)
@@ -281,10 +281,10 @@ export function DashboardSections({
               <button
                 type="button"
                 onClick={handleResetAllMedicines}
-                className="py-2.5 px-3 rounded-xl border border-slate-300 bg-white hover:bg-rose-50 text-slate-700 hover:text-rose-800 font-semibold text-xs flex items-center justify-center gap-1 shadow-2xs active:scale-98 transition-all cursor-pointer shrink-0"
+                className="py-2.5 px-3 rounded-control border border-line-strong bg-surface hover:bg-critical-soft text-ink-muted hover:text-critical font-semibold text-xs flex items-center justify-center gap-1 shadow-2xs active:scale-98 transition-all cursor-pointer shrink-0"
                 title="आज की सभी एंट्री रीसेट / अनमार्क करें"
               >
-                <RotateCcw className="h-3.5 w-3.5 text-rose-600" />
+                <RotateCcw className="h-3.5 w-3.5 text-critical" />
                 <span>Unmark All</span>
               </button>
             </div>
@@ -300,18 +300,18 @@ export function DashboardSections({
                   return (
                     <div
                       key={medicine.id}
-                      className="flex flex-col gap-2 rounded-2xl border-2 border-slate-200 bg-white p-3 sm:p-3.5 shadow-2xs sm:flex-row sm:items-center sm:justify-between"
+                      className="flex flex-col gap-2 rounded-card border-2 border-line bg-surface p-3 sm:p-3.5 shadow-2xs sm:flex-row sm:items-center sm:justify-between"
                     >
                       <div className="space-y-0.5">
                         <div className="flex flex-wrap items-center gap-2">
-                          <p className="text-sm sm:text-base font-bold text-slate-950">
+                          <p className="text-sm sm:text-base font-bold text-ink">
                             {medicine.medicine_name}
                           </p>
                           <span className="text-xs font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-md shrink-0">
                             {medicine.dose}
                           </span>
                         </div>
-                        <p className="text-xs font-semibold text-slate-600">
+                        <p className="text-xs font-semibold text-ink-muted">
                           ⏰ {medicine.scheduled_time.slice(0, 5)} · {medicine.meal_relation ? medicine.meal_relation.replace("_", " ") : "With water"}
                         </p>
                         {currentStatus && (
@@ -333,12 +333,12 @@ export function DashboardSections({
                           type="button"
                           onClick={() => handleMarkMedicine(medicine)}
                           className={cn(
-                            "min-h-9 px-3 py-1 rounded-xl border-2 text-xs font-bold transition-all cursor-pointer active:scale-98 shadow-xs flex items-center gap-1",
+                            "min-h-9 px-3 py-1 rounded-control border-2 text-xs font-bold transition-all cursor-pointer active:scale-98 shadow-xs flex items-center gap-1",
                             currentStatus === "taken"
-                              ? "border-emerald-600 bg-emerald-600 text-white font-bold shadow-md ring-2 ring-emerald-600/30"
+                              ? "border-positive bg-positive text-ink-inverse font-bold shadow-e2 ring-2 ring-positive/30"
                               : currentStatus === "late"
-                              ? "border-amber-500 bg-amber-500 text-white font-bold shadow-md ring-2 ring-amber-500/30"
-                              : "border-slate-300 bg-white text-slate-800 hover:bg-slate-50 hover:border-slate-400 font-semibold shadow-2xs",
+                              ? "border-attention bg-attention text-ink-inverse font-bold shadow-e2 ring-2 ring-attention/30"
+                              : "border-line bg-surface text-ink-muted hover:bg-surface-sunken hover:border-line-strong font-semibold shadow-2xs",
                           )}
                         >
                           <span>✓</span>
@@ -356,10 +356,10 @@ export function DashboardSections({
                           type="button"
                           onClick={() => handleMarkMedicineMissed(medicine)}
                           className={cn(
-                            "min-h-9 px-3 py-1 rounded-xl border-2 text-xs font-bold transition-all cursor-pointer active:scale-98 shadow-xs flex items-center gap-1",
+                            "min-h-9 px-3 py-1 rounded-control border-2 text-xs font-bold transition-all cursor-pointer active:scale-98 shadow-xs flex items-center gap-1",
                             currentStatus === "missed"
-                              ? "border-rose-600 bg-rose-600 text-white font-bold"
-                              : "border-slate-200 bg-slate-50 text-slate-700 hover:bg-rose-50 hover:text-rose-800 hover:border-rose-300 font-semibold",
+                              ? "border-critical bg-critical text-ink-inverse font-bold"
+                              : "border-line bg-surface-sunken text-ink-muted hover:bg-critical-soft hover:text-critical hover:border-critical-line font-semibold",
                           )}
                         >
                           <span>✕</span>
@@ -406,37 +406,37 @@ export function DashboardSections({
         {todayMorningBP || todayEveningBP ? (
           <div className="grid gap-3 sm:grid-cols-2">
             {/* Morning BP */}
-            <div className={`rounded-xl border p-4 ${todayMorningBP ? "border-rose-100 bg-rose-50/40" : "border-dashed border-slate-200 bg-slate-50/70"}`}>
-              <p className="text-2xs font-semibold uppercase tracking-wider text-slate-400 mb-1">सुबह · Morning</p>
+            <div className={`rounded-card border p-4 ${todayMorningBP ? "border-rose-100 bg-rose-50/40" : "border-dashed border-line bg-surface-sunken"}`}>
+              <p className="text-2xs font-semibold uppercase tracking-wider text-ink-subtle mb-1">सुबह · Morning</p>
               {todayMorningBP ? (
                 <>
-                  <p className="text-2xl font-extrabold text-slate-950">
+                  <p className="text-2xl font-extrabold text-ink">
                     {todayMorningBP.systolic}/{todayMorningBP.diastolic}
-                    <span className="text-xs font-semibold text-slate-400"> mmHg</span>
+                    <span className="text-xs font-semibold text-ink-subtle"> mmHg</span>
                   </p>
-                  <p className="mt-0.5 text-xs text-slate-500">
+                  <p className="mt-0.5 text-xs text-ink-subtle">
                     Pulse: {todayMorningBP.pulse ? `${todayMorningBP.pulse} bpm` : "--"}
                   </p>
                 </>
               ) : (
-                <p className="text-xs text-slate-400 mt-1">दर्ज नहीं किया</p>
+                <p className="text-xs text-ink-subtle mt-1">दर्ज नहीं किया</p>
               )}
             </div>
             {/* Evening BP */}
-            <div className={`rounded-xl border p-4 ${todayEveningBP ? "border-rose-100 bg-rose-50/40" : "border-dashed border-slate-200 bg-slate-50/70"}`}>
-              <p className="text-2xs font-semibold uppercase tracking-wider text-slate-400 mb-1">शाम · Evening</p>
+            <div className={`rounded-card border p-4 ${todayEveningBP ? "border-rose-100 bg-rose-50/40" : "border-dashed border-line bg-surface-sunken"}`}>
+              <p className="text-2xs font-semibold uppercase tracking-wider text-ink-subtle mb-1">शाम · Evening</p>
               {todayEveningBP ? (
                 <>
-                  <p className="text-2xl font-extrabold text-slate-950">
+                  <p className="text-2xl font-extrabold text-ink">
                     {todayEveningBP.systolic}/{todayEveningBP.diastolic}
-                    <span className="text-xs font-semibold text-slate-400"> mmHg</span>
+                    <span className="text-xs font-semibold text-ink-subtle"> mmHg</span>
                   </p>
-                  <p className="mt-0.5 text-xs text-slate-500">
+                  <p className="mt-0.5 text-xs text-ink-subtle">
                     Pulse: {todayEveningBP.pulse ? `${todayEveningBP.pulse} bpm` : "--"}
                   </p>
                 </>
               ) : (
-                <p className="text-xs text-slate-400 mt-1">दर्ज नहीं किया</p>
+                <p className="text-xs text-ink-subtle mt-1">दर्ज नहीं किया</p>
               )}
             </div>
           </div>
@@ -474,21 +474,21 @@ export function DashboardSections({
         </CardHeader>
 
         {todayWeight ? (
-          <div className="rounded-xl border border-amber-100 bg-amber-50/50 p-4">
+          <div className="rounded-card border border-amber-100 bg-amber-50/50 p-4">
             <div className="flex items-end justify-between">
               <div>
-                <p className="text-3xl font-extrabold text-slate-950">
+                <p className="text-3xl font-extrabold text-ink">
                   {todayWeight.weight_kg}
-                  <span className="text-sm font-semibold text-slate-500"> kg</span>
+                  <span className="text-sm font-semibold text-ink-subtle"> kg</span>
                 </p>
-                <p className="mt-1 text-xs font-medium text-slate-600">
+                <p className="mt-1 text-xs font-medium text-ink-muted">
                   Target: {patient.target_weight_kg ? `${patient.target_weight_kg} kg` : "--"} · Goal difference:{" "}
                   {patient.target_weight_kg
                     ? `${(todayWeight.weight_kg - patient.target_weight_kg).toFixed(1)} kg`
                     : "--"}
                 </p>
                 {todayWeight.notes ? (
-                  <p className="mt-2 text-xs italic text-slate-500">
+                  <p className="mt-2 text-xs italic text-ink-subtle">
                     &quot;{todayWeight.notes}&quot;
                   </p>
                 ) : null}
@@ -534,28 +534,28 @@ export function DashboardSections({
 
         {todayActivity && (todayActivity.steps > 0 || todayActivity.distance_km > 0) ? (
           <div className="grid gap-3 sm:grid-cols-3">
-            <div className="rounded-xl bg-emerald-50 p-4">
+            <div className="rounded-card bg-emerald-50 p-4">
               <p className="text-xs font-semibold text-emerald-700">Steps Walked</p>
-              <p className="mt-1 text-2xl font-extrabold text-slate-950">
+              <p className="mt-1 text-2xl font-extrabold text-ink">
                 {todayActivity.steps.toLocaleString()}
               </p>
-              <p className="text-xs text-slate-500">कदम</p>
+              <p className="text-xs text-ink-subtle">कदम</p>
             </div>
 
-            <div className="rounded-xl bg-sky-50 p-4">
+            <div className="rounded-card bg-sky-50 p-4">
               <p className="text-xs font-semibold text-sky-700">Distance</p>
-              <p className="mt-1 text-2xl font-extrabold text-slate-950">
+              <p className="mt-1 text-2xl font-extrabold text-ink">
                 {todayActivity.distance_km} km
               </p>
-              <p className="text-xs text-slate-500">दूरी</p>
+              <p className="text-xs text-ink-subtle">दूरी</p>
             </div>
 
-            <div className="rounded-xl bg-slate-50 p-4">
-              <p className="text-xs font-semibold text-slate-600">Active Time</p>
-              <p className="mt-1 text-2xl font-extrabold text-slate-950">
+            <div className="rounded-card bg-surface-sunken p-4">
+              <p className="text-xs font-semibold text-ink-muted">Active Time</p>
+              <p className="mt-1 text-2xl font-extrabold text-ink">
                 {todayActivity.walking_minutes || 0} min
               </p>
-              <p className="text-xs text-slate-500">समय</p>
+              <p className="text-xs text-ink-subtle">समय</p>
             </div>
           </div>
         ) : (
@@ -595,19 +595,19 @@ export function DashboardSections({
             return (
               <label
                 key={item.id}
-                className={`flex min-h-16 cursor-pointer items-center gap-3 rounded-xl border p-3 text-sm font-medium transition-all ${
+                className={`flex min-h-16 cursor-pointer items-center gap-3 rounded-card border p-3 text-sm font-medium transition-all ${
                   isCompleted
                     ? "border-emerald-200 bg-emerald-50/80 text-emerald-950 shadow-2xs"
-                    : "border-slate-200 bg-white text-slate-700 hover:border-emerald-200 hover:bg-slate-50"
+                    : "border-line bg-surface text-ink-muted hover:border-emerald-200 hover:bg-surface-sunken"
                 }`}
               >
                 <input
                   type="checkbox"
                   checked={isCompleted}
                   onChange={() => handleToggleChecklist(item.id, item.status)}
-                  className="h-5 w-5 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
+                  className="h-5 w-5 rounded border-line-strong text-emerald-600 focus:ring-emerald-500"
                 />
-                <span className={isCompleted ? "line-through text-slate-500" : ""}>
+                <span className={isCompleted ? "line-through text-ink-subtle" : ""}>
                   {item.item_label}
                 </span>
               </label>

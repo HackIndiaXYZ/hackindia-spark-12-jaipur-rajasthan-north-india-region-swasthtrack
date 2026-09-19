@@ -16,7 +16,8 @@ type BadgeVariant =
   | "info"
   | "attention"
   | "critical"
-  | "brand";
+  | "brand"
+  | "gold";
 
 const variantClasses: Record<BadgeVariant, string> = {
   green: "border-positive-line bg-positive-soft text-positive",
@@ -28,6 +29,9 @@ const variantClasses: Record<BadgeVariant, string> = {
   red: "border-critical-line bg-critical-soft text-critical",
   critical: "border-critical-line bg-critical-soft text-critical",
   brand: "border-brand-line bg-brand-soft text-brand-ink",
+  // Premium / achievement label — a streak, a milestone, an admin-only tag.
+  // Kept rare on purpose (§ premium accent rule in globals.css).
+  gold: "border-gold-line bg-gold-soft text-gold-ink",
   neutral: "border-line bg-surface-sunken text-ink-muted",
 };
 

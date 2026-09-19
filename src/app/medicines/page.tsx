@@ -70,9 +70,9 @@ export default function MedicinesPage() {
           eyebrow="Medicine Tracking (दवाइयाँ)"
           title="Medicine Schedule & Adherence"
         />
-        <div className="flex h-64 items-center justify-center rounded-2xl border border-slate-200 bg-white">
-          <div className="text-center text-slate-500">
-            <div className="mx-auto mb-3 h-8 w-8 animate-spin rounded-full border-4 border-emerald-600 border-t-transparent" />
+        <div className="flex h-64 items-center justify-center rounded-card border border-line bg-surface">
+          <div className="text-center text-ink-muted">
+            <div className="mx-auto mb-3 h-8 w-8 animate-spin rounded-full border-4 border-brand border-t-transparent" />
             <p className="text-sm font-medium">Loading medicine regimen...</p>
           </div>
         </div>

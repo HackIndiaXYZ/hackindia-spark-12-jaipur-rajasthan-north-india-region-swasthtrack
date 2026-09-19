@@ -38,25 +38,25 @@ export function MedicineAdherenceSummary({
 
   return (
     <div className="grid gap-4 lg:grid-cols-[1fr_2fr]">
-      <Card className="bg-gradient-to-br from-white to-emerald-50">
+      <Card tone="premium">
         <div className="flex items-start justify-between gap-4">
           <div>
             <div className="flex items-center gap-2">
-              <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+              <p className="text-xs font-semibold uppercase tracking-wider text-ink-subtle">
                 Today&apos;s Adherence
               </p>
-              <Badge variant="green">दवा नियमिता</Badge>
+              <Badge variant="gold">दवा नियमिता</Badge>
             </div>
-            <p className="mt-2 text-4xl font-extrabold text-emerald-700">
+            <p className="mt-2 text-4xl font-extrabold grad-text">
               {adherence}%
             </p>
-            <p className="mt-1 text-xs text-slate-600">
+            <p className="mt-1 text-xs text-ink-muted">
               {activeMeds.length > 0
                 ? `${takenCount} of ${activeMeds.length} active doses recorded`
                 : "No active medicines in profile"}
             </p>
           </div>
-          <span className="grid h-11 w-11 place-items-center rounded-xl bg-white text-emerald-700 shadow-xs">
+          <span className="grid h-11 w-11 place-items-center rounded-control bg-gold-soft text-gold-ink shadow-xs">
             <Pill aria-hidden className="h-5 w-5" />
           </span>
         </div>
@@ -66,8 +66,8 @@ export function MedicineAdherenceSummary({
       <Card className="flex items-start gap-3 border-sky-100 bg-sky-50/70">
         <ShieldCheck aria-hidden className="mt-1 h-5 w-5 shrink-0 text-sky-700" />
         <div>
-          <h2 className="font-semibold text-slate-950">Medication Safety & Verification</h2>
-          <p className="mt-1.5 text-xs leading-relaxed text-slate-600">
+          <h2 className="font-semibold text-ink">Medication Safety & Verification</h2>
+          <p className="mt-1.5 text-xs leading-relaxed text-ink-muted">
             This module records patient-reported compliance to physician prescribed medicines. It does not replace clinical advice or authorize dosage alterations.
           </p>
           <div className="mt-3 flex items-center gap-2 text-xs font-semibold text-sky-900">

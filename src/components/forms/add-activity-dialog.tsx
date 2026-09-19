@@ -124,14 +124,14 @@ export function AddActivityDialog({
     >
       <form onSubmit={handleSubmit} className="space-y-5">
         {error ? (
-          <div className="rounded-xl border border-rose-200 bg-rose-50 p-3.5 text-sm font-semibold text-rose-800">
+          <div className="rounded-card border border-critical-line bg-critical-soft p-3.5 text-sm font-semibold text-critical">
             {error}
           </div>
         ) : null}
 
         {/* 1. 1-TAP WALKING PRESETS */}
         <div className="space-y-2">
-          <label className="block text-sm font-bold text-slate-900">
+          <label className="block text-sm font-bold text-ink">
             ⭐ आज कितनी देर टहले? (1-क्लिक प्रीसेट):
           </label>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
@@ -142,10 +142,10 @@ export function AddActivityDialog({
                   type="button"
                   key={p.min}
                   onClick={() => handleSelectPreset(p)}
-                  className={`p-3 rounded-2xl border-2 text-left transition-all flex items-center justify-between cursor-pointer ${
+                  className={`p-3 rounded-card border-2 text-left transition-all flex items-center justify-between cursor-pointer ${
                     isSelected
                       ? "border-sky-600 bg-sky-50 text-sky-950 font-bold ring-2 ring-sky-500/30 shadow-xs"
-                      : "border-slate-200 bg-white text-slate-800 hover:bg-slate-50 font-semibold"
+                      : "border-line bg-surface text-ink hover:bg-surface-sunken font-semibold"
                   }`}
                 >
                   <div>
@@ -162,9 +162,9 @@ export function AddActivityDialog({
         </div>
 
         {/* 2. DIRECT EDITABLE INPUTS (NO AUTO-OVERWRITE) */}
-        <div className="space-y-4 pt-2 border-t border-slate-200">
+        <div className="space-y-4 pt-2 border-t border-line">
           <div className="flex items-center justify-between">
-            <p className="text-xs font-bold uppercase tracking-wider text-slate-500">
+            <p className="text-xs font-bold uppercase tracking-wider text-ink-subtle">
               वास्तविक मान (Actual / Manual Entry):
             </p>
             <button
@@ -234,7 +234,7 @@ export function AddActivityDialog({
           </div>
 
           {estimateExplanation && (
-            <div className="rounded-xl border border-sky-200 bg-sky-50/70 p-3 text-xs text-sky-900 flex items-start gap-2">
+            <div className="rounded-card border border-sky-200 bg-sky-50/70 p-3 text-xs text-sky-900 flex items-start gap-2">
               <Info className="h-4 w-4 shrink-0 text-sky-600 mt-0.5" />
               <span>{estimateExplanation}</span>
             </div>
@@ -257,7 +257,7 @@ export function AddActivityDialog({
             variant="primary"
             type="submit"
             disabled={loading}
-            className="w-full min-h-12 text-base font-bold rounded-2xl bg-sky-600 hover:bg-sky-700 text-white shadow-md shadow-sky-600/20"
+            className="w-full min-h-control-lg text-base font-bold"
           >
             <Footprints className="h-5 w-5 mr-2" />
             {loading ? "सेव हो रहा है..." : "✓ कदम व गतिविधि दर्ज करें (Save Walk)"}

@@ -122,9 +122,9 @@ export default function ProfilePage() {
           eyebrow="Patient Profile"
           title="Profile & Medical Background"
         />
-        <div className="flex h-64 items-center justify-center rounded-2xl border border-slate-200 bg-white">
-          <div className="text-center text-slate-500">
-            <div className="mx-auto mb-3 h-8 w-8 animate-spin rounded-full border-4 border-emerald-600 border-t-transparent" />
+        <div className="flex h-64 items-center justify-center rounded-card border border-line bg-surface">
+          <div className="text-center text-ink-muted">
+            <div className="mx-auto mb-3 h-8 w-8 animate-spin rounded-full border-4 border-brand border-t-transparent" />
             <p className="text-sm font-medium">Loading patient profile / प्रोफाइल लोड हो रही है...</p>
           </div>
         </div>
@@ -145,14 +145,14 @@ export default function ProfilePage() {
       </div>
 
       {toastMessage ? (
-        <div className="flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-800 animate-in fade-in">
-          <Check className="h-4 w-4 shrink-0 text-emerald-600" />
+        <div className="flex items-center gap-2 rounded-card border border-positive-line bg-positive-soft px-4 py-3 text-sm font-semibold text-positive animate-in fade-in">
+          <Check className="h-4 w-4 shrink-0 text-positive" />
           {toastMessage}
         </div>
       ) : null}
 
       {/* SECTION 1: PERSONAL INFORMATION */}
-      <Card>
+      <Card tone="premium">
         <CardHeader>
           <div>
             <div className="flex items-center gap-2">
@@ -174,54 +174,54 @@ export default function ProfilePage() {
         </CardHeader>
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-4">
-            <div className="flex items-center gap-2 text-xs font-semibold text-slate-500">
+          <div className="rounded-card border border-line bg-surface-sunken p-4">
+            <div className="flex items-center gap-2 text-xs font-semibold text-ink-subtle">
               <User className="h-4 w-4 text-emerald-600" />
               <span>Full Name & Gender</span>
             </div>
-            <p className="mt-2 text-lg font-semibold text-slate-950">{patient.name}</p>
-            <p className="text-sm font-medium text-slate-600">
+            <p className="mt-2 text-lg font-semibold text-ink">{patient.name}</p>
+            <p className="text-sm font-medium text-ink-muted">
               {patient.age} years · {patient.gender || "Not specified"}
             </p>
           </div>
 
-          <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-4">
-            <div className="flex items-center gap-2 text-xs font-semibold text-slate-500">
+          <div className="rounded-card border border-line bg-surface-sunken p-4">
+            <div className="flex items-center gap-2 text-xs font-semibold text-ink-subtle">
               <Scale className="h-4 w-4 text-amber-600" />
               <span>Weight & Height</span>
             </div>
-            <p className="mt-2 text-lg font-semibold text-slate-950">
+            <p className="mt-2 text-lg font-semibold text-ink">
               {patient.current_weight_kg ? `${patient.current_weight_kg} kg` : "--"}
             </p>
-            <p className="text-sm font-medium text-slate-600">
+            <p className="text-sm font-medium text-ink-muted">
               Height: {patient.height_cm ? `${patient.height_cm} cm` : "--"}
             </p>
           </div>
 
-          <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-4">
-            <div className="flex items-center gap-2 text-xs font-semibold text-slate-500">
+          <div className="rounded-card border border-line bg-surface-sunken p-4">
+            <div className="flex items-center gap-2 text-xs font-semibold text-ink-subtle">
               <Heart className="h-4 w-4 text-rose-500" />
               <span>Target Weight</span>
             </div>
-            <p className="mt-2 text-lg font-semibold text-slate-950">
+            <p className="mt-2 text-lg font-semibold text-ink">
               {patient.target_weight_kg ? `${patient.target_weight_kg} kg` : "--"}
             </p>
-            <p className="text-sm font-medium text-slate-600">
+            <p className="text-sm font-medium text-ink-muted">
               {patient.current_weight_kg && patient.target_weight_kg
                 ? `Difference: ${(patient.current_weight_kg - patient.target_weight_kg).toFixed(1)} kg`
                 : "Goal weight"}
             </p>
           </div>
 
-          <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-4">
-            <div className="flex items-center gap-2 text-xs font-semibold text-slate-500">
+          <div className="rounded-card border border-line bg-surface-sunken p-4">
+            <div className="flex items-center gap-2 text-xs font-semibold text-ink-subtle">
               <Utensils className="h-4 w-4 text-emerald-600" />
               <span>Calorie Target</span>
             </div>
-            <p className="mt-2 text-lg font-semibold text-slate-950">
+            <p className="mt-2 text-lg font-semibold text-ink">
               {patient.daily_calorie_target} kcal/day
             </p>
-            <p className="text-sm font-medium text-slate-600">
+            <p className="text-sm font-medium text-ink-muted">
               Prescribed daily ceiling
             </p>
           </div>
@@ -254,17 +254,17 @@ export default function ProfilePage() {
           {conditions.map((cond) => (
             <div
               key={cond.id}
-              className="flex flex-col justify-between rounded-xl border border-slate-200 bg-white p-4 transition-colors hover:border-emerald-200"
+              className="flex flex-col justify-between rounded-card border border-line bg-surface p-4 transition-colors hover:border-brand-line"
             >
               <div>
                 <div className="flex items-start justify-between gap-2">
-                  <h3 className="text-base font-semibold text-slate-950">
+                  <h3 className="text-base font-semibold text-ink">
                     {cond.condition_name}
                   </h3>
                   <button
                     type="button"
                     onClick={() => handleDeleteCondition(cond.id, cond.condition_name)}
-                    className="flex h-8 w-8 items-center justify-center rounded-lg text-slate-400 hover:bg-rose-50 hover:text-rose-600 transition-colors"
+                    className="flex h-8 w-8 items-center justify-center rounded-control text-ink-subtle hover:bg-critical-soft hover:text-critical transition-colors"
                     title="Remove condition"
                   >
                     <Trash2 className="h-4 w-4" />
@@ -279,21 +279,21 @@ export default function ProfilePage() {
                 ) : null}
 
                 {cond.notes ? (
-                  <p className="mt-2 text-xs leading-relaxed text-slate-600">
+                  <p className="mt-2 text-xs leading-relaxed text-ink-muted">
                     {cond.notes}
                   </p>
                 ) : null}
               </div>
 
-              <div className="mt-4 pt-3 border-t border-slate-100 flex items-center gap-1 text-xs font-medium text-slate-400">
-                <ShieldCheck className="h-3.5 w-3.5 text-slate-400" />
+              <div className="mt-4 pt-3 border-t border-line flex items-center gap-1 text-xs font-medium text-ink-subtle">
+                <ShieldCheck className="h-3.5 w-3.5 text-ink-subtle" />
                 <span>Monitored condition</span>
               </div>
             </div>
           ))}
 
           {conditions.length === 0 ? (
-            <div className="col-span-full rounded-xl border border-dashed border-slate-200 bg-slate-50 p-8 text-center text-sm text-slate-500">
+            <div className="col-span-full rounded-card border border-dashed border-line-strong bg-surface-sunken p-8 text-center text-sm text-ink-muted">
               No medical conditions added yet. Click &quot;Add Condition&quot; above to record one.
             </div>
           ) : null}
@@ -329,22 +329,22 @@ export default function ProfilePage() {
           {medicines.map((med) => (
             <div
               key={med.id}
-              className={`flex flex-col justify-between rounded-xl border p-4 transition-all ${
+              className={`flex flex-col justify-between rounded-card border p-4 transition-all ${
                 med.active
-                  ? "border-slate-200 bg-white shadow-xs"
-                  : "border-slate-200 bg-slate-50/80 opacity-70"
+                  ? "border-line bg-surface shadow-e1"
+                  : "border-line bg-surface-sunken opacity-70"
               }`}
             >
               <div>
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex items-center gap-2">
-                    <span className={`grid h-9 w-9 place-items-center rounded-lg ${
-                      med.active ? "bg-emerald-100 text-emerald-700" : "bg-slate-200 text-slate-500"
+                    <span className={`grid h-9 w-9 place-items-center rounded-control ${
+                      med.active ? "bg-positive-soft text-positive" : "bg-surface-sunken text-ink-subtle"
                     }`}>
                       <Pill className="h-4 w-4" />
                     </span>
                     <div>
-                      <h3 className="text-base font-semibold text-slate-950">
+                      <h3 className="text-base font-semibold text-ink">
                         {med.medicine_name}
                       </h3>
                       <p className="text-xs font-semibold text-emerald-700">
@@ -358,27 +358,27 @@ export default function ProfilePage() {
                   </Badge>
                 </div>
 
-                <div className="mt-4 space-y-1.5 text-xs text-slate-600">
+                <div className="mt-4 space-y-1.5 text-xs text-ink-muted">
                   <div className="flex items-center justify-between">
-                    <span className="text-slate-400 font-medium">Scheduled Time:</span>
-                    <span className="font-semibold text-slate-800">{med.scheduled_time.slice(0, 5)}</span>
+                    <span className="text-ink-subtle font-medium">Scheduled Time:</span>
+                    <span className="font-semibold text-ink">{med.scheduled_time.slice(0, 5)}</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-slate-400 font-medium">Food Relation:</span>
-                    <span className="font-semibold text-slate-800">{med.meal_relation || "Not specified"}</span>
+                    <span className="text-ink-subtle font-medium">Food Relation:</span>
+                    <span className="font-semibold text-ink">{med.meal_relation || "Not specified"}</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-slate-400 font-medium">Frequency:</span>
-                    <span className="font-semibold text-slate-800 capitalize">{med.frequency}</span>
+                    <span className="text-ink-subtle font-medium">Frequency:</span>
+                    <span className="font-semibold text-ink capitalize">{med.frequency}</span>
                   </div>
                 </div>
               </div>
 
-              <div className="mt-5 flex items-center justify-between gap-2 border-t border-slate-100 pt-3">
+              <div className="mt-5 flex items-center justify-between gap-2 border-t border-line pt-3">
                 <button
                   type="button"
                   onClick={() => handleToggleMedicineActive(med)}
-                  className="text-xs font-semibold text-slate-600 hover:text-emerald-700 transition-colors"
+                  className="text-xs font-semibold text-ink-muted hover:text-brand-ink transition-colors"
                 >
                   {med.active ? "Deactivate (निष्क्रिय करें)" : "Activate (सक्रिय करें)"}
                 </button>
@@ -390,7 +390,7 @@ export default function ProfilePage() {
                       setMedicineToEdit(med);
                       setIsAddMedicineOpen(true);
                     }}
-                    className="flex h-8 w-8 items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100 hover:text-slate-900 transition-colors"
+                    className="flex h-8 w-8 items-center justify-center rounded-control text-ink-muted hover:bg-surface-sunken hover:text-ink transition-colors"
                     title="Edit medicine"
                   >
                     <Edit2 className="h-3.5 w-3.5" />
@@ -398,7 +398,7 @@ export default function ProfilePage() {
                   <button
                     type="button"
                     onClick={() => handleDeleteMedicine(med.id, med.medicine_name)}
-                    className="flex h-8 w-8 items-center justify-center rounded-lg text-slate-400 hover:bg-rose-50 hover:text-rose-600 transition-colors"
+                    className="flex h-8 w-8 items-center justify-center rounded-control text-ink-subtle hover:bg-critical-soft hover:text-critical transition-colors"
                     title="Delete medicine"
                   >
                     <Trash2 className="h-3.5 w-3.5" />
@@ -409,7 +409,7 @@ export default function ProfilePage() {
           ))}
 
           {medicines.length === 0 ? (
-            <div className="col-span-full rounded-xl border border-dashed border-slate-200 bg-slate-50 p-8 text-center text-sm text-slate-500">
+            <div className="col-span-full rounded-card border border-dashed border-line-strong bg-surface-sunken p-8 text-center text-sm text-ink-muted">
               No medicines recorded yet. Click &quot;Add Medicine&quot; above to add your prescription.
             </div>
           ) : null}

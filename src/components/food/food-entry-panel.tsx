@@ -418,15 +418,15 @@ export function FoodEntryPanel({
       <div className="space-y-6 p-4 sm:p-6">
         {/* Error / Success Alerts */}
         {errorMsg && (
-          <div className="rounded-xl border border-rose-200 bg-rose-50 p-4 text-sm font-medium text-rose-800 flex gap-2.5 items-start">
-            <AlertTriangle className="h-5 w-5 text-rose-600 flex-shrink-0 mt-0.5" />
+          <div className="rounded-card border border-critical-line bg-critical-soft p-4 text-sm font-medium text-critical flex gap-2.5 items-start">
+            <AlertTriangle className="h-5 w-5 text-critical flex-shrink-0 mt-0.5" />
             <div>{errorMsg}</div>
           </div>
         )}
 
         {successMsg && (
-          <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-sm font-semibold text-emerald-900 flex gap-2.5 items-start">
-            <Check className="h-5 w-5 text-emerald-600 flex-shrink-0 mt-0.5" />
+          <div className="rounded-card border border-positive-line bg-positive-soft p-4 text-sm font-semibold text-positive flex gap-2.5 items-start">
+            <Check className="h-5 w-5 text-positive flex-shrink-0 mt-0.5" />
             <div>{successMsg}</div>
           </div>
         )}
@@ -434,8 +434,8 @@ export function FoodEntryPanel({
         {/* 1. MEAL TYPE SELECTION */}
         <div>
           <div className="flex items-center justify-between mb-2">
-            <label className="text-sm font-semibold text-slate-700">भोजन का समय (Select Meal Slot):</label>
-            <span className="text-xs text-emerald-700 font-semibold bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-lg">
+            <label className="text-sm font-semibold text-ink-muted">भोजन का समय (Select Meal Slot):</label>
+            <span className="text-xs text-emerald-700 font-semibold bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-field">
               🕐 {new Date().toLocaleTimeString("hi-IN", { hour: "2-digit", minute: "2-digit" })} → {mealType}
             </span>
           </div>
@@ -452,14 +452,14 @@ export function FoodEntryPanel({
                 key={meal.id}
                 type="button"
                 onClick={() => setMealType(meal.id)}
-                className={`py-2 px-1 rounded-xl text-center border-2 transition-all flex flex-col items-center justify-center ${
+                className={`py-2 px-1 rounded-control text-center border-2 transition-all flex flex-col items-center justify-center ${
                   mealType === meal.id
                     ? "border-emerald-600 bg-emerald-50/50 text-emerald-950 font-semibold scale-[1.02]"
-                    : "border-slate-200 hover:border-slate-300 text-slate-700 hover:bg-slate-50"
+                    : "border-line hover:border-line-strong text-ink-muted hover:bg-surface-sunken"
                 }`}
               >
                 <span className="text-sm">{meal.label}</span>
-                <span className="text-2xs text-slate-400 font-medium">{meal.sub}</span>
+                <span className="text-2xs text-ink-subtle font-medium">{meal.sub}</span>
               </button>
             ))}
           </div>
@@ -469,15 +469,15 @@ export function FoodEntryPanel({
         {!selectedFood && !showCustomForm && (
           <div className="space-y-4">
             <div className="relative">
-              <label className="text-sm font-semibold text-slate-700 block mb-2">खोजें (Search Food Item):</label>
+              <label className="text-sm font-semibold text-ink-muted block mb-2">खोजें (Search Food Item):</label>
               <div className="relative">
-                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
+                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-5 w-5 text-ink-subtle" />
                 <input
                   type="text"
                   placeholder="खोजें... (उदा: रोटी, दाल, सेब, Pizza...)"
                   value={searchQuery}
                   onChange={onSearchQueryChange}
-                  className="w-full pl-11 pr-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-slate-50 focus:bg-white text-base shadow-sm transition-all"
+                  className="w-full pl-11 pr-4 py-3 rounded-field border border-line focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-surface-sunken focus:bg-surface text-base shadow-e1 transition-all"
                 />
               </div>
             </div>
@@ -494,29 +494,29 @@ export function FoodEntryPanel({
 
             {/* Search Results / Suggestions list */}
             {(searchResults.length > 0 || suggestions.length > 0) && (
-              <div className="rounded-xl border border-slate-200 divide-y divide-slate-100 overflow-hidden bg-white shadow-sm max-h-80 overflow-y-auto">
+              <div className="rounded-xl border border-line divide-y divide-line overflow-hidden bg-surface shadow-e1 max-h-80 overflow-y-auto">
                 {[...searchResults, ...suggestions].map((food) => {
                   const isFav = favorites.some(f => f.id === food.id);
                   return (
                     <div
                       key={food.id}
                       onClick={() => handleSelectFood(food)}
-                      className="p-3.5 hover:bg-slate-50 cursor-pointer flex items-center justify-between transition-colors group"
+                      className="p-3.5 hover:bg-surface-sunken cursor-pointer flex items-center justify-between transition-colors group"
                     >
                       <div className="flex items-center gap-3 min-w-0">
                         <span className="text-2xl shrink-0">
                           {getExactFoodEmoji(food.name, food.category)}
                         </span>
                         <div className="min-w-0">
-                          <span className="font-semibold text-slate-900 group-hover:text-emerald-700 transition-colors truncate block">
+                          <span className="font-semibold text-ink group-hover:text-emerald-700 transition-colors truncate block">
                             {food.name}
                           </span>
                           {food.name_hi && (
-                            <span className="ml-2 text-sm text-slate-500 font-hindi">
+                            <span className="ml-2 text-sm text-ink-subtle font-hindi">
                               ({food.name_hi})
                             </span>
                           )}
-                          <div className="text-xs text-slate-400 mt-0.5">
+                          <div className="text-xs text-ink-subtle mt-0.5">
                             {food.category} · {food.calories_per_100g ? `${food.calories_per_100g} kcal/100g` : "Calorie info missing"}
                           </div>
                         </div>
@@ -525,12 +525,12 @@ export function FoodEntryPanel({
                         <button
                           type="button"
                           onClick={(e) => handleToggleFav(food, e)}
-                          className="p-2 text-slate-300 hover:text-amber-500 transition-colors"
+                          className="p-2 text-ink-subtle hover:text-amber-500 transition-colors"
                           title="पसंदीदा सूची में जोड़ें"
                         >
                           <Star className={`h-5 w-5 ${isFav ? "fill-amber-500 text-amber-500" : ""}`} />
                         </button>
-                        <ChevronRight className="h-5 w-5 text-slate-300 group-hover:translate-x-0.5 transition-transform" />
+                        <ChevronRight className="h-5 w-5 text-ink-subtle group-hover:translate-x-0.5 transition-transform" />
                       </div>
                     </div>
                   );
@@ -540,8 +540,8 @@ export function FoodEntryPanel({
 
             {/* Food Not Found Fallback */}
             {noFoodFound && searchQuery.trim().length > 0 && (
-              <div className="rounded-xl border border-slate-200 bg-slate-50 p-5 text-center shadow-inner">
-                <p className="text-slate-600 font-medium mb-3.5">
+              <div className="rounded-xl border border-line bg-surface-sunken p-5 text-center shadow-inner">
+                <p className="text-ink-muted font-medium mb-3.5">
                   &quot;{searchQuery}&quot; हमारी लिस्ट में नहीं मिला। (Food not found in database)
                 </p>
                 <div className="flex flex-wrap justify-center gap-2">
@@ -585,7 +585,7 @@ export function FoodEntryPanel({
             {/* Search History */}
             {recentSearchHistory.length > 0 && !searchQuery && (
               <div className="flex flex-wrap items-center gap-2 pt-1 text-xs">
-                <span className="text-slate-400 flex items-center gap-1.5">
+                <span className="text-ink-subtle flex items-center gap-1.5">
                   <History className="h-3.5 w-3.5" /> हाल ही में खोजे गए:
                 </span>
                 {recentSearchHistory.map((h, idx) => (
@@ -596,7 +596,7 @@ export function FoodEntryPanel({
                       setSearchQuery(h);
                       handleSearch(h);
                     }}
-                    className="bg-slate-100 hover:bg-slate-200 text-slate-700 px-2.5 py-1 rounded-full font-medium transition-colors"
+                    className="bg-surface-sunken hover:bg-surface-sunken text-ink-muted px-2.5 py-1 rounded-full font-medium transition-colors"
                   >
                     {h}
                   </button>
@@ -612,7 +612,7 @@ export function FoodEntryPanel({
                     <Bookmark className="h-4 w-4 text-indigo-600" />
                     <span>आपके सेव किए गए भोजन (Your Saved Foods)</span>
                   </div>
-                  <span className="text-xs text-slate-400 font-medium">1-टैप में लोड करें</span>
+                  <span className="text-xs text-ink-subtle font-medium">1-टैप में लोड करें</span>
                 </div>
 
                 <div className="flex flex-wrap gap-2">
@@ -671,11 +671,11 @@ export function FoodEntryPanel({
             {/* 3. PROMINENT PERSONALIZED QUICK FOODS SECTION */}
             <div>
               <div className="flex items-center justify-between gap-2 mb-2.5">
-                <div className="flex items-center gap-1.5 text-sm font-semibold text-slate-800">
+                <div className="flex items-center gap-1.5 text-sm font-semibold text-ink">
                   <Sparkles className="h-4 w-4 text-emerald-600" />
                   <span>आपके नियमित भोजन · Quick Food Shortcuts</span>
                 </div>
-                <span className="text-xs text-slate-400 font-medium">
+                <span className="text-xs text-ink-subtle font-medium">
                   {mealType ? `(${mealType} Relevance)` : "(Learned)"}
                 </span>
               </div>
@@ -683,7 +683,7 @@ export function FoodEntryPanel({
               {quickFoodsLoading ? (
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                   {[...Array(4)].map((_, i) => (
-                    <div key={i} className="h-20 rounded-xl bg-slate-100 animate-pulse border border-slate-200" />
+                    <div key={i} className="h-20 rounded-xl bg-surface-sunken animate-pulse border border-line" />
                   ))}
                 </div>
               ) : quickFoods.length > 0 ? (
@@ -691,7 +691,7 @@ export function FoodEntryPanel({
                   {quickFoods.map((q) => (
                     <div
                       key={q.canonicalKey}
-                      className="group relative p-3 rounded-xl border border-slate-200 hover:border-emerald-300 bg-white hover:bg-emerald-50/50 text-left transition-all shadow-2xs flex flex-col justify-between cursor-pointer"
+                      className="group relative p-3 rounded-xl border border-line hover:border-emerald-300 bg-surface hover:bg-emerald-50/50 text-left transition-all shadow-2xs flex flex-col justify-between cursor-pointer"
                       onClick={async () => {
                         if (quickActionLockRef.current) return;
                         quickActionLockRef.current = true;
@@ -750,9 +750,9 @@ export function FoodEntryPanel({
 
                       <div className="flex items-center gap-1.5 min-w-0 pr-3">
                         <span className="text-lg shrink-0">{getExactFoodEmoji(q.name, q.category)}</span>
-                        <span className="text-xs font-semibold text-slate-900 truncate">{q.name}</span>
+                        <span className="text-xs font-semibold text-ink truncate">{q.name}</span>
                       </div>
-                      <div className="mt-1 flex items-center justify-between text-xs text-slate-500 font-hindi">
+                      <div className="mt-1 flex items-center justify-between text-xs text-ink-subtle font-hindi">
                         <span className="truncate">{q.name_hi || `${q.distinctDays30d} days`}</span>
                         <span className="text-emerald-700 font-bold font-sans shrink-0 ml-1">~{q.defaultCal} cal</span>
                       </div>
@@ -760,11 +760,11 @@ export function FoodEntryPanel({
                   ))}
                 </div>
               ) : (
-                <div className="rounded-xl border border-dashed border-slate-200 bg-slate-50/70 p-4 text-center">
-                  <p className="text-xs font-semibold text-slate-700">
+                <div className="rounded-xl border border-dashed border-line bg-surface-sunken/70 p-4 text-center">
+                  <p className="text-xs font-semibold text-ink-muted">
                     आपके बार-बार खाए जाने वाले भोजन यहाँ automatically सीख कर दिखाई देंगे।
                   </p>
-                  <p className="text-xs text-slate-400 mt-0.5">
+                  <p className="text-xs text-ink-subtle mt-0.5">
                     (Your personalized frequently logged foods will adapt and appear here automatically.)
                   </p>
                 </div>
@@ -775,23 +775,23 @@ export function FoodEntryPanel({
 
         {/* 4. SELECTION PORTIONS & OIL SECTOR (SAVING WORKFLOW) */}
         {selectedFood && (
-          <div className="bg-slate-50 rounded-xl p-5 border border-slate-200 space-y-4">
+          <div className="bg-surface-sunken rounded-xl p-5 border border-line space-y-4">
             <div className="flex items-start justify-between">
               <div>
                 <span className="text-xs font-semibold uppercase tracking-wider text-emerald-700 bg-emerald-100/60 px-2 py-0.5 rounded">
                   {selectedFood.category}
                 </span>
-                <h3 className="text-lg font-semibold text-slate-900 mt-1">
+                <h3 className="text-lg font-semibold text-ink mt-1">
                   {selectedFood.name} {selectedFood.name_hi ? `(${selectedFood.name_hi})` : ""}
                 </h3>
                 {selectedFood.source_note && (
-                  <p className="text-xs text-slate-400 mt-0.5">{selectedFood.source_note}</p>
+                  <p className="text-xs text-ink-subtle mt-0.5">{selectedFood.source_note}</p>
                 )}
               </div>
               <button
                 type="button"
                 onClick={() => setSelectedFood(null)}
-                className="text-xs font-semibold text-slate-500 hover:text-slate-700"
+                className="text-xs font-semibold text-ink-subtle hover:text-ink-muted"
               >
                 Change (बदलें)
               </button>
@@ -842,7 +842,7 @@ export function FoodEntryPanel({
 
             {/* Cooking Oil Input */}
             <div>
-              <label className="text-xs font-semibold text-slate-600 block mb-1.5">
+              <label className="text-xs font-semibold text-ink-muted block mb-1.5">
                 बनाने में तेल की मात्रा (Cooking Oil Used):
               </label>
               <div className="flex flex-wrap gap-1.5">
@@ -861,7 +861,7 @@ export function FoodEntryPanel({
                     className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${
                       oilQuantity === oil.id
                         ? "border-emerald-600 bg-emerald-600 text-white font-semibold"
-                        : "border-slate-200 hover:border-slate-300 text-slate-700 bg-white"
+                        : "border-line hover:border-line-strong text-ink-muted bg-surface"
                     }`}
                   >
                     {oil.label}
@@ -879,11 +879,11 @@ export function FoodEntryPanel({
             </div>
 
             {/* Calorie Engine output display */}
-            <div className="border-t border-slate-200/80 pt-4 flex flex-wrap items-center justify-between gap-4">
+            <div className="border-t border-line/80 pt-4 flex flex-wrap items-center justify-between gap-4">
               <div>
-                <span className="text-xs text-slate-400 font-medium">अनुमानित कैलोरी (Estimated Calories):</span>
+                <span className="text-xs text-ink-subtle font-medium">अनुमानित कैलोरी (Estimated Calories):</span>
                 <div className="flex items-baseline gap-2">
-                  <span className="text-3xl font-bold text-slate-900">
+                  <span className="text-3xl font-bold text-ink">
                     ~{calculateCalories()} kcal
                   </span>
                   <Badge variant={getConfidenceLevel() === "High" ? "green" : getConfidenceLevel() === "Medium" ? "blue" : "amber"}>
@@ -917,8 +917,8 @@ export function FoodEntryPanel({
 
         {/* 5. ONLINE REFERENCE / CUSTOM FOOD MANUAL FORM */}
         {showCustomForm && (
-          <form onSubmit={handleSaveCustomFood} className="bg-slate-50 rounded-xl p-5 border border-slate-200 space-y-4">
-            <h3 className="text-lg font-semibold text-slate-900 flex items-center gap-2">
+          <form onSubmit={handleSaveCustomFood} className="bg-surface-sunken rounded-xl p-5 border border-line space-y-4">
+            <h3 className="text-lg font-semibold text-ink flex items-center gap-2">
               <Plus className="h-5 w-5 text-emerald-600" />
               {customSourceType === "web_reference" ? "Web Search Reference Entry" : "Add Custom Food (नया भोजन जोड़ें)"}
             </h3>
@@ -1018,7 +1018,7 @@ export function FoodEntryPanel({
               />
             </Field>
 
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-end gap-2 border-t border-slate-200 pt-4">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-end gap-2 border-t border-line pt-4">
               <Button
                 type="button"
                 variant="ghost"

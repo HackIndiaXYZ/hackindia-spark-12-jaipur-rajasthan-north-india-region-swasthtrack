@@ -2,7 +2,7 @@ import type { ComponentProps, PropsWithChildren, ReactNode } from "react";
 import type { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-type CardTone = "default" | "sunken" | "raised";
+type CardTone = "default" | "sunken" | "raised" | "premium";
 
 const toneClasses: Record<CardTone, string> = {
   // Every card carries the same top highlight as the rest of the product, so
@@ -10,6 +10,9 @@ const toneClasses: Record<CardTone, string> = {
   default: "bg-surface shadow-e2",
   sunken: "bg-surface-sunken shadow-none",
   raised: "surface-lift",
+  // Gold hairline edge — the hero-tier surface (score, snapshot, the one
+  // featured card per screen). Not for routine content cards.
+  premium: "gold-edge",
 };
 
 type CardProps = ComponentProps<"section"> & {
@@ -34,7 +37,7 @@ export function Card({
     <section
       className={cn(
         "rounded-card",
-        tone === "raised" ? "" : "border border-line",
+        tone === "raised" || tone === "premium" ? "" : "border border-line",
         toneClasses[tone],
         !flush && "p-4 sm:p-5",
         className,

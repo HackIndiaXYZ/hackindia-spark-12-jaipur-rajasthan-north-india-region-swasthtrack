@@ -32,7 +32,7 @@ export default function TimelinePage() {
           title="Health Timeline"
           description="A chronological journey of all your daily health events, vitals, nutrition, and activities."
         />
-        <div className="h-64 rounded-2xl border-2 border-slate-200 bg-white animate-pulse" />
+        <div className="h-64 rounded-panel border-2 border-line bg-surface animate-pulse" />
       </div>
     );
   }

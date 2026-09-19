@@ -231,7 +231,7 @@ export default function SettingsPage() {
           eyebrow="Settings (सेटिंग्स)"
           title="Health Preferences & Settings"
         />
-        <div className="h-96 rounded-2xl bg-slate-100 animate-pulse" />
+        <div className="h-96 rounded-panel bg-surface-sunken animate-pulse" />
       </div>
     );
   }
@@ -245,27 +245,27 @@ export default function SettingsPage() {
       />
 
       {toastMessage && (
-        <div className="flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-800 animate-in fade-in">
-          <Check className="h-4 w-4 shrink-0 text-emerald-600" />
+        <div className="flex items-center gap-2 rounded-card border border-positive-line bg-positive-soft px-4 py-3 text-sm font-semibold text-positive animate-in fade-in">
+          <Check className="h-4 w-4 shrink-0 text-positive" />
           {toastMessage}
         </div>
       )}
 
       {error && (
-        <div className="flex items-center gap-2 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-semibold text-rose-800 animate-in fade-in">
-          <AlertCircle className="h-4 w-4 shrink-0 text-rose-600" />
+        <div className="flex items-center gap-2 rounded-card border border-critical-line bg-critical-soft px-4 py-3 text-sm font-semibold text-critical animate-in fade-in">
+          <AlertCircle className="h-4 w-4 shrink-0 text-critical" />
           {error}
         </div>
       )}
 
       <form onSubmit={handleSaveSettings} className="space-y-6">
         {/* SECTION 1: PROFILE SUMMARY */}
-        <Card className="border-slate-200 bg-white p-5">
+        <Card className="p-5">
           <CardHeader className="p-0 pb-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <User className="h-4 w-4 text-emerald-600" />
-                <CardTitle className="text-sm font-semibold text-slate-900">
+                <User className="h-4 w-4 text-brand" />
+                <CardTitle className="text-sm font-semibold text-ink">
                   Patient Profile Summary (मरीज़ का परिचय)
                 </CardTitle>
               </div>
@@ -277,32 +277,32 @@ export default function SettingsPage() {
           </CardHeader>
 
           <div className="grid gap-3 sm:grid-cols-3 text-xs">
-            <div className="rounded-xl border border-slate-100 bg-slate-50 p-3">
-              <span className="text-2xs font-semibold uppercase tracking-wider text-slate-400">Patient Name</span>
-              <p className="font-semibold text-slate-900 text-sm mt-0.5">{patient?.name}</p>
-              <p className="text-slate-500">{patient?.age} yrs · {patient?.gender}</p>
+            <div className="rounded-card border border-line bg-surface-sunken p-3">
+              <span className="text-2xs font-semibold uppercase tracking-wider text-ink-subtle">Patient Name</span>
+              <p className="font-semibold text-ink text-sm mt-0.5">{patient?.name}</p>
+              <p className="text-ink-muted">{patient?.age} yrs · {patient?.gender}</p>
             </div>
 
-            <div className="rounded-xl border border-slate-100 bg-slate-50 p-3">
-              <span className="text-2xs font-semibold uppercase tracking-wider text-slate-400">Weight Status</span>
-              <p className="font-semibold text-slate-900 text-sm mt-0.5">{patient?.current_weight_kg} kg</p>
-              <p className="text-slate-500">Target Goal: {patient?.target_weight_kg} kg</p>
+            <div className="rounded-card border border-line bg-surface-sunken p-3">
+              <span className="text-2xs font-semibold uppercase tracking-wider text-ink-subtle">Weight Status</span>
+              <p className="font-semibold text-ink text-sm mt-0.5">{patient?.current_weight_kg} kg</p>
+              <p className="text-ink-muted">Target Goal: {patient?.target_weight_kg} kg</p>
             </div>
 
-            <div className="rounded-xl border border-slate-100 bg-slate-50 p-3">
-              <span className="text-2xs font-semibold uppercase tracking-wider text-slate-400">Timezone</span>
-              <p className="font-semibold text-slate-900 text-sm mt-0.5">{timezone}</p>
-              <p className="text-slate-500">Asia/Kolkata (IST Standard)</p>
+            <div className="rounded-card border border-line bg-surface-sunken p-3">
+              <span className="text-2xs font-semibold uppercase tracking-wider text-ink-subtle">Timezone</span>
+              <p className="font-semibold text-ink text-sm mt-0.5">{timezone}</p>
+              <p className="text-ink-muted">Asia/Kolkata (IST Standard)</p>
             </div>
           </div>
         </Card>
 
         {/* SECTION 2: NUTRITION GOALS */}
-        <Card className="border-slate-200 bg-white p-5">
+        <Card className="p-5">
           <CardHeader className="p-0 pb-4">
             <div className="flex items-center gap-2">
               <Utensils className="h-4 w-4 text-emerald-600" />
-              <CardTitle className="text-sm font-semibold text-slate-900">
+              <CardTitle className="text-sm font-semibold text-ink">
                 Nutrition & Calorie Target (दैनिक कैलोरी लक्ष्य)
               </CardTitle>
             </div>
@@ -312,11 +312,11 @@ export default function SettingsPage() {
           </CardHeader>
 
           <div className="space-y-3">
-            <div className="rounded-xl border border-amber-200 bg-amber-50/60 p-3 text-xs text-amber-900 flex items-start gap-2">
-              <AlertCircle className="h-4 w-4 text-amber-700 shrink-0 mt-0.5" />
+            <div className="rounded-card border border-attention-line bg-attention-soft p-3 text-xs text-attention flex items-start gap-2">
+              <AlertCircle className="h-4 w-4 text-attention shrink-0 mt-0.5" />
               <div>
                 <p className="font-semibold">Medical Plan Note / डॉक्टर का परामर्श:</p>
-                <p className="mt-0.5 leading-relaxed text-amber-800">
+                <p className="mt-0.5 leading-relaxed text-attention">
                   This target is currently based on your prescribed plan. Changing it should be discussed with your healthcare professional. (यह लक्ष्य आपकी योजना पर आधारित है। बदलाव से पहले डॉक्टर से परामर्श लें।)
                 </p>
               </div>
@@ -324,14 +324,14 @@ export default function SettingsPage() {
 
             <div className="grid gap-3 sm:grid-cols-2">
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                <label className="block text-xs font-semibold text-ink-muted mb-1">
                   Daily Calorie Target (kcal/day)
                 </label>
                 <input
                   type="number"
                   value={calorieTarget}
                   onChange={(e) => setCalorieTarget(e.target.value)}
-                  className="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-900 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+                  className="w-full rounded-field border border-line-strong px-3 py-2 text-sm font-semibold text-ink focus:border-brand focus:ring-1 focus:ring-brand"
                   placeholder="1600"
                   required
                 />
@@ -343,10 +343,10 @@ export default function SettingsPage() {
                     key={preset}
                     type="button"
                     onClick={() => setCalorieTarget(String(preset))}
-                    className={`rounded-lg border px-2.5 py-1.5 text-xs font-semibold transition-colors ${
+                    className={`rounded-control border px-2.5 py-1.5 text-xs font-semibold transition-colors ${
                       calorieTarget === String(preset)
                         ? "border-emerald-600 bg-emerald-50 text-emerald-800"
-                        : "border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100"
+                        : "border-line bg-surface-sunken text-ink-muted hover:bg-line"
                     }`}
                   >
                     {preset} kcal
@@ -355,10 +355,10 @@ export default function SettingsPage() {
               </div>
             </div>
 
-            <div className="pt-3 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2">
+            <div className="pt-3 border-t border-line flex flex-wrap items-center justify-between gap-2">
               <div>
-                <p className="text-xs font-semibold text-slate-800">Personalized Quick Foods (सीखे गए त्वरित भोजन)</p>
-                <p className="text-xs text-slate-500">
+                <p className="text-xs font-semibold text-ink">Personalized Quick Foods (सीखे गए त्वरित भोजन)</p>
+                <p className="text-xs text-ink-muted">
                   Resets learned eating frequency rankings without deleting your past food log history. (लॉग इतिहास डिलीट किए बिना केवल रैंकिंग रीसेट करें)
                 </p>
               </div>
@@ -370,9 +370,9 @@ export default function SettingsPage() {
                     showToast("Personalized Quick Food preferences reset successfully. (क्विक फूड प्राथमिकताएं रीसेट कर दी गईं)");
                   }
                 }}
-                className="flex items-center gap-1.5 rounded-lg border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-semibold text-slate-700 hover:border-slate-300 hover:bg-slate-100 transition-colors"
+                className="flex items-center gap-1.5 rounded-control border border-line bg-surface-sunken px-3 py-1.5 text-xs font-semibold text-ink-muted hover:border-line-strong hover:bg-line transition-colors"
               >
-                <RotateCcw className="h-3.5 w-3.5 text-slate-500" />
+                <RotateCcw className="h-3.5 w-3.5 text-ink-subtle" />
                 Reset Quick Foods
               </button>
             </div>
@@ -380,11 +380,11 @@ export default function SettingsPage() {
         </Card>
 
         {/* SECTION 3: ACTIVITY GOALS */}
-        <Card className="border-slate-200 bg-white p-5">
+        <Card className="p-5">
           <CardHeader className="p-0 pb-4">
             <div className="flex items-center gap-2">
               <Footprints className="h-4 w-4 text-sky-600" />
-              <CardTitle className="text-sm font-semibold text-slate-900">
+              <CardTitle className="text-sm font-semibold text-ink">
                 Activity & Step Goal (दैनिक कदम लक्ष्य)
               </CardTitle>
             </div>
@@ -396,21 +396,21 @@ export default function SettingsPage() {
           <div className="space-y-3">
             <div className="grid gap-3 sm:grid-cols-2">
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                <label className="block text-xs font-semibold text-ink-muted mb-1">
                   Daily Step Goal (कदम / दिन)
                 </label>
                 <input
                   type="number"
                   value={stepGoal}
                   onChange={(e) => setStepGoal(e.target.value)}
-                  className="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-900 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+                  className="w-full rounded-field border border-line-strong px-3 py-2 text-sm font-semibold text-ink focus:border-brand focus:ring-1 focus:ring-brand"
                   placeholder="6000"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-500 mb-1">
+                <label className="block text-xs font-semibold text-ink-subtle mb-1">
                   Quick Presets:
                 </label>
                 <div className="flex flex-wrap gap-1.5">
@@ -419,10 +419,10 @@ export default function SettingsPage() {
                       key={preset}
                       type="button"
                       onClick={() => setStepGoal(String(preset))}
-                      className={`rounded-lg border px-2.5 py-1.5 text-xs font-semibold transition-colors ${
+                      className={`rounded-control border px-2.5 py-1.5 text-xs font-semibold transition-colors ${
                         stepGoal === String(preset)
                           ? "border-sky-600 bg-sky-50 text-sky-800"
-                          : "border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100"
+                          : "border-line bg-surface-sunken text-ink-muted hover:bg-line"
                       }`}
                     >
                       {preset.toLocaleString()}
@@ -431,18 +431,18 @@ export default function SettingsPage() {
                 </div>
               </div>
             </div>
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-ink-muted">
               * Note: Changing your step goal dynamically evaluates current & future scores. Historical step records remain unchanged.
             </p>
           </div>
         </Card>
 
         {/* SECTION 4: SLEEP GOALS */}
-        <Card className="border-slate-200 bg-white p-5">
+        <Card className="p-5">
           <CardHeader className="p-0 pb-4">
             <div className="flex items-center gap-2">
               <Moon className="h-4 w-4 text-indigo-600" />
-              <CardTitle className="text-sm font-semibold text-slate-900">
+              <CardTitle className="text-sm font-semibold text-ink">
                 Sleep Duration Target (नींद का लक्ष्य - घंटे)
               </CardTitle>
             </div>
@@ -453,7 +453,7 @@ export default function SettingsPage() {
 
           <div className="grid gap-3 sm:grid-cols-2">
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">
+              <label className="block text-xs font-semibold text-ink-muted mb-1">
                 Target Hours / Night
               </label>
               <input
@@ -461,14 +461,14 @@ export default function SettingsPage() {
                 step="0.5"
                 value={sleepTarget}
                 onChange={(e) => setSleepTarget(e.target.value)}
-                className="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-900 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+                className="w-full rounded-field border border-line-strong px-3 py-2 text-sm font-semibold text-ink focus:border-brand focus:ring-1 focus:ring-brand"
                 placeholder="7.0"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-500 mb-1">
+              <label className="block text-xs font-semibold text-ink-subtle mb-1">
                 Quick Presets:
               </label>
               <div className="flex flex-wrap gap-1.5">
@@ -477,10 +477,10 @@ export default function SettingsPage() {
                     key={preset}
                     type="button"
                     onClick={() => setSleepTarget(String(preset))}
-                    className={`rounded-lg border px-2.5 py-1.5 text-xs font-semibold transition-colors ${
+                    className={`rounded-control border px-2.5 py-1.5 text-xs font-semibold transition-colors ${
                       sleepTarget === String(preset)
                         ? "border-indigo-600 bg-indigo-50 text-indigo-800"
-                        : "border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100"
+                        : "border-line bg-surface-sunken text-ink-muted hover:bg-line"
                     }`}
                   >
                     {preset} hrs
@@ -492,11 +492,11 @@ export default function SettingsPage() {
         </Card>
 
         {/* SECTION 5: BP TRACKING SCHEDULE */}
-        <Card className="border-slate-200 bg-white p-5">
+        <Card className="p-5">
           <CardHeader className="p-0 pb-4">
             <div className="flex items-center gap-2">
               <HeartPulse className="h-4 w-4 text-rose-600" />
-              <CardTitle className="text-sm font-semibold text-slate-900">
+              <CardTitle className="text-sm font-semibold text-ink">
                 Blood Pressure Monitoring Schedule (BP निगरानी कार्यक्रम)
               </CardTitle>
             </div>
@@ -513,10 +513,10 @@ export default function SettingsPage() {
             ].map((opt) => (
               <label
                 key={opt.id}
-                className={`flex items-center gap-2.5 rounded-xl border p-3 cursor-pointer transition-colors ${
+                className={`flex items-center gap-2.5 rounded-card border p-3 cursor-pointer transition-colors ${
                   bpSchedule === opt.id
                     ? "border-rose-600 bg-rose-50/50 text-rose-950 font-semibold"
-                    : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+                    : "border-line bg-surface text-ink-muted hover:bg-surface-sunken"
                 }`}
               >
                 <input
@@ -528,7 +528,7 @@ export default function SettingsPage() {
                 />
                 <div>
                   <span className="block">{opt.label}</span>
-                  <span className="text-2xs text-slate-500 font-normal">{opt.labelHi}</span>
+                  <span className="text-2xs text-ink-subtle font-normal">{opt.labelHi}</span>
                 </div>
               </label>
             ))}
@@ -536,11 +536,11 @@ export default function SettingsPage() {
         </Card>
 
         {/* SECTION 6: HEALTH ALERT NOTIFICATIONS */}
-        <Card className="border-slate-200 bg-white p-5">
+        <Card className="p-5">
           <CardHeader className="p-0 pb-4">
             <div className="flex items-center gap-2">
               <Bell className="h-4 w-4 text-amber-600" />
-              <CardTitle className="text-sm font-semibold text-slate-900">
+              <CardTitle className="text-sm font-semibold text-ink">
                 Health Alerts & Reminders (सूचनाएं एवं रिमाइंडर्स)
               </CardTitle>
             </div>
@@ -550,63 +550,63 @@ export default function SettingsPage() {
           </CardHeader>
 
           <div className="space-y-2.5 text-xs">
-            <label className="flex items-center justify-between p-3 rounded-xl border border-slate-100 bg-slate-50">
-              <span className="font-semibold text-slate-800">
+            <label className="flex items-center justify-between p-3 rounded-card border border-line bg-surface-sunken">
+              <span className="font-semibold text-ink">
                 Blood Pressure Observation Alerts (रक्तचाप अलर्ट)
               </span>
               <input
                 type="checkbox"
                 checked={bpAlerts}
                 onChange={(e) => setBpAlerts(e.target.checked)}
-                className="h-5 w-5 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
+                className="h-5 w-5 rounded border-line-strong text-brand focus:ring-brand"
               />
             </label>
 
-            <label className="flex items-center justify-between p-3 rounded-xl border border-slate-100 bg-slate-50">
-              <span className="font-semibold text-slate-800">
+            <label className="flex items-center justify-between p-3 rounded-card border border-line bg-surface-sunken">
+              <span className="font-semibold text-ink">
                 Medicine Schedule Reminders (दवाई रिमाइंडर्स)
               </span>
               <input
                 type="checkbox"
                 checked={medAlerts}
                 onChange={(e) => setMedAlerts(e.target.checked)}
-                className="h-5 w-5 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
+                className="h-5 w-5 rounded border-line-strong text-brand focus:ring-brand"
               />
             </label>
 
-            <label className="flex items-center justify-between p-3 rounded-xl border border-slate-100 bg-slate-50">
-              <span className="font-semibold text-slate-800">
+            <label className="flex items-center justify-between p-3 rounded-card border border-line bg-surface-sunken">
+              <span className="font-semibold text-ink">
                 Activity & Step Tracking Reminders (गतिविधि रिमाइंडर्स)
               </span>
               <input
                 type="checkbox"
                 checked={actAlerts}
                 onChange={(e) => setActAlerts(e.target.checked)}
-                className="h-5 w-5 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
+                className="h-5 w-5 rounded border-line-strong text-brand focus:ring-brand"
               />
             </label>
 
-            <label className="flex items-center justify-between p-3 rounded-xl border border-slate-100 bg-slate-50">
-              <span className="font-semibold text-slate-800">
+            <label className="flex items-center justify-between p-3 rounded-card border border-line bg-surface-sunken">
+              <span className="font-semibold text-ink">
                 Sleep Logging Reminders (नींद रिमाइंडर्स)
               </span>
               <input
                 type="checkbox"
                 checked={sleepAlerts}
                 onChange={(e) => setSleepAlerts(e.target.checked)}
-                className="h-5 w-5 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
+                className="h-5 w-5 rounded border-line-strong text-brand focus:ring-brand"
               />
             </label>
 
-            <label className="flex items-center justify-between p-3 rounded-xl border border-slate-100 bg-slate-50">
-              <span className="font-semibold text-slate-800">
+            <label className="flex items-center justify-between p-3 rounded-card border border-line bg-surface-sunken">
+              <span className="font-semibold text-ink">
                 Missing Daily Data Alerts (छूटे हुए डेटा की सूचना)
               </span>
               <input
                 type="checkbox"
                 checked={missingDataAlerts}
                 onChange={(e) => setMissingDataAlerts(e.target.checked)}
-                className="h-5 w-5 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
+                className="h-5 w-5 rounded border-line-strong text-brand focus:ring-brand"
               />
             </label>
 
@@ -615,7 +615,7 @@ export default function SettingsPage() {
                 type="button"
                 onClick={handleEnablePushNotifs}
                 disabled={notifPermission === "granted"}
-                className={`w-full py-2.5 px-4 rounded-xl font-semibold text-xs flex items-center justify-center gap-2 border transition-all ${
+                className={`w-full py-2.5 px-4 rounded-control font-semibold text-xs flex items-center justify-center gap-2 border transition-all ${
                   notifPermission === "granted"
                     ? "bg-emerald-50 border-emerald-200 text-emerald-800"
                     : "bg-amber-50 hover:bg-amber-100 border-amber-300 text-amber-900 cursor-pointer shadow-2xs"
@@ -633,11 +633,11 @@ export default function SettingsPage() {
         </Card>
 
         {/* SECTION DATA EXPORT & BACKUP */}
-        <Card className="border-slate-200 bg-white p-5">
+        <Card className="p-5">
           <CardHeader className="p-0 pb-4">
             <div className="flex items-center gap-2">
               <Download className="h-4 w-4 text-sky-600" />
-              <CardTitle className="text-sm font-semibold text-slate-900">
+              <CardTitle className="text-sm font-semibold text-ink">
                 Full Data Export & Backup (सम्पूर्ण डेटा बैकअप)
               </CardTitle>
             </div>
@@ -650,7 +650,7 @@ export default function SettingsPage() {
             <button
               type="button"
               onClick={() => patient && exportAllDataAsCsv(patient.id)}
-              className="flex-1 py-2.5 px-4 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-800 font-semibold text-xs flex items-center justify-center gap-2 shadow-2xs active:scale-98 transition-all cursor-pointer"
+              className="flex-1 py-2.5 px-4 rounded-control border border-line-strong bg-surface hover:bg-surface-sunken text-ink font-semibold text-xs flex items-center justify-center gap-2 shadow-e1 active:scale-98 transition-all cursor-pointer"
             >
               <Download className="h-4 w-4 text-emerald-600" />
               <span>CSV फ़ाइल डाउनलोड करें (Export CSV)</span>
@@ -659,7 +659,7 @@ export default function SettingsPage() {
             <button
               type="button"
               onClick={() => patient && exportAllDataAsJson(patient.id)}
-              className="flex-1 py-2.5 px-4 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-800 font-semibold text-xs flex items-center justify-center gap-2 shadow-2xs active:scale-98 transition-all cursor-pointer"
+              className="flex-1 py-2.5 px-4 rounded-control border border-line-strong bg-surface hover:bg-surface-sunken text-ink font-semibold text-xs flex items-center justify-center gap-2 shadow-e1 active:scale-98 transition-all cursor-pointer"
             >
               <Download className="h-4 w-4 text-sky-600" />
               <span>JSON फ़ाइल डाउनलोड करें (Export JSON)</span>
@@ -668,11 +668,11 @@ export default function SettingsPage() {
         </Card>
 
         {/* SECTION 7: UNITS & DISPLAY */}
-        <Card className="border-slate-200 bg-white p-5">
+        <Card className="p-5">
           <CardHeader className="p-0 pb-4">
             <div className="flex items-center gap-2">
               <Ruler className="h-4 w-4 text-emerald-600" />
-              <CardTitle className="text-sm font-semibold text-slate-900">
+              <CardTitle className="text-sm font-semibold text-ink">
                 Units & Display Preferences (इकाई और भाषा)
               </CardTitle>
             </div>
@@ -683,11 +683,11 @@ export default function SettingsPage() {
 
           <div className="grid gap-3 sm:grid-cols-3 text-xs">
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Weight Unit</label>
+              <label className="block text-xs font-semibold text-ink-muted mb-1">Weight Unit</label>
               <select
                 value={weightUnit}
                 onChange={(e) => setWeightUnit(e.target.value as WeightUnit)}
-                className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-xs font-semibold text-slate-800"
+                className="w-full rounded-field border border-line-strong bg-surface px-3 py-2 text-xs font-semibold text-ink"
               >
                 <option value="kg">Kilograms (kg)</option>
                 <option value="lb">Pounds (lb)</option>
@@ -695,11 +695,11 @@ export default function SettingsPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Height Unit</label>
+              <label className="block text-xs font-semibold text-ink-muted mb-1">Height Unit</label>
               <select
                 value={heightUnit}
                 onChange={(e) => setHeightUnit(e.target.value as HeightUnit)}
-                className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-xs font-semibold text-slate-800"
+                className="w-full rounded-field border border-line-strong bg-surface px-3 py-2 text-xs font-semibold text-ink"
               >
                 <option value="cm">Centimeters (cm)</option>
                 <option value="ft_in">Feet & Inches (ft-in)</option>
@@ -707,11 +707,11 @@ export default function SettingsPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Language</label>
+              <label className="block text-xs font-semibold text-ink-muted mb-1">Language</label>
               <select
                 value={language}
                 onChange={(e) => setLanguage(e.target.value as LanguagePref)}
-                className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-xs font-semibold text-slate-800"
+                className="w-full rounded-field border border-line-strong bg-surface px-3 py-2 text-xs font-semibold text-ink"
               >
                 <option value="bilingual">Bilingual (हिन्दी + English)</option>
                 <option value="hi">हिन्दी (Hindi)</option>
@@ -722,12 +722,12 @@ export default function SettingsPage() {
         </Card>
 
         {/* SECTION 8: ACCOUNT & CAREGIVER MANAGEMENT */}
-        <Card className="border-slate-200 bg-white p-5">
+        <Card className="p-5">
           <CardHeader className="p-0 pb-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Users className="h-4 w-4 text-emerald-600" />
-                <CardTitle className="text-sm font-semibold text-slate-900">
+                <CardTitle className="text-sm font-semibold text-ink">
                   Account & Caregiver Access (खाता एवं केयरगिवर प्रबंधन)
                 </CardTitle>
               </div>
@@ -748,14 +748,14 @@ export default function SettingsPage() {
 
           <div className="space-y-3.5 text-xs">
             {/* Authenticated User info */}
-            <div className="rounded-xl border border-slate-100 bg-slate-50 p-3 flex items-center justify-between">
+            <div className="rounded-card border border-line bg-surface-sunken p-3 flex items-center justify-between">
               <div className="flex items-center gap-2.5">
-                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-100 text-emerald-800">
+                <div className="flex h-9 w-9 items-center justify-center rounded-control bg-positive-soft text-positive">
                   <Phone className="h-4 w-4" />
                 </div>
                 <div>
-                  <p className="font-semibold text-slate-900">{user?.phone || "+91 98765 43210"}</p>
-                  <p className="text-xs text-slate-500">
+                  <p className="font-semibold text-ink">{user?.phone || "+91 98765 43210"}</p>
+                  <p className="text-xs text-ink-muted">
                     Role: {profile?.role === "caregiver" ? "Caregiver (केयरगिवर)" : "Primary Patient (मरीज़)"}
                   </p>
                 </div>
@@ -765,7 +765,7 @@ export default function SettingsPage() {
 
             {/* Caregivers List */}
             <div>
-              <span className="block font-semibold text-slate-700 mb-2">
+              <span className="block font-semibold text-ink-muted mb-2">
                 Authorized Caregivers (आपकी स्वास्थ्य जानकारी देखने वाले लोग):
               </span>
               {caregivers.length > 0 ? (
@@ -773,16 +773,16 @@ export default function SettingsPage() {
                   {caregivers.map((cg) => (
                     <div
                       key={cg.user_id}
-                      className="flex items-center justify-between p-3 rounded-xl border border-slate-200 bg-white shadow-2xs"
+                      className="flex items-center justify-between p-3 rounded-card border border-line bg-surface shadow-e1"
                     >
                       <div>
-                        <p className="font-semibold text-slate-900">{cg.display_name}</p>
-                        <p className="text-xs text-slate-500">{cg.phone} · Added {new Date(cg.added_at).toLocaleDateString("en-IN")}</p>
+                        <p className="font-semibold text-ink">{cg.display_name}</p>
+                        <p className="text-xs text-ink-muted">{cg.phone} · Added {new Date(cg.added_at).toLocaleDateString("en-IN")}</p>
                       </div>
                       <button
                         type="button"
                         onClick={() => handleRevokeCaregiver(cg.user_id)}
-                        className="text-xs font-semibold text-rose-600 hover:text-rose-800 hover:bg-rose-50 px-2.5 py-1.5 rounded-lg transition-colors flex items-center gap-1"
+                        className="text-xs font-semibold text-critical hover:text-critical hover:bg-critical-soft px-2.5 py-1.5 rounded-control transition-colors flex items-center gap-1"
                       >
                         <Trash2 className="h-3 w-3" />
                         Remove Access (हटाएं)
@@ -791,14 +791,14 @@ export default function SettingsPage() {
                   ))}
                 </div>
               ) : (
-                <div className="p-3 rounded-xl border border-slate-100 bg-slate-50 text-slate-500 text-xs">
+                <div className="p-3 rounded-card border border-line bg-surface-sunken text-ink-muted text-xs">
                   कोई केयरगिवर नहीं जुड़ा है। परिवार के सदस्य को जोड़ने के लिए &quot;Add Caregiver&quot; पर क्लिक करें।
                 </div>
               )}
             </div>
 
             {/* Export & Logout Actions */}
-            <div className="pt-2 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2">
+            <div className="pt-2 border-t border-line flex flex-wrap items-center justify-between gap-2">
               <Button
                 type="button"
                 variant="secondary"
@@ -823,18 +823,18 @@ export default function SettingsPage() {
         </Card>
 
         {/* SECTION 9: ABOUT, CONTACT & LEGAL POLICIES */}
-        <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5 text-xs text-slate-600 space-y-3">
+        <div className="rounded-card border border-line bg-surface-sunken p-5 text-xs text-ink-muted space-y-3">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-1.5 font-semibold text-slate-800">
-              <ShieldCheck className="h-4 w-4 text-emerald-700" />
+            <div className="flex items-center gap-1.5 font-semibold text-ink">
+              <ShieldCheck className="h-4 w-4 text-brand" />
               <span>SwasthTrack Health Companion · Version 7.0</span>
             </div>
-            <span className="text-xs text-slate-400">Created by Pawan Kumar</span>
+            <span className="text-xs text-ink-subtle">Created by Pawan Kumar</span>
           </div>
-          <p className="text-slate-500 leading-relaxed">
+          <p className="text-ink-muted leading-relaxed">
             Your health records are privately synchronized with Supabase and protected with Row-Level Security (RLS). All analytics are rule-based for supportive tracking.
           </p>
-          <div className="pt-2 border-t border-slate-200 flex flex-wrap items-center gap-x-4 gap-y-2 font-semibold text-emerald-800">
+          <div className="pt-2 border-t border-line flex flex-wrap items-center gap-x-4 gap-y-2 font-semibold text-brand-ink">
             <Link href="/about" className="hover:underline">
               About SwasthTrack
             </Link>
@@ -854,7 +854,7 @@ export default function SettingsPage() {
         </div>
 
         {/* SUBMIT BUTTON */}
-        <div className="flex justify-end gap-3 sticky bottom-4 z-20 bg-white/95 backdrop-blur-md p-4 rounded-2xl border border-slate-200 shadow-md">
+        <div className="flex justify-end gap-3 sticky bottom-4 z-20 frost p-4 rounded-panel border border-line shadow-e2">
           <Button
             variant="primary"
             type="submit"

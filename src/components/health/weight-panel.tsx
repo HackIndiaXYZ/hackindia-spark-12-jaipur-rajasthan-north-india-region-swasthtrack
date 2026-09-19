@@ -245,31 +245,31 @@ export function WeightPanel({
       </CardHeader>
 
       {error ? (
-        <div className="mb-4 rounded-xl border border-rose-200 bg-rose-50 p-3 text-sm font-medium text-rose-700">
+        <div className="mb-4 rounded-card border border-critical-line bg-critical-soft p-3 text-sm font-medium text-critical">
           {error}
         </div>
       ) : null}
 
       {successMsg ? (
-        <div className="mb-4 flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-sm font-semibold text-emerald-800">
-          <Check className="h-4 w-4 text-emerald-600" />
+        <div className="mb-4 flex items-center gap-2 rounded-card border border-positive-line bg-positive-soft p-3 text-sm font-semibold text-positive">
+          <Check className="h-4 w-4 text-positive" />
           {successMsg}
         </div>
       ) : null}
 
       {/* Latest reading + target progress */}
-      <div className="mb-5 rounded-xl border border-slate-200 bg-slate-50 p-4">
+      <div className="mb-5 rounded-card border border-line bg-surface-sunken p-4">
         <div className="flex items-start justify-between">
           <div>
-            <p className="text-2xs font-semibold uppercase tracking-wider text-slate-400">
+            <p className="text-2xs font-semibold uppercase tracking-wider text-ink-subtle">
               Latest Weight · ताज़ा वजन
             </p>
-            <p className="mt-1 text-4xl font-extrabold text-slate-950">
+            <p className="mt-1 text-4xl font-extrabold text-ink">
               {latest ? `${latest.weight_kg}` : "--"}
-              <span className="text-sm font-semibold text-slate-400"> kg</span>
+              <span className="text-sm font-semibold text-ink-subtle"> kg</span>
             </p>
             {latest && (
-              <p className="mt-0.5 text-xs text-slate-500">
+              <p className="mt-0.5 text-xs text-ink-subtle">
                 {new Date(latest.measured_at).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}
                 {latest.notes ? ` · ${latest.notes}` : ""}
               </p>
@@ -277,7 +277,7 @@ export function WeightPanel({
           </div>
           {targetWeight && latest && (
             <div className="text-right">
-              <p className="text-2xs font-semibold uppercase tracking-wider text-slate-400">Target</p>
+              <p className="text-2xs font-semibold uppercase tracking-wider text-ink-subtle">Target</p>
               <p className="mt-1 text-lg font-extrabold text-emerald-700">{targetWeight} kg</p>
               <p className={`text-xs font-semibold ${latest.weight_kg > targetWeight ? "text-amber-600" : "text-emerald-600"}`}>
                 {latest.weight_kg > targetWeight
@@ -293,11 +293,11 @@ export function WeightPanel({
         {/* Progress bar toward target */}
         {targetWeight && latest && latest.weight_kg > targetWeight && (
           <div className="mt-3">
-            <div className="flex justify-between text-2xs text-slate-500 mb-1">
+            <div className="flex justify-between text-2xs text-ink-subtle mb-1">
               <span>Current: {latest.weight_kg} kg</span>
               <span>Target: {targetWeight} kg</span>
             </div>
-            <div className="h-2 w-full rounded-full bg-slate-200 overflow-hidden">
+            <div className="h-2 w-full rounded-full bg-surface-sunken overflow-hidden">
               <div
                 className="h-full rounded-full bg-gradient-to-r from-amber-400 to-emerald-500 transition-all"
                 style={{
@@ -382,46 +382,46 @@ export function WeightPanel({
 
       {/* HISTORY TAB */}
       {activeTab === "history" && (
-        <div className="rounded-xl border border-slate-200 bg-white p-4">
-          <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-3">
+        <div className="rounded-card border border-line bg-surface p-4">
+          <h4 className="text-xs font-semibold uppercase tracking-wider text-ink-subtle mb-3">
             Weight History · वजन इतिहास
           </h4>
           {logs.length > 0 ? (
-            <div className="divide-y divide-slate-100">
+            <div className="divide-y divide-line">
               {logs.slice(0, 20).map((log) => {
                 const editable = canEditEntry(log.created_at);
                 const isEditing = editingId === log.id;
 
                 if (isEditing) {
                   return (
-                    <div key={log.id} className="py-3 space-y-2 bg-slate-50 rounded-lg p-3 my-1">
+                    <div key={log.id} className="py-3 space-y-2 bg-surface-sunken rounded-card p-3 my-1">
                       <input
                         type="number"
                         step="0.1"
                         value={editWeight}
                         onChange={(e) => setEditWeight(e.target.value)}
-                        className="w-full rounded-lg border border-slate-300 px-2 py-1.5 text-sm"
+                        className="w-full rounded-field border border-line-strong px-2 py-1.5 text-sm"
                         placeholder="Weight (kg)"
                       />
                       <input
                         type="text"
                         value={editNotes}
                         onChange={(e) => setEditNotes(e.target.value)}
-                        className="w-full rounded-lg border border-slate-300 px-2 py-1.5 text-sm"
+                        className="w-full rounded-field border border-line-strong px-2 py-1.5 text-sm"
                         placeholder="Notes"
                       />
                       <div className="flex gap-2">
                         <button
                           type="button"
                           onClick={handleSaveEdit}
-                          className="rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-emerald-700"
+                          className="rounded-control bg-positive px-3 py-1.5 text-xs font-semibold text-ink-inverse hover:brightness-95"
                         >
                           ✓ Save
                         </button>
                         <button
                           type="button"
                           onClick={() => setEditingId(null)}
-                          className="rounded-lg bg-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-300"
+                          className="rounded-control bg-surface-sunken px-3 py-1.5 text-xs font-semibold text-ink-muted hover:bg-line-strong"
                         >
                           Cancel
                         </button>
@@ -434,14 +434,14 @@ export function WeightPanel({
                   <div key={log.id} className="py-2.5 flex items-center justify-between gap-2">
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-2">
-                        <span className="font-semibold text-slate-900">{log.weight_kg} kg</span>
+                        <span className="font-semibold text-ink">{log.weight_kg} kg</span>
                         {targetWeight && (
                           <span className={`text-2xs font-semibold ${log.weight_kg > targetWeight ? "text-amber-600" : "text-emerald-600"}`}>
                             ({log.weight_kg > targetWeight ? "+" : ""}{(log.weight_kg - targetWeight).toFixed(1)} kg)
                           </span>
                         )}
                       </div>
-                      <p className="text-xs text-slate-500">
+                      <p className="text-xs text-ink-subtle">
                         {new Date(log.measured_at).toLocaleDateString("en-IN", {
                           day: "numeric",
                           month: "short",
@@ -456,7 +456,7 @@ export function WeightPanel({
                           <button
                             type="button"
                             onClick={() => startEdit(log)}
-                            className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-500 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 transition-colors"
+                            className="flex h-9 w-9 items-center justify-center rounded-control border border-line bg-surface text-ink-subtle hover:bg-info-soft hover:text-info hover:border-info-line transition-colors"
                             title="Edit (बदलें)"
                           >
                             <Edit3 className="h-4 w-4" />
@@ -464,7 +464,7 @@ export function WeightPanel({
                           <button
                             type="button"
                             onClick={() => handleDelete(log.id)}
-                            className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-500 hover:bg-rose-50 hover:text-rose-600 hover:border-rose-200 transition-colors"
+                            className="flex h-9 w-9 items-center justify-center rounded-control border border-line bg-surface text-ink-subtle hover:bg-critical-soft hover:text-critical hover:border-critical-line transition-colors"
                             title="Delete (मिटाएं)"
                           >
                             <Trash2 className="h-4 w-4" />
@@ -472,7 +472,7 @@ export function WeightPanel({
                         </>
                       ) : (
                         <span title="Edit window (2 घंटे) समाप्त हो गई">
-                          <Lock className="h-4 w-4 text-slate-300" />
+                          <Lock className="h-4 w-4 text-ink-subtle" />
                         </span>
                       )}
                     </div>
@@ -481,7 +481,7 @@ export function WeightPanel({
               })}
             </div>
           ) : (
-            <p className="text-xs text-slate-400 py-6 text-center">
+            <p className="text-xs text-ink-subtle py-6 text-center">
               कोई weight entry दर्ज नहीं है
             </p>
           )}
@@ -498,10 +498,10 @@ export function WeightPanel({
                 key={range}
                 type="button"
                 onClick={() => setChartRange(range)}
-                className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-all ${
+                className={`rounded-control px-3 py-1.5 text-xs font-semibold transition-all ${
                   chartRange === range
-                    ? "bg-amber-500 text-white shadow-sm"
-                    : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                    ? "bg-amber-500 text-white shadow-e1"
+                    : "bg-surface-sunken text-ink-muted hover:bg-line-strong"
                 }`}
               >
                 {rangeLabels[range]}
@@ -521,20 +521,20 @@ export function WeightPanel({
           {/* Weekly summary */}
           {weeklySummaries.length > 0 ? (
             <div>
-              <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">
+              <h4 className="text-xs font-semibold uppercase tracking-wider text-ink-subtle mb-2">
                 Weekly Summary · साप्ताहिक सारांश
               </h4>
               <div className="space-y-1">
                 {weeklySummaries.map((ws) => (
-                  <div key={ws.week} className="flex items-center justify-between rounded-lg bg-slate-50 px-3 py-2">
+                  <div key={ws.week} className="flex items-center justify-between rounded-field bg-surface-sunken px-3 py-2">
                     <div>
-                      <span className="text-xs font-semibold text-slate-700">Week of {ws.week}</span>
-                      <span className="ml-2 text-2xs text-slate-400">({ws.count} entries)</span>
+                      <span className="text-xs font-semibold text-ink-muted">Week of {ws.week}</span>
+                      <span className="ml-2 text-2xs text-ink-subtle">({ws.count} entries)</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className="text-sm font-semibold text-slate-900">{ws.avg} kg</span>
+                      <span className="text-sm font-semibold text-ink">{ws.avg} kg</span>
                       {ws.change !== null && (
-                        <span className={`text-2xs font-semibold ${ws.change > 0 ? "text-rose-600" : ws.change < 0 ? "text-emerald-600" : "text-slate-400"}`}>
+                        <span className={`text-2xs font-semibold ${ws.change > 0 ? "text-rose-600" : ws.change < 0 ? "text-emerald-600" : "text-ink-subtle"}`}>
                           {ws.change > 0 ? "↑" : ws.change < 0 ? "↓" : "→"} {Math.abs(ws.change)} kg
                         </span>
                       )}
@@ -544,8 +544,8 @@ export function WeightPanel({
               </div>
             </div>
           ) : !chartLoading && chartLogs.length === 0 ? (
-            <div className="rounded-xl border border-dashed border-slate-200 bg-slate-50/70 p-4 text-center">
-              <p className="text-xs text-slate-400">पर्याप्त data नहीं है summary के लिए</p>
+            <div className="rounded-card border border-dashed border-line bg-surface-sunken/70 p-4 text-center">
+              <p className="text-xs text-ink-subtle">पर्याप्त data नहीं है summary के लिए</p>
             </div>
           ) : null}
         </div>

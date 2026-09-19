@@ -72,11 +72,11 @@ export function WeeklyReportView({ patientId }: WeeklyReportViewProps) {
   if (loading) {
     return (
       <div className="space-y-4 animate-pulse">
-        <div className="h-28 rounded-2xl bg-slate-100" />
-        <div className="h-64 rounded-2xl bg-slate-100" />
+        <div className="h-28 rounded-card bg-surface-sunken" />
+        <div className="h-64 rounded-card bg-surface-sunken" />
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {[...Array(4)].map((_, i) => (
-            <div key={i} className="h-24 rounded-xl bg-slate-100" />
+            <div key={i} className="h-24 rounded-control bg-surface-sunken" />
           ))}
         </div>
       </div>
@@ -95,26 +95,26 @@ export function WeeklyReportView({ patientId }: WeeklyReportViewProps) {
 
   return (
     <div className="space-y-5">
-      {/* Header Banner */}
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between rounded-2xl border border-slate-200 bg-white p-5 shadow-xs">
+      {/* Header Banner — hero: the one number the report exists to show */}
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between rounded-panel gold-edge p-5">
         <div>
           <div className="flex items-center gap-2">
-            <Calendar className="h-5 w-5 text-emerald-600" />
-            <h3 className="font-semibold text-slate-900 text-base">
+            <Calendar className="h-5 w-5 text-brand" />
+            <h3 className="font-semibold text-ink text-base">
               Weekly Health & Habit Report · साप्ताहिक स्वास्थ्य रिपोर्ट
             </h3>
           </div>
-          <p className="mt-1 text-xs text-slate-500">
-            Reporting Period: <span className="font-semibold text-slate-800">{weeklyData.weekRangeLabel}</span> · {weeklyData.daysTrackedCount} of 7 days active
+          <p className="mt-1 text-xs text-ink-subtle">
+            Reporting Period: <span className="font-semibold text-ink-muted">{weeklyData.weekRangeLabel}</span> · {weeklyData.daysTrackedCount} of 7 days active
           </p>
         </div>
 
         <div className="flex items-baseline gap-3">
           <div className="text-right">
-            <p className="text-2xs font-semibold uppercase tracking-wider text-slate-400">Weekly Avg Score</p>
-            <p className="text-3xl font-bold text-slate-950">
+            <p className="text-2xs font-semibold uppercase tracking-wider text-ink-subtle">Weekly Avg Score</p>
+            <p className="grad-text text-3xl font-bold">
               {weeklyData.averageScore}
-              <span className="text-xs font-semibold text-slate-400">/100</span>
+              <span className="text-xs font-semibold text-ink-subtle">/100</span>
             </p>
           </div>
         </div>
@@ -122,23 +122,23 @@ export function WeeklyReportView({ patientId }: WeeklyReportViewProps) {
 
       {/* INSUFFICIENT DATA EMPTY STATE */}
       {!weeklyData.hasSufficientData && (
-        <div className="rounded-2xl border border-dashed border-amber-200 bg-amber-50/50 p-6 text-center">
-          <Info className="mx-auto h-8 w-8 text-amber-600 mb-2" />
-          <h4 className="font-semibold text-amber-900 text-sm">
+        <div className="rounded-card border border-dashed border-attention-line bg-attention-soft/50 p-6 text-center">
+          <Info className="mx-auto h-8 w-8 text-attention mb-2" />
+          <h4 className="font-semibold text-attention text-sm">
             अभी पर्याप्त data उपलब्ध नहीं है
           </h4>
-          <p className="mt-1 text-xs text-amber-800 max-w-md mx-auto">
+          <p className="mt-1 text-xs text-attention max-w-md mx-auto">
             सटीक साप्ताहिक विश्लेषण (Weekly insight) के लिए कम से कम 3 दिनों का ट्रैकिंग रिकॉर्ड आवश्यक है। जैसे ही आप कुछ दिन नियमित लॉग करेंगे, यहाँ विस्तृत ट्रेंड दिखाई देगा।
           </p>
         </div>
       )}
 
       {/* WEEKLY SCORE INTERACTIVE BAR GRAPH */}
-      <Card className="border-slate-200 bg-white p-5">
+      <Card className="p-5">
         <CardHeader className="p-0 pb-4">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div>
-              <CardTitle className="text-sm font-semibold text-slate-900 flex items-center gap-2">
+              <CardTitle className="text-sm font-semibold text-ink flex items-center gap-2">
                 <Sparkles className="h-4 w-4 text-emerald-600" />
                 Daily Wellness Score Trend (दिन-प्रतिदिन स्कोर)
               </CardTitle>
@@ -183,12 +183,12 @@ export function WeeklyReportView({ patientId }: WeeklyReportViewProps) {
                   if (active && payload && payload.length > 0) {
                     const data = payload[0].payload;
                     return (
-                      <div className="rounded-xl border border-slate-200 bg-white p-2.5 shadow-lg text-xs">
-                        <p className="font-semibold text-slate-900">{data.day}</p>
+                      <div className="rounded-control border border-line bg-surface p-2.5 shadow-e3 text-xs">
+                        <p className="font-semibold text-ink">{data.day}</p>
                         <p className="text-emerald-700 font-extrabold text-sm mt-0.5">
                           {data.score}/100 Score
                         </p>
-                        <p className="text-2xs text-slate-500">{data.category}</p>
+                        <p className="text-2xs text-ink-subtle">{data.category}</p>
                       </div>
                     );
                   }
@@ -223,9 +223,9 @@ export function WeeklyReportView({ patientId }: WeeklyReportViewProps) {
 
         {/* Selected Day Inspector Breakdown */}
         {selectedDay?.scoreResult && (
-          <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50/70 p-4 text-xs">
+          <div className="mt-4 rounded-control border border-line bg-surface-sunken/70 p-4 text-xs">
             <div className="flex items-center justify-between mb-2">
-              <span className="font-semibold text-slate-900">
+              <span className="font-semibold text-ink">
                 {selectedDay.dayLabel} Breakdown:
               </span>
               <span className="font-extrabold text-emerald-800">
@@ -233,29 +233,29 @@ export function WeeklyReportView({ patientId }: WeeklyReportViewProps) {
               </span>
             </div>
             <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-6">
-              <div className="rounded-lg bg-white p-2 border border-slate-200 text-center">
-                <span className="text-2xs text-slate-400">Medicine</span>
-                <p className="font-semibold text-slate-800">{selectedDay.scoreResult.components.medicine.score}/25</p>
+              <div className="rounded-field bg-surface p-2 border border-line text-center">
+                <span className="text-2xs text-ink-subtle">Medicine</span>
+                <p className="font-semibold text-ink">{selectedDay.scoreResult.components.medicine.score}/25</p>
               </div>
-              <div className="rounded-lg bg-white p-2 border border-slate-200 text-center">
-                <span className="text-2xs text-slate-400">Food</span>
-                <p className="font-semibold text-slate-800">{selectedDay.scoreResult.components.food.score}/20</p>
+              <div className="rounded-field bg-surface p-2 border border-line text-center">
+                <span className="text-2xs text-ink-subtle">Food</span>
+                <p className="font-semibold text-ink">{selectedDay.scoreResult.components.food.score}/20</p>
               </div>
-              <div className="rounded-lg bg-white p-2 border border-slate-200 text-center">
-                <span className="text-2xs text-slate-400">Activity</span>
-                <p className="font-semibold text-slate-800">{selectedDay.scoreResult.components.activity.score}/15</p>
+              <div className="rounded-field bg-surface p-2 border border-line text-center">
+                <span className="text-2xs text-ink-subtle">Activity</span>
+                <p className="font-semibold text-ink">{selectedDay.scoreResult.components.activity.score}/15</p>
               </div>
-              <div className="rounded-lg bg-white p-2 border border-slate-200 text-center">
-                <span className="text-2xs text-slate-400">Sleep</span>
-                <p className="font-semibold text-slate-800">{selectedDay.scoreResult.components.sleep.score}/15</p>
+              <div className="rounded-field bg-surface p-2 border border-line text-center">
+                <span className="text-2xs text-ink-subtle">Sleep</span>
+                <p className="font-semibold text-ink">{selectedDay.scoreResult.components.sleep.score}/15</p>
               </div>
-              <div className="rounded-lg bg-white p-2 border border-slate-200 text-center">
-                <span className="text-2xs text-slate-400">BP</span>
-                <p className="font-semibold text-slate-800">{selectedDay.scoreResult.components.bp.score}/15</p>
+              <div className="rounded-field bg-surface p-2 border border-line text-center">
+                <span className="text-2xs text-ink-subtle">BP</span>
+                <p className="font-semibold text-ink">{selectedDay.scoreResult.components.bp.score}/15</p>
               </div>
-              <div className="rounded-lg bg-white p-2 border border-slate-200 text-center">
-                <span className="text-2xs text-slate-400">Weight</span>
-                <p className="font-semibold text-slate-800">{selectedDay.scoreResult.components.weight.score}/10</p>
+              <div className="rounded-field bg-surface p-2 border border-line text-center">
+                <span className="text-2xs text-ink-subtle">Weight</span>
+                <p className="font-semibold text-ink">{selectedDay.scoreResult.components.weight.score}/10</p>
               </div>
             </div>
           </div>
@@ -264,110 +264,110 @@ export function WeeklyReportView({ patientId }: WeeklyReportViewProps) {
 
       {/* 8-METRIC WEEKLY SUMMARY GRID */}
       <div className="grid gap-3 grid-cols-2 md:grid-cols-4">
-        <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-xs">
+        <div className="rounded-card border border-line bg-surface p-4 shadow-e1">
           <div className="flex items-center gap-2 text-emerald-600 mb-1">
             <Pill className="h-4 w-4" />
-            <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">Medicine Adherence</span>
+            <span className="text-xs font-semibold uppercase tracking-wider text-ink-subtle">Medicine Adherence</span>
           </div>
-          <p className="text-2xl font-bold text-slate-900">{weeklyData.medicineAdherencePercent}%</p>
-          <p className="text-xs text-slate-500 mt-0.5">साप्ताहिक खुराक अनुपालन</p>
+          <p className="text-2xl font-bold text-ink">{weeklyData.medicineAdherencePercent}%</p>
+          <p className="text-xs text-ink-subtle mt-0.5">साप्ताहिक खुराक अनुपालन</p>
         </div>
 
-        <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-xs">
+        <div className="rounded-card border border-line bg-surface p-4 shadow-e1">
           <div className="flex items-center gap-2 text-green-600 mb-1">
             <Utensils className="h-4 w-4" />
-            <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">Avg Calories</span>
+            <span className="text-xs font-semibold uppercase tracking-wider text-ink-subtle">Avg Calories</span>
           </div>
-          <p className="text-2xl font-bold text-slate-900">
+          <p className="text-2xl font-bold text-ink">
             {weeklyData.averageCalories ? `${weeklyData.averageCalories} kcal` : "N/A"}
           </p>
-          <p className="text-xs text-slate-500 mt-0.5">प्रतिदिन औसत कैलोरी</p>
+          <p className="text-xs text-ink-subtle mt-0.5">प्रतिदिन औसत कैलोरी</p>
         </div>
 
-        <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-xs">
+        <div className="rounded-card border border-line bg-surface p-4 shadow-e1">
           <div className="flex items-center gap-2 text-sky-600 mb-1">
             <Footprints className="h-4 w-4" />
-            <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">Avg Steps</span>
+            <span className="text-xs font-semibold uppercase tracking-wider text-ink-subtle">Avg Steps</span>
           </div>
-          <p className="text-2xl font-bold text-slate-900">
+          <p className="text-2xl font-bold text-ink">
             {weeklyData.averageSteps ? weeklyData.averageSteps.toLocaleString() : "N/A"}
           </p>
-          <p className="text-xs text-slate-500 mt-0.5">प्रतिदिन औसत कदम</p>
+          <p className="text-xs text-ink-subtle mt-0.5">प्रतिदिन औसत कदम</p>
         </div>
 
-        <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-xs">
+        <div className="rounded-card border border-line bg-surface p-4 shadow-e1">
           <div className="flex items-center gap-2 text-indigo-600 mb-1">
             <Moon className="h-4 w-4" />
-            <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">Avg Sleep</span>
+            <span className="text-xs font-semibold uppercase tracking-wider text-ink-subtle">Avg Sleep</span>
           </div>
-          <p className="text-2xl font-bold text-slate-900">
+          <p className="text-2xl font-bold text-ink">
             {weeklyData.averageSleepHours ? `${weeklyData.averageSleepHours} hrs` : "N/A"}
           </p>
-          <p className="text-xs text-slate-500 mt-0.5">औसत नींद का समय</p>
+          <p className="text-xs text-ink-subtle mt-0.5">औसत नींद का समय</p>
         </div>
 
-        <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-xs">
+        <div className="rounded-card border border-line bg-surface p-4 shadow-e1">
           <div className="flex items-center gap-2 text-rose-600 mb-1">
             <HeartPulse className="h-4 w-4" />
-            <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">BP Readings</span>
+            <span className="text-xs font-semibold uppercase tracking-wider text-ink-subtle">BP Readings</span>
           </div>
-          <p className="text-2xl font-bold text-slate-900">{weeklyData.bpReadingsCount}</p>
-          <p className="text-xs text-slate-500 mt-0.5">कुल रिकॉर्ड किए गए माप</p>
+          <p className="text-2xl font-bold text-ink">{weeklyData.bpReadingsCount}</p>
+          <p className="text-xs text-ink-subtle mt-0.5">कुल रिकॉर्ड किए गए माप</p>
         </div>
 
-        <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-xs">
+        <div className="rounded-card border border-line bg-surface p-4 shadow-e1">
           <div className="flex items-center gap-2 text-amber-600 mb-1">
             <Scale className="h-4 w-4" />
-            <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">Weight Change</span>
+            <span className="text-xs font-semibold uppercase tracking-wider text-ink-subtle">Weight Change</span>
           </div>
-          <p className="text-2xl font-bold text-slate-900">
+          <p className="text-2xl font-bold text-ink">
             {weeklyData.weightChangeKg !== null
               ? `${weeklyData.weightChangeKg > 0 ? "+" : ""}${weeklyData.weightChangeKg} kg`
               : "Stable / N/A"}
           </p>
-          <p className="text-xs text-slate-500 mt-0.5">सप्ताह में वजन बदलाव</p>
+          <p className="text-xs text-ink-subtle mt-0.5">सप्ताह में वजन बदलाव</p>
         </div>
 
-        <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-xs">
+        <div className="rounded-card border border-line bg-surface p-4 shadow-e1">
           <div className="flex items-center gap-2 text-emerald-600 mb-1">
             <Sparkles className="h-4 w-4" />
-            <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">Highest Score</span>
+            <span className="text-xs font-semibold uppercase tracking-wider text-ink-subtle">Highest Score</span>
           </div>
-          <p className="text-2xl font-bold text-slate-900">
+          <p className="text-2xl font-bold text-ink">
             {weeklyData.highestScore ? `${weeklyData.highestScore.score}` : "N/A"}
           </p>
-          <p className="text-xs text-slate-500 mt-0.5">
+          <p className="text-xs text-ink-subtle mt-0.5">
             {weeklyData.highestScore ? weeklyData.highestScore.dayLabel : "No score"}
           </p>
         </div>
 
-        <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-xs">
-          <div className="flex items-center gap-2 text-slate-600 mb-1">
+        <div className="rounded-card border border-line bg-surface p-4 shadow-e1">
+          <div className="flex items-center gap-2 text-ink-muted mb-1">
             <Activity className="h-4 w-4" />
-            <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">Food Logging %</span>
+            <span className="text-xs font-semibold uppercase tracking-wider text-ink-subtle">Food Logging %</span>
           </div>
-          <p className="text-2xl font-bold text-slate-900">{weeklyData.foodLoggingConsistencyPercent}%</p>
-          <p className="text-xs text-slate-500 mt-0.5">भोजन दर्ज निरंतरता</p>
+          <p className="text-2xl font-bold text-ink">{weeklyData.foodLoggingConsistencyPercent}%</p>
+          <p className="text-xs text-ink-subtle mt-0.5">भोजन दर्ज निरंतरता</p>
         </div>
       </div>
 
       {/* RULE-BASED PERSONALIZED INSIGHTS CARD */}
       {weeklyData.personalizedInsights.length > 0 && (
-        <Card className="border-emerald-100 bg-emerald-50/40 p-5">
+        <Card className="border-positive-line bg-positive-soft/40 p-5">
           <CardHeader className="p-0 pb-3">
-            <CardTitle className="text-sm font-semibold text-emerald-950 flex items-center gap-2">
-              <CheckCircle2 className="h-4 w-4 text-emerald-700" />
+            <CardTitle className="text-sm font-semibold text-positive flex items-center gap-2">
+              <CheckCircle2 className="h-4 w-4 text-positive" />
               Weekly Personalized Insights · साप्ताहिक व्यक्तिगत अंतर्दृष्टि
             </CardTitle>
-            <CardDescription className="text-xs text-emerald-800">
+            <CardDescription className="text-xs text-positive">
               आपके इस सप्ताह के डेटा पर आधारित विश्लेषण (यह कोई मेडिकल डायग्नोसिस नहीं है)
             </CardDescription>
           </CardHeader>
 
-          <div className="space-y-2 text-xs text-emerald-900 font-medium">
+          <div className="space-y-2 text-xs text-positive font-medium">
             {weeklyData.personalizedInsights.map((insight, idx) => (
               <div key={idx} className="flex items-start gap-2">
-                <span className="mt-1 h-1.5 w-1.5 rounded-full bg-emerald-600 shrink-0" />
+                <span className="mt-1 h-1.5 w-1.5 rounded-full bg-positive shrink-0" />
                 <span>{insight}</span>
               </div>
             ))}
@@ -376,7 +376,7 @@ export function WeeklyReportView({ patientId }: WeeklyReportViewProps) {
       )}
 
       {/* Medical disclaimer note */}
-      <div className="flex items-center gap-1.5 text-xs text-slate-400">
+      <div className="flex items-center gap-1.5 text-xs text-ink-subtle">
         <AlertCircle className="h-3 w-3 shrink-0" />
         <span>
           यह रिपोर्ट केवल आपकी हैबिट ट्रैकिंग और लॉगिंग निरंतरता की समीक्षा के लिए है। यह किसी मेडिकल ट्रीटमेंट का विकल्प नहीं है।

@@ -39,17 +39,17 @@ export function PersonalHealthPatternCard({
   }
 
   return (
-    <Card className="border-emerald-200/80 bg-linear-to-br from-emerald-50/50 to-white p-5 shadow-xs transition-all">
+    <Card className="border-emerald-200/80 bg-linear-to-br from-emerald-50/50 to-surface p-5 shadow-xs transition-all">
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-2">
           <span className="flex h-6 w-6 items-center justify-center rounded-lg bg-emerald-600 text-white shadow-xs">
             <Sparkles className="h-3.5 w-3.5" />
           </span>
           <div>
-            <h3 className="font-semibold text-slate-900 text-sm sm:text-base">
+            <h3 className="font-semibold text-ink text-sm sm:text-base">
               Personal Health Pattern · आपका हाल का पैटर्न
             </h3>
-            <p className="text-xs text-slate-500 font-medium">
+            <p className="text-xs text-ink-subtle font-medium">
               Data-driven observational summary of recent logs (30-day baseline)
             </p>
           </div>
@@ -66,11 +66,11 @@ export function PersonalHealthPatternCard({
           return (
             <div
               key={idx}
-              className="flex items-start justify-between gap-3 rounded-xl border border-emerald-100/80 bg-white p-3 transition-colors"
+              className="flex items-start justify-between gap-3 rounded-card border border-emerald-100/80 bg-surface p-3 transition-colors"
             >
               <div className="flex items-start gap-2.5">
                 <span className="mt-1 h-1.5 w-1.5 rounded-full bg-emerald-600 shrink-0" />
-                <p className="text-slate-800 font-medium leading-relaxed">
+                <p className="text-ink font-medium leading-relaxed">
                   {b.hi}
                 </p>
               </div>
@@ -87,7 +87,7 @@ export function PersonalHealthPatternCard({
                     <button
                       type="button"
                       onClick={() => handleFeedback(insightKey, true)}
-                      className="p-1 rounded-md text-slate-400 hover:text-emerald-700 hover:bg-emerald-50 transition-colors"
+                      className="p-1 rounded-md text-ink-subtle hover:text-emerald-700 hover:bg-emerald-50 transition-colors"
                       title="उपयोगी थी (Helpful)"
                     >
                       <ThumbsUp className="h-3 w-3" />
@@ -95,7 +95,7 @@ export function PersonalHealthPatternCard({
                     <button
                       type="button"
                       onClick={() => handleFeedback(insightKey, false)}
-                      className="p-1 rounded-md text-slate-400 hover:text-rose-700 hover:bg-rose-50 transition-colors"
+                      className="p-1 rounded-md text-ink-subtle hover:text-rose-700 hover:bg-rose-50 transition-colors"
                       title="सही नहीं लगी (Not helpful)"
                     >
                       <ThumbsDown className="h-3 w-3" />
@@ -111,14 +111,14 @@ export function PersonalHealthPatternCard({
         {multiFactorObservations?.map((mf) => (
           <div
             key={mf.id}
-            className="flex items-start gap-2.5 rounded-xl border border-sky-100 bg-sky-50/40 p-3 text-sky-950"
+            className="flex items-start gap-2.5 rounded-card border border-sky-100 bg-sky-50/40 p-3 text-sky-950"
           >
             <Activity className="h-4 w-4 text-sky-600 shrink-0 mt-0.5" />
             <div>
               <span className="block font-semibold text-xs text-sky-900 mb-0.5">
                 Multi-Factor Observation ({mf.factors.join(" + ")}):
               </span>
-              <p className="text-slate-700 font-medium leading-relaxed text-xs">
+              <p className="text-ink-muted font-medium leading-relaxed text-xs">
                 {mf.observationHi}
               </p>
             </div>
@@ -126,7 +126,7 @@ export function PersonalHealthPatternCard({
         ))}
       </div>
 
-      <p className="mt-3 text-2xs text-slate-400 italic">
+      <p className="mt-3 text-2xs text-ink-subtle italic">
         * यह अवलोकन आपकी हाल की प्रविष्टियों पर आधारित है और किसी चिकित्सीय निदान (Medical Diagnosis) का विकल्प नहीं है।
       </p>
     </Card>

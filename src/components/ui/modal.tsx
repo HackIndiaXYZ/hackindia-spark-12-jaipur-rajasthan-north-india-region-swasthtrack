@@ -46,7 +46,7 @@ export function Modal({
   return (
     <div
       aria-modal="true"
-      className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-slate-950/60 p-4 backdrop-blur-xs animate-in fade-in duration-200"
+      className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-ink/60 p-4 backdrop-blur-xs animate-in fade-in duration-200"
       role="dialog"
     >
       <div
@@ -56,29 +56,32 @@ export function Modal({
       />
       <div
         className={cn(
-          "relative z-10 w-full rounded-2xl border border-slate-200 bg-white p-4 sm:p-6 shadow-2xl transition-all max-h-[90vh] overflow-y-auto",
+          "reveal relative z-10 w-full rounded-sheet border border-line bg-surface p-4 sm:p-6 shadow-e4 transition-all max-h-[90vh] overflow-y-auto",
           maxWidthClasses[maxWidth],
         )}
       >
-        <div className="flex items-start justify-between gap-4 border-b border-slate-100 pb-4">
+        {/* Gold hairline — the one accent moment on an otherwise quiet sheet. */}
+        <div aria-hidden className="absolute inset-x-0 top-0 h-1 grad-spring rounded-t-sheet" />
+
+        <div className="flex items-start justify-between gap-4 border-b border-line pb-4">
           <div>
             <div className="flex items-center gap-2">
-              <h2 className="text-xl font-semibold text-slate-950">{title}</h2>
+              <h2 className="text-xl font-semibold text-ink">{title}</h2>
               {hindiTitle ? (
-                <span className="rounded-md bg-emerald-50 px-2 py-0.5 text-xs font-semibold text-emerald-700">
+                <span lang="hi" className="rounded-md border border-gold-line bg-gold-soft px-2 py-0.5 text-xs font-semibold text-gold-ink">
                   {hindiTitle}
                 </span>
               ) : null}
             </div>
             {description ? (
-              <p className="mt-1 text-sm text-slate-500">{description}</p>
+              <p className="mt-1 text-sm text-ink-muted">{description}</p>
             ) : null}
           </div>
           <button
             type="button"
             onClick={onClose}
             aria-label="Close dialog"
-            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-slate-500 hover:bg-slate-200 hover:text-slate-900 transition-colors"
+            className="pressable flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-control bg-surface-sunken text-ink-muted hover:bg-line hover:text-ink transition-colors"
           >
             <X className="h-5 w-5" />
           </button>

@@ -5,36 +5,30 @@ import React from "react";
 /* ------------------------------------------------------------------ */
 /*  Skeleton primitives                                                */
 /* ------------------------------------------------------------------ */
+/*  All shimmer bars share the `.skeleton` keyframe (globals.css) — the
+    same loading treatment the wellness ring uses — instead of a plain
+    `animate-pulse` grey block, so every loading state in the product
+    reads as one system. */
 
 /** Shimmer bar for normal text (e.g. labels, descriptions) */
 const TextBar: React.FC<{ className?: string }> = ({ className = "" }) => (
-  <div
-    className={`h-4 w-24 rounded bg-slate-200 animate-pulse ${className}`}
-  />
+  <div className={`skeleton h-4 w-24 ${className}`} />
 );
 
 /** Shimmer bar for large values (e.g. metric numbers) */
 const ValueBar: React.FC<{ className?: string }> = ({ className = "" }) => (
-  <div
-    className={`h-8 w-32 rounded bg-slate-200 animate-pulse ${className}`}
-  />
+  <div className={`skeleton h-8 w-32 ${className}`} />
 );
 
 /** Shimmer bar for input fields */
 const InputBar: React.FC<{ className?: string }> = ({ className = "" }) => (
-  <div
-    className={`h-10 w-full rounded-lg bg-slate-100 animate-pulse ${className}`}
-  />
+  <div className={`skeleton h-10 w-full rounded-field ${className}`} />
 );
 
 /** Shimmer bar for small / helper text */
 const SmallTextBar: React.FC<{ className?: string }> = ({
   className = "",
-}) => (
-  <div
-    className={`h-3 w-16 rounded bg-slate-100 animate-pulse ${className}`}
-  />
-);
+}) => <div className={`skeleton h-3 w-16 ${className}`} />;
 
 /* ------------------------------------------------------------------ */
 /*  1. SkeletonCard                                                    */
@@ -48,12 +42,12 @@ export const SkeletonCard: React.FC<{ className?: string }> = ({
   className = "",
 }) => (
   <div
-    className={`rounded-2xl border bg-white p-5 space-y-4 ${className}`}
+    className={`rounded-card border border-line bg-surface p-5 space-y-4 ${className}`}
     aria-hidden="true"
   >
     {/* Header area */}
     <div className="flex items-center gap-3">
-      <div className="h-8 w-8 rounded-full bg-slate-200 animate-pulse" />
+      <div className="skeleton h-8 w-8 rounded-full" />
       <TextBar className="w-36" />
     </div>
 
@@ -73,12 +67,12 @@ export const SkeletonCard: React.FC<{ className?: string }> = ({
 /** Single metric card skeleton (icon circle + title + value + helper) */
 const SkeletonMetricCard: React.FC = () => (
   <div
-    className="rounded-2xl border bg-white p-5 space-y-3"
+    className="rounded-card border border-line bg-surface p-5 space-y-3"
     aria-hidden="true"
   >
     <div className="flex items-center gap-3">
       {/* Icon circle */}
-      <div className="h-10 w-10 rounded-full bg-slate-200 animate-pulse shrink-0" />
+      <div className="skeleton h-10 w-10 shrink-0 rounded-full" />
       {/* Title bar */}
       <TextBar className="w-28" />
     </div>
@@ -118,13 +112,13 @@ export const SkeletonHealthPanel: React.FC<{ className?: string }> = ({
   className = "",
 }) => (
   <div
-    className={`rounded-2xl border bg-white p-5 space-y-6 ${className}`}
+    className={`rounded-card border border-line bg-surface p-5 space-y-6 ${className}`}
     aria-hidden="true"
   >
     {/* Header row */}
     <div className="flex items-center justify-between">
       <div className="flex items-center gap-3">
-        <div className="h-9 w-9 rounded-full bg-slate-200 animate-pulse" />
+        <div className="skeleton h-9 w-9 rounded-full" />
         <TextBar className="w-40" />
       </div>
       <SmallTextBar className="w-20" />
@@ -144,11 +138,11 @@ export const SkeletonHealthPanel: React.FC<{ className?: string }> = ({
       </div>
       <InputBar />
       {/* Submit button placeholder */}
-      <div className="h-10 w-28 rounded-lg bg-slate-200 animate-pulse" />
+      <div className="skeleton h-10 w-28 rounded-control" />
     </div>
 
     {/* History list area */}
-    <div className="space-y-3 pt-2 border-t">
+    <div className="space-y-3 pt-2 border-t border-line">
       <TextBar className="w-32" />
       {Array.from({ length: 4 }).map((_, i) => (
         <div key={i} className="flex items-center justify-between">
@@ -179,25 +173,22 @@ export const SkeletonDashboard: React.FC<{ className?: string }> = ({
 }) => (
   <div className={`space-y-6 ${className}`} aria-hidden="true">
     {/* Patient overview banner skeleton */}
-    <div className="rounded-2xl border bg-white p-5 flex items-center gap-4">
+    <div className="rounded-card border border-line bg-surface p-5 flex items-center gap-4">
       {/* Avatar */}
-      <div className="h-14 w-14 rounded-full bg-slate-200 animate-pulse shrink-0" />
+      <div className="skeleton h-14 w-14 shrink-0 rounded-full" />
       <div className="space-y-2 flex-1">
         <TextBar className="w-44" />
         <SmallTextBar className="w-32" />
         <SmallTextBar className="w-24" />
       </div>
       {/* Status badge placeholder */}
-      <div className="h-6 w-20 rounded-full bg-slate-100 animate-pulse shrink-0" />
+      <div className="skeleton h-6 w-20 shrink-0 rounded-full" />
     </div>
 
     {/* Quick actions bar skeleton */}
     <div className="flex gap-3 overflow-hidden">
       {Array.from({ length: 4 }).map((_, i) => (
-        <div
-          key={i}
-          className="h-10 w-32 rounded-lg bg-slate-100 animate-pulse shrink-0"
-        />
+        <div key={i} className="skeleton h-10 w-32 shrink-0 rounded-control" />
       ))}
     </div>
 

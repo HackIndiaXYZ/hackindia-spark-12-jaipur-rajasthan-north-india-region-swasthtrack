@@ -60,20 +60,20 @@ export function JoinPatientDialog({
     >
       <form onSubmit={handleSubmit} className="space-y-4 text-xs">
         {error && (
-          <div className="rounded-xl border border-rose-200 bg-rose-50 p-3 text-xs font-semibold text-rose-800 animate-in fade-in">
+          <div className="rounded-card border border-critical-line bg-critical-soft p-3 text-xs font-semibold text-critical animate-in fade-in">
             {error}
           </div>
         )}
 
         {successMsg && (
-          <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-xs font-semibold text-emerald-800 flex items-center gap-1.5 animate-in fade-in">
-            <Check className="h-4 w-4 text-emerald-600" />
+          <div className="rounded-card border border-positive-line bg-positive-soft p-3 text-xs font-semibold text-positive flex items-center gap-1.5 animate-in fade-in">
+            <Check className="h-4 w-4 text-positive" />
             {successMsg}
           </div>
         )}
 
-        <div>
-          <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+        <div className="gold-edge rounded-card p-4">
+          <label className="block text-xs font-semibold text-ink-muted mb-1.5">
             6-अंकों का इनविटेशन कोड (Pairing Code)
           </label>
           <div className="relative flex items-center">
@@ -84,12 +84,12 @@ export function JoinPatientDialog({
               placeholder="e.g. 849201"
               value={code}
               onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))}
-              className="w-full rounded-2xl border border-slate-300 px-4 py-3 text-center text-xl font-bold tracking-widest text-slate-900 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
+              className="w-full rounded-field border border-line-strong px-4 py-3 text-center text-xl font-bold tracking-widest text-ink focus:border-brand focus:ring-2 focus:ring-brand/20"
               required
             />
-            <KeyRound className="absolute right-3.5 h-4 w-4 text-slate-400" />
+            <KeyRound className="absolute right-3.5 h-4 w-4 text-ink-subtle" />
           </div>
-          <p className="mt-1.5 text-xs text-slate-500">
+          <p className="mt-1.5 text-xs text-ink-subtle">
             मरीज़ के फोन में Settings &gt; Add Caregiver से कोड प्राप्त करें।
           </p>
         </div>

@@ -12,6 +12,7 @@ import {
   ShieldAlert,
   Utensils,
 } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { DepthCard } from "@/components/ui/depth-card";
 import { TimelineEventCard } from "./timeline-event-card";
 import { TimelineDetailDialog } from "./timeline-detail-dialog";
@@ -132,7 +133,7 @@ export function TimelineView({ patientId }: TimelineViewProps) {
   return (
     <div className="space-y-4">
       {/* 1. DATE SCOPE SELECTOR (TODAY, YESTERDAY, 7D, 30D, ALL) */}
-      <div className="flex items-center gap-1.5 p-1.5 bg-slate-100/90 rounded-2xl border border-slate-200 overflow-x-auto scrollbar-none">
+      <div className="flex items-center gap-1.5 p-1.5 bg-surface-sunken/90 rounded-card border border-line overflow-x-auto scrollbar-none">
         {dateScopeOptions.map((opt) => {
           const isActive = dateScope === opt.id;
           return (
@@ -146,10 +147,10 @@ export function TimelineView({ patientId }: TimelineViewProps) {
                 }
               }}
               className={cn(
-                "px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer shrink-0",
+                "px-3 py-1.5 rounded-control text-xs font-bold transition-all cursor-pointer shrink-0",
                 isActive
-                  ? "bg-white text-slate-950 shadow-xs border border-slate-200/80 scale-[1.02]"
-                  : "text-slate-600 hover:text-slate-950"
+                  ? "bg-surface text-ink shadow-e1 border border-line scale-[1.02]"
+                  : "text-ink-muted hover:text-ink"
               )}
             >
               <span>{opt.hindiLabel}</span>
@@ -176,10 +177,10 @@ export function TimelineView({ patientId }: TimelineViewProps) {
                 }
               }}
               className={cn(
-                "flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer shrink-0 shadow-2xs",
+                "flex items-center gap-1.5 px-3 py-2 rounded-control text-xs font-bold transition-all cursor-pointer shrink-0 shadow-2xs",
                 isActive
-                  ? "bg-emerald-600 text-white shadow-xs scale-[1.02]"
-                  : "bg-white border-2 border-slate-200 text-slate-700 hover:border-emerald-300 hover:bg-emerald-50/40"
+                  ? "bg-brand text-ink-inverse shadow-e1 scale-[1.02]"
+                  : "bg-surface border-2 border-line text-ink-muted hover:border-brand-line hover:bg-brand-softer"
               )}
             >
               <Icon className="h-3.5 w-3.5" />
@@ -192,48 +193,59 @@ export function TimelineView({ patientId }: TimelineViewProps) {
       {/* 3. TIMELINE EVENTS CONTENT */}
       {loading ? (
         <div className="space-y-3 animate-pulse pt-2">
-          <div className="h-24 rounded-2xl bg-slate-100" />
-          <div className="h-24 rounded-2xl bg-slate-100" />
-          <div className="h-24 rounded-2xl bg-slate-100" />
+          <div className="h-24 rounded-card bg-surface-sunken" />
+          <div className="h-24 rounded-card bg-surface-sunken" />
+          <div className="h-24 rounded-card bg-surface-sunken" />
         </div>
       ) : groups.length === 0 ? (
-        <DepthCard depth={1} className="p-8 text-center bg-white rounded-2xl border-2 border-slate-200">
-          <Calendar className="mx-auto h-10 w-10 text-slate-300 mb-2" />
-          <h4 className="text-base font-bold text-slate-800">कोई रिकॉर्ड नहीं मिला</h4>
-          <p className="text-xs font-semibold text-slate-500 mt-1">
+        <DepthCard depth={1} className="p-8 text-center bg-surface rounded-card border-2 border-line">
+          <Calendar className="mx-auto h-10 w-10 text-ink-subtle mb-2" />
+          <h4 className="text-base font-bold text-ink">कोई रिकॉर्ड नहीं मिला</h4>
+          <p className="text-xs font-semibold text-ink-subtle mt-1">
             चुनी गई अवधि व श्रेणी के लिए अभी कोई इवेंट दर्ज नहीं है।
           </p>
         </DepthCard>
       ) : (
         <div className="space-y-6 pt-1">
-          {groups.map((group) => (
-            <section key={group.groupKey} className="space-y-3">
-              {/* GROUP SECTION HEADER */}
-              <div className="flex items-center gap-2">
-                <span className="h-2.5 w-2.5 rounded-full bg-emerald-600 shadow-2xs" />
-                <h3 className="text-sm sm:text-base font-bold text-slate-950 tracking-tight">
-                  {group.groupLabelHi}
-                </h3>
-                <span className="text-xs font-semibold text-slate-400">
-                  · {group.events.length} रिकॉर्ड्स
-                </span>
-              </div>
-
-              {/* EVENTS LIST */}
-              <div className="space-y-2.5">
-                {group.events.map((event) => (
-                  <TimelineEventCard
-                    key={event.id}
-                    event={event}
-                    onSelect={(ev) => {
-                      setSelectedEvent(ev);
-                      setIsDetailOpen(true);
-                    }}
+          {groups.map((group) => {
+            const isToday = group.groupKey === "Today";
+            return (
+              <section key={group.groupKey} className="space-y-3">
+                {/* GROUP SECTION HEADER — the "today" marker is this screen's one gold moment */}
+                <div className="flex items-center gap-2">
+                  <span
+                    className={cn(
+                      "h-2.5 w-2.5 rounded-full shadow-2xs",
+                      isToday ? "grad-spring" : "bg-brand",
+                    )}
                   />
-                ))}
-              </div>
-            </section>
-          ))}
+                  <h3 className="text-sm sm:text-base font-bold text-ink tracking-tight">
+                    {group.groupLabelHi}
+                  </h3>
+                  {isToday ? (
+                    <Badge variant="gold" className="text-2xs">आज · Today</Badge>
+                  ) : null}
+                  <span className="text-xs font-semibold text-ink-subtle">
+                    · {group.events.length} रिकॉर्ड्स
+                  </span>
+                </div>
+
+                {/* EVENTS LIST */}
+                <div className="space-y-2.5">
+                  {group.events.map((event) => (
+                    <TimelineEventCard
+                      key={event.id}
+                      event={event}
+                      onSelect={(ev) => {
+                        setSelectedEvent(ev);
+                        setIsDetailOpen(true);
+                      }}
+                    />
+                  ))}
+                </div>
+              </section>
+            );
+          })}
 
           {/* PROGRESSIVE LOAD MORE BUTTON */}
           {hasMore && (
@@ -242,7 +254,7 @@ export function TimelineView({ patientId }: TimelineViewProps) {
                 type="button"
                 onClick={handleLoadMore}
                 disabled={loadingMore}
-                className="px-6 py-2.5 rounded-xl bg-white border-2 border-slate-200 hover:border-emerald-400 hover:bg-emerald-50 active:scale-98 text-xs sm:text-sm font-bold text-slate-800 shadow-sm cursor-pointer transition-all disabled:opacity-50"
+                className="px-6 py-2.5 rounded-control bg-surface border-2 border-line hover:border-brand-line hover:bg-brand-softer active:scale-98 text-xs sm:text-sm font-bold text-ink-muted shadow-e1 cursor-pointer transition-all disabled:opacity-50"
               >
                 {loadingMore ? "लोड हो रहा है..." : "पूर्व के और रिकॉर्ड्स देखें (Load More)"}
               </button>

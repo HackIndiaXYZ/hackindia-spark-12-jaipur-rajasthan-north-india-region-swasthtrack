@@ -43,10 +43,10 @@ type MedicineScheduleProps = {
 type StatusType = "taken" | "late" | "missed" | "pending";
 
 const statusStyles: Record<StatusType, string> = {
-  taken: "border-emerald-500 bg-emerald-600 text-white font-bold shadow-md ring-2 ring-emerald-600/30",
-  late: "border-amber-500 bg-amber-500 text-white font-bold shadow-md ring-2 ring-amber-500/30",
-  missed: "border-rose-500 bg-rose-600 text-white font-bold shadow-md ring-2 ring-rose-600/30",
-  pending: "border-slate-300 bg-white text-slate-800 hover:bg-slate-50 hover:border-slate-400 font-semibold shadow-2xs",
+  taken: "border-positive bg-positive text-ink-inverse font-bold shadow-e2 ring-2 ring-positive/30",
+  late: "border-attention bg-attention text-ink-inverse font-bold shadow-e2 ring-2 ring-attention/30",
+  missed: "border-critical bg-critical text-ink-inverse font-bold shadow-e2 ring-2 ring-critical/30",
+  pending: "border-line-strong bg-surface text-ink hover:bg-surface-sunken hover:border-line-strong font-semibold shadow-2xs",
 };
 
 /** "आज", "कल", or a short local date — never a hard-coded special case. */
@@ -280,19 +280,19 @@ export function MedicineSchedule({
   ).length;
 
   return (
-    <Card className="border-2 border-slate-200/90 shadow-md">
+    <Card className="border-2 border-line/90 shadow-e2">
       {/* HEADER & DATE NAVIGATOR */}
-      <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 sm:p-6 pb-4 border-b border-slate-100">
+      <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 sm:p-6 pb-4 border-b border-line">
         <div>
           <div className="flex flex-wrap items-center gap-2">
-            <CardTitle className="text-xl sm:text-2xl font-bold text-slate-900">
+            <CardTitle className="text-xl sm:text-2xl font-bold text-ink">
               Medicine Schedule
             </CardTitle>
             <Badge variant="green" className="text-xs font-semibold px-2.5 py-1">
               दवाइयों का समय
             </Badge>
           </div>
-          <CardDescription className="text-xs sm:text-sm font-medium text-slate-600 mt-1">
+          <CardDescription className="text-xs sm:text-sm font-medium text-ink-muted mt-1">
             दिन के समय के अनुसार दवाइयों की सूची एवं खुराक दर्ज करें
           </CardDescription>
         </div>
@@ -360,13 +360,13 @@ export function MedicineSchedule({
       </div>
 
       {rollbackError && (
-        <div className="mx-4 sm:mx-6 mt-4 rounded-xl border border-rose-200 bg-rose-50 p-3 text-xs sm:text-sm font-semibold text-rose-800 animate-in fade-in">
+        <div className="mx-4 sm:mx-6 mt-4 rounded-card border border-critical-line bg-critical-soft p-3 text-xs sm:text-sm font-semibold text-critical animate-in fade-in">
           ⚠️ {rollbackError}
         </div>
       )}
 
       {bulkSuccessMsg && (
-        <div className="mx-4 sm:mx-6 mt-4 rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-xs sm:text-sm font-semibold text-emerald-800 animate-in fade-in">
+        <div className="mx-4 sm:mx-6 mt-4 rounded-card border border-positive-line bg-positive-soft p-3 text-xs sm:text-sm font-semibold text-positive animate-in fade-in">
           {bulkSuccessMsg}
         </div>
       )}
@@ -450,30 +450,30 @@ export function MedicineSchedule({
 
                     return (
                       <article
-                        className={`rounded-2xl border-2 p-4 sm:p-5 transition-all shadow-xs ${
+                        className={`rounded-card border-2 p-4 sm:p-5 transition-all shadow-xs ${
                           medicine.active
-                            ? "border-slate-300/80 bg-white hover:border-slate-400"
-                            : "border-slate-200 bg-slate-100/70 opacity-60"
+                            ? "border-line-strong/80 bg-surface hover:border-line-strong"
+                            : "border-line bg-surface-sunken/70 opacity-60"
                         }`}
                         key={medicine.id}
                       >
                         <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                           <div className="space-y-1.5">
                             <div className="flex flex-wrap items-center gap-2.5">
-                              <h4 className="font-bold text-slate-950 text-base sm:text-lg tracking-tight">
+                              <h4 className="font-bold text-ink text-base sm:text-lg tracking-tight">
                                 {medicine.medicine_name}
                               </h4>
-                              <span className="text-xs sm:text-sm font-bold text-emerald-800 bg-emerald-100/90 px-2.5 py-0.5 rounded-lg shadow-2xs">
+                              <span className="text-xs sm:text-sm font-bold text-emerald-800 bg-emerald-100/90 px-2.5 py-0.5 rounded-field shadow-2xs">
                                 {medicine.dose}
                               </span>
                               {currentStatus !== "pending" && (
                                 <span
                                   className={`text-xs font-bold px-2.5 py-0.5 rounded-md flex items-center gap-1.5 border ${
                                     currentStatus === "taken"
-                                      ? "bg-emerald-100 text-emerald-900 border-emerald-300"
+                                      ? "bg-positive-soft text-positive border-positive-line"
                                       : currentStatus === "late"
-                                      ? "bg-amber-100 text-amber-900 border-amber-300"
-                                      : "bg-rose-100 text-rose-900 border-rose-300"
+                                      ? "bg-attention-soft text-attention border-attention-line"
+                                      : "bg-critical-soft text-critical border-critical-line"
                                   }`}
                                 >
                                   <span>
@@ -486,27 +486,27 @@ export function MedicineSchedule({
                                 </span>
                               )}
                             </div>
-                            <p className="text-sm sm:text-base font-semibold text-slate-700 flex items-center gap-1.5">
+                            <p className="text-sm sm:text-base font-semibold text-ink-muted flex items-center gap-1.5">
                               <span className="text-emerald-700">●</span>
                               {medicine.meal_relation ? medicine.meal_relation.replace("_", " ") : "भोजन के बाद"}
-                              <span className="text-slate-400 font-normal">·</span>
-                              <span className="text-slate-600 font-semibold">{medicine.frequency}</span>
+                              <span className="text-ink-subtle font-normal">·</span>
+                              <span className="text-ink-muted font-semibold">{medicine.frequency}</span>
                             </p>
 
                             {/* MARKED TIME & SCHEDULED TIME HIGHLIGHT BANNER */}
                             <div className="mt-2.5 pt-1.5 flex flex-wrap items-center gap-2 text-xs font-semibold">
-                              <span className="bg-slate-100 text-slate-800 px-2.5 py-1 rounded-lg border border-slate-200 flex items-center gap-1.5 font-bold">
+                              <span className="bg-surface-sunken text-ink px-2.5 py-1 rounded-field border border-line flex items-center gap-1.5 font-bold">
                                 <Clock className="h-3.5 w-3.5 text-emerald-700" />
                                 <span>निर्धारित समय (Scheduled): {medicine.scheduled_time.slice(0, 5)}</span>
                               </span>
 
                               {markedTime ? (
-                                <span className="bg-purple-100 text-purple-950 px-2.5 py-1 rounded-lg border border-purple-300 flex items-center gap-1.5 font-bold animate-in fade-in">
+                                <span className="bg-purple-100 text-purple-950 px-2.5 py-1 rounded-field border border-purple-300 flex items-center gap-1.5 font-bold animate-in fade-in">
                                   <span>🕒</span>
                                   <span>मार्क समय (Marked Time): {markedTime}</span>
                                 </span>
                               ) : currentStatus !== "pending" ? (
-                                <span className="bg-purple-100 text-purple-950 px-2.5 py-1 rounded-lg border border-purple-300 flex items-center gap-1.5 font-bold animate-in fade-in">
+                                <span className="bg-purple-100 text-purple-950 px-2.5 py-1 rounded-field border border-purple-300 flex items-center gap-1.5 font-bold animate-in fade-in">
                                   <span>🕒</span>
                                   <span>मार्क समय (Marked Time): हाल ही में दर्ज (Just Now)</span>
                                 </span>
@@ -515,7 +515,7 @@ export function MedicineSchedule({
                           </div>
 
                           <div className="flex items-center gap-2 self-start shrink-0">
-                            <div className="flex items-center gap-1.5 text-xs sm:text-sm font-bold text-slate-900 bg-slate-100 px-3 py-1.5 rounded-xl border border-slate-200 shadow-2xs">
+                            <div className="flex items-center gap-1.5 text-xs sm:text-sm font-bold text-ink bg-surface-sunken px-3 py-1.5 rounded-control border border-line shadow-2xs">
                               <Clock aria-hidden="true" className="h-4 w-4 text-emerald-700" />
                               <span>{medicine.scheduled_time.slice(0, 5)}</span>
                             </div>
@@ -523,16 +523,16 @@ export function MedicineSchedule({
                         </div>
 
                         {medicine.active && (
-                          <div className="mt-4 pt-3 border-t border-slate-100">
+                          <div className="mt-4 pt-3 border-t border-line">
                             <div className="flex items-center justify-between mb-2">
-                              <p className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-slate-500">
+                              <p className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-ink-subtle">
                                 स्थिति बदलें / दर्ज करें (Change Entry):
                               </p>
                               {currentStatus !== "pending" && (
                                 <button
                                   type="button"
                                   onClick={() => handleUnmark(medicine)}
-                                  className="text-xs font-semibold text-slate-400 hover:text-rose-600 flex items-center gap-1 cursor-pointer"
+                                  className="text-xs font-semibold text-ink-subtle hover:text-critical flex items-center gap-1 cursor-pointer"
                                   title="एंट्री हटाएं / रीसेट करें"
                                 >
                                   <RotateCcw className="h-3 w-3" />
@@ -541,13 +541,13 @@ export function MedicineSchedule({
                               )}
                             </div>
 
-                            <div className="flex items-center gap-2 pt-1 border-t border-slate-100">
+                            <div className="flex items-center gap-2 pt-1 border-t border-line">
                               {/* Option 1: Taken (Auto evaluates on-time vs late) */}
                               <button
                                 type="button"
                                 onClick={() => handleMarkAuto(medicine)}
                                 className={cn(
-                                  "flex-1 min-h-11 rounded-xl border-2 px-3 text-xs sm:text-sm font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer active:scale-98 shadow-xs",
+                                  "flex-1 min-h-11 rounded-control border-2 px-3 text-xs sm:text-sm font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer active:scale-98 shadow-xs",
                                   currentStatus === "taken"
                                     ? statusStyles.taken
                                     : currentStatus === "late"
@@ -570,10 +570,10 @@ export function MedicineSchedule({
                                 type="button"
                                 onClick={() => handleMarkMissed(medicine)}
                                 className={cn(
-                                  "flex-1 min-h-11 rounded-xl border-2 px-3 text-xs sm:text-sm font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer active:scale-98 shadow-xs",
+                                  "flex-1 min-h-11 rounded-control border-2 px-3 text-xs sm:text-sm font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer active:scale-98 shadow-xs",
                                   currentStatus === "missed"
                                     ? statusStyles.missed
-                                    : "border-slate-200 bg-slate-50 text-slate-700 hover:bg-rose-50 hover:text-rose-800 hover:border-rose-300 font-semibold",
+                                    : "border-line bg-surface-sunken text-ink-muted hover:bg-critical-soft hover:text-critical hover:border-critical-line font-semibold",
                                 )}
                               >
                                 <span>✕</span>
@@ -590,7 +590,7 @@ export function MedicineSchedule({
                     );
                   })
                 ) : (
-                  <p className="text-sm font-semibold text-slate-500 py-3 text-center bg-white rounded-xl border border-slate-200">
+                  <p className="text-sm font-semibold text-ink-subtle py-3 text-center bg-surface rounded-card border border-line">
                     इस समय के लिए कोई दवाई निर्धारित नहीं है (No medicines scheduled).
                   </p>
                 )}

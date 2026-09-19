@@ -72,14 +72,14 @@ export function AddWeightDialog({
     >
       <form onSubmit={handleSubmit} className="space-y-5">
         {error ? (
-          <div className="rounded-xl border border-rose-200 bg-rose-50 p-3.5 text-sm font-semibold text-rose-800">
+          <div className="rounded-card border border-critical-line bg-critical-soft p-3.5 text-sm font-semibold text-critical">
             {error}
           </div>
         ) : null}
 
-        {/* 1. BIG NUMBER STEPPER WITH DIRECT EDITABLE INPUT */}
-        <div className="rounded-2xl border-2 border-amber-200 bg-amber-50/60 p-5 text-center">
-          <p className="text-xs font-bold text-amber-950 uppercase tracking-wider">
+        {/* 1. BIG NUMBER STEPPER WITH DIRECT EDITABLE INPUT — the one hero number in this dialog */}
+        <div className="gold-edge rounded-panel p-5 text-center">
+          <p className="text-xs font-bold text-gold-ink uppercase tracking-wider">
             आज का वजन (Weight in kg)
           </p>
 
@@ -91,37 +91,37 @@ export function AddWeightDialog({
               max="300"
               value={weight}
               onChange={(e) => setWeight(e.target.value)}
-              className="w-36 text-center text-4xl sm:text-5xl font-bold text-amber-950 bg-white border-2 border-amber-300 rounded-2xl py-1.5 focus:ring-2 focus:ring-amber-500 focus:outline-none shadow-2xs"
+              className="w-36 text-center text-4xl sm:text-5xl font-bold text-gold-ink bg-surface border-2 border-gold-line rounded-card py-1.5 focus:ring-2 focus:ring-gold-line focus:outline-none shadow-2xs"
             />
-            <span className="text-2xl font-bold text-amber-800">kg</span>
+            <span className="text-2xl font-bold text-gold-ink">kg</span>
           </div>
 
           <div className="flex items-center justify-between gap-1.5 sm:gap-2 mt-4">
             <button
               type="button"
               onClick={() => adjustWeight(-0.5)}
-              className="flex-1 min-w-0 min-h-10 rounded-xl bg-white border-2 border-amber-300 font-bold text-xs sm:text-sm text-amber-900 hover:bg-amber-100 flex items-center justify-center active:scale-95 shadow-2xs"
+              className="flex-1 min-w-0 min-h-11 rounded-field bg-surface border-2 border-gold-line font-bold text-xs sm:text-sm text-gold-ink hover:bg-gold-soft flex items-center justify-center active:scale-95 shadow-2xs"
             >
               -0.5 kg
             </button>
             <button
               type="button"
               onClick={() => adjustWeight(-0.1)}
-              className="flex-1 min-w-0 min-h-10 rounded-xl bg-white border-2 border-amber-200 font-semibold text-xs text-slate-700 hover:bg-slate-50 flex items-center justify-center active:scale-95"
+              className="flex-1 min-w-0 min-h-11 rounded-field bg-surface border-2 border-line font-semibold text-xs text-ink-muted hover:bg-surface-sunken flex items-center justify-center active:scale-95"
             >
               -0.1
             </button>
             <button
               type="button"
               onClick={() => adjustWeight(+0.1)}
-              className="flex-1 min-w-0 min-h-10 rounded-xl bg-white border-2 border-amber-200 font-semibold text-xs text-slate-700 hover:bg-slate-50 flex items-center justify-center active:scale-95"
+              className="flex-1 min-w-0 min-h-11 rounded-field bg-surface border-2 border-line font-semibold text-xs text-ink-muted hover:bg-surface-sunken flex items-center justify-center active:scale-95"
             >
               +0.1
             </button>
             <button
               type="button"
               onClick={() => adjustWeight(+0.5)}
-              className="flex-1 min-w-0 min-h-10 rounded-xl bg-white border-2 border-amber-300 font-bold text-xs sm:text-sm text-amber-900 hover:bg-amber-100 flex items-center justify-center active:scale-95 shadow-2xs"
+              className="flex-1 min-w-0 min-h-11 rounded-field bg-surface border-2 border-gold-line font-bold text-xs sm:text-sm text-gold-ink hover:bg-gold-soft flex items-center justify-center active:scale-95 shadow-2xs"
             >
               +0.5 kg
             </button>
@@ -144,7 +144,7 @@ export function AddWeightDialog({
             variant="primary"
             type="submit"
             disabled={loading}
-            className="w-full min-h-12 text-base font-bold rounded-2xl bg-amber-600 hover:bg-amber-700 text-white shadow-md shadow-amber-600/20"
+            className="w-full min-h-control-lg text-base font-bold"
           >
             <Scale className="h-5 w-5 mr-2" />
             {loading ? "सेव हो रहा है..." : `⚖️ ${weight} kg वजन सेव करें (Save Weight)`}

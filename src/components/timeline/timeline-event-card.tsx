@@ -34,35 +34,37 @@ const domainIcons: Record<TimelineDomain, typeof Activity> = {
 };
 
 const domainStyles: Record<TimelineDomain, { iconBg: string; border: string; accent: string }> = {
+  // These six mirror the app-wide vital identity tokens (globals.css §25,
+  // §45) so a colour means the same vital in the timeline as everywhere else.
   food: {
-    iconBg: "bg-amber-100 text-amber-800 border-amber-200",
-    border: "border-amber-200/80 hover:border-amber-300",
-    accent: "bg-amber-500",
+    iconBg: "bg-food-soft text-food border-food-line",
+    border: "border-food-line/80 hover:border-food",
+    accent: "bg-food",
   },
   bp: {
-    iconBg: "bg-rose-100 text-rose-800 border-rose-200",
-    border: "border-rose-200/80 hover:border-rose-300",
-    accent: "bg-rose-500",
+    iconBg: "bg-bp-soft text-bp border-bp-line",
+    border: "border-bp-line/80 hover:border-bp",
+    accent: "bg-bp",
   },
   medicine: {
-    iconBg: "bg-teal-100 text-teal-800 border-teal-200",
-    border: "border-teal-200/80 hover:border-teal-300",
-    accent: "bg-teal-500",
+    iconBg: "bg-meds-soft text-meds border-meds-line",
+    border: "border-meds-line/80 hover:border-meds",
+    accent: "bg-meds",
   },
   activity: {
-    iconBg: "bg-emerald-100 text-emerald-800 border-emerald-200",
-    border: "border-emerald-200/80 hover:border-emerald-300",
-    accent: "bg-emerald-500",
+    iconBg: "bg-activity-soft text-activity border-activity-line",
+    border: "border-activity-line/80 hover:border-activity",
+    accent: "bg-activity",
   },
   sleep: {
-    iconBg: "bg-purple-100 text-purple-800 border-purple-200",
-    border: "border-purple-200/80 hover:border-purple-300",
-    accent: "bg-purple-500",
+    iconBg: "bg-sleep-soft text-sleep border-sleep-line",
+    border: "border-sleep-line/80 hover:border-sleep",
+    accent: "bg-sleep",
   },
   weight: {
-    iconBg: "bg-blue-100 text-blue-800 border-blue-200",
-    border: "border-blue-200/80 hover:border-blue-300",
-    accent: "bg-blue-500",
+    iconBg: "bg-weight-soft text-weight border-weight-line",
+    border: "border-weight-line/80 hover:border-weight",
+    accent: "bg-weight",
   },
   wellness_score: {
     iconBg: "bg-emerald-100 text-emerald-800 border-emerald-200",
@@ -80,9 +82,9 @@ const domainStyles: Record<TimelineDomain, { iconBg: string; border: string; acc
     accent: "bg-rose-500",
   },
   progress_photo: {
-    iconBg: "bg-slate-100 text-slate-800 border-slate-200",
-    border: "border-slate-200/80 hover:border-slate-300",
-    accent: "bg-slate-500",
+    iconBg: "bg-surface-sunken text-ink-muted border-line",
+    border: "border-line hover:border-line-strong",
+    accent: "bg-ink-subtle",
   },
   goal_change: {
     iconBg: "bg-sky-100 text-sky-800 border-sky-200",
@@ -90,9 +92,9 @@ const domainStyles: Record<TimelineDomain, { iconBg: string; border: string; acc
     accent: "bg-sky-500",
   },
   settings_change: {
-    iconBg: "bg-slate-100 text-slate-800 border-slate-200",
-    border: "border-slate-200/80 hover:border-slate-300",
-    accent: "bg-slate-500",
+    iconBg: "bg-surface-sunken text-ink-muted border-line",
+    border: "border-line hover:border-line-strong",
+    accent: "bg-ink-subtle",
   },
 };
 
@@ -117,21 +119,21 @@ export function TimelineEventCard({
         }
       }}
       className={cn(
-        "rounded-2xl border-2 bg-white p-3.5 sm:p-4 shadow-sm transition-all duration-150 cursor-pointer select-none",
-        "active:scale-[0.985] active:translate-y-0.5 hover:shadow-md",
+        "rounded-card border-2 bg-surface p-3.5 sm:p-4 shadow-e1 transition-all duration-150 cursor-pointer select-none",
+        "active:scale-[0.985] active:translate-y-0.5 hover:shadow-e2",
         style.border
       )}
     >
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-start gap-3">
           {/* ICON BADGE */}
-          <div className={cn("h-10 w-10 rounded-xl border flex items-center justify-center shrink-0 shadow-2xs", style.iconBg)}>
+          <div className={cn("h-10 w-10 rounded-control border flex items-center justify-center shrink-0 shadow-2xs", style.iconBg)}>
             <Icon className="h-5 w-5 stroke-[2.2]" />
           </div>
 
           <div className="space-y-0.5">
             <div className="flex flex-wrap items-center gap-2">
-              <h4 className="text-sm sm:text-base font-bold text-slate-950 tracking-tight">
+              <h4 className="text-sm sm:text-base font-bold text-ink tracking-tight">
                 {event.titleHi}
               </h4>
               {event.statusBadge && (
@@ -142,15 +144,15 @@ export function TimelineEventCard({
             </div>
 
             {event.statusText && (
-              <p className="text-xs font-semibold text-slate-600">
+              <p className="text-xs font-semibold text-ink-muted">
                 {event.statusText}
               </p>
             )}
 
-            <div className="flex items-center gap-2 text-xs font-semibold text-slate-400 pt-0.5">
+            <div className="flex items-center gap-2 text-xs font-semibold text-ink-subtle pt-0.5">
               <span>{event.displayTime}</span>
               <span>•</span>
-              <span className="bg-slate-100 px-1.5 py-0.5 rounded text-slate-600 font-semibold border border-slate-200/80">
+              <span className="bg-surface-sunken px-1.5 py-0.5 rounded text-ink-muted font-semibold border border-line">
                 {event.source}
               </span>
             </div>
@@ -166,7 +168,7 @@ export function TimelineEventCard({
           ) : null}
           <button
             type="button"
-            className="text-xs font-semibold text-slate-400 hover:text-slate-700 inline-flex items-center gap-0.5 mt-0.5"
+            className="text-xs font-semibold text-ink-subtle hover:text-ink-muted inline-flex items-center gap-0.5 mt-0.5"
           >
             <span>विवरण</span>
             {isExpanded ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
@@ -176,17 +178,17 @@ export function TimelineEventCard({
 
       {/* EXPANDABLE DETAIL */}
       {isExpanded && (
-        <div className="mt-3 pt-3 border-t border-slate-100 text-xs text-slate-600 space-y-1.5 animate-in fade-in">
-          <div className="flex items-center justify-between text-slate-500 font-semibold text-xs">
+        <div className="mt-3 pt-3 border-t border-line text-xs text-ink-muted space-y-1.5 animate-in fade-in">
+          <div className="flex items-center justify-between text-ink-subtle font-semibold text-xs">
             <span>तारीख: {event.dateStr}</span>
             <span>स्रोत: {event.source === "Manual" ? "उपयोगकर्ता द्वारा दर्ज (Manual)" : "सिस्टम द्वारा आकलित"}</span>
           </div>
           {event.detailNote ? (
-            <p className="p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 font-medium">
+            <p className="p-2.5 rounded-control bg-surface-sunken border border-line text-ink-muted font-medium">
               📝 {event.detailNote}
             </p>
           ) : (
-            <p className="text-xs text-slate-400 italic">
+            <p className="text-xs text-ink-subtle italic">
               कोई अतिरिक्त टिप्पणी नहीं है।
             </p>
           )}

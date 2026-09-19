@@ -17,7 +17,7 @@ export function AskFollowUpChips({
 
   return (
     <div className="mt-3 space-y-1.5">
-      <p className="text-xs font-semibold text-slate-500 flex items-center gap-1">
+      <p className="text-xs font-semibold text-ink-muted flex items-center gap-1">
         <Sparkles className="h-3 w-3 text-purple-600 shrink-0" />
         <span>संबंधित प्रश्न (Suggested Follow-ups):</span>
       </p>
@@ -28,7 +28,7 @@ export function AskFollowUpChips({
             type="button"
             disabled={disabled}
             onClick={() => onSelectSuggestion(text)}
-            className="px-2.5 py-1 rounded-xl bg-purple-50 hover:bg-purple-100 border border-purple-200 text-xs font-semibold text-purple-900 shadow-2xs transition-all active:scale-95 cursor-pointer disabled:opacity-50"
+            className="px-2.5 py-1 rounded-control bg-purple-50 hover:bg-purple-100 border border-purple-200 text-xs font-semibold text-purple-900 shadow-2xs transition-all active:scale-95 cursor-pointer disabled:opacity-50"
           >
             💬 {text}
           </button>

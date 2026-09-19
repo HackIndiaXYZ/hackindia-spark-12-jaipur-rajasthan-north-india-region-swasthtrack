@@ -70,20 +70,20 @@ export function AddCaregiverDialog({
       description="Share this temporary 6-digit pairing code with your caregiver."
     >
       <div className="space-y-4 text-xs">
-        <div className="rounded-2xl border border-emerald-200 bg-emerald-50/50 p-5 text-center space-y-2">
-          <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">
+        <div className="gold-edge rounded-card p-5 text-center space-y-2">
+          <span className="text-xs font-semibold text-ink-subtle uppercase tracking-wider block">
             6-अंकों का पेयरिंग कोड (Pairing Code)
           </span>
 
           {loading ? (
-            <div className="h-12 w-36 mx-auto rounded-xl bg-slate-200 animate-pulse" />
+            <div className="h-12 w-36 mx-auto skeleton" />
           ) : (
-            <div className="text-3xl font-bold text-emerald-950 tracking-widest font-mono">
+            <div className="text-3xl font-bold text-ink tracking-widest font-mono">
               {invitation?.invite_code || "------"}
             </div>
           )}
 
-          <p className="text-xs text-slate-500">
+          <p className="text-xs text-ink-subtle">
             यह कोड 15 मिनट के लिए वैध (valid) है।
           </p>
         </div>
@@ -96,7 +96,7 @@ export function AddCaregiverDialog({
             disabled={!invitation}
           >
             {copied ? (
-              <span className="flex items-center gap-1 text-emerald-700">
+              <span className="flex items-center gap-1 text-positive">
                 <Check className="h-3.5 w-3.5" />
                 कोड कॉपी हो गया!
               </span>
@@ -109,9 +109,9 @@ export function AddCaregiverDialog({
           </Button>
         </div>
 
-        <div className="rounded-xl border border-slate-200 bg-slate-50 p-3 text-xs text-slate-600 space-y-1">
-          <p className="font-semibold text-slate-800 flex items-center gap-1.5">
-            <KeyRound className="h-3.5 w-3.5 text-emerald-600" />
+        <div className="rounded-card border border-line bg-surface-sunken p-3 text-xs text-ink-muted space-y-1">
+          <p className="font-semibold text-ink flex items-center gap-1.5">
+            <KeyRound className="h-3.5 w-3.5 text-brand" />
             केयरगिवर के लिए निर्देश:
           </p>
           <p>

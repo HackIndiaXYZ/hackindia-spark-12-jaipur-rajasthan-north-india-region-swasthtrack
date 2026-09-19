@@ -27,16 +27,16 @@ function CustomTooltip({ active, payload }: any) {
   if (active && payload && payload.length > 0) {
     const data = payload[0].payload;
     return (
-      <div className="rounded-lg border border-slate-200 bg-white p-3 shadow-lg text-xs">
-        <p className="font-semibold text-slate-900">{data.weight} kg</p>
-        <p className="text-slate-500">{data.fullDate}</p>
+      <div className="rounded-field border border-line bg-surface p-3 shadow-e3 text-xs">
+        <p className="font-semibold text-ink">{data.weight} kg</p>
+        <p className="text-ink-subtle">{data.fullDate}</p>
         {data.targetDiff !== null && (
           <p className={`mt-1 font-semibold ${data.targetDiff > 0 ? "text-amber-600" : "text-emerald-600"}`}>
             Target से {data.targetDiff > 0 ? "+" : ""}{data.targetDiff} kg
           </p>
         )}
         {data.notes && (
-          <p className="mt-1 text-slate-400 italic">{data.notes}</p>
+          <p className="mt-1 text-ink-subtle italic">{data.notes}</p>
         )}
       </div>
     );
@@ -48,8 +48,8 @@ function CustomTooltip({ active, payload }: any) {
 export function WeightTrendChart({ logs, targetWeight }: WeightTrendChartProps) {
   if (logs.length === 0) {
     return (
-      <div className="flex h-48 items-center justify-center rounded-xl border border-dashed border-slate-200 bg-slate-50/70">
-        <p className="text-xs text-slate-400">
+      <div className="flex h-48 items-center justify-center rounded-card border border-dashed border-line bg-surface-sunken/70">
+        <p className="text-xs text-ink-subtle">
           पर्याप्त data नहीं है chart के लिए
         </p>
       </div>
@@ -129,7 +129,7 @@ export function WeightTrendChart({ logs, targetWeight }: WeightTrendChartProps) 
       </ResponsiveContainer>
 
       {/* Legend */}
-      <div className="mt-2 flex flex-wrap items-center justify-center gap-4 text-xs font-semibold text-slate-700">
+      <div className="mt-2 flex flex-wrap items-center justify-center gap-4 text-xs font-semibold text-ink-muted">
         <span className="flex items-center gap-1.5">
           <span className="inline-block h-2.5 w-4 rounded bg-amber-500" /> Weight (वजन)
         </span>

@@ -24,17 +24,17 @@ export function HealthForecastCard({
   if (!predictions || predictions.length === 0) return null;
 
   return (
-    <Card className="border-indigo-100 bg-linear-to-br from-indigo-50/30 to-white p-5 shadow-xs transition-all">
+    <Card className="border-indigo-100 bg-linear-to-br from-indigo-50/30 to-surface p-5 shadow-xs transition-all">
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-2">
-          <span className="flex h-6 w-6 items-center justify-center rounded-lg bg-indigo-600 text-white shadow-xs">
+          <span className="flex h-6 w-6 items-center justify-center rounded-control bg-indigo-600 text-white shadow-xs">
             <LineChart className="h-3.5 w-3.5" />
           </span>
           <div>
-            <h3 className="font-semibold text-slate-900 text-sm sm:text-base">
+            <h3 className="font-semibold text-ink text-sm sm:text-base">
               Health Trend Forecast · व्यक्तिगत स्वास्थ्य पूर्वानुमान
             </h3>
-            <p className="text-xs text-slate-500 font-medium">
+            <p className="text-xs text-ink-subtle font-medium">
               Short-term statistical range projections based on your longitudinal baseline
             </p>
           </div>
@@ -59,21 +59,21 @@ export function HealthForecastCard({
             return (
               <div
                 key={p.id}
-                className="flex flex-col justify-between rounded-xl border border-slate-200 bg-slate-50/60 p-3.5 text-xs opacity-75"
+                className="flex flex-col justify-between rounded-card border border-line bg-surface-sunken/60 p-3.5 text-xs opacity-75"
               >
                 <div>
                   <div className="flex items-center justify-between">
-                    <p className="font-semibold text-slate-700">{p.metricLabelHi}</p>
+                    <p className="font-semibold text-ink-muted">{p.metricLabelHi}</p>
                     <Badge variant="neutral">Data Low</Badge>
                   </div>
-                  <p className="mt-3 text-sm font-semibold text-slate-400">
+                  <p className="mt-3 text-sm font-semibold text-ink-subtle">
                     डेटा अपर्याप्त है
                   </p>
-                  <p className="mt-1 text-xs text-slate-500 leading-relaxed">
+                  <p className="mt-1 text-xs text-ink-subtle leading-relaxed">
                     {p.unavailableReasonHi || "विश्वसनीय अनुमान के लिए और अधिक मापों की आवश्यकता है।"}
                   </p>
                 </div>
-                <p className="mt-3 text-2xs text-slate-400 flex items-center gap-1">
+                <p className="mt-3 text-2xs text-ink-subtle flex items-center gap-1">
                   <Database className="h-3 w-3" />
                   {p.dataPointsUsed} records logged
                 </p>
@@ -91,11 +91,11 @@ export function HealthForecastCard({
           return (
             <div
               key={p.id}
-              className="flex flex-col justify-between rounded-xl border border-indigo-100 bg-white p-3.5 shadow-2xs transition-all text-xs"
+              className="flex flex-col justify-between rounded-card border border-indigo-100 bg-surface p-3.5 shadow-2xs transition-all text-xs"
             >
               <div>
                 <div className="flex items-center justify-between">
-                  <p className="font-semibold text-slate-900">{p.metricLabelHi}</p>
+                  <p className="font-semibold text-ink">{p.metricLabelHi}</p>
                   <Badge variant={badgeVariant}>{p.confidence} Conf.</Badge>
                 </div>
 
@@ -105,12 +105,12 @@ export function HealthForecastCard({
                   </p>
                 </div>
 
-                <p className="mt-1.5 text-slate-600 font-medium leading-relaxed text-xs">
+                <p className="mt-1.5 text-ink-muted font-medium leading-relaxed text-xs">
                   {p.explanationHi}
                 </p>
               </div>
 
-              <div className="mt-3 pt-2 border-t border-slate-100 flex items-center justify-between text-2xs text-slate-400">
+              <div className="mt-3 pt-2 border-t border-line flex items-center justify-between text-2xs text-ink-subtle">
                 <span className="flex items-center gap-1">
                   <Database className="h-3 w-3 text-indigo-500" />
                   {p.dataPointsUsed} measurements
@@ -126,9 +126,9 @@ export function HealthForecastCard({
       </div>
 
       {/* Model & Safety Footer */}
-      <div className="mt-3.5 rounded-xl border border-slate-200/60 bg-slate-50 p-2.5 flex items-center justify-between text-2xs text-slate-500">
+      <div className="mt-3.5 rounded-card border border-line/60 bg-surface-sunken p-2.5 flex items-center justify-between text-2xs text-ink-subtle">
         <div className="flex items-center gap-1.5 font-medium">
-          <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" />
+          <ShieldCheck className="h-3.5 w-3.5 text-positive" />
           <span>
             {modelVersion || "swasthtrack-ml-v1.0"} · Non-diagnostic experimental statistical forecasting
           </span>

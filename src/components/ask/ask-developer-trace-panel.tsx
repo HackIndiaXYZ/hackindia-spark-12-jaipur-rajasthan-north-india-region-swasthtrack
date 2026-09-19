@@ -11,19 +11,19 @@ export function AskDeveloperTracePanel({ trace }: DeveloperTracePanelProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="mt-3 rounded-xl border border-slate-800 bg-slate-950 text-slate-200 text-xs overflow-hidden shadow-md">
+    <div className="mt-3 rounded-card border border-slate-800 bg-slate-950 text-slate-200 text-xs overflow-hidden shadow-e2">
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full px-3.5 py-2 flex items-center justify-between gap-2 bg-slate-900 hover:bg-slate-850 cursor-pointer text-slate-300 font-mono text-xs transition-colors"
+        className="w-full px-3.5 py-2 flex items-center justify-between gap-2 bg-slate-900 hover:bg-slate-800 cursor-pointer text-slate-300 font-mono text-xs transition-colors"
       >
         <div className="flex items-center gap-2">
           <Terminal className="h-3.5 w-3.5 text-emerald-400 shrink-0" />
           <span className="font-semibold">DEVELOPER EXECUTION TRACE (§17)</span>
-          <span className="text-2xs text-emerald-400 bg-emerald-950/80 border border-emerald-800 px-1.5 py-0.2 rounded">
+          <span className="text-2xs text-emerald-400 bg-emerald-950/80 border border-emerald-800 px-1.5 py-0.5 rounded">
             {String(trace.latency_ms || 0)}ms
           </span>
-          <span className="text-2xs text-cyan-400 bg-cyan-950/80 border border-cyan-800 px-1.5 py-0.2 rounded">
+          <span className="text-2xs text-cyan-400 bg-cyan-950/80 border border-cyan-800 px-1.5 py-0.5 rounded">
             VALIDATION: {String(trace.validation || "PASS")}
           </span>
         </div>

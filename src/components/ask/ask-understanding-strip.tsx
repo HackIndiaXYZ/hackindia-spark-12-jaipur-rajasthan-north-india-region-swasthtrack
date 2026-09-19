@@ -22,7 +22,7 @@ export function AskUnderstandingStrip({
   const isHighConfidence = understandingConfidence >= 0.85;
 
   return (
-    <div className="rounded-xl border border-slate-200/90 bg-slate-50/80 px-3 py-2 text-xs font-semibold text-slate-700 shadow-2xs">
+    <div className="rounded-card border border-line/90 bg-surface-sunken/80 px-3 py-2 text-xs font-semibold text-ink-muted shadow-2xs">
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-1.5 flex-wrap">
           {isHighConfidence ? (
@@ -30,16 +30,16 @@ export function AskUnderstandingStrip({
           ) : (
             <HelpCircle className="h-3.5 w-3.5 text-amber-600 shrink-0" />
           )}
-          <span className="text-slate-500">समझा गया:</span>
-          <span className="bg-white px-2 py-0.5 rounded border border-slate-200 text-slate-900 font-bold">
+          <span className="text-ink-subtle">समझा गया:</span>
+          <span className="bg-surface px-2 py-0.5 rounded border border-line text-ink font-bold">
             मरीज़: {patientLabel}
           </span>
           {resolvedDate && (
-            <span className="bg-white px-2 py-0.5 rounded border border-slate-200 text-slate-900 font-bold">
+            <span className="bg-surface px-2 py-0.5 rounded border border-line text-ink font-bold">
               तिथि: {resolvedDate}
             </span>
           )}
-          <span className="bg-white px-2 py-0.5 rounded border border-slate-200 text-slate-900 font-bold">
+          <span className="bg-surface px-2 py-0.5 rounded border border-line text-ink font-bold">
             विषय: {metricLabel}
           </span>
         </div>
@@ -58,7 +58,7 @@ export function AskUnderstandingStrip({
           <button
             type="button"
             onClick={() => setIsOpen(!isOpen)}
-            className="text-slate-400 hover:text-slate-700 p-0.5 cursor-pointer"
+            className="text-ink-subtle hover:text-ink-muted p-0.5 cursor-pointer"
           >
             {isOpen ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
           </button>
@@ -66,7 +66,7 @@ export function AskUnderstandingStrip({
       </div>
 
       {isOpen && (
-        <div className="mt-2 pt-2 border-t border-slate-200 text-xs text-slate-600 space-y-1">
+        <div className="mt-2 pt-2 border-t border-line text-xs text-ink-muted space-y-1">
           <p>
             • समझ का विश्वास (Understanding Score): <strong>{Math.round(understandingConfidence * 100)}%</strong>
           </p>

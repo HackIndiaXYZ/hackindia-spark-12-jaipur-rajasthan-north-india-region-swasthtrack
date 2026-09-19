@@ -40,14 +40,14 @@ function CustomTooltip({ active, payload }: any) {
     const data = payload[0].payload;
     const cat = getBPCategory(data.systolic, data.diastolic);
     return (
-      <div className="rounded-lg border border-slate-200 bg-white p-3 shadow-lg text-xs">
-        <p className="font-semibold text-slate-900">
+      <div className="rounded-field border border-line bg-surface p-3 shadow-e3 text-xs">
+        <p className="font-semibold text-ink">
           {data.systolic}/{data.diastolic} mmHg
         </p>
-        <p className="text-slate-600">
+        <p className="text-ink-muted">
           Pulse: {data.pulse || "--"} bpm
         </p>
-        <p className="text-slate-500">
+        <p className="text-ink-subtle">
           {data.type} · {data.fullDate}
         </p>
         <p style={{ color: cat.color }} className="mt-1 font-semibold">
@@ -63,8 +63,8 @@ function CustomTooltip({ active, payload }: any) {
 export function BPTrendChart({ logs }: BPTrendChartProps) {
   if (logs.length === 0) {
     return (
-      <div className="flex h-48 items-center justify-center rounded-xl border border-dashed border-slate-200 bg-slate-50/70">
-        <p className="text-xs text-slate-400">
+      <div className="flex h-48 items-center justify-center rounded-card border border-dashed border-line bg-surface-sunken/70">
+        <p className="text-xs text-ink-subtle">
           पर्याप्त data नहीं है chart के लिए
         </p>
       </div>
@@ -134,7 +134,7 @@ export function BPTrendChart({ logs }: BPTrendChartProps) {
       </ResponsiveContainer>
 
       {/* Legend */}
-      <div className="mt-2 flex flex-wrap items-center justify-center gap-4 text-xs font-semibold text-slate-700">
+      <div className="mt-2 flex flex-wrap items-center justify-center gap-4 text-xs font-semibold text-ink-muted">
         <span className="flex items-center gap-1.5">
           <span className="inline-block h-2.5 w-4 rounded bg-red-500" /> Systolic (ऊपर)
         </span>

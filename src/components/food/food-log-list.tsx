@@ -179,9 +179,9 @@ export function FoodLogList({
   };
 
   return (
-    <Card className="border-slate-200">
+    <Card className="border-line">
       {/* Date Navigation Bar */}
-      <div className="bg-slate-50 border-b border-slate-200 px-3 sm:px-6 py-3 sm:py-4 flex flex-wrap items-center justify-between gap-3">
+      <div className="bg-surface-sunken border-b border-line px-3 sm:px-6 py-3 sm:py-4 flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-1.5 sm:gap-2">
           <Button
             type="button"
@@ -189,9 +189,9 @@ export function FoodLogList({
             onClick={() => adjustDate(-1)}
             className="p-2 h-8 w-8 sm:h-9 sm:w-9 rounded-lg shrink-0"
           >
-            <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5 text-slate-600" />
+            <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5 text-ink-muted" />
           </Button>
-          <div className="flex items-center gap-1.5 font-semibold text-slate-800 text-xs sm:text-base min-w-0 text-center justify-center">
+          <div className="flex items-center gap-1.5 font-semibold text-ink text-xs sm:text-base min-w-0 text-center justify-center">
             <Calendar className="h-4 w-4 text-emerald-600 shrink-0" />
             <span className="truncate">{selectedDate === new Date().toISOString().split("T")[0] ? "आज (Today)" : selectedDate}</span>
           </div>
@@ -201,14 +201,14 @@ export function FoodLogList({
             onClick={() => adjustDate(1)}
             className="p-2 h-8 w-8 sm:h-9 sm:w-9 rounded-lg shrink-0"
           >
-            <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5 text-slate-600" />
+            <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5 text-ink-muted" />
           </Button>
         </div>
 
         {/* Dynamic target calorie indicator */}
         <div className="text-right">
-          <span className="text-xs text-slate-400 font-semibold block">आज का कैलोरी उपयोग (Calorie Budget)</span>
-          <span className="text-lg font-bold text-slate-900">
+          <span className="text-xs text-ink-subtle font-semibold block">आज का कैलोरी उपयोग (Calorie Budget)</span>
+          <span className="text-lg font-bold text-ink">
             {totalCalories} / {dailyCalorieTarget} kcal
           </span>
           <span className="text-xs font-semibold text-emerald-700 block mt-0.5">
@@ -251,14 +251,14 @@ export function FoodLogList({
             {Object.entries(groupedLogs).map(([mealName, mealItems]) => {
               const mealTotal = mealItems.reduce((sum, i) => sum + i.calories, 0);
               return (
-                <div key={mealName} className="rounded-xl border border-slate-100 bg-white overflow-hidden shadow-xs">
+                <div key={mealName} className="rounded-xl border border-line bg-surface overflow-hidden shadow-xs">
                   {/* Meal Group Header */}
-                  <div className="bg-slate-50/70 border-b border-slate-100 px-4 py-3 flex items-center justify-between">
+                  <div className="bg-surface-sunken/70 border-b border-line px-4 py-3 flex items-center justify-between">
                     <div>
-                      <h4 className="font-semibold text-slate-800 text-sm">
+                      <h4 className="font-semibold text-ink text-sm">
                         {MEAL_LABELS_HI[mealName] || mealName}
                       </h4>
-                      <span className="text-2xs text-slate-400 font-semibold block mt-0.5">
+                      <span className="text-2xs text-ink-subtle font-semibold block mt-0.5">
                         {mealItems.length} items logged
                       </span>
                     </div>
@@ -274,33 +274,33 @@ export function FoodLogList({
                         <Copy className="h-3 w-3" />
                         कल का कॉपी करें
                       </button>
-                      <span className="font-semibold text-slate-900 text-sm">
+                      <span className="font-semibold text-ink text-sm">
                         ~{mealTotal} kcal
                       </span>
                     </div>
                   </div>
 
                   {/* Meal Group Items */}
-                  <div className="divide-y divide-slate-100">
+                  <div className="divide-y divide-line">
                     {mealItems.map((item) => {
                       const loggedTime = new Date(item.consumed_at).getTime();
                       const currentTime = new Date().getTime();
                       const canEdit = (currentTime - loggedTime) < (2 * 60 * 60 * 1000);
 
                       return (
-                        <div key={item.id} className="p-4 hover:bg-slate-50/30 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 transition-colors">
+                        <div key={item.id} className="p-4 hover:bg-surface-sunken/30 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 transition-colors">
                           <div className="space-y-1">
                             <div className="flex items-center gap-2 flex-wrap">
                               <span className="text-xl shrink-0">{getExactFoodEmoji(item.food_name)}</span>
-                              <span className="font-semibold text-slate-900">{item.food_name}</span>
+                              <span className="font-semibold text-ink">{item.food_name}</span>
                               <Badge variant={item.calorie_confidence === "High" ? "green" : item.calorie_confidence === "Medium" ? "blue" : "amber"}>
                                 {item.calorie_confidence} confidence
                               </Badge>
-                              <span className="text-xs text-slate-400 font-semibold bg-slate-100 px-1.5 py-0.5 rounded">
+                              <span className="text-xs text-ink-subtle font-semibold bg-surface-sunken px-1.5 py-0.5 rounded">
                                 🕐 {new Date(item.consumed_at).toLocaleTimeString("hi-IN", { hour: "2-digit", minute: "2-digit" })}
                               </span>
                             </div>
-                            <div className="text-xs text-slate-500 font-medium space-x-2">
+                            <div className="text-xs text-ink-subtle font-medium space-x-2">
                               <span>मात्रा (Quantity): {item.quantity} {item.unit}</span>
                               {item.standardized_grams && <span>({item.standardized_grams}g)</span>}
                               {item.oil_quantity && item.oil_quantity !== "None" && (
@@ -319,7 +319,7 @@ export function FoodLogList({
 
                           {/* Actions */}
                           <div className="flex items-center justify-between sm:justify-end gap-4">
-                            <span className="font-bold text-slate-900 text-base">
+                            <span className="font-bold text-ink text-base">
                               ~{item.calories} kcal
                             </span>
                             <div className="flex gap-1.5 items-center">
@@ -329,7 +329,7 @@ export function FoodLogList({
                                     type="button"
                                     variant="ghost"
                                     onClick={() => handleEditClick(item)}
-                                    className="p-2 h-11 w-11 text-slate-500 hover:text-emerald-700 hover:bg-emerald-50 rounded-xl transition-colors"
+                                    className="p-2 h-11 w-11 text-ink-subtle hover:text-emerald-700 hover:bg-emerald-50 rounded-xl transition-colors"
                                     title="बदलाव करें (Edit entry)"
                                   >
                                     <Edit className="h-6 w-6" />
@@ -338,7 +338,7 @@ export function FoodLogList({
                                     type="button"
                                     variant="ghost"
                                     onClick={() => handleDeleteClick(item.id)}
-                                    className="p-2 h-11 w-11 text-slate-500 hover:text-rose-600 hover:bg-rose-50 rounded-xl transition-colors"
+                                    className="p-2 h-11 w-11 text-ink-subtle hover:text-rose-600 hover:bg-rose-50 rounded-xl transition-colors"
                                     title="हटाएं (Delete entry)"
                                   >
                                     <Trash2 className="h-6 w-6" />
@@ -346,10 +346,10 @@ export function FoodLogList({
                                 </>
                               ) : (
                                 <span 
-                                  className="p-2 text-slate-400 flex items-center justify-center cursor-help" 
+                                  className="p-2 text-ink-subtle flex items-center justify-center cursor-help" 
                                   title="2 घंटे बीत चुके हैं, अब इसे बदला या हटाया नहीं जा सकता (Locked after 2 hours)"
                                 >
-                                  <Lock className="h-6 w-6 text-slate-300" />
+                                  <Lock className="h-6 w-6 text-ink-subtle" />
                                 </span>
                               )}
                             </div>
@@ -363,11 +363,11 @@ export function FoodLogList({
             })}
           </div>
         ) : (
-          <div className="rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50/50 p-10 text-center">
-            <p className="text-slate-500 font-medium text-sm">
+          <div className="rounded-2xl border-2 border-dashed border-line bg-surface-sunken/50 p-10 text-center">
+            <p className="text-ink-subtle font-medium text-sm">
               आज अभी तक कोई भोजन प्रविष्टि नहीं की गई है। (No meals logged today)
             </p>
-            <p className="text-slate-400 text-xs mt-1">
+            <p className="text-ink-subtle text-xs mt-1">
               दवाइयों और स्वास्थ्य के अनुकूल भोजन लॉग करने के लिए ऊपर दिए गए सर्च फॉर्म का उपयोग करें।
             </p>
           </div>
@@ -377,7 +377,7 @@ export function FoodLogList({
       {/* Structured Edit Modal */}
       {editingItem && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4">
-          <div className="bg-white rounded-2xl w-full max-w-md overflow-hidden shadow-2xl border border-slate-100 flex flex-col">
+          <div className="bg-surface rounded-2xl w-full max-w-md overflow-hidden shadow-e4 border border-line flex flex-col">
             <div className="bg-emerald-600 px-6 py-4 text-white">
               <h3 className="font-semibold text-lg">प्रविष्टि संपादित करें (Edit Logged Food)</h3>
               <p className="text-emerald-100 text-xs mt-0.5">{editingItem.food_name}</p>
@@ -413,7 +413,7 @@ export function FoodLogList({
               </Field>
             </div>
 
-            <div className="bg-slate-50 px-6 py-4 flex justify-end gap-2 border-t border-slate-100">
+            <div className="bg-surface-sunken px-6 py-4 flex justify-end gap-2 border-t border-line">
               <Button type="button" variant="ghost" onClick={() => setEditingItem(null)}>
                 Cancel
               </Button>

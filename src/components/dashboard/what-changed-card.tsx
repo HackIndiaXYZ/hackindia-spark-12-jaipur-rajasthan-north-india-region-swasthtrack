@@ -85,12 +85,12 @@ export function WhatChangedCard({ patientId }: WhatChangedCardProps) {
   if (loading) {
     return (
       <DepthCard depth={2} className="p-5 animate-pulse">
-        <div className="h-5 w-48 rounded bg-slate-200" />
-        <div className="mt-2 h-3.5 w-64 rounded bg-slate-100" />
+        <div className="h-5 w-48 rounded bg-surface-sunken" />
+        <div className="mt-2 h-3.5 w-64 rounded bg-surface-sunken" />
         <div className="mt-4 grid gap-3 sm:grid-cols-3">
-          <div className="h-20 rounded-xl bg-slate-100" />
-          <div className="h-20 rounded-xl bg-slate-100" />
-          <div className="h-20 rounded-xl bg-slate-100" />
+          <div className="h-20 rounded-card bg-surface-sunken" />
+          <div className="h-20 rounded-card bg-surface-sunken" />
+          <div className="h-20 rounded-card bg-surface-sunken" />
         </div>
       </DepthCard>
     );
@@ -104,23 +104,23 @@ export function WhatChangedCard({ patientId }: WhatChangedCardProps) {
     : data.metrics.filter((m) => m.isSufficient).slice(0, 3);
 
   return (
-    <DepthCard depth={2} surface="gradient" className="p-4 sm:p-5 border-slate-200/90 shadow-md">
+    <DepthCard depth={2} surface="gradient" className="p-4 sm:p-5 border-line shadow-e2">
       {/* HEADER */}
-      <div className="flex items-center justify-between gap-3 pb-3 border-b border-slate-100">
+      <div className="flex items-center justify-between gap-3 pb-3 border-b border-line">
         <div className="flex items-center gap-2.5">
-          <div className="h-8 w-8 rounded-xl bg-purple-100 border border-purple-200 text-purple-700 flex items-center justify-center shrink-0 shadow-2xs">
+          <div className="h-8 w-8 rounded-control bg-purple-100 border border-purple-200 text-purple-700 flex items-center justify-center shrink-0 shadow-2xs">
             <Sparkles className="h-4 w-4 stroke-[2.2]" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h3 className="text-sm sm:text-base font-bold text-slate-950 tracking-tight">
+              <h3 className="text-sm sm:text-base font-bold text-ink tracking-tight">
                 पिछले 7 दिनों में क्या बदला?
               </h3>
               <Badge variant="blue" className="text-2xs font-semibold">
                 What Changed
               </Badge>
             </div>
-            <p className="text-xs font-semibold text-slate-500">
+            <p className="text-xs font-semibold text-ink-subtle">
               हालिया दौर बनाम संदर्भ दौर (Personal Comparison)
             </p>
           </div>
@@ -145,17 +145,17 @@ export function WhatChangedCard({ patientId }: WhatChangedCardProps) {
             <div
               key={c.metric}
               className={cn(
-                "rounded-2xl border-2 p-3 transition-all",
+                "rounded-card border-2 p-3 transition-all",
                 cfg.border,
                 cfg.bg
               )}
             >
               <div className="flex items-center justify-between mb-1.5">
                 <div className="flex items-center gap-1.5">
-                  <div className="h-6 w-6 rounded-lg bg-white border border-slate-200 flex items-center justify-center shrink-0 shadow-2xs">
-                    <Icon className="h-3.5 w-3.5 text-slate-700" />
+                  <div className="h-6 w-6 rounded-lg bg-surface border border-line flex items-center justify-center shrink-0 shadow-2xs">
+                    <Icon className="h-3.5 w-3.5 text-ink-muted" />
                   </div>
-                  <span className="text-xs font-bold text-slate-900 truncate">
+                  <span className="text-xs font-bold text-ink truncate">
                     {c.metricHi}
                   </span>
                 </div>
@@ -165,15 +165,15 @@ export function WhatChangedCard({ patientId }: WhatChangedCardProps) {
                 </Badge>
               </div>
 
-              <div className="text-xs font-semibold text-slate-800">
+              <div className="text-xs font-semibold text-ink-muted">
                 <span>{c.recentValue.toLocaleString()} {c.unit}</span>
-                <span className="text-2xs text-slate-400 font-semibold ml-1">
+                <span className="text-2xs text-ink-subtle font-semibold ml-1">
                   (पूर्व: {c.referenceValue.toLocaleString()})
                 </span>
               </div>
 
               {c.personalPatternRange && (
-                <p className="text-2xs text-slate-500 font-medium mt-0.5">
+                <p className="text-2xs text-ink-subtle font-medium mt-0.5">
                   सामान्य: {c.personalPatternRange}
                 </p>
               )}
@@ -183,7 +183,7 @@ export function WhatChangedCard({ patientId }: WhatChangedCardProps) {
       </div>
 
       {/* FOOTER ACTION */}
-      <div className="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-slate-400">
+      <div className="mt-3 pt-2.5 border-t border-line flex items-center justify-between text-xs font-semibold text-ink-subtle">
         <span>* सांख्यिकीय मध्यमान पर आधारित तुलना</span>
         <Link
           href="/insights/changes"

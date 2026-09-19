@@ -86,14 +86,14 @@ export function AddSleepDialog({
     >
       <form onSubmit={handleSubmit} className="space-y-5">
         {error ? (
-          <div className="rounded-xl border border-rose-200 bg-rose-50 p-3.5 text-sm font-semibold text-rose-800">
+          <div className="rounded-card border border-critical-line bg-critical-soft p-3.5 text-sm font-semibold text-critical">
             {error}
           </div>
         ) : null}
 
         {/* 1. 1-TAP PRESET SLEEP HOURS */}
         <div className="space-y-2">
-          <label className="block text-sm font-bold text-slate-900">
+          <label className="block text-sm font-bold text-ink">
             ⭐ कितने घंटे सोए? (1-टैप में चुनें):
           </label>
           <div className="grid grid-cols-3 gap-2.5">
@@ -104,14 +104,14 @@ export function AddSleepDialog({
                   type="button"
                   key={preset.hours}
                   onClick={() => setSleepHours(preset.hours)}
-                  className={`flex flex-col items-center justify-center p-3 rounded-2xl border-2 transition-all text-center cursor-pointer ${
+                  className={`flex flex-col items-center justify-center p-3 rounded-card border-2 transition-all text-center cursor-pointer ${
                     isSelected
                       ? "border-indigo-600 bg-indigo-50 text-indigo-950 font-bold ring-2 ring-indigo-500/30 shadow-xs"
-                      : "border-slate-200 bg-white text-slate-700 hover:border-indigo-200 hover:bg-slate-50 font-semibold"
+                      : "border-line bg-surface text-ink-muted hover:border-indigo-200 hover:bg-surface-sunken font-semibold"
                   }`}
                 >
                   <span className="text-base sm:text-lg">{preset.label}</span>
-                  <span className="text-xs font-semibold text-slate-500">{preset.hint}</span>
+                  <span className="text-xs font-semibold text-ink-subtle">{preset.hint}</span>
                 </button>
               );
             })}
@@ -119,8 +119,8 @@ export function AddSleepDialog({
         </div>
 
         {/* 2. MANUAL DURATION & DATE INPUTS */}
-        <div className="space-y-4 pt-2 border-t border-slate-200">
-          <p className="text-xs font-bold uppercase tracking-wider text-slate-500">
+        <div className="space-y-4 pt-2 border-t border-line">
+          <p className="text-xs font-bold uppercase tracking-wider text-ink-subtle">
             नींद का सटीक मान (Custom Value डालें):
           </p>
 
@@ -180,8 +180,8 @@ export function AddSleepDialog({
         </div>
 
         {/* 3. SLEEP QUALITY SELECTOR */}
-        <div className="space-y-2 pt-2 border-t border-slate-200">
-          <label className="block text-sm font-bold text-slate-900">
+        <div className="space-y-2 pt-2 border-t border-line">
+          <label className="block text-sm font-bold text-ink">
             ⭐ नींद कैसी रही? (Sleep Quality):
           </label>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
@@ -192,14 +192,14 @@ export function AddSleepDialog({
                   type="button"
                   key={q.value}
                   onClick={() => setSelectedQuality(q.value)}
-                  className={`p-2.5 rounded-xl border-2 text-xs sm:text-sm font-semibold text-left transition-all flex items-center justify-between cursor-pointer ${
+                  className={`p-2.5 rounded-field border-2 text-xs sm:text-sm font-semibold text-left transition-all flex items-center justify-between cursor-pointer ${
                     isSelected
-                      ? "border-emerald-600 bg-emerald-50 text-emerald-950 font-bold shadow-2xs"
-                      : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+                      ? "border-brand bg-brand-soft text-brand-ink font-bold shadow-2xs"
+                      : "border-line bg-surface text-ink-muted hover:bg-surface-sunken"
                   }`}
                 >
                   <span>{q.label}</span>
-                  {isSelected && <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />}
+                  {isSelected && <CheckCircle2 className="h-4 w-4 text-brand shrink-0" />}
                 </button>
               );
             })}
@@ -212,7 +212,7 @@ export function AddSleepDialog({
             variant="primary"
             type="submit"
             disabled={loading}
-            className="w-full min-h-12 text-base font-bold rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white shadow-md shadow-indigo-600/20"
+            className="w-full min-h-control-lg text-base font-bold"
           >
             <Moon className="h-5 w-5 mr-2" />
             {loading ? "सेव हो रहा है..." : `🌙 ${sleepHours} घंटे नींद सेव करें (Save Sleep)`}

@@ -281,13 +281,13 @@ export function AddFoodDialog({
     >
       <div className="space-y-4 sm:space-y-5 max-w-full overflow-hidden">
         {error ? (
-          <div className="rounded-xl border border-rose-200 bg-rose-50 p-3 text-xs sm:text-sm font-semibold text-rose-800 shadow-xs">
+          <div className="rounded-card border border-critical-line bg-critical-soft p-3 text-xs sm:text-sm font-semibold text-critical shadow-xs">
             {error}
           </div>
         ) : null}
 
         {successInfo ? (
-          <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-xs sm:text-sm font-semibold text-emerald-800 shadow-xs">
+          <div className="rounded-card border border-positive-line bg-positive-soft p-3 text-xs sm:text-sm font-semibold text-positive shadow-xs">
             ✓ {successInfo}
           </div>
         ) : null}
@@ -295,13 +295,13 @@ export function AddFoodDialog({
         {/* SEARCH BAR WITH COMPREHENSIVE 2,600+ DATABASE AUTOCOMPLETE */}
         <div className="space-y-1.5 w-full">
           <div className="relative w-full">
-            <Search className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-400" />
+            <Search className="absolute left-3.5 top-3.5 h-4 w-4 text-ink-subtle" />
             <input
               type="text"
               placeholder="भोजन खोजें (उदा. Roti, Dal, Khichdi, Apple, Milk, Dosa, Paneer)..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full rounded-2xl border-2 border-slate-200 bg-slate-50 pl-10 pr-9 py-3 text-sm sm:text-base font-semibold text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-hidden focus:border-emerald-500 shadow-inner"
+              className="w-full rounded-field border-2 border-line bg-surface-sunken pl-10 pr-9 py-3 text-sm sm:text-base font-semibold text-ink placeholder:text-ink-subtle focus:bg-surface focus:outline-hidden focus:border-brand shadow-inset-field"
             />
             {searchQuery && (
               <button
@@ -310,7 +310,7 @@ export function AddFoodDialog({
                   setSearchQuery("");
                   setSearchResults([]);
                 }}
-                className="absolute right-3 top-3.5 text-slate-400 hover:text-slate-600 cursor-pointer"
+                className="absolute right-3 top-3.5 text-ink-subtle hover:text-ink-muted cursor-pointer"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -319,9 +319,9 @@ export function AddFoodDialog({
 
           {/* INSTANT AUTOCOMPLETE DROPDOWN */}
           {searchQuery.trim().length > 0 && (
-            <div className="rounded-2xl border-2 border-emerald-200 bg-white p-2 shadow-xl space-y-1 max-h-60 overflow-y-auto w-full z-20 animate-in fade-in">
+            <div className="rounded-card border-2 border-brand-line bg-surface p-2 shadow-e4 space-y-1 max-h-60 overflow-y-auto w-full z-20 animate-in fade-in">
               {isSearching ? (
-                <div className="p-3 text-center text-xs text-slate-500 font-semibold">
+                <div className="p-3 text-center text-xs text-ink-subtle font-semibold">
                   खोज रहे हैं... (Searching 2,600+ foods)
                 </div>
               ) : searchResults.length > 0 ? (
@@ -330,27 +330,27 @@ export function AddFoodDialog({
                     type="button"
                     key={item.id}
                     onClick={() => handleSelectSearchResult(item)}
-                    className="w-full text-left p-2.5 rounded-xl hover:bg-emerald-50 active:bg-emerald-100 flex items-center justify-between gap-2 text-xs sm:text-sm font-semibold text-slate-800 transition-colors cursor-pointer border border-transparent hover:border-emerald-200"
+                    className="w-full text-left p-2.5 rounded-control hover:bg-brand-softer active:bg-brand-soft flex items-center justify-between gap-2 text-xs sm:text-sm font-semibold text-ink transition-colors cursor-pointer border border-transparent hover:border-brand-line"
                   >
                     <div className="flex items-center gap-2 min-w-0">
                       <span className="text-base">{getExactFoodEmoji(item.name, item.category)}</span>
                       <div className="min-w-0">
-                        <p className="truncate font-bold text-slate-950">
+                        <p className="truncate font-bold text-ink">
                           {item.name} {item.name_hi ? `(${item.name_hi})` : ""}
                         </p>
-                        <p className="text-xs text-slate-500 font-medium">
+                        <p className="text-xs text-ink-subtle font-medium">
                           {item.isSaved ? "★ Your Saved Food" : "Database Food"}
                         </p>
                       </div>
                     </div>
-                    <span className="text-emerald-700 font-extrabold shrink-0 bg-emerald-50 px-2 py-0.5 rounded-md">
+                    <span className="text-brand-ink font-extrabold shrink-0 bg-brand-soft px-2 py-0.5 rounded-field">
                       {item.calories} kcal
                     </span>
                   </button>
                 ))
               ) : (
-                <div className="p-3 text-center text-xs text-slate-600">
-                  <p className="font-semibold text-slate-800">&ldquo;{searchQuery}&rdquo; हमारी लिस्ट में नहीं मिला</p>
+                <div className="p-3 text-center text-xs text-ink-muted">
+                  <p className="font-semibold text-ink">&ldquo;{searchQuery}&rdquo; हमारी लिस्ट में नहीं मिला</p>
                   <button
                     type="button"
                     onClick={() => {
@@ -358,7 +358,7 @@ export function AddFoodDialog({
                       setSearchQuery("");
                       setSearchResults([]);
                     }}
-                    className="mt-2 inline-flex items-center gap-1.5 text-emerald-800 bg-emerald-100/80 hover:bg-emerald-200/80 px-3 py-1.5 rounded-xl font-bold text-xs transition-colors cursor-pointer"
+                    className="mt-2 inline-flex items-center gap-1.5 text-brand-ink bg-brand-soft hover:bg-brand-line/40 px-3 py-1.5 rounded-control font-bold text-xs transition-colors cursor-pointer"
                   >
                     <Plus className="h-3.5 w-3.5" />
                     + इस भोजन का विवरण नीचे भरें (&ldquo;{searchQuery}&rdquo;)
@@ -377,7 +377,7 @@ export function AddFoodDialog({
                 <Bookmark className="h-3.5 w-3.5 text-indigo-600" />
                 <span>आपके सेव किए गए भोजन (Your Saved Foods):</span>
               </label>
-              <span className="text-xs text-slate-400 font-medium">1-टैप में भरें</span>
+              <span className="text-xs text-ink-subtle font-medium">1-टैप में भरें</span>
             </div>
 
             <div className="flex flex-wrap gap-2 max-w-full">
@@ -388,7 +388,7 @@ export function AddFoodDialog({
                   <div
                     key={item.id}
                     onClick={() => handleSelectSavedFood(item)}
-                    className={`inline-flex items-center gap-1.5 py-1.5 px-3 rounded-xl border-2 text-xs font-bold transition-all cursor-pointer shadow-xs active:scale-97 ${
+                    className={`inline-flex items-center gap-1.5 py-1.5 px-3 rounded-control border-2 text-xs font-bold transition-all cursor-pointer shadow-xs active:scale-97 ${
                       isSelected
                         ? "border-indigo-600 bg-indigo-100 text-indigo-950 ring-2 ring-indigo-500/20"
                         : "border-indigo-200 bg-indigo-50/70 text-indigo-950 hover:bg-indigo-100/70"
@@ -401,7 +401,7 @@ export function AddFoodDialog({
                       type="button"
                       title="Remove from Saved Foods (इतिहास सुरक्षित रहेगा)"
                       onClick={(e) => handleRemoveSaved(e, item.id)}
-                      className="ml-1 text-indigo-400 hover:text-rose-600 cursor-pointer p-0.5 rounded-sm hover:bg-white"
+                      className="ml-1 text-indigo-400 hover:text-rose-600 cursor-pointer p-0.5 rounded-sm hover:bg-surface"
                     >
                       <Trash2 className="h-3 w-3" />
                     </button>
@@ -416,11 +416,11 @@ export function AddFoodDialog({
         {personalizedQuickFoods.length > 0 && (
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <label className="text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
-                <Sparkles className="h-3.5 w-3.5 text-emerald-600" />
+              <label className="text-xs font-bold uppercase tracking-wider text-ink-muted flex items-center gap-1.5">
+                <Sparkles className="h-3.5 w-3.5 text-brand" />
                 <span>अक्सर खाया जाने वाला भोजन (Learned Quick Food):</span>
               </label>
-              <span className="text-xs text-slate-400 font-medium">व्यवहार से सीखा</span>
+              <span className="text-xs text-ink-subtle font-medium">व्यवहार से सीखा</span>
             </div>
 
             <div className="flex flex-wrap gap-2 max-w-full">
@@ -432,15 +432,15 @@ export function AddFoodDialog({
                     type="button"
                     key={q.canonicalKey}
                     onClick={() => handleSelectQuickFood(q)}
-                    className={`inline-flex items-center gap-1.5 py-1.5 px-3 rounded-xl border text-xs font-semibold transition-all cursor-pointer shadow-xs active:scale-97 ${
+                    className={`inline-flex items-center gap-1.5 py-1.5 px-3 rounded-control border text-xs font-semibold transition-all cursor-pointer shadow-xs active:scale-97 ${
                       isSelected
-                        ? "border-emerald-600 bg-emerald-100 text-emerald-950 ring-2 ring-emerald-500/20 font-bold"
-                        : "border-slate-200 bg-white text-slate-800 hover:border-emerald-300 hover:bg-emerald-50/50"
+                        ? "border-brand bg-brand-soft text-brand-ink ring-2 ring-brand/20 font-bold"
+                        : "border-line bg-surface text-ink hover:border-brand-line hover:bg-brand-softer/50"
                     }`}
                   >
                     <span>{emoji}</span>
                     <span className="truncate max-w-36">{q.name}</span>
-                    <span className="text-2xs text-emerald-700 shrink-0">~{q.defaultCal} kcal</span>
+                    <span className="text-2xs text-brand-ink shrink-0">~{q.defaultCal} kcal</span>
                   </button>
                 );
               })}
@@ -449,8 +449,8 @@ export function AddFoodDialog({
         )}
 
         {/* 3. CUSTOM EDITABLE DETAILS FORM */}
-        <form onSubmit={handleSubmitLog} className="space-y-4 pt-3 border-t border-slate-200">
-          <p className="text-xs font-bold uppercase tracking-wider text-slate-500">
+        <form onSubmit={handleSubmitLog} className="space-y-4 pt-3 border-t border-line">
+          <p className="text-xs font-bold uppercase tracking-wider text-ink-subtle">
             भोजन का विवरण (Food Details):
           </p>
 
@@ -540,7 +540,7 @@ export function AddFoodDialog({
               variant="primary"
               type="submit"
               disabled={loading}
-              className="flex-1 min-h-12 text-sm sm:text-base font-bold rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white shadow-md active:scale-98"
+              className="flex-1 min-h-control-lg text-sm sm:text-base font-bold"
             >
               <Utensils className="h-4.5 w-4.5 mr-2 shrink-0" />
               {loading ? "सेव हो रहा है..." : "✓ Add to Food Log (अभी दर्ज करें)"}
@@ -549,7 +549,7 @@ export function AddFoodDialog({
             <button
               type="button"
               onClick={handleSaveAsMyFood}
-              className="min-h-12 px-4 rounded-2xl border-2 border-indigo-300 bg-indigo-50/90 hover:bg-indigo-100 text-indigo-950 font-semibold text-xs sm:text-sm flex items-center justify-center gap-1.5 transition-all cursor-pointer active:scale-98 shadow-sm"
+              className="min-h-control-lg px-4 rounded-control border-2 border-indigo-300 bg-indigo-50/90 hover:bg-indigo-100 text-indigo-950 font-semibold text-xs sm:text-sm flex items-center justify-center gap-1.5 transition-all cursor-pointer active:scale-98 shadow-e1"
             >
               <BookmarkPlus className="h-4.5 w-4.5 text-indigo-600 shrink-0" />
               Save as My Food (भविष्य के लिए रखें)

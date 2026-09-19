@@ -39,12 +39,12 @@ export function AuthGuard({ children }: { children: ReactNode }) {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-slate-50">
+      <div className="min-h-screen flex flex-col items-center justify-center bg-canvas">
         <div className="flex flex-col items-center gap-3">
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-600 text-white shadow-md animate-pulse">
+          <div className="flex h-12 w-12 items-center justify-center rounded-card bg-brand text-ink-inverse shadow-e2 animate-pulse">
             <HeartPulse className="h-6 w-6" />
           </div>
-          <p className="text-sm font-semibold text-slate-700">
+          <p className="text-sm font-semibold text-ink-muted">
             SwasthTrack सुरक्षित लोड हो रहा है...
           </p>
         </div>

@@ -39,17 +39,17 @@ export default function ReportsPage() {
       {patient ? (
         <ReportsTabs patientId={patient.id} />
       ) : (
-        <div className="h-64 rounded-2xl bg-slate-100 animate-pulse" />
+        <div className="h-64 rounded-panel bg-surface-sunken animate-pulse" />
       )}
 
       {/* Developer Data Quality Report Section (ADMIN ONLY) */}
       {isAdmin && (
-        <Card className="border-slate-200">
-          <CardHeader className="bg-slate-50 border-b border-slate-200">
+        <Card>
+          <CardHeader className="bg-surface-sunken border-b border-line">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div>
-                <CardTitle className="text-slate-900 flex items-center gap-2">
-                  <ShieldAlert className="h-5 w-5 text-emerald-700" />
+                <CardTitle className="text-ink flex items-center gap-2">
+                  <ShieldAlert className="h-5 w-5 text-brand" />
                   Food Database Data Quality Report (डेटाबेस गुणवत्ता रिपोर्ट)
                 </CardTitle>
                 <CardDescription>
@@ -64,72 +64,72 @@ export default function ReportsPage() {
             <div className="p-6 space-y-6">
               {/* Grid Metrics */}
               <div className="grid gap-4 grid-cols-2 md:grid-cols-3 xl:grid-cols-5">
-                <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-xs">
-                  <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Total Food Items</p>
-                  <p className="mt-1 text-2xl font-bold text-slate-900">{report.totalFoods}</p>
-                  <p className="text-2xs text-slate-400 mt-0.5">कुल खाद्य पदार्थ</p>
+                <div className="rounded-card border border-line bg-surface p-4 shadow-e1">
+                  <p className="text-xs font-semibold text-ink-subtle uppercase tracking-wider">Total Food Items</p>
+                  <p className="mt-1 text-2xl font-bold text-ink">{report.totalFoods}</p>
+                  <p className="text-2xs text-ink-subtle mt-0.5">कुल खाद्य पदार्थ</p>
                 </div>
 
-                <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-xs">
-                  <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Duplicate Names</p>
-                  <p className="mt-1 text-2xl font-bold text-slate-900">{report.duplicateNamesCount}</p>
-                  <p className="text-2xs text-slate-400 mt-0.5">दोहरे नाम वाले व्यंजन</p>
+                <div className="rounded-card border border-line bg-surface p-4 shadow-e1">
+                  <p className="text-xs font-semibold text-ink-subtle uppercase tracking-wider">Duplicate Names</p>
+                  <p className="mt-1 text-2xl font-bold text-ink">{report.duplicateNamesCount}</p>
+                  <p className="text-2xs text-ink-subtle mt-0.5">दोहरे नाम वाले व्यंजन</p>
                 </div>
 
-                <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-xs">
-                  <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Missing Calories</p>
-                  <p className="mt-1 text-2xl font-bold text-slate-900">{report.missingCaloriesCount}</p>
-                  <p className="text-2xs text-slate-400 mt-0.5">बिना कैलोरी वैल्यू वाले</p>
+                <div className="rounded-card border border-line bg-surface p-4 shadow-e1">
+                  <p className="text-xs font-semibold text-ink-subtle uppercase tracking-wider">Missing Calories</p>
+                  <p className="mt-1 text-2xl font-bold text-ink">{report.missingCaloriesCount}</p>
+                  <p className="text-2xs text-ink-subtle mt-0.5">बिना कैलोरी वैल्यू वाले</p>
                 </div>
 
-                <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-xs">
-                  <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Calorie Variants</p>
-                  <p className="mt-1 text-2xl font-bold text-slate-900">{report.duplicateVariantsCount}</p>
-                  <p className="text-2xs text-slate-400 mt-0.5">कैलोरी के विभिन्न प्रकार</p>
+                <div className="rounded-card border border-line bg-surface p-4 shadow-e1">
+                  <p className="text-xs font-semibold text-ink-subtle uppercase tracking-wider">Calorie Variants</p>
+                  <p className="mt-1 text-2xl font-bold text-ink">{report.duplicateVariantsCount}</p>
+                  <p className="text-2xs text-ink-subtle mt-0.5">कैलोरी के विभिन्न प्रकार</p>
                 </div>
 
-                <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-xs">
-                  <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Missing Portions</p>
-                  <p className="mt-1 text-2xl font-bold text-slate-900">{report.missingPortionsCount}</p>
-                  <p className="text-2xs text-slate-400 mt-0.5">बिना मात्रा अनुपात (Portion)</p>
+                <div className="rounded-card border border-line bg-surface p-4 shadow-e1">
+                  <p className="text-xs font-semibold text-ink-subtle uppercase tracking-wider">Missing Portions</p>
+                  <p className="mt-1 text-2xl font-bold text-ink">{report.missingPortionsCount}</p>
+                  <p className="text-2xs text-ink-subtle mt-0.5">बिना मात्रा अनुपात (Portion)</p>
                 </div>
               </div>
 
               {/* Verification status warnings */}
               <div className="grid gap-5 md:grid-cols-2">
                 <div className="space-y-2">
-                  <h4 className="font-semibold text-slate-800 text-sm flex items-center gap-1.5">
-                    <AlertCircle className="h-4.5 w-4.5 text-amber-600" />
+                  <h4 className="font-semibold text-ink text-sm flex items-center gap-1.5">
+                    <AlertCircle className="h-4.5 w-4.5 text-attention" />
                     Needs Verification / Custom Entries ({report.requireVerificationCount}):
                   </h4>
                   {report.details.requireVerification.length > 0 ? (
-                    <div className="bg-amber-50/50 border border-amber-200/60 rounded-xl p-3 max-h-48 overflow-y-auto text-xs font-mono text-amber-900 space-y-1">
+                    <div className="bg-attention-soft border border-attention-line rounded-card p-3 max-h-48 overflow-y-auto text-xs font-mono text-attention space-y-1">
                       {report.details.requireVerification.map((name, idx) => (
                         <div key={idx}>• {name}</div>
                       ))}
                     </div>
                   ) : (
-                    <div className="bg-emerald-50 text-emerald-800 text-xs p-3 rounded-xl flex items-center gap-1.5">
-                      <CheckCircle className="h-4 w-4 text-emerald-600" />
+                    <div className="bg-positive-soft text-positive text-xs p-3 rounded-card flex items-center gap-1.5">
+                      <CheckCircle className="h-4 w-4 text-positive" />
                       All custom entries are verified.
                     </div>
                   )}
                 </div>
 
                 <div className="space-y-2">
-                  <h4 className="font-semibold text-slate-800 text-sm flex items-center gap-1.5">
-                    <AlertCircle className="h-4.5 w-4.5 text-rose-600" />
+                  <h4 className="font-semibold text-ink text-sm flex items-center gap-1.5">
+                    <AlertCircle className="h-4.5 w-4.5 text-critical" />
                     Missing Calories ({report.missingCaloriesCount}):
                   </h4>
                   {report.details.missingCalories.length > 0 ? (
-                    <div className="bg-rose-50/50 border border-rose-200/60 rounded-xl p-3 max-h-48 overflow-y-auto text-xs font-mono text-rose-900 space-y-1">
+                    <div className="bg-critical-soft border border-critical-line rounded-card p-3 max-h-48 overflow-y-auto text-xs font-mono text-critical space-y-1">
                       {report.details.missingCalories.map((name, idx) => (
                         <div key={idx}>• {name}</div>
                       ))}
                     </div>
                   ) : (
-                    <div className="bg-emerald-50 text-emerald-800 text-xs p-3 rounded-xl flex items-center gap-1.5">
-                      <CheckCircle className="h-4 w-4 text-emerald-600" />
+                    <div className="bg-positive-soft text-positive text-xs p-3 rounded-card flex items-center gap-1.5">
+                      <CheckCircle className="h-4 w-4 text-positive" />
                       No missing calories found.
                     </div>
                   )}
@@ -137,18 +137,18 @@ export default function ReportsPage() {
               </div>
             </div>
           ) : (
-            <div className="p-6 text-sm text-slate-500">Loading data quality report...</div>
+            <div className="p-6 text-sm text-ink-muted">Loading data quality report...</div>
           )}
         </Card>
       )}
 
       {/* Medical Disclaimer Banner */}
-      <div className="rounded-2xl border border-slate-200 bg-white p-4 text-xs text-slate-500 flex items-center justify-between gap-3 shadow-2xs">
+      <div className="rounded-card border border-line bg-surface p-4 text-xs text-ink-muted flex items-center justify-between gap-3 shadow-e1">
         <div className="flex items-center gap-2">
-          <ShieldAlert className="h-4 w-4 text-slate-400 shrink-0" />
+          <ShieldAlert className="h-4 w-4 text-ink-subtle shrink-0" />
           <span>स्वास्थट्रैक रिपोर्ट एक वेलनेस ट्रैकिंग रिकॉर्ड है, यह चिकित्सकीय सलाह या डॉक्टर के निदान का स्थान नहीं लेता है।</span>
         </div>
-        <a href="/medical-disclaimer" className="font-semibold text-emerald-700 hover:underline shrink-0">
+        <a href="/medical-disclaimer" className="font-semibold text-brand-ink hover:underline shrink-0">
           Medical Disclaimer →
         </a>
       </div>

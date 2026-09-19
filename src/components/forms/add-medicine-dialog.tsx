@@ -95,7 +95,7 @@ function MedicineForm({
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       {error ? (
-        <div className="rounded-lg border border-rose-200 bg-rose-50 p-3 text-sm font-medium text-rose-700">
+        <div className="rounded-card border border-critical-line bg-critical-soft p-3 text-sm font-medium text-critical">
           {error}
         </div>
       ) : null}
@@ -159,18 +159,18 @@ function MedicineForm({
       </div>
 
       <div className="pt-2">
-        <label className="flex items-center gap-3 rounded-lg border border-slate-200 bg-slate-50 p-3">
+        <label className="flex items-center gap-3 rounded-card border border-line bg-surface-sunken p-3">
           <input
             type="checkbox"
             checked={active}
             onChange={(e) => setActive(e.target.checked)}
-            className="h-5 w-5 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
+            className="h-5 w-5 rounded border-line-strong text-brand focus:ring-brand"
           />
           <div>
-            <span className="block text-sm font-semibold text-slate-900">
+            <span className="block text-sm font-semibold text-ink">
               Active medicine (सक्रिय दवाई)
             </span>
-            <span className="block text-xs text-slate-500">
+            <span className="block text-xs text-ink-subtle">
               Uncheck to deactivate if stopped by your doctor
             </span>
           </div>
