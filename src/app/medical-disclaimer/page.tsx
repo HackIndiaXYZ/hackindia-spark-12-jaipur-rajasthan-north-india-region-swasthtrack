@@ -1,108 +1,82 @@
-"use client";
-
-import Link from "next/link";
-import { ShieldAlert, ArrowLeft, PhoneCall, CheckCircle } from "lucide-react";
-import { PageTitle } from "@/components/ui/page-title";
+import { CheckCircle2, PhoneCall, ShieldAlert } from "lucide-react";
+import { LegalBody, LegalList, LegalPage, LegalSection } from "@/components/legal/legal-page";
 
 export default function MedicalDisclaimerPage() {
   return (
-    <div className="space-y-8 max-w-4xl mx-auto">
-      <div className="flex items-center gap-2">
-        <Link
-          href="/"
-          className="inline-flex items-center gap-1.5 text-xs font-semibold text-ink-subtle hover:text-ink transition-colors"
-        >
-          <ArrowLeft className="h-3.5 w-3.5" />
-          Back to Dashboard (डैशबोर्ड)
-        </Link>
-      </div>
-
-      <PageTitle
-        eyebrow="Medical Safety Notice (चिकित्सीय अस्वीकरण)"
-        title="Medical Disclaimer"
-        description="Important information regarding the purpose, scope, and non-clinical nature of SwasthTrack."
-      />
-
-      {/* CORE HIGHLIGHT BOX */}
-      <div className="rounded-card border-2 border-positive-line bg-positive-soft p-6 sm:p-7 space-y-3">
+    <LegalPage
+      eyebrow="Medical safety notice"
+      title="Medical Disclaimer"
+      hindiTitle="चिकित्सीय अस्वीकरण"
+      description="What SwasthTrack is for, and what it is not."
+    >
+      <div className="space-y-3 rounded-card border-2 border-attention-line bg-attention-soft p-5 sm:p-7">
         <div className="flex items-center gap-2.5">
-          <ShieldAlert className="h-6 w-6 text-positive shrink-0" />
-          <h2 className="text-base sm:text-lg font-bold text-ink">
-            For Informational &amp; Personal Tracking Purposes Only
-          </h2>
+          <ShieldAlert aria-hidden className="h-6 w-6 shrink-0 text-attention" />
+          <h2 className="text-base font-semibold text-ink sm:text-lg">For information and personal tracking only</h2>
         </div>
-        <p className="text-sm text-ink leading-relaxed font-medium">
-          SwasthTrack is a digital health tracking and daily wellness companion designed to help patients and families keep organized personal records of their health routines.
+        <p className="text-sm font-medium leading-relaxed text-ink">
+          SwasthTrack helps patients and families keep organised records of daily health routines.
         </p>
-        <p className="text-sm text-ink leading-relaxed font-semibold">
-          SwasthTrack is NOT a medical device, hospital, licensed diagnostic laboratory, doctor, or emergency medical service provider.
+        <p className="text-sm font-semibold leading-relaxed text-ink">
+          SwasthTrack is NOT a medical device, hospital, diagnostic laboratory, doctor or emergency service.
+        </p>
+        <p lang="hi" className="text-sm leading-relaxed text-ink-muted">
+          यह ऐप डॉक्टर की सलाह, जाँच या इलाज का विकल्प नहीं है। किसी भी चिंता में डॉक्टर से मिलें।
         </p>
       </div>
 
-      {/* DETAILED DISCLAIMER SECTIONS */}
-      <div className="rounded-card border border-line bg-surface p-6 sm:p-8 space-y-6 text-xs sm:text-sm text-ink-muted leading-relaxed">
-        {/* 1. Not a Substitute for Medical Advice */}
-        <section className="space-y-2">
-          <h3 className="text-base font-semibold text-ink">
-            1. No Substitute for Professional Healthcare
-          </h3>
+      <LegalBody>
+        <LegalSection title="1. Not a substitute for professional care">
           <p>
-            The content, charts, alerts, scores (e.g., Wellness Score), and summaries provided by SwasthTrack are for educational and tracking convenience only. They are not intended to be a substitute for professional medical advice, diagnosis, or treatment.
+            Charts, alerts, scores and summaries in SwasthTrack are for education and convenience. They are not medical advice, diagnosis
+            or treatment. Always ask your physician or another qualified health professional about a condition, symptom or treatment plan.
           </p>
+        </LegalSection>
+
+        <LegalSection title="2. Medicines">
+          <p>Never ignore professional advice, or delay getting it, because of something you recorded or read in the app.</p>
+          <LegalList>
+            <li>
+              Do <strong className="text-ink">not</strong> start, stop or change the dose or timing of a medicine because of an app
+              number, score or reminder.
+            </li>
+            <li>Every change to a prescription must come from your treating doctor.</li>
+          </LegalList>
+        </LegalSection>
+
+        <LegalSection title="3. Estimates, trends and AI answers">
           <p>
-            Always seek the advice of your physician or qualified healthcare provider with any questions you may have regarding a medical condition, symptoms, or treatment plan.
+            Trends, flags, calorie figures and Ask answers (including AI-written ones, when enabled) are estimates built from what was
+            logged. They can be incomplete or wrong and are not clinical assessments. Where a number is an estimate, the app says so.
+          </p>
+        </LegalSection>
+
+        <section className="space-y-3 rounded-card border border-critical-line bg-critical-soft p-5">
+          <h2 className="flex items-center gap-2 text-sm font-semibold text-critical">
+            <PhoneCall aria-hidden className="h-4 w-4 shrink-0" />
+            Medical emergencies
+          </h2>
+          <p className="text-sm leading-relaxed text-ink-muted">
+            If you or a family member may be having an emergency, for example severe chest pain, trouble breathing, sudden numbness or
+            weakness in the face or arms, difficulty speaking, fainting, or a very high blood pressure with symptoms:
+          </p>
+          <p className="rounded-control border border-critical-line bg-surface p-3 text-center text-sm font-semibold text-ink">
+            Call <a href="tel:112" className="text-critical underline underline-offset-2">112</a> or{" "}
+            <a href="tel:108" className="text-critical underline underline-offset-2">108</a> (India) immediately, or go to the nearest
+            hospital emergency room.
+          </p>
+          <p lang="hi" className="text-sm text-ink-muted">
+            आपात स्थिति में तुरंत 112 या 108 पर कॉल करें, या नज़दीकी अस्पताल के इमरजेंसी में जाएँ। ऐप खोलकर इंतज़ार न करें।
           </p>
         </section>
 
-        {/* 2. Medication & Prescription Decisions */}
-        <section className="space-y-2">
-          <h3 className="text-base font-semibold text-ink">
-            2. Prescriptions and Medications
-          </h3>
+        <LegalSection title="4. Using the app at a doctor visit" icon={<CheckCircle2 aria-hidden className="h-4 w-4 text-positive" />}>
           <p>
-            Never disregard professional medical advice or delay seeking it because of something you have recorded or read on SwasthTrack.
+            You can print or save the Doctor visit summary from Reports and share your blood pressure history, medicine adherence and weight
+            trend with your doctor. It shows only what was recorded, with how many days have records, and makes no diagnosis.
           </p>
-          <ul className="list-disc list-inside space-y-1 pl-1 text-ink font-medium">
-            <li>Do NOT start, stop, or change the dosage or timing of any prescribed medication based on app metrics or scores.</li>
-            <li>All prescription modifications must be made directly by your treating doctor.</li>
-          </ul>
-        </section>
-
-        {/* 3. Predictive Insights & Estimates */}
-        <section className="space-y-2">
-          <h3 className="text-base font-semibold text-ink">
-            3. Pattern Insights & Estimates
-          </h3>
-          <p>
-            Any trend insights, anomaly flags, or calorie calculations generated by the application are statistical estimates derived from user-entered logs. They carry inherent mathematical uncertainties and do not represent verified clinical assessments.
-          </p>
-        </section>
-
-        {/* 4. Emergency Situations */}
-        <section className="rounded-card border border-critical-line bg-critical-soft p-5 space-y-3">
-          <div className="flex items-center gap-2 text-critical font-semibold text-sm">
-            <PhoneCall className="h-4 w-4 text-critical shrink-0" />
-            <span>Medical Emergencies</span>
-          </div>
-          <p className="text-xs sm:text-sm text-critical leading-relaxed font-medium">
-            If you or your family member believe you are experiencing a medical emergency (such as severe chest pain, shortness of breath, sudden numbness, weakness in the face or arms, speech difficulty, or an extreme hypertensive spike):
-          </p>
-          <div className="rounded-control bg-surface/80 border border-critical-line p-3 text-critical font-semibold text-center text-sm">
-            🚨 Call your local emergency medical service immediately (e.g. 112 / 108 in India) or visit the nearest hospital emergency room.
-          </div>
-        </section>
-
-        {/* 5. Doctor Checkup Reports */}
-        <section className="space-y-2">
-          <h3 className="text-base font-semibold text-ink flex items-center gap-2">
-            <CheckCircle className="h-4 w-4 text-positive" />
-            5. Use During Doctor Visits
-          </h3>
-          <p>
-            We encourage you to export and share your SwasthTrack logs (Blood Pressure history, medicine adherence logs, and weight trends) with your doctor during routine clinical appointments to give them an organized record of your at-home daily health patterns.
-          </p>
-        </section>
-      </div>
-    </div>
+        </LegalSection>
+      </LegalBody>
+    </LegalPage>
   );
 }

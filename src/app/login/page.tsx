@@ -1,513 +1,598 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect, useId, useRef, useState, type FormEvent, type ReactNode } from "react";
+import Image from "next/image";
+import Link from "next/link";
 import {
+  AlertCircle,
   ArrowLeft,
-  ArrowRight,
   CheckCircle2,
   Eye,
   EyeOff,
-  KeyRound,
-  Lock,
-  Phone,
+  Loader2,
+  Mail,
+  MailCheck,
   ShieldCheck,
-  UserPlus,
 } from "lucide-react";
-import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { useAuth } from "@/context/auth-context";
+import { TextInput } from "@/components/ui/form-field";
+import { cn } from "@/lib/utils";
+import {
+  AuthServiceError,
+  MIN_PASSWORD_LENGTH,
+  OTP_LENGTH,
+  resendSignupOtp,
+  resetPasswordWithCode,
+  sendLoginCode,
+  sendPasswordResetCode,
+  signInWithPassword,
+  signUpWithEmail,
+  verifyLoginCode,
+  verifySignupOtp,
+} from "@/services/auth-service";
+
+type Mode = "signin" | "signup" | "code" | "reset";
+type Step = "form" | "verify";
+/** What the emailed code is for. */
+type VerifyKind = "signup" | "login" | "reset";
+
+const RESEND_COOLDOWN_SECONDS = 60;
+// After this many wrong codes, nudge the user to ask for a fresh one.
+const ATTEMPTS_BEFORE_NUDGE = 3;
+
+function LabeledField({
+  id,
+  label,
+  hint,
+  children,
+  action,
+}: {
+  id: string;
+  label: string;
+  hint?: string;
+  children: ReactNode;
+  action?: ReactNode;
+}) {
+  return (
+    <div>
+      <div className="flex items-baseline justify-between gap-3">
+        <label htmlFor={id} className="text-sm font-medium text-ink">
+          {label}
+        </label>
+        {action}
+      </div>
+      <div className="mt-1.5">{children}</div>
+      {hint ? (
+        <p id={`${id}-hint`} className="mt-1 text-xs text-ink-subtle">
+          {hint}
+        </p>
+      ) : null}
+    </div>
+  );
+}
+
+function PasswordInput({
+  id,
+  value,
+  onChange,
+  autoComplete,
+  placeholder,
+  describedBy,
+}: {
+  id: string;
+  value: string;
+  onChange: (value: string) => void;
+  autoComplete: "current-password" | "new-password";
+  placeholder?: string;
+  describedBy?: string;
+}) {
+  const [visible, setVisible] = useState(false);
+  return (
+    <div className="relative">
+      <TextInput
+        id={id}
+        type={visible ? "text" : "password"}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        autoComplete={autoComplete}
+        placeholder={placeholder}
+        aria-describedby={describedBy}
+        className="pr-12"
+        required
+      />
+      <button
+        type="button"
+        onClick={() => setVisible((v) => !v)}
+        aria-label={visible ? "पासवर्ड छुपाएं (Hide password)" : "पासवर्ड दिखाएं (Show password)"}
+        aria-pressed={visible}
+        className="absolute inset-y-0 right-0 flex w-11 cursor-pointer items-center justify-center rounded-r-field text-ink-subtle hover:text-ink focus-visible:outline-2 focus-visible:outline-brand"
+      >
+        {visible ? <EyeOff className="h-4 w-4" aria-hidden /> : <Eye className="h-4 w-4" aria-hidden />}
+      </button>
+    </div>
+  );
+}
+
+const MODE_TABS: { mode: "signin" | "signup"; label: string }[] = [
+  { mode: "signin", label: "लॉगिन (Sign in)" },
+  { mode: "signup", label: "नया खाता (Create account)" },
+];
 
 export default function LoginPage() {
-  const router = useRouter();
-  const { login, register, sendOtp, verifyOtp, loginDemo } = useAuth();
+  const uid = useId();
+  const [mode, setMode] = useState<Mode>("signin");
+  const [step, setStep] = useState<Step>("form");
+  const [verifyKind, setVerifyKind] = useState<VerifyKind>("signup");
 
-  const [activeTab, setActiveTab] = useState<"login" | "signup" | "forgot">("login");
-  const [phone, setPhone] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [otpSent, setOtpSent] = useState(false);
-  const [otpCode, setOtpCode] = useState("");
+  const [code, setCode] = useState("");
   const [newPassword, setNewPassword] = useState("");
+  const [confirmNewPassword, setConfirmNewPassword] = useState("");
 
-  const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [done, setDone] = useState(false);
   const [error, setError] = useState("");
-  const [successMsg, setSuccessMsg] = useState("");
+  const [notice, setNotice] = useState("");
+  const [attempts, setAttempts] = useState(0);
+  const [cooldown, setCooldown] = useState(0);
 
-  function handleTabSwitch(tab: "login" | "signup" | "forgot") {
-    setActiveTab(tab);
+  const busyRef = useRef(false);
+  const codeInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (cooldown <= 0) return;
+    const timer = setTimeout(() => setCooldown((c) => c - 1), 1000);
+    return () => clearTimeout(timer);
+  }, [cooldown]);
+
+  useEffect(() => {
+    if (step === "verify") codeInputRef.current?.focus();
+  }, [step]);
+
+  function resetTransient() {
     setError("");
-    setSuccessMsg("");
-    setOtpSent(false);
-    setOtpCode("");
+    setNotice("");
+    setAttempts(0);
+    setCode("");
+    setNewPassword("");
+    setConfirmNewPassword("");
   }
 
-  // Handle Login
-  async function handleLoginSubmit(e: FormEvent) {
-    e.preventDefault();
-    setError("");
-    setSuccessMsg("");
+  function switchMode(next: Mode) {
+    setMode(next);
+    setStep("form");
+    resetTransient();
+    setPassword("");
+    setConfirmPassword("");
+  }
 
+  function goToVerify(kind: VerifyKind, message: string) {
+    setVerifyKind(kind);
+    setStep("verify");
+    setCode("");
+    setAttempts(0);
+    setError("");
+    setNotice(message);
+    setCooldown(RESEND_COOLDOWN_SECONDS);
+  }
+
+  /** One request at a time: a double tap must not send two emails or two sign-ins. */
+  async function run(action: () => Promise<void>) {
+    if (busyRef.current) return;
+    busyRef.current = true;
+    setBusy(true);
+    setError("");
+    setNotice("");
     try {
-      setLoading(true);
-      const res = await login(phone, password);
-      if (res.isNewUser) {
-        router.replace("/onboarding");
-      } else {
-        router.replace("/");
-      }
-    } catch (err: unknown) {
-      setError((err as Error).message || "लॉगिन विफल रहा। कृपया सही विवरण दर्ज करें।");
+      await action();
+    } catch (err) {
+      setError(
+        err instanceof Error && err.message
+          ? err.message
+          : "कुछ गड़बड़ हो गई। कृपया फिर कोशिश करें। (Something went wrong. Please try again.)",
+      );
     } finally {
-      setLoading(false);
+      busyRef.current = false;
+      setBusy(false);
     }
   }
 
-  // Handle Explicit Demo Login
-  async function handleDemoLogin() {
-    setError("");
-    setSuccessMsg("");
-
-    try {
-      setLoading(true);
-      await loginDemo();
-      router.replace("/");
-    } catch (err: unknown) {
-      setError((err as Error).message || "डेमो मोड लॉगिन विफल रहा।");
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  // Handle Sign Up
-  async function handleSignupSubmit(e: FormEvent) {
+  function handleFormSubmit(e: FormEvent) {
     e.preventDefault();
-    setError("");
-    setSuccessMsg("");
 
-    if (password !== confirmPassword) {
-      setError("दोनों पासवर्ड मेल नहीं खाते। कृपया दोबारा जांचें।");
+    if (mode === "signin") {
+      void run(async () => {
+        try {
+          await signInWithPassword(email, password);
+          setDone(true);
+        } catch (err) {
+          if (err instanceof AuthServiceError && err.code === "email_not_confirmed") {
+            // Account exists but the address was never verified: send a fresh code and go to that step.
+            let message = "आपका ईमेल अभी सत्यापित नहीं है। हमने नया कोड भेजा है, उसे दर्ज करें।";
+            try {
+              await resendSignupOtp(email);
+              setCooldown(RESEND_COOLDOWN_SECONDS);
+            } catch {
+              message = "आपका ईमेल अभी सत्यापित नहीं है। कोड पहले भेजा जा चुका है, अपना ईमेल देखें या कुछ देर बाद नया कोड मंगाएं।";
+            }
+            goToVerify("signup", message);
+            return;
+          }
+          throw err;
+        }
+      });
       return;
     }
 
-    try {
-      setLoading(true);
-      const res = await register(phone, password);
-      if (res.isNewUser) {
-        router.replace("/onboarding");
-      } else {
-        router.replace("/");
+    if (mode === "signup") {
+      if (password.length < MIN_PASSWORD_LENGTH) {
+        setError(`पासवर्ड कम से कम ${MIN_PASSWORD_LENGTH} अक्षरों का रखें। (At least ${MIN_PASSWORD_LENGTH} characters.)`);
+        return;
       }
-    } catch (err: unknown) {
-      setError((err as Error).message || "खाता बनाने में त्रुटि हुई।");
-    } finally {
-      setLoading(false);
+      if (password !== confirmPassword) {
+        setError("दोनों पासवर्ड एक जैसे नहीं हैं। (The two passwords do not match.)");
+        return;
+      }
+      void run(async () => {
+        const res = await signUpWithEmail(email, password, name);
+        if (res.status === "signed_in") setDone(true);
+        else goToVerify("signup", `हमने ${email.trim()} पर ${OTP_LENGTH} अंकों का कोड भेजा है।`);
+      });
+      return;
     }
+
+    if (mode === "code") {
+      void run(async () => {
+        await sendLoginCode(email);
+        goToVerify("login", `अगर ${email.trim()} पर खाता है, तो ${OTP_LENGTH} अंकों का कोड भेज दिया गया है।`);
+      });
+      return;
+    }
+
+    // reset
+    void run(async () => {
+      await sendPasswordResetCode(email);
+      goToVerify("reset", `अगर ${email.trim()} पर खाता है, तो ${OTP_LENGTH} अंकों का कोड भेज दिया गया है।`);
+    });
   }
 
-  // Request OTP
-  async function handleRequestOtp(e: FormEvent) {
+  function handleVerifySubmit(e: FormEvent) {
     e.preventDefault();
-    setError("");
-    setSuccessMsg("");
 
-    try {
-      setLoading(true);
-      const res = await sendOtp(phone);
-      setOtpSent(true);
-      setSuccessMsg(res.message);
-    } catch (err: unknown) {
-      setError((err as Error).message || "OTP भेजने में विफल।");
-    } finally {
-      setLoading(false);
+    if (verifyKind === "reset") {
+      if (newPassword.length < MIN_PASSWORD_LENGTH) {
+        setError(`नया पासवर्ड कम से कम ${MIN_PASSWORD_LENGTH} अक्षरों का रखें। (At least ${MIN_PASSWORD_LENGTH} characters.)`);
+        return;
+      }
+      if (newPassword !== confirmNewPassword) {
+        setError("दोनों पासवर्ड एक जैसे नहीं हैं। (The two passwords do not match.)");
+        return;
+      }
     }
+
+    void run(async () => {
+      try {
+        if (verifyKind === "signup") await verifySignupOtp(email, code);
+        else if (verifyKind === "login") await verifyLoginCode(email, code);
+        else await resetPasswordWithCode(email, code, newPassword);
+        setDone(true);
+      } catch (err) {
+        if (err instanceof AuthServiceError && err.code === "invalid_code") setAttempts((n) => n + 1);
+        throw err;
+      }
+    });
   }
 
-  // Handle Verify OTP & Reset Password
-  async function handleVerifyOtpSubmit(e: FormEvent) {
-    e.preventDefault();
-    setError("");
-    setSuccessMsg("");
-
-    try {
-      setLoading(true);
-      const res = await verifyOtp(phone, otpCode, newPassword);
-      setSuccessMsg(res.message);
-      setPassword(newPassword);
-      setTimeout(() => {
-        setActiveTab("login");
-      }, 2000);
-    } catch (err: unknown) {
-      setError((err as Error).message || "पासवर्ड रीसेट विफल रहा।");
-    } finally {
-      setLoading(false);
-    }
+  function handleResend() {
+    if (cooldown > 0) return;
+    void run(async () => {
+      if (verifyKind === "signup") await resendSignupOtp(email);
+      else if (verifyKind === "login") await sendLoginCode(email);
+      else await sendPasswordResetCode(email);
+      setCode("");
+      setAttempts(0);
+      setCooldown(RESEND_COOLDOWN_SECONDS);
+      setNotice("नया कोड भेज दिया गया है। (A new code was sent.)");
+    });
   }
+
+  const verifyTitle =
+    verifyKind === "reset" ? "पासवर्ड रीसेट" : verifyKind === "login" ? "ईमेल कोड से लॉगिन" : "ईमेल सत्यापित करें";
+  const verifyTitleEn =
+    verifyKind === "reset" ? "Reset password" : verifyKind === "login" ? "Sign in with email code" : "Verify your email";
+
+  const emailId = `${uid}-email`;
+  const nameId = `${uid}-name`;
+  const passwordId = `${uid}-password`;
+  const confirmId = `${uid}-confirm`;
+  const codeId = `${uid}-code`;
+  const newPasswordId = `${uid}-new-password`;
+  const confirmNewId = `${uid}-confirm-new-password`;
 
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center bg-canvas px-4 py-8">
-      <div className="gold-edge w-full max-w-md rounded-panel p-6 sm:p-8">
-        {/* LOGO & TITLE */}
-        <div className="text-center mb-6">
-          <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-card overflow-hidden shadow-e2 border border-line bg-surface">
-            <Image
-              src="/logo.jpg"
-              alt="SwasthTrack Logo"
-              width={64}
-              height={64}
-              className="h-full w-full object-cover"
-            />
+    <div className="flex min-h-screen flex-col items-center justify-center bg-canvas px-4 py-8">
+      <div className="gold-edge w-full max-w-md rounded-panel bg-surface p-6 sm:p-8">
+        <div className="mb-6 text-center">
+          <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center overflow-hidden rounded-card border border-line bg-surface shadow-e2">
+            <Image src="/logo.jpg" alt="SwasthTrack" width={64} height={64} className="h-full w-full object-cover" priority />
           </div>
-          <h1 className="text-xl sm:text-2xl font-bold text-ink tracking-tight">
-            SwasthTrack
-          </h1>
-          <p className="text-xs sm:text-sm font-medium text-ink-subtle mt-1">
-            अपनी सेहत का रिकॉर्ड सुरक्षित रखें
+          <h1 className="text-2xl font-bold tracking-tight text-ink">SwasthTrack</h1>
+          <p lang="hi" className="mt-1 text-sm font-medium text-ink-muted">
+            अपनों की सेहत, एक सुरक्षित जगह
           </p>
         </div>
 
-        {/* TABS (LOGIN / SIGNUP) */}
-        {activeTab !== "forgot" && (
-          <div className="mb-5 flex rounded-card bg-surface-sunken p-1">
-            <button
-              type="button"
-              onClick={() => handleTabSwitch("login")}
-              className={`w-1/2 rounded-control py-2 text-xs font-semibold transition-all ${
-                activeTab === "login"
-                  ? "bg-surface text-ink shadow-e1"
-                  : "text-ink-subtle hover:text-ink"
-              }`}
+        {step === "form" && (mode === "signin" || mode === "signup") ? (
+          <div role="tablist" aria-label="Sign in or create account" className="mb-5 flex rounded-card bg-surface-sunken p-1">
+            {MODE_TABS.map((tab) => (
+              <button
+                key={tab.mode}
+                type="button"
+                role="tab"
+                aria-selected={mode === tab.mode}
+                onClick={() => switchMode(tab.mode)}
+                className={cn(
+                  "min-h-control flex-1 cursor-pointer rounded-control px-2 text-xs font-semibold transition-colors",
+                  mode === tab.mode ? "bg-surface text-ink shadow-e1" : "text-ink-subtle hover:text-ink",
+                )}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+        ) : null}
+
+        {/* Always mounted so screen readers announce changes. */}
+        <div aria-live="polite" className="empty:hidden">
+          {error ? (
+            <div
+              role="alert"
+              className="mb-4 flex items-start gap-2 rounded-card border border-critical-line bg-critical-soft p-3 text-sm font-medium text-critical"
             >
-              लॉगिन करें (Login)
-            </button>
-            <button
-              type="button"
-              onClick={() => handleTabSwitch("signup")}
-              className={`w-1/2 rounded-control py-2 text-xs font-semibold transition-all ${
-                activeTab === "signup"
-                  ? "bg-surface text-ink shadow-e1"
-                  : "text-ink-subtle hover:text-ink"
-              }`}
-            >
-              नया खाता बनाएं (Sign Up)
-            </button>
-          </div>
-        )}
+              <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
+              <span>{error}</span>
+            </div>
+          ) : null}
+          {notice ? (
+            <div className="mb-4 flex items-start gap-2 rounded-card border border-positive-line bg-positive-soft p-3 text-sm font-medium text-positive">
+              <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
+              <span>{notice}</span>
+            </div>
+          ) : null}
+        </div>
 
-        {/* ERROR / SUCCESS ALERTS */}
-        {error && (
-          <div className="mb-4 rounded-card border border-critical-line bg-critical-soft p-3 text-xs font-semibold text-critical animate-in fade-in">
-            {error}
+        {done ? (
+          <div role="status" className="flex flex-col items-center gap-3 py-8 text-center">
+            <Loader2 className="h-6 w-6 animate-spin text-brand" aria-hidden />
+            <p className="text-sm font-semibold text-ink-muted">आपका खाता खोला जा रहा है... (Opening your account)</p>
           </div>
-        )}
+        ) : step === "form" ? (
+          <form onSubmit={handleFormSubmit} className="space-y-4">
+            {mode === "reset" ? (
+              <div>
+                <h2 className="text-lg font-semibold text-ink">पासवर्ड भूल गए? (Forgot password)</h2>
+                <p className="mt-1 text-sm text-ink-muted">
+                  अपना ईमेल दर्ज करें, हम {OTP_LENGTH} अंकों का कोड भेजेंगे। (Enter your email and we will send a {OTP_LENGTH}-digit code.)
+                </p>
+              </div>
+            ) : null}
+            {mode === "code" ? (
+              <div>
+                <h2 className="text-lg font-semibold text-ink">ईमेल कोड से लॉगिन (Sign in with email code)</h2>
+                <p className="mt-1 text-sm text-ink-muted">
+                  पासवर्ड की ज़रूरत नहीं। ईमेल पर आया कोड दर्ज करें। (No password needed: enter the code we email you.)
+                </p>
+              </div>
+            ) : null}
 
-        {successMsg && (
-          <div className="mb-4 rounded-card border border-positive-line bg-positive-soft p-3 text-xs font-semibold text-positive flex items-center gap-1.5 animate-in fade-in">
-            <CheckCircle2 className="h-4 w-4 shrink-0 text-positive" />
-            {successMsg}
-          </div>
-        )}
+            {mode === "signup" ? (
+              <LabeledField id={nameId} label="आपका नाम (Your name, optional)">
+                <TextInput
+                  id={nameId}
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  autoComplete="name"
+                  placeholder="जैसे: रिया शर्मा"
+                />
+              </LabeledField>
+            ) : null}
 
-        {/* 1. LOGIN FORM */}
-        {activeTab === "login" && (
-          <form onSubmit={handleLoginSubmit} className="space-y-4">
-            <div>
-              <label className="block text-xs font-semibold text-ink-muted mb-1.5">
-                मोबाइल नंबर (Mobile Number)
-              </label>
-              <div className="relative flex items-center">
-                <span className="absolute left-3.5 text-xs font-semibold text-ink-subtle">
-                  +91
-                </span>
-                <input
-                  type="tel"
-                  inputMode="numeric"
-                  autoFocus
-                  placeholder="98765 43210"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  className="w-full rounded-field border border-line-strong pl-12 pr-4 py-3 text-sm font-semibold text-ink tracking-wider placeholder:text-ink-subtle focus:border-brand focus:ring-2 focus:ring-brand/20 transition-all"
+            <LabeledField id={emailId} label="ईमेल (Email)">
+              <div className="relative">
+                <TextInput
+                  id={emailId}
+                  type="email"
+                  inputMode="email"
+                  autoComplete="email"
+                  autoCapitalize="none"
+                  spellCheck={false}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="you@example.com"
+                  className="pr-10"
                   required
                 />
-                <Phone className="absolute right-3.5 h-4 w-4 text-ink-subtle" />
+                <Mail className="pointer-events-none absolute right-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-subtle" aria-hidden />
               </div>
-            </div>
+            </LabeledField>
 
-            <div>
-              <div className="flex items-center justify-between mb-1.5">
-                <label className="block text-xs font-semibold text-ink-muted">
-                  पासवर्ड (Password)
-                </label>
-                <button
-                  type="button"
-                  onClick={() => handleTabSwitch("forgot")}
-                  className="text-xs font-semibold text-brand hover:text-brand-ink"
-                >
-                  पासवर्ड भूल गए?
-                </button>
-              </div>
-              <div className="relative flex items-center">
-                <input
-                  type={showPassword ? "text" : "password"}
-                  placeholder="पासवर्ड दर्ज करें"
+            {mode === "signin" || mode === "signup" ? (
+              <LabeledField
+                id={passwordId}
+                label="पासवर्ड (Password)"
+                hint={mode === "signup" ? `कम से कम ${MIN_PASSWORD_LENGTH} अक्षर (At least ${MIN_PASSWORD_LENGTH} characters)` : undefined}
+                action={
+                  mode === "signin" ? (
+                    <button
+                      type="button"
+                      onClick={() => switchMode("reset")}
+                      className="cursor-pointer text-xs font-semibold text-brand-ink hover:underline"
+                    >
+                      पासवर्ड भूल गए?
+                    </button>
+                  ) : undefined
+                }
+              >
+                <PasswordInput
+                  id={passwordId}
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full rounded-field border border-line-strong px-4 py-3 text-sm font-semibold text-ink tracking-wider placeholder:text-ink-subtle focus:border-brand focus:ring-2 focus:ring-brand/20 transition-all"
-                  required
+                  onChange={setPassword}
+                  autoComplete={mode === "signin" ? "current-password" : "new-password"}
+                  describedBy={mode === "signup" ? `${passwordId}-hint` : undefined}
                 />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="hit-target absolute right-3.5 text-ink-subtle hover:text-ink-muted"
-                >
-                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                </button>
-              </div>
-            </div>
+              </LabeledField>
+            ) : null}
 
-            <Button
-              variant="primary"
-              type="submit"
-              disabled={loading}
-              className="w-full h-12 text-sm font-semibold rounded-control"
-            >
-              {loading ? (
-                "लॉगिन हो रहा है..."
-              ) : (
-                <span className="flex items-center justify-center gap-2">
-                  <Lock className="h-4 w-4" />
-                  लॉगिन करें (Sign In)
-                  <ArrowRight className="h-4 w-4" />
-                </span>
-              )}
+            {mode === "signup" ? (
+              <LabeledField id={confirmId} label="पासवर्ड दोबारा (Confirm password)">
+                <PasswordInput id={confirmId} value={confirmPassword} onChange={setConfirmPassword} autoComplete="new-password" />
+              </LabeledField>
+            ) : null}
+
+            <Button type="submit" variant="primary" size="lg" block disabled={busy}>
+              {busy ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> : null}
+              {mode === "signin"
+                ? busy
+                  ? "लॉगिन हो रहा है..."
+                  : "लॉगिन करें"
+                : mode === "signup"
+                  ? busy
+                    ? "खाता बन रहा है..."
+                    : "खाता बनाएं और कोड पाएं"
+                  : busy
+                    ? "कोड भेजा जा रहा है..."
+                    : "कोड भेजें (Send code)"}
             </Button>
-          </form>
-        )}
 
-        {/* 2. SIGN UP FORM */}
-        {activeTab === "signup" && (
-          <form onSubmit={handleSignupSubmit} className="space-y-4">
-            <div>
-              <label className="block text-xs font-semibold text-ink-muted mb-1.5">
-                मोबाइल नंबर (Mobile Number)
-              </label>
-              <div className="relative flex items-center">
-                <span className="absolute left-3.5 text-xs font-semibold text-ink-subtle">
-                  +91
-                </span>
-                <input
-                  type="tel"
-                  inputMode="numeric"
-                  autoFocus
-                  placeholder="98765 43210"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  className="w-full rounded-field border border-line-strong pl-12 pr-4 py-3 text-sm font-semibold text-ink tracking-wider placeholder:text-ink-subtle focus:border-brand focus:ring-2 focus:ring-brand/20 transition-all"
-                  required
-                />
-                <Phone className="absolute right-3.5 h-4 w-4 text-ink-subtle" />
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-xs font-semibold text-ink-muted mb-1.5">
-                पासवर्ड बनाएं (Create Password)
-              </label>
-              <div className="relative flex items-center">
-                <input
-                  type={showPassword ? "text" : "password"}
-                  placeholder="कम से कम 4 अक्षर या अंक"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full rounded-field border border-line-strong px-4 py-3 text-sm font-semibold text-ink tracking-wider placeholder:text-ink-subtle focus:border-brand focus:ring-2 focus:ring-brand/20 transition-all"
-                  required
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="hit-target absolute right-3.5 text-ink-subtle hover:text-ink-muted"
-                >
-                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                </button>
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-xs font-semibold text-ink-muted mb-1.5">
-                पासवर्ड दोबारा दर्ज करें (Confirm Password)
-              </label>
-              <div className="relative flex items-center">
-                <input
-                  type={showPassword ? "text" : "password"}
-                  placeholder="वही पासवर्ड दोबारा लिखें"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="w-full rounded-field border border-line-strong px-4 py-3 text-sm font-semibold text-ink tracking-wider placeholder:text-ink-subtle focus:border-brand focus:ring-2 focus:ring-brand/20 transition-all"
-                  required
-                />
-              </div>
-            </div>
-
-            <Button
-              variant="primary"
-              type="submit"
-              disabled={loading}
-              className="w-full h-12 text-sm font-semibold rounded-control"
-            >
-              {loading ? (
-                "खाता बनाया जा रहा है..."
-              ) : (
-                <span className="flex items-center justify-center gap-2">
-                  <UserPlus className="h-4 w-4" />
-                  खाता बनाएं एवं सेटअप शुरू करें
-                  <ArrowRight className="h-4 w-4" />
-                </span>
-              )}
-            </Button>
-          </form>
-        )}
-
-        {/* DEMO MODE CTA BUTTON */}
-        {activeTab !== "forgot" && (
-          <div className="mt-4 pt-3 border-t border-line">
-            <button
-              type="button"
-              onClick={handleDemoLogin}
-              disabled={loading}
-              className="w-full py-2.5 px-4 rounded-control bg-gold-soft hover:brightness-95 border border-gold-line text-gold-ink font-semibold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all cursor-pointer shadow-2xs active:scale-98"
-            >
-              <span>⚡ बिना लॉगिन ऐप देखें (Try Demo Mode)</span>
-            </button>
-          </div>
-        )}
-
-        {/* 3. FORGOT PASSWORD FORM (6-Digit OTP) */}
-        {activeTab === "forgot" && (
-          <div className="space-y-4">
-            <div className="flex items-center justify-between mb-1">
+            {mode === "signin" ? (
               <button
                 type="button"
-                onClick={() => handleTabSwitch("login")}
-                className="text-xs font-semibold text-ink-subtle hover:text-ink flex items-center gap-1 cursor-pointer"
+                onClick={() => switchMode("code")}
+                className="block min-h-control w-full cursor-pointer text-center text-sm font-semibold text-brand-ink hover:underline"
               >
-                <ArrowLeft className="h-3.5 w-3.5" />
-                वापस लॉगिन पर जाएं
+                बिना पासवर्ड, ईमेल कोड से लॉगिन करें
+              </button>
+            ) : null}
+
+            {mode === "reset" || mode === "code" ? (
+              <button
+                type="button"
+                onClick={() => switchMode("signin")}
+                className="flex min-h-control w-full cursor-pointer items-center justify-center gap-1.5 text-sm font-semibold text-ink-muted hover:text-ink"
+              >
+                <ArrowLeft className="h-4 w-4" aria-hidden />
+                वापस लॉगिन पर (Back to sign in)
+              </button>
+            ) : null}
+          </form>
+        ) : (
+          <form onSubmit={handleVerifySubmit} className="space-y-4">
+            <div className="flex items-start gap-3">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-card bg-brand-soft text-brand-ink">
+                <MailCheck className="h-5 w-5" aria-hidden />
+              </div>
+              <div>
+                <h2 className="text-lg font-semibold text-ink">
+                  {verifyTitle} <span className="text-sm font-medium text-ink-muted">({verifyTitleEn})</span>
+                </h2>
+                <p className="mt-1 text-sm text-ink-muted">
+                  ईमेल में आया {OTP_LENGTH} अंकों का कोड नीचे डालें। स्पैम फ़ोल्डर भी देखें।
+                </p>
+              </div>
+            </div>
+
+            <LabeledField id={codeId} label={`${OTP_LENGTH} अंकों का कोड (${OTP_LENGTH}-digit code)`}>
+              <TextInput
+                ref={codeInputRef}
+                id={codeId}
+                type="text"
+                inputMode="numeric"
+                autoComplete="one-time-code"
+                pattern={`[0-9]{${OTP_LENGTH}}`}
+                maxLength={OTP_LENGTH}
+                value={code}
+                onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, OTP_LENGTH))}
+                placeholder="------"
+                aria-describedby={attempts >= ATTEMPTS_BEFORE_NUDGE ? `${codeId}-attempts` : undefined}
+                className="text-center font-mono text-2xl font-bold tracking-[0.5em]"
+                required
+              />
+            </LabeledField>
+
+            {attempts > 0 ? (
+              <p id={`${codeId}-attempts`} className="text-xs text-ink-muted">
+                {attempts >= ATTEMPTS_BEFORE_NUDGE
+                  ? `${attempts} बार गलत कोड दर्ज हुआ। नया कोड मंगाना बेहतर रहेगा।`
+                  : `गलत कोड (${attempts}). फिर से जांचकर डालें।`}
+              </p>
+            ) : null}
+
+            {verifyKind === "reset" ? (
+              <>
+                <LabeledField id={newPasswordId} label="नया पासवर्ड (New password)" hint={`कम से कम ${MIN_PASSWORD_LENGTH} अक्षर`}>
+                  <PasswordInput
+                    id={newPasswordId}
+                    value={newPassword}
+                    onChange={setNewPassword}
+                    autoComplete="new-password"
+                    describedBy={`${newPasswordId}-hint`}
+                  />
+                </LabeledField>
+                <LabeledField id={confirmNewId} label="नया पासवर्ड दोबारा (Confirm new password)">
+                  <PasswordInput
+                    id={confirmNewId}
+                    value={confirmNewPassword}
+                    onChange={setConfirmNewPassword}
+                    autoComplete="new-password"
+                  />
+                </LabeledField>
+              </>
+            ) : null}
+
+            <Button type="submit" variant="primary" size="lg" block disabled={busy || code.length !== OTP_LENGTH}>
+              {busy ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> : <ShieldCheck className="h-4 w-4" aria-hidden />}
+              {busy ? "जांच हो रही है..." : verifyKind === "reset" ? "पासवर्ड बदलें" : "सत्यापित करें (Verify)"}
+            </Button>
+
+            <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
+              <button
+                type="button"
+                onClick={() => {
+                  setStep("form");
+                  resetTransient();
+                }}
+                className="flex min-h-control cursor-pointer items-center gap-1.5 text-sm font-semibold text-ink-muted hover:text-ink"
+              >
+                <ArrowLeft className="h-4 w-4" aria-hidden />
+                वापस (Back)
+              </button>
+              <button
+                type="button"
+                onClick={handleResend}
+                disabled={cooldown > 0 || busy}
+                className="min-h-control cursor-pointer text-sm font-semibold text-brand-ink hover:underline disabled:cursor-not-allowed disabled:text-ink-subtle disabled:no-underline"
+              >
+                {cooldown > 0 ? `नया कोड ${cooldown} सेकंड बाद` : "कोड दोबारा भेजें (Resend code)"}
               </button>
             </div>
-
-            <div className="rounded-card border border-info-line bg-info-soft p-3 text-xs text-info font-medium space-y-1">
-              <p className="font-semibold flex items-center gap-1.5">
-                <KeyRound className="h-3.5 w-3.5 text-info" />
-                6-Digit OTP पासवर्ड रीसेट:
-              </p>
-              <p>
-                रजिस्टर्ड मोबाइल नंबर पर 6-अंकों का OTP प्राप्त कर नया पासवर्ड बनाएं।
-              </p>
-            </div>
-
-            {!otpSent ? (
-              <form onSubmit={handleRequestOtp} className="space-y-4">
-                <div>
-                  <label className="block text-xs font-semibold text-ink-muted mb-1.5">
-                    रजिस्टर्ड मोबाइल नंबर (Mobile Number)
-                  </label>
-                  <div className="relative flex items-center">
-                    <span className="absolute left-3.5 text-xs font-semibold text-ink-subtle">
-                      +91
-                    </span>
-                    <input
-                      type="tel"
-                      inputMode="numeric"
-                      autoFocus
-                      placeholder="98765 43210"
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
-                      className="w-full rounded-field border border-line-strong pl-12 pr-4 py-3 text-sm font-semibold text-ink tracking-wider placeholder:text-ink-subtle focus:border-brand focus:ring-2 focus:ring-brand/20 transition-all"
-                      required
-                    />
-                  </div>
-                </div>
-
-                <Button
-                  variant="primary"
-                  type="submit"
-                  disabled={loading || phone.length < 10}
-                  className="w-full h-12 text-sm font-semibold rounded-control"
-                >
-                  {loading ? (
-                    "OTP भेजा जा रहा है..."
-                  ) : (
-                    <span className="flex items-center justify-center gap-2">
-                      <Phone className="h-4 w-4" />
-                      OTP कोड भेजें (Send OTP)
-                    </span>
-                  )}
-                </Button>
-              </form>
-            ) : (
-              <form onSubmit={handleVerifyOtpSubmit} className="space-y-4">
-                <div>
-                  <label className="block text-xs font-semibold text-ink-muted mb-1.5">
-                    6-अंकों का OTP कोड (Enter 6-Digit OTP) *
-                  </label>
-                  <input
-                    type="text"
-                    inputMode="numeric"
-                    maxLength={6}
-                    autoFocus
-                    placeholder="e.g. 123456"
-                    value={otpCode}
-                    onChange={(e) => setOtpCode(e.target.value.replace(/\D/g, ""))}
-                    className="w-full rounded-field border border-line-strong px-4 py-3 text-center text-lg font-bold tracking-widest text-ink focus:border-brand focus:ring-2 focus:ring-brand/20"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-semibold text-ink-muted mb-1.5">
-                    नया पासवर्ड बनाएं (New Password) *
-                  </label>
-                  <input
-                    type="password"
-                    placeholder="नया पासवर्ड दर्ज करें"
-                    value={newPassword}
-                    onChange={(e) => setNewPassword(e.target.value)}
-                    className="w-full rounded-field border border-line-strong px-4 py-3 text-sm font-semibold text-ink tracking-wider focus:border-brand focus:ring-2 focus:ring-brand/20"
-                    required
-                  />
-                </div>
-
-                <Button
-                  variant="primary"
-                  type="submit"
-                  disabled={loading || otpCode.length !== 6 || !newPassword}
-                  className="w-full h-12 text-sm font-semibold rounded-control"
-                >
-                  {loading ? (
-                    "रीसेट हो रहा है..."
-                  ) : (
-                    <span className="flex items-center justify-center gap-2">
-                      <KeyRound className="h-4 w-4" />
-                      पासवर्ड रीसेट करें (Reset Password)
-                    </span>
-                  )}
-                </Button>
-              </form>
-            )}
-          </div>
+          </form>
         )}
 
-        {/*
-          This badge previously read "सुरक्षित एन्क्रिप्टेड स्वास्थ्य सेवा"
-          (secure encrypted health service). Sign-in credentials are currently
-          held in browser storage and are not encrypted, so the claim was not
-          accurate. It now states what is actually true.
-        */}
-        <div className="mt-8 flex items-center justify-center gap-2 border-t border-line pt-5 text-xs text-ink-subtle">
-          <ShieldCheck aria-hidden className="h-4 w-4 shrink-0 text-brand" />
-          <span lang="hi">आपका स्वास्थ्य डेटा केवल आपके परिवार के लिए</span>
-        </div>
+        <p className="mt-6 text-center text-xs text-ink-subtle">
+          आगे बढ़ने पर आप{" "}
+          <Link href="/terms" className="font-semibold text-brand-ink underline-offset-2 hover:underline">
+            शर्तों
+          </Link>{" "}
+          और{" "}
+          <Link href="/privacy" className="font-semibold text-brand-ink underline-offset-2 hover:underline">
+            गोपनीयता नीति
+          </Link>{" "}
+          से सहमत हैं। SwasthTrack डॉक्टर की सलाह का विकल्प नहीं है।
+        </p>
       </div>
     </div>
   );

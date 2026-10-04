@@ -1,5 +1,6 @@
-import type { MealType, MedicinePeriod, ReadingPeriod } from "@/types";
+import type { MealType } from "@/types";
 
+/** Meal slots in the order they occur in a day. */
 export const mealTypes: MealType[] = [
   "Breakfast",
   "Mid-morning",
@@ -7,13 +8,4 @@ export const mealTypes: MealType[] = [
   "Evening snack",
   "Dinner",
   "Bedtime",
-];
-
-export const readingPeriods: ReadingPeriod[] = ["Morning", "Evening"];
-
-export const medicinePeriods: MedicinePeriod[] = [
-  "Morning",
-  "Afternoon",
-  "Evening",
-  "Night",
 ];

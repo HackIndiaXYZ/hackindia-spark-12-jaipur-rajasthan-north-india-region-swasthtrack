@@ -10,6 +10,13 @@ import React from "react";
     `animate-pulse` grey block, so every loading state in the product
     reads as one system. */
 
+/** One polite announcement per loading screen; the shimmer itself is decorative. */
+const LoadingStatus: React.FC = () => (
+  <span role="status" lang="hi" className="sr-only">
+    लोड हो रहा है… (Loading)
+  </span>
+);
+
 /** Shimmer bar for normal text (e.g. labels, descriptions) */
 const TextBar: React.FC<{ className?: string }> = ({ className = "" }) => (
   <div className={`skeleton h-4 w-24 ${className}`} />
@@ -38,7 +45,7 @@ const SmallTextBar: React.FC<{ className?: string }> = ({
  * A card-shaped skeleton matching the Card component pattern.
  * Renders a header area and a content area with shimmer bars.
  */
-export const SkeletonCard: React.FC<{ className?: string }> = ({
+const SkeletonCardBase: React.FC<{ className?: string }> = ({
   className = "",
 }) => (
   <div
@@ -58,6 +65,15 @@ export const SkeletonCard: React.FC<{ className?: string }> = ({
       <TextBar className="w-1/2" />
     </div>
   </div>
+);
+
+export const SkeletonCard: React.FC<{ className?: string }> = ({
+  className = "",
+}) => (
+  <>
+    <LoadingStatus />
+    <SkeletonCardBase className={className} />
+  </>
 );
 
 /* ------------------------------------------------------------------ */
@@ -86,7 +102,7 @@ const SkeletonMetricCard: React.FC = () => (
 /**
  * A grid of 6 metric card skeletons matching the TodaySummaryGrid layout.
  */
-export const SkeletonMetricGrid: React.FC<{ className?: string }> = ({
+const SkeletonMetricGridBase: React.FC<{ className?: string }> = ({
   className = "",
 }) => (
   <div
@@ -97,6 +113,15 @@ export const SkeletonMetricGrid: React.FC<{ className?: string }> = ({
       <SkeletonMetricCard key={i} />
     ))}
   </div>
+);
+
+export const SkeletonMetricGrid: React.FC<{ className?: string }> = ({
+  className = "",
+}) => (
+  <>
+    <LoadingStatus />
+    <SkeletonMetricGridBase className={className} />
+  </>
 );
 
 /* ------------------------------------------------------------------ */
@@ -111,6 +136,8 @@ export const SkeletonMetricGrid: React.FC<{ className?: string }> = ({
 export const SkeletonHealthPanel: React.FC<{ className?: string }> = ({
   className = "",
 }) => (
+  <>
+  <LoadingStatus />
   <div
     className={`rounded-card border border-line bg-surface p-5 space-y-6 ${className}`}
     aria-hidden="true"
@@ -155,6 +182,7 @@ export const SkeletonHealthPanel: React.FC<{ className?: string }> = ({
       ))}
     </div>
   </div>
+  </>
 );
 
 /* ------------------------------------------------------------------ */
@@ -171,9 +199,10 @@ export const SkeletonHealthPanel: React.FC<{ className?: string }> = ({
 export const SkeletonDashboard: React.FC<{ className?: string }> = ({
   className = "",
 }) => (
-  <div className={`space-y-6 ${className}`} aria-hidden="true">
+  <div className={`space-y-6 ${className}`}>
+    <LoadingStatus />
     {/* Patient overview banner skeleton */}
-    <div className="rounded-card border border-line bg-surface p-5 flex items-center gap-4">
+    <div aria-hidden="true" className="rounded-card border border-line bg-surface p-5 flex items-center gap-4">
       {/* Avatar */}
       <div className="skeleton h-14 w-14 shrink-0 rounded-full" />
       <div className="space-y-2 flex-1">
@@ -186,19 +215,19 @@ export const SkeletonDashboard: React.FC<{ className?: string }> = ({
     </div>
 
     {/* Quick actions bar skeleton */}
-    <div className="flex gap-3 overflow-hidden">
+    <div aria-hidden="true" className="flex gap-3 overflow-hidden">
       {Array.from({ length: 4 }).map((_, i) => (
         <div key={i} className="skeleton h-10 w-32 shrink-0 rounded-control" />
       ))}
     </div>
 
     {/* Metric grid */}
-    <SkeletonMetricGrid />
+    <SkeletonMetricGridBase />
 
     {/* 4 cards in 2-col grid */}
     <div className="grid gap-4 md:grid-cols-2">
       {Array.from({ length: 4 }).map((_, i) => (
-        <SkeletonCard key={i} />
+        <SkeletonCardBase key={i} />
       ))}
     </div>
   </div>

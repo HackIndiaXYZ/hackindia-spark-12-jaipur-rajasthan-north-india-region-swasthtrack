@@ -1,7 +1,22 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import { getActivePatientId } from "@/lib/active-patient";
+import {
+  MEDICINE_LATE_AFTER_MIN,
+  MEDICINE_MISSED_AFTER_MIN,
+  eachIST,
+  isPlausibleBP,
+  istDayBounds,
+  istHour,
+  istInstant,
+  istMinutesOfDay,
+  toISTDate,
+  todayIST,
+  addDaysIST,
+} from "@/lib/health-rules";
 import { isSupabaseConfigured, supabase } from "@/lib/supabase/client";
-export { isSupabaseConfigured, supabase };
 import type { Database } from "@/lib/supabase/database.types";
+import { notifyAbnormalBp, notifyWeightLogged } from "./alert-email-client";
+
+export { isSupabaseConfigured, supabase };
 
 export type PatientProfile = Database["public"]["Tables"]["patients"]["Row"];
 export type MedicalCondition = Database["public"]["Tables"]["medical_conditions"]["Row"];
@@ -33,6 +48,8 @@ export interface FoodItem {
   is_verified: boolean;
   is_custom: boolean;
   is_active: boolean;
+  /** Null for the seeded catalogue; the creator's user id for custom foods. */
+  created_by?: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -64,7 +81,7 @@ export interface FoodLogEntry {
   sodium_mg: number | null;
   oil_quantity: string;
   oil_calories: number;
-  calorie_confidence: 'High' | 'Medium' | 'Low';
+  calorie_confidence: "High" | "Medium" | "Low";
   source_type: string;
   source_note: string | null;
   consumed_at: string;
@@ -79,206 +96,159 @@ export interface PatientFoodFavorite {
   created_at: string;
 }
 
-export const DEMO_PATIENT_ID = "patient-empty";
+// ----------------------------------------------------
+// ERRORS
+// ----------------------------------------------------
 
-const DEFAULT_PATIENT: PatientProfile = {
-  id: DEMO_PATIENT_ID,
-  name: "New Patient",
-  age: null,
-  gender: null,
-  height_cm: null,
-  current_weight_kg: null,
-  target_weight_kg: null,
-  daily_calorie_target: 1600,
-  created_at: new Date().toISOString(),
-  updated_at: new Date().toISOString(),
-};
-
-const DEFAULT_CONDITIONS: MedicalCondition[] = [];
-
-export const PAPA_MEDICINES: MedicineItem[] = [
-  {
-    id: "b6e678d8-9a02-4c11-9877-67a8405008d8",
-    patient_id: "6c4fcb90-5dc1-4ff5-89fe-3049f927f4ac",
-    medicine_name: "Omidec ES 40 Cap (Esomeprazole + Domperidone)",
-    dose: "1 Capsule (40mg)",
-    scheduled_time: "07:30:00",
-    meal_relation: "before_meal",
-    frequency: "Twice Daily (सुबह-शाम भूखे पेट)",
-    active: true,
-    created_at: "2026-08-24T17:01:50.661559+00:00",
-  },
-  {
-    id: "5329c874-ed89-4bd5-b522-61e2cd59e89d",
-    patient_id: "6c4fcb90-5dc1-4ff5-89fe-3049f927f4ac",
-    medicine_name: "Deopride 25 Tab (Levosulpiride 25mg)",
-    dose: "1 Tablet (25mg)",
-    scheduled_time: "07:30:00",
-    meal_relation: "before_meal",
-    frequency: "Twice Daily (सुबह-शाम भूखे पेट)",
-    active: true,
-    created_at: "2026-08-24T17:01:50.661559+00:00",
-  },
-  {
-    id: "7686a144-82ab-4b1c-84df-3bc4f33e9ca5",
-    patient_id: "6c4fcb90-5dc1-4ff5-89fe-3049f927f4ac",
-    medicine_name: "Fytel Trio Tab (Telmisartan Combination)",
-    dose: "1 Tablet",
-    scheduled_time: "08:00:00",
-    meal_relation: "after_meal",
-    frequency: "Once Daily (सुबह नाश्ते के बाद)",
-    active: true,
-    created_at: "2026-08-24T17:01:50.661559+00:00",
-  },
-  {
-    id: "502a5b56-d6bb-4473-bde8-ca43bc40ac2d",
-    patient_id: "6c4fcb90-5dc1-4ff5-89fe-3049f927f4ac",
-    medicine_name: "Valever 300 Tab (Morning Dose)",
-    dose: "1 Tablet (300mg)",
-    scheduled_time: "08:30:00",
-    meal_relation: "after_meal",
-    frequency: "Twice Daily (सुबह नाश्ते के बाद)",
-    active: true,
-    created_at: "2026-08-24T17:01:50.661559+00:00",
-  },
-  {
-    id: "3eaf6b2c-d809-4fe0-b559-067c579cdea2",
-    patient_id: "6c4fcb90-5dc1-4ff5-89fe-3049f927f4ac",
-    medicine_name: "M-Cobaren Forte Tab (Multivitamin / Neuro)",
-    dose: "1 Capsule",
-    scheduled_time: "13:30:00",
-    meal_relation: "after_meal",
-    frequency: "Once Daily (दोपहर लंच के बाद)",
-    active: true,
-    created_at: "2026-08-24T17:01:50.661559+00:00",
-  },
-  {
-    id: "f9c524e8-e329-4604-9088-62ff1f860d30",
-    patient_id: "6c4fcb90-5dc1-4ff5-89fe-3049f927f4ac",
-    medicine_name: "Metwon AM 50 Tab (Metoprolol + Amlodipine)",
-    dose: "1 Tablet (50mg)",
-    scheduled_time: "18:00:00",
-    meal_relation: "after_meal",
-    frequency: "Once Daily (शाम 6:00 PM)",
-    active: true,
-    created_at: "2026-08-24T17:01:50.661559+00:00",
-  },
-  {
-    id: "c08c3b75-a6d1-471c-ae51-8728df9af24c",
-    patient_id: "6c4fcb90-5dc1-4ff5-89fe-3049f927f4ac",
-    medicine_name: "Omidec ES 40 Cap (Evening Dose)",
-    dose: "1 Capsule (40mg)",
-    scheduled_time: "18:30:00",
-    meal_relation: "before_meal",
-    frequency: "Twice Daily (शाम डिनर से पहले भूखे पेट)",
-    active: true,
-    created_at: "2026-08-24T17:01:50.661559+00:00",
-  },
-  {
-    id: "d06f6b8f-4681-4c64-8ec6-3f6dfe765274",
-    patient_id: "6c4fcb90-5dc1-4ff5-89fe-3049f927f4ac",
-    medicine_name: "Deopride 25 Tab (Evening Dose)",
-    dose: "1 Tablet (25mg)",
-    scheduled_time: "18:30:00",
-    meal_relation: "before_meal",
-    frequency: "Twice Daily (शाम डिनर से पहले भूखे पेट)",
-    active: true,
-    created_at: "2026-08-24T17:01:50.661559+00:00",
-  },
-  {
-    id: "3a9ad4da-b19c-43c1-9a67-f01355e28f52",
-    patient_id: "6c4fcb90-5dc1-4ff5-89fe-3049f927f4ac",
-    medicine_name: "Valever 300 Tab (Night Dose)",
-    dose: "1 Tablet (300mg)",
-    scheduled_time: "20:30:00",
-    meal_relation: "after_meal",
-    frequency: "Twice Daily (रात डिनर के बाद)",
-    active: true,
-    created_at: "2026-08-24T17:01:50.661559+00:00",
-  },
-  {
-    id: "0f7f4520-62f1-425c-8396-062807e67fbb",
-    patient_id: "6c4fcb90-5dc1-4ff5-89fe-3049f927f4ac",
-    medicine_name: "Epsolin ER 300 Cap (Phenytoin Sodium 300mg)",
-    dose: "1 Capsule (300mg)",
-    scheduled_time: "21:00:00",
-    meal_relation: "after_meal",
-    frequency: "Once Daily (रात 9:00 PM)",
-    active: true,
-    created_at: "2026-08-24T17:01:50.661559+00:00",
-  },
-  {
-    id: "df80805a-f0a4-46b6-aa4c-1c3022380cdf",
-    patient_id: "6c4fcb90-5dc1-4ff5-89fe-3049f927f4ac",
-    medicine_name: "Rosafin Gold 20 Cap (Rosuvastatin + Aspirin + Clopidogrel)",
-    dose: "1 Capsule (20mg)",
-    scheduled_time: "21:00:00",
-    meal_relation: "after_meal",
-    frequency: "Once Daily (रात 9:00 PM)",
-    active: true,
-    created_at: "2026-08-24T17:01:50.661559+00:00",
-  },
-  {
-    id: "9d6ba993-42dd-4eee-9f7e-32c5d67eb8d0",
-    patient_id: "6c4fcb90-5dc1-4ff5-89fe-3049f927f4ac",
-    medicine_name: "Slona Plus Tab (Clonazepam + Escitalopram)",
-    dose: "1 Tablet",
-    scheduled_time: "21:30:00",
-    meal_relation: "after_meal",
-    frequency: "Once Daily (रात 9:30 PM)",
-    active: true,
-    created_at: "2026-08-24T17:01:50.661559+00:00",
-  },
-  {
-    id: "69fbe825-7397-48c5-870e-f4cddf8de5d3",
-    patient_id: "6c4fcb90-5dc1-4ff5-89fe-3049f927f4ac",
-    medicine_name: "Tamsis D / Albus Tab (Tamsulosin + Dutasteride)",
-    dose: "1 Tablet",
-    scheduled_time: "22:00:00",
-    meal_relation: "after_meal",
-    frequency: "Once Daily (रात 10:00 PM सोने से पहले)",
-    active: true,
-    created_at: "2026-08-24T17:01:50.661559+00:00",
-  },
-];
-
-const DEFAULT_MEDICINES: MedicineItem[] = PAPA_MEDICINES;
-
-export const SEEDED_PAPA_MED_LOGS_26: MedicineLogEntry[] = PAPA_MEDICINES.map((m) => ({
-  id: `medlog-26-${m.id}`,
-  patient_id: "6c4fcb90-5dc1-4ff5-89fe-3049f927f4ac",
-  medicine_id: m.id,
-  scheduled_time: `2026-08-26T${m.scheduled_time}`,
-  taken_time: `2026-08-26T${m.scheduled_time}`,
-  status: "taken" as const,
-  notes: "26/08/2026 को सभी दवाइयाँ ली गईं",
-  created_at: "2026-08-26T22:30:00.000Z",
-}));
-
-const STORAGE_VERSION_KEY = "swasthtrack_storage_version";
-const CURRENT_STORAGE_VERSION = "swasthtrack_v7_clean_white_state";
-
-export function checkAndMigrateStorage(): void {
-  if (typeof window !== "undefined") {
-    const version = localStorage.getItem(STORAGE_VERSION_KEY);
-    if (version !== CURRENT_STORAGE_VERSION) {
-      // Clear all legacy keys
-      const keysToRemove: string[] = [];
-      for (let i = 0; i < localStorage.length; i++) {
-        const k = localStorage.key(i);
-        if (k && k.startsWith("swasthtrack_")) {
-          keysToRemove.push(k);
-        }
-      }
-      keysToRemove.forEach((k) => localStorage.removeItem(k));
-      localStorage.setItem(STORAGE_VERSION_KEY, CURRENT_STORAGE_VERSION);
-      _profileCache = null;
-      _profileCacheTime = 0;
-    }
+/** Supabase env vars are missing. We never invent data to cover for that. */
+export class SupabaseNotConfiguredError extends Error {
+  constructor() {
+    super(
+      "Supabase is not configured. Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY in .env.local.",
+    );
+    this.name = "SupabaseNotConfiguredError";
   }
 }
 
-// Helper functions for client-side storage persistence
+/** A patient-scoped call was made but the user has no active patient yet. */
+export class NoActivePatientError extends Error {
+  constructor() {
+    super("कोई मरीज़ चुना नहीं गया है (no patient selected).");
+    this.name = "NoActivePatientError";
+  }
+}
+
+export class PatientNotFoundError extends Error {
+  constructor() {
+    super("मरीज़ नहीं मिला, या अब आपके पास इसका एक्सेस नहीं है (patient not found or no access).");
+    this.name = "PatientNotFoundError";
+  }
+}
+
+/** Row Level Security refused the write, or the row does not exist. */
+export class PermissionDeniedError extends Error {
+  constructor(message = "यह बदलाव करने की अनुमति नहीं है, या रिकॉर्ड नहीं मिला (view-only access or record not found).") {
+    super(message);
+    this.name = "PermissionDeniedError";
+  }
+}
+
+type DbErrorLike = { message: string; code?: string };
+
+function dbError(context: string, error: DbErrorLike): Error {
+  console.error(`Supabase ${context} error:`, error);
+  const code = error.code;
+  if (code === "42501" || code === "PGRST116" || /row-level security/i.test(error.message)) {
+    return new PermissionDeniedError();
+  }
+  if (code === "23514") {
+    return new Error("दर्ज की गई कीमत मान्य सीमा से बाहर है (value outside the allowed range).");
+  }
+  if (code === "23505") {
+    return new Error("यह रिकॉर्ड पहले से मौजूद है (this record already exists).");
+  }
+  if (code === "23503") {
+    return new Error("जुड़ा हुआ रिकॉर्ड नहीं मिला (a linked record is missing).");
+  }
+  if (code === "22P02") {
+    return new Error("अमान्य पहचान (invalid id).");
+  }
+  if (/failed to fetch|networkerror|load failed/i.test(error.message)) {
+    return new Error("इंटरनेट कनेक्शन जांचें और दोबारा कोशिश करें (check your connection and retry).");
+  }
+  return new Error(error.message || "Database request failed");
+}
+
+/**
+ * Server-only hook (see lib/supabase/request-scope.ts): a route can run this
+ * module as a specific RLS-scoped client for one async call chain. When it returns
+ * undefined — always, in the browser — the shared client is used.
+ */
+let dbResolver: (() => typeof supabase | undefined) | null = null;
+
+export function setDbResolver(resolver: (() => typeof supabase | undefined) | null): void {
+  dbResolver = resolver;
+}
+
+/** The client every read and write goes through. */
+export function getDbClient(): typeof supabase {
+  if (!isSupabaseConfigured) throw new SupabaseNotConfiguredError();
+  return dbResolver?.() ?? supabase;
+}
+
+function db() {
+  return getDbClient();
+}
+
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+const isUuid = (value: string | null | undefined): value is string => Boolean(value && UUID_RE.test(value));
+
+/** Explicit id, else the user's active patient. Never "the newest patient in the DB". */
+function resolvePatientId(patientId?: string | null): string {
+  const id = patientId || getActivePatientId();
+  if (!id) throw new NoActivePatientError();
+  return id;
+}
+
+// ----------------------------------------------------
+// UI-PREFERENCE STORAGE (never health data)
+// ----------------------------------------------------
+
+/**
+ * Health data lives only in Supabase. These two helpers remain for small UI
+ * preferences (dismissed banners, hidden quick-foods, ...). Anything written
+ * here is wiped on sign-out (see auth-context) because it is per-browser.
+ */
+
+const APP_KEY_PREFIX = "swasthtrack_";
+
+// Keys older builds used to cache health data and fake accounts on this device.
+// They are removed once so no stale PHI or password hash lingers in the browser.
+const LEGACY_EXACT_KEYS = [
+  "swasthtrack_patient",
+  "swasthtrack_all_patients",
+  "swasthtrack_conditions",
+  "swasthtrack_medicines",
+  "swasthtrack_food_logs",
+  "swasthtrack_bp_logs",
+  "swasthtrack_weight_logs",
+  "swasthtrack_activity_logs",
+  "swasthtrack_sleep_logs",
+  "swasthtrack_medicine_logs",
+  "swasthtrack_checklists",
+  "swasthtrack_master_foods",
+  "swasthtrack_portions",
+  "swasthtrack_patient_memberships",
+  "swasthtrack_caregiver_invitations",
+  "swasthtrack_user_profiles",
+  "swasthtrack_storage_version",
+];
+// Old local "accounts" (phone + hash), OTPs and per-patient favourites.
+const LEGACY_PREFIXES = ["fav_ids_", `${APP_KEY_PREFIX}auth_`];
+const LEGACY_CLEANUP_FLAG = "swasthtrack_phi_cleanup_v1";
+let legacyCleanupDone = false;
+
+/** One-time removal of legacy health-data / fake-account keys. Leaves every other preference alone. */
+export function checkAndMigrateStorage(): void {
+  if (legacyCleanupDone || typeof window === "undefined") return;
+  legacyCleanupDone = true;
+  try {
+    if (localStorage.getItem(LEGACY_CLEANUP_FLAG) === "1") return;
+    const doomed: string[] = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (!key) continue;
+      if (LEGACY_EXACT_KEYS.includes(key) || LEGACY_PREFIXES.some((p) => key.startsWith(p))) {
+        doomed.push(key);
+      }
+    }
+    doomed.forEach((key) => localStorage.removeItem(key));
+    localStorage.setItem(LEGACY_CLEANUP_FLAG, "1");
+  } catch {
+    // storage blocked (private mode): nothing to clean
+  }
+}
+
 export function getStorageItem<T>(key: string, fallback: T): T {
   checkAndMigrateStorage();
   if (typeof window !== "undefined") {
@@ -303,199 +273,188 @@ export function setStorageItem<T>(key: string, value: T): void {
   }
 }
 
+// ----------------------------------------------------
+// DATES (IST — see src/lib/health-rules.ts)
+// ----------------------------------------------------
+
+/** Today's calendar date in India, "YYYY-MM-DD". (Name kept; it is IST, not device-local.) */
 export function getTodayDateString(): string {
-  const d = new Date();
-  const year = d.getFullYear();
-  const month = String(d.getMonth() + 1).padStart(2, "0");
-  const day = String(d.getDate()).padStart(2, "0");
-  return `${year}-${month}-${day}`;
+  return todayIST();
 }
 
+/** True when the instant falls on the given IST calendar date. */
 export function isSameLocalDay(utcString: string, localDateStr: string): boolean {
   if (!utcString) return false;
-  const d = new Date(utcString);
-  const year = d.getFullYear();
-  const month = String(d.getMonth() + 1).padStart(2, "0");
-  const day = String(d.getDate()).padStart(2, "0");
-  return `${year}-${month}-${day}` === localDateStr;
+  return toISTDate(utcString) === localDateStr;
+}
+
+const ISO_DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
+
+/**
+ * Callers should pass IST dates ("YYYY-MM-DD"). Older code passed ISO instants, so
+ * those are converted to their IST date instead of failing.
+ */
+function ensureIstDate(value: string): string {
+  if (ISO_DATE_RE.test(value)) return value;
+  const d = new Date(value);
+  if (Number.isNaN(d.getTime())) throw new Error(`Invalid date "${value}" (expected YYYY-MM-DD)`);
+  return toISTDate(d);
+}
+
+function istRangeISO(startDate: string, endDate: string): { startISO: string; endISO: string } {
+  return {
+    startISO: istDayBounds(ensureIstDate(startDate)).startISO,
+    endISO: istDayBounds(ensureIstDate(endDate)).endISO,
+  };
+}
+
+// ----------------------------------------------------
+// READ CACHE (≈30 s TTL, in-flight de-dupe, per patient, cleared on any write)
+// ----------------------------------------------------
+
+const READ_TTL_MS = 30_000;
+const PROFILE_TTL_MS = 60_000;
+const MAX_CACHE_ENTRIES = 400;
+
+type CacheEntry = { at: number; ttl: number; value: unknown };
+const readCache = new Map<string, CacheEntry>();
+const inflight = new Map<string, Promise<unknown>>();
+const patientEpochs = new Map<string, number>();
+let globalEpoch = 0;
+
+const epochOf = (pid: string) => `${globalEpoch}:${patientEpochs.get(pid) ?? 0}`;
+const cacheKey = (pid: string, fn: string, args: unknown[]) => `${pid}|${fn}|${JSON.stringify(args)}`;
+
+// Callers sort/reverse the arrays they get; hand out copies so the cache stays intact.
+function snapshot<T>(value: T): T {
+  if (Array.isArray(value)) return value.slice() as unknown as T;
+  if (value && typeof value === "object") return { ...(value as object) } as T;
+  return value;
+}
+
+function cachedRead<T>(
+  pid: string,
+  fn: string,
+  args: unknown[],
+  load: () => Promise<T>,
+  ttl = READ_TTL_MS,
+): Promise<T> {
+  const key = cacheKey(pid, fn, args);
+  const hit = readCache.get(key);
+  if (hit && Date.now() - hit.at < hit.ttl) return Promise.resolve(snapshot(hit.value as T));
+
+  const pending = inflight.get(key) as Promise<T> | undefined;
+  if (pending) return pending.then(snapshot);
+
+  const epoch = epochOf(pid);
+  const promise: Promise<T> = load()
+    .then((value) => {
+      // A write (or sign-out) while this request was in flight makes the result stale.
+      if (value != null && epochOf(pid) === epoch) {
+        if (readCache.size >= MAX_CACHE_ENTRIES) readCache.clear();
+        readCache.set(key, { at: Date.now(), ttl, value });
+      }
+      return value;
+    })
+    .finally(() => {
+      if (inflight.get(key) === promise) inflight.delete(key);
+    });
+  inflight.set(key, promise);
+  return promise.then(snapshot);
+}
+
+/** Drop every cached read for one patient (call after any write). */
+export function invalidatePatientCache(patientId?: string | null): void {
+  const pid = patientId || getActivePatientId();
+  if (!pid) {
+    clearAllPatientCaches();
+    return;
+  }
+  const prefix = `${pid}|`;
+  for (const key of [...readCache.keys()]) if (key.startsWith(prefix)) readCache.delete(key);
+  for (const key of [...inflight.keys()]) if (key.startsWith(prefix)) inflight.delete(key);
+  patientEpochs.set(pid, (patientEpochs.get(pid) ?? 0) + 1);
+}
+
+/** Drop every cached read (sign-out, switching accounts). */
+export function clearAllPatientCaches(): void {
+  readCache.clear();
+  inflight.clear();
+  patientEpochs.clear();
+  globalEpoch += 1;
+  invalidateFoodsCache();
+}
+
+/** @deprecated Use invalidatePatientCache / clearAllPatientCaches. Kept for old callers. */
+export function invalidateProfileCache(): void {
+  clearAllPatientCaches();
+}
+
+// PostgREST returns at most 1000 rows per request. Range readers promise "no
+// truncation", so they page.
+const PAGE_SIZE = 1000;
+
+async function fetchAllPages<T>(
+  context: string,
+  fetchPage: (
+    from: number,
+    to: number,
+  ) => PromiseLike<{ data: T[] | null; error: DbErrorLike | null }>,
+): Promise<T[]> {
+  const out: T[] = [];
+  for (let from = 0; ; from += PAGE_SIZE) {
+    const { data, error } = await fetchPage(from, from + PAGE_SIZE - 1);
+    if (error) throw dbError(context, error);
+    const rows = data ?? [];
+    out.push(...rows);
+    if (rows.length < PAGE_SIZE) break;
+  }
+  return out;
 }
 
 // ----------------------------------------------------
 // PATIENT PROFILE CRUD
 // ----------------------------------------------------
 
-let _profileCache: PatientProfile | null = null;
-let _profileCacheTime = 0;
-const PROFILE_CACHE_TTL = 60000; // 1 minute
-
-export function invalidateProfileCache(): void {
-  _profileCache = null;
-  _profileCacheTime = 0;
+/** The patient row, or null when it does not exist / the user has no access. */
+export async function getPatientProfileOrNull(patientId?: string): Promise<PatientProfile | null> {
+  const pid = resolvePatientId(patientId);
+  return cachedRead<PatientProfile | null>(
+    pid,
+    "profile",
+    [],
+    async () => {
+      const { data, error } = await db().from("patients").select("*").eq("id", pid).maybeSingle();
+      if (error) throw dbError("getPatientProfile", error);
+      return data;
+    },
+    PROFILE_TTL_MS,
+  );
 }
 
+/** Throws NoActivePatientError / PatientNotFoundError instead of inventing a patient. */
 export async function getPatientProfile(patientId?: string): Promise<PatientProfile> {
-  // Determine target patient ID
-  let targetId = patientId;
-
-  if (!targetId && typeof window !== "undefined") {
-    // Check active session & memberships
-    const userProfile = getStorageItem<{ id: string; phone?: string; role?: string } | null>(
-      "swasthtrack_auth_profile",
-      null,
-    );
-    const authUser = getStorageItem<{ id: string; phone?: string } | null>(
-      "swasthtrack_auth_user",
-      null,
-    );
-    const userId = userProfile?.id || authUser?.id;
-
-    if (userId) {
-      const memberships = getStorageItem<
-        { patient_id: string; user_id: string; status: string }[]
-      >("swasthtrack_patient_memberships", []);
-      const activeMem = memberships.find(
-        (m) =>
-          (m.user_id === userId || (authUser?.id && m.user_id === authUser.id)) &&
-          m.status === "active",
-      );
-      if (activeMem) {
-        targetId = activeMem.patient_id;
-      }
-    }
-  }
-
-  // Check cache first if matching target
-  if (
-    _profileCache &&
-    targetId &&
-    _profileCache.id === targetId &&
-    Date.now() - _profileCacheTime < PROFILE_CACHE_TTL
-  ) {
-    return _profileCache;
-  }
-
-  // 1. If targetId is known, fetch that specific patient
-  if (targetId && targetId !== "patient-empty") {
-    if (isSupabaseConfigured) {
-      try {
-        const { data, error } = await supabase
-          .from("patients")
-          .select("*")
-          .eq("id", targetId)
-          .maybeSingle();
-
-        if (!error && data) {
-          _profileCache = data;
-          _profileCacheTime = Date.now();
-          return data;
-        }
-      } catch (err) {
-        console.warn("Supabase fetch patient by id failed:", err);
-      }
-    }
-
-    const allPatients = getStorageItem<PatientProfile[]>("swasthtrack_all_patients", []);
-    const localPatient = allPatients.find((p) => p.id === targetId);
-    if (localPatient) {
-      _profileCache = localPatient;
-      _profileCacheTime = Date.now();
-      return localPatient;
-    }
-  }
-
-  // 2. Fallback: Query active patient from Supabase if available
-  if (isSupabaseConfigured) {
-    try {
-      const { data, error } = await supabase
-        .from("patients")
-        .select("*")
-        .order("created_at", { ascending: false })
-        .limit(1)
-        .maybeSingle();
-
-      if (!error && data) {
-        _profileCache = data;
-        _profileCacheTime = Date.now();
-
-        // Ensure active membership is recorded locally
-        if (typeof window !== "undefined") {
-          const userProfile = getStorageItem<{ id: string } | null>("swasthtrack_auth_profile", null);
-          const authUser = getStorageItem<{ id: string } | null>("swasthtrack_auth_user", null);
-          const uid = userProfile?.id || authUser?.id;
-          if (uid) {
-            const memberships = getStorageItem<any[]>("swasthtrack_patient_memberships", []);
-            if (!memberships.some((m) => m.patient_id === data.id && m.user_id === uid)) {
-              setStorageItem("swasthtrack_patient_memberships", [
-                ...memberships,
-                {
-                  id: `mem-${Date.now()}`,
-                  patient_id: data.id,
-                  user_id: uid,
-                  role: "patient",
-                  status: "active",
-                  created_at: new Date().toISOString(),
-                },
-              ]);
-            }
-          }
-        }
-
-        return data;
-      }
-    } catch (err) {
-      console.warn("Supabase fallback fetch patient failed:", err);
-    }
-  }
-
-  // 3. Fallback to fresh clean default patient with no prefilled names
-  const cleanDefault: PatientProfile = {
-    ...DEFAULT_PATIENT,
-    id: `patient-${Date.now()}`,
-  };
-  _profileCache = cleanDefault;
-  _profileCacheTime = Date.now();
-  return cleanDefault;
+  const profile = await getPatientProfileOrNull(patientId);
+  if (!profile) throw new PatientNotFoundError();
+  return profile;
 }
 
 export async function updatePatientProfile(
   updates: Partial<Omit<PatientProfile, "id" | "created_at">>,
   patientId?: string,
 ): Promise<PatientProfile> {
-  invalidateProfileCache();
-  const currentProfile = await getPatientProfile();
-  const targetId = patientId || currentProfile.id;
+  const pid = resolvePatientId(patientId);
+  const { data, error } = await db()
+    .from("patients")
+    .update({ ...updates, updated_at: new Date().toISOString() })
+    .eq("id", pid)
+    .select()
+    .maybeSingle();
 
-  if (isSupabaseConfigured) {
-    const { data, error } = await supabase
-      .from("patients")
-      .update({
-        ...updates,
-        updated_at: new Date().toISOString(),
-      })
-      .eq("id", targetId)
-      .select()
-      .single();
-
-    if (error) {
-      console.error("Supabase updatePatientProfile error:", error);
-      throw new Error(error.message || "Failed to update patient profile in database");
-    }
-
-    if (!data) {
-      throw new Error("Patient record not found in database.");
-    }
-
-    setStorageItem("swasthtrack_patient", data);
-    return data;
-  }
-
-  const updated: PatientProfile = {
-    ...currentProfile,
-    ...updates,
-    updated_at: new Date().toISOString(),
-  };
-  setStorageItem("swasthtrack_patient", updated);
-  return updated;
+  if (error) throw dbError("updatePatientProfile", error);
+  if (!data) throw new PermissionDeniedError();
+  invalidatePatientCache(pid);
+  return data;
 }
 
 // ----------------------------------------------------
@@ -503,82 +462,36 @@ export async function updatePatientProfile(
 // ----------------------------------------------------
 
 export async function getMedicalConditions(patientId?: string): Promise<MedicalCondition[]> {
-  const profile = await getPatientProfile();
-  const pid = patientId || profile.id;
-
-  if (isSupabaseConfigured) {
-    const { data, error } = await supabase
+  const pid = resolvePatientId(patientId);
+  return cachedRead(pid, "conditions", [], async () => {
+    const { data, error } = await db()
       .from("medical_conditions")
       .select("*")
       .eq("patient_id", pid)
       .order("created_at", { ascending: true });
-
-    if (error) {
-      console.error("Supabase getMedicalConditions error:", error);
-      throw new Error(error.message);
-    }
-
-    if (data) {
-      setStorageItem("swasthtrack_conditions", data);
-      return data;
-    }
-  }
-
-  const stored = getStorageItem<MedicalCondition[]>("swasthtrack_conditions", DEFAULT_CONDITIONS);
-  return stored.filter((c) => c.patient_id === pid);
+    if (error) throw dbError("getMedicalConditions", error);
+    return data ?? [];
+  });
 }
 
 export async function addMedicalCondition(
   condition: Omit<Database["public"]["Tables"]["medical_conditions"]["Insert"], "id" | "created_at">,
 ): Promise<MedicalCondition> {
-  if (isSupabaseConfigured) {
-    const { data, error } = await supabase
-      .from("medical_conditions")
-      .insert(condition)
-      .select()
-      .single();
-
-    if (error) {
-      console.error("Supabase addMedicalCondition error:", error);
-      throw new Error(error.message);
-    }
-
-    if (data) {
-      const current = getStorageItem<MedicalCondition[]>("swasthtrack_conditions", []);
-      setStorageItem("swasthtrack_conditions", [...current, data]);
-      return data;
-    }
-  }
-
-  const newCondition: MedicalCondition = {
-    id: `cond-${Date.now()}`,
-    patient_id: condition.patient_id,
-    condition_name: condition.condition_name,
-    diagnosed_year: condition.diagnosed_year ?? null,
-    notes: condition.notes ?? null,
-    created_at: new Date().toISOString(),
-  };
-  const list = getStorageItem<MedicalCondition[]>("swasthtrack_conditions", DEFAULT_CONDITIONS);
-  const updatedList = [...list, newCondition];
-  setStorageItem("swasthtrack_conditions", updatedList);
-  return newCondition;
+  const { data, error } = await db().from("medical_conditions").insert(condition).select().single();
+  if (error) throw dbError("addMedicalCondition", error);
+  invalidatePatientCache(condition.patient_id);
+  return data;
 }
 
 export async function deleteMedicalCondition(id: string): Promise<boolean> {
-  if (isSupabaseConfigured) {
-    const { error } = await supabase
-      .from("medical_conditions")
-      .delete()
-      .eq("id", id);
-
-    if (error) {
-      console.error("Supabase deleteMedicalCondition error:", error);
-      throw new Error(error.message);
-    }
-  }
-
-  const list = getStorageItem<MedicalCondition[]>("swasthtrack_conditions", DEFAULT_CONDITIONS);
-  setStorageItem("swasthtrack_conditions", list.filter((c) => c.id !== id));
+  const { data, error } = await db()
+    .from("medical_conditions")
+    .delete()
+    .eq("id", id)
+    .select("patient_id");
+  if (error) throw dbError("deleteMedicalCondition", error);
+  if (!data || data.length === 0) throw new PermissionDeniedError();
+  data.forEach((row) => invalidatePatientCache(row.patient_id));
   return true;
 }
 
@@ -586,118 +499,45 @@ export async function deleteMedicalCondition(id: string): Promise<boolean> {
 // MEDICINES CRUD
 // ----------------------------------------------------
 
+/** All of the patient's medicines (active and inactive), earliest scheduled time first. A new patient has none. */
 export async function getMedicines(patientId?: string): Promise<MedicineItem[]> {
-  const profile = await getPatientProfile();
-  const pid = patientId || profile.id;
-
-  if (isSupabaseConfigured) {
-    const { data, error } = await supabase
+  const pid = resolvePatientId(patientId);
+  return cachedRead(pid, "medicines", [], async () => {
+    const { data, error } = await db()
       .from("medicines")
       .select("*")
       .eq("patient_id", pid)
       .order("scheduled_time", { ascending: true });
-
-    if (error) {
-      console.error("Supabase getMedicines error:", error);
-      throw new Error(error.message);
-    }
-
-    if (data) {
-      setStorageItem("swasthtrack_medicines", data);
-      return data;
-    }
-  }
-
-  const stored = getStorageItem<MedicineItem[]>("swasthtrack_medicines", DEFAULT_MEDICINES);
-  return stored.filter((m) => m.patient_id === pid);
+    if (error) throw dbError("getMedicines", error);
+    return data ?? [];
+  });
 }
 
 export async function addMedicine(
   medicine: Omit<Database["public"]["Tables"]["medicines"]["Insert"], "id" | "created_at">,
 ): Promise<MedicineItem> {
-  if (isSupabaseConfigured) {
-    const { data, error } = await supabase
-      .from("medicines")
-      .insert(medicine)
-      .select()
-      .single();
-
-    if (error) {
-      console.error("Supabase addMedicine error:", error);
-      throw new Error(error.message);
-    }
-
-    if (data) {
-      const current = getStorageItem<MedicineItem[]>("swasthtrack_medicines", []);
-      setStorageItem("swasthtrack_medicines", [...current, data]);
-      return data;
-    }
-  }
-
-  const newMedicine: MedicineItem = {
-    id: `med-${Date.now()}`,
-    patient_id: medicine.patient_id,
-    medicine_name: medicine.medicine_name,
-    dose: medicine.dose,
-    scheduled_time: medicine.scheduled_time,
-    meal_relation: medicine.meal_relation ?? null,
-    frequency: medicine.frequency ?? "daily",
-    active: medicine.active ?? true,
-    created_at: new Date().toISOString(),
-  };
-  const list = getStorageItem<MedicineItem[]>("swasthtrack_medicines", DEFAULT_MEDICINES);
-  setStorageItem("swasthtrack_medicines", [...list, newMedicine]);
-  return newMedicine;
+  const { data, error } = await db().from("medicines").insert(medicine).select().single();
+  if (error) throw dbError("addMedicine", error);
+  invalidatePatientCache(medicine.patient_id);
+  return data;
 }
 
 export async function updateMedicine(
   id: string,
   updates: Partial<Omit<MedicineItem, "id" | "patient_id" | "created_at">>,
 ): Promise<MedicineItem | null> {
-  if (isSupabaseConfigured) {
-    const { data, error } = await supabase
-      .from("medicines")
-      .update(updates)
-      .eq("id", id)
-      .select()
-      .single();
-
-    if (error) {
-      console.error("Supabase updateMedicine error:", error);
-      throw new Error(error.message);
-    }
-
-    if (data) {
-      const list = getStorageItem<MedicineItem[]>("swasthtrack_medicines", []);
-      setStorageItem(
-        "swasthtrack_medicines",
-        list.map((m) => (m.id === id ? data : m)),
-      );
-      return data;
-    }
-  }
-
-  const list = getStorageItem<MedicineItem[]>("swasthtrack_medicines", DEFAULT_MEDICINES);
-  const idx = list.findIndex((m) => m.id === id);
-  if (idx !== -1) {
-    list[idx] = { ...list[idx], ...updates };
-    setStorageItem("swasthtrack_medicines", list);
-    return list[idx];
-  }
-  return null;
+  const { data, error } = await db().from("medicines").update(updates).eq("id", id).select().maybeSingle();
+  if (error) throw dbError("updateMedicine", error);
+  if (!data) throw new PermissionDeniedError();
+  invalidatePatientCache(data.patient_id);
+  return data;
 }
 
 export async function deleteMedicine(id: string): Promise<boolean> {
-  if (isSupabaseConfigured) {
-    const { error } = await supabase.from("medicines").delete().eq("id", id);
-    if (error) {
-      console.error("Supabase deleteMedicine error:", error);
-      throw new Error(error.message);
-    }
-  }
-
-  const list = getStorageItem<MedicineItem[]>("swasthtrack_medicines", DEFAULT_MEDICINES);
-  setStorageItem("swasthtrack_medicines", list.filter((m) => m.id !== id));
+  const { data, error } = await db().from("medicines").delete().eq("id", id).select("patient_id");
+  if (error) throw dbError("deleteMedicine", error);
+  if (!data || data.length === 0) throw new PermissionDeniedError();
+  data.forEach((row) => invalidatePatientCache(row.patient_id));
   return true;
 }
 
@@ -1216,44 +1056,50 @@ const MOCK_PORTIONS: FoodPortion[] = [
   { id: "p-11", food_item_id: "f-05", portion_name: "10 pieces", portion_name_hi: "10 बादाम", standardized_grams: 12, notes: "Ten almonds", created_at: new Date().toISOString() }
 ];
 
+// ----------------------------------------------------
+// SHARED FOOD CATALOGUE (not patient data; readable by every signed-in user)
+// ----------------------------------------------------
+
 let _foodsCache: FoodItem[] | null = null;
 let _foodsCacheTime = 0;
+let _foodsInflight: Promise<FoodItem[]> | null = null;
 const FOODS_CACHE_TTL = 300000; // 5 minutes
 
 export async function getAllActiveFoods(): Promise<FoodItem[]> {
   const now = Date.now();
-  if (_foodsCache && now - _foodsCacheTime < FOODS_CACHE_TTL) {
-    return _foodsCache;
-  }
+  if (_foodsCache && now - _foodsCacheTime < FOODS_CACHE_TTL) return _foodsCache;
+  if (_foodsInflight) return _foodsInflight;
 
-  let allFoods: FoodItem[] = [];
-  if (isSupabaseConfigured) {
+  const request: Promise<FoodItem[]> = (async () => {
     try {
-      const { data, error } = await (supabase as any)
-        .from("food_items")
-        .select("*")
-        .eq("is_active", true);
-      
-      if (!error && data) {
-        allFoods = data as unknown as FoodItem[];
-      }
-    } catch {
-      // ignore
+      const rows = await fetchAllPages<FoodItem>("getAllActiveFoods", (from, to) =>
+        db()
+          .from("food_items")
+          .select("*")
+          .eq("is_active", true)
+          .order("name", { ascending: true })
+          .order("id", { ascending: true })
+          .range(from, to),
+      );
+      // Last resort only when the shared catalogue has not been seeded yet.
+      _foodsCache = rows.length > 0 ? rows : MOCK_FOODS;
+      _foodsCacheTime = Date.now();
+      return _foodsCache;
+    } catch (err) {
+      if (_foodsCache) return _foodsCache; // stale beats nothing
+      throw err;
     }
-  }
-
-  if (allFoods.length === 0) {
-    allFoods = getStorageItem<FoodItem[]>("swasthtrack_master_foods", MOCK_FOODS);
-  }
-
-  _foodsCache = allFoods;
-  _foodsCacheTime = now;
-  return allFoods;
+  })().finally(() => {
+    if (_foodsInflight === request) _foodsInflight = null;
+  });
+  _foodsInflight = request;
+  return request;
 }
 
 export function invalidateFoodsCache(): void {
   _foodsCache = null;
   _foodsCacheTime = 0;
+  _foodsInflight = null;
 }
 
 // Helper to check spelling corrections & fuzzy match
@@ -1285,7 +1131,7 @@ export async function getFuzzyMatches(input: string): Promise<FoodItem[]> {
     // check distance for each word or whole name
     return (
       getLevenshteinDistance(correctedInput, enName) <= 2 ||
-      words.some(w => getLevenshteinDistance(correctedInput, w) <= 1)
+      words.some((w) => getLevenshteinDistance(correctedInput, w) <= 1)
     );
   });
 
@@ -1311,9 +1157,7 @@ export async function searchFoodItems(query: string): Promise<{
 
   // Exact Match
   const exact = allFoods.filter(
-    (f) =>
-      f.name.toLowerCase() === corrected ||
-      (f.name_hi || "").toLowerCase() === corrected
+    (f) => f.name.toLowerCase() === corrected || (f.name_hi || "").toLowerCase() === corrected,
   );
 
   if (exact.length > 0) {
@@ -1322,9 +1166,7 @@ export async function searchFoodItems(query: string): Promise<{
 
   // Partial Match
   const partial = allFoods.filter(
-    (f) =>
-      f.name.toLowerCase().includes(corrected) ||
-      (f.name_hi || "").toLowerCase().includes(corrected)
+    (f) => f.name.toLowerCase().includes(corrected) || (f.name_hi || "").toLowerCase().includes(corrected),
   );
 
   if (partial.length > 0) {
@@ -1335,7 +1177,7 @@ export async function searchFoodItems(query: string): Promise<{
   const fuzzy = allFoods.filter(
     (f) =>
       getLevenshteinDistance(corrected, f.name.toLowerCase()) <= 2 ||
-      f.name.toLowerCase().split(/\s+/).some(w => getLevenshteinDistance(corrected, w) <= 1)
+      f.name.toLowerCase().split(/\s+/).some((w) => getLevenshteinDistance(corrected, w) <= 1),
   );
 
   return {
@@ -1349,23 +1191,24 @@ export async function searchFoodItems(query: string): Promise<{
 // PORTIONS MAPPINGS
 // ----------------------------------------------------
 
+const _portionsCache = new Map<string, { at: number; rows: FoodPortion[] }>();
+
 export async function getFoodPortions(foodItemId: string): Promise<FoodPortion[]> {
-  if (isSupabaseConfigured) {
-    try {
-      const { data, error } = await (supabase as any)
-        .from("food_portions")
-        .select("*")
-        .eq("food_item_id", foodItemId);
+  // Fallback catalogue entries have no database id, so they only have fallback portions.
+  if (!isUuid(foodItemId)) return MOCK_PORTIONS.filter((p) => p.food_item_id === foodItemId);
 
-      if (!error && data) {
-        return data as unknown as FoodPortion[];
-      }
-    } catch {}
+  const hit = _portionsCache.get(foodItemId);
+  if (hit && Date.now() - hit.at < FOODS_CACHE_TTL) return hit.rows.slice();
+
+  const { data, error } = await db().from("food_portions").select("*").eq("food_item_id", foodItemId);
+  if (error) {
+    // Portions only refine a quantity; the entry form still works in grams without them.
+    console.warn("Supabase getFoodPortions error:", error);
+    return [];
   }
-
-  // Fallback to cache portions
-  const allPortions = getStorageItem<FoodPortion[]>("swasthtrack_portions", MOCK_PORTIONS);
-  return allPortions.filter(p => p.food_item_id === foodItemId);
+  const rows = (data ?? []) as FoodPortion[];
+  _portionsCache.set(foodItemId, { at: Date.now(), rows });
+  return rows.slice();
 }
 
 // ----------------------------------------------------
@@ -1373,53 +1216,39 @@ export async function getFoodPortions(foodItemId: string): Promise<FoodPortion[]
 // ----------------------------------------------------
 
 export async function getFavorites(patientId: string): Promise<FoodItem[]> {
-  if (isSupabaseConfigured) {
-    try {
-      const { data, error } = await (supabase as any)
-        .from("patient_food_favorites")
-        .select("food_items(*)")
-        .eq("patient_id", patientId);
-
-      if (!error && data) {
-        // Flatten output
-        return data.map((d: unknown) => (d as { food_items: unknown })?.food_items).filter(Boolean) as unknown as FoodItem[];
-      }
-    } catch {}
-  }
-
-  const favIds = getStorageItem<string[]>(`fav_ids_${patientId}`, []);
-  const allFoods = getStorageItem<FoodItem[]>("swasthtrack_master_foods", MOCK_FOODS);
-  return allFoods.filter(f => favIds.includes(f.id));
+  const pid = resolvePatientId(patientId);
+  return cachedRead(pid, "favorites", [], async () => {
+    const { data, error } = await db()
+      .from("patient_food_favorites")
+      .select("food_items(*)")
+      .eq("patient_id", pid);
+    if (error) throw dbError("getFavorites", error);
+    return (data ?? [])
+      .map((row) => row.food_items as FoodItem | null)
+      .filter((food): food is FoodItem => Boolean(food));
+  });
 }
 
 export async function toggleFavorite(patientId: string, foodItemId: string, isFav: boolean): Promise<boolean> {
-  if (isSupabaseConfigured) {
-    try {
-      if (isFav) {
-        const { error } = await (supabase as any)
-          .from("patient_food_favorites")
-          .insert({ patient_id: patientId, food_item_id: foodItemId })
-          .select();
-        if (!error) return true;
-      } else {
-        const { error } = await (supabase as any)
-          .from("patient_food_favorites")
-          .delete()
-          .eq("patient_id", patientId)
-          .eq("food_item_id", foodItemId);
-        if (!error) return true;
-      }
-    } catch {}
+  const pid = resolvePatientId(patientId);
+  if (!isUuid(foodItemId)) {
+    throw new Error("यह खाना अभी कैटलॉग में सेव नहीं है, इसलिए पसंदीदा नहीं बन सकता (catalogue item not loaded).");
   }
 
-  const favIds = getStorageItem<string[]>(`fav_ids_${patientId}`, []);
-  let updated = [];
   if (isFav) {
-    updated = [...new Set([...favIds, foodItemId])];
+    const { error } = await db()
+      .from("patient_food_favorites")
+      .upsert({ patient_id: pid, food_item_id: foodItemId }, { onConflict: "patient_id,food_item_id", ignoreDuplicates: true });
+    if (error) throw dbError("toggleFavorite", error);
   } else {
-    updated = favIds.filter(id => id !== foodItemId);
+    const { error } = await db()
+      .from("patient_food_favorites")
+      .delete()
+      .eq("patient_id", pid)
+      .eq("food_item_id", foodItemId);
+    if (error) throw dbError("toggleFavorite", error);
   }
-  setStorageItem(`fav_ids_${patientId}`, updated);
+  invalidatePatientCache(pid);
   return true;
 }
 
@@ -1428,222 +1257,136 @@ export async function toggleFavorite(patientId: string, foodItemId: string, isFa
 // ----------------------------------------------------
 
 export async function addCustomFood(
-  food: Omit<FoodItem, "id" | "created_at" | "updated_at">
+  food: Omit<FoodItem, "id" | "created_at" | "updated_at">,
 ): Promise<FoodItem> {
-  if (isSupabaseConfigured) {
-    const { data, error } = await (supabase as any)
-      .from("food_items")
-      .insert({
-        name: food.name,
-        name_hi: food.name_hi,
-        category: food.category,
-        subcategory: food.subcategory,
-        reference_weight_g: food.reference_weight_g,
-        reference_unit: food.reference_unit,
-        calories_per_100g: food.calories_per_100g,
-        protein_g_100g: food.protein_g_100g,
-        carbs_g_100g: food.carbs_g_100g,
-        fat_g_100g: food.fat_g_100g,
-        fibre_g_100g: food.fibre_g_100g,
-        sodium_mg_100g: food.sodium_mg_100g,
-        source_type: food.source_type || "user_entered",
-        source_name: food.source_name || "User Custom Entry",
-        source_note: food.source_note,
-        is_verified: false,
-        is_custom: true,
-        is_active: true
-      })
-      .select()
-      .single();
+  // RLS only accepts custom rows owned by the caller: is_custom must be true and
+  // created_by (defaults to auth.uid() in the database) is left for Postgres to fill.
+  const { data, error } = await db()
+    .from("food_items")
+    .insert({
+      name: food.name,
+      name_hi: food.name_hi,
+      category: food.category,
+      subcategory: food.subcategory,
+      reference_weight_g: food.reference_weight_g,
+      reference_unit: food.reference_unit,
+      calories_per_100g: food.calories_per_100g,
+      protein_g_100g: food.protein_g_100g,
+      carbs_g_100g: food.carbs_g_100g,
+      fat_g_100g: food.fat_g_100g,
+      fibre_g_100g: food.fibre_g_100g,
+      sodium_mg_100g: food.sodium_mg_100g,
+      source_type: food.source_type || "user_entered",
+      source_name: food.source_name || "User Custom Entry",
+      source_note: food.source_note,
+      is_verified: false,
+      is_custom: true,
+      is_active: true,
+    })
+    .select()
+    .single();
 
-    if (error) {
-      console.error("Supabase addCustomFood error:", error);
-      throw new Error(error.message);
-    }
-    if (data) {
-      // Sync locally & invalidate cache
-      invalidateFoodsCache();
-      const list = getStorageItem<FoodItem[]>("swasthtrack_master_foods", MOCK_FOODS);
-      setStorageItem("swasthtrack_master_foods", [data as unknown as FoodItem, ...list]);
-      return data as unknown as FoodItem;
-    }
-  }
-
+  if (error) throw dbError("addCustomFood", error);
   invalidateFoodsCache();
-  const entry: FoodItem = {
-    id: `custom-food-${Date.now()}`,
-    ...food,
-    is_custom: true,
-    is_verified: false,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString()
-  };
-  const list = getStorageItem<FoodItem[]>("swasthtrack_master_foods", MOCK_FOODS);
-  setStorageItem("swasthtrack_master_foods", [entry, ...list]);
-  return entry;
+  return data;
 }
 
 // ----------------------------------------------------
 // FOOD LOGS & RECALCULATIONS
 // ----------------------------------------------------
 
-export async function logFood(
-  log: Omit<FoodLogEntry, "id" | "created_at">
-): Promise<FoodLogEntry> {
-  if (isSupabaseConfigured) {
-    const { data, error } = await (supabase as any)
-      .from("food_logs")
-      .insert({
-        patient_id: log.patient_id,
-        food_item_id: log.food_item_id,
-        meal_type: log.meal_type,
-        food_name: log.food_name,
-        quantity: log.quantity,
-        unit: log.unit,
-        standardized_grams: log.standardized_grams,
-        calories: log.calories,
-        protein_g: log.protein_g,
-        carbs_g: log.carbs_g,
-        fat_g: log.fat_g,
-        fibre_g: log.fibre_g,
-        sodium_mg: log.sodium_mg,
-        oil_quantity: log.oil_quantity,
-        oil_calories: log.oil_calories,
-        calorie_confidence: log.calorie_confidence,
-        source_type: log.source_type,
-        source_note: log.source_note,
-        consumed_at: log.consumed_at
-      })
-      .select()
-      .single();
+export async function logFood(log: Omit<FoodLogEntry, "id" | "created_at">): Promise<FoodLogEntry> {
+  const { data, error } = await db()
+    .from("food_logs")
+    .insert({
+      patient_id: log.patient_id,
+      // Fallback-catalogue ids ("f-01") are not database ids.
+      food_item_id: isUuid(log.food_item_id) ? log.food_item_id : null,
+      meal_type: log.meal_type,
+      food_name: log.food_name,
+      quantity: log.quantity,
+      unit: log.unit,
+      standardized_grams: log.standardized_grams,
+      calories: log.calories,
+      protein_g: log.protein_g,
+      carbs_g: log.carbs_g,
+      fat_g: log.fat_g,
+      fibre_g: log.fibre_g,
+      sodium_mg: log.sodium_mg,
+      oil_quantity: log.oil_quantity,
+      oil_calories: log.oil_calories,
+      calorie_confidence: log.calorie_confidence,
+      source_type: log.source_type,
+      source_note: log.source_note,
+      consumed_at: log.consumed_at,
+      notes: log.notes,
+    })
+    .select()
+    .single();
 
-    if (error) {
-      console.error("Supabase logFood error:", error);
-      throw new Error(error.message);
-    }
-
-    if (data) {
-      const current = getStorageItem<FoodLogEntry[]>("swasthtrack_food_logs", []);
-      setStorageItem("swasthtrack_food_logs", [data as unknown as FoodLogEntry, ...current]);
-      return data as unknown as FoodLogEntry;
-    }
-  }
-
-  const newEntry: FoodLogEntry = {
-    id: `food-${Date.now()}`,
-    ...log,
-    created_at: new Date().toISOString()
-  };
-  const current = getStorageItem<FoodLogEntry[]>("swasthtrack_food_logs", []);
-  setStorageItem("swasthtrack_food_logs", [newEntry, ...current]);
-  return newEntry;
+  if (error) throw dbError("logFood", error);
+  invalidatePatientCache(log.patient_id);
+  return data;
 }
 
 export async function getFoodLogs(patientId?: string, limit = 30): Promise<FoodLogEntry[]> {
-  const profile = await getPatientProfile();
-  const pid = patientId || profile.id;
-
-  if (isSupabaseConfigured) {
-    const { data, error } = await (supabase as any)
+  const pid = resolvePatientId(patientId);
+  return cachedRead(pid, "foodLogs", [limit], async () => {
+    const { data, error } = await db()
       .from("food_logs")
       .select("*")
       .eq("patient_id", pid)
       .order("consumed_at", { ascending: false })
       .limit(limit);
-
-    if (error) {
-      console.error("Supabase getFoodLogs error:", error);
-      throw new Error(error.message);
-    }
-
-    if (data) {
-      setStorageItem("swasthtrack_food_logs", data);
-      return data as unknown as FoodLogEntry[];
-    }
-  }
-
-  const stored = getStorageItem<FoodLogEntry[]>("swasthtrack_food_logs", []);
-  return stored.filter((f) => f.patient_id === pid).slice(0, limit);
+    if (error) throw dbError("getFoodLogs", error);
+    return data ?? [];
+  });
 }
 
+/** Meals of one IST calendar day, oldest first. */
 export async function getFoodLogsByDate(patientId: string, dateStr: string): Promise<FoodLogEntry[]> {
-  if (isSupabaseConfigured) {
-    const parts = dateStr.split("-");
-    const year = parseInt(parts[0], 10);
-    const month = parseInt(parts[1], 10) - 1;
-    const day = parseInt(parts[2], 10);
-    const localStart = new Date(year, month, day, 0, 0, 0, 0);
-    const localEnd = new Date(year, month, day, 23, 59, 59, 999);
-    const start = localStart.toISOString();
-    const end = localEnd.toISOString();
+  return getFoodLogsInRange(patientId, dateStr, dateStr);
+}
 
-    const { data, error } = await (supabase as any)
-      .from("food_logs")
-      .select("*")
-      .eq("patient_id", patientId)
-      .gte("consumed_at", start)
-      .lte("consumed_at", end)
-      .order("consumed_at", { ascending: true });
-
-    if (!error && data) {
-      return data as unknown as FoodLogEntry[];
-    }
-  }
-
-  const stored = getStorageItem<FoodLogEntry[]>("swasthtrack_food_logs", []);
-  return stored.filter(
-    (f) =>
-      f.patient_id === patientId &&
-      isSameLocalDay(f.consumed_at, dateStr)
+/** All meals between two IST dates (inclusive), oldest first, no row-count truncation. */
+export async function getFoodLogsInRange(
+  patientId: string,
+  startDate: string,
+  endDate: string,
+): Promise<FoodLogEntry[]> {
+  const pid = resolvePatientId(patientId);
+  const { startISO, endISO } = istRangeISO(startDate, endDate);
+  return cachedRead(pid, "foodLogsRange", [startDate, endDate], () =>
+    fetchAllPages<FoodLogEntry>("getFoodLogsInRange", (from, to) =>
+      db()
+        .from("food_logs")
+        .select("*")
+        .eq("patient_id", pid)
+        .gte("consumed_at", startISO)
+        .lte("consumed_at", endISO)
+        .order("consumed_at", { ascending: true })
+        .order("id", { ascending: true })
+        .range(from, to),
+    ),
   );
 }
 
 export async function updateFoodLog(
   id: string,
-  updates: Partial<Omit<FoodLogEntry, "id" | "patient_id" | "created_at">>
+  updates: Partial<Omit<FoodLogEntry, "id" | "patient_id" | "created_at">>,
 ): Promise<FoodLogEntry | null> {
-  if (isSupabaseConfigured) {
-    const { data, error } = await (supabase as any)
-      .from("food_logs")
-      .update(updates)
-      .eq("id", id)
-      .select()
-      .single();
-
-    if (error) {
-      console.error("Supabase updateFoodLog error:", error);
-      throw new Error(error.message);
-    }
-
-    if (data) {
-      const list = getStorageItem<FoodLogEntry[]>("swasthtrack_food_logs", []);
-      const updatedList = list.map((f) => (f.id === id ? { ...f, ...data } : f));
-      setStorageItem("swasthtrack_food_logs", updatedList);
-      return data as unknown as FoodLogEntry;
-    }
-  }
-
-  const list = getStorageItem<FoodLogEntry[]>("swasthtrack_food_logs", []);
-  const idx = list.findIndex(f => f.id === id);
-  if (idx !== -1) {
-    list[idx] = { ...list[idx], ...updates };
-    setStorageItem("swasthtrack_food_logs", list);
-    return list[idx];
-  }
-  return null;
+  const { data, error } = await db().from("food_logs").update(updates).eq("id", id).select().maybeSingle();
+  if (error) throw dbError("updateFoodLog", error);
+  if (!data) throw new PermissionDeniedError();
+  invalidatePatientCache(data.patient_id);
+  return data;
 }
 
 export async function deleteFoodLog(id: string): Promise<boolean> {
-  if (isSupabaseConfigured) {
-    const { error } = await (supabase as any).from("food_logs").delete().eq("id", id);
-    if (error) {
-      console.error("Supabase deleteFoodLog error:", error);
-      throw new Error(error.message);
-    }
-  }
-
-  const list = getStorageItem<FoodLogEntry[]>("swasthtrack_food_logs", []);
-  setStorageItem("swasthtrack_food_logs", list.filter((f) => f.id !== id));
+  const { data, error } = await db().from("food_logs").delete().eq("id", id).select("patient_id");
+  if (error) throw dbError("deleteFoodLog", error);
+  if (!data || data.length === 0) throw new PermissionDeniedError();
+  data.forEach((row) => invalidatePatientCache(row.patient_id));
   return true;
 }
 
@@ -1651,24 +1394,26 @@ export async function deleteFoodLog(id: string): Promise<boolean> {
 // COPY PREVIOUS MEAL LOGS
 // ----------------------------------------------------
 
+const pad2 = (n: number) => String(n).padStart(2, "0");
+
 export async function copyPreviousMeal(
   patientId: string,
   sourceDateStr: string,
   targetDateStr: string,
-  mealType: string
+  mealType: string,
 ): Promise<boolean> {
-  const sourceLogs = await getFoodLogsByDate(patientId, sourceDateStr);
-  const mealsToCopy = sourceLogs.filter(f => f.meal_type === mealType);
-
+  const pid = resolvePatientId(patientId);
+  targetDateStr = ensureIstDate(targetDateStr);
+  const sourceLogs = await getFoodLogsByDate(pid, sourceDateStr);
+  const mealsToCopy = sourceLogs.filter((f) => f.meal_type === mealType);
   if (mealsToCopy.length === 0) return false;
 
-  // Clone with target consumed_at timestamp (retaining original time component if present)
-  for (const log of mealsToCopy) {
-    const timeComponent = log.consumed_at.split("T")[1] || "12:00:00.000Z";
-    const targetConsumedAt = `${targetDateStr}T${timeComponent}`;
-
-    await logFood({
-      patient_id: patientId,
+  // Keep each item's India wall-clock time, moved onto the target day.
+  const rows = mealsToCopy.map((log) => {
+    const minutes = istMinutesOfDay(log.consumed_at);
+    const hhmm = `${pad2(Math.floor(minutes / 60))}:${pad2(minutes % 60)}`;
+    return {
+      patient_id: pid,
       food_item_id: log.food_item_id,
       meal_type: log.meal_type,
       food_name: log.food_name,
@@ -1686,11 +1431,14 @@ export async function copyPreviousMeal(
       calorie_confidence: log.calorie_confidence,
       source_type: log.source_type,
       source_note: log.source_note,
-      consumed_at: targetConsumedAt,
-      notes: log.notes ? `${log.notes} (Copied from ${sourceDateStr})` : `Copied from ${sourceDateStr}`
-    });
-  }
+      consumed_at: istInstant(targetDateStr, hhmm).toISOString(),
+      notes: log.notes ? `${log.notes} (Copied from ${sourceDateStr})` : `Copied from ${sourceDateStr}`,
+    };
+  });
 
+  const { error } = await db().from("food_logs").insert(rows);
+  if (error) throw dbError("copyPreviousMeal", error);
+  invalidatePatientCache(pid);
   return true;
 }
 
@@ -1698,543 +1446,324 @@ export async function copyPreviousMeal(
 // BLOOD PRESSURE LOGS
 // ----------------------------------------------------
 
+function assertPlausibleBP(systolic: number, diastolic: number, pulse?: number | null): void {
+  if (!isPlausibleBP(systolic, diastolic, pulse)) {
+    throw new Error(
+      "BP की कीमत संभव सीमा से बाहर है। ऊपर का (सिस्टोलिक) नीचे के (डायस्टोलिक) से बड़ा होना चाहिए, और दोनों सही दर्ज करें (implausible blood pressure reading).",
+    );
+  }
+}
+
 export async function logBloodPressure(
   log: Omit<Database["public"]["Tables"]["bp_logs"]["Insert"], "id" | "created_at">,
 ): Promise<BPLogEntry> {
-  if (isSupabaseConfigured) {
-    const { data, error } = await supabase
-      .from("bp_logs")
-      .insert(log)
-      .select()
-      .single();
-
-    if (error) {
-      console.error("Supabase logBloodPressure error:", error);
-      throw new Error(error.message);
-    }
-
-    if (data) {
-      const current = getStorageItem<BPLogEntry[]>("swasthtrack_bp_logs", []);
-      setStorageItem("swasthtrack_bp_logs", [data, ...current]);
-      return data;
-    }
-  }
-
-  const newEntry: BPLogEntry = {
-    id: `bp-${Date.now()}`,
-    patient_id: log.patient_id,
-    systolic: log.systolic,
-    diastolic: log.diastolic,
-    pulse: log.pulse ?? null,
-    reading_type: log.reading_type ?? null,
-    measured_at: log.measured_at ?? new Date().toISOString(),
-    notes: log.notes ?? null,
-    created_at: new Date().toISOString(),
-  };
-  const current = getStorageItem<BPLogEntry[]>("swasthtrack_bp_logs", []);
-  setStorageItem("swasthtrack_bp_logs", [newEntry, ...current]);
-  return newEntry;
+  assertPlausibleBP(log.systolic, log.diastolic, log.pulse);
+  const { data, error } = await db().from("bp_logs").insert(log).select().single();
+  if (error) throw dbError("logBloodPressure", error);
+  invalidatePatientCache(log.patient_id);
+  notifyAbnormalBp(data);
+  return data;
 }
 
+/** The latest `limit` readings, newest first. */
 export async function getBloodPressureLogs(patientId?: string, limit = 20): Promise<BPLogEntry[]> {
-  const profile = await getPatientProfile();
-  const pid = patientId || profile.id;
-
-  if (isSupabaseConfigured) {
-    const { data, error } = await supabase
+  const pid = resolvePatientId(patientId);
+  return cachedRead(pid, "bpLogs", [limit], async () => {
+    const { data, error } = await db()
       .from("bp_logs")
       .select("*")
       .eq("patient_id", pid)
       .order("measured_at", { ascending: false })
       .limit(limit);
+    if (error) throw dbError("getBloodPressureLogs", error);
+    return data ?? [];
+  });
+}
 
-    if (error) {
-      console.error("Supabase getBloodPressureLogs error:", error);
-      throw new Error(error.message);
-    }
+/** Readings between two IST dates (inclusive), oldest first, no row-count truncation. */
+export async function getBloodPressureLogsInRange(
+  patientId: string,
+  startDate: string,
+  endDate: string,
+): Promise<BPLogEntry[]> {
+  const pid = resolvePatientId(patientId);
+  const { startISO, endISO } = istRangeISO(startDate, endDate);
+  return cachedRead(pid, "bpRange", [startDate, endDate], () =>
+    fetchAllPages<BPLogEntry>("getBloodPressureLogsInRange", (from, to) =>
+      db()
+        .from("bp_logs")
+        .select("*")
+        .eq("patient_id", pid)
+        .gte("measured_at", startISO)
+        .lte("measured_at", endISO)
+        .order("measured_at", { ascending: true })
+        .order("id", { ascending: true })
+        .range(from, to),
+    ),
+  );
+}
 
-    if (data) {
-      setStorageItem("swasthtrack_bp_logs", data);
-      return data;
-    }
-  }
-
-  const stored = getStorageItem<BPLogEntry[]>("swasthtrack_bp_logs", []);
-  return stored.filter((b) => b.patient_id === pid).slice(0, limit);
+/** @deprecated Use getBloodPressureLogsInRange (IST dates). Accepts ISO instants too. */
+export async function getBloodPressureLogsByDateRange(
+  patientId: string,
+  startDate: string,
+  endDate: string,
+): Promise<BPLogEntry[]> {
+  return getBloodPressureLogsInRange(patientId, ensureIstDate(startDate), ensureIstDate(endDate));
 }
 
 export async function updateBloodPressure(
   id: string,
-  updates: { systolic?: number; diastolic?: number; pulse?: number | null; reading_type?: string; measured_at?: string; notes?: string | null }
+  updates: { systolic?: number; diastolic?: number; pulse?: number | null; reading_type?: string; measured_at?: string; notes?: string | null },
 ): Promise<BPLogEntry | null> {
-  if (isSupabaseConfigured) {
-    const { data, error } = await supabase
-      .from("bp_logs")
-      .update(updates)
-      .eq("id", id)
-      .select()
-      .single();
-    if (error) { console.error("Supabase updateBloodPressure error:", error); throw new Error(error.message); }
-    return data;
+  if (updates.systolic != null && updates.diastolic != null) {
+    assertPlausibleBP(updates.systolic, updates.diastolic, updates.pulse);
   }
-  return null;
+  const { data, error } = await db().from("bp_logs").update(updates).eq("id", id).select().maybeSingle();
+  if (error) throw dbError("updateBloodPressure", error);
+  if (!data) throw new PermissionDeniedError();
+  invalidatePatientCache(data.patient_id);
+  return data;
 }
+
 export async function deleteBloodPressure(id: string): Promise<boolean> {
-  if (isSupabaseConfigured) {
-    const { error } = await supabase.from("bp_logs").delete().eq("id", id);
-    if (error) { console.error("Supabase deleteBloodPressure error:", error); throw new Error(error.message); }
-  }
-  const stored = getStorageItem<BPLogEntry[]>("swasthtrack_bp_logs", []);
-  setStorageItem("swasthtrack_bp_logs", stored.filter(b => b.id !== id));
+  const { data, error } = await db().from("bp_logs").delete().eq("id", id).select("patient_id");
+  if (error) throw dbError("deleteBloodPressure", error);
+  if (!data || data.length === 0) throw new PermissionDeniedError();
+  data.forEach((row) => invalidatePatientCache(row.patient_id));
   return true;
-}
-
-export function recordAIFeedback(patientId: string, cardId: string, rating: "helpful" | "not_helpful"): void {
-  const current = getStorageItem<Array<{ patient_id: string; card_id: string; rating: string; timestamp: string }>>("swasthtrack_ai_feedback", []);
-  current.push({
-    patient_id: patientId,
-    card_id: cardId,
-    rating,
-    timestamp: new Date().toISOString(),
-  });
-  setStorageItem("swasthtrack_ai_feedback", current);
-}
-
-export function getPapa30DayBPBaseline(patientId: string): BPLogEntry[] {
-  const list: BPLogEntry[] = [];
-  const now = new Date();
-
-  const baseReadings = [
-    { sys: 124, dia: 82, pulse: 72 },
-    { sys: 128, dia: 84, pulse: 74 },
-    { sys: 122, dia: 80, pulse: 70 },
-    { sys: 130, dia: 85, pulse: 76 },
-    { sys: 126, dia: 82, pulse: 72 },
-    { sys: 120, dia: 78, pulse: 68 },
-    { sys: 125, dia: 81, pulse: 71 },
-    { sys: 129, dia: 83, pulse: 75 },
-    { sys: 123, dia: 79, pulse: 69 },
-    { sys: 127, dia: 82, pulse: 73 },
-    { sys: 131, dia: 86, pulse: 77 },
-    { sys: 125, dia: 80, pulse: 70 },
-    { sys: 122, dia: 78, pulse: 68 },
-    { sys: 128, dia: 83, pulse: 74 },
-    { sys: 124, dia: 81, pulse: 71 },
-  ];
-
-  for (let i = 30; i >= 0; i--) {
-    const d = new Date(now.getFullYear(), now.getMonth(), now.getDate() - i, 8, 15);
-    const r = baseReadings[i % baseReadings.length];
-
-    list.push({
-      id: `bp-base-m-${i}`,
-      patient_id: patientId,
-      systolic: r.sys,
-      diastolic: r.dia,
-      pulse: r.pulse,
-      reading_type: "Morning",
-      measured_at: d.toISOString(),
-      notes: "Morning baseline record",
-      created_at: d.toISOString(),
-    });
-
-    if (i % 2 === 0) {
-      const eveD = new Date(now.getFullYear(), now.getMonth(), now.getDate() - i, 18, 45);
-      list.push({
-        id: `bp-base-e-${i}`,
-        patient_id: patientId,
-        systolic: r.sys + 4,
-        diastolic: r.dia + 3,
-        pulse: r.pulse + 2,
-        reading_type: "Evening",
-        measured_at: eveD.toISOString(),
-        notes: "Evening baseline record",
-        created_at: eveD.toISOString(),
-      });
-    }
-  }
-
-  return list;
-}
-
-export function getPapa30DayWeightBaseline(patientId: string): WeightLogEntry[] {
-  const list: WeightLogEntry[] = [];
-  const now = new Date();
-  const baseWeights = [68.4, 68.3, 68.5, 68.2, 68.1, 68.0, 68.2, 68.3, 68.1, 67.9, 68.0, 68.2, 68.1];
-
-  for (let i = 30; i >= 0; i--) {
-    const d = new Date(now.getFullYear(), now.getMonth(), now.getDate() - i, 7, 30);
-    const w = baseWeights[i % baseWeights.length];
-    list.push({
-      id: `weight-base-${i}`,
-      patient_id: patientId,
-      weight_kg: w,
-      measured_at: d.toISOString(),
-      notes: "Morning weigh-in",
-      created_at: d.toISOString(),
-    });
-  }
-
-  return list;
-}
-
-export async function getBloodPressureLogsByDateRange(
-  patientId: string,
-  startDate: string,
-  endDate: string
-): Promise<BPLogEntry[]> {
-  const startMs = new Date(startDate).getTime();
-  const endMs = new Date(endDate).getTime();
-
-  let results: BPLogEntry[] = [];
-
-  if (isSupabaseConfigured) {
-    try {
-      const { data, error } = await supabase
-        .from("bp_logs")
-        .select("*")
-        .eq("patient_id", patientId)
-        .gte("measured_at", startDate)
-        .lte("measured_at", endDate)
-        .order("measured_at", { ascending: true });
-
-      if (!error && data && data.length > 0) {
-        results = data as unknown as BPLogEntry[];
-      }
-    } catch (err) {
-      console.error("Supabase getBloodPressureLogsByDateRange error:", err);
-    }
-  }
-
-  if (results.length === 0) {
-    const stored = getStorageItem<BPLogEntry[]>("swasthtrack_bp_logs", []);
-    results = stored.filter((b) => {
-      if (b.patient_id !== patientId) return false;
-      const t = new Date(b.measured_at).getTime();
-      return t >= startMs && t <= endMs;
-    });
-
-    // Populate 30-day baseline for Papa if stored records are sparse
-    if (results.length < 10 && patientId === "6c4fcb90-5dc1-4ff5-89fe-3049f927f4ac") {
-      const baseline = getPapa30DayBPBaseline(patientId);
-      const existingIds = new Set(results.map((r) => r.id));
-      for (const b of baseline) {
-        const t = new Date(b.measured_at).getTime();
-        if (t >= startMs && t <= endMs && !existingIds.has(b.id)) {
-          results.push(b);
-        }
-      }
-    }
-  }
-
-  return results.sort((a, b) => new Date(a.measured_at).getTime() - new Date(b.measured_at).getTime());
 }
 
 // ----------------------------------------------------
 // WEIGHT LOGS
 // ----------------------------------------------------
 
+function assertPlausibleWeight(kg: number): void {
+  if (!Number.isFinite(kg) || kg < 20 || kg > 350) {
+    throw new Error("वजन 20 से 350 kg के बीच दर्ज करें (weight must be between 20 and 350 kg).");
+  }
+}
+
+/**
+ * Keep patients.current_weight_kg equal to the newest weight reading. A back-dated
+ * entry (or deleting the latest one) must not leave the profile pointing at an
+ * old number.
+ */
+async function syncCurrentWeight(patientId: string): Promise<void> {
+  try {
+    const { data: latest, error } = await db()
+      .from("weight_logs")
+      .select("weight_kg")
+      .eq("patient_id", patientId)
+      .order("measured_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    if (error) throw error;
+    await db()
+      .from("patients")
+      .update({
+        current_weight_kg: latest ? Number(latest.weight_kg) : null,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", patientId);
+  } catch (err) {
+    // The log itself is already saved; the profile number catches up on the next write.
+    console.warn("Could not sync current weight:", err);
+  } finally {
+    invalidatePatientCache(patientId);
+  }
+}
+
 export async function logWeight(
   log: Omit<Database["public"]["Tables"]["weight_logs"]["Insert"], "id" | "created_at">,
 ): Promise<WeightLogEntry> {
-  if (isSupabaseConfigured) {
-    const { data, error } = await supabase
-      .from("weight_logs")
-      .insert(log)
-      .select()
-      .single();
-
-    if (error) {
-      console.error("Supabase logWeight error:", error);
-      throw new Error(error.message);
-    }
-
-    if (data) {
-      await updatePatientProfile({ current_weight_kg: log.weight_kg }, log.patient_id);
-      const current = getStorageItem<WeightLogEntry[]>("swasthtrack_weight_logs", []);
-      setStorageItem("swasthtrack_weight_logs", [data, ...current]);
-      return data;
-    }
-  }
-
-  const newEntry: WeightLogEntry = {
-    id: `weight-${Date.now()}`,
-    patient_id: log.patient_id,
-    weight_kg: log.weight_kg,
-    measured_at: log.measured_at ?? new Date().toISOString(),
-    notes: log.notes ?? null,
-    created_at: new Date().toISOString(),
-  };
-  const current = getStorageItem<WeightLogEntry[]>("swasthtrack_weight_logs", []);
-  setStorageItem("swasthtrack_weight_logs", [newEntry, ...current]);
-  await updatePatientProfile({ current_weight_kg: log.weight_kg }, log.patient_id);
-  return newEntry;
+  assertPlausibleWeight(log.weight_kg);
+  const { data, error } = await db().from("weight_logs").insert(log).select().single();
+  if (error) throw dbError("logWeight", error);
+  await syncCurrentWeight(log.patient_id);
+  notifyWeightLogged(data);
+  return data;
 }
 
+/** The latest `limit` weigh-ins, newest first. */
 export async function getWeightLogs(patientId?: string, limit = 20): Promise<WeightLogEntry[]> {
-  const profile = await getPatientProfile();
-  const pid = patientId || profile.id;
-
-  if (isSupabaseConfigured) {
-    const { data, error } = await supabase
+  const pid = resolvePatientId(patientId);
+  return cachedRead(pid, "weightLogs", [limit], async () => {
+    const { data, error } = await db()
       .from("weight_logs")
       .select("*")
       .eq("patient_id", pid)
       .order("measured_at", { ascending: false })
       .limit(limit);
+    if (error) throw dbError("getWeightLogs", error);
+    return data ?? [];
+  });
+}
 
-    if (error) {
-      console.error("Supabase getWeightLogs error:", error);
-      throw new Error(error.message);
-    }
+/** Weigh-ins between two IST dates (inclusive), oldest first, no row-count truncation. */
+export async function getWeightLogsInRange(
+  patientId: string,
+  startDate: string,
+  endDate: string,
+): Promise<WeightLogEntry[]> {
+  const pid = resolvePatientId(patientId);
+  const { startISO, endISO } = istRangeISO(startDate, endDate);
+  return cachedRead(pid, "weightRange", [startDate, endDate], () =>
+    fetchAllPages<WeightLogEntry>("getWeightLogsInRange", (from, to) =>
+      db()
+        .from("weight_logs")
+        .select("*")
+        .eq("patient_id", pid)
+        .gte("measured_at", startISO)
+        .lte("measured_at", endISO)
+        .order("measured_at", { ascending: true })
+        .order("id", { ascending: true })
+        .range(from, to),
+    ),
+  );
+}
 
-    if (data) {
-      setStorageItem("swasthtrack_weight_logs", data);
-      return data;
-    }
-  }
-
-  const stored = getStorageItem<WeightLogEntry[]>("swasthtrack_weight_logs", []);
-  return stored.filter((w) => w.patient_id === pid).slice(0, limit);
+/** @deprecated Use getWeightLogsInRange (IST dates). Accepts ISO instants too. */
+export async function getWeightLogsByDateRange(
+  patientId: string,
+  startDate: string,
+  endDate: string,
+): Promise<WeightLogEntry[]> {
+  return getWeightLogsInRange(patientId, ensureIstDate(startDate), ensureIstDate(endDate));
 }
 
 export async function updateWeight(
   id: string,
-  updates: { weight_kg?: number; measured_at?: string; notes?: string | null }
+  updates: { weight_kg?: number; measured_at?: string; notes?: string | null },
 ): Promise<WeightLogEntry | null> {
-  if (isSupabaseConfigured) {
-    const { data, error } = await supabase
-      .from("weight_logs")
-      .update(updates)
-      .eq("id", id)
-      .select()
-      .single();
-    if (error) { console.error("Supabase updateWeight error:", error); throw new Error(error.message); }
-    return data;
-  }
-  return null;
+  if (updates.weight_kg != null) assertPlausibleWeight(updates.weight_kg);
+  const { data, error } = await db().from("weight_logs").update(updates).eq("id", id).select().maybeSingle();
+  if (error) throw dbError("updateWeight", error);
+  if (!data) throw new PermissionDeniedError();
+  await syncCurrentWeight(data.patient_id);
+  return data;
 }
 
 export async function deleteWeight(id: string): Promise<boolean> {
-  if (isSupabaseConfigured) {
-    const { error } = await supabase.from("weight_logs").delete().eq("id", id);
-    if (error) { console.error("Supabase deleteWeight error:", error); throw new Error(error.message); }
-  }
-  const stored = getStorageItem<WeightLogEntry[]>("swasthtrack_weight_logs", []);
-  setStorageItem("swasthtrack_weight_logs", stored.filter(w => w.id !== id));
+  const { data, error } = await db().from("weight_logs").delete().eq("id", id).select("patient_id");
+  if (error) throw dbError("deleteWeight", error);
+  if (!data || data.length === 0) throw new PermissionDeniedError();
+  for (const row of data) await syncCurrentWeight(row.patient_id);
   return true;
 }
 
-export async function getWeightLogsByDateRange(
-  patientId: string,
-  startDate: string,
-  endDate: string
-): Promise<WeightLogEntry[]> {
-  const startMs = new Date(startDate).getTime();
-  const endMs = new Date(endDate).getTime();
-
-  let results: WeightLogEntry[] = [];
-
-  if (isSupabaseConfigured) {
-    try {
-      const { data, error } = await supabase
-        .from("weight_logs")
-        .select("*")
-        .eq("patient_id", patientId)
-        .gte("measured_at", startDate)
-        .lte("measured_at", endDate)
-        .order("measured_at", { ascending: true });
-
-      if (!error && data && data.length > 0) {
-        results = data as unknown as WeightLogEntry[];
-      }
-    } catch (err) {
-      console.error("Supabase getWeightLogsByDateRange error:", err);
-    }
-  }
-
-  if (results.length === 0) {
-    const stored = getStorageItem<WeightLogEntry[]>("swasthtrack_weight_logs", []);
-    results = stored.filter((w) => {
-      if (w.patient_id !== patientId) return false;
-      const t = new Date(w.measured_at).getTime();
-      return t >= startMs && t <= endMs;
-    });
-
-    // Populate 30-day baseline for Papa if stored records are sparse
-    if (results.length < 10 && patientId === "6c4fcb90-5dc1-4ff5-89fe-3049f927f4ac") {
-      const baseline = getPapa30DayWeightBaseline(patientId);
-      const existingIds = new Set(results.map((r) => r.id));
-      for (const b of baseline) {
-        const t = new Date(b.measured_at).getTime();
-        if (t >= startMs && t <= endMs && !existingIds.has(b.id)) {
-          results.push(b);
-        }
-      }
-    }
-  }
-
-  return results.sort((a, b) => new Date(a.measured_at).getTime() - new Date(b.measured_at).getTime());
-}
-
 // ----------------------------------------------------
-// ACTIVITY LOGS
+// ACTIVITY LOGS (one row per patient per date)
 // ----------------------------------------------------
 
 export async function logActivity(
   log: Omit<Database["public"]["Tables"]["activity_logs"]["Insert"], "id" | "created_at">,
 ): Promise<ActivityLogEntry> {
-  if (isSupabaseConfigured) {
-    const { data, error } = await supabase
-      .from("activity_logs")
-      .upsert(log, { onConflict: "patient_id,date" })
-      .select()
-      .single();
-
-    if (error) {
-      console.error("Supabase logActivity error:", error);
-      throw new Error(error.message);
-    }
-
-    if (data) {
-      const current = getStorageItem<ActivityLogEntry[]>("swasthtrack_activity_logs", []);
-      const filtered = current.filter((a) => a.date !== data.date);
-      setStorageItem("swasthtrack_activity_logs", [data, ...filtered]);
-      return data;
-    }
-  }
-
-  const list = getStorageItem<ActivityLogEntry[]>("swasthtrack_activity_logs", []);
-  const existingIdx = list.findIndex(
-    (a) => a.patient_id === log.patient_id && a.date === log.date,
-  );
-  const entry: ActivityLogEntry = {
-    id: existingIdx !== -1 ? list[existingIdx].id : `act-${Date.now()}`,
-    patient_id: log.patient_id,
-    date: log.date,
-    steps: log.steps ?? 0,
-    distance_km: log.distance_km ?? 0,
-    walking_minutes: log.walking_minutes ?? 0,
-    estimated_calories_burned: log.estimated_calories_burned ?? 0,
-    created_at: new Date().toISOString(),
-  };
-
-  if (existingIdx !== -1) {
-    list[existingIdx] = entry;
-  } else {
-    list.unshift(entry);
-  }
-  setStorageItem("swasthtrack_activity_logs", list);
-  return entry;
+  const { data, error } = await db()
+    .from("activity_logs")
+    .upsert(log, { onConflict: "patient_id,date" })
+    .select()
+    .single();
+  if (error) throw dbError("logActivity", error);
+  invalidatePatientCache(log.patient_id);
+  return data;
 }
 
+/** The latest `limit` days, newest first. */
 export async function getActivityLogs(patientId?: string, limit = 14): Promise<ActivityLogEntry[]> {
-  const profile = await getPatientProfile();
-  const pid = patientId || profile.id;
-
-  if (isSupabaseConfigured) {
-    const { data, error } = await supabase
+  const pid = resolvePatientId(patientId);
+  return cachedRead(pid, "activityLogs", [limit], async () => {
+    const { data, error } = await db()
       .from("activity_logs")
       .select("*")
       .eq("patient_id", pid)
       .order("date", { ascending: false })
       .limit(limit);
+    if (error) throw dbError("getActivityLogs", error);
+    return data ?? [];
+  });
+}
 
-    if (error) {
-      console.error("Supabase getActivityLogs error:", error);
-      throw new Error(error.message);
-    }
-
-    if (data) {
-      setStorageItem("swasthtrack_activity_logs", data);
-      return data;
-    }
-  }
-
-  const stored = getStorageItem<ActivityLogEntry[]>("swasthtrack_activity_logs", []);
-  return stored.filter((a) => a.patient_id === pid).slice(0, limit);
+/** Activity rows between two IST dates (inclusive), oldest first. */
+export async function getActivityLogsInRange(
+  patientId: string,
+  startDate: string,
+  endDate: string,
+): Promise<ActivityLogEntry[]> {
+  const pid = resolvePatientId(patientId);
+  startDate = ensureIstDate(startDate);
+  endDate = ensureIstDate(endDate);
+  return cachedRead(pid, "activityRange", [startDate, endDate], () =>
+    fetchAllPages<ActivityLogEntry>("getActivityLogsInRange", (from, to) =>
+      db()
+        .from("activity_logs")
+        .select("*")
+        .eq("patient_id", pid)
+        .gte("date", startDate)
+        .lte("date", endDate)
+        .order("date", { ascending: true })
+        .range(from, to),
+    ),
+  );
 }
 
 // ----------------------------------------------------
-// SLEEP LOGS
+// SLEEP LOGS (one row per patient per date)
 // ----------------------------------------------------
 
 export async function logSleep(
   log: Omit<Database["public"]["Tables"]["sleep_logs"]["Insert"], "id" | "created_at">,
 ): Promise<SleepLogEntry> {
-  if (isSupabaseConfigured) {
-    const { data, error } = await supabase
-      .from("sleep_logs")
-      .upsert(log, { onConflict: "patient_id,date" })
-      .select()
-      .single();
-
-    if (error) {
-      console.error("Supabase logSleep error:", error);
-      throw new Error(error.message);
-    }
-
-    if (data) {
-      const current = getStorageItem<SleepLogEntry[]>("swasthtrack_sleep_logs", []);
-      const filtered = current.filter((s) => s.date !== data.date);
-      setStorageItem("swasthtrack_sleep_logs", [data, ...filtered]);
-      return data;
-    }
-  }
-
-  const list = getStorageItem<SleepLogEntry[]>("swasthtrack_sleep_logs", []);
-  const existingIdx = list.findIndex(
-    (s) => s.patient_id === log.patient_id && s.date === log.date,
-  );
-  const entry: SleepLogEntry = {
-    id: existingIdx !== -1 ? list[existingIdx].id : `sleep-${Date.now()}`,
-    patient_id: log.patient_id,
-    date: log.date,
-    sleep_hours: log.sleep_hours,
-    bedtime: log.bedtime ?? null,
-    wake_time: log.wake_time ?? null,
-    notes: log.notes ?? null,
-    created_at: new Date().toISOString(),
-  };
-
-  if (existingIdx !== -1) {
-    list[existingIdx] = entry;
-  } else {
-    list.unshift(entry);
-  }
-  setStorageItem("swasthtrack_sleep_logs", list);
-  return entry;
+  const { data, error } = await db()
+    .from("sleep_logs")
+    .upsert(log, { onConflict: "patient_id,date" })
+    .select()
+    .single();
+  if (error) throw dbError("logSleep", error);
+  invalidatePatientCache(log.patient_id);
+  return data;
 }
 
+/** The latest `limit` nights, newest first. */
 export async function getSleepLogs(patientId?: string, limit = 14): Promise<SleepLogEntry[]> {
-  const profile = await getPatientProfile();
-  const pid = patientId || profile.id;
-
-  if (isSupabaseConfigured) {
-    const { data, error } = await supabase
+  const pid = resolvePatientId(patientId);
+  return cachedRead(pid, "sleepLogs", [limit], async () => {
+    const { data, error } = await db()
       .from("sleep_logs")
       .select("*")
       .eq("patient_id", pid)
       .order("date", { ascending: false })
       .limit(limit);
+    if (error) throw dbError("getSleepLogs", error);
+    return data ?? [];
+  });
+}
 
-    if (error) {
-      console.error("Supabase getSleepLogs error:", error);
-      throw new Error(error.message);
-    }
-
-    if (data) {
-      setStorageItem("swasthtrack_sleep_logs", data);
-      return data;
-    }
-  }
-
-  const stored = getStorageItem<SleepLogEntry[]>("swasthtrack_sleep_logs", []);
-  return stored.filter((s) => s.patient_id === pid).slice(0, limit);
+/** Sleep rows between two IST dates (inclusive), oldest first. */
+export async function getSleepLogsInRange(
+  patientId: string,
+  startDate: string,
+  endDate: string,
+): Promise<SleepLogEntry[]> {
+  const pid = resolvePatientId(patientId);
+  startDate = ensureIstDate(startDate);
+  endDate = ensureIstDate(endDate);
+  return cachedRead(pid, "sleepRange", [startDate, endDate], () =>
+    fetchAllPages<SleepLogEntry>("getSleepLogsInRange", (from, to) =>
+      db()
+        .from("sleep_logs")
+        .select("*")
+        .eq("patient_id", pid)
+        .gte("date", startDate)
+        .lte("date", endDate)
+        .order("date", { ascending: true })
+        .range(from, to),
+    ),
+  );
 }
 
 // ----------------------------------------------------
-// MEDICINE LOGS & STATUS EVALUATION (§Auto-Late & Auto-Missed)
+// MEDICINE LOGS & STATUS EVALUATION (auto-late & auto-missed)
 // ----------------------------------------------------
 
 export interface MedicineEvaluationResult {
@@ -2245,42 +1774,39 @@ export interface MedicineEvaluationResult {
   isMissed: boolean;
 }
 
+/** "HH:MM" of a medicine's schedule (the column is a Postgres `time`, "08:30:00"). */
+function medicineHHMM(medicine: MedicineItem): string {
+  const [h = "08", m = "00"] = (medicine.scheduled_time || "08:00").split(":");
+  return `${h.padStart(2, "0")}:${m.padStart(2, "0")}`;
+}
+
 /**
- * Intelligent evaluation of medicine status based on prescription rules:
- * 1. Morning Empty Stomach ("bhukhe pet") medicine marked taken after 10:00 AM -> status = "late"
- * 2. Any medicine marked > 2 hours past scheduled time -> status = "late"
- * 3. Medicine taken within schedule window -> status = "taken"
+ * Intelligent evaluation of medicine status based on prescription rules (all
+ * times are India time):
+ * 1. Morning empty-stomach ("bhukhe pet") medicine marked taken after 10:00 AM -> "late"
+ * 2. Any medicine marked more than MEDICINE_LATE_AFTER_MIN (3 hours) past its scheduled time -> "late"
+ * 3. Otherwise -> "taken"
  */
 export function evaluateMedicineStatusAndMessage(
   medicine: MedicineItem,
   scheduledDateStr: string,
-  actualActionIso?: string
+  actualActionIso?: string,
 ): MedicineEvaluationResult {
   const actionDate = actualActionIso ? new Date(actualActionIso) : new Date();
+  const scheduledDate = istInstant(scheduledDateStr, medicineHHMM(medicine));
+  const schedHour = Number(medicineHHMM(medicine).split(":")[0]);
 
-  // Extract scheduled hour and minute
-  const schedTimeParts = medicine.scheduled_time ? medicine.scheduled_time.split(":") : ["08", "00"];
-  const schedHour = parseInt(schedTimeParts[0], 10);
-  const schedMin = parseInt(schedTimeParts[1] || "0", 10);
-
-  // Construct local scheduled Date object
-  const scheduledDate = new Date(
-    `${scheduledDateStr}T${String(schedHour).padStart(2, "0")}:${String(schedMin).padStart(2, "0")}:00`
-  );
-
-  // Empty stomach / morning before food check
   const isMorningEmptyStomach =
-    (medicine.meal_relation === "before_meal" || medicine.frequency?.includes("भूखे पेट")) &&
+    (medicine.meal_relation === "before_meal" ||
+      medicine.meal_relation === "empty_stomach" ||
+      medicine.frequency?.includes("भूखे पेट") ||
+      medicine.frequency?.includes("खाली पेट")) &&
     schedHour < 11;
 
-  const actionHour = actionDate.getHours();
+  const diffMinutes = Math.floor((actionDate.getTime() - scheduledDate.getTime()) / 60000);
+  const actedOnOrAfterScheduledDay = toISTDate(actionDate) >= scheduledDateStr;
 
-  // Calculate delay in minutes
-  const diffMs = actionDate.getTime() - scheduledDate.getTime();
-  const diffMinutes = Math.floor(diffMs / (1000 * 60));
-
-  // Rule 1: Morning empty stomach taken after 10:00 AM -> LATE
-  if (isMorningEmptyStomach && (actionHour >= 10 || diffMinutes > 180)) {
+  if (isMorningEmptyStomach && ((actedOnOrAfterScheduledDay && istHour(actionDate) >= 10) || diffMinutes > MEDICINE_LATE_AFTER_MIN)) {
     return {
       computedStatus: "late",
       isLate: true,
@@ -2290,8 +1816,7 @@ export function evaluateMedicineStatusAndMessage(
     };
   }
 
-  // Rule 2: Any medicine taken > 3 hours (180 mins) past scheduled time -> LATE
-  if (diffMinutes > 180) {
+  if (diffMinutes > MEDICINE_LATE_AFTER_MIN) {
     const hoursLate = (diffMinutes / 60).toFixed(1);
     return {
       computedStatus: "late",
@@ -2302,7 +1827,6 @@ export function evaluateMedicineStatusAndMessage(
     };
   }
 
-  // Rule 3: Taken On Time
   return {
     computedStatus: "taken",
     isLate: false,
@@ -2312,256 +1836,243 @@ export function evaluateMedicineStatusAndMessage(
   };
 }
 
-/**
- * Check if a scheduled medicine missed its 4-hour deadline window
- */
-export function isMedicinePast4HourDeadline(
-  medicine: MedicineItem,
-  scheduledDateStr: string
-): boolean {
-  const now = new Date();
-  const todayStr = getTodayDateString();
-
-  // Only auto-miss for today or past dates
-  if (scheduledDateStr > todayStr) return false;
-
-  const schedTimeParts = medicine.scheduled_time ? medicine.scheduled_time.split(":") : ["08", "00"];
-  const schedHour = parseInt(schedTimeParts[0], 10);
-  const schedMin = parseInt(schedTimeParts[1] || "0", 10);
-
-  const deadlineDate = new Date(
-    `${scheduledDateStr}T${String(schedHour).padStart(2, "0")}:${String(schedMin).padStart(2, "0")}:00`
-  );
-  // Add 4 hours grace deadline
-  deadlineDate.setHours(deadlineDate.getHours() + 4);
-
-  return now.getTime() > deadlineDate.getTime();
+/** True once a scheduled dose is more than MEDICINE_MISSED_AFTER_MIN (4 hours) overdue. */
+export function isMedicinePast4HourDeadline(medicine: MedicineItem, scheduledDateStr: string): boolean {
+  if (scheduledDateStr > todayIST()) return false;
+  const deadline = istInstant(scheduledDateStr, medicineHHMM(medicine)).getTime() + MEDICINE_MISSED_AFTER_MIN * 60000;
+  return Date.now() > deadline;
 }
 
+const AUTO_MISSED_PREFIX = "auto-missed-";
+
+/** Virtual "missed" entries are computed on read and never stored. */
+export const isAutoMissedLogId = (id: string): boolean => id.startsWith(AUTO_MISSED_PREFIX);
+
+const medicineDayKey = (medicineId: string, istDate: string) => `${medicineId}|${istDate}`;
+
+/**
+ * Doses that came due, passed the missed deadline and have no log. Only for days
+ * when the medicine already existed: a dose scheduled before the medicine was
+ * added was never the patient's to take, so it is not "missed".
+ */
+function buildAutoMissed(
+  patientId: string,
+  medicines: MedicineItem[],
+  dates: string[],
+  loggedKeys: Set<string>,
+): MedicineLogEntry[] {
+  const now = Date.now();
+  const out: MedicineLogEntry[] = [];
+  for (const med of medicines) {
+    if (!med.active) continue;
+    const createdMs = new Date(med.created_at).getTime();
+    const hhmm = medicineHHMM(med);
+    for (const date of dates) {
+      if (loggedKeys.has(medicineDayKey(med.id, date))) continue;
+      const scheduled = istInstant(date, hhmm);
+      if (scheduled.getTime() < createdMs) continue;
+      const deadline = scheduled.getTime() + MEDICINE_MISSED_AFTER_MIN * 60000;
+      if (now <= deadline) continue;
+      out.push({
+        id: `${AUTO_MISSED_PREFIX}${med.id}-${date}`,
+        patient_id: patientId,
+        medicine_id: med.id,
+        scheduled_time: scheduled.toISOString(),
+        taken_time: null,
+        status: "missed",
+        notes: "4 घंटे की समयावधि बीतने के कारण स्वतः (Auto-Missed) दर्ज",
+        created_at: new Date(deadline).toISOString(),
+      });
+    }
+  }
+  return out;
+}
+
+const bySchedule = (a: MedicineLogEntry, b: MedicineLogEntry) =>
+  new Date(a.scheduled_time).getTime() - new Date(b.scheduled_time).getTime();
+
+/**
+ * Callers send `${date}T${HH:MM:SS}` with no zone. That is India wall-clock time,
+ * not UTC and not the device's zone, so pin it to +05:30 before it is stored.
+ */
+function scheduledInstant(value?: string | null): Date {
+  if (!value) return new Date();
+  const zoneless = /^(\d{4}-\d{2}-\d{2})[T ](\d{2}:\d{2})(?::\d{2}(?:\.\d+)?)?$/.exec(value);
+  const d = zoneless ? istInstant(zoneless[1], zoneless[2]) : new Date(value);
+  if (Number.isNaN(d.getTime())) throw new Error(`Invalid scheduled time "${value}"`);
+  return d;
+}
+
+/**
+ * Record (or change) a dose. One row per medicine per IST day: an existing row
+ * for that day is updated, otherwise a real row is inserted. Recording over a
+ * virtual auto-missed day therefore just creates the real log.
+ */
 export async function logMedicineStatus(
   log: Omit<Database["public"]["Tables"]["medicine_logs"]["Insert"], "id" | "created_at">,
 ): Promise<MedicineLogEntry> {
-  const logDate = log.scheduled_time ? log.scheduled_time.split("T")[0] : getTodayDateString();
-  const startOfDay = `${logDate}T00:00:00.000Z`;
-  const endOfDay = `${logDate}T23:59:59.999Z`;
+  const client = db();
+  const scheduled = scheduledInstant(log.scheduled_time);
+  const { startISO, endISO } = istDayBounds(toISTDate(scheduled));
 
-  if (isSupabaseConfigured) {
-    // Check if there is an existing log for this medicine on this specific date
-    const { data: existing } = await supabase
+  const { data: existing, error: findError } = await client
+    .from("medicine_logs")
+    .select("*")
+    .eq("patient_id", log.patient_id)
+    .eq("medicine_id", log.medicine_id)
+    .gte("scheduled_time", startISO)
+    .lte("scheduled_time", endISO)
+    .order("created_at", { ascending: true });
+  if (findError) throw dbError("logMedicineStatus", findError);
+
+  let saved: MedicineLogEntry;
+  if (existing && existing.length > 0) {
+    const [keep, ...duplicates] = existing;
+    const patch: Database["public"]["Tables"]["medicine_logs"]["Update"] = { status: log.status };
+    if (log.taken_time !== undefined) patch.taken_time = log.taken_time;
+    if (log.notes !== undefined) patch.notes = log.notes;
+    const { data, error } = await client
       .from("medicine_logs")
-      .select("*")
-      .eq("patient_id", log.patient_id)
-      .eq("medicine_id", log.medicine_id)
-      .gte("scheduled_time", startOfDay)
-      .lte("scheduled_time", endOfDay)
-      .maybeSingle();
-
-    if (existing) {
-      // Update existing log
-      const { data, error } = await supabase
-        .from("medicine_logs")
-        .update({
-          status: log.status,
-          taken_time: log.taken_time,
-          notes: log.notes,
-        })
-        .eq("id", existing.id)
-        .select()
-        .single();
-
-      if (error) {
-        console.error("Supabase update logMedicineStatus error:", error);
-        throw new Error(error.message);
-      }
-      return data;
-    } else {
-      // Insert new log
-      const { data, error } = await supabase
-        .from("medicine_logs")
-        .insert({
-          medicine_id: log.medicine_id,
-          patient_id: log.patient_id,
-          scheduled_time: log.scheduled_time,
-          taken_time: log.taken_time,
-          status: log.status,
-          notes: log.notes,
-        })
-        .select()
-        .single();
-
-      if (error) {
-        console.error("Supabase insert logMedicineStatus error:", error);
-        throw new Error(error.message);
-      }
-      return data;
+      .update(patch)
+      .eq("id", keep.id)
+      .select()
+      .single();
+    if (error) throw dbError("logMedicineStatus", error);
+    saved = data;
+    if (duplicates.length > 0) {
+      // Older builds could double-insert the same dose; keep one row per day.
+      await client.from("medicine_logs").delete().in("id", duplicates.map((d) => d.id));
     }
-  }
-
-  const storedList = getStorageItem<MedicineLogEntry[]>("swasthtrack_medicine_logs", []);
-  const existingIdx = storedList.findIndex(
-    (m) =>
-      m.patient_id === log.patient_id &&
-      m.medicine_id === log.medicine_id &&
-      m.scheduled_time.startsWith(logDate),
-  );
-
-  const entry: MedicineLogEntry = {
-    id: existingIdx !== -1 ? storedList[existingIdx].id : `medlog-${Date.now()}`,
-    medicine_id: log.medicine_id,
-    patient_id: log.patient_id,
-    scheduled_time: log.scheduled_time,
-    taken_time: log.taken_time ?? null,
-    status: log.status,
-    notes: log.notes ?? null,
-    created_at: new Date().toISOString(),
-  };
-
-  if (existingIdx !== -1) {
-    storedList[existingIdx] = entry;
   } else {
-    storedList.unshift(entry);
+    const { data, error } = await client
+      .from("medicine_logs")
+      .insert({
+        medicine_id: log.medicine_id,
+        patient_id: log.patient_id,
+        scheduled_time: scheduled.toISOString(),
+        taken_time: log.taken_time,
+        status: log.status,
+        notes: log.notes,
+      })
+      .select()
+      .single();
+    if (error) throw dbError("logMedicineStatus", error);
+    saved = data;
   }
-  setStorageItem("swasthtrack_medicine_logs", storedList);
-  return entry;
+
+  invalidatePatientCache(log.patient_id);
+  return saved;
 }
 
+/** Undo a dose. Virtual auto-missed ids were never stored, so deleting one is a no-op. */
 export async function deleteMedicineLog(id: string): Promise<boolean> {
-  if (isSupabaseConfigured) {
-    try {
-      await supabase.from("medicine_logs").delete().eq("id", id);
-    } catch {}
-  }
-  const stored = getStorageItem<MedicineLogEntry[]>("swasthtrack_medicine_logs", []);
-  setStorageItem("swasthtrack_medicine_logs", stored.filter((m) => m.id !== id));
+  if (isAutoMissedLogId(id)) return true;
+  const { data, error } = await db().from("medicine_logs").delete().eq("id", id).select("patient_id");
+  if (error) throw dbError("deleteMedicineLog", error);
+  data?.forEach((row) => invalidatePatientCache(row.patient_id));
   return true;
 }
 
-export async function getMedicineLogsByDate(
-  patientId?: string,
-  dateStr?: string,
+async function fetchMedicineLogRows(pid: string, startISO: string, endISO: string): Promise<MedicineLogEntry[]> {
+  return fetchAllPages<MedicineLogEntry>("getMedicineLogs", (from, to) =>
+    db()
+      .from("medicine_logs")
+      .select("*")
+      .eq("patient_id", pid)
+      .gte("scheduled_time", startISO)
+      .lte("scheduled_time", endISO)
+      .order("scheduled_time", { ascending: true })
+      .order("id", { ascending: true })
+      .range(from, to),
+  );
+}
+
+/**
+ * Real logs plus virtual `auto-missed-*` entries for every active medicine, between
+ * two IST dates (inclusive), oldest first. One logs query + one medicines query.
+ */
+export async function getMedicineLogsInRange(
+  patientId: string,
+  startDate: string,
+  endDate: string,
 ): Promise<MedicineLogEntry[]> {
-  const profile = await getPatientProfile();
-  const pid = patientId || profile.id;
-  const targetDate = dateStr || getTodayDateString();
+  const pid = resolvePatientId(patientId);
+  startDate = ensureIstDate(startDate);
+  endDate = ensureIstDate(endDate);
+  const { startISO, endISO } = istRangeISO(startDate, endDate);
+  return cachedRead(pid, "medLogsRange", [startDate, endDate], async () => {
+    const [real, medicines] = await Promise.all([fetchMedicineLogRows(pid, startISO, endISO), getMedicines(pid)]);
+    const logged = new Set(real.map((l) => medicineDayKey(l.medicine_id, toISTDate(l.scheduled_time))));
+    const virtual = buildAutoMissed(pid, medicines, eachIST(startDate, endDate), logged);
+    return [...real, ...virtual].sort(bySchedule);
+  });
+}
 
-  const startOfDay = `${targetDate}T00:00:00.000Z`;
-  const endOfDay = `${targetDate}T23:59:59.999Z`;
-
-  let existingLogs: MedicineLogEntry[] = [];
-
-  if (isSupabaseConfigured) {
-    try {
-      const { data, error } = await supabase
-        .from("medicine_logs")
-        .select("*")
-        .eq("patient_id", pid)
-        .gte("scheduled_time", startOfDay)
-        .lte("scheduled_time", endOfDay)
-        .order("scheduled_time", { ascending: true });
-
-      if (!error && data) {
-        existingLogs = data as unknown as MedicineLogEntry[];
-      }
-    } catch (err) {
-      console.error("Supabase getMedicineLogsByDate error:", err);
-    }
-  }
-
-  // Fallback to localStorage ONLY when Supabase is NOT configured
-  if (!isSupabaseConfigured) {
-    const stored = getStorageItem<MedicineLogEntry[]>("swasthtrack_medicine_logs", []);
-    existingLogs = stored.filter(
-      (m) => m.patient_id === pid && m.scheduled_time.startsWith(targetDate),
-    );
-  }
-
-  // Auto-eval: Check if any active medicines are past their 4-hour deadline and generate auto-missed virtual logs
-  const activeMeds = await getMedicines(pid);
-  const existingMedIds = new Set(existingLogs.map((l) => l.medicine_id));
-  const autoMissedLogs: MedicineLogEntry[] = [];
-
-  for (const med of activeMeds) {
-    if (med.active && !existingMedIds.has(med.id)) {
-      if (isMedicinePast4HourDeadline(med, targetDate)) {
-        autoMissedLogs.push({
-          id: `auto-missed-${med.id}-${targetDate}`,
-          patient_id: pid,
-          medicine_id: med.id,
-          scheduled_time: `${targetDate}T${med.scheduled_time}`,
-          taken_time: null,
-          status: "missed",
-          notes: "4 घंटे की समयावधि बीतने के कारण स्वतः (Auto-Missed) दर्ज",
-          created_at: new Date().toISOString(),
-        });
-      }
-    }
-  }
-
-  return [...existingLogs, ...autoMissedLogs];
+/** One IST day's logs (real + virtual auto-missed). Defaults to today. */
+export async function getMedicineLogsByDate(patientId?: string, dateStr?: string): Promise<MedicineLogEntry[]> {
+  const date = dateStr ? ensureIstDate(dateStr) : todayIST();
+  return getMedicineLogsInRange(resolvePatientId(patientId), date, date);
 }
 
 export async function getTodayMedicineLogs(patientId?: string): Promise<MedicineLogEntry[]> {
-  return getMedicineLogsByDate(patientId, getTodayDateString());
+  return getMedicineLogsByDate(patientId, todayIST());
 }
 
 // ----------------------------------------------------
 // DAILY CHECKLISTS
 // ----------------------------------------------------
 
+const DEFAULT_CHECKLIST = [
+  { item_key: "breakfast_lunch", item_label: "Log breakfast and lunch / भोजन दर्ज करें" },
+  { item_key: "morning_bp", item_label: "Record morning blood pressure / सुबह का BP नापें" },
+  { item_key: "medicines", item_label: "Confirm medicines taken / दवाइयाँ लें" },
+  { item_key: "evening_walk", item_label: "Walk after dinner / रात को टहलें" },
+];
+
+const TEMPLATE_PREFIX = "checklist-template:";
+
+function sortChecklist(items: DailyChecklistEntry[]): DailyChecklistEntry[] {
+  const order = (key: string) => {
+    const i = DEFAULT_CHECKLIST.findIndex((d) => d.item_key === key);
+    return i === -1 ? DEFAULT_CHECKLIST.length : i;
+  };
+  return [...items].sort((a, b) => order(a.item_key) - order(b.item_key) || a.item_key.localeCompare(b.item_key));
+}
+
 export async function getDailyChecklist(patientId?: string, date?: string): Promise<DailyChecklistEntry[]> {
-  const profile = await getPatientProfile(patientId);
-  const pid = patientId || profile.id;
-  const targetDate = date || getTodayDateString();
+  const pid = resolvePatientId(patientId);
+  const targetDate = date ? ensureIstDate(date) : todayIST();
 
-  const defaultItems = [
-    { item_key: "breakfast_lunch", item_label: "Log breakfast and lunch / भोजन दर्ज करें" },
-    { item_key: "morning_bp", item_label: "Record morning blood pressure / सुबह का BP नापें" },
-    { item_key: "medicines", item_label: "Confirm medicines taken / दवाइयाँ लें" },
-    { item_key: "evening_walk", item_label: "Walk after dinner / रात को टहलें" },
-  ];
+  return cachedRead(pid, "checklist", [targetDate], async () => {
+    const select = () =>
+      db().from("daily_checklists").select("*").eq("patient_id", pid).eq("checklist_date", targetDate);
 
-  if (isSupabaseConfigured && pid && pid !== "patient-empty" && !pid.startsWith("patient-")) {
-    try {
-      const { data, error } = await supabase
-        .from("daily_checklists")
-        .select("*")
-        .eq("patient_id", pid)
-        .eq("checklist_date", targetDate);
+    const { data, error } = await select();
+    if (error) throw dbError("getDailyChecklist", error);
+    if (data && data.length > 0) return sortChecklist(data);
 
-      if (!error && data && data.length > 0) {
-        return data;
-      }
-
-      if (!error) {
-        const inserts = defaultItems.map((item) => ({
+    // Seed today's checklist. (patient, date, item) is unique, so a concurrent seed is harmless.
+    const { error: seedError } = await db()
+      .from("daily_checklists")
+      .upsert(
+        DEFAULT_CHECKLIST.map((item) => ({
           patient_id: pid,
           checklist_date: targetDate,
           item_key: item.item_key,
           item_label: item.item_label,
           status: "pending" as const,
-        }));
-        const { data: created, error: createError } = await supabase
-          .from("daily_checklists")
-          .insert(inserts)
-          .select();
+        })),
+        { onConflict: "patient_id,checklist_date,item_key", ignoreDuplicates: true },
+      );
 
-        if (!createError && created && created.length > 0) {
-          return created;
-        }
-      }
-    } catch {
-      // Safe fallback to local storage
+    if (!seedError) {
+      const { data: seeded, error: reselectError } = await select();
+      if (!reselectError && seeded && seeded.length > 0) return sortChecklist(seeded);
     }
-  }
 
-  const storedList = getStorageItem<DailyChecklistEntry[]>("swasthtrack_checklists", []);
-  let items = storedList.filter(
-    (c) => c.patient_id === pid && c.checklist_date === targetDate,
-  );
-
-  if (items.length === 0) {
-    items = defaultItems.map((item) => ({
-      id: `check-${item.item_key}-${targetDate}`,
+    // View-only members cannot create rows: show the unsaved template, flagged by its id.
+    return DEFAULT_CHECKLIST.map((item) => ({
+      id: `${TEMPLATE_PREFIX}${item.item_key}:${targetDate}`,
       patient_id: pid,
       checklist_date: targetDate,
       item_key: item.item_key,
@@ -2571,44 +2082,48 @@ export async function getDailyChecklist(patientId?: string, date?: string): Prom
       completed_at: null,
       created_at: new Date().toISOString(),
     }));
-    setStorageItem("swasthtrack_checklists", [...storedList, ...items]);
-  }
-
-  return items;
+  });
 }
 
 export async function toggleChecklistItem(id: string, completed: boolean): Promise<DailyChecklistEntry | null> {
-  const status = completed ? "completed" : "pending";
+  const status = completed ? ("completed" as const) : ("pending" as const);
   const completed_at = completed ? new Date().toISOString() : null;
 
-  if (isSupabaseConfigured) {
-    const { data, error } = await supabase
+  if (id.startsWith(TEMPLATE_PREFIX)) {
+    const [itemKey, checklistDate] = id.slice(TEMPLATE_PREFIX.length).split(":");
+    const template = DEFAULT_CHECKLIST.find((d) => d.item_key === itemKey);
+    const pid = resolvePatientId();
+    if (!template) return null;
+    const { data, error } = await db()
       .from("daily_checklists")
-      .update({ status, completed_at })
-      .eq("id", id)
+      .upsert(
+        {
+          patient_id: pid,
+          checklist_date: checklistDate,
+          item_key: template.item_key,
+          item_label: template.item_label,
+          status,
+          completed_at,
+        },
+        { onConflict: "patient_id,checklist_date,item_key" },
+      )
       .select()
       .single();
-
-    if (error) {
-      console.error("Supabase toggleChecklistItem error:", error);
-      throw new Error(error.message);
-    }
-
-    if (data) return data;
+    if (error) throw dbError("toggleChecklistItem", error);
+    invalidatePatientCache(pid);
+    return data;
   }
 
-  const storedList = getStorageItem<DailyChecklistEntry[]>("swasthtrack_checklists", []);
-  const idx = storedList.findIndex((c) => c.id === id);
-  if (idx !== -1) {
-    storedList[idx] = {
-      ...storedList[idx],
-      status,
-      completed_at,
-    };
-    setStorageItem("swasthtrack_checklists", storedList);
-    return storedList[idx];
-  }
-  return null;
+  const { data, error } = await db()
+    .from("daily_checklists")
+    .update({ status, completed_at })
+    .eq("id", id)
+    .select()
+    .maybeSingle();
+  if (error) throw dbError("toggleChecklistItem", error);
+  if (!data) throw new PermissionDeniedError();
+  invalidatePatientCache(data.patient_id);
+  return data;
 }
 
 // ----------------------------------------------------
@@ -2646,52 +2161,42 @@ export interface DashboardOverview {
 }
 
 export async function getDashboardOverview(patientId?: string): Promise<DashboardOverview> {
-  const profile = await getPatientProfile(patientId);
-  const pid = patientId || profile.id;
-  const today = getTodayDateString();
+  const pid = resolvePatientId(patientId);
+  const today = todayIST();
 
-  const [
-    conditions,
-    medicines,
-    bpList,
-    weightList,
-    foodList,
-    actList,
-    sleepList,
-    medLogs,
-    checklist,
-  ] = await Promise.all([
-    getMedicalConditions(pid),
-    getMedicines(pid),
-    getBloodPressureLogs(pid, 10),
-    getWeightLogs(pid, 10),
-    getFoodLogs(pid, 60),
-    getActivityLogs(pid, 7),
-    getSleepLogs(pid, 7),
-    getTodayMedicineLogs(pid),
-    getDailyChecklist(pid, today),
-  ]);
+  const [profile, conditions, medicines, bpList, weightList, foodRange, actList, sleepList, medLogs, checklist] =
+    await Promise.all([
+      getPatientProfile(pid),
+      getMedicalConditions(pid),
+      getMedicines(pid),
+      getBloodPressureLogs(pid, 10),
+      getWeightLogs(pid, 10),
+      // One query covers today's totals and the calorie sparkline (last 8 days).
+      getFoodLogsInRange(pid, addDaysIST(today, -7), today),
+      getActivityLogs(pid, 7),
+      getSleepLogs(pid, 7),
+      getTodayMedicineLogs(pid),
+      getDailyChecklist(pid, today),
+    ]);
 
+  // Services return newest-first; sparklines read left to right in time.
   const todayBPs = bpList.filter((b) => isSameLocalDay(b.measured_at, today));
   const todayMorningBP = todayBPs.find((b) => b.reading_type === "Morning") || null;
   const todayEveningBP = todayBPs.find((b) => b.reading_type === "Evening") || null;
   const todayWeight = weightList.find((w) => isSameLocalDay(w.measured_at, today)) || null;
 
-  const todayFoods = foodList.filter((f) => isSameLocalDay(f.consumed_at, today));
-  const todayFoodCalories = todayFoods.length > 0
-    ? todayFoods.reduce((acc, curr) => acc + Number(curr.calories || 0), 0)
-    : null;
-  const todayProteinGrams = todayFoods.length > 0
-    ? todayFoods.reduce((acc, curr) => acc + Number(curr.protein_g || 0), 0)
-    : null;
+  const todayFoods = foodRange.filter((f) => isSameLocalDay(f.consumed_at, today));
+  const todayFoodCalories =
+    todayFoods.length > 0 ? todayFoods.reduce((acc, curr) => acc + Number(curr.calories || 0), 0) : null;
+  const todayProteinGrams =
+    todayFoods.length > 0 ? todayFoods.reduce((acc, curr) => acc + Number(curr.protein_g || 0), 0) : null;
 
   const todayActivity = actList.find((a) => a.date === today) || null;
   const todaySleep = sleepList.find((sl) => sl.date === today) || null;
 
-  // Services return newest-first; sparklines read left to right in time.
   const caloriesByDay = new Map<string, number>();
-  foodList.forEach((f) => {
-    const day = f.consumed_at.slice(0, 10);
+  foodRange.forEach((f) => {
+    const day = toISTDate(f.consumed_at);
     caloriesByDay.set(day, (caloriesByDay.get(day) || 0) + Number(f.calories || 0));
   });
 
@@ -2719,25 +2224,28 @@ export async function getDashboardOverview(patientId?: string): Promise<Dashboar
   };
 
   const activeMeds = medicines.filter((m) => m.active);
-  
-  // Find the latest log for each medicine today
+
+  // Latest log per medicine today (a real log beats the virtual auto-missed one).
   const latestLogByMedId = new Map<string, MedicineLogEntry>();
   medLogs.forEach((l) => {
     const existing = latestLogByMedId.get(l.medicine_id);
-    if (!existing || new Date(l.created_at || l.scheduled_time) > new Date(existing.created_at || existing.scheduled_time)) {
+    if (!existing) {
+      latestLogByMedId.set(l.medicine_id, l);
+      return;
+    }
+    const existingVirtual = isAutoMissedLogId(existing.id);
+    const currentVirtual = isAutoMissedLogId(l.id);
+    if (existingVirtual && !currentVirtual) {
+      latestLogByMedId.set(l.medicine_id, l);
+    } else if (existingVirtual === currentVirtual && new Date(l.created_at) > new Date(existing.created_at)) {
       latestLogByMedId.set(l.medicine_id, l);
     }
   });
 
   const takenMedIds = new Set<string>();
   latestLogByMedId.forEach((log, medId) => {
-    if (log.status === "taken" || log.status === "late") {
-      takenMedIds.add(medId);
-    }
+    if (log.status === "taken" || log.status === "late") takenMedIds.add(medId);
   });
-
-  const todayMedicineTakenCount = takenMedIds.size;
-  const todayMedicineTotalCount = activeMeds.length;
 
   return {
     patient: profile,
@@ -2749,8 +2257,8 @@ export async function getDashboardOverview(patientId?: string): Promise<Dashboar
     todayProteinGrams,
     todayFoodCount: todayFoods.length,
     todayActivity,
-    todayMedicineTakenCount,
-    todayMedicineTotalCount,
+    todayMedicineTakenCount: takenMedIds.size,
+    todayMedicineTotalCount: activeMeds.length,
     todayMedicineLogs: medLogs,
     todayWeight,
     todaySleep,
@@ -2775,21 +2283,16 @@ export interface DataQualityReport {
 }
 
 export async function getFoodDataQualityReport(): Promise<DataQualityReport> {
-  let allFoods: FoodItem[] = [];
-  let allPortions: FoodPortion[] = [];
-
-  if (isSupabaseConfigured) {
-    try {
-      const { data: foods } = await (supabase as any).from("food_items").select("*");
-      const { data: portions } = await (supabase as any).from("food_portions").select("*");
-      if (foods) allFoods = foods as unknown as FoodItem[];
-      if (portions) allPortions = portions as unknown as FoodPortion[];
-    } catch {}
-  }
+  let allFoods = await fetchAllPages<FoodItem>("getFoodDataQualityReport(foods)", (from, to) =>
+    db().from("food_items").select("*").order("id", { ascending: true }).range(from, to),
+  );
+  let allPortions = await fetchAllPages<FoodPortion>("getFoodDataQualityReport(portions)", (from, to) =>
+    db().from("food_portions").select("*").order("id", { ascending: true }).range(from, to),
+  );
 
   if (allFoods.length === 0) {
-    allFoods = getStorageItem<FoodItem[]>("swasthtrack_master_foods", MOCK_FOODS);
-    allPortions = getStorageItem<FoodPortion[]>("swasthtrack_portions", MOCK_PORTIONS);
+    allFoods = MOCK_FOODS;
+    allPortions = MOCK_PORTIONS;
   }
 
   const nameCounts = new Map<string, number>();
@@ -2822,7 +2325,6 @@ export async function getFoodDataQualityReport(): Promise<DataQualityReport> {
     }
   });
 
-  // Calculate duplicates and variants
   let duplicateNamesCount = 0;
   let duplicateVariantsCount = 0;
 
@@ -2830,7 +2332,7 @@ export async function getFoodDataQualityReport(): Promise<DataQualityReport> {
     if (count > 1) {
       duplicateNamesCount++;
       duplicateNames.push(name);
-      
+
       const calsSet = variantMap.get(name);
       if (calsSet && calsSet.size > 1) {
         duplicateVariantsCount++;

@@ -1,272 +1,481 @@
 "use client";
 
-import { useEffect, useState, type FormEvent } from "react";
-import {
-  Check,
-  Clock,
-  Edit3,
-  HeartPulse,
-  ListOrdered,
-  Lock,
-  Plus,
-  Trash2,
-  TrendingUp,
-} from "lucide-react";
+import { useId, useState, type FormEvent } from "react";
+import dynamic from "next/dynamic";
+import { HeartPulse, Info, Plus } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Field, NumberInput, Select, TextInput } from "@/components/ui/form-field";
-import { BPTrendChart } from "@/components/health/bp-trend-chart";
-import { readingPeriods } from "@/lib/health-options";
+import { Modal } from "@/components/ui/modal";
+import { EmptyState, ErrorState } from "@/components/ui/page";
+import { Segmented, segmentedPanelId, segmentedTabId } from "@/components/ui/segmented";
+import { useConfirm } from "@/components/ui/confirm-dialog";
+import { useToast } from "@/components/ui/toast";
+import { BPChip, bpSafetyNote, classifyReading, statusTextClass } from "@/components/health/bp-chip";
+import { fmtTime, istDateAndTime, relativeDayLabel } from "@/components/health/format";
+import {
+  ChartSkeleton,
+  RangeSelector,
+  RowActions,
+  SmallNote,
+  StatTile,
+  panelTabOptions,
+  rangeWindow,
+  type ChartRange,
+  type PanelTab,
+} from "@/components/health/panel-parts";
+import { loadErrorMessage, useAsyncData } from "@/components/health/use-async-data";
+import {
+  classifyBP,
+  isPlausibleBP,
+  istHour,
+  istInstant,
+  mean,
+  toISTDate,
+  todayIST,
+  type BPThresholds,
+} from "@/lib/health-rules";
 import {
   deleteBloodPressure,
-  getBloodPressureLogsByDateRange,
+  getBloodPressureLogsInRange,
   logBloodPressure,
   updateBloodPressure,
   type BPLogEntry,
 } from "@/services/patient-service";
 
+// recharts is the heaviest dependency on this screen; it loads only when the
+// Trend tab is opened.
+const BPTrendChart = dynamic(() => import("@/components/health/bp-trend-chart").then((m) => m.BPTrendChart), {
+  ssr: false,
+  loading: () => <ChartSkeleton />,
+});
+
 type BloodPressurePanelProps = {
   patientId: string;
+  /** Newest first. */
   logs: BPLogEntry[];
+  thresholds: BPThresholds;
+  /** False for viewers: the panel is read-only. */
+  canWrite: boolean;
   onSuccess?: () => void;
 };
 
-// Auto-detect morning or evening based on current hour
-function getDefaultReadingType(): string {
-  const hour = new Date().getHours();
-  return hour < 14 ? "Morning" : "Evening";
+type FieldErrors = { systolic?: string; diastolic?: string; pulse?: string };
+
+const PERIOD_LABEL: Record<string, string> = {
+  Morning: "सुबह",
+  Afternoon: "दोपहर",
+  Evening: "शाम",
+  Night: "रात",
+  Special: "चेकअप",
+};
+
+function periodLabel(type: string | null): string {
+  return (type && PERIOD_LABEL[type]) || type || "दर्ज";
 }
 
-// Get BP category for neutral display (NOT diagnosis)
-function getBPFlag(systolic: number, diastolic: number): { label: string; labelHi: string; color: string; bgColor: string } {
-  if (systolic < 90 || diastolic < 60) {
-    return { label: "Below monitoring range", labelHi: "सामान्य range से नीचे", color: "text-info", bgColor: "bg-info-soft border-info-line" };
+/** Checks one entry. Returns field errors, or the parsed numbers. */
+function parseBP(
+  sysStr: string,
+  diaStr: string,
+  pulseStr: string,
+): { errors: FieldErrors; values: { systolic: number; diastolic: number; pulse: number | null } | null } {
+  const errors: FieldErrors = {};
+  const systolic = parseInt(sysStr, 10);
+  const diastolic = parseInt(diaStr, 10);
+  const pulse = pulseStr.trim() ? parseInt(pulseStr, 10) : null;
+
+  if (!sysStr.trim() || Number.isNaN(systolic)) errors.systolic = "ऊपर का नंबर लिखें";
+  else if (systolic < 50 || systolic > 280) errors.systolic = "50 से 280 के बीच लिखें";
+
+  if (!diaStr.trim() || Number.isNaN(diastolic)) errors.diastolic = "नीचे का नंबर लिखें";
+  else if (diastolic < 30 || diastolic > 180) errors.diastolic = "30 से 180 के बीच लिखें";
+
+  if (!errors.systolic && !errors.diastolic && systolic <= diastolic) {
+    errors.diastolic = "नीचे का नंबर ऊपर वाले से छोटा होना चाहिए";
   }
-  if (systolic <= 120 && diastolic <= 80) {
-    return { label: "Within normal range", labelHi: "सामान्य range में", color: "text-positive", bgColor: "bg-positive-soft border-positive-line" };
+  if (pulse !== null && (Number.isNaN(pulse) || pulse < 25 || pulse > 250)) {
+    errors.pulse = "25 से 250 के बीच लिखें";
   }
-  if (systolic <= 130 && diastolic <= 85) {
-    return { label: "Slightly above normal range", labelHi: "सामान्य range से थोड़ा ऊपर", color: "text-attention", bgColor: "bg-attention-soft border-attention-line" };
+
+  if (Object.keys(errors).length > 0 || !isPlausibleBP(systolic, diastolic, pulse)) {
+    return { errors, values: null };
   }
-  if (systolic <= 140 || diastolic <= 90) {
-    return { label: "Above normal monitoring range", labelHi: "सामान्य monitoring range से ऊपर", color: "text-attention", bgColor: "bg-attention-soft border-attention-line" };
-  }
-  return { label: "Significantly above monitoring range", labelHi: "यह reading सामान्य monitoring range से बाहर है", color: "text-critical", bgColor: "bg-critical-soft border-critical-line" };
+  return { errors, values: { systolic, diastolic, pulse } };
 }
 
-// Allow editing/correcting BP entries
-function canEditEntry(createdAt: string): boolean {
-  return Boolean(createdAt);
+/* ---- Latest morning / evening ------------------------------------------------- */
+
+function LatestCard({
+  title,
+  log,
+  thresholds,
+}: {
+  title: string;
+  log: BPLogEntry | undefined;
+  thresholds: BPThresholds;
+}) {
+  const today = todayIST();
+  const day = log ? toISTDate(log.measured_at) : null;
+  const { tone } = log ? classifyReading(log.systolic, log.diastolic, thresholds) : { tone: "info" as const };
+
+  return (
+    <div className="rounded-card border border-line bg-surface-sunken p-4">
+      <p className="text-xs font-semibold text-ink-muted">{title}</p>
+      {log && day ? (
+        <>
+          <p className={`tabular mt-1 text-3xl font-semibold ${statusTextClass[tone]}`}>
+            {log.systolic}/{log.diastolic}
+            <span className="ml-1 text-xs font-medium text-ink-subtle">mmHg</span>
+          </p>
+          <p className="mt-0.5 text-xs text-ink-subtle">
+            {relativeDayLabel(day, today)}, {fmtTime(log.measured_at)}
+            {log.pulse ? ` · नब्ज़ ${log.pulse}` : ""}
+          </p>
+          <BPChip systolic={log.systolic} diastolic={log.diastolic} thresholds={thresholds} className="mt-2" />
+          {day !== today ? <p className="mt-1.5 text-xs text-ink-subtle">आज अभी दर्ज नहीं हुआ</p> : null}
+        </>
+      ) : (
+        <>
+          <p className="mt-1 text-3xl font-semibold text-ink-subtle">—</p>
+          <p className="mt-1 text-xs text-ink-subtle">अभी तक कोई रीडिंग दर्ज नहीं</p>
+        </>
+      )}
+    </div>
+  );
 }
 
-type ChartRange = "7d" | "30d" | "3m" | "6m" | "1y";
+/* ---- Edit dialog -------------------------------------------------------------- */
 
-function getDateRangeStart(range: ChartRange): Date {
-  const now = new Date();
-  switch (range) {
-    case "7d": return new Date(now.getFullYear(), now.getMonth(), now.getDate() - 7);
-    case "30d": return new Date(now.getFullYear(), now.getMonth(), now.getDate() - 30);
-    case "3m": return new Date(now.getFullYear(), now.getMonth() - 3, now.getDate());
-    case "6m": return new Date(now.getFullYear(), now.getMonth() - 6, now.getDate());
-    case "1y": return new Date(now.getFullYear() - 1, now.getMonth(), now.getDate());
+function EditBPModal({
+  log,
+  thresholds,
+  onClose,
+  onSaved,
+}: {
+  log: BPLogEntry;
+  thresholds: BPThresholds;
+  onClose: () => void;
+  onSaved: () => void;
+}) {
+  const toast = useToast();
+  const confirm = useConfirm();
+  const initial = istDateAndTime(log.measured_at);
+  const [systolic, setSystolic] = useState(String(log.systolic));
+  const [diastolic, setDiastolic] = useState(String(log.diastolic));
+  const [pulse, setPulse] = useState(log.pulse ? String(log.pulse) : "");
+  const [period, setPeriod] = useState(log.reading_type || "Morning");
+  const [date, setDate] = useState(initial.date);
+  const [time, setTime] = useState(initial.time);
+  const [notes, setNotes] = useState(log.notes || "");
+  const [errors, setErrors] = useState<FieldErrors>({});
+  const [saving, setSaving] = useState(false);
+
+  async function save() {
+    const { errors: found, values } = parseBP(systolic, diastolic, pulse);
+    setErrors(found);
+    if (!values) return;
+    if (!date || !time) {
+      toast.error("तारीख़ और समय भरें", "Date and time are required.");
+      return;
+    }
+    const measuredAt = istInstant(date, time);
+    if (measuredAt.getTime() > Date.now() + 5 * 60_000) {
+      toast.error("यह समय अभी से आगे का है", "Time is in the future.");
+      return;
+    }
+
+    const cls = classifyBP(values.systolic, values.diastolic, thresholds);
+    if (cls.category === "crisis" || cls.needsUrgentAttention) {
+      const ok = await confirm({
+        title: "क्या यह रीडिंग सही है?",
+        message: `${values.systolic}/${values.diastolic} mmHg सामान्य से काफ़ी अलग है। सही है तो सहेजें; टाइप की गलती हो तो रद्द करके जाँचें।`,
+        confirmLabel: "हाँ, सही है",
+        cancelLabel: "रद्द करें",
+      });
+      if (!ok) return;
+    }
+
+    setSaving(true);
+    try {
+      await updateBloodPressure(log.id, {
+        systolic: values.systolic,
+        diastolic: values.diastolic,
+        pulse: values.pulse,
+        reading_type: period,
+        measured_at: measuredAt.toISOString(),
+        notes: notes.trim() || null,
+      });
+      toast.success("रीडिंग अपडेट हो गई", "BP reading updated.");
+      onSaved();
+      onClose();
+    } catch (err) {
+      toast.error("अपडेट नहीं हो पाया", err instanceof Error ? err.message : undefined);
+    } finally {
+      setSaving(false);
+    }
   }
+
+  return (
+    <Modal
+      isOpen
+      onClose={onClose}
+      title="BP reading बदलें"
+      hindiTitle="रक्तचाप संपादित करें"
+      footer={
+        <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+          <Button variant="secondary" onClick={onClose}>
+            रद्द करें (Cancel)
+          </Button>
+          <Button variant="primary" loading={saving} onClick={() => void save()}>
+            सहेजें (Save)
+          </Button>
+        </div>
+      }
+    >
+      <div className="space-y-3">
+        <div className="grid grid-cols-2 gap-3">
+          <Field label="Systolic (ऊपर वाला)" hint="mmHg" error={errors.systolic} required>
+            <NumberInput maxLength={3} value={systolic} onChange={(e) => setSystolic(e.target.value)} />
+          </Field>
+          <Field label="Diastolic (नीचे वाला)" hint="mmHg" error={errors.diastolic} required>
+            <NumberInput maxLength={3} value={diastolic} onChange={(e) => setDiastolic(e.target.value)} />
+          </Field>
+        </div>
+        <div className="grid grid-cols-2 gap-3">
+          <Field label="Pulse (नब्ज़)" hint="bpm · वैकल्पिक" error={errors.pulse}>
+            <NumberInput maxLength={3} value={pulse} onChange={(e) => setPulse(e.target.value)} />
+          </Field>
+          <Field label="समय का हिस्सा (Period)">
+            <Select value={period} onChange={(e) => setPeriod(e.target.value)}>
+              <option value="Morning">सुबह (Morning)</option>
+              <option value="Afternoon">दोपहर (Afternoon)</option>
+              <option value="Evening">शाम (Evening)</option>
+              <option value="Night">रात (Night)</option>
+              <option value="Special">चेकअप (Special)</option>
+            </Select>
+          </Field>
+        </div>
+        <div className="grid grid-cols-2 gap-3">
+          <Field label="तारीख़ (Date)">
+            <TextInput type="date" max={todayIST()} value={date} onChange={(e) => setDate(e.target.value)} />
+          </Field>
+          <Field label="समय (Time)">
+            <TextInput type="time" value={time} onChange={(e) => setTime(e.target.value)} />
+          </Field>
+        </div>
+        <Field label="टिप्पणी (Notes)">
+          <TextInput value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="जैसे: दवाई के बाद, 10 मिनट आराम के बाद" />
+        </Field>
+      </div>
+    </Modal>
+  );
 }
 
-export function BloodPressurePanel({ patientId, logs, onSuccess }: BloodPressurePanelProps) {
+/* ---- Trend tab ---------------------------------------------------------------- */
+
+function BPTrend({ patientId, thresholds }: { patientId: string; thresholds: BPThresholds }) {
+  const [range, setRange] = useState<ChartRange>("30d");
+  const win = rangeWindow(range);
+  const { data, error, loading, reload } = useAsyncData(
+    () => getBloodPressureLogsInRange(patientId, win.startDate, win.endDate),
+    [patientId, range, win.endDate],
+  );
+
+  const stats = (() => {
+    if (!data || data.length === 0) return null;
+    const sys = data.map((l) => l.systolic);
+    const dia = data.map((l) => l.diastolic);
+    const classes = data.map((l) => classifyBP(l.systolic, l.diastolic, thresholds));
+    const avgOf = (type: string) => {
+      const part = data.filter((l) => l.reading_type === type);
+      return part.length > 0
+        ? { n: part.length, sys: Math.round(mean(part.map((l) => l.systolic))!), dia: Math.round(mean(part.map((l) => l.diastolic))!) }
+        : null;
+    };
+    return {
+      count: data.length,
+      avgSys: Math.round(mean(sys)!),
+      avgDia: Math.round(mean(dia)!),
+      minSys: Math.min(...sys),
+      maxSys: Math.max(...sys),
+      minDia: Math.min(...dia),
+      maxDia: Math.max(...dia),
+      aboveTarget: classes.filter((c) => c.aboveTarget).length,
+      aboveAlert: classes.filter((c) => c.exceedsAlert).length,
+      morning: avgOf("Morning"),
+      evening: avgOf("Evening"),
+    };
+  })();
+
+  return (
+    <div className="space-y-4">
+      <RangeSelector value={range} onChange={setRange} ariaLabel="BP trend range — अवधि चुनें" />
+
+      {error ? (
+        <ErrorState
+          title="ट्रेंड लोड नहीं हो पाया"
+          englishTitle="Could not load the trend"
+          description={loadErrorMessage(error)}
+          onRetry={reload}
+        />
+      ) : loading ? (
+        <ChartSkeleton />
+      ) : (
+        <>
+          <BPTrendChart logs={data ?? []} thresholds={thresholds} startDate={win.startDate} endDate={win.endDate} />
+
+          {stats ? (
+            <div className="space-y-3" aria-live="polite">
+              <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4">
+                <StatTile label="औसत (Average)" value={`${stats.avgSys}/${stats.avgDia}`} unit="mmHg" />
+                <StatTile
+                  label="ऊपर का: कम–ज़्यादा"
+                  value={`${stats.minSys}–${stats.maxSys}`}
+                  helper={`नीचे का ${stats.minDia}–${stats.maxDia}`}
+                />
+                <StatTile
+                  label="लक्ष्य से ऊपर"
+                  value={`${stats.aboveTarget}/${stats.count}`}
+                  unit="रीडिंग"
+                  tone={stats.aboveTarget > 0 ? "attention" : "positive"}
+                  helper={`लक्ष्य ${thresholds.target_systolic}/${thresholds.target_diastolic}`}
+                />
+                <StatTile
+                  label="अलर्ट सीमा से ऊपर"
+                  value={stats.aboveAlert}
+                  unit="रीडिंग"
+                  tone={stats.aboveAlert > 0 ? "critical" : "positive"}
+                  helper={`अलर्ट ${thresholds.alert_systolic}/${thresholds.alert_diastolic}`}
+                />
+              </div>
+              {stats.morning || stats.evening ? (
+                <div className="grid grid-cols-2 gap-2.5">
+                  <StatTile
+                    label="सुबह का औसत"
+                    value={stats.morning ? `${stats.morning.sys}/${stats.morning.dia}` : null}
+                    unit="mmHg"
+                    helper={stats.morning ? `${stats.morning.n} रीडिंग` : "इस अवधि में नहीं"}
+                  />
+                  <StatTile
+                    label="शाम का औसत"
+                    value={stats.evening ? `${stats.evening.sys}/${stats.evening.dia}` : null}
+                    unit="mmHg"
+                    helper={stats.evening ? `${stats.evening.n} रीडिंग` : "इस अवधि में नहीं"}
+                  />
+                </div>
+              ) : null}
+              {stats.count < 5 ? (
+                <SmallNote>
+                  इस अवधि में सिर्फ़ {stats.count} रीडिंग हैं, इसलिए औसत पर ज़्यादा भरोसा न करें। (Small sample — treat averages as rough.)
+                </SmallNote>
+              ) : null}
+            </div>
+          ) : (
+            <EmptyState
+              icon={HeartPulse}
+              title="इस अवधि में कोई रीडिंग नहीं"
+              description="No readings in this period. A longer range may show earlier readings."
+            />
+          )}
+        </>
+      )}
+    </div>
+  );
+}
+
+/* ---- Panel -------------------------------------------------------------------- */
+
+export function BloodPressurePanel({ patientId, logs, thresholds, canWrite, onSuccess }: BloodPressurePanelProps) {
+  const toast = useToast();
+  const confirm = useConfirm();
+  const tabsId = useId();
+
+  const [tab, setTab] = useState<PanelTab>(canWrite ? "form" : "history");
   const [systolic, setSystolic] = useState("");
   const [diastolic, setDiastolic] = useState("");
   const [pulse, setPulse] = useState("");
-  const [readingType, setReadingType] = useState(getDefaultReadingType());
+  // A convenience default for the slot, from India time; the reader can change it.
+  const [period, setPeriod] = useState(() => (istHour(new Date()) < 14 ? "Morning" : "Evening"));
   const [notes, setNotes] = useState("");
-  const [error, setError] = useState("");
-  const [successMsg, setSuccessMsg] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState<FieldErrors>({});
+  const [saving, setSaving] = useState(false);
+  const [editing, setEditing] = useState<BPLogEntry | null>(null);
 
-  // Edit state
-  const [editingId, setEditingId] = useState<string | null>(null);
-  const [editSystolic, setEditSystolic] = useState("");
-  const [editDiastolic, setEditDiastolic] = useState("");
-  const [editPulse, setEditPulse] = useState("");
-  const [editReadingType, setEditReadingType] = useState("Morning");
-  const [editDate, setEditDate] = useState("");
-  const [editTime, setEditTime] = useState("");
-  const [editNotes, setEditNotes] = useState("");
+  const latestMorning = logs.find((l) => l.reading_type === "Morning");
+  const latestEvening = logs.find((l) => l.reading_type === "Evening");
 
-  // Chart state
-  const [chartRange, setChartRange] = useState<ChartRange>("30d");
-  const [chartLogs, setChartLogs] = useState<BPLogEntry[]>([]);
-  const [chartLoading, setChartLoading] = useState(false);
-
-  // Tab state
-  const [activeTab, setActiveTab] = useState<"form" | "history" | "chart">("form");
-
-  // Separate morning and evening from logs
-  const morningLogs = logs.filter((l) => l.reading_type === "Morning");
-  const eveningLogs = logs.filter((l) => l.reading_type === "Evening");
-  const latestMorning = morningLogs[0];
-  const latestEvening = eveningLogs[0];
-
-  // Load chart data when range or tab changes
-  useEffect(() => {
-    if (activeTab !== "chart") return;
-    let active = true;
-
-    const start = getDateRangeStart(chartRange);
-    const end = new Date();
-
-    getBloodPressureLogsByDateRange(patientId, start.toISOString(), end.toISOString())
-      .then((data) => {
-        if (active) {
-          setChartLogs(data);
-        }
-      })
-      .catch(() => {
-        // silent
-      })
-      .finally(() => {
-        if (active) {
-          setChartLoading(false);
-        }
-      });
-
-    return () => {
-      active = false;
-    };
-  }, [activeTab, chartRange, patientId]);
-
-  // Compute summary stats from chart logs
-  const summaryStats = chartLogs.length > 0
-    ? {
-        avgSys: Math.round(chartLogs.reduce((s, l) => s + l.systolic, 0) / chartLogs.length),
-        avgDia: Math.round(chartLogs.reduce((s, l) => s + l.diastolic, 0) / chartLogs.length),
-        minSys: Math.min(...chartLogs.map((l) => l.systolic)),
-        maxSys: Math.max(...chartLogs.map((l) => l.systolic)),
-        minDia: Math.min(...chartLogs.map((l) => l.diastolic)),
-        maxDia: Math.max(...chartLogs.map((l) => l.diastolic)),
-        count: chartLogs.length,
-      }
-    : null;
+  const typedSys = parseInt(systolic, 10);
+  const typedDia = parseInt(diastolic, 10);
+  const preview =
+    Number.isFinite(typedSys) && Number.isFinite(typedDia) && isPlausibleBP(typedSys, typedDia)
+      ? classifyReading(typedSys, typedDia, thresholds)
+      : null;
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
-    setError("");
-    setSuccessMsg("");
+    const { errors: found, values } = parseBP(systolic, diastolic, pulse);
+    setErrors(found);
+    if (!values) return;
 
-    const sysNum = parseInt(systolic, 10);
-    const diaNum = parseInt(diastolic, 10);
-    const pulseNum = pulse ? parseInt(pulse, 10) : undefined;
-
-    if (isNaN(sysNum) || sysNum < 50 || sysNum > 280) {
-      setError("कृपया Systolic 50-280 mmHg के बीच दर्ज करें");
-      return;
+    const cls = classifyBP(values.systolic, values.diastolic, thresholds);
+    const note = bpSafetyNote(cls);
+    if (cls.category === "crisis" || cls.needsUrgentAttention) {
+      const ok = await confirm({
+        title: "क्या यह रीडिंग सही है?",
+        message: `${values.systolic}/${values.diastolic} mmHg सामान्य से काफ़ी अलग है। ${note ?? ""} सही है तो सहेजें; टाइप की गलती हो तो रद्द करके जाँचें।`,
+        confirmLabel: "हाँ, सही है — सहेजें",
+        cancelLabel: "रद्द करें",
+      });
+      if (!ok) return;
     }
 
-    if (isNaN(diaNum) || diaNum < 30 || diaNum > 180) {
-      setError("कृपया Diastolic 30-180 mmHg के बीच दर्ज करें");
-      return;
-    }
-
-    if (sysNum <= diaNum) {
-      setError("Systolic, Diastolic से अधिक होना चाहिए");
-      return;
-    }
-
+    setSaving(true);
     try {
-      setLoading(true);
       await logBloodPressure({
         patient_id: patientId,
-        systolic: sysNum,
-        diastolic: diaNum,
-        pulse: pulseNum ?? null,
-        reading_type: readingType,
+        systolic: values.systolic,
+        diastolic: values.diastolic,
+        pulse: values.pulse,
+        reading_type: period,
         measured_at: new Date().toISOString(),
         notes: notes.trim() || null,
       });
-
       setSystolic("");
       setDiastolic("");
       setPulse("");
       setNotes("");
-      setSuccessMsg("BP reading saved! (रक्तचाप दर्ज हो गया) ✅");
-      setTimeout(() => setSuccessMsg(""), 4000);
-      onSuccess?.();
-    } catch {
-      setError("BP दर्ज करने में त्रुटि हुई।");
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  async function handleDelete(id: string) {
-    if (!confirm("क्या आप यह BP reading मिटाना चाहते हैं?")) return;
-    try {
-      await deleteBloodPressure(id);
-      setSuccessMsg("BP reading deleted ✅");
-      setTimeout(() => setSuccessMsg(""), 3000);
-      onSuccess?.();
-    } catch {
-      setError("Delete में त्रुटि हुई।");
-    }
-  }
-
-  function startEdit(log: BPLogEntry) {
-    setEditingId(log.id);
-    setEditSystolic(String(log.systolic));
-    setEditDiastolic(String(log.diastolic));
-    setEditPulse(log.pulse ? String(log.pulse) : "");
-    setEditReadingType(log.reading_type || "Morning");
-    const d = new Date(log.measured_at);
-    const yyyy = d.getFullYear();
-    const mm = String(d.getMonth() + 1).padStart(2, "0");
-    const dd = String(d.getDate()).padStart(2, "0");
-    setEditDate(`${yyyy}-${mm}-${dd}`);
-    setEditTime(d.toTimeString().slice(0, 5));
-    setEditNotes(log.notes || "");
-  }
-
-  async function handleSaveEdit() {
-    if (!editingId) return;
-    const sysNum = parseInt(editSystolic, 10);
-    const diaNum = parseInt(editDiastolic, 10);
-    if (isNaN(sysNum) || isNaN(diaNum) || sysNum <= diaNum) {
-      setError("कृपया सही values दर्ज करें (Systolic must be higher than Diastolic)");
-      return;
-    }
-    try {
-      let newMeasuredAt = new Date().toISOString();
-      if (editDate && editTime) {
-        newMeasuredAt = new Date(`${editDate}T${editTime}:00`).toISOString();
-      }
-      await updateBloodPressure(editingId, {
-        systolic: sysNum,
-        diastolic: diaNum,
-        pulse: editPulse ? parseInt(editPulse, 10) : null,
-        reading_type: editReadingType,
-        measured_at: newMeasuredAt,
-        notes: editNotes.trim() || null,
+      setErrors({});
+      toast({
+        title: `रीडिंग दर्ज हो गई: ${values.systolic}/${values.diastolic}`,
+        description: note ?? "BP reading saved.",
+        tone: "success",
+        durationMs: note ? 12000 : undefined,
       });
-      setEditingId(null);
-      setSuccessMsg("BP reading updated ✅");
-      setTimeout(() => setSuccessMsg(""), 3000);
       onSuccess?.();
-    } catch {
-      setError("Update में त्रुटि हुई।");
+    } catch (err) {
+      toast.error("रीडिंग दर्ज नहीं हो पाई", err instanceof Error ? err.message : undefined);
+    } finally {
+      setSaving(false);
     }
   }
 
-  const rangeLabels: Record<ChartRange, string> = {
-    "7d": "7 दिन",
-    "30d": "30 दिन",
-    "3m": "3 महीने",
-    "6m": "6 महीने",
-    "1y": "1 साल",
-  };
+  async function handleDelete(log: BPLogEntry) {
+    const ok = await confirm({
+      title: "यह BP रीडिंग मिटाएँ?",
+      message: `${log.systolic}/${log.diastolic} mmHg · ${relativeDayLabel(toISTDate(log.measured_at))}, ${fmtTime(log.measured_at)}। यह वापस नहीं आएगी।`,
+      tone: "danger",
+    });
+    if (!ok) return;
+    try {
+      await deleteBloodPressure(log.id);
+      toast.success("रीडिंग मिटा दी गई", "BP reading deleted.");
+      onSuccess?.();
+    } catch (err) {
+      toast.error("मिटाया नहीं जा सका", err instanceof Error ? err.message : undefined);
+    }
+  }
 
   return (
     <Card>
@@ -278,458 +487,182 @@ export function BloodPressurePanel({ patientId, logs, onSuccess }: BloodPressure
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-2">
               <CardTitle>Blood Pressure</CardTitle>
-              <Badge variant="critical">रक्तचाप</Badge>
+              <Badge variant="critical" lang="hi">
+                रक्तचाप
+              </Badge>
             </div>
             <CardDescription>
-              Systolic, diastolic & pulse · सुबह / शाम
+              लक्ष्य {thresholds.target_systolic}/{thresholds.target_diastolic} · अलर्ट {thresholds.alert_systolic}/{thresholds.alert_diastolic} mmHg
             </CardDescription>
           </div>
         </div>
       </CardHeader>
 
-      {error ? (
-        <div className="mb-4 rounded-card border border-critical-line bg-critical-soft p-3 text-sm font-medium text-critical">
-          {error}
-        </div>
-      ) : null}
-
-      {successMsg ? (
-        <div className="mb-4 flex items-center gap-2 rounded-card border border-positive-line bg-positive-soft p-3 text-sm font-semibold text-positive">
-          <Check className="h-4 w-4 text-positive" />
-          {successMsg}
-        </div>
-      ) : null}
-
-      {/* Latest readings - Morning & Evening */}
       <div className="mb-5 grid gap-3 sm:grid-cols-2">
-        <div className="rounded-card border border-line bg-surface-sunken p-4">
-          <p className="text-2xs font-semibold uppercase tracking-wider text-ink-subtle">
-            सुबह · Morning
-          </p>
-          <p className="mt-1 text-3xl font-extrabold text-ink">
-            {latestMorning ? `${latestMorning.systolic}/${latestMorning.diastolic}` : "--/--"}
-            <span className="text-xs font-semibold text-ink-subtle"> mmHg</span>
-          </p>
-          {latestMorning ? (
-            <>
-              <p className="mt-0.5 text-xs text-ink-subtle">
-                Pulse {latestMorning.pulse || "--"} · {new Date(latestMorning.measured_at).toLocaleDateString("en-IN", { day: "numeric", month: "short" })}
-              </p>
-              {(() => {
-                const flag = getBPFlag(latestMorning.systolic, latestMorning.diastolic);
-                return (
-                  <p className={`mt-1 text-2xs font-semibold ${flag.color}`}>
-                    {flag.labelHi}
-                  </p>
-                );
-              })()}
-            </>
-          ) : (
-            <p className="mt-1 text-xs text-ink-subtle">आज नहीं दर्ज किया</p>
-          )}
-        </div>
-
-        <div className="rounded-card border border-line bg-surface-sunken p-4">
-          <p className="text-2xs font-semibold uppercase tracking-wider text-ink-subtle">
-            शाम · Evening
-          </p>
-          <p className="mt-1 text-3xl font-extrabold text-ink">
-            {latestEvening ? `${latestEvening.systolic}/${latestEvening.diastolic}` : "--/--"}
-            <span className="text-xs font-semibold text-ink-subtle"> mmHg</span>
-          </p>
-          {latestEvening ? (
-            <>
-              <p className="mt-0.5 text-xs text-ink-subtle">
-                Pulse {latestEvening.pulse || "--"} · {new Date(latestEvening.measured_at).toLocaleDateString("en-IN", { day: "numeric", month: "short" })}
-              </p>
-              {(() => {
-                const flag = getBPFlag(latestEvening.systolic, latestEvening.diastolic);
-                return (
-                  <p className={`mt-1 text-2xs font-semibold ${flag.color}`}>
-                    {flag.labelHi}
-                  </p>
-                );
-              })()}
-            </>
-          ) : (
-            <p className="mt-1 text-xs text-ink-subtle">आज नहीं दर्ज किया</p>
-          )}
-        </div>
+        <LatestCard title="सुबह · Morning (ताज़ा)" log={latestMorning} thresholds={thresholds} />
+        <LatestCard title="शाम · Evening (ताज़ा)" log={latestEvening} thresholds={thresholds} />
       </div>
 
-      {/* Panel view switch. Labels are single words and never wrap: the old
-          three-emoji labels broke onto two and three lines at 320px. */}
-      <div className="mb-4 grid grid-cols-3 gap-1 rounded-control bg-surface-sunken p-1">
-        {(["form", "history", "chart"] as const).map((tab) => (
-          <button
-            key={tab}
-            type="button"
-            role="tab"
-            aria-selected={activeTab === tab}
-            onClick={() => setActiveTab(tab)}
-            className={`pressable flex min-h-10 cursor-pointer items-center justify-center gap-1.5 whitespace-nowrap rounded-field px-2 text-sm font-medium ${
-              activeTab === tab
-                ? "bg-surface text-ink shadow-e1"
-                : "text-ink-muted hover:text-ink"
-            }`}
-          >
-            {tab === "form" ? (
-              <>
-                <Plus aria-hidden className="h-4 w-4 shrink-0" />
-                <span>New</span>
-              </>
-            ) : tab === "history" ? (
-              <>
-                <ListOrdered aria-hidden className="h-4 w-4 shrink-0" />
-                <span>History</span>
-              </>
-            ) : (
-              <>
-                <TrendingUp aria-hidden className="h-4 w-4 shrink-0" />
-                <span>Trend</span>
-              </>
-            )}
-          </button>
-        ))}
-      </div>
+      <Segmented
+        mode="tabs"
+        idPrefix={tabsId}
+        options={panelTabOptions(canWrite)}
+        value={tab}
+        onChange={setTab}
+        ariaLabel="BP panel — नया, इतिहास या ट्रेंड"
+        size="sm"
+        className="mb-3"
+      />
 
-      {/* FORM TAB */}
-      {activeTab === "form" && (
-        <form onSubmit={handleSubmit} className="rounded-card border border-line bg-surface p-4">
-          <p className="mb-3 flex items-center gap-1.5 text-xs text-ink-subtle">
-            <Clock aria-hidden className="h-3.5 w-3.5 shrink-0" />
-            <span className="tabular">
-              {new Date().toLocaleTimeString("en-IN", {
-                hour: "2-digit",
-                minute: "2-digit",
-              })}
-            </span>
-            <span lang="hi">
-              → स्वतः: {getDefaultReadingType() === "Morning" ? "सुबह" : "शाम"}
-            </span>
-          </p>
-          <div className="grid gap-3 sm:grid-cols-2">
-            {/* Systolic and diastolic sit side by side even on the narrowest
-                phone: they are read and entered as a pair. */}
-            <div className="col-span-full grid grid-cols-2 gap-3">
-              <Field label="Systolic (ऊपर वाला)" hint="mmHg" required>
-                <NumberInput
-                  placeholder="128"
-                  maxLength={3}
-                  value={systolic}
-                  onChange={(e) => setSystolic(e.target.value)}
-                  required
-                  className="text-xl font-semibold"
-                />
-              </Field>
-              <Field label="Diastolic (नीचे वाला)" hint="mmHg" required>
-                <NumberInput
-                  placeholder="82"
-                  maxLength={3}
-                  value={diastolic}
-                  onChange={(e) => setDiastolic(e.target.value)}
-                  required
-                  className="text-xl font-semibold"
-                />
-              </Field>
-            </div>
-            <Field label="Pulse (धड़कन)" hint="bpm · वैकल्पिक">
+      {tab === "form" && canWrite ? (
+        <form
+          role="tabpanel"
+          id={segmentedPanelId(tabsId, "form")}
+          aria-labelledby={segmentedTabId(tabsId, "form")}
+          onSubmit={(e) => void handleSubmit(e)}
+          noValidate
+          className="space-y-3 rounded-card border border-line bg-surface p-4"
+        >
+          <div className="grid grid-cols-2 gap-3">
+            {/* Read and entered as a pair, so they stay side by side on a phone. */}
+            <Field label="Systolic (ऊपर वाला)" hint="mmHg" error={errors.systolic} required>
               <NumberInput
-                placeholder="74"
+                placeholder="जैसे 128"
                 maxLength={3}
-                value={pulse}
-                onChange={(e) => setPulse(e.target.value)}
+                value={systolic}
+                onChange={(e) => setSystolic(e.target.value)}
+                className="text-xl font-semibold"
               />
             </Field>
-            <Field label="समय (Time of day)">
-              <Select
-                value={readingType}
-                onChange={(e) => setReadingType(e.target.value)}
-              >
-                {readingPeriods.map((period) => (
-                  <option key={period} value={period}>
-                    {period === "Morning" ? "Morning (सुबह)" : "Evening (शाम)"}
-                  </option>
-                ))}
-                <option value="Special">Special / Checkup</option>
+            <Field label="Diastolic (नीचे वाला)" hint="mmHg" error={errors.diastolic} required>
+              <NumberInput
+                placeholder="जैसे 82"
+                maxLength={3}
+                value={diastolic}
+                onChange={(e) => setDiastolic(e.target.value)}
+                className="text-xl font-semibold"
+              />
+            </Field>
+          </div>
+
+          {preview ? (
+            <p aria-live="polite" className="flex flex-wrap items-center gap-2 text-xs text-ink-muted">
+              <BPChip systolic={typedSys} diastolic={typedDia} thresholds={thresholds} />
+              <span>इस मरीज़ के लक्ष्य के हिसाब से</span>
+            </p>
+          ) : null}
+
+          <div className="grid gap-3 sm:grid-cols-2">
+            <Field label="Pulse (नब्ज़)" hint="bpm · वैकल्पिक" error={errors.pulse}>
+              <NumberInput placeholder="जैसे 74" maxLength={3} value={pulse} onChange={(e) => setPulse(e.target.value)} />
+            </Field>
+            <Field label="कब नापा (Time of day)">
+              <Select value={period} onChange={(e) => setPeriod(e.target.value)}>
+                <option value="Morning">सुबह (Morning)</option>
+                <option value="Evening">शाम (Evening)</option>
+                <option value="Special">चेकअप (Special)</option>
               </Select>
             </Field>
           </div>
-          <div className="mt-3">
-            <Field label="Notes (टिप्पणी)">
-              <TextInput
-                placeholder="e.g. दवाई लेने के बाद / After 10 min rest"
-                value={notes}
-                onChange={(e) => setNotes(e.target.value)}
-              />
-            </Field>
-          </div>
+          <Field label="टिप्पणी (Notes)" hint="वैकल्पिक · optional">
+            <TextInput
+              placeholder="जैसे: दवाई के बाद, 10 मिनट आराम के बाद"
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+            />
+          </Field>
 
-          {/* Live BP flag preview */}
-          {systolic && diastolic && parseInt(systolic) > parseInt(diastolic) && (
-            <div className={`mt-3 rounded-card border p-2.5 text-xs font-medium ${getBPFlag(parseInt(systolic), parseInt(diastolic)).bgColor} ${getBPFlag(parseInt(systolic), parseInt(diastolic)).color}`}>
-              {getBPFlag(parseInt(systolic), parseInt(diastolic)).labelHi}
-              <span className="ml-2 text-ink-subtle">
-                (Normal range: 90-120 / 60-80 mmHg)
-              </span>
-            </div>
-          )}
-
-          <Button
-            type="submit"
-            disabled={loading}
-            className="mt-4 w-full sm:w-auto"
-            variant="primary"
-          >
+          <Button type="submit" variant="primary" loading={saving} className="w-full sm:w-auto">
             <Plus aria-hidden className="h-4 w-4" />
-            {loading ? "Saving..." : "Save BP (रक्तचाप दर्ज करें)"}
+            रीडिंग दर्ज करें (Save BP)
           </Button>
         </form>
-      )}
+      ) : null}
 
-      {/* HISTORY TAB */}
-      {activeTab === "history" && (
-        <div className="rounded-card border border-line bg-surface p-4">
-          <h4 className="text-xs font-semibold uppercase tracking-wider text-ink-subtle mb-3">
-            Recent BP History · हाल का इतिहास
-          </h4>
+      {tab === "history" ? (
+        <div
+          role="tabpanel"
+          id={segmentedPanelId(tabsId, "history")}
+          aria-labelledby={segmentedTabId(tabsId, "history")}
+          className="rounded-card border border-line bg-surface p-4"
+        >
+          <h3 className="mb-1 text-sm font-semibold text-ink">हाल की रीडिंग · Recent readings</h3>
+          <p className="mb-3 text-xs text-ink-subtle">
+            पिछली {logs.length} रीडिंग। पुरानी रीडिंग देखने के लिए ट्रेंड टैब में अवधि बदलें।
+          </p>
           {logs.length > 0 ? (
-            <div className="divide-y divide-line">
-              {logs.slice(0, 20).map((log) => {
-                const editable = canEditEntry(log.created_at);
-                const flag = getBPFlag(log.systolic, log.diastolic);
-                const isEditing = editingId === log.id;
-
-                if (isEditing) {
-                  return (
-                    <div key={log.id} className="py-3 space-y-2.5 bg-surface-sunken border border-brand-line rounded-card p-3 my-1">
-                      <p className="text-xs font-semibold text-ink">
-                        Edit BP Reading · रक्तचाप विवरण संपादित करें
+            <ul className="divide-y divide-line">
+              {logs.map((log) => (
+                <li key={log.id} className="flex items-center justify-between gap-2 py-2.5">
+                  <div className="min-w-0 flex-1">
+                    <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                      <p className="tabular text-base font-semibold text-ink">
+                        {log.systolic}/{log.diastolic}
+                        <span className="ml-1 text-xs font-normal text-ink-subtle">mmHg</span>
                       </p>
-
-                      <div className="grid grid-cols-2 gap-2">
-                        <div>
-                          <label className="block text-2xs font-semibold text-ink-subtle mb-1">Time of Day (समय)</label>
-                          <select
-                            value={editReadingType}
-                            onChange={(e) => setEditReadingType(e.target.value)}
-                            className="w-full rounded-field border border-line-strong bg-surface px-2 py-1.5 text-xs font-semibold text-ink"
-                          >
-                            <option value="Morning">Morning (सुबह)</option>
-                            <option value="Afternoon">Afternoon (दोपहर)</option>
-                            <option value="Evening">Evening (शाम)</option>
-                            <option value="Night">Night (रात)</option>
-                            <option value="Special">Special / Checkup</option>
-                          </select>
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-1.5">
-                          <div>
-                            <label className="block text-2xs font-semibold text-ink-subtle mb-1">Date</label>
-                            <input
-                              type="date"
-                              value={editDate}
-                              onChange={(e) => setEditDate(e.target.value)}
-                              className="w-full rounded-field border border-line-strong bg-surface px-2 py-1 text-xs"
-                            />
-                          </div>
-                          <div>
-                            <label className="block text-2xs font-semibold text-ink-subtle mb-1">Time</label>
-                            <input
-                              type="time"
-                              value={editTime}
-                              onChange={(e) => setEditTime(e.target.value)}
-                              className="w-full rounded-field border border-line-strong bg-surface px-2 py-1 text-xs"
-                            />
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="grid grid-cols-3 gap-2">
-                        <div>
-                          <label className="block text-2xs font-semibold text-ink-subtle mb-1">Systolic (ऊपर)</label>
-                          <input
-                            type="number"
-                            value={editSystolic}
-                            onChange={(e) => setEditSystolic(e.target.value)}
-                            className="w-full rounded-field border border-line-strong bg-surface px-2 py-1.5 text-xs font-semibold text-ink"
-                            placeholder="128"
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-2xs font-semibold text-ink-subtle mb-1">Diastolic (नीचे)</label>
-                          <input
-                            type="number"
-                            value={editDiastolic}
-                            onChange={(e) => setEditDiastolic(e.target.value)}
-                            className="w-full rounded-field border border-line-strong bg-surface px-2 py-1.5 text-xs font-semibold text-ink"
-                            placeholder="82"
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-2xs font-semibold text-ink-subtle mb-1">Pulse (धड़कन)</label>
-                          <input
-                            type="number"
-                            value={editPulse}
-                            onChange={(e) => setEditPulse(e.target.value)}
-                            className="w-full rounded-field border border-line-strong bg-surface px-2 py-1.5 text-xs text-ink"
-                            placeholder="74"
-                          />
-                        </div>
-                      </div>
-
-                      <div>
-                        <label className="block text-2xs font-semibold text-ink-subtle mb-1">Notes (टिप्पणी)</label>
-                        <input
-                          type="text"
-                          value={editNotes}
-                          onChange={(e) => setEditNotes(e.target.value)}
-                          className="w-full rounded-field border border-line-strong bg-surface px-2.5 py-1.5 text-xs text-ink"
-                          placeholder="e.g. Taken after 10 min rest"
-                        />
-                      </div>
-
-                      <div className="flex gap-2 pt-1">
-                        <button
-                          type="button"
-                          onClick={handleSaveEdit}
-                          className="rounded-control bg-positive px-3.5 py-1.5 text-xs font-semibold text-ink-inverse hover:brightness-95 transition-colors"
-                        >
-                          ✓ Save Changes (सुरक्षित करें)
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setEditingId(null);
-                            setError("");
-                          }}
-                          className="rounded-control bg-surface-sunken px-3.5 py-1.5 text-xs font-semibold text-ink-muted hover:bg-line-strong transition-colors"
-                        >
-                          Cancel (रद्द करें)
-                        </button>
-                      </div>
+                      <BPChip systolic={log.systolic} diastolic={log.diastolic} thresholds={thresholds} />
                     </div>
-                  );
-                }
-
-                return (
-                  <div key={log.id} className="py-2.5 flex items-center justify-between gap-2">
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center gap-2">
-                        <p className="font-semibold text-ink">
-                          {log.systolic}/{log.diastolic}
-                          <span className="text-xs font-normal text-ink-subtle"> mmHg</span>
-                        </p>
-                        <span className={`text-2xs font-semibold ${flag.color}`}>
-                          {flag.label}
-                        </span>
-                      </div>
-                      <p className="text-xs text-ink-subtle">
-                        Pulse {log.pulse || "--"} · {log.reading_type === "Morning" ? "सुबह" : log.reading_type === "Evening" ? "शाम" : log.reading_type || "Recorded"} · {new Date(log.measured_at).toLocaleDateString("en-IN", { day: "numeric", month: "short" })} {new Date(log.measured_at).toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" })}
-                      </p>
-                      {log.notes && (
-                        <p className="text-2xs italic text-ink-subtle truncate">{log.notes}</p>
-                      )}
-                    </div>
-                    <div className="flex items-center gap-1 shrink-0">
-                      {editable ? (
-                        <>
-                          <button
-                            type="button"
-                            onClick={() => startEdit(log)}
-                            className="flex h-9 w-9 items-center justify-center rounded-control border border-line bg-surface text-ink-subtle hover:bg-info-soft hover:text-info hover:border-info-line transition-colors"
-                            title="Edit (बदलें)"
-                          >
-                            <Edit3 className="h-4 w-4" />
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => handleDelete(log.id)}
-                            className="flex h-9 w-9 items-center justify-center rounded-control border border-line bg-surface text-ink-subtle hover:bg-critical-soft hover:text-critical hover:border-critical-line transition-colors"
-                            title="Delete (मिटाएं)"
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </button>
-                        </>
-                      ) : (
-                        <span title="Edit window (2 घंटे) समाप्त हो गई">
-                          <Lock className="h-4 w-4 text-ink-subtle" />
-                        </span>
-                      )}
-                    </div>
+                    <p className="mt-0.5 text-xs text-ink-subtle">
+                      {periodLabel(log.reading_type)} · {relativeDayLabel(toISTDate(log.measured_at))}, {fmtTime(log.measured_at)}
+                      {log.pulse ? ` · नब्ज़ ${log.pulse}` : ""}
+                    </p>
+                    {log.notes ? <p className="truncate text-xs italic text-ink-subtle">{log.notes}</p> : null}
                   </div>
-                );
-              })}
-            </div>
+                  {canWrite ? (
+                    <RowActions
+                      what={`BP ${log.systolic}/${log.diastolic}`}
+                      onEdit={() => setEditing(log)}
+                      onDelete={() => void handleDelete(log)}
+                    />
+                  ) : null}
+                </li>
+              ))}
+            </ul>
           ) : (
-            <p className="text-xs text-ink-subtle py-6 text-center">
-              कोई BP reading दर्ज नहीं है
-            </p>
+            <EmptyState
+              icon={HeartPulse}
+              title="अभी कोई BP रीडिंग नहीं"
+              description="No readings yet."
+              action={
+                canWrite ? (
+                  <Button variant="primary" onClick={() => setTab("form")}>
+                    <Plus aria-hidden className="h-4 w-4" />
+                    पहली रीडिंग दर्ज करें
+                  </Button>
+                ) : undefined
+              }
+            />
           )}
         </div>
-      )}
+      ) : null}
 
-      {/* CHART TAB */}
-      {activeTab === "chart" && (
-        <div className="space-y-4">
-          {/* Range selector */}
-          <div className="flex gap-1 flex-wrap">
-            {(Object.keys(rangeLabels) as ChartRange[]).map((range) => (
-              <button
-                key={range}
-                type="button"
-                onClick={() => setChartRange(range)}
-                className={`rounded-control px-3 py-1.5 text-xs font-semibold transition-all ${
-                  chartRange === range
-                    ? "bg-bp text-ink-inverse shadow-e1"
-                    : "bg-surface-sunken text-ink-muted hover:bg-line-strong"
-                }`}
-              >
-                {rangeLabels[range]}
-              </button>
-            ))}
-          </div>
-
-          {/* Chart */}
-          {chartLoading ? (
-            <div className="flex h-48 items-center justify-center">
-              <div className="h-6 w-6 animate-spin rounded-full border-2 border-bp border-t-transparent" />
-            </div>
-          ) : (
-            <BPTrendChart logs={chartLogs} />
-          )}
-
-          {/* Summary stats */}
-          {summaryStats && (
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-              <div className="rounded-card bg-surface-sunken p-3 text-center">
-                <p className="text-2xs font-semibold uppercase text-ink-subtle">Avg (औसत)</p>
-                <p className="mt-1 text-lg font-extrabold text-ink">{summaryStats.avgSys}/{summaryStats.avgDia}</p>
-              </div>
-              <div className="rounded-card bg-positive-soft p-3 text-center">
-                <p className="text-2xs font-semibold uppercase text-positive">Min (न्यूनतम)</p>
-                <p className="mt-1 text-lg font-extrabold text-ink">{summaryStats.minSys}/{summaryStats.minDia}</p>
-              </div>
-              <div className="rounded-card bg-critical-soft p-3 text-center">
-                <p className="text-2xs font-semibold uppercase text-critical">Max (अधिकतम)</p>
-                <p className="mt-1 text-lg font-extrabold text-ink">{summaryStats.maxSys}/{summaryStats.maxDia}</p>
-              </div>
-              <div className="rounded-card bg-info-soft p-3 text-center">
-                <p className="text-2xs font-semibold uppercase text-info">Readings (कुल)</p>
-                <p className="mt-1 text-lg font-extrabold text-ink">{summaryStats.count}</p>
-              </div>
-            </div>
-          )}
+      {tab === "chart" ? (
+        <div
+          role="tabpanel"
+          id={segmentedPanelId(tabsId, "chart")}
+          aria-labelledby={segmentedTabId(tabsId, "chart")}
+          className="rounded-card border border-line bg-surface p-4"
+        >
+          <BPTrend patientId={patientId} thresholds={thresholds} />
         </div>
-      )}
+      ) : null}
 
-      {/* Disclaimer */}
-      <div className="mt-4 flex items-start gap-2 rounded-card border border-positive-line bg-positive-soft p-3 text-xs text-ink-muted">
-        <Clock aria-hidden className="mt-0.5 h-4 w-4 shrink-0 text-positive" />
-        <span>
-          यह screen सिर्फ़ readings record करती है — यह किसी भी प्रकार का चिकित्सा निदान नहीं करती और न ही दवाई बदलती है।
+      <p className="mt-4 flex items-start gap-2 rounded-card border border-info-line bg-info-soft p-3 text-xs text-ink-muted">
+        <Info aria-hidden className="mt-0.5 h-4 w-4 shrink-0 text-info" />
+        <span lang="hi">
+          यह स्क्रीन सिर्फ़ रीडिंग दर्ज करती है। यह निदान नहीं करती और दवाई नहीं बदलती। चिंता हो तो डॉक्टर से बात करें; आपात स्थिति में 112 / 108।
         </span>
-      </div>
+      </p>
+
+      {editing ? (
+        <EditBPModal
+          key={editing.id}
+          log={editing}
+          thresholds={thresholds}
+          onClose={() => setEditing(null)}
+          onSaved={() => onSuccess?.()}
+        />
+      ) : null}
     </Card>
   );
 }

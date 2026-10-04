@@ -2,9 +2,17 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { primaryNavigation } from "@/components/layout/navigation-items";
+import {
+  isNavActive,
+  primaryNavigation,
+} from "@/components/layout/navigation-items";
 import { cn } from "@/lib/utils";
 
+/**
+ * Phone navigation. Its height is published as `--bottom-nav-h` in globals.css
+ * (and the content column pads by it), so keep the two in step when changing
+ * the row height or padding below.
+ */
 export function BottomNavigation() {
   const pathname = usePathname();
 
@@ -15,16 +23,16 @@ export function BottomNavigation() {
     >
       <div className="mx-auto grid max-w-md grid-cols-5 gap-1 px-2 pt-1.5 pb-[max(0.5rem,env(safe-area-inset-bottom))]">
         {primaryNavigation.map((item) => {
-          const active = pathname === item.href;
+          const active = isNavActive(item.href, pathname);
           const Icon = item.icon;
 
           return (
             <Link
               aria-current={active ? "page" : undefined}
               className={cn(
-                // 56px tall including the label — comfortably over the 44px
+                // 60px tall including both labels — comfortably over the 44px
                 // minimum tap target (§44).
-                "pressable flex min-h-14 flex-col items-center justify-center gap-0.5 rounded-control px-1",
+                "pressable flex min-h-15 flex-col items-center justify-center gap-0.5 rounded-control px-1",
                 active
                   ? "bg-brand-soft text-brand-ink shadow-e1"
                   : "text-ink-muted hover:bg-surface-sunken hover:text-ink",
@@ -36,11 +44,23 @@ export function BottomNavigation() {
                 aria-hidden
                 className={cn("h-5 w-5 shrink-0", active && "stroke-[2.4]")}
               />
+              {/* Hindi is the label; English is a quiet second line for
+                  family members who read it more easily. */}
               <span
                 lang="hi"
-                className="w-full truncate text-center text-2xs font-medium leading-tight"
+                className={cn(
+                  "w-full truncate text-center text-2xs leading-tight",
+                  active ? "font-semibold" : "font-medium",
+                )}
               >
                 {item.hindiLabel}
+              </span>
+              <span
+                aria-hidden
+                lang="en"
+                className="w-full truncate text-center text-2xs leading-none text-ink-muted"
+              >
+                {item.label}
               </span>
             </Link>
           );

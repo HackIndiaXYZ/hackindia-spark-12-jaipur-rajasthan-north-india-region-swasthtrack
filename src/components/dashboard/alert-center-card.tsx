@@ -24,6 +24,8 @@ import {
 
 type AlertCenterCardProps = {
   alerts: HealthAlert[];
+  /** Keys the alerts' dismissed/read state to this patient (defaults to the active one). */
+  patientId?: string;
   onAlertChange?: () => void;
 };
 
@@ -65,31 +67,30 @@ const severityStyles = {
   }
 >;
 
-export function AlertCenterCard({
-  alerts: initialAlerts,
-  onAlertChange,
-}: AlertCenterCardProps) {
-  const [alerts, setAlerts] = useState<HealthAlert[]>(initialAlerts);
-
-  if (!alerts || alerts.length === 0) return null;
+export function AlertCenterCard({ alerts, patientId, onAlertChange }: AlertCenterCardProps) {
+  // The alert list always comes from props (a refresh can add or remove alerts);
+  // only what the user did on this device since is kept here.
+  const [dismissedKeys, setDismissedKeys] = useState<ReadonlySet<string>>(() => new Set());
+  const [readKeys, setReadKeys] = useState<ReadonlySet<string>>(() => new Set());
 
   // Most severe first, and never the same alert key twice (§34).
   const order: Record<AlertSeverity, number> = { IMPORTANT: 0, ATTENTION: 1, INFO: 2 };
-  const visible = Array.from(
-    new Map(alerts.map((a) => [a.key, a])).values(),
-  ).sort((a, b) => (order[a.severity] ?? 3) - (order[b.severity] ?? 3));
+  const visible = Array.from(new Map((alerts ?? []).map((a) => [a.key, a])).values())
+    .filter((a) => !dismissedKeys.has(a.key))
+    .map((a) => (readKeys.has(a.key) ? { ...a, isRead: true } : a))
+    .sort((a, b) => Number(Boolean(b.isUrgent)) - Number(Boolean(a.isUrgent)) || (order[a.severity] ?? 3) - (order[b.severity] ?? 3));
+
+  if (visible.length === 0) return null;
 
   function handleDismiss(alertKey: string) {
-    dismissAlert(alertKey);
-    setAlerts((prev) => prev.filter((a) => a.key !== alertKey));
+    dismissAlert(alertKey, patientId);
+    setDismissedKeys((prev) => new Set(prev).add(alertKey));
     onAlertChange?.();
   }
 
   function handleMarkRead(alertKey: string) {
-    markAlertAsRead(alertKey);
-    setAlerts((prev) =>
-      prev.map((a) => (a.key === alertKey ? { ...a, isRead: true } : a)),
-    );
+    markAlertAsRead(alertKey, patientId);
+    setReadKeys((prev) => new Set(prev).add(alertKey));
     onAlertChange?.();
   }
 
@@ -154,13 +155,13 @@ export function AlertCenterCard({
                   <button
                     type="button"
                     onClick={() => handleMarkRead(alert.key)}
-                    className="pressable flex min-h-9 cursor-pointer items-center gap-1.5 rounded-control px-2 text-xs font-medium text-ink-muted hover:bg-surface hover:text-brand"
+                    className="pressable flex min-h-control cursor-pointer items-center gap-1.5 rounded-control px-2 text-xs font-medium text-ink-muted hover:bg-surface hover:text-brand"
                   >
                     <Check aria-hidden className="h-3.5 w-3.5" />
                     <span lang="hi">पढ़ा हुआ चिह्नित करें</span>
                   </button>
                 ) : (
-                  <span className="px-2 text-xs text-ink-subtle">
+                  <span className="px-2 text-xs text-ink-muted">
                     <span lang="hi">पढ़ा गया</span>
                   </span>
                 )}
@@ -168,7 +169,7 @@ export function AlertCenterCard({
                 {alert.actionUrl ? (
                   <Link
                     href={alert.actionUrl}
-                    className="pressable flex min-h-9 items-center gap-1 rounded-control px-2 text-xs font-semibold text-brand hover:bg-surface"
+                    className="pressable flex min-h-control items-center gap-1 rounded-control px-2 text-xs font-semibold text-brand hover:bg-surface"
                   >
                     <span lang="hi">विवरण देखें</span>
                     <ChevronRight aria-hidden className="h-3.5 w-3.5" />

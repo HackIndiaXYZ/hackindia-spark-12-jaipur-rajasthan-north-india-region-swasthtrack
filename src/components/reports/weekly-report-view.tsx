@@ -1,387 +1,225 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useEffect, useState } from "react";
-import {
-  Activity,
-  AlertCircle,
-  Calendar,
-  CheckCircle2,
-  Footprints,
-  HeartPulse,
-  Info,
-  Moon,
-  Pill,
-  Scale,
-  Sparkles,
-  Utensils,
-} from "lucide-react";
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  Cell,
-  ReferenceLine,
-} from "recharts";
+import { useState } from "react";
+import dynamic from "next/dynamic";
+import { Activity, Footprints, HeartPulse, Moon, Pill, Scale, Sparkles, Utensils } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { ErrorState } from "@/components/ui/page";
+import { loadErrorMessage, useAsyncData } from "@/components/health/use-async-data";
 import {
-  getWeeklyReportData,
-  type WeeklyReportSummary,
-  type DayScorePoint,
-} from "@/services/reports-analytics-service";
+  CoverageLine,
+  InsightList,
+  MetricCard,
+  NotEnoughData,
+  ReportDisclaimer,
+  ReportHero,
+  ReportSkeleton,
+} from "@/components/reports/report-parts";
+import { cn } from "@/lib/utils";
+import { getWeeklyReportData, type DayScorePoint } from "@/services/reports-analytics-service";
+
+const WeeklyScoreChart = dynamic(() => import("@/components/reports/weekly-score-chart").then((m) => m.WeeklyScoreChart), {
+  ssr: false,
+  loading: () => <div aria-hidden className="skeleton h-56 w-full rounded-card" />,
+});
 
 type WeeklyReportViewProps = {
   patientId: string;
 };
 
+const nf = new Intl.NumberFormat("en-IN");
+
+const PARTS = [
+  { key: "medicine", label: "Medicine" },
+  { key: "food", label: "Food" },
+  { key: "activity", label: "Steps" },
+  { key: "sleep", label: "Sleep" },
+  { key: "bp", label: "BP" },
+  { key: "weight", label: "Weight" },
+] as const;
+
 export function WeeklyReportView({ patientId }: WeeklyReportViewProps) {
-  const [weeklyData, setWeeklyData] = useState<WeeklyReportSummary | null>(null);
-  const [selectedDay, setSelectedDay] = useState<DayScorePoint | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { data, error, loading, reload } = useAsyncData(() => getWeeklyReportData(patientId), [patientId]);
+  // null = "the latest day", resolved below, so no effect is needed to preselect it.
+  const [pickedDate, setPickedDate] = useState<string | null>(null);
 
-  useEffect(() => {
-    let active = true;
-
-    getWeeklyReportData(patientId)
-      .then((res) => {
-        if (active) {
-          setWeeklyData(res);
-          // Default select the latest day
-          if (res.dailyScores.length > 0) {
-            setSelectedDay(res.dailyScores[res.dailyScores.length - 1]);
-          }
-        }
-      })
-      .catch((err) => {
-        console.error("Error loading weekly report:", err);
-      })
-      .finally(() => {
-        if (active) setLoading(false);
-      });
-
-    return () => {
-      active = false;
-    };
-  }, [patientId]);
-
-  if (loading) {
+  if (error) {
     return (
-      <div className="space-y-4 animate-pulse">
-        <div className="h-28 rounded-card bg-surface-sunken" />
-        <div className="h-64 rounded-card bg-surface-sunken" />
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          {[...Array(4)].map((_, i) => (
-            <div key={i} className="h-24 rounded-control bg-surface-sunken" />
-          ))}
-        </div>
-      </div>
+      <ErrorState
+        title="साप्ताहिक रिपोर्ट लोड नहीं हो पाई"
+        englishTitle="The weekly report could not be loaded"
+        description={loadErrorMessage(error)}
+        onRetry={reload}
+      />
     );
   }
+  if (loading || !data) return <ReportSkeleton blocks={3} />;
 
-  if (!weeklyData) return null;
-
-  const chartData = weeklyData.dailyScores.map((d) => ({
-    day: d.dayLabel,
+  const days: DayScorePoint[] = data.dailyScores;
+  const selected = days.find((d) => d.date === pickedDate) ?? days[days.length - 1] ?? null;
+  const bars = days.map((d) => ({
     date: d.date,
-    score: d.score,
+    dayLabel: d.dayLabel,
+    score: d.hasLogs ? d.score : null,
     category: d.category,
-    raw: d,
   }));
 
   return (
     <div className="space-y-5">
-      {/* Header Banner — hero: the one number the report exists to show */}
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between rounded-panel gold-edge p-5">
-        <div>
-          <div className="flex items-center gap-2">
-            <Calendar className="h-5 w-5 text-brand" />
-            <h3 className="font-semibold text-ink text-base">
-              Weekly Health & Habit Report · साप्ताहिक स्वास्थ्य रिपोर्ट
-            </h3>
-          </div>
-          <p className="mt-1 text-xs text-ink-subtle">
-            Reporting Period: <span className="font-semibold text-ink-muted">{weeklyData.weekRangeLabel}</span> · {weeklyData.daysTrackedCount} of 7 days active
-          </p>
-        </div>
+      <ReportHero
+        title="Weekly report"
+        hindiTitle="साप्ताहिक रिपोर्ट"
+        period={<span className="font-medium text-ink-muted">{data.weekRangeLabel}</span>}
+        scoreLabel="Weekly average"
+        score={data.daysTrackedCount > 0 ? data.averageScore : null}
+        controls={<CoverageLine tracked={data.daysTrackedCount} total={data.totalDays} />}
+      />
 
-        <div className="flex items-baseline gap-3">
-          <div className="text-right">
-            <p className="text-2xs font-semibold uppercase tracking-wider text-ink-subtle">Weekly Avg Score</p>
-            <p className="grad-text text-3xl font-bold">
-              {weeklyData.averageScore}
-              <span className="text-xs font-semibold text-ink-subtle">/100</span>
-            </p>
-          </div>
-        </div>
-      </div>
+      {!data.hasSufficientData ? <NotEnoughData days={3} label="साप्ताहिक विश्लेषण" /> : null}
 
-      {/* INSUFFICIENT DATA EMPTY STATE */}
-      {!weeklyData.hasSufficientData && (
-        <div className="rounded-card border border-dashed border-attention-line bg-attention-soft/50 p-6 text-center">
-          <Info className="mx-auto h-8 w-8 text-attention mb-2" />
-          <h4 className="font-semibold text-attention text-sm">
-            अभी पर्याप्त data उपलब्ध नहीं है
-          </h4>
-          <p className="mt-1 text-xs text-attention max-w-md mx-auto">
-            सटीक साप्ताहिक विश्लेषण (Weekly insight) के लिए कम से कम 3 दिनों का ट्रैकिंग रिकॉर्ड आवश्यक है। जैसे ही आप कुछ दिन नियमित लॉग करेंगे, यहाँ विस्तृत ट्रेंड दिखाई देगा।
-          </p>
-        </div>
-      )}
-
-      {/* WEEKLY SCORE INTERACTIVE BAR GRAPH */}
-      <Card className="p-5">
-        <CardHeader className="p-0 pb-4">
-          <div className="flex flex-wrap items-center justify-between gap-2">
-            <div>
-              <CardTitle className="text-sm font-semibold text-ink flex items-center gap-2">
-                <Sparkles className="h-4 w-4 text-emerald-600" />
-                Daily Wellness Score Trend (दिन-प्रतिदिन स्कोर)
-              </CardTitle>
-              <CardDescription className="text-xs">
-                किसी भी दिन का विवरण देखने के लिए बार पर टैप करें (Tap a bar to inspect day details)
-              </CardDescription>
-            </div>
-            {selectedDay && (
-              <Badge variant="blue">
-                Selected: {selectedDay.dayLabel} ({selectedDay.score}/100)
-              </Badge>
-            )}
+      <Card>
+        <CardHeader>
+          <div className="min-w-0">
+            <CardTitle className="flex items-center gap-2 text-sm">
+              <Sparkles aria-hidden className="h-4 w-4 text-brand" />
+              Daily tracking score · दिन-प्रतिदिन स्कोर
+            </CardTitle>
+            <CardDescription>किसी दिन का ब्योरा देखने के लिए बार या नीचे दिए दिन पर टैप करें</CardDescription>
           </div>
+          {selected ? (
+            <Badge variant="neutral">
+              {selected.dayLabel}: {selected.hasLogs ? `${selected.score}/100` : "कोई रिकॉर्ड नहीं"}
+            </Badge>
+          ) : null}
         </CardHeader>
 
-        <div className="h-56 w-full">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart
-              data={chartData}
-              margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
-              onClick={(e: any) => {
-                if (e && e.activePayload && e.activePayload.length > 0) {
-                  setSelectedDay(e.activePayload[0].payload.raw);
-                }
-              }}
-            >
-              <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
-              <XAxis
-                dataKey="day"
-                tick={{ fontSize: 11, fill: "#64748b" }}
-                tickLine={false}
-                axisLine={{ stroke: "#e2e8f0" }}
-              />
-              <YAxis
-                domain={[0, 100]}
-                tick={{ fontSize: 10, fill: "#94a3b8" }}
-                tickLine={false}
-                axisLine={{ stroke: "#e2e8f0" }}
-              />
-              <Tooltip
-                content={({ active, payload }) => {
-                  if (active && payload && payload.length > 0) {
-                    const data = payload[0].payload;
-                    return (
-                      <div className="rounded-control border border-line bg-surface p-2.5 shadow-e3 text-xs">
-                        <p className="font-semibold text-ink">{data.day}</p>
-                        <p className="text-emerald-700 font-extrabold text-sm mt-0.5">
-                          {data.score}/100 Score
-                        </p>
-                        <p className="text-2xs text-ink-subtle">{data.category}</p>
-                      </div>
-                    );
-                  }
-                  return null;
-                }}
-              />
-              <ReferenceLine y={75} stroke="#22c55e" strokeDasharray="4 4" strokeOpacity={0.6} />
-              <Bar dataKey="score" radius={[6, 6, 0, 0]} cursor="pointer">
-                {chartData.map((entry) => {
-                  const isSelected = selectedDay?.date === entry.date;
-                  const color =
-                    entry.score >= 90
-                      ? "#10b981"
-                      : entry.score >= 75
-                      ? "#3b82f6"
-                      : entry.score >= 60
-                      ? "#f59e0b"
-                      : "#ef4444";
-                  return (
-                    <Cell
-                      key={entry.date}
-                      fill={color}
-                      stroke={isSelected ? "#0f172a" : undefined}
-                      strokeWidth={isSelected ? 2 : 0}
-                    />
-                  );
-                })}
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
+        <WeeklyScoreChart days={bars} selectedDate={selected?.date ?? null} onSelect={setPickedDate} />
 
-        {/* Selected Day Inspector Breakdown */}
-        {selectedDay?.scoreResult && (
-          <div className="mt-4 rounded-control border border-line bg-surface-sunken/70 p-4 text-xs">
-            <div className="flex items-center justify-between mb-2">
-              <span className="font-semibold text-ink">
-                {selectedDay.dayLabel} Breakdown:
-              </span>
-              <span className="font-extrabold text-emerald-800">
-                {selectedDay.score}/100 · {selectedDay.categoryHi}
+        {/* The keyboard / screen-reader way to pick a day, and the chart's text alternative. */}
+        <ul className="mt-3 grid grid-cols-7 gap-1.5" aria-label="Days of the week — सप्ताह के दिन">
+          {days.map((d) => {
+            const active = selected?.date === d.date;
+            return (
+              <li key={d.date}>
+                <button
+                  type="button"
+                  onClick={() => setPickedDate(d.date)}
+                  aria-pressed={active}
+                  className={cn(
+                    "pressable flex min-h-control w-full cursor-pointer flex-col items-center justify-center rounded-field border px-0.5 text-center",
+                    active ? "border-brand bg-brand-soft text-brand-ink" : "border-line bg-surface text-ink-muted",
+                  )}
+                >
+                  <span className="text-2xs leading-tight">{d.dayLabel}</span>
+                  <span className="tabular text-xs font-semibold">{d.hasLogs ? d.score : "—"}</span>
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+
+        {selected?.scoreResult && selected.hasLogs ? (
+          <div className="mt-4 rounded-control border border-line bg-surface-sunken p-3.5 text-xs">
+            <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
+              <span className="font-semibold text-ink">{selected.dayLabel}</span>
+              <span lang="hi" className="font-semibold text-ink-muted">
+                {selected.score}/100 · {selected.categoryHi}
               </span>
             </div>
             <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-6">
-              <div className="rounded-field bg-surface p-2 border border-line text-center">
-                <span className="text-2xs text-ink-subtle">Medicine</span>
-                <p className="font-semibold text-ink">{selectedDay.scoreResult.components.medicine.score}/25</p>
-              </div>
-              <div className="rounded-field bg-surface p-2 border border-line text-center">
-                <span className="text-2xs text-ink-subtle">Food</span>
-                <p className="font-semibold text-ink">{selectedDay.scoreResult.components.food.score}/20</p>
-              </div>
-              <div className="rounded-field bg-surface p-2 border border-line text-center">
-                <span className="text-2xs text-ink-subtle">Activity</span>
-                <p className="font-semibold text-ink">{selectedDay.scoreResult.components.activity.score}/15</p>
-              </div>
-              <div className="rounded-field bg-surface p-2 border border-line text-center">
-                <span className="text-2xs text-ink-subtle">Sleep</span>
-                <p className="font-semibold text-ink">{selectedDay.scoreResult.components.sleep.score}/15</p>
-              </div>
-              <div className="rounded-field bg-surface p-2 border border-line text-center">
-                <span className="text-2xs text-ink-subtle">BP</span>
-                <p className="font-semibold text-ink">{selectedDay.scoreResult.components.bp.score}/15</p>
-              </div>
-              <div className="rounded-field bg-surface p-2 border border-line text-center">
-                <span className="text-2xs text-ink-subtle">Weight</span>
-                <p className="font-semibold text-ink">{selectedDay.scoreResult.components.weight.score}/10</p>
-              </div>
+              {PARTS.map(({ key, label }) => {
+                const c = selected.scoreResult!.components[key];
+                return (
+                  <div key={key} className="rounded-field border border-line bg-surface p-2 text-center">
+                    <span className="text-2xs text-ink-subtle">{label}</span>
+                    <p className="tabular font-semibold text-ink">{c.isScored ? `${c.score}/${c.maxScore}` : "—"}</p>
+                  </div>
+                );
+              })}
             </div>
           </div>
-        )}
+        ) : selected && !selected.hasLogs ? (
+          <p lang="hi" className="mt-4 text-xs text-ink-subtle">
+            {selected.dayLabel} को कुछ दर्ज नहीं हुआ।
+          </p>
+        ) : null}
       </Card>
 
-      {/* 8-METRIC WEEKLY SUMMARY GRID */}
-      <div className="grid gap-3 grid-cols-2 md:grid-cols-4">
-        <div className="rounded-card border border-line bg-surface p-4 shadow-e1">
-          <div className="flex items-center gap-2 text-emerald-600 mb-1">
-            <Pill className="h-4 w-4" />
-            <span className="text-xs font-semibold uppercase tracking-wider text-ink-subtle">Medicine Adherence</span>
-          </div>
-          <p className="text-2xl font-bold text-ink">{weeklyData.medicineAdherencePercent}%</p>
-          <p className="text-xs text-ink-subtle mt-0.5">साप्ताहिक खुराक अनुपालन</p>
-        </div>
-
-        <div className="rounded-card border border-line bg-surface p-4 shadow-e1">
-          <div className="flex items-center gap-2 text-green-600 mb-1">
-            <Utensils className="h-4 w-4" />
-            <span className="text-xs font-semibold uppercase tracking-wider text-ink-subtle">Avg Calories</span>
-          </div>
-          <p className="text-2xl font-bold text-ink">
-            {weeklyData.averageCalories ? `${weeklyData.averageCalories} kcal` : "N/A"}
-          </p>
-          <p className="text-xs text-ink-subtle mt-0.5">प्रतिदिन औसत कैलोरी</p>
-        </div>
-
-        <div className="rounded-card border border-line bg-surface p-4 shadow-e1">
-          <div className="flex items-center gap-2 text-sky-600 mb-1">
-            <Footprints className="h-4 w-4" />
-            <span className="text-xs font-semibold uppercase tracking-wider text-ink-subtle">Avg Steps</span>
-          </div>
-          <p className="text-2xl font-bold text-ink">
-            {weeklyData.averageSteps ? weeklyData.averageSteps.toLocaleString() : "N/A"}
-          </p>
-          <p className="text-xs text-ink-subtle mt-0.5">प्रतिदिन औसत कदम</p>
-        </div>
-
-        <div className="rounded-card border border-line bg-surface p-4 shadow-e1">
-          <div className="flex items-center gap-2 text-indigo-600 mb-1">
-            <Moon className="h-4 w-4" />
-            <span className="text-xs font-semibold uppercase tracking-wider text-ink-subtle">Avg Sleep</span>
-          </div>
-          <p className="text-2xl font-bold text-ink">
-            {weeklyData.averageSleepHours ? `${weeklyData.averageSleepHours} hrs` : "N/A"}
-          </p>
-          <p className="text-xs text-ink-subtle mt-0.5">औसत नींद का समय</p>
-        </div>
-
-        <div className="rounded-card border border-line bg-surface p-4 shadow-e1">
-          <div className="flex items-center gap-2 text-rose-600 mb-1">
-            <HeartPulse className="h-4 w-4" />
-            <span className="text-xs font-semibold uppercase tracking-wider text-ink-subtle">BP Readings</span>
-          </div>
-          <p className="text-2xl font-bold text-ink">{weeklyData.bpReadingsCount}</p>
-          <p className="text-xs text-ink-subtle mt-0.5">कुल रिकॉर्ड किए गए माप</p>
-        </div>
-
-        <div className="rounded-card border border-line bg-surface p-4 shadow-e1">
-          <div className="flex items-center gap-2 text-amber-600 mb-1">
-            <Scale className="h-4 w-4" />
-            <span className="text-xs font-semibold uppercase tracking-wider text-ink-subtle">Weight Change</span>
-          </div>
-          <p className="text-2xl font-bold text-ink">
-            {weeklyData.weightChangeKg !== null
-              ? `${weeklyData.weightChangeKg > 0 ? "+" : ""}${weeklyData.weightChangeKg} kg`
-              : "Stable / N/A"}
-          </p>
-          <p className="text-xs text-ink-subtle mt-0.5">सप्ताह में वजन बदलाव</p>
-        </div>
-
-        <div className="rounded-card border border-line bg-surface p-4 shadow-e1">
-          <div className="flex items-center gap-2 text-emerald-600 mb-1">
-            <Sparkles className="h-4 w-4" />
-            <span className="text-xs font-semibold uppercase tracking-wider text-ink-subtle">Highest Score</span>
-          </div>
-          <p className="text-2xl font-bold text-ink">
-            {weeklyData.highestScore ? `${weeklyData.highestScore.score}` : "N/A"}
-          </p>
-          <p className="text-xs text-ink-subtle mt-0.5">
-            {weeklyData.highestScore ? weeklyData.highestScore.dayLabel : "No score"}
-          </p>
-        </div>
-
-        <div className="rounded-card border border-line bg-surface p-4 shadow-e1">
-          <div className="flex items-center gap-2 text-ink-muted mb-1">
-            <Activity className="h-4 w-4" />
-            <span className="text-xs font-semibold uppercase tracking-wider text-ink-subtle">Food Logging %</span>
-          </div>
-          <p className="text-2xl font-bold text-ink">{weeklyData.foodLoggingConsistencyPercent}%</p>
-          <p className="text-xs text-ink-subtle mt-0.5">भोजन दर्ज निरंतरता</p>
-        </div>
+      <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+        <MetricCard
+          icon={Pill}
+          tone="meds"
+          label="Medicine adherence"
+          hindiLabel="खुराक अनुपालन (समय पर + देर से)"
+          value={data.hasMedicineData ? `${data.medicineAdherencePercent}%` : null}
+          helper={data.hasMedicineData ? undefined : "इस हफ़्ते कोई खुराक तय नहीं थी"}
+        />
+        <MetricCard
+          icon={Utensils}
+          tone="food"
+          label="Avg calories"
+          hindiLabel="रोज़ औसत कैलोरी"
+          value={data.averageCalories ? `${Math.round(data.averageCalories)} kcal` : null}
+          helper={data.averageCalories ? undefined : "भोजन दर्ज नहीं हुआ"}
+        />
+        <MetricCard
+          icon={Footprints}
+          tone="activity"
+          label="Avg steps"
+          hindiLabel="रोज़ औसत कदम"
+          value={data.averageSteps ? nf.format(data.averageSteps) : null}
+          helper={data.averageSteps ? undefined : "कदम दर्ज नहीं हुए"}
+        />
+        <MetricCard
+          icon={Moon}
+          tone="sleep"
+          label="Avg sleep"
+          hindiLabel="औसत नींद"
+          value={data.averageSleepHours ? `${data.averageSleepHours} hrs` : null}
+          helper={data.averageSleepHours ? undefined : "नींद दर्ज नहीं हुई"}
+        />
+        <MetricCard
+          icon={HeartPulse}
+          tone="bp"
+          label="BP readings"
+          hindiLabel="रक्तचाप के माप"
+          value={data.bpReadingsCount}
+        />
+        <MetricCard
+          icon={Scale}
+          tone="weight"
+          label="Weight change"
+          hindiLabel="हफ़्ते में वजन का बदलाव"
+          value={data.weightChangeKg !== null ? `${data.weightChangeKg > 0 ? "+" : ""}${data.weightChangeKg} kg` : null}
+          helper={data.weightChangeKg === null ? "बदलाव निकालने के लिए 2 तौल चाहिए" : undefined}
+        />
+        <MetricCard
+          icon={Sparkles}
+          tone="brand"
+          label="Best day"
+          hindiLabel="सबसे अच्छा दिन"
+          value={data.highestScore ? data.highestScore.score : null}
+          helper={data.highestScore?.dayLabel}
+        />
+        <MetricCard
+          icon={Activity}
+          tone="neutral"
+          label="Food logging"
+          hindiLabel="भोजन दर्ज करने की नियमितता"
+          value={`${data.foodLoggingConsistencyPercent}%`}
+          helper="उन दिनों का हिस्सा जिनमें भोजन दर्ज हुआ"
+        />
       </div>
 
-      {/* RULE-BASED PERSONALIZED INSIGHTS CARD */}
-      {weeklyData.personalizedInsights.length > 0 && (
-        <Card className="border-positive-line bg-positive-soft/40 p-5">
-          <CardHeader className="p-0 pb-3">
-            <CardTitle className="text-sm font-semibold text-positive flex items-center gap-2">
-              <CheckCircle2 className="h-4 w-4 text-positive" />
-              Weekly Personalized Insights · साप्ताहिक व्यक्तिगत अंतर्दृष्टि
-            </CardTitle>
-            <CardDescription className="text-xs text-positive">
-              आपके इस सप्ताह के डेटा पर आधारित विश्लेषण (यह कोई मेडिकल डायग्नोसिस नहीं है)
-            </CardDescription>
-          </CardHeader>
+      <InsightList
+        title="This week's observations"
+        hindiTitle="इस हफ़्ते की बातें"
+        note="आपके इस हफ़्ते के रिकॉर्ड पर आधारित (निदान नहीं)"
+        items={data.personalizedInsights}
+      />
 
-          <div className="space-y-2 text-xs text-positive font-medium">
-            {weeklyData.personalizedInsights.map((insight, idx) => (
-              <div key={idx} className="flex items-start gap-2">
-                <span className="mt-1 h-1.5 w-1.5 rounded-full bg-positive shrink-0" />
-                <span>{insight}</span>
-              </div>
-            ))}
-          </div>
-        </Card>
-      )}
-
-      {/* Medical disclaimer note */}
-      <div className="flex items-center gap-1.5 text-xs text-ink-subtle">
-        <AlertCircle className="h-3 w-3 shrink-0" />
-        <span>
-          यह रिपोर्ट केवल आपकी हैबिट ट्रैकिंग और लॉगिंग निरंतरता की समीक्षा के लिए है। यह किसी मेडिकल ट्रीटमेंट का विकल्प नहीं है।
-        </span>
-      </div>
+      <ReportDisclaimer>यह रिपोर्ट सिर्फ़ रिकॉर्ड की निरंतरता की समीक्षा है, इलाज का विकल्प नहीं।</ReportDisclaimer>
     </div>
   );
 }

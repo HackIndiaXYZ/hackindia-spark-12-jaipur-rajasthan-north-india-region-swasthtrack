@@ -1,348 +1,197 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
-import {
-  Activity,
-  ArrowLeft,
-  CheckCircle2,
-  Cpu,
-  FlaskConical,
-  Gauge,
-  HelpCircle,
-  Layers,
-  Play,
-  ShieldCheck,
-  Sparkles,
-  Users,
-} from "lucide-react";
+import { CheckCircle2, FlaskConical, Loader2, Play, XCircle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { PageTitle } from "@/components/ui/page-title";
-import { EmptyState, PageBody } from "@/components/ui/page";
+import { EmptyState, PageBody, PageHeader, Section } from "@/components/ui/page";
 import { useAuth } from "@/context/auth-context";
-import {
-  SIMULATION_SCENARIOS,
-  runSimulationScenario,
-  calculateIntelligenceReliabilityScore,
-  type ScenarioRunResult,
-} from "@/services/soie-simulation-lab-service";
+import { authFetch } from "@/lib/supabase/auth-fetch";
+import type { EvalReport } from "@/services/soie/eval/harness";
 
+interface ServerInfo {
+  ai: boolean;
+  webSearch: boolean;
+  model: string | null;
+  rateLimitPerHour: number;
+}
+
+/**
+ * SOIE evaluation & diagnostics (admin only).
+ *
+ * "Run the evaluation" executes REAL engine code in this browser: the safety
+ * gate, date resolver, fact ledger, answer verifier, rules engine, agent loop
+ * (driven by a scripted fake model) and data loaders (against an in-memory fake
+ * database), over synthetic patients. Pass/fail is computed, never canned.
+ *
+ * It does not call a real model or database. The server status below only says
+ * whether a key is configured; it does not call the model either.
+ */
 export default function SimulationLabPage() {
-  const { profile: authProfile } = useAuth();
-  const [selectedScenarioId, setSelectedScenarioId] = useState(SIMULATION_SCENARIOS[0].id);
-  const [runResult, setRunResult] = useState<ScenarioRunResult | null>(() =>
-    runSimulationScenario(SIMULATION_SCENARIOS[0].id)
-  );
-  const [isRunning, setIsRunning] = useState(false);
+  const { profile, loading } = useAuth();
+  const [report, setReport] = useState<EvalReport | null>(null);
+  const [running, setRunning] = useState(false);
+  const [progress, setProgress] = useState<[number, number]>([0, 0]);
+  const [server, setServer] = useState<ServerInfo | null | "error">(null);
+  const [showAll, setShowAll] = useState(false);
 
-  const reliability = calculateIntelligenceReliabilityScore();
-
-  function handleRun(scenarioId: string) {
-    setIsRunning(true);
-    setSelectedScenarioId(scenarioId);
-    setTimeout(() => {
-      const res = runSimulationScenario(scenarioId);
-      setRunResult(res);
-      setIsRunning(false);
-    }, 200);
-  }
-
-  // Internal QA tooling: it runs synthetic acceptance scenarios and exposes
-  // engine internals, so it is not part of the patient/caregiver product.
-  if (authProfile?.role !== "admin") {
+  if (loading) {
     return (
       <PageBody>
-        <PageTitle
-          eyebrow="Developer"
-          title="Simulation Lab"
-          description="Internal acceptance-testing tool."
-        />
-        <EmptyState
-          icon={FlaskConical}
-          title="Not available for this account"
-          hindiTitle="यह पेज केवल डेवलपर खातों के लिए है।"
-          description="The Simulation Lab runs synthetic QA scenarios and is restricted to administrator accounts."
-        />
+        <p className="py-10 text-center text-sm text-ink-muted" role="status">
+          लोड हो रहा है…
+        </p>
+      </PageBody>
+    );
+  }
+  if (profile?.role !== "admin") {
+    return (
+      <PageBody>
+        <EmptyState icon={FlaskConical} title="Admins only" hindiTitle="यह पेज सिर्फ़ एडमिन के लिए है" description="SOIE की जाँच और डायग्नोस्टिक्स केवल एडमिन खाते दिखा सकते हैं।" />
       </PageBody>
     );
   }
 
+  async function run() {
+    setRunning(true);
+    setReport(null);
+    try {
+      const { runEval } = await import("@/services/soie/eval");
+      // Yield once so the spinner paints before the (synchronous-ish) work starts.
+      await new Promise((r) => setTimeout(r, 30));
+      setReport(await runEval((done, total) => setProgress([done, total])));
+    } finally {
+      setRunning(false);
+    }
+  }
+
+  async function checkServer() {
+    setServer(null);
+    try {
+      const res = await authFetch("/api/soie");
+      setServer(res.ok ? ((await res.json()) as ServerInfo) : "error");
+    } catch {
+      setServer("error");
+    }
+  }
+
+  const failing = report?.results.filter((r) => !r.passed) ?? [];
+
   return (
-    <div className="space-y-6 max-w-6xl mx-auto">
-      {/* Top Breadcrumb & Synthetic Lab Alert */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-        <Link
-          href="/"
-          className="inline-flex items-center gap-1.5 text-xs font-semibold text-ink-subtle hover:text-ink transition-colors"
-        >
-          <ArrowLeft className="h-3.5 w-3.5" />
-          Back to Dashboard (डैशबोर्ड)
-        </Link>
-        <div className="inline-flex items-center gap-2 rounded-full border border-indigo-200 bg-indigo-50/80 px-3 py-1 text-xs font-semibold text-indigo-900">
-          <FlaskConical className="h-3.5 w-3.5 text-indigo-600 animate-pulse" />
-          <span>SOIE v2.0 Simulation &amp; Verification Lab</span>
-          <span className="rounded bg-indigo-600 px-1.5 py-0.2 text-2xs text-ink-inverse">SYNTHETIC DATA</span>
-        </div>
-      </div>
+    <PageBody>
+      <PageHeader eyebrow="Admin" title="SOIE evaluation & diagnostics" hindiTitle="SOIE की जाँच" description="असली इंजन कोड पर चलने वाले टेस्ट। नतीजे गणना से आते हैं, पहले से तय नहीं।" />
 
-      <PageTitle
-        eyebrow="SOIE v2.0 Intelligence Demonstration &amp; QA"
-        title="Simulation Lab & Acceptance Testing"
-        description="Run standardized synthetic health scenarios to rigorously test multi-detector anomalies, 'I Don't Know' honesty, reminder fatigue backoff, and agent consensus."
-      />
-
-      {/* SYSTEM RELIABILITY VS WELLNESS DISTINCTION HEADER */}
-      <div className="grid gap-4 sm:grid-cols-3">
-        <Card className="border-indigo-200 bg-gradient-to-br from-indigo-50/80 via-surface to-sky-50/30 p-5 shadow-xs">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold uppercase text-indigo-900 flex items-center gap-1.5">
-              <Gauge className="h-4 w-4 text-indigo-600" />
-              Intelligence Reliability
-            </span>
-            <Badge variant="blue">Model QA</Badge>
-          </div>
-          <p className="mt-2 text-2xl sm:text-3xl font-bold text-ink">
-            {reliability.score}%
-          </p>
-          <p className="mt-1 text-xs text-indigo-900/80 font-medium">
-            10/10 Synthetic verification checks passed
-          </p>
-        </Card>
-
-        <Card className="border-line bg-surface p-5 shadow-xs">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold uppercase text-ink-subtle flex items-center gap-1.5">
-              <Activity className="h-4 w-4 text-emerald-600" />
-              Engine Latency (P95)
-            </span>
-            <Badge variant="green">Budget Compliant</Badge>
-          </div>
-          <p className="mt-2 text-2xl sm:text-3xl font-bold text-ink">
-            {reliability.engineLatencyP95Ms} <span className="text-base font-semibold text-ink-subtle">ms</span>
-          </p>
-          <p className="mt-1 text-xs text-ink-subtle font-medium">
-            Max budget: 250ms per event
-          </p>
-        </Card>
-
-        <Card className="border-line bg-surface p-5 shadow-xs">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold uppercase text-ink-subtle flex items-center gap-1.5">
-              <ShieldCheck className="h-4 w-4 text-teal-600" />
-              Privacy Safeguards
-            </span>
-            <Badge variant="green">Verified</Badge>
-          </div>
-          <p className="mt-2 text-xl sm:text-2xl font-bold text-positive flex items-center gap-1.5">
-            <CheckCircle2 className="h-5 w-5" />
-            Active (Isolated)
-          </p>
-          <p className="mt-1 text-xs text-ink-subtle font-medium">
-            Zero raw-data mutation &amp; RLS enforced
-          </p>
-        </Card>
-      </div>
-
-      {/* SCENARIOS RUNNER GRID */}
-      <div className="grid gap-6 lg:grid-cols-12">
-        {/* Left Column: 10 Standardized Scenarios (4 cols) */}
-        <div className="lg:col-span-4 space-y-2.5">
-          <h3 className="text-xs font-semibold uppercase tracking-wider text-ink-subtle flex items-center gap-1.5 px-1">
-            <Layers className="h-3.5 w-3.5 text-indigo-600" />
-            Standardized Scenarios ({SIMULATION_SCENARIOS.length})
-          </h3>
-
-          <div className="space-y-2 max-h-[580px] overflow-y-auto pr-1">
-            {SIMULATION_SCENARIOS.map((sc) => {
-              const isSelected = selectedScenarioId === sc.id;
-              return (
-                <button
-                  type="button"
-                  key={sc.id}
-                  onClick={() => handleRun(sc.id)}
-                  className={`w-full text-left p-3.5 rounded-card border-2 transition-all cursor-pointer ${
-                    isSelected
-                      ? "border-indigo-600 bg-indigo-50/90 text-indigo-950 shadow-xs"
-                      : "border-line bg-surface text-ink hover:border-line-strong hover:bg-surface-sunken/60"
-                  }`}
-                >
-                  <div className="flex items-start justify-between gap-2">
-                    <span className="text-xs font-bold leading-snug">
-                      {sc.name}
-                    </span>
-                    <span className="rounded bg-surface-sunken px-1.5 py-0.5 text-2xs font-semibold text-ink-muted shrink-0">
-                      {sc.stepsCount}d
-                    </span>
-                  </div>
-                  <p className="text-xs text-ink-muted font-hindi mt-1">
-                    {sc.nameHi}
-                  </p>
-                  <p className="text-xs text-ink-subtle line-clamp-2 mt-1 leading-relaxed">
-                    {sc.description}
-                  </p>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Right Column: Execution Output & Acceptance Rubric (8 cols) */}
-        <div className="lg:col-span-8 space-y-4">
-          {runResult ? (
-            <>
-              {/* Header Box */}
-              <div className="rounded-card border border-line bg-surface p-5 shadow-xs space-y-4">
-                <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line pb-3">
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <h4 className="text-base font-bold text-ink">
-                        {runResult.scenario.name}
-                      </h4>
-                      <Badge variant={runResult.allPassed ? "green" : "red"}>
-                        {runResult.allPassed ? "Rubric Passed" : "Check Failed"}
-                      </Badge>
-                    </div>
-                    <p className="text-xs text-ink-subtle font-hindi mt-0.5">
-                      {runResult.scenario.nameHi}
-                    </p>
-                  </div>
-
-                  <Button
-                    variant="secondary"
-                    onClick={() => handleRun(selectedScenarioId)}
-                    disabled={isRunning}
-                    className="text-xs h-8"
-                  >
-                    <Play className="h-3 w-3 text-indigo-600" />
-                    Re-run Scenario
-                  </Button>
-                </div>
-
-                {/* Structured Output Contract Display (§48-49) */}
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-semibold uppercase text-ink-muted flex items-center gap-1.5">
-                      <Cpu className="h-3.5 w-3.5 text-emerald-600" />
-                      Structured Output Contract Output
-                    </span>
-                    <span className="text-xs font-mono text-ink-subtle">
-                      Latency: {runResult.executionTimeMs}ms
-                    </span>
-                  </div>
-
-                  {/* Highlight card depending on refusal / attention */}
-                  <div
-                    className={`rounded-card border p-4 space-y-2.5 ${
-                      runResult.output.isRefusal
-                        ? "border-attention-line bg-attention-soft text-attention"
-                        : runResult.output.safetyLevel === "attention"
-                        ? "border-critical-line bg-critical-soft text-ink"
-                        : "border-positive-line bg-positive-soft text-ink"
-                    }`}
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-semibold uppercase tracking-wider flex items-center gap-1">
-                        {runResult.output.isRefusal ? (
-                          <>
-                            <HelpCircle className="h-3.5 w-3.5 text-attention" />
-                            &apos;I Don&apos;t Know&apos; Honest Refusal
-                          </>
-                        ) : (
-                          <>
-                            <Sparkles className="h-3.5 w-3.5 text-positive" />
-                            Verified Output Insight
-                          </>
-                        )}
-                      </span>
-                      <span className="rounded-full bg-surface/90 px-2 py-0.5 text-2xs font-semibold border border-line">
-                        Confidence: {runResult.output.confidence.toUpperCase()} ({Math.round(runResult.output.confidenceScore * 100)}%)
-                      </span>
-                    </div>
-
-                    <p className="text-sm font-semibold leading-snug">
-                      &ldquo;{runResult.output.observation}&rdquo;
-                    </p>
-                    {runResult.output.observationHi && (
-                      <p className="text-xs text-ink-muted font-hindi font-medium">
-                        {runResult.output.observationHi}
-                      </p>
-                    )}
-
-                    <div className="pt-2 border-t border-line/60 grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs">
-                      <div>
-                        <span className="text-ink-subtle block text-2xs">Metric / Window:</span>
-                        <span className="font-semibold">{runResult.output.evidence.metric} ({runResult.output.evidence.window})</span>
-                      </div>
-                      <div>
-                        <span className="text-ink-subtle block text-2xs">Baseline vs Current:</span>
-                        <span className="font-semibold">{String(runResult.output.comparison.baseline)} → {String(runResult.output.comparison.current)}</span>
-                      </div>
-                      <div>
-                        <span className="text-ink-subtle block text-2xs">Safety Level:</span>
-                        <span className="font-semibold text-ink uppercase text-xs">{runResult.output.safetyLevel}</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Acceptance Rubric Checklist (§88) */}
-                <div className="space-y-2 pt-2 border-t border-line">
-                  <h5 className="text-xs font-semibold uppercase tracking-wider text-ink-muted flex items-center gap-1.5">
-                    <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
-                    Acceptance Rubric Verification (§88)
-                  </h5>
-
-                  <div className="space-y-1.5">
-                    {runResult.rubricChecks.map((check) => (
-                      <div
-                        key={check.checkName}
-                        className="flex items-start gap-2.5 rounded-card border border-line bg-surface-sunken/70 p-2.5 text-xs"
-                      >
-                        <CheckCircle2
-                          className={`h-4 w-4 shrink-0 mt-0.5 ${
-                            check.passed ? "text-positive" : "text-critical"
-                          }`}
-                        />
-                        <div>
-                          <p className="font-semibold text-ink">{check.checkName}</p>
-                          <p className="text-xs text-ink-subtle">{check.evidence}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Multi-Agent Consensus Breakdown (§50-55) */}
-                <div className="space-y-2 pt-2 border-t border-line">
-                  <h5 className="text-xs font-semibold uppercase tracking-wider text-ink-muted flex items-center gap-1.5">
-                    <Users className="h-3.5 w-3.5 text-indigo-600" />
-                    Multi-Agent Consensus Layer
-                  </h5>
-
-                  <div className="rounded-card border border-line bg-surface-sunken/90 p-3 text-xs space-y-1.5">
-                    <div className="flex items-center justify-between">
-                      <span className="font-semibold text-ink">
-                        Resolved Intervention: <strong className="text-indigo-800 uppercase">{runResult.consensus.resolvedInterventionLevel}</strong>
-                      </span>
-                      <span className="text-xs text-ink-subtle font-semibold">
-                        Consensus: {Math.round(runResult.consensus.consensusScore * 100)}%
-                      </span>
-                    </div>
-                    <p className="text-xs text-ink-muted">
-                      <strong>Supporting Agents:</strong> {runResult.consensus.supportingAgents.join(", ")}
-                    </p>
-                    <p className="text-xs text-ink-subtle italic">
-                      {runResult.consensus.rationale}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </>
+      <Card className="space-y-3">
+        <div className="flex flex-wrap items-center gap-3">
+          <Button variant="primary" onClick={run} disabled={running}>
+            {running ? <Loader2 aria-hidden className="h-4 w-4 animate-spin" /> : <Play aria-hidden className="h-4 w-4" />}
+            {running ? `चल रहा है… ${progress[0]}/${progress[1]}` : "मूल्यांकन चलाएँ (Run evaluation)"}
+          </Button>
+          {report ? (
+            <Badge variant={report.failed === 0 ? "positive" : "critical"}>
+              {report.failed === 0 ? <CheckCircle2 aria-hidden className="h-3 w-3" /> : <XCircle aria-hidden className="h-3 w-3" />}
+              {report.passed}/{report.total} पास · {report.ms} ms
+            </Badge>
           ) : null}
         </div>
-      </div>
-    </div>
+        <p className="text-xs text-ink-subtle">
+          चलता है: सुरक्षा गेट, तारीख़ समझ (IST), फ़ैक्ट लेजर, उत्तर-जाँचकर्ता (verifier), नियम-आधारित इंजन, एजेंट लूप (नकली स्क्रिप्टेड मॉडल के साथ) और डेटा-लोडर (नकली मेमोरी डेटाबेस के साथ), कृत्रिम मरीज़ों पर। असली AI मॉडल या असली डेटाबेस इसमें नहीं बुलाए जाते।
+        </p>
+      </Card>
+
+      {report ? (
+        <>
+          <Section title="Results by area" hindiTitle="क्षेत्र के अनुसार नतीजे">
+            <Card flush className="overflow-x-auto">
+              <table className="w-full text-left text-sm">
+                <thead>
+                  <tr className="border-b border-line text-xs text-ink-subtle">
+                    <th scope="col" className="px-4 py-2 font-medium">
+                      Area
+                    </th>
+                    <th scope="col" className="px-4 py-2 text-right font-medium">
+                      Passed
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {report.byGroup.map((g) => (
+                    <tr key={g.group} className="border-b border-line last:border-b-0">
+                      <td className="px-4 py-2 text-ink">{g.group}</td>
+                      <td className="tabular px-4 py-2 text-right">
+                        <span className={g.passed === g.total ? "font-semibold text-positive" : "font-semibold text-critical"}>
+                          {g.passed}/{g.total}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </Card>
+          </Section>
+
+          {failing.length > 0 ? (
+            <Section title={`Failures (${failing.length})`} hindiTitle="जो केस फेल हुए">
+              <div className="space-y-3">
+                {failing.map((r) => (
+                  <Card key={r.id} className="border-critical-line">
+                    <p className="text-sm font-semibold text-critical">{r.title}</p>
+                    <p className="text-2xs text-ink-subtle">
+                      {r.group} · {r.id}
+                    </p>
+                    <pre className="mt-2 overflow-x-auto whitespace-pre-wrap rounded-field bg-surface-sunken p-2.5 font-mono text-2xs text-ink-muted">{r.failures.join("\n")}</pre>
+                  </Card>
+                ))}
+              </div>
+            </Section>
+          ) : (
+            <Card tone="sunken" className="flex items-center gap-2 text-sm text-positive">
+              <CheckCircle2 aria-hidden className="h-4 w-4" />
+              <span>सभी {report.total} केस पास हुए।</span>
+            </Card>
+          )}
+
+          <Section title="All cases" hindiTitle="सभी केस" action={<Button size="sm" variant="quiet" onClick={() => setShowAll((s) => !s)}>{showAll ? "छिपाएँ" : "दिखाएँ"}</Button>}>
+            {showAll ? (
+              <Card flush>
+                <ul className="divide-y divide-line">
+                  {report.results.map((r) => (
+                    <li key={r.id} className="flex items-start gap-2 px-4 py-2 text-sm">
+                      {r.passed ? <CheckCircle2 aria-label="pass" className="mt-0.5 h-4 w-4 shrink-0 text-positive" /> : <XCircle aria-label="fail" className="mt-0.5 h-4 w-4 shrink-0 text-critical" />}
+                      <span className="min-w-0 flex-1 text-ink">
+                        {r.title}
+                        <span className="block text-2xs text-ink-subtle">{r.group}</span>
+                      </span>
+                      <span className="tabular text-2xs text-ink-subtle">{r.ms} ms</span>
+                    </li>
+                  ))}
+                </ul>
+              </Card>
+            ) : null}
+          </Section>
+        </>
+      ) : null}
+
+      <Section title="Server configuration" hindiTitle="सर्वर की स्थिति">
+        <Card className="space-y-2 text-sm">
+          <Button variant="secondary" onClick={checkServer}>
+            जाँचें
+          </Button>
+          {server === "error" ? <p className="text-critical">स्थिति नहीं मिल सकी।</p> : null}
+          {server && server !== "error" ? (
+            <ul className="space-y-1 text-ink-muted">
+              <li>
+                AI कुंजी: <strong className={server.ai ? "text-positive" : "text-attention"}>{server.ai ? "सेट है" : "सेट नहीं है (नियम-आधारित मोड)"}</strong>
+              </li>
+              <li>मॉडल: {server.model ?? "—"}</li>
+              <li>इंटरनेट खोज: {server.webSearch ? "चालू" : "बंद"}</li>
+              <li>सीमा: {server.rateLimitPerHour} सवाल प्रति घंटा प्रति उपयोगकर्ता</li>
+            </ul>
+          ) : null}
+          <p className="text-xs text-ink-subtle">यह सिर्फ़ कॉन्फ़िगरेशन बताता है; असली मॉडल को कॉल नहीं करता। असली जाँच के लिए /ask पर एक सवाल पूछें (docs/soie.md में स्मोक-टेस्ट देखें)।</p>
+        </Card>
+      </Section>
+    </PageBody>
   );
 }

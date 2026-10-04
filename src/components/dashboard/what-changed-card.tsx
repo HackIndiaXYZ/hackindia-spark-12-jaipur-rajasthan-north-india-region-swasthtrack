@@ -1,20 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
-import {
-  Activity,
-  ArrowDownRight,
-  ArrowUpRight,
-  HeartPulse,
-  Minus,
-  Moon,
-  Scale,
-  Sparkles,
-  Utensils,
-} from "lucide-react";
+import { Activity, ArrowDownRight, ArrowUpRight, HeartPulse, Minus, Moon, Scale, Sparkles, Utensils } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { DepthCard } from "@/components/ui/depth-card";
+import { Card } from "@/components/ui/card";
+import { ErrorState } from "@/components/ui/page";
 import { cn } from "@/lib/utils";
 import {
   getHealthChanges,
@@ -35,163 +26,169 @@ const metricIcons: Record<string, typeof Activity> = {
   food_consistency: Utensils,
 };
 
-const dirConfig: Record<
-  TrendDirection,
-  { badgeTone: "green" | "blue" | "amber"; icon: typeof ArrowUpRight; color: string; border: string; bg: string }
-> = {
-  up: {
-    badgeTone: "green",
-    icon: ArrowUpRight,
-    color: "text-positive",
-    border: "border-positive-line",
-    bg: "bg-positive-soft/50",
-  },
-  stable: {
-    badgeTone: "blue",
-    icon: Minus,
-    color: "text-info",
-    border: "border-info-line",
-    bg: "bg-info-soft/50",
-  },
-  down: {
-    badgeTone: "amber",
-    icon: ArrowDownRight,
-    color: "text-attention",
-    border: "border-attention-line",
-    bg: "bg-attention-soft/50",
-  },
+// Direction is a description, not a verdict: "up" in BP is not good news and "down" in weight is
+// not automatically bad, so the tone is neutral (info) for every direction.
+const dirConfig: Record<TrendDirection, { icon: typeof ArrowUpRight; label: string }> = {
+  up: { icon: ArrowUpRight, label: "वृद्धि" },
+  stable: { icon: Minus, label: "स्थिर" },
+  down: { icon: ArrowDownRight, label: "कमी" },
 };
 
+type State =
+  | { status: "loading" }
+  | { status: "error" }
+  | { status: "ready"; data: HealthChangesResult };
+
 export function WhatChangedCard({ patientId }: WhatChangedCardProps) {
-  const [data, setData] = useState<HealthChangesResult | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [state, setState] = useState<State>({ status: "loading" });
+  const [attempt, setAttempt] = useState(0);
 
   useEffect(() => {
     let active = true;
     getHealthChanges(patientId, "7d")
-      .then((res) => {
-        if (active) setData(res);
+      .then((data) => {
+        if (active) setState({ status: "ready", data });
       })
-      .catch((err) => console.error("WhatChanged error:", err))
-      .finally(() => {
-        if (active) setLoading(false);
+      .catch(() => {
+        if (active) setState({ status: "error" });
       });
-
     return () => {
       active = false;
     };
-  }, [patientId]);
+  }, [patientId, attempt]);
 
-  if (loading) {
+  const retry = useCallback(() => {
+    setState({ status: "loading" });
+    setAttempt((n) => n + 1);
+  }, []);
+
+  if (state.status === "loading") {
     return (
-      <DepthCard depth={2} className="p-5 animate-pulse">
-        <div className="h-5 w-48 rounded bg-surface-sunken" />
-        <div className="mt-2 h-3.5 w-64 rounded bg-surface-sunken" />
+      <Card aria-busy="true" aria-label="पिछले 7 दिनों की तुलना लोड हो रही है">
+        <div className="skeleton h-5 w-48" />
+        <div className="skeleton mt-2 h-3.5 w-64" />
         <div className="mt-4 grid gap-3 sm:grid-cols-3">
-          <div className="h-20 rounded-card bg-surface-sunken" />
-          <div className="h-20 rounded-card bg-surface-sunken" />
-          <div className="h-20 rounded-card bg-surface-sunken" />
+          <div className="skeleton h-20" />
+          <div className="skeleton h-20" />
+          <div className="skeleton h-20" />
         </div>
-      </DepthCard>
+      </Card>
     );
   }
 
-  if (!data || !data.dataSufficiency.isSufficient || data.metrics.length === 0) return null;
+  if (state.status === "error") {
+    return (
+      <ErrorState
+        title="पिछले 7 दिनों की तुलना लोड नहीं हो पाई"
+        englishTitle="Could not load what changed"
+        onRetry={retry}
+      />
+    );
+  }
 
-  // Maximum 3 important changes (§26)
-  const topChanges = data.rankedKeyChanges.length > 0
-    ? data.rankedKeyChanges.slice(0, 3)
-    : data.metrics.filter((m) => m.isSufficient).slice(0, 3);
+  const { data } = state;
+
+  if (!data.dataSufficiency.isSufficient || data.metrics.length === 0) {
+    return (
+      <Card>
+        <h2 className="text-sm font-semibold text-ink sm:text-base">
+          <span lang="hi">पिछले 7 दिनों में क्या बदला?</span>
+        </h2>
+        <p lang="hi" className="mt-1.5 text-sm text-ink-muted">
+          {data.dataSufficiency.reasonHi ?? "तुलना के लिए अभी पर्याप्त रिकॉर्ड नहीं हैं। कुछ दिन रीडिंग दर्ज करते रहें।"}
+        </p>
+      </Card>
+    );
+  }
+
+  // At most three changes (§26). The ranked list can be empty (nothing stood out); then the
+  // metrics that have data are shown as they are, without implying a change.
+  const topChanges =
+    data.rankedKeyChanges.length > 0
+      ? data.rankedKeyChanges.slice(0, 3)
+      : data.metrics.filter((m) => m.isSufficient).slice(0, 3);
 
   return (
-    <DepthCard depth={2} surface="gradient" className="p-4 sm:p-5 border-line shadow-e2">
-      {/* HEADER */}
-      <div className="flex items-center justify-between gap-3 pb-3 border-b border-line">
+    <Card>
+      <div className="flex items-start justify-between gap-3 border-b border-line pb-3">
         <div className="flex items-center gap-2.5">
-          <div className="h-8 w-8 rounded-control bg-purple-100 border border-purple-200 text-purple-700 flex items-center justify-center shrink-0 shadow-2xs">
-            <Sparkles className="h-4 w-4 stroke-[2.2]" />
-          </div>
+          <span aria-hidden className="grid h-8 w-8 shrink-0 place-items-center rounded-control bg-info-soft text-info">
+            <Sparkles className="h-4 w-4" />
+          </span>
           <div>
-            <div className="flex items-center gap-2">
-              <h3 className="text-sm sm:text-base font-bold text-ink tracking-tight">
+            <div className="flex flex-wrap items-center gap-2">
+              <h2 lang="hi" className="text-sm font-semibold text-ink sm:text-base">
                 पिछले 7 दिनों में क्या बदला?
-              </h3>
-              <Badge variant="blue" className="text-2xs font-semibold">
-                What Changed
-              </Badge>
+              </h2>
+              <Badge variant="info">What changed</Badge>
             </div>
-            <p className="text-xs font-semibold text-ink-subtle">
-              हालिया दौर बनाम संदर्भ दौर (Personal Comparison)
+            <p lang="hi" className="text-xs text-ink-muted">
+              हाल के 7 दिन बनाम उससे पहले के 7 दिन (आपके अपने रिकॉर्ड की तुलना)
             </p>
           </div>
         </div>
 
         <Link
           href="/insights/changes"
-          className="text-xs font-bold text-purple-700 hover:text-purple-950 flex items-center gap-1 shrink-0"
+          className="flex min-h-control shrink-0 items-center px-1 text-xs font-semibold text-brand-ink hover:underline"
         >
-          <span>विस्तृत देखें →</span>
+          <span lang="hi">विस्तृत देखें →</span>
         </Link>
       </div>
 
-      {/* TOP 3 HIGHLIGHTED CHANGES (§26) */}
-      <div className="mt-3 grid gap-2.5 sm:grid-cols-3">
+      <ul className="mt-3 grid gap-2.5 sm:grid-cols-3">
         {topChanges.map((c: MetricHealthChange) => {
-          const cfg = dirConfig[c.direction] || dirConfig.stable;
-          const Icon = metricIcons[c.metric] || Activity;
+          const cfg = dirConfig[c.direction] ?? dirConfig.stable;
+          const Icon = metricIcons[c.metric] ?? Activity;
           const DirIcon = cfg.icon;
+          // Without an earlier window there is nothing to compare with: say so instead of "stable".
+          const compared = c.hasReference;
 
           return (
-            <div
-              key={c.metric}
-              className={cn(
-                "rounded-card border-2 p-3 transition-all",
-                cfg.border,
-                cfg.bg
-              )}
-            >
-              <div className="flex items-center justify-between mb-1.5">
-                <div className="flex items-center gap-1.5">
-                  <div className="h-6 w-6 rounded-control bg-surface border border-line flex items-center justify-center shrink-0 shadow-2xs">
+            <li key={c.metric} className={cn("rounded-card border border-info-line bg-info-soft p-3")}>
+              <div className="mb-1.5 flex items-center justify-between gap-2">
+                <div className="flex min-w-0 items-center gap-1.5">
+                  <span aria-hidden className="grid h-6 w-6 shrink-0 place-items-center rounded-field border border-line bg-surface">
                     <Icon className="h-3.5 w-3.5 text-ink-muted" />
-                  </div>
-                  <span className="text-xs font-bold text-ink truncate">
+                  </span>
+                  <span lang="hi" className="truncate text-xs font-semibold text-ink">
                     {c.metricHi}
                   </span>
                 </div>
-                <Badge variant={cfg.badgeTone} className="text-2xs font-bold px-1.5 py-0">
-                  <DirIcon className="h-2.5 w-2.5 inline mr-0.5" />
-                  {c.direction === "up" ? "वृद्धि" : c.direction === "down" ? "कमी" : "स्थिर"}
-                </Badge>
+                {compared ? (
+                  <Badge variant="info" className="shrink-0">
+                    <DirIcon aria-hidden className="h-3 w-3" />
+                    <span lang="hi">{cfg.label}</span>
+                  </Badge>
+                ) : null}
               </div>
 
-              <div className="text-xs font-semibold text-ink-muted">
-                <span>{c.recentValue.toLocaleString()} {c.unit}</span>
-                <span className="text-2xs text-ink-subtle font-semibold ml-1">
-                  (पूर्व: {c.referenceValue.toLocaleString()})
-                </span>
-              </div>
+              <p className="tabular text-xs font-semibold text-ink">
+                {c.recentValue.toLocaleString("en-IN")} {c.unit}
+                {compared ? (
+                  <span lang="hi" className="ml-1 font-normal text-ink-muted">
+                    (पहले: {c.referenceValue.toLocaleString("en-IN")})
+                  </span>
+                ) : (
+                  <span lang="hi" className="ml-1 font-normal text-ink-muted">
+                    · पिछले दौर का डेटा नहीं
+                  </span>
+                )}
+              </p>
 
-              {c.personalPatternRange && (
-                <p className="text-2xs text-ink-subtle font-medium mt-0.5">
-                  सामान्य: {c.personalPatternRange}
+              {c.personalPatternRange ? (
+                <p lang="hi" className="mt-0.5 text-xs text-ink-muted">
+                  आपका सामान्य दायरा: {c.personalPatternRange}
                 </p>
-              )}
-            </div>
+              ) : null}
+            </li>
           );
         })}
-      </div>
+      </ul>
 
-      {/* FOOTER ACTION */}
-      <div className="mt-3 pt-2.5 border-t border-line flex items-center justify-between text-xs font-semibold text-ink-subtle">
-        <span>* सांख्यिकीय मध्यमान पर आधारित तुलना</span>
-        <Link
-          href="/insights/changes"
-          className="text-purple-700 hover:text-purple-950 font-bold"
-        >
-          View all changes (सभी विश्लेषण) →
-        </Link>
-      </div>
-    </DepthCard>
+      <p lang="hi" className="mt-3 border-t border-line pt-2.5 text-xs text-ink-muted">
+        यह सिर्फ़ रिकॉर्ड की तुलना है (मध्यमान के आधार पर), निदान नहीं।
+      </p>
+    </Card>
   );
 }

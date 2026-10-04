@@ -4,25 +4,43 @@ const path = require("path");
 const { createClient } = require("@supabase/supabase-js");
 
 // 1. Load environment variables from .env.local
+//
+// This script writes the shared food catalogue, which Row Level Security blocks
+// for every signed-in user and for the anon key. It therefore needs the
+// service-role key. That key bypasses RLS: keep it in .env.local on your own
+// computer only, never in a NEXT_PUBLIC_ variable, never in Vercel, never in git.
 const envPath = path.join(__dirname, "..", ".env.local");
-let supabaseUrl = "";
-let supabaseKey = "";
-
+let envContent = "";
 if (fs.existsSync(envPath)) {
-  const envContent = fs.readFileSync(envPath, "utf-8");
-  const urlMatch = envContent.match(/NEXT_PUBLIC_SUPABASE_URL\s*=\s*(.*)/);
-  const keyMatch = envContent.match(/(NEXT_PUBLIC_SUPABASE_ANON_KEY|NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY)\s*=\s*(.*)/);
-  
-  if (urlMatch) supabaseUrl = urlMatch[1].trim();
-  if (keyMatch) supabaseKey = keyMatch[2].trim();
+  envContent = fs.readFileSync(envPath, "utf-8");
 }
 
-if (!supabaseUrl || !supabaseKey) {
-  console.error("❌ Error: NEXT_PUBLIC_SUPABASE_URL and key must be set in .env.local");
+function readEnv(name) {
+  const match = envContent.match(new RegExp("^\\s*" + name + "\\s*=\\s*(.*)$", "m"));
+  const raw = match ? match[1] : process.env[name] || "";
+  return raw.trim().replace(/^["']|["']$/g, "");
+}
+
+const supabaseUrl = readEnv("NEXT_PUBLIC_SUPABASE_URL");
+const serviceKey = readEnv("SUPABASE_SERVICE_ROLE_KEY");
+
+if (!supabaseUrl || !serviceKey) {
+  console.error(
+    "Error: NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY must both be set in .env.local.\n" +
+      "The food import needs the service-role key because Row Level Security blocks the anon key.\n" +
+      "See docs/auth-setup.md (environment variables). Never expose this key to the browser or commit it.",
+  );
   process.exit(1);
 }
 
-const supabase = createClient(supabaseUrl, supabaseKey);
+// Guard against pasting the public key by mistake (never printed).
+const publicKeys = [readEnv("NEXT_PUBLIC_SUPABASE_ANON_KEY"), readEnv("NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY")].filter(Boolean);
+if (publicKeys.includes(serviceKey)) {
+  console.error("Error: SUPABASE_SERVICE_ROLE_KEY is the same as the public anon key. Use the service_role key from Project Settings > API.");
+  process.exit(1);
+}
+
+const supabase = createClient(supabaseUrl, serviceKey, { auth: { persistSession: false } });
 
 // 2. Custom CSV Parser (handles quotes and commas safely)
 function parseCSV(content) {
@@ -127,6 +145,7 @@ async function run() {
       source_note: `Category: ${category}, Per 100g: ${per100g}, Energy: ${kj}`,
       is_verified: true,
       is_custom: false,
+      created_by: null,
       is_active: true
     });
   }
@@ -190,6 +209,7 @@ async function run() {
       source_note: `Priority: ${patientPriority}, Status: ${dataStatus}, Note: ${sourceNote || ""}`,
       is_verified: isVerifiedValue,
       is_custom: false,
+      created_by: null,
       is_active: true
     });
   }
@@ -200,9 +220,10 @@ async function run() {
 
   console.log(`📦 Preparing to seed a total of ${allToInsert.length} food items to Supabase...`);
 
-  // Clear existing items if needed (Optionally truncate/delete to allow idempotent seeds)
+  // Clear previously seeded catalogue rows so the import is repeatable. Foods that
+  // people added themselves (is_custom or created_by set) are never touched.
   console.log("🧹 Clearing old master food items to ensure clean seed...");
-  const { error: deleteError } = await supabase.from("food_items").delete().neq("id", "00000000-0000-0000-0000-000000000000");
+  const { error: deleteError } = await supabase.from("food_items").delete().eq("is_custom", false).is("created_by", null);
   if (deleteError) {
     console.error("⚠️ Warning when deleting old records:", deleteError);
   }
@@ -230,15 +251,32 @@ async function run() {
     console.log(`⚖️ Found ${portionRows.length - 1} portion definitions.`);
 
     // Fetch all seeded food items from DB to map name -> id
-    const { data: dbFoods, error: fetchError } = await supabase.from("food_items").select("id, name");
-    if (fetchError || !dbFoods) {
-      console.error("❌ Failed to fetch seeded foods for portion mapping:", fetchError);
-      process.exit(1);
+    // PostgREST returns at most 1000 rows per request, so page through the
+    // seeded catalogue (custom foods are excluded on purpose).
+    const dbFoods = [];
+    for (let from = 0; ; from += 1000) {
+      const { data: page, error: fetchError } = await supabase
+        .from("food_items")
+        .select("id, name, source_type")
+        .eq("is_custom", false)
+        .is("created_by", null)
+        .order("id")
+        .range(from, from + 999);
+      if (fetchError || !page) {
+        console.error("❌ Failed to fetch seeded foods for portion mapping:", fetchError);
+        process.exit(1);
+      }
+      dbFoods.push(...page);
+      if (page.length < 1000) break;
     }
 
     const foodNameMap = new Map();
+    const papaNames = new Set();
     dbFoods.forEach(f => {
-      foodNameMap.set(f.name.toLowerCase(), f.id);
+      const key = f.name.toLowerCase();
+      if (papaNames.has(key)) return; // the priority layer wins on duplicate names
+      foodNameMap.set(key, f.id);
+      if (f.source_type === "papa_priority") papaNames.add(key);
     });
 
     const portionsToInsert = [];
@@ -303,4 +341,5 @@ async function run() {
 
 run().catch(err => {
   console.error("❌ Unexpected Import Failure:", err);
+  process.exitCode = 1;
 });

@@ -1,5 +1,8 @@
 "use client";
 
+import { todayIST } from "@/lib/health-rules";
+
+/** Today's date as the household sees it: IST, whatever the device clock says. */
 export function CurrentDate() {
   const now = new Date();
   const label = new Intl.DateTimeFormat("en-IN", {
@@ -7,10 +10,11 @@ export function CurrentDate() {
     day: "numeric",
     month: "long",
     year: "numeric",
+    timeZone: "Asia/Kolkata",
   }).format(now);
 
   return (
-    <time dateTime={now.toISOString()} suppressHydrationWarning>
+    <time lang="en-IN" dateTime={todayIST(now)} suppressHydrationWarning>
       {label}
     </time>
   );

@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
-import { UserCheck } from "lucide-react";
+import { useRef, useState, type FormEvent } from "react";
+import { AlertCircle, UserCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Field, Select, TextInput } from "@/components/ui/form-field";
+import { Field, NumberInput, Select, TextInput } from "@/components/ui/form-field";
 import { Modal } from "@/components/ui/modal";
 import { updatePatientProfile, type PatientProfile } from "@/services/patient-service";
 
@@ -13,6 +13,28 @@ type EditPatientDialogProps = {
   patient: PatientProfile;
   onSuccess?: () => void;
 };
+
+type FieldErrors = Partial<Record<"name" | "age" | "height" | "weight" | "target" | "calories", string>>;
+
+// Empty means "not recorded", never a made-up number.
+const show = (value: number | null | undefined) => (value == null ? "" : String(value));
+
+/** Blank -> null (clears the value). Filled -> must be a number inside [min, max]. */
+function parseOptional(
+  raw: string,
+  min: number,
+  max: number,
+  message: string,
+  integer = false,
+): { value: number | null; error?: string } {
+  const text = raw.trim();
+  if (!text) return { value: null };
+  const n = Number(text);
+  if (!Number.isFinite(n) || n < min || n > max || (integer && !Number.isInteger(n))) {
+    return { value: null, error: message };
+  }
+  return { value: n };
+}
 
 function EditPatientForm({
   patient,
@@ -24,113 +46,108 @@ function EditPatientForm({
   onSuccess?: () => void;
 }) {
   const [name, setName] = useState(patient.name);
-  const [age, setAge] = useState(patient.age ? String(patient.age) : "52");
-  const [gender, setGender] = useState(patient.gender || "Male");
-  const [heightCm, setHeightCm] = useState(patient.height_cm ? String(patient.height_cm) : "172");
-  const [currentWeightKg, setCurrentWeightKg] = useState(patient.current_weight_kg ? String(patient.current_weight_kg) : "78.4");
-  const [targetWeightKg, setTargetWeightKg] = useState(patient.target_weight_kg ? String(patient.target_weight_kg) : "72.0");
-  const [calorieTarget, setCalorieTarget] = useState(patient.daily_calorie_target ? String(patient.daily_calorie_target) : "1600");
+  const [age, setAge] = useState(show(patient.age));
+  const [gender, setGender] = useState(patient.gender ?? "");
+  const [heightCm, setHeightCm] = useState(show(patient.height_cm));
+  const [currentWeightKg, setCurrentWeightKg] = useState(show(patient.current_weight_kg));
+  const [targetWeightKg, setTargetWeightKg] = useState(show(patient.target_weight_kg));
+  const [calorieTarget, setCalorieTarget] = useState(show(patient.daily_calorie_target));
   const [error, setError] = useState("");
+  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
   const [loading, setLoading] = useState(false);
+  const busyRef = useRef(false);
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
+    if (busyRef.current) return;
     setError("");
 
-    if (!name.trim()) {
-      setError("Please enter the patient's full name (मरीज़ का नाम लिखें)");
+    const errors: FieldErrors = {};
+    if (!name.trim()) errors.name = "मरीज़ का नाम लिखें। (Name is required.)";
+    const ageR = parseOptional(age, 1, 120, "आयु 1 से 120 के बीच होनी चाहिए। (Age 1 to 120.)", true);
+    const heightR = parseOptional(heightCm, 50, 260, "ऊंचाई 50 से 260 सेमी के बीच होनी चाहिए। (Height 50 to 260 cm.)");
+    const weightR = parseOptional(currentWeightKg, 20, 350, "वजन 20 से 350 kg के बीच होना चाहिए। (Weight 20 to 350 kg.)");
+    const targetR = parseOptional(targetWeightKg, 20, 350, "लक्ष्य वजन 20 से 350 kg के बीच होना चाहिए। (Target 20 to 350 kg.)");
+    const calR = parseOptional(calorieTarget, 500, 6000, "कैलोरी लक्ष्य 500 से 6000 kcal के बीच होना चाहिए। (500 to 6000 kcal.)", true);
+    if (calR.value == null && !calR.error) errors.calories = "दैनिक कैलोरी लक्ष्य ज़रूरी है। (Calorie target is required.)";
+    if (ageR.error) errors.age = ageR.error;
+    if (heightR.error) errors.height = heightR.error;
+    if (weightR.error) errors.weight = weightR.error;
+    if (targetR.error) errors.target = targetR.error;
+    if (calR.error) errors.calories = calR.error;
+
+    setFieldErrors(errors);
+    if (Object.keys(errors).length > 0) {
+      setError("कृपया लाल निशान वाली जानकारी ठीक करें। (Please fix the highlighted fields.)");
       return;
     }
 
-    const ageNum = parseInt(age, 10);
-    if (isNaN(ageNum) || ageNum < 1 || ageNum > 120) {
-      setError("Please enter a valid age between 1 and 120 (आयु 1 से 120 के बीच होनी चाहिए)");
-      return;
-    }
-
-    const heightNum = parseFloat(heightCm);
-    if (isNaN(heightNum) || heightNum <= 50 || heightNum > 260) {
-      setError("Please enter a valid height in cm (ऊंचाई 50 से 260 सेमी के बीच होनी चाहिए)");
-      return;
-    }
-
-    const currWtNum = parseFloat(currentWeightKg);
-    if (isNaN(currWtNum) || currWtNum <= 20 || currWtNum > 350) {
-      setError("Please enter a valid current weight (वर्तमान वजन सही दर्ज करें)");
-      return;
-    }
-
-    const targetWtNum = parseFloat(targetWeightKg);
-    if (isNaN(targetWtNum) || targetWtNum <= 20 || targetWtNum > 350) {
-      setError("Please enter a valid target weight (लक्ष्य वजन सही दर्ज करें)");
-      return;
-    }
-
-    const calNum = parseInt(calorieTarget, 10);
-    if (isNaN(calNum) || calNum <= 500 || calNum > 6000) {
-      setError("Please enter a realistic daily calorie target (दैनिक कैलोरी लक्ष्य 500 से 6000 kcal के बीच होना चाहिए)");
-      return;
-    }
-
+    busyRef.current = true;
+    setLoading(true);
     try {
-      setLoading(true);
       await updatePatientProfile(
         {
           name: name.trim(),
-          age: ageNum,
-          gender: gender,
-          height_cm: heightNum,
-          current_weight_kg: currWtNum,
-          target_weight_kg: targetWtNum,
-          daily_calorie_target: calNum,
+          age: ageR.value,
+          gender: gender || null,
+          height_cm: heightR.value,
+          current_weight_kg: weightR.value,
+          target_weight_kg: targetR.value,
+          // Required by the database: validated above, so never null here.
+          daily_calorie_target: calR.value ?? patient.daily_calorie_target,
         },
         patient.id,
       );
 
       onClose();
       onSuccess?.();
-    } catch (err: unknown) {
-      setError(
-        err instanceof Error ? err.message : "Failed to update profile. Please try again.",
-      );
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "प्रोफाइल सेव नहीं हो सकी। (Could not save the profile.)");
     } finally {
+      busyRef.current = false;
       setLoading(false);
     }
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      {error ? (
-        <div className="rounded-lg border border-rose-200 bg-rose-50 p-3 text-sm font-medium text-rose-700">
-          {error}
-        </div>
-      ) : null}
+    <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+      <div aria-live="polite" className="empty:hidden">
+        {error ? (
+          <div
+            role="alert"
+            className="flex items-start gap-2 rounded-card border border-critical-line bg-critical-soft p-3 text-sm font-medium text-critical"
+          >
+            <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
+            <span>{error}</span>
+          </div>
+        ) : null}
+      </div>
 
-      <Field label="Full Name (पूरा नाम)">
+      <Field label="Full name (पूरा नाम)" required error={fieldErrors.name}>
         <TextInput
           autoFocus
           type="text"
-          placeholder="e.g. Mr. Rajiv Sharma"
+          placeholder="पूरा नाम"
           value={name}
           onChange={(e) => setName(e.target.value)}
+          aria-invalid={Boolean(fieldErrors.name)}
           required
         />
       </Field>
 
       <div className="grid grid-cols-2 gap-4">
-        <Field label="Age (आयु / वर्ष)">
-          <TextInput
-            type="number"
-            inputMode="numeric"
-            placeholder="52"
+        <Field label="Age (आयु / वर्ष)" hint="वैकल्पिक" error={fieldErrors.age}>
+          <NumberInput
             value={age}
             onChange={(e) => setAge(e.target.value)}
-            required
+            placeholder="वर्ष"
+            aria-invalid={Boolean(fieldErrors.age)}
           />
         </Field>
 
-        <Field label="Gender (लिंग)">
+        <Field label="Gender (लिंग)" hint="वैकल्पिक">
           <Select value={gender} onChange={(e) => setGender(e.target.value)}>
+            <option value="">चुनें</option>
             <option value="Male">Male (पुरुष)</option>
             <option value="Female">Female (महिला)</option>
             <option value="Other">Other (अन्य)</option>
@@ -138,56 +155,50 @@ function EditPatientForm({
         </Field>
       </div>
 
-      <div className="grid grid-cols-3 gap-3">
-        <Field label="Height (ऊंचाई cm)" hint="e.g. 172">
-          <TextInput
-            type="number"
-            step="0.5"
-            inputMode="decimal"
-            placeholder="172"
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+        <Field label="Height (ऊंचाई cm)" hint="वैकल्पिक" error={fieldErrors.height}>
+          <NumberInput
+            allowDecimal
             value={heightCm}
             onChange={(e) => setHeightCm(e.target.value)}
-            required
+            placeholder="सेमी"
+            aria-invalid={Boolean(fieldErrors.height)}
           />
         </Field>
 
-        <Field label="Current (वजन kg)" hint="e.g. 78.4">
-          <TextInput
-            type="number"
-            step="0.1"
-            inputMode="decimal"
-            placeholder="78.4"
+        <Field label="Current (वजन kg)" hint="वैकल्पिक" error={fieldErrors.weight}>
+          <NumberInput
+            allowDecimal
             value={currentWeightKg}
             onChange={(e) => setCurrentWeightKg(e.target.value)}
-            required
+            placeholder="kg"
+            aria-invalid={Boolean(fieldErrors.weight)}
           />
         </Field>
 
-        <Field label="Target (लक्ष्य kg)" hint="e.g. 72.0">
-          <TextInput
-            type="number"
-            step="0.1"
-            inputMode="decimal"
-            placeholder="72.0"
+        <Field label="Target (लक्ष्य kg)" hint="वैकल्पिक" error={fieldErrors.target}>
+          <NumberInput
+            allowDecimal
             value={targetWeightKg}
             onChange={(e) => setTargetWeightKg(e.target.value)}
-            required
+            placeholder="kg"
+            aria-invalid={Boolean(fieldErrors.target)}
           />
         </Field>
       </div>
 
       <Field
-        label="Daily Calorie Target (दैनिक कैलोरी लक्ष्य kcal)"
-        hint="Prescribed by physician/dietitian (Standard: 1600 kcal)"
+        label="Daily calorie target (दैनिक कैलोरी लक्ष्य kcal)"
+        hint="डॉक्टर या डायटीशियन की सलाह के अनुसार रखें"
+        required
+        error={fieldErrors.calories}
       >
-        <TextInput
-          type="number"
-          inputMode="numeric"
-          placeholder="1600"
+        <NumberInput
           value={calorieTarget}
           onChange={(e) => setCalorieTarget(e.target.value)}
+          placeholder="kcal"
           className="text-lg font-semibold"
-          required
+          aria-invalid={Boolean(fieldErrors.calories)}
         />
       </Field>
 
@@ -196,27 +207,22 @@ function EditPatientForm({
           Cancel (रद्द करें)
         </Button>
         <Button variant="primary" type="submit" disabled={loading}>
-          <UserCheck className="h-4 w-4" />
-          {loading ? "Saving..." : "Save Profile (सुरक्षित करें)"}
+          <UserCheck className="h-4 w-4" aria-hidden />
+          {loading ? "Saving..." : "Save profile (सुरक्षित करें)"}
         </Button>
       </div>
     </form>
   );
 }
 
-export function EditPatientDialog({
-  isOpen,
-  onClose,
-  patient,
-  onSuccess,
-}: EditPatientDialogProps) {
+export function EditPatientDialog({ isOpen, onClose, patient, onSuccess }: EditPatientDialogProps) {
   return (
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title="Edit Personal Information"
+      title="Edit personal information"
       hindiTitle="व्यक्तिगत जानकारी संपादित करें"
-      description="Update basic clinical parameters, target weight, and doctor prescribed calorie target."
+      description="Only the name and calorie target are required. Leave the rest empty if unknown."
       maxWidth="lg"
     >
       {isOpen ? (

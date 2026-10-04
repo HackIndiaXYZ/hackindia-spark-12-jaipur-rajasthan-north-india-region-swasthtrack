@@ -1,762 +1,551 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import type { User } from "@supabase/supabase-js";
+import { setActivePatientId } from "@/lib/active-patient";
+import { isSupabaseConfigured, supabase } from "@/lib/supabase/client";
+import type { MemberRole } from "@/lib/supabase/database.types";
 import {
-  getPatientProfile,
-  getStorageItem,
-  invalidateProfileCache,
-  isSupabaseConfigured,
-  setStorageItem,
-  supabase,
+  SupabaseNotConfiguredError,
+  clearAllPatientCaches,
+  invalidatePatientCache,
   type PatientProfile,
 } from "./patient-service";
 
-export type UserRole = "patient" | "caregiver" | "admin";
+/**
+ * Authentication and caregiver membership, on top of Supabase Auth.
+ *
+ *  - email + password, with a 6-digit email OTP (sent by Supabase) to verify the
+ *    address at sign-up;
+ *  - password reset by emailed code;
+ *  - optional passwordless "sign in with email code".
+ *
+ * There are no accounts, password hashes, OTPs or memberships in localStorage.
+ * Who may see which patient is decided by Postgres Row Level Security
+ * (supabase/migrations/20261004000000_secure_auth_rls_soie.sql); this file only
+ * calls the RPCs and tables that migration defines.
+ */
+
+export const MIN_PASSWORD_LENGTH = 8;
+export const OTP_LENGTH = 6;
+
+export type UserRole = "member" | "admin";
 
 export interface UserProfile {
   id: string;
-  auth_user_id: string;
-  phone: string;
-  display_name: string;
+  email: string | null;
+  display_name: string | null;
   role: UserRole;
-  created_at: string;
-  updated_at: string;
 }
 
-export interface UserAccount {
-  phone: string;
-  password_hash: string;
-  auth_user_id: string;
-  created_at: string;
-}
-
-export interface PatientMembership {
-  id: string;
-  patient_id: string;
-  user_id: string;
-  role: "patient" | "caregiver";
-  caregiver_role?: "editor" | "viewer";
-  status: "active" | "revoked";
-  created_at: string;
-}
+/** A patient the signed-in user is an active member of, with their role on it. */
+export type AuthorizedPatient = PatientProfile & { member_role: MemberRole };
 
 export interface CaregiverInvitation {
   id: string;
   patient_id: string;
-  created_by_user_id: string;
   invite_code: string;
-  status: "pending" | "accepted" | "expired";
+  role: "editor" | "viewer";
+  status: "pending" | "accepted" | "expired" | "cancelled";
   expires_at: string;
   created_at: string;
-  accepted_at?: string;
-  accepted_by_user_id?: string;
 }
 
+/** One row of a patient's roster (owner-only view). */
 export interface AuthorizedCaregiver {
+  member_id: string;
   user_id: string;
-  phone: string;
-  display_name: string;
-  role: string;
+  email: string | null;
+  display_name: string | null;
+  role: MemberRole;
+  status: "active" | "revoked";
   added_at: string;
-  membership_id: string;
 }
 
-const AUTH_USER_KEY = "swasthtrack_auth_user";
-const AUTH_PROFILE_KEY = "swasthtrack_auth_profile";
-const ACCOUNTS_KEY = "swasthtrack_auth_accounts";
-const MEMBERSHIPS_KEY = "swasthtrack_patient_memberships";
-const INVITATIONS_KEY = "swasthtrack_caregiver_invitations";
+// ---------------------------------------------------------------------------
+// Errors
+// ---------------------------------------------------------------------------
 
-export const DEFAULT_PATIENT_ID = "patient-empty";
+export type AuthErrorCode =
+  | "invalid_credentials"
+  | "email_not_confirmed"
+  | "rate_limited"
+  | "weak_password"
+  | "user_exists"
+  | "invalid_code"
+  | "invalid_input"
+  | "same_password"
+  | "not_signed_in"
+  | "network"
+  | "unknown";
 
-/**
- * NOT A CRYPTOGRAPHIC HASH.
- *
- * This is a salted DJB2/31 digest kept only so existing local test accounts
- * keep working. It is reversible by brute force in milliseconds, and the
- * result is stored in `localStorage` alongside the phone number, so anyone
- * with access to the device or to injected script can read it.
- *
- * The whole local auth path (accounts, memberships, OTPs) is a development
- * stand-in and MUST be replaced with Supabase Auth plus row-level security
- * before this product handles anyone's real health data. See the audit report
- * for the migration path.
- */
-export function hashPassword(password: string): string {
-  const salt = "swasthtrack_v2026_salted_hash_key_";
-  const str = salt + password;
-  let hash1 = 5381;
-  let hash2 = 0;
-  for (let i = 0; i < str.length; i++) {
-    const char = str.charCodeAt(i);
-    hash1 = (hash1 * 33) ^ char;
-    hash2 = (hash2 * 31) + char;
+/** Carries a stable `code` so the UI can branch (e.g. send the user to the code step). */
+export class AuthServiceError extends Error {
+  constructor(
+    public code: AuthErrorCode,
+    message: string,
+  ) {
+    super(message);
+    this.name = "AuthServiceError";
   }
-  const h1 = (hash1 >>> 0).toString(16).padStart(8, "0");
-  const h2 = (hash2 >>> 0).toString(16).padStart(8, "0");
-  return `sha256_v2_${h1}${h2}_len${password.length}`;
 }
 
-/**
- * Get stored accounts
- */
-function getStoredAccounts(): UserAccount[] {
-  return getStorageItem<UserAccount[]>(ACCOUNTS_KEY, []);
+const MESSAGES: Record<AuthErrorCode, string> = {
+  invalid_credentials: "ईमेल या पासवर्ड गलत है। (Incorrect email or password.)",
+  email_not_confirmed:
+    "आपका ईमेल अभी सत्यापित नहीं है। हमने एक कोड भेजा है, उसे दर्ज करें। (Email not verified yet: enter the code we emailed you.)",
+  rate_limited:
+    "बहुत ज़्यादा कोशिशें हो गईं। कुछ मिनट रुककर फिर कोशिश करें। (Too many attempts. Please wait a few minutes.)",
+  weak_password: `पासवर्ड कम से कम ${MIN_PASSWORD_LENGTH} अक्षरों का होना चाहिए। (Password must be at least ${MIN_PASSWORD_LENGTH} characters.)`,
+  user_exists:
+    "इस ईमेल से खाता पहले से है। लॉगिन करें, या 'पासवर्ड भूल गए' चुनें। (An account with this email already exists. Sign in or reset your password.)",
+  invalid_code: "कोड गलत है या समाप्त हो चुका है। नया कोड मंगाएं। (The code is wrong or has expired. Request a new one.)",
+  invalid_input: "कृपया जानकारी जांचें। (Please check your details.)",
+  same_password: "नया पासवर्ड पुराने से अलग रखें। (Choose a password different from the old one.)",
+  not_signed_in: "कृपया पहले लॉगिन करें। (Please sign in first.)",
+  network: "इंटरनेट कनेक्शन जांचें और फिर कोशिश करें। (Check your connection and try again.)",
+  unknown: "कुछ गड़बड़ हो गई। कृपया फिर कोशिश करें। (Something went wrong. Please try again.)",
+};
+
+function authError(code: AuthErrorCode, message?: string): AuthServiceError {
+  return new AuthServiceError(code, message ?? MESSAGES[code]);
 }
 
-/**
- * Normalize and validate Indian phone number format (+91XXXXXXXXXX)
- */
-export function normalizePhoneNumber(input: string): string {
-  const cleaned = input.replace(/\D/g, "");
-  if (cleaned.length === 10) {
-    return `+91${cleaned}`;
+type SupabaseAuthLike = { code?: string; message?: string; status?: number; name?: string };
+
+function mapAuthError(error: SupabaseAuthLike): AuthServiceError {
+  const code = error.code ?? "";
+  const text = error.message ?? "";
+
+  if (code === "invalid_credentials" || /invalid login credentials/i.test(text)) return authError("invalid_credentials");
+  if (code === "email_not_confirmed" || /email not confirmed/i.test(text)) return authError("email_not_confirmed");
+  if (
+    code === "over_email_send_rate_limit" ||
+    code === "over_request_rate_limit" ||
+    code === "over_sms_send_rate_limit" ||
+    error.status === 429 ||
+    /rate limit|too many requests|after \d+ seconds|security purposes/i.test(text)
+  ) {
+    return authError("rate_limited");
   }
-  if (cleaned.length === 12 && cleaned.startsWith("91")) {
-    return `+${cleaned}`;
+  if (code === "weak_password" || /password should be at least|weak password/i.test(text)) return authError("weak_password");
+  if (code === "user_already_exists" || code === "email_exists" || /already registered|already exists/i.test(text)) {
+    return authError("user_exists");
   }
-  if (input.startsWith("+") && cleaned.length >= 11) {
-    return `+${cleaned}`;
+  if (code === "same_password" || /different from the old password/i.test(text)) return authError("same_password");
+  if (code === "otp_expired" || code === "validation_failed" || /token has expired|otp.*(expired|invalid)|invalid.*token/i.test(text)) {
+    return authError("invalid_code");
   }
-  return input.trim();
+  if (code === "session_not_found" || code === "refresh_token_not_found" || /auth session missing/i.test(text)) {
+    return authError("not_signed_in");
+  }
+  if (/failed to fetch|networkerror|load failed|fetch failed/i.test(text)) return authError("network");
+  return authError("unknown");
 }
 
-/**
- * Validate 10-digit mobile number format
- */
-export function isValidIndianMobile(phone: string): boolean {
-  const norm = normalizePhoneNumber(phone);
-  return /^\+91[6-9]\d{9}$/.test(norm);
+function requireConfigured(): void {
+  if (!isSupabaseConfigured) throw new SupabaseNotConfiguredError();
 }
 
+// ---------------------------------------------------------------------------
+// Input checks
+// ---------------------------------------------------------------------------
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+export function normalizeEmail(input: string): string {
+  return input.trim().toLowerCase();
+}
+
+function requireEmail(input: string): string {
+  const email = normalizeEmail(input);
+  if (!EMAIL_RE.test(email)) {
+    throw authError("invalid_input", "कृपया सही ईमेल पता दर्ज करें। (Enter a valid email address.)");
+  }
+  return email;
+}
+
+function requirePassword(password: string): void {
+  if (password.length < MIN_PASSWORD_LENGTH) throw authError("weak_password");
+}
+
+function requireCode(input: string): string {
+  const code = input.replace(/\s+/g, "");
+  if (!new RegExp(`^\\d{${OTP_LENGTH}}$`).test(code)) {
+    throw authError("invalid_code", `कृपया ${OTP_LENGTH} अंकों का कोड दर्ज करें। (Enter the ${OTP_LENGTH}-digit code.)`);
+  }
+  return code;
+}
+
+// ---------------------------------------------------------------------------
+// Sign up / sign in
+// ---------------------------------------------------------------------------
+
 /**
- * Register a new user with mobile number and password
+ * Create an account. Supabase emails a 6-digit code (the "Confirm signup"
+ * template must contain `{{ .Token }}`); the account cannot sign in until it is
+ * verified with `verifySignupOtp`.
  */
-export async function registerUserWithPassword(
-  phone: string,
+export async function signUpWithEmail(
+  email: string,
   password: string,
-): Promise<{ success: boolean; user: any; profile: UserProfile; isNewUser: boolean }> {
-  const formattedPhone = normalizePhoneNumber(phone);
+  displayName?: string,
+): Promise<{ status: "verify" | "signed_in" }> {
+  requireConfigured();
+  const cleanEmail = requireEmail(email);
+  requirePassword(password);
 
-  if (!isValidIndianMobile(formattedPhone)) {
-    throw new Error("कृपया 10 अंकों का मान्य भारतीय मोबाइल नंबर दर्ज करें (6-9 से शुरू)।");
-  }
-
-  if (password.length < 4) {
-    throw new Error("पासवर्ड कम से कम 4 अक्षरों/अंकों का होना चाहिए।");
-  }
-
-  const accounts = getStoredAccounts();
-  const existing = accounts.find((a) => a.phone === formattedPhone);
-  if (existing) {
-    throw new Error("इस मोबाइल नंबर पर पहले से खाता मौजूद है। कृपया 'लॉगिन करें' टैब चुनें।");
-  }
-
-  const authUserId = `usr-${formattedPhone.replace(/\D/g, "")}`;
-  const newAccount: UserAccount = {
-    phone: formattedPhone,
-    password_hash: hashPassword(password),
-    auth_user_id: authUserId,
-    created_at: new Date().toISOString(),
-  };
-
-  setStorageItem(ACCOUNTS_KEY, [...accounts, newAccount]);
-
-  const authUser = {
-    id: authUserId,
-    phone: formattedPhone,
-    aud: "authenticated",
-    role: "authenticated",
-    created_at: new Date().toISOString(),
-  };
-
-  const profile = await ensureUserProfile(
-    authUserId,
-    formattedPhone,
-    "SwasthTrack User",
-    "patient",
-  );
-
-  setStorageItem(AUTH_USER_KEY, authUser);
-  setStorageItem(AUTH_PROFILE_KEY, profile);
-  invalidateProfileCache();
-
-  return { success: true, user: authUser, profile, isNewUser: true };
-}
-
-/**
- * Login with mobile number and password
- */
-export async function loginWithPhonePassword(
-  phone: string,
-  password: string,
-): Promise<{ success: boolean; user: any; profile: UserProfile; isNewUser: boolean }> {
-  const formattedPhone = normalizePhoneNumber(phone);
-
-  if (!isValidIndianMobile(formattedPhone)) {
-    throw new Error("कृपया 10 अंकों का मान्य भारतीय मोबाइल नंबर दर्ज करें।");
-  }
-
-  const accounts = getStoredAccounts();
-  const account = accounts.find((a) => a.phone === formattedPhone);
-
-  if (!account) {
-    throw new Error("इस नंबर से कोई खाता नहीं मिला। कृपया पहले 'नया खाता बनाएं' पर क्लिक करें।");
-  }
-
-  if (account.password_hash !== hashPassword(password)) {
-    throw new Error("दर्ज किया गया पासवर्ड गलत है। कृपया पुनः प्रयास करें या 'पासवर्ड भूल गए' चुनें।");
-  }
-
-  const authUser = {
-    id: account.auth_user_id,
-    phone: formattedPhone,
-    aud: "authenticated",
-    role: "authenticated",
-    created_at: account.created_at,
-  };
-
-  const profile = await ensureUserProfile(
-    authUser.id,
-    formattedPhone,
-    "SwasthTrack Patient",
-    "patient",
-  );
-
-  // Auto-link to existing patient in Supabase if one exists
-  if (isSupabaseConfigured) {
-    try {
-      const { data: pts } = await supabase.from("patients").select("id").limit(1);
-      if (pts && pts.length > 0) {
-        const existingPatientId = pts[0].id;
-        await ensurePatientMembership(existingPatientId, profile.id, "patient");
-        await ensurePatientMembership(existingPatientId, authUser.id, "patient");
-      }
-    } catch {
-      // fallback
-    }
-  }
-
-  const isNewUser =
-    !hasActivePatientMembership(profile.id) &&
-    !hasActivePatientMembership(authUser.id);
-
-  setStorageItem(AUTH_USER_KEY, authUser);
-  setStorageItem(AUTH_PROFILE_KEY, profile);
-  invalidateProfileCache();
-
-  return { success: true, user: authUser, profile, isNewUser };
-}
-
-const OTP_STORE_KEY = "swasthtrack_auth_otps";
-
-interface OtpEntry {
-  phone: string;
-  code: string;
-  expiresAt: number;
-}
-
-/**
- * Generate and send a 6-digit OTP for password reset
- */
-export async function sendPasswordResetOtp(
-  phone: string,
-): Promise<{ success: boolean; message: string; simulatedOtp: string }> {
-  const formattedPhone = normalizePhoneNumber(phone);
-
-  if (!isValidIndianMobile(formattedPhone)) {
-    throw new Error("कृपया 10 अंकों का मान्य भारतीय मोबाइल नंबर दर्ज करें।");
-  }
-
-  const accounts = getStoredAccounts();
-  const account = accounts.find((a) => a.phone === formattedPhone);
-
-  if (!account) {
-    throw new Error("इस नंबर से कोई खाता नहीं मिला। कृपया पहले 'नया खाता बनाएं' पर क्लिक करें।");
-  }
-
-  const code = Math.floor(100000 + Math.random() * 900000).toString();
-  const otps = getStorageItem<OtpEntry[]>(OTP_STORE_KEY, []);
-  const filtered = otps.filter((o) => o.phone !== formattedPhone && o.expiresAt > Date.now());
-
-  filtered.push({
-    phone: formattedPhone,
-    code,
-    expiresAt: Date.now() + 10 * 60 * 1000,
+  const name = displayName?.trim();
+  const { data, error } = await supabase.auth.signUp({
+    email: cleanEmail,
+    password,
+    options: name ? { data: { display_name: name } } : undefined,
   });
+  if (error) throw mapAuthError(error);
 
-  setStorageItem(OTP_STORE_KEY, filtered);
+  // Supabase hides "already registered" by returning a user with no identities.
+  if (data.user && Array.isArray(data.user.identities) && data.user.identities.length === 0) {
+    throw authError("user_exists");
+  }
+  // "Confirm email" switched off in the dashboard: the account is live immediately.
+  return { status: data.session ? "signed_in" : "verify" };
+}
 
+export async function verifySignupOtp(email: string, code: string): Promise<void> {
+  requireConfigured();
+  const { error } = await supabase.auth.verifyOtp({ email: requireEmail(email), token: requireCode(code), type: "signup" });
+  if (error) throw mapAuthError(error);
+}
+
+export async function resendSignupOtp(email: string): Promise<void> {
+  requireConfigured();
+  const { error } = await supabase.auth.resend({ type: "signup", email: requireEmail(email) });
+  if (error) throw mapAuthError(error);
+}
+
+export async function signInWithPassword(email: string, password: string): Promise<void> {
+  requireConfigured();
+  const cleanEmail = requireEmail(email);
+  if (!password) throw authError("invalid_credentials");
+  const { error } = await supabase.auth.signInWithPassword({ email: cleanEmail, password });
+  if (error) throw mapAuthError(error);
+}
+
+// Errors that only say "this email has no account". The caller must not learn that.
+function isUnknownAccountError(error: SupabaseAuthLike): boolean {
+  return (
+    error.code === "otp_disabled" ||
+    error.code === "signup_disabled" ||
+    error.code === "user_not_found" ||
+    /signups not allowed|user not found/i.test(error.message ?? "")
+  );
+}
+
+/** Passwordless sign-in: emails a code. Succeeds quietly for unknown addresses. */
+export async function sendLoginCode(email: string): Promise<void> {
+  requireConfigured();
+  const { error } = await supabase.auth.signInWithOtp({
+    email: requireEmail(email),
+    options: { shouldCreateUser: false },
+  });
+  if (error && !isUnknownAccountError(error)) throw mapAuthError(error);
+}
+
+export async function verifyLoginCode(email: string, code: string): Promise<void> {
+  requireConfigured();
+  const { error } = await supabase.auth.verifyOtp({ email: requireEmail(email), token: requireCode(code), type: "email" });
+  if (error) throw mapAuthError(error);
+}
+
+// ---------------------------------------------------------------------------
+// Password reset / change
+// ---------------------------------------------------------------------------
+
+/** Emails a recovery code. Always looks successful, so it never reveals whether an account exists. */
+export async function sendPasswordResetCode(email: string): Promise<void> {
+  requireConfigured();
+  const { error } = await supabase.auth.resetPasswordForEmail(requireEmail(email));
+  if (error && !isUnknownAccountError(error)) throw mapAuthError(error);
+}
+
+/** Verify the emailed code, then set the new password. The user ends up signed in. */
+export async function resetPasswordWithCode(email: string, code: string, newPassword: string): Promise<void> {
+  requireConfigured();
+  const cleanEmail = requireEmail(email);
+  const token = requireCode(code);
+  requirePassword(newPassword);
+
+  const { error: verifyError } = await supabase.auth.verifyOtp({ email: cleanEmail, token, type: "recovery" });
+  if (verifyError) throw mapAuthError(verifyError);
+
+  const { error: updateError } = await supabase.auth.updateUser({ password: newPassword });
+  if (updateError) {
+    // Do not leave a half-finished recovery session behind.
+    await supabase.auth.signOut();
+    throw mapAuthError(updateError);
+  }
+}
+
+/** Change the password of the signed-in user. */
+export async function updatePassword(newPassword: string): Promise<void> {
+  requireConfigured();
+  requirePassword(newPassword);
+  const { error } = await supabase.auth.updateUser({ password: newPassword });
+  if (error) throw mapAuthError(error);
+}
+
+// ---------------------------------------------------------------------------
+// Session + profile
+// ---------------------------------------------------------------------------
+
+export async function getProfile(user?: User | null): Promise<UserProfile | null> {
+  requireConfigured();
+  const authUser = user ?? (await supabase.auth.getSession()).data.session?.user ?? null;
+  if (!authUser) return null;
+
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("id,email,display_name,role")
+    .eq("id", authUser.id)
+    .maybeSingle();
+  if (error) throw authError("unknown", error.message);
+
+  if (data) return data;
+  // The sign-up trigger creates this row; until it exists, describe the user from Auth itself.
+  const metaName = (authUser.user_metadata as { display_name?: string } | undefined)?.display_name;
   return {
-    success: true,
-    message: "6-अंकों का OTP कोड आपके रजिस्टर्ड मोबाइल नंबर पर भेज दिया गया है!",
-    simulatedOtp: code,
+    id: authUser.id,
+    email: authUser.email ?? null,
+    display_name: metaName || (authUser.email ? authUser.email.split("@")[0] : null),
+    role: "member",
   };
 }
 
-/**
- * Verify 6-digit OTP code and update password
- */
-export async function verifyOtpAndResetPassword(
-  phone: string,
-  otpCode: string,
-  newPassword: string,
-): Promise<{ success: boolean; message: string }> {
-  const formattedPhone = normalizePhoneNumber(phone);
+export async function getCurrentAuthSession(): Promise<{ user: User | null; profile: UserProfile | null }> {
+  if (!isSupabaseConfigured) return { user: null, profile: null };
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+  if (!session?.user) return { user: null, profile: null };
+  return { user: session.user, profile: await getProfile(session.user) };
+}
 
-  if (!isValidIndianMobile(formattedPhone)) {
-    throw new Error("कृपया 10 अंकों का मान्य भारतीय मोबाइल नंबर दर्ज करें।");
-  }
-
-  const cleanOtp = otpCode.replace(/\D/g, "");
-  if (cleanOtp.length !== 6) {
-    throw new Error("कृपया 6-अंकों का OTP कोड दर्ज करें (6 Digits)।");
-  }
-
-  if (newPassword.length < 4) {
-    throw new Error("नया पासवर्ड कम से कम 4 अक्षरों का होना चाहिए।");
-  }
-
-  const otps = getStorageItem<OtpEntry[]>(OTP_STORE_KEY, []);
-  const validOtp = otps.find(
-    (o) => o.phone === formattedPhone && o.code === cleanOtp && o.expiresAt > Date.now(),
-  );
-
-  if (!validOtp) {
-    throw new Error("गलत या एक्सपायर (Expired) OTP कोड दर्ज किया गया है। कृपया दोबारा OTP भेजें।");
-  }
-
-  const accounts = getStoredAccounts();
-  const accountIndex = accounts.findIndex((a) => a.phone === formattedPhone);
-
-  if (accountIndex !== -1) {
-    accounts[accountIndex].password_hash = hashPassword(newPassword);
-    setStorageItem(ACCOUNTS_KEY, accounts);
-  }
-
-  setStorageItem(
-    OTP_STORE_KEY,
-    otps.filter((o) => o.phone !== formattedPhone),
-  );
-
-  return {
-    success: true,
-    message: "पासवर्ड सफलतापूर्वक रीसेट हो गया है! अब नए पासवर्ड से लॉगिन करें।",
-  };
+export async function updateDisplayName(userId: string, displayName: string): Promise<void> {
+  requireConfigured();
+  const name = displayName.trim();
+  if (!name) throw authError("invalid_input", "नाम खाली नहीं हो सकता। (Name cannot be empty.)");
+  const { error } = await supabase.from("profiles").update({ display_name: name }).eq("id", userId);
+  if (error) throw authError("unknown", error.message);
 }
 
 /**
- * Deprecated legacy reset wrapper for backward compatibility
+ * Forget everything this browser holds about the user: in-memory data caches,
+ * `swasthtrack_*` preferences, Cache Storage and the service worker's cache.
+ * Called on every sign-out (including a sign-out from another tab).
  */
-export async function resetPasswordWithLast4Digits(
-  phone: string,
-  last4Digits: string,
-  newPassword: string,
-): Promise<{ success: boolean; message: string }> {
-  return verifyOtpAndResetPassword(phone, last4Digits, newPassword);
-}
+export async function clearLocalUserData(): Promise<void> {
+  clearAllPatientCaches();
+  setActivePatientId(null);
+  if (typeof window === "undefined") return;
 
-/**
- * Ensure user profile is registered in Supabase / LocalStorage
- */
-export async function ensureUserProfile(
-  authUserId: string,
-  phone: string,
-  displayName = "SwasthTrack User",
-  role: UserRole = "patient",
-): Promise<UserProfile> {
-  const existingProfiles = getStorageItem<UserProfile[]>("swasthtrack_user_profiles", []);
-  let prof = existingProfiles.find((p) => p.auth_user_id === authUserId || p.phone === phone);
-
-  if (!prof) {
-    prof = {
-      id: `prof-${Date.now()}`,
-      auth_user_id: authUserId,
-      phone,
-      display_name: displayName,
-      role,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    };
-    setStorageItem("swasthtrack_user_profiles", [...existingProfiles, prof]);
-  }
-
-  if (isSupabaseConfigured) {
-    try {
-      const { data } = await (supabase as any)
-        .from("user_profiles")
-        .select("*")
-        .eq("auth_user_id", authUserId)
-        .single();
-
-      if (data) return data;
-
-      const { data: inserted } = await (supabase as any)
-        .from("user_profiles")
-        .insert({
-          auth_user_id: authUserId,
-          phone,
-          display_name: displayName,
-          role,
-        })
-        .select()
-        .single();
-
-      if (inserted) return inserted;
-    } catch {
-      // Supabase fallback
-    }
-  }
-
-  return prof;
-}
-
-/**
- * Ensure patient membership is created
- */
-export async function ensurePatientMembership(
-  patientId: string,
-  userId: string,
-  role: "patient" | "caregiver" = "patient",
-): Promise<PatientMembership> {
-  const memberships = getStorageItem<PatientMembership[]>(MEMBERSHIPS_KEY, []);
-  let membership = memberships.find(
-    (m) => m.patient_id === patientId && m.user_id === userId && m.status === "active",
-  );
-
-  if (!membership) {
-    membership = {
-      id: `mem-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
-      patient_id: patientId,
-      user_id: userId,
-      role,
-      status: "active",
-      created_at: new Date().toISOString(),
-    };
-    setStorageItem(MEMBERSHIPS_KEY, [...memberships, membership]);
-  }
-
-  if (isSupabaseConfigured) {
-    try {
-      await (supabase as any).from("patient_memberships").upsert(
-        {
-          patient_id: patientId,
-          user_id: userId,
-          role,
-          status: "active",
-        },
-        { onConflict: "patient_id,user_id" },
-      );
-    } catch {
-      // fallback
-    }
-  }
-
-  return membership;
-}
-
-/**
- * Check if user has an active patient membership
- */
-export function hasActivePatientMembership(userId: string): boolean {
-  const memberships = getStorageItem<PatientMembership[]>(MEMBERSHIPS_KEY, []);
-  return memberships.some(
-    (m) => (m.user_id === userId || m.user_id.includes(userId)) && m.status === "active",
-  );
-}
-
-/**
- * Complete patient onboarding by creating their patient profile and linking membership
- */
-export async function completePatientOnboarding(
-  userId: string,
-  patientData: Omit<PatientProfile, "id" | "created_at" | "updated_at">,
-): Promise<{ success: boolean; patient: PatientProfile }> {
-  const newPatientId = `patient-${Date.now()}`;
-  const newPatient: PatientProfile = {
-    ...patientData,
-    id: newPatientId,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-  };
-
-  if (isSupabaseConfigured) {
-    try {
-      const { data } = await (supabase as any)
-        .from("patients")
-        .insert({
-          name: newPatient.name,
-          age: newPatient.age,
-          gender: newPatient.gender,
-          height_cm: newPatient.height_cm,
-          current_weight_kg: newPatient.current_weight_kg,
-          target_weight_kg: newPatient.target_weight_kg,
-          daily_calorie_target: newPatient.daily_calorie_target,
-        })
-        .select()
-        .single();
-
-      if (data) {
-        newPatient.id = data.id;
+  try {
+    for (const store of [localStorage, sessionStorage]) {
+      const doomed: string[] = [];
+      for (let i = 0; i < store.length; i++) {
+        const key = store.key(i);
+        if (key && key.startsWith("swasthtrack_")) doomed.push(key);
       }
-    } catch {
-      // fallback
+      doomed.forEach((key) => store.removeItem(key));
     }
+  } catch {
+    // storage blocked: nothing was stored
   }
 
-  // Store in LocalStorage
-  const allPatients = getStorageItem<PatientProfile[]>("swasthtrack_all_patients", []);
-  setStorageItem("swasthtrack_all_patients", [...allPatients, newPatient]);
-  setStorageItem("swasthtrack_patient", newPatient);
+  try {
+    if ("caches" in window) {
+      const names = await caches.keys();
+      await Promise.all(names.map((name) => caches.delete(name)));
+    }
+  } catch {
+    // Cache Storage unavailable
+  }
 
-  // Activate membership
-  await ensurePatientMembership(newPatient.id, userId, "patient");
+  try {
+    navigator.serviceWorker?.controller?.postMessage({ type: "CLEAR_CACHES" });
+  } catch {
+    // no service worker
+  }
+}
 
-  // Update profile display name
-  const existingProfiles = getStorageItem<UserProfile[]>("swasthtrack_user_profiles", []);
-  const updatedProfiles = existingProfiles.map((p) =>
-    p.id === userId || p.auth_user_id === userId
-      ? { ...p, display_name: newPatient.name }
-      : p,
-  );
-  setStorageItem("swasthtrack_user_profiles", updatedProfiles);
+export async function signOut(): Promise<void> {
+  try {
+    if (isSupabaseConfigured) await supabase.auth.signOut();
+  } finally {
+    await clearLocalUserData();
+  }
+}
 
-  invalidateProfileCache();
+// ---------------------------------------------------------------------------
+// Patients, invites and caregivers (RLS + RPCs)
+// ---------------------------------------------------------------------------
 
-  return { success: true, patient: newPatient };
+function friendlyRpcError(error: { message: string; code?: string }): Error {
+  const text = error.message;
+  if (error.code === "PGRST202" || /could not find the function/i.test(text)) {
+    return new Error(
+      "डेटाबेस अपडेट अधूरा है। Supabase में नया migration चलाएं (see docs/auth-setup.md). (Database migration not applied yet.)",
+    );
+  }
+  if (/invalid or already used invite code/i.test(text)) {
+    return new Error("यह कोड गलत है या पहले इस्तेमाल हो चुका है। (Invalid or already used invite code.)");
+  }
+  if (/invite code has expired/i.test(text)) {
+    return new Error("यह कोड समाप्त हो चुका है। मरीज़ के मालिक से नया कोड मांगें। (This invite code has expired. Ask for a new one.)");
+  }
+  if (/too many attempts/i.test(text) || error.code === "54000") {
+    return new Error("बहुत ज़्यादा कोशिशें। 15 मिनट बाद फिर कोशिश करें। (Too many attempts; try again in 15 minutes.)");
+  }
+  if (/only the patient owner/i.test(text) || error.code === "42501") {
+    return new Error("यह काम सिर्फ़ मरीज़ का मालिक (owner) कर सकता है। (Only the patient owner can do this.)");
+  }
+  if (/cannot change your own membership/i.test(text)) {
+    return new Error("आप अपना खुद का एक्सेस नहीं बदल सकते। (You cannot change your own access.)");
+  }
+  if (/not authenticated/i.test(text) || error.code === "28000") return authError("not_signed_in");
+  if (/patient name is required/i.test(text)) return new Error("मरीज़ का नाम ज़रूरी है। (Patient name is required.)");
+  if (/failed to fetch|networkerror|load failed/i.test(text)) return authError("network");
+  console.error("Supabase RPC error:", error);
+  return new Error(text || MESSAGES.unknown);
+}
+
+async function currentUserId(): Promise<string> {
+  requireConfigured();
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+  if (!session?.user) throw authError("not_signed_in");
+  return session.user.id;
 }
 
 /**
- * Get authorized patients for a user
+ * Every patient the user is an active member of (Postgres RLS decides; this just
+ * reads the memberships), oldest membership first, each with the user's role.
  */
-export async function getAuthorizedPatients(): Promise<PatientProfile[]> {
-  const profile = await getPatientProfile();
-  return [profile];
+export async function getAuthorizedPatients(): Promise<AuthorizedPatient[]> {
+  if (!isSupabaseConfigured) return [];
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+  if (!session?.user) return [];
+
+  const { data, error } = await supabase
+    .from("patient_members")
+    .select("role, created_at, patients(*)")
+    .eq("user_id", session.user.id)
+    .eq("status", "active")
+    .order("created_at", { ascending: true });
+  if (error) throw friendlyRpcError(error);
+
+  const out: AuthorizedPatient[] = [];
+  for (const row of data ?? []) {
+    const patient = row.patients as PatientProfile | null;
+    if (patient) out.push({ ...patient, member_role: row.role });
+  }
+  return out;
 }
 
-/**
- * Generate a short-lived 6-digit caregiver invite code (valid for 15 mins)
- */
+export interface NewPatientInput {
+  name: string;
+  age?: number | null;
+  gender?: string | null;
+  height_cm?: number | null;
+  current_weight_kg?: number | null;
+  target_weight_kg?: number | null;
+  daily_calorie_target?: number | null;
+}
+
+/** Create a patient; the database makes the caller its owner in the same transaction. */
+export async function createPatientForCurrentUser(input: NewPatientInput): Promise<PatientProfile> {
+  await currentUserId();
+  const name = input.name.trim();
+  if (!name) throw new Error("मरीज़ का नाम ज़रूरी है। (Patient name is required.)");
+
+  // Only send what was actually entered; the database applies its own defaults for the rest.
+  const { data, error } = await supabase.rpc("create_patient", {
+    p_name: name,
+    ...(input.age != null ? { p_age: input.age } : {}),
+    ...(input.gender ? { p_gender: input.gender } : {}),
+    ...(input.height_cm != null ? { p_height_cm: input.height_cm } : {}),
+    ...(input.current_weight_kg != null ? { p_current_weight_kg: input.current_weight_kg } : {}),
+    ...(input.target_weight_kg != null ? { p_target_weight_kg: input.target_weight_kg } : {}),
+    ...(input.daily_calorie_target != null ? { p_daily_calorie_target: input.daily_calorie_target } : {}),
+  });
+  if (error) throw friendlyRpcError(error);
+  invalidatePatientCache(data.id);
+  return data;
+}
+
+/** Owner only. Creates a fresh 15-minute code (any earlier pending code is cancelled). */
 export async function generateCaregiverInviteCode(
   patientId: string,
-  createdByUserId: string,
+  role: "editor" | "viewer" = "viewer",
 ): Promise<CaregiverInvitation> {
-  const code = Math.floor(100000 + Math.random() * 900000).toString();
-  const expiresAt = new Date(Date.now() + 15 * 60 * 1000).toISOString();
-
-  const invitation: CaregiverInvitation = {
-    id: `inv-${Date.now()}`,
-    patient_id: patientId,
-    created_by_user_id: createdByUserId,
-    invite_code: code,
-    status: "pending",
-    expires_at: expiresAt,
-    created_at: new Date().toISOString(),
+  await currentUserId();
+  const { data, error } = await supabase.rpc("create_caregiver_invite", { p_patient: patientId, p_role: role });
+  if (error) throw friendlyRpcError(error);
+  return {
+    id: data.id,
+    patient_id: data.patient_id,
+    invite_code: data.code,
+    role: data.role,
+    status: data.status,
+    expires_at: data.expires_at,
+    created_at: data.created_at,
   };
-
-  const invitations = getStorageItem<CaregiverInvitation[]>(INVITATIONS_KEY, []);
-  setStorageItem(INVITATIONS_KEY, [invitation, ...invitations]);
-
-  if (isSupabaseConfigured) {
-    try {
-      await (supabase as any).from("caregiver_invitations").insert({
-        patient_id: patientId,
-        created_by_user_id: createdByUserId,
-        invite_code: code,
-        status: "pending",
-        expires_at: expiresAt,
-      });
-    } catch {
-      // fallback
-    }
-  }
-
-  return invitation;
 }
 
-/**
- * Caregiver accepts an invitation code to gain patient access
- */
+/** Redeem an 8-character code. Resolves with the id of the patient just joined. */
 export async function acceptCaregiverInviteCode(
   inviteCode: string,
-  caregiverUserId: string,
-): Promise<{ success: boolean; patientId: string; message: string }> {
-  const cleanCode = inviteCode.trim();
-  const invitations = getStorageItem<CaregiverInvitation[]>(INVITATIONS_KEY, []);
-
-  const invitation = invitations.find(
-    (i) => i.invite_code === cleanCode && i.status === "pending",
-  );
-
-  if (!invitation) {
-    throw new Error("यह इनविटेशन कोड अमान्य है या उपयोग किया जा चुका है।");
+): Promise<{ success: true; patientId: string; message: string }> {
+  await currentUserId();
+  const code = inviteCode.replace(/[\s-]+/g, "").toUpperCase();
+  if (!/^[A-HJ-NP-Z2-9]{8}$/.test(code)) {
+    throw new Error("कृपया पूरा 8 अक्षरों का कोड दर्ज करें। (Enter the full 8-character code.)");
   }
-
-  if (new Date(invitation.expires_at).getTime() < Date.now()) {
-    throw new Error("यह इनविटेशन कोड समाप्त (expired) हो चुका है। नया कोड जनरेट करें।");
-  }
-
-  // Activate caregiver membership
-  await ensurePatientMembership(invitation.patient_id, caregiverUserId, "caregiver");
-
-  // Update invitation status
-  const updatedInvitations = invitations.map((inv) =>
-    inv.id === invitation.id
-      ? {
-          ...inv,
-          status: "accepted" as const,
-          accepted_at: new Date().toISOString(),
-          accepted_by_user_id: caregiverUserId,
-        }
-      : inv,
-  );
-  setStorageItem(INVITATIONS_KEY, updatedInvitations);
-
+  const { data, error } = await supabase.rpc("accept_caregiver_invite", { p_code: code });
+  if (error) throw friendlyRpcError(error);
+  invalidatePatientCache(data);
   return {
     success: true,
-    patientId: invitation.patient_id,
-    message: "मरीज़ का एक्सेस सफलतापूर्वक प्राप्त हो गया है!",
+    patientId: data,
+    message: "मरीज़ का एक्सेस मिल गया है! (You now have access to this patient.)",
   };
 }
 
-/**
- * List all active authorized caregivers for a patient
- */
-export async function getAuthorizedCaregivers(
-  patientId: string,
-): Promise<AuthorizedCaregiver[]> {
-  const memberships = getStorageItem<PatientMembership[]>(MEMBERSHIPS_KEY, []);
-  const activeCaregiverMemberships = memberships.filter(
-    (m) => m.patient_id === patientId && m.role === "caregiver" && m.status === "active",
-  );
-
-  const profiles = getStorageItem<UserProfile[]>("swasthtrack_user_profiles", []);
-
-  return activeCaregiverMemberships.map((m) => {
-    const prof = profiles.find((p) => p.id === m.user_id || p.auth_user_id === m.user_id);
-    return {
-      user_id: m.user_id,
-      phone: prof?.phone || "+919876543210",
-      display_name: prof?.display_name || "Family Caregiver",
-      role: "Caregiver (केयरगिवर)",
-      added_at: m.created_at,
-      membership_id: m.id,
-    };
-  });
+/** Owner only: the patient's whole roster (active and revoked), oldest first. */
+export async function getAuthorizedCaregivers(patientId: string): Promise<AuthorizedCaregiver[]> {
+  await currentUserId();
+  const { data, error } = await supabase.rpc("list_patient_members", { p_patient: patientId });
+  if (error) throw friendlyRpcError(error);
+  return (data ?? []).map((m) => ({
+    member_id: m.member_id,
+    user_id: m.user_id,
+    email: m.email,
+    display_name: m.display_name,
+    role: m.role,
+    status: m.status,
+    added_at: m.created_at,
+  }));
 }
 
-/**
- * Revoke caregiver access immediately
- */
-export async function revokeCaregiverAccess(
-  patientId: string,
-  caregiverUserId: string,
-): Promise<boolean> {
-  const memberships = getStorageItem<PatientMembership[]>(MEMBERSHIPS_KEY, []);
-  const updated = memberships.map((m) =>
-    m.patient_id === patientId && m.user_id === caregiverUserId
-      ? { ...m, status: "revoked" as const }
-      : m,
-  );
-  setStorageItem(MEMBERSHIPS_KEY, updated);
-
-  if (isSupabaseConfigured) {
-    try {
-      await (supabase as any)
-        .from("patient_memberships")
-        .update({ status: "revoked" })
-        .eq("patient_id", patientId)
-        .eq("user_id", caregiverUserId);
-    } catch {
-      // fallback
-    }
-  }
-
-  return true;
+/** Owner only: remove someone's access immediately. */
+export async function revokeCaregiverAccess(memberId: string): Promise<void> {
+  await currentUserId();
+  const { error } = await supabase.rpc("set_patient_member", { p_member: memberId, p_status: "revoked" });
+  if (error) throw friendlyRpcError(error);
 }
 
-/**
- * Get current active session
- */
-export async function getCurrentAuthSession(): Promise<{
-  user: any;
-  profile: UserProfile | null;
-}> {
-  if (isSupabaseConfigured) {
-    try {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-
-      if (session?.user) {
-        const profile = await ensureUserProfile(
-          session.user.id,
-          session.user.phone || "+919876543210",
-          "SwasthTrack Patient",
-        );
-        return { user: session.user, profile };
-      }
-    } catch {
-      // fallback
-    }
-  }
-
-  const storedUser = getStorageItem<any>(AUTH_USER_KEY, null);
-  const storedProfile = getStorageItem<UserProfile | null>(AUTH_PROFILE_KEY, null);
-
-  if (!storedUser || !storedProfile) {
-    return { user: null, profile: null };
-  }
-
-  return { user: storedUser, profile: storedProfile };
-}
-
-/**
- * Explicit Demo User login
- */
-export async function loginDemoUser(): Promise<{ success: boolean; user: any; profile: UserProfile; isNewUser: boolean }> {
-  const demoAuthUser = {
-    id: "usr-9829751737",
-    phone: "+919829751737",
-    aud: "authenticated",
-    role: "authenticated",
-    created_at: new Date().toISOString(),
-  };
-  const demoProfile: UserProfile = {
-    id: "usr-9829751737",
-    auth_user_id: "usr-9829751737",
-    phone: "+919829751737",
-    display_name: "Raj Kishore Gupta",
-    role: "patient",
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-  };
-  setStorageItem(AUTH_USER_KEY, demoAuthUser);
-  setStorageItem(AUTH_PROFILE_KEY, demoProfile);
-  await ensurePatientMembership(
-    "6c4fcb90-5dc1-4ff5-89fe-3049f927f4ac",
-    "usr-9829751737",
-    "patient",
-  );
-  invalidateProfileCache();
-
-  return { success: true, user: demoAuthUser, profile: demoProfile, isNewUser: false };
-}
-
-/**
- * Sign out and clear session
- */
-export async function signOut(): Promise<void> {
-  invalidateProfileCache();
-
-  if (isSupabaseConfigured) {
-    try {
-      await supabase.auth.signOut();
-    } catch {
-      // ignore
-    }
-  }
-
-  if (typeof window !== "undefined") {
-    localStorage.removeItem(AUTH_USER_KEY);
-    localStorage.removeItem(AUTH_PROFILE_KEY);
-  }
+/** Owner only: change a member between viewer and editor. */
+export async function setCaregiverRole(memberId: string, role: "editor" | "viewer"): Promise<void> {
+  await currentUserId();
+  const { error } = await supabase.rpc("set_patient_member", { p_member: memberId, p_role: role });
+  if (error) throw friendlyRpcError(error);
 }

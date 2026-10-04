@@ -1,22 +1,28 @@
 import {
-  getActivityLogs,
-  getBloodPressureLogs,
-  getFoodLogs,
+  SLEEP_LONG_HOURS,
+  SLEEP_SHORT_HOURS,
+  STEPS_GOAL_MET_RATIO,
+  addDaysIST,
+  classifyBP,
+  istInstant,
+  toISTDate,
+  todayIST,
+  type BPClassification,
+} from "@/lib/health-rules";
+import { doseDateOfLog, scheduledMinutes } from "@/lib/analytics/adherence";
+import { loadSeries, type SeriesKey } from "./analytics-data";
+import {
   getPatientProfile,
-  getSleepLogs,
-  getTodayMedicineLogs,
-  getWeightLogs,
   type ActivityLogEntry,
   type BPLogEntry,
   type FoodLogEntry,
+  type MedicineItem,
   type MedicineLogEntry,
   type SleepLogEntry,
   type WeightLogEntry,
 } from "./patient-service";
-import {
-  generateSmartInsightsAndAlerts,
-  type HealthAlert,
-} from "./smart-insights-service";
+import { getPatientSettingsOrDefault } from "./settings-service";
+import { generateSmartInsightsAndAlerts, type HealthAlert } from "./smart-insights-service";
 
 export type TimelineDomain =
   | "food"
@@ -36,20 +42,22 @@ export type EventDataSource = "Manual" | "Calculated" | "Estimated" | "Imported"
 export type DateScope = "today" | "yesterday" | "7d" | "30d" | "all";
 
 export interface TimelineEvent {
-  // Formal Phase 8A Event Schema
   id: string;
   patient_id: string;
   event_type: TimelineDomain;
-  event_timestamp: string; // ISO string
+  /** ISO instant. For date-only events (`isDateOnly`) this is IST midnight of that day and carries no time-of-day meaning. */
+  event_timestamp: string;
   source_record_id: string;
   summary: string;
   metadata?: Record<string, unknown>;
 
-  // UI Display Attributes
   domain: TimelineDomain;
   title: string;
   titleHi: string;
-  displayTime: string; // e.g. "08:20 AM"
+  /** e.g. "08:20 AM", or "पूरे दिन का" for events that only have a date. */
+  displayTime: string;
+  /** True when the record has only a date (steps, sleep, alerts), so no clock time may be shown. */
+  isDateOnly?: boolean;
   dateStr: string; // YYYY-MM-DD (IST)
   value: string;
   unit?: string;
@@ -75,337 +83,341 @@ export interface TimelineGroup {
   events: TimelineEvent[];
 }
 
-/**
- * Format timestamp into display time in Asia/Kolkata
- */
-function formatTimeIST(isoString: string): string {
-  try {
-    const d = new Date(isoString);
-    return d.toLocaleTimeString("en-IN", {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: true,
-      timeZone: "Asia/Kolkata",
-    });
-  } catch {
-    return isoString.slice(11, 16) || "Time";
-  }
+export interface TimelineResult {
+  groups: TimelineGroup[];
+  /** Events in the whole window (not just this page). */
+  totalCount: number;
+  hasMore: boolean;
+  /** IST dates (inclusive) the query covered; "all" is the last 365 days. */
+  coveredFrom: string;
+  coveredTo: string;
 }
 
-/**
- * Convert UTC timestamp to YYYY-MM-DD in Asia/Kolkata
- */
-function getISTDateStr(dateOrIso: Date | string): string {
-  try {
-    const d = typeof dateOrIso === "string" ? new Date(dateOrIso) : dateOrIso;
-    return d.toLocaleDateString("en-CA", { timeZone: "Asia/Kolkata" });
-  } catch {
-    return String(dateOrIso).slice(0, 10);
-  }
+const ALL_SCOPE_DAYS = 365;
+const DATE_ONLY_LABEL_HI = "पूरे दिन का";
+
+function formatTimeIST(iso: string): string {
+  return new Date(iso).toLocaleTimeString("en-IN", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+    timeZone: "Asia/Kolkata",
+  });
 }
 
-function getGroupKey(
-  dateStr: string,
-  todayStr: string,
-  yesterdayStr: string,
-  weekAgoCutoffStr: string
-): TimelineTimeGroup {
-  if (dateStr === todayStr) return "Today";
-  if (dateStr === yesterdayStr) return "Yesterday";
-  if (dateStr >= weekAgoCutoffStr) return "This Week";
+function dateOnlyTimestamp(dateStr: string): string {
+  return istInstant(dateStr, "00:00").toISOString();
+}
+
+function groupKeyOf(dateStr: string, today: string): TimelineTimeGroup {
+  if (dateStr === today) return "Today";
+  if (dateStr === addDaysIST(today, -1)) return "Yesterday";
+  if (dateStr >= addDaysIST(today, -6)) return "This Week";
   return "Older";
 }
 
+function scopeWindow(scope: DateScope, today: string): { start: string; end: string } {
+  switch (scope) {
+    case "today":
+      return { start: today, end: today };
+    case "yesterday": {
+      const y = addDaysIST(today, -1);
+      return { start: y, end: y };
+    }
+    case "7d":
+      return { start: addDaysIST(today, -6), end: today };
+    case "30d":
+      return { start: addDaysIST(today, -29), end: today };
+    default:
+      return { start: addDaysIST(today, -(ALL_SCOPE_DAYS - 1)), end: today };
+  }
+}
+
+function bpTone(c: BPClassification): TimelineEvent["statusBadgeTone"] {
+  if (c.exceedsAlert || c.category === "crisis" || (c.category === "low" && c.needsUrgentAttention)) return "red";
+  if (c.aboveTarget || c.category === "low") return "amber";
+  return "green";
+}
+
+function hhmmOrNull(value: string | null | undefined): string | null {
+  const m = value ? /^(\d{1,2}):(\d{2})/.exec(value) : null;
+  return m ? `${m[1].padStart(2, "0")}:${m[2]}` : null;
+}
+
+const GROUP_LABELS: Record<TimelineTimeGroup, { en: string; hi: string }> = {
+  Today: { en: "Today", hi: "आज" },
+  Yesterday: { en: "Yesterday", hi: "कल (बीता हुआ दिन)" },
+  "This Week": { en: "This Week", hi: "इस सप्ताह" },
+  Older: { en: "Earlier", hi: "पूर्व के रिकॉर्ड्स" },
+};
+
 /**
- * Unified Health Timeline Query Engine
- * Batches domain queries, enforces deduplication, respects Asia/Kolkata timezone,
- * and loads recent events with progressive pagination.
+ * Unified health timeline. Every domain is read for the whole selected window
+ * (IST days), events are merged and sorted newest-first, then paged, so
+ * `totalCount` and `hasMore` describe the real data.
  */
 export async function getHealthTimelineEvents(
   patientId?: string,
   filterDomain: "all" | TimelineDomain = "all",
   dateScope: DateScope = "today",
   offset: number = 0,
-  limit: number = 30
-): Promise<{ groups: TimelineGroup[]; totalCount: number; hasMore: boolean }> {
+  limit: number = 30,
+): Promise<TimelineResult> {
   const profile = await getPatientProfile(patientId);
   const pid = patientId || profile.id;
+  const today = todayIST();
+  const win = scopeWindow(dateScope, today);
+  const wants = (d: TimelineDomain) => filterDomain === "all" || filterDomain === d;
 
-  const now = new Date();
-  const todayStr = getISTDateStr(now);
+  const keys: SeriesKey[] = [];
+  if (wants("food")) keys.push("food");
+  if (wants("bp")) keys.push("bp");
+  if (wants("medicine")) keys.push("medicineLogs", "medicines");
+  if (wants("activity")) keys.push("activity");
+  if (wants("sleep")) keys.push("sleep");
+  if (wants("weight")) keys.push("weight");
 
-  const yesterdayDate = new Date(now.getTime() - 24 * 60 * 60 * 1000);
-  const yesterdayStr = getISTDateStr(yesterdayDate);
+  const [settings, series, smartData] = await Promise.all([
+    getPatientSettingsOrDefault(pid),
+    keys.length > 0 ? loadSeries(pid, win.start, win.end, keys) : Promise.resolve(null),
+    (filterDomain === "all" || filterDomain === "insight" || filterDomain === "alert") && win.end === today
+      ? generateSmartInsightsAndAlerts(pid).catch(() => null)
+      : Promise.resolve(null),
+  ]);
 
-  const weekAgoDate = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-  const weekAgoStr = getISTDateStr(weekAgoDate);
+  const events: TimelineEvent[] = [];
+  const seen = new Set<string>();
+  const add = (ev: TimelineEvent) => {
+    if (seen.has(ev.id)) return;
+    seen.add(ev.id);
+    if (ev.dateStr < win.start || ev.dateStr > win.end) return;
+    events.push(ev);
+  };
 
-  const monthAgoDate = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
-  const monthAgoStr = getISTDateStr(monthAgoDate);
-
-  // Determine query batch limits based on dateScope
-  const queryLimit =
-    dateScope === "today" || dateScope === "yesterday"
-      ? 15
-      : dateScope === "7d"
-      ? 40
-      : 80;
-
-  // Concurrently batch fetch domain logs without N+1 queries
-  const [actLogs, bpLogs, sleepLogs, weightLogs, foodLogs, medLogs, smartData] =
-    await Promise.all([
-      getActivityLogs(pid, queryLimit),
-      getBloodPressureLogs(pid, queryLimit),
-      getSleepLogs(pid, queryLimit),
-      getWeightLogs(pid, queryLimit),
-      getFoodLogs(pid, queryLimit),
-      getTodayMedicineLogs(pid),
-      (filterDomain === "all" || filterDomain === "insight" || filterDomain === "alert")
-        ? generateSmartInsightsAndAlerts(pid).catch(() => null)
-        : Promise.resolve(null),
-    ]);
-
-  const rawEvents: TimelineEvent[] = [];
-  const seenIds = new Set<string>();
-
-  function addEvent(ev: TimelineEvent) {
-    if (seenIds.has(ev.id)) return;
-    seenIds.add(ev.id);
-
-    // Apply Date Scope filtering
-    if (dateScope === "today" && ev.dateStr !== todayStr) return;
-    if (dateScope === "yesterday" && ev.dateStr !== yesterdayStr) return;
-    if (dateScope === "7d" && ev.dateStr < weekAgoStr) return;
-    if (dateScope === "30d" && ev.dateStr < monthAgoStr) return;
-
-    rawEvents.push(ev);
-  }
-
-  // 1. Food Logs
-  if (filterDomain === "all" || filterDomain === "food") {
-    foodLogs.forEach((f: FoodLogEntry) => {
-      const time = f.consumed_at || f.created_at;
-      const dateStr = getISTDateStr(time);
-      addEvent({
-        id: `food-${f.id}`,
-        patient_id: pid,
-        event_type: "food",
-        event_timestamp: time,
-        source_record_id: f.id,
-        summary: `${f.meal_type}: ${f.food_name} (${f.calories} kcal)`,
-        metadata: { meal_type: f.meal_type, quantity: f.quantity, unit: f.unit },
-        domain: "food",
-        title: f.food_name,
-        titleHi: `${f.meal_type}: ${f.food_name}`,
-        displayTime: formatTimeIST(time),
-        dateStr,
-        value: `${f.calories || 0} kcal`,
-        unit: "kcal",
-        statusText: `${f.quantity} ${f.unit || "serving"} · ${f.meal_type}`,
-        statusBadge: f.meal_type,
-        statusBadgeTone: "amber",
-        source: "Manual",
-        calculationStatus: "Raw",
-        detailNote: f.notes || undefined,
-        iconName: "Utensils",
-        canEdit: true,
-        canDelete: true,
-      });
+  // 1. Food
+  series?.food.forEach((f: FoodLogEntry) => {
+    const time = f.consumed_at || f.created_at;
+    add({
+      id: `food-${f.id}`,
+      patient_id: pid,
+      event_type: "food",
+      event_timestamp: time,
+      source_record_id: f.id,
+      summary: `${f.meal_type}: ${f.food_name} (${f.calories} kcal)`,
+      metadata: { meal_type: f.meal_type, quantity: f.quantity, unit: f.unit },
+      domain: "food",
+      title: f.food_name,
+      titleHi: `${f.meal_type}: ${f.food_name}`,
+      displayTime: formatTimeIST(time),
+      dateStr: toISTDate(time),
+      value: `${f.calories || 0} kcal`,
+      unit: "kcal",
+      statusText: `${f.quantity} ${f.unit || "serving"} · ${f.meal_type}`,
+      statusBadge: f.meal_type,
+      statusBadgeTone: "amber",
+      source: "Manual",
+      calculationStatus: "Raw",
+      detailNote: f.notes || undefined,
+      iconName: "Utensils",
+      canEdit: true,
+      canDelete: true,
     });
-  }
+  });
 
-  // 2. BP Logs
-  if (filterDomain === "all" || filterDomain === "bp") {
-    bpLogs.forEach((b: BPLogEntry) => {
-      const time = b.measured_at || b.created_at;
-      const dateStr = getISTDateStr(time);
-      addEvent({
-        id: `bp-${b.id}`,
-        patient_id: pid,
-        event_type: "bp",
-        event_timestamp: time,
-        source_record_id: b.id,
-        summary: `BP Reading ${b.systolic}/${b.diastolic} mmHg (${b.reading_type || "Manual"})`,
-        metadata: { systolic: b.systolic, diastolic: b.diastolic, pulse: b.pulse },
-        domain: "bp",
-        title: "Blood Pressure Reading",
-        titleHi: `ब्लड प्रेशर माप (${b.reading_type || "रीडिंग"})`,
-        displayTime: formatTimeIST(time),
-        dateStr,
-        value: `${b.systolic}/${b.diastolic} mmHg`,
-        unit: "mmHg",
-        statusText: b.pulse ? `नाड़ी गति (Pulse): ${b.pulse} bpm` : undefined,
-        statusBadge: b.reading_type || "BP",
-        statusBadgeTone: b.systolic > 140 || b.diastolic > 90 ? "amber" : "green",
-        source: "Manual",
-        calculationStatus: "Raw",
-        confidence: "High",
-        detailNote: b.notes || undefined,
-        iconName: "HeartPulse",
-        canEdit: true,
-        canDelete: true,
-      });
+  // 2. Blood pressure (classified against this patient's own lines)
+  series?.bp.forEach((b: BPLogEntry) => {
+    const time = b.measured_at || b.created_at;
+    const cls = classifyBP(b.systolic, b.diastolic, settings.bp_targets);
+    add({
+      id: `bp-${b.id}`,
+      patient_id: pid,
+      event_type: "bp",
+      event_timestamp: time,
+      source_record_id: b.id,
+      summary: `BP Reading ${b.systolic}/${b.diastolic} mmHg (${b.reading_type || "Manual"})`,
+      metadata: { systolic: b.systolic, diastolic: b.diastolic, pulse: b.pulse, category: cls.category },
+      domain: "bp",
+      title: "Blood Pressure Reading",
+      titleHi: `ब्लड प्रेशर माप (${b.reading_type || "रीडिंग"})`,
+      displayTime: formatTimeIST(time),
+      dateStr: toISTDate(time),
+      value: `${b.systolic}/${b.diastolic} mmHg`,
+      unit: "mmHg",
+      statusText: `${cls.labelHi}${b.pulse ? ` · नाड़ी (Pulse): ${b.pulse} bpm` : ""}`,
+      statusBadge: b.reading_type || "BP",
+      statusBadgeTone: bpTone(cls),
+      source: "Manual",
+      calculationStatus: "Raw",
+      confidence: "High",
+      detailNote: b.notes || undefined,
+      iconName: "HeartPulse",
+      canEdit: true,
+      canDelete: true,
     });
-  }
+  });
 
-  // 3. Medicine Logs
-  if (filterDomain === "all" || filterDomain === "medicine") {
-    medLogs.forEach((m: MedicineLogEntry) => {
-      const time = m.taken_time || m.scheduled_time || m.created_at;
-      const dateStr = getISTDateStr(time);
-      const isTaken = m.status === "taken";
-      addEvent({
+  // 3. Medicines: every dose in the window (real logs and computed auto-missed)
+  if (series && wants("medicine")) {
+    const medById = new Map<string, MedicineItem>(series.medicines.map((m) => [m.id, m]));
+    series.medicineLogs.forEach((m: MedicineLogEntry) => {
+      const med = medById.get(m.medicine_id);
+      const sched = med ? scheduledMinutes(med.scheduled_time) : null;
+      const doseDate = sched !== null ? doseDateOfLog(m, sched) : toISTDate(m.scheduled_time);
+      const scheduledAt =
+        med && sched !== null
+          ? istInstant(doseDate, med.scheduled_time.slice(0, 5)).toISOString()
+          : new Date(m.scheduled_time).toISOString();
+      const isVirtual = m.id.startsWith("auto-missed-");
+      const took = (m.status === "taken" || m.status === "late") && m.taken_time ? m.taken_time : null;
+      const time = took ?? scheduledAt;
+      const name = med ? `${med.medicine_name}${med.dose ? ` · ${med.dose}` : ""}` : "दवाई";
+      const statusHi =
+        m.status === "taken" ? "समय पर ली गई" : m.status === "late" ? "देर से ली गई" : m.status === "missed" ? "छूट गई" : "बाकी";
+      add({
         id: `med-${m.id}`,
         patient_id: pid,
         event_type: "medicine",
         event_timestamp: time,
         source_record_id: m.id,
-        summary: `Prescribed Medicine Dose: ${m.status.toUpperCase()}`,
-        metadata: { status: m.status, scheduled_time: m.scheduled_time },
+        summary: `${name}: ${m.status.toUpperCase()}`,
+        metadata: { status: m.status, scheduled_time: scheduledAt, medicine_id: m.medicine_id },
         domain: "medicine",
-        title: "Prescribed Medicine Dose",
-        titleHi: `दवाई खुराक: ${isTaken ? "समय पर ली गई" : m.status === "late" ? "देर से ली गई" : "छूट गई"}`,
+        title: name,
+        titleHi: `${name}: ${statusHi}`,
         displayTime: formatTimeIST(time),
-        dateStr,
-        value: isTaken ? "Taken ✓" : m.status === "late" ? "Late ⏳" : "Missed ✗",
+        dateStr: took ? toISTDate(took) : doseDate,
+        value: m.status === "taken" ? "Taken ✓" : m.status === "late" ? "Late ⏳" : m.status === "missed" ? "Missed ✗" : "Pending",
+        statusText: took ? `निर्धारित समय ${formatTimeIST(scheduledAt)}` : `निर्धारित समय ${formatTimeIST(scheduledAt)} (दर्ज समय नहीं)`,
         statusBadge: m.status.toUpperCase(),
-        statusBadgeTone: isTaken ? "green" : m.status === "late" ? "amber" : "red",
-        source: "Manual",
-        calculationStatus: "Raw",
-        detailNote: m.notes || undefined,
+        statusBadgeTone: m.status === "taken" ? "green" : m.status === "late" ? "amber" : m.status === "missed" ? "red" : "neutral",
+        source: isVirtual ? "Calculated" : "Manual",
+        calculationStatus: isVirtual ? "Calculated" : "Raw",
+        detailNote: isVirtual ? "No entry was made; counted as missed automatically after the time window." : m.notes || undefined,
+        detailNoteHi: isVirtual ? "कोई एंट्री नहीं हुई; समय बीतने के बाद अपने आप छूटी गिनी गई।" : undefined,
         iconName: "Pill",
-        canEdit: true,
-        canDelete: true,
+        canEdit: !isVirtual,
+        canDelete: !isVirtual,
       });
     });
   }
 
-  // 4. Activity Logs
-  if (filterDomain === "all" || filterDomain === "activity") {
-    actLogs.forEach((a: ActivityLogEntry) => {
-      const time = `${a.date}T18:00:00.000Z`;
-      const dateStr = getISTDateStr(time);
-      addEvent({
-        id: `act-${a.id}`,
-        patient_id: pid,
-        event_type: "activity",
-        event_timestamp: time,
-        source_record_id: a.id,
-        summary: `Daily Physical Movement: ${a.steps.toLocaleString()} steps`,
-        metadata: { steps: a.steps, distance_km: a.distance_km, minutes: a.walking_minutes },
-        domain: "activity",
-        title: "Daily Steps & Movement",
-        titleHi: "दैनिक कदम व शारीरिक गतिविधि",
-        displayTime: formatTimeIST(time),
-        dateStr,
-        value: `${a.steps.toLocaleString()} कदम`,
-        unit: "steps",
-        statusText: a.distance_km
-          ? `${a.distance_km} km · ${a.walking_minutes || "--"} min walk`
-          : undefined,
-        statusBadge: a.steps >= 6000 ? "Goal Met ✓" : "Recorded",
-        statusBadgeTone: a.steps >= 6000 ? "green" : "blue",
-        source: a.walking_minutes ? "Manual" : "Estimated",
-        calculationStatus: a.walking_minutes ? "Raw" : "Calculated",
-        confidence: "High",
-        iconName: "Activity",
-        canEdit: true,
-        canDelete: false,
-      });
+  // 4. Activity (daily total: a date, not a time)
+  series?.activity.forEach((a: ActivityLogEntry) => {
+    const met = a.steps >= settings.daily_step_goal * STEPS_GOAL_MET_RATIO;
+    add({
+      id: `act-${a.id}`,
+      patient_id: pid,
+      event_type: "activity",
+      event_timestamp: dateOnlyTimestamp(a.date),
+      source_record_id: a.id,
+      summary: `Daily Physical Movement: ${a.steps.toLocaleString("en-IN")} steps`,
+      metadata: { steps: a.steps, distance_km: a.distance_km, minutes: a.walking_minutes },
+      domain: "activity",
+      title: "Daily Steps & Movement",
+      titleHi: "दैनिक कदम व शारीरिक गतिविधि",
+      displayTime: DATE_ONLY_LABEL_HI,
+      isDateOnly: true,
+      dateStr: a.date,
+      value: `${a.steps.toLocaleString("en-IN")} कदम`,
+      unit: "steps",
+      statusText: a.distance_km ? `${a.distance_km} km · ${a.walking_minutes || "--"} min walk` : undefined,
+      statusBadge: met ? "Goal Met ✓" : "Recorded",
+      statusBadgeTone: met ? "green" : "blue",
+      source: a.walking_minutes ? "Manual" : "Estimated",
+      calculationStatus: a.walking_minutes ? "Raw" : "Calculated",
+      confidence: a.walking_minutes ? "High" : "Low",
+      iconName: "Activity",
+      canEdit: true,
+      canDelete: false,
     });
-  }
+  });
 
-  // 5. Sleep Logs
-  if (filterDomain === "all" || filterDomain === "sleep") {
-    sleepLogs.forEach((s: SleepLogEntry) => {
-      const time = `${s.date}T07:00:00.000Z`;
-      const dateStr = getISTDateStr(time);
-      addEvent({
-        id: `sleep-${s.id}`,
-        patient_id: pid,
-        event_type: "sleep",
-        event_timestamp: time,
-        source_record_id: s.id,
-        summary: `Night Sleep: ${s.sleep_hours} hours`,
-        metadata: { hours: s.sleep_hours, bedtime: s.bedtime, wake_time: s.wake_time },
-        domain: "sleep",
-        title: "Sleep Duration",
-        titleHi: "रात्रि विश्राम (नींद)",
-        displayTime: formatTimeIST(time),
-        dateStr,
-        value: `${s.sleep_hours} घंटे`,
-        unit: "hours",
-        statusText: s.bedtime && s.wake_time ? `समय: ${s.bedtime} - ${s.wake_time}` : undefined,
-        statusBadge: Number(s.sleep_hours) >= 7 ? "Optimal" : "Rest Logged",
-        statusBadgeTone: "blue",
-        source: "Manual",
-        calculationStatus: "Raw",
-        confidence: "High",
-        detailNote: s.notes || undefined,
-        iconName: "Moon",
-        canEdit: true,
-        canDelete: true,
-      });
+  // 5. Sleep (the wake-up time when it was recorded, else date-only)
+  series?.sleep.forEach((s: SleepLogEntry) => {
+    const wake = hhmmOrNull(s.wake_time);
+    const hours = Number(s.sleep_hours);
+    const short = hours < SLEEP_SHORT_HOURS;
+    const long = hours > SLEEP_LONG_HOURS;
+    const timestamp = wake ? istInstant(s.date, wake).toISOString() : dateOnlyTimestamp(s.date);
+    add({
+      id: `sleep-${s.id}`,
+      patient_id: pid,
+      event_type: "sleep",
+      event_timestamp: timestamp,
+      source_record_id: s.id,
+      summary: `Night Sleep: ${s.sleep_hours} hours`,
+      metadata: { hours: s.sleep_hours, bedtime: s.bedtime, wake_time: s.wake_time },
+      domain: "sleep",
+      title: "Sleep Duration",
+      titleHi: "रात्रि विश्राम (नींद)",
+      displayTime: wake ? formatTimeIST(timestamp) : DATE_ONLY_LABEL_HI,
+      isDateOnly: !wake,
+      dateStr: s.date,
+      value: `${s.sleep_hours} घंटे`,
+      unit: "hours",
+      statusText: s.bedtime && s.wake_time ? `समय: ${s.bedtime} - ${s.wake_time}` : undefined,
+      statusBadge: short ? "Short" : long ? "Long" : hours >= settings.sleep_target_hours ? "Target met" : "Rest Logged",
+      statusBadgeTone: short || long ? "amber" : hours >= settings.sleep_target_hours ? "green" : "blue",
+      source: "Manual",
+      calculationStatus: "Raw",
+      confidence: "High",
+      detailNote: s.notes || undefined,
+      iconName: "Moon",
+      canEdit: true,
+      canDelete: true,
     });
-  }
+  });
 
-  // 6. Weight Logs
-  if (filterDomain === "all" || filterDomain === "weight") {
-    weightLogs.forEach((w: WeightLogEntry) => {
-      const time = w.measured_at || w.created_at;
-      const dateStr = getISTDateStr(time);
-      addEvent({
-        id: `weight-${w.id}`,
-        patient_id: pid,
-        event_type: "weight",
-        event_timestamp: time,
-        source_record_id: w.id,
-        summary: `Body Weight: ${w.weight_kg} kg`,
-        metadata: { weight_kg: w.weight_kg },
-        domain: "weight",
-        title: "Body Weight Measurement",
-        titleHi: "शारीरिक वजन माप",
-        displayTime: formatTimeIST(time),
-        dateStr,
-        value: `${w.weight_kg} kg`,
-        unit: "kg",
-        statusBadge: "Weight",
-        statusBadgeTone: "neutral",
-        source: "Manual",
-        calculationStatus: "Raw",
-        confidence: "High",
-        detailNote: w.notes || undefined,
-        iconName: "Scale",
-        canEdit: true,
-        canDelete: true,
-      });
+  // 6. Weight
+  series?.weight.forEach((w: WeightLogEntry) => {
+    const time = w.measured_at || w.created_at;
+    add({
+      id: `weight-${w.id}`,
+      patient_id: pid,
+      event_type: "weight",
+      event_timestamp: time,
+      source_record_id: w.id,
+      summary: `Body Weight: ${w.weight_kg} kg`,
+      metadata: { weight_kg: w.weight_kg },
+      domain: "weight",
+      title: "Body Weight Measurement",
+      titleHi: "शारीरिक वजन माप",
+      displayTime: formatTimeIST(time),
+      dateStr: toISTDate(time),
+      value: `${w.weight_kg} kg`,
+      unit: "kg",
+      statusBadge: "Weight",
+      statusBadgeTone: "neutral",
+      source: "Manual",
+      calculationStatus: "Raw",
+      confidence: "High",
+      detailNote: w.notes || undefined,
+      iconName: "Scale",
+      canEdit: true,
+      canDelete: true,
     });
-  }
+  });
 
-  // 7. Active Alerts
+  // 7. Active alerts: computed for today, so they have a date and no clock time
   if (filterDomain === "all" || filterDomain === "alert") {
-    smartData?.alerts?.forEach((al: HealthAlert) => {
-      const time = al.date ? `${al.date}T08:00:00.000Z` : new Date().toISOString();
-      const dateStr = getISTDateStr(time);
-      addEvent({
-        id: `alert-${al.id}`,
+    smartData?.alerts.forEach((al: HealthAlert) => {
+      add({
+        id: `alert-${al.key}`,
         patient_id: pid,
         event_type: "alert",
-        event_timestamp: time,
+        event_timestamp: dateOnlyTimestamp(al.date),
         source_record_id: al.id,
         summary: al.messageHi,
-        metadata: { category: al.category, severity: al.severity },
+        metadata: { category: al.category, severity: al.severity, urgent: al.isUrgent ?? false },
         domain: "alert",
         title: al.title,
         titleHi: al.titleHi || al.title,
-        displayTime: formatTimeIST(time),
-        dateStr,
-        // The severity used to fill both `value` and `statusBadge`, so every
-        // alert row rendered "IMPORTANT" twice (§28).
+        displayTime: DATE_ONLY_LABEL_HI,
+        isDateOnly: true,
+        dateStr: al.date,
         value: "",
         statusBadge: al.severity === "IMPORTANT" ? "ज़रूरी" : al.severity === "ATTENTION" ? "ध्यान दें" : "जानकारी",
-        statusBadgeTone:
-          al.severity === "IMPORTANT" ? "red" : al.severity === "ATTENTION" ? "amber" : "neutral",
+        statusBadgeTone: al.severity === "IMPORTANT" ? "red" : al.severity === "ATTENTION" ? "amber" : "neutral",
         source: "Calculated",
         calculationStatus: "Aggregated",
         confidence: "High",
@@ -417,42 +429,27 @@ export async function getHealthTimelineEvents(
     });
   }
 
-  // Sort reverse-chronologically (newest first)
-  rawEvents.sort((a, b) => new Date(b.event_timestamp).getTime() - new Date(a.event_timestamp).getTime());
+  events.sort((a, b) => new Date(b.event_timestamp).getTime() - new Date(a.event_timestamp).getTime());
 
-  const totalCount = rawEvents.length;
-  const pagedEvents = rawEvents.slice(offset, offset + limit);
-  const hasMore = offset + limit < totalCount;
+  const totalCount = events.length;
+  const page = events.slice(offset, offset + limit);
 
-  // Group events by: Today, Yesterday, This Week, Older
-  const groupOrder: TimelineTimeGroup[] = ["Today", "Yesterday", "This Week", "Older"];
-  const groupLabels: Record<TimelineTimeGroup, { en: string; hi: string }> = {
-    Today: { en: "Today", hi: "आज" },
-    Yesterday: { en: "Yesterday", hi: "कल (बीता हुआ दिन)" },
-    "This Week": { en: "This Week", hi: "इस सप्ताह" },
-    Older: { en: "Earlier", hi: "पूर्व के रिकॉर्ड्स" },
+  const order: TimelineTimeGroup[] = ["Today", "Yesterday", "This Week", "Older"];
+  const buckets: Record<TimelineTimeGroup, TimelineEvent[]> = { Today: [], Yesterday: [], "This Week": [], Older: [] };
+  page.forEach((ev) => buckets[groupKeyOf(ev.dateStr, today)].push(ev));
+
+  return {
+    groups: order
+      .filter((k) => buckets[k].length > 0)
+      .map((k) => ({
+        groupKey: k,
+        groupLabel: GROUP_LABELS[k].en,
+        groupLabelHi: GROUP_LABELS[k].hi,
+        events: buckets[k],
+      })),
+    totalCount,
+    hasMore: offset + limit < totalCount,
+    coveredFrom: win.start,
+    coveredTo: win.end,
   };
-
-  const groupBuckets: Record<TimelineTimeGroup, TimelineEvent[]> = {
-    Today: [],
-    Yesterday: [],
-    "This Week": [],
-    Older: [],
-  };
-
-  pagedEvents.forEach((ev) => {
-    const key = getGroupKey(ev.dateStr, todayStr, yesterdayStr, weekAgoStr);
-    groupBuckets[key].push(ev);
-  });
-
-  const groups: TimelineGroup[] = groupOrder
-    .filter((k) => groupBuckets[k].length > 0)
-    .map((k) => ({
-      groupKey: k,
-      groupLabel: groupLabels[k].en,
-      groupLabelHi: groupLabels[k].hi,
-      events: groupBuckets[k],
-    }));
-
-  return { groups, totalCount, hasMore };
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import {
   Activity,
@@ -20,325 +20,308 @@ import {
   UserCheck,
   Utensils,
 } from "lucide-react";
+import { NoPatientState } from "@/components/health/no-patient-state";
+import { isNoPatientError, loadErrorMessage, useAsyncData } from "@/components/health/use-async-data";
 import { Badge } from "@/components/ui/badge";
-import { DepthCard } from "@/components/ui/depth-card";
-import { PageTitle } from "@/components/ui/page-title";
+import { Button } from "@/components/ui/button";
+import { Card, metricChipClasses, type MetricTone } from "@/components/ui/card";
+import { EmptyState, ErrorState, PageBody, PageHeader } from "@/components/ui/page";
+import { Segmented, type SegmentedOption } from "@/components/ui/segmented";
+import { useAuth } from "@/context/auth-context";
 import { cn } from "@/lib/utils";
-import {
-  getHealthChanges,
-  type HealthChangesResult,
-  type TrendDirection,
-} from "@/services/what-changed-service";
+import { getHealthChanges, type HealthChangesResult, type TrendDirection } from "@/services/what-changed-service";
 
-const metricIcons: Record<string, typeof Activity> = {
-  daily_steps: Activity,
-  sleep_duration: Moon,
-  systolic_bp: HeartPulse,
-  body_weight: Scale,
-  food_consistency: Utensils,
-  medicine_adherence: CheckCircle2,
+type Period = "7d" | "30d";
+
+const METRIC_STYLE: Record<string, { icon: typeof Activity; tone: MetricTone }> = {
+  daily_steps: { icon: Activity, tone: "activity" },
+  sleep_duration: { icon: Moon, tone: "sleep" },
+  systolic_bp: { icon: HeartPulse, tone: "bp" },
+  body_weight: { icon: Scale, tone: "weight" },
+  food_consistency: { icon: Utensils, tone: "food" },
+  medicine_adherence: { icon: CheckCircle2, tone: "meds" },
+};
+
+const PERIOD_OPTIONS: SegmentedOption<Period>[] = [
+  { value: "7d", label: "7 days", hindiLabel: "7 दिन बनाम पिछले 7" },
+  { value: "30d", label: "30 days", hindiLabel: "30 दिन बनाम पिछले 30" },
+];
+
+const DIR_ICON: Record<TrendDirection, typeof ArrowUpRight> = {
+  up: ArrowUpRight,
+  down: ArrowDownRight,
+  stable: Minus,
 };
 
 export default function HealthChangesPage() {
-  const [period, setPeriod] = useState<"7d" | "30d">("7d");
-  const [data, setData] = useState<HealthChangesResult | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { activePatientId, authorizedPatients, loading: authLoading } = useAuth();
+  const [period, setPeriod] = useState<Period>("7d");
   const [showExplanation, setShowExplanation] = useState(false);
   const [expandedMetric, setExpandedMetric] = useState<string | null>(null);
-  const [isCaregiverMode, setIsCaregiverMode] = useState(false);
+  const [caregiverMode, setCaregiverMode] = useState(false);
 
-  useEffect(() => {
-    let active = true;
+  const patientName = authorizedPatients.find((p) => p.id === activePatientId)?.name ?? "मरीज़";
 
-    getHealthChanges(undefined, period)
-      .then((res) => {
-        if (active) {
-          setData(res);
-        }
-      })
-      .catch((err) => console.error("Error loading changes:", err))
-      .finally(() => {
-        if (active) setLoading(false);
-      });
+  const { data, error, loading, reload } = useAsyncData<HealthChangesResult>(
+    () => getHealthChanges(activePatientId!, period),
+    [activePatientId, period],
+    activePatientId !== null,
+  );
 
-    return () => {
-      active = false;
-    };
-  }, [period]);
+  const header = (
+    <>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <Link href="/" className="inline-flex min-h-control items-center gap-1.5 text-sm font-semibold text-ink-muted hover:text-ink">
+          <ArrowLeft aria-hidden className="h-4 w-4" />
+          डैशबोर्ड पर लौटें
+        </Link>
+        <Button variant={caregiverMode ? "primary" : "secondary"} size="sm" aria-pressed={caregiverMode} onClick={() => setCaregiverMode((v) => !v)}>
+          <UserCheck aria-hidden className="h-4 w-4" />
+          {caregiverMode ? "केयरगिवर सारांश चालू" : "केयरगिवर सारांश देखें"}
+        </Button>
+      </div>
+      <PageHeader
+        eyebrow="Health comparison"
+        title="What changed?"
+        hindiTitle="स्वास्थ्य में क्या बदला?"
+        description="हाल के रिकॉर्ड की तुलना उससे ठीक पहले की उतनी ही अवधि से। यह निदान नहीं, सिर्फ़ आपके अपने आँकड़ों का अवलोकन है।"
+      />
+      <Segmented options={PERIOD_OPTIONS} value={period} onChange={setPeriod} ariaLabel="Comparison period — तुलना की अवधि" />
+    </>
+  );
+
+  if (!authLoading && activePatientId === null) {
+    return (
+      <PageBody>
+        {header}
+        <NoPatientState what="बदलावों की तुलना" />
+      </PageBody>
+    );
+  }
+
+  if (error) {
+    return (
+      <PageBody>
+        {header}
+        {isNoPatientError(error) ? (
+          <NoPatientState what="बदलावों की तुलना" />
+        ) : (
+          <ErrorState
+            title="तुलना लोड नहीं हो पाई"
+            englishTitle="The comparison could not be loaded"
+            description={loadErrorMessage(error)}
+            onRetry={reload}
+          />
+        )}
+      </PageBody>
+    );
+  }
+
+  if (authLoading || loading || !data) {
+    return (
+      <PageBody>
+        {header}
+        <div aria-busy="true" aria-label="लोड हो रहा है" className="space-y-4">
+          <div className="skeleton h-28 rounded-panel" />
+          <div className="skeleton h-40 rounded-panel" />
+          <div className="skeleton h-40 rounded-panel" />
+        </div>
+      </PageBody>
+    );
+  }
+
+  const noReference = data.metrics.every((m) => !m.hasReference);
 
   return (
-    <div className="space-y-6">
-      {/* HEADER BAR */}
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <Link
-          href="/"
-          className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-ink-subtle hover:text-ink transition-colors"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          <span>डैशबोर्ड पर लौटें (Back)</span>
-        </Link>
+    <PageBody>
+      {header}
 
-        {/* CAREGIVER TOGGLE */}
-        <button
-          type="button"
-          onClick={() => setIsCaregiverMode(!isCaregiverMode)}
-          className={cn(
-            "flex items-center gap-1.5 px-3 py-1.5 rounded-control border text-xs font-bold transition-all cursor-pointer",
-            isCaregiverMode
-              ? "bg-purple-100 border-purple-300 text-purple-900 shadow-2xs"
-              : "bg-surface border-line text-ink-muted hover:border-line-strong"
-          )}
-        >
-          <UserCheck className="h-3.5 w-3.5" />
-          <span>{isCaregiverMode ? "केयरगिवर व्यू सक्रिय" : "केयरगिवर सारांश देखें"}</span>
-        </button>
-      </div>
-
-      <PageTitle
-        eyebrow="Intelligence Engine · स्वास्थ्य तुलना"
-        title="What Changed? · स्वास्थ्य में क्या बदला?"
-        description="हालिया दौर के स्वास्थ्य रिकॉर्ड्स बनाम पिछले संदर्भ दौर का वस्तुनिष्ठ और गैर-चिकित्सीय विश्लेषण।"
-      />
-
-      {/* PERIOD SWITCHER */}
-      <div className="flex items-center justify-between gap-3 p-1.5 bg-surface-sunken rounded-control border border-line/80 max-w-md">
-        <button
-          type="button"
-          onClick={() => {
-            if (period !== "7d") {
-              setLoading(true);
-              setPeriod("7d");
-            }
-          }}
-          className={cn(
-            "flex-1 py-2 rounded-control text-xs sm:text-sm font-bold transition-all cursor-pointer text-center",
-            period === "7d"
-              ? "bg-surface text-ink shadow-e1 border border-line/60"
-              : "text-ink-muted hover:text-ink"
-          )}
-        >
-          7 दिन vs पिछले 7 दिन (7D)
-        </button>
-        <button
-          type="button"
-          onClick={() => {
-            if (period !== "30d") {
-              setLoading(true);
-              setPeriod("30d");
-            }
-          }}
-          className={cn(
-            "flex-1 py-2 rounded-control text-xs sm:text-sm font-bold transition-all cursor-pointer text-center",
-            period === "30d"
-              ? "bg-surface text-ink shadow-e1 border border-line/60"
-              : "text-ink-muted hover:text-ink"
-          )}
-        >
-          30 दिन vs पिछले 30 दिन (30D)
-        </button>
-      </div>
-
-      {loading ? (
-        <div className="space-y-4 animate-pulse">
-          <div className="h-28 rounded-panel bg-surface-sunken" />
-          <div className="h-40 rounded-panel bg-surface-sunken" />
-          <div className="h-40 rounded-panel bg-surface-sunken" />
-        </div>
-      ) : !data || !data.dataSufficiency.isSufficient ? (
-        <DepthCard depth={1} className="p-8 text-center">
-          <Info className="mx-auto h-10 w-10 text-ink-subtle mb-2" />
-          <h3 className="text-base font-bold text-ink">
-            {data?.dataSufficiency.reasonHi || "अभी पर्याप्त health history नहीं है।"}
-          </h3>
-          <p className="text-xs font-semibold text-ink-subtle mt-1">
-            सटीक तुलना के लिए नियमित रूप से भोजन, BP, कदम व दवाइयाँ दर्ज करते रहें।
-          </p>
-        </DepthCard>
+      {!data.dataSufficiency.isSufficient ? (
+        <EmptyState
+          icon={Info}
+          title={data.dataSufficiency.reasonHi || "अभी तुलना के लिए पर्याप्त रिकॉर्ड नहीं हैं"}
+          hindiTitle="Not enough history yet"
+          description="सटीक तुलना के लिए कुछ हफ़्ते नियमित रूप से भोजन, BP, कदम और दवाइयाँ दर्ज करते रहें।"
+        />
       ) : (
         <div className="space-y-5">
-          {/* CAREGIVER VIEW BANNER */}
-          {isCaregiverMode && (
-            <DepthCard depth={2} className="p-4 sm:p-5 border-info-line bg-info-soft shadow-e1">
-              <div className="flex items-center gap-2 mb-1.5">
-                <UserCheck className="h-4 w-4 text-info" />
-                <h4 className="text-sm font-bold text-info">
-                  केयरगिवर सारांश (What Changed for Papa?)
-                </h4>
-              </div>
-              <p className="text-xs sm:text-sm font-semibold text-info leading-relaxed">
+          {caregiverMode ? (
+            <Card className="border-info-line bg-info-soft">
+              <h2 className="mb-1.5 flex items-center gap-2 text-sm font-semibold text-info">
+                <UserCheck aria-hidden className="h-4 w-4" />
+                केयरगिवर सारांश: {patientName} में क्या बदला?
+              </h2>
+              <p lang="hi" className="text-sm leading-relaxed text-ink">
                 {data.caregiverSummaryHi}
               </p>
-            </DepthCard>
-          )}
+            </Card>
+          ) : null}
 
-          {/* COMPACT MULTI-METRIC SUMMARY BANNER — the one hero surface on this page */}
-          <DepthCard depth={2} surface="gradient" glow="gold" highlight className="p-4 sm:p-6">
-            <div className="flex items-start justify-between gap-3 pb-3 border-b border-line">
-              <div className="flex items-center gap-2.5">
-                <div className="h-9 w-9 rounded-control bg-gold-soft text-gold-ink border border-gold-line flex items-center justify-center shrink-0 shadow-2xs">
-                  <Sparkles className="h-5 w-5 stroke-[2.2]" />
-                </div>
-                <div>
-                  <h3 className="text-base sm:text-lg font-bold text-ink tracking-tight">
-                    मुख्य बदलावों का संक्षिप्त सारांश
-                  </h3>
-                  <p className="text-xs font-semibold text-ink-subtle">
-                    अवधि: {data.dateRange.recentStart} से {data.dateRange.recentEnd}
+          <Card tone="premium">
+            <div className="flex items-start justify-between gap-3 border-b border-line pb-3">
+              <div className="flex min-w-0 items-center gap-2.5">
+                <span className="grid h-9 w-9 shrink-0 place-items-center rounded-control border border-gold-line bg-gold-soft text-gold-ink">
+                  <Sparkles aria-hidden className="h-5 w-5" />
+                </span>
+                <div className="min-w-0">
+                  <h2 lang="hi" className="text-base font-semibold text-ink sm:text-lg">
+                    मुख्य बदलावों का सारांश
+                  </h2>
+                  <p className="text-xs text-ink-subtle">
+                    हाल की अवधि: {data.dateRange.recentStart} से {data.dateRange.recentEnd} · तुलना: {data.dateRange.referenceStart} से {data.dateRange.referenceEnd}
                   </p>
                 </div>
               </div>
-
-              {/* METHODOLOGY TOGGLE */}
-              <button
-                type="button"
-                onClick={() => setShowExplanation(!showExplanation)}
-                className="text-xs font-semibold text-ink-muted hover:text-ink flex items-center gap-1 bg-surface-sunken px-2.5 py-1 rounded-lg border border-line cursor-pointer"
+              <Button
+                variant="quiet"
+                size="sm"
+                aria-expanded={showExplanation}
+                onClick={() => setShowExplanation((v) => !v)}
               >
-                <HelpCircle className="h-3.5 w-3.5 text-ink-subtle" />
-                <span>तुलना का आधार</span>
-                {showExplanation ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
-              </button>
+                <HelpCircle aria-hidden className="h-3.5 w-3.5" />
+                तुलना का आधार
+                {showExplanation ? <ChevronUp aria-hidden className="h-3.5 w-3.5" /> : <ChevronDown aria-hidden className="h-3.5 w-3.5" />}
+              </Button>
             </div>
 
-            {/* EXPANDABLE METHODOLOGY */}
-            {showExplanation && (
-              <div className="mt-3.5 p-3.5 rounded-card border border-info-line bg-info-soft text-xs text-info space-y-2 animate-in fade-in">
-                <p className="font-semibold flex items-center gap-1.5">
-                  <Info className="h-4 w-4 text-info shrink-0" />
-                  <span>सांख्यिकीय विश्लेषण नियम (Statistical Rules):</span>
+            {showExplanation ? (
+              <div className="mt-3.5 space-y-1.5 rounded-card border border-info-line bg-info-soft p-3.5 text-xs text-ink-muted">
+                <p className="flex items-center gap-1.5 font-semibold text-info">
+                  <Info aria-hidden className="h-4 w-4 shrink-0" />
+                  तुलना कैसे होती है
                 </p>
-                <p className="text-info leading-relaxed font-medium">
-                  • यह इंजन किसी एक दिन के असामान्य आंकड़े (Outlier) को दबाने के लिए सांख्यिकीय मध्यमान (Median) का उपयोग करता है।
-                  <br />
-                  • यह कोई चिकित्सकीय निदान नहीं है, बल्कि आपके अपने डेटा का वस्तुनिष्ठ तुलनात्मक अवलोकन है।
+                <p lang="hi" className="leading-relaxed">
+                  • एक दिन के अजीब आँकड़े का असर कम करने के लिए औसत की जगह मध्यमान (median) लिया जाता है।
+                  <br />• हाल की अवधि की तुलना उससे ठीक पहले की उतनी ही लंबी अवधि से होती है।
+                  <br />• यह निदान नहीं है, सिर्फ़ आपके अपने रिकॉर्ड का अवलोकन है।
                 </p>
               </div>
-            )}
+            ) : null}
 
-            {/* SUMMARY BULLETS */}
-            <div className="mt-4 p-3.5 rounded-card bg-surface border border-line/80 shadow-2xs">
-              <pre className="text-xs sm:text-sm font-semibold text-ink whitespace-pre-wrap font-sans leading-relaxed">
+            <div className="mt-4 rounded-card border border-line bg-surface p-3.5">
+              <pre lang="hi" className="whitespace-pre-wrap font-sans text-sm leading-relaxed text-ink">
                 {data.compactSummaryHi}
               </pre>
             </div>
-          </DepthCard>
 
-          {/* ALL METRICS DETAILED GRID */}
-          <div className="grid gap-3.5 sm:grid-cols-2">
+            {noReference ? (
+              <p lang="hi" className="mt-3 text-xs text-ink-subtle">
+                पिछली अवधि का रिकॉर्ड न होने से अभी असली तुलना नहीं हो सकी, इसलिए &ldquo;स्थिर&rdquo; या &ldquo;बदलाव&rdquo; जैसा कुछ नहीं कहा जा रहा।
+              </p>
+            ) : data.rankedKeyChanges.length === 0 ? (
+              <p lang="hi" className="mt-3 text-xs text-ink-subtle">
+                जिन मापों की तुलना हो सकी, उनमें कोई बड़ा बदलाव नहीं दिखा।
+              </p>
+            ) : null}
+          </Card>
+
+          <ul className="grid gap-3.5 sm:grid-cols-2">
             {data.metrics.map((m) => {
-              const Icon = metricIcons[m.metric] || Activity;
+              const style = METRIC_STYLE[m.metric] ?? { icon: Activity, tone: "neutral" as MetricTone };
+              const Icon = style.icon;
               const isExpanded = expandedMetric === m.metric;
-
-              const dirBadgeTone: Record<TrendDirection, "green" | "blue" | "amber"> = {
-                up: "green",
-                down: "amber",
-                stable: "blue",
-              };
-
-              const dirIcon: Record<TrendDirection, typeof ArrowUpRight> = {
-                up: ArrowUpRight,
-                down: ArrowDownRight,
-                stable: Minus,
-              };
-              const DirIcon = dirIcon[m.direction];
+              const comparable = m.isSufficient && m.hasReference;
+              const DirIcon = DIR_ICON[m.direction];
 
               return (
-                <div
-                  key={m.metric}
-                  onClick={() => setExpandedMetric(isExpanded ? null : m.metric)}
-                  className={cn(
-                    "rounded-card border-2 p-4 bg-surface transition-all duration-150 cursor-pointer select-none relative",
-                    "hover:shadow-e2 active:scale-[0.985]",
-                    m.isSufficient ? "border-line" : "border-line/60 bg-surface-sunken/60"
-                  )}
-                >
-                  <div className="flex items-start justify-between gap-2 mb-2.5">
-                    <div className="flex items-center gap-2.5">
-                      <div className="h-9 w-9 rounded-control bg-surface-sunken border border-line text-ink-muted flex items-center justify-center shrink-0 shadow-2xs">
-                        <Icon className="h-4.5 w-4.5" />
-                      </div>
-                      <div>
-                        <h4 className="text-sm sm:text-base font-bold text-ink tracking-tight">
-                          {m.metricHi}
-                        </h4>
-                        <span className="text-xs font-semibold text-ink-subtle">
-                          {m.dataPoints} रिकॉर्ड्स · {m.confidenceLabelHi}
-                        </span>
-                      </div>
-                    </div>
-
-                    {m.isSufficient ? (
-                      <Badge variant={dirBadgeTone[m.direction]} className="text-2xs sm:text-xs font-bold flex items-center gap-1">
-                        <DirIcon className="h-3 w-3" />
-                        <span>{m.directionLabelHi}</span>
-                      </Badge>
-                    ) : (
-                      <Badge variant="neutral" className="text-2xs font-semibold">
-                        डेटा प्रतीक्षारत
-                      </Badge>
+                <li key={m.metric}>
+                  <button
+                    type="button"
+                    disabled={!comparable}
+                    aria-expanded={comparable ? isExpanded : undefined}
+                    onClick={() => setExpandedMetric(isExpanded ? null : m.metric)}
+                    className={cn(
+                      "pressable w-full rounded-card border bg-surface p-4 text-left shadow-e1",
+                      comparable ? "cursor-pointer border-line hover:shadow-e2" : "cursor-default border-line bg-surface-sunken shadow-none",
                     )}
-                  </div>
-
-                  {m.isSufficient ? (
-                    <div className="space-y-2">
-                      <p className="text-xs sm:text-sm font-semibold text-ink leading-snug">
-                        {m.explanationHi}
-                      </p>
-
-                      <div className="flex flex-wrap items-center justify-between text-xs font-semibold text-ink-muted pt-2 border-t border-line">
-                        {m.personalPatternRange && (
-                          <span>सामान्य दायरा: {m.personalPatternRange}</span>
-                        )}
-                        <span className="text-ink-subtle">
-                          {isExpanded ? "विवरण बंद करें ↑" : "विस्तृत विवरण देखें ↓"}
+                  >
+                    <div className="mb-2.5 flex items-start justify-between gap-2">
+                      <div className="flex min-w-0 items-center gap-2.5">
+                        <span className={cn("grid h-9 w-9 shrink-0 place-items-center rounded-control", metricChipClasses[style.tone])}>
+                          <Icon aria-hidden className="h-4 w-4" />
                         </span>
+                        <div className="min-w-0">
+                          <h3 lang="hi" className="text-sm font-semibold text-ink sm:text-base">
+                            {m.metricHi}
+                          </h3>
+                          <span lang="hi" className="text-xs text-ink-subtle">
+                            {m.dataPoints} रिकॉर्ड · {m.confidenceLabelHi}
+                          </span>
+                        </div>
                       </div>
 
-                      {/* EXPANDED INTERACTIVE DETAILS */}
-                      {isExpanded && (
-                        <div className="mt-3 pt-3 border-t border-line text-xs text-ink-muted space-y-1.5 animate-in fade-in">
-                          <div className="grid grid-cols-2 gap-2 p-2.5 rounded-card bg-surface-sunken border border-line text-center">
-                            <div>
-                              <span className="text-2xs font-semibold text-ink-subtle block">हालिया मध्यमान</span>
-                              <span className="text-sm font-bold text-ink">
-                                {m.recentValue.toLocaleString()} {m.unit}
-                              </span>
-                            </div>
-                            <div>
-                              <span className="text-2xs font-semibold text-ink-subtle block">पिछला संदर्भ मध्यमान</span>
-                              <span className="text-sm font-bold text-ink">
-                                {m.referenceValue.toLocaleString()} {m.unit}
-                              </span>
-                            </div>
-                          </div>
-                          <p className="text-xs text-ink-subtle font-semibold pt-1">
-                            • अंतर: {m.difference > 0 ? "+" : ""}{m.difference} {m.unit} ({m.percentChange > 0 ? "+" : ""}{m.percentChange}%)
-                          </p>
-                        </div>
+                      {comparable ? (
+                        <Badge variant={m.direction === "stable" ? "neutral" : "info"}>
+                          <DirIcon aria-hidden className="h-3 w-3" />
+                          <span lang="hi">{m.directionLabelHi}</span>
+                        </Badge>
+                      ) : (
+                        <Badge variant="neutral">
+                          <span lang="hi">{m.isSufficient ? "पिछला रिकॉर्ड नहीं" : "डेटा कम है"}</span>
+                        </Badge>
                       )}
                     </div>
-                  ) : (
-                    <div className="mt-2 text-xs font-semibold text-ink-subtle bg-surface-sunken/80 p-2.5 rounded-card border border-line">
-                      ⚠️ {m.insufficientReasonHi || "इस metric के लिए अभी पर्याप्त data उपलब्ध नहीं है।"}
-                    </div>
-                  )}
-                </div>
+
+                    {comparable ? (
+                      <div className="space-y-2">
+                        <p lang="hi" className="text-sm leading-snug text-ink">
+                          {m.explanationHi}
+                        </p>
+                        <div className="flex flex-wrap items-center justify-between gap-1 border-t border-line pt-2 text-xs text-ink-muted">
+                          {m.personalPatternRange ? <span lang="hi">सामान्य दायरा: {m.personalPatternRange}</span> : <span />}
+                          <span className="text-ink-subtle">{isExpanded ? "विवरण बंद करें" : "विवरण देखें"}</span>
+                        </div>
+
+                        {isExpanded ? (
+                          <div className="space-y-1.5 border-t border-line pt-3 text-xs text-ink-muted">
+                            <div className="grid grid-cols-2 gap-2 rounded-card border border-line bg-surface-sunken p-2.5 text-center">
+                              <div>
+                                <span lang="hi" className="block text-2xs text-ink-subtle">
+                                  हाल का मध्यमान
+                                </span>
+                                <span className="tabular text-sm font-semibold text-ink">
+                                  {m.recentValue.toLocaleString("en-IN")} {m.unit}
+                                </span>
+                              </div>
+                              <div>
+                                <span lang="hi" className="block text-2xs text-ink-subtle">
+                                  पिछली अवधि का मध्यमान
+                                </span>
+                                <span className="tabular text-sm font-semibold text-ink">
+                                  {m.referenceValue.toLocaleString("en-IN")} {m.unit}
+                                </span>
+                              </div>
+                            </div>
+                            <p lang="hi" className="tabular text-xs text-ink-subtle">
+                              अंतर: {m.difference > 0 ? "+" : ""}
+                              {m.difference} {m.unit} ({m.percentChange > 0 ? "+" : ""}
+                              {m.percentChange}%)
+                            </p>
+                          </div>
+                        ) : null}
+                      </div>
+                    ) : (
+                      <p lang="hi" className="rounded-field border border-line bg-surface p-2.5 text-xs text-ink-muted">
+                        {m.insufficientReasonHi ||
+                          (m.isSufficient
+                            ? "तुलना के लिए पिछली अवधि का रिकॉर्ड नहीं है।"
+                            : "इस माप के लिए अभी पर्याप्त डेटा नहीं है।")}
+                      </p>
+                    )}
+                  </button>
+                </li>
               );
             })}
-          </div>
+          </ul>
 
-          {/* MEDICAL SAFETY DISCLAIMER */}
-          <div className="p-4 rounded-card bg-attention-soft border border-attention-line text-xs text-attention space-y-1">
-            <p className="font-bold flex items-center gap-1.5 text-attention">
-              <Info className="h-4 w-4 text-attention shrink-0" />
-              <span>चिकित्सीय सुरक्षा व निष्पक्षता सूचना:</span>
-            </p>
-            <p className="font-medium text-attention leading-relaxed">
-              यह प्रणाली केवल आपके द्वारा दर्ज स्वास्थ्य आंकड़ों में सांख्यिकीय बदलावों को दर्शाती है। यह किसी रोग की पुष्टि (Diagnosis) या दवा में बदलाव की सिफारिश नहीं करती। किसी भी लक्षण या निर्णय के लिए अपने चिकित्सक से अवश्य परामर्श करें।
-            </p>
-          </div>
+          <p className="flex items-start gap-1.5 rounded-card border border-attention-line bg-attention-soft p-4 text-xs text-ink-muted">
+            <Info aria-hidden className="mt-0.5 h-4 w-4 shrink-0 text-attention" />
+            <span lang="hi" className="leading-relaxed">
+              यह सिर्फ़ आपके दर्ज आँकड़ों में सांख्यिकीय बदलाव दिखाता है। यह किसी बीमारी की पुष्टि नहीं करता और दवा बदलने की सलाह नहीं देता। किसी भी लक्षण या फ़ैसले के लिए डॉक्टर से बात करें।
+            </span>
+          </p>
         </div>
       )}
-    </div>
+    </PageBody>
   );
 }

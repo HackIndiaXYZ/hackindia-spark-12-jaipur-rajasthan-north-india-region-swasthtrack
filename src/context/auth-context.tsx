@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import {
@@ -6,175 +5,210 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
+  useRef,
   useState,
   type ReactNode,
 } from "react";
+import type { User } from "@supabase/supabase-js";
+import { getActivePatientId, setActivePatientId as setStoreActivePatientId } from "@/lib/active-patient";
+import { isSupabaseConfigured, supabase } from "@/lib/supabase/client";
+import type { MemberRole } from "@/lib/supabase/database.types";
 import {
-  DEFAULT_PATIENT_ID,
-  getCurrentAuthSession,
+  clearLocalUserData,
   getAuthorizedPatients,
-  loginWithPhonePassword,
-  registerUserWithPassword,
-  sendPasswordResetOtp,
-  verifyOtpAndResetPassword,
-  loginDemoUser,
-  resetPasswordWithLast4Digits,
-  signOut,
+  getProfile,
+  signOut as signOutService,
+  type AuthorizedPatient,
   type UserProfile,
 } from "@/services/auth-service";
-import { isSupabaseConfigured, supabase, type PatientProfile } from "@/services/patient-service";
+import { clearAllPatientCaches } from "@/services/patient-service";
 
 interface AuthContextType {
-  user: any | null;
+  user: User | null;
   profile: UserProfile | null;
-  activePatientId: string;
-  authorizedPatients: PatientProfile[];
+  /** True until the session AND the user's memberships are known. */
   loading: boolean;
-  login: (phone: string, password: string) => Promise<{ success: boolean; user: any; profile: UserProfile; isNewUser: boolean }>;
-  register: (phone: string, password: string) => Promise<{ success: boolean; user: any; profile: UserProfile; isNewUser: boolean }>;
-  sendOtp: (phone: string) => Promise<{ success: boolean; message: string; simulatedOtp: string }>;
-  verifyOtp: (phone: string, otpCode: string, newPassword: string) => Promise<{ success: boolean; message: string }>;
-  resetPassword: (phone: string, last4Digits: string, newPassword: string) => Promise<{ success: boolean; message: string }>;
-  loginDemo: () => Promise<{ success: boolean; user: any; profile: UserProfile; isNewUser: boolean }>;
-  logout: () => Promise<void>;
+  /** Set when the session exists but profile/memberships could not be loaded. */
+  loadError: string | null;
+  supabaseConfigured: boolean;
+  /** Null (never a placeholder id) when the user has no patient yet. */
+  activePatientId: string | null;
+  /** Every patient the user is an active member of. */
+  authorizedPatients: AuthorizedPatient[];
+  /** The user's role on the active patient. */
+  memberRole: MemberRole | null;
+  /** Owner or editor on the active patient (viewers are read-only). */
+  canWrite: boolean;
   setActivePatientId: (patientId: string) => void;
+  /** Reload profile + memberships (after creating or joining a patient). */
   refreshSession: () => Promise<void>;
+  signOut: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<any | null>(null);
-  const [profile, setProfile] = useState<UserProfile | null>(null);
-  const [activePatientId, setActivePatientId] = useState<string>(DEFAULT_PATIENT_ID);
-  const [authorizedPatients, setAuthorizedPatients] = useState<PatientProfile[]>([]);
-  const [loading, setLoading] = useState(true);
+// A UI preference only: which patient to open first. It is validated against the
+// real memberships every time, so editing it by hand grants nothing.
+const ACTIVE_PATIENT_PREF_KEY = "swasthtrack_active_patient";
 
-  const loadSession = useCallback(async () => {
+function readPreferredPatient(): string | null {
+  try {
+    return localStorage.getItem(ACTIVE_PATIENT_PREF_KEY);
+  } catch {
+    return null;
+  }
+}
+
+function writePreferredPatient(id: string | null): void {
+  try {
+    if (id) localStorage.setItem(ACTIVE_PATIENT_PREF_KEY, id);
+    else localStorage.removeItem(ACTIVE_PATIENT_PREF_KEY);
+  } catch {
+    // storage blocked
+  }
+}
+
+function pickActivePatient(patients: AuthorizedPatient[], preferred: string | null): string | null {
+  if (preferred && patients.some((p) => p.id === preferred)) return preferred;
+  return patients[0]?.id ?? null;
+}
+
+interface LoadedData {
+  userId: string;
+  profile: UserProfile | null;
+  patients: AuthorizedPatient[];
+  activePatientId: string | null;
+  error: string | null;
+}
+
+export function AuthProvider({ children }: { children: ReactNode }) {
+  const [authUser, setAuthUser] = useState<User | null>(null);
+  const [authResolved, setAuthResolved] = useState(false);
+  const [data, setData] = useState<LoadedData | null>(null);
+
+  const lastUserIdRef = useRef<string | null>(null);
+  const resolvedRef = useRef(false);
+  const patientsRef = useRef<AuthorizedPatient[]>([]);
+
+  // Profile + memberships for one user. Writes the module-level active patient
+  // BEFORE the state update, so pages mounting in the same commit already see it
+  // (child effects run before this provider's effects).
+  const loadData = useCallback(async (user: User): Promise<void> => {
     try {
-      const session = await getCurrentAuthSession();
-      if (session.user) {
-        setUser(session.user);
-        setProfile(session.profile);
-        const patients = await getAuthorizedPatients();
-        setAuthorizedPatients(patients);
-        if (patients.length > 0) {
-          setActivePatientId(patients[0].id);
-        }
-      } else {
-        setUser(null);
-        setProfile(null);
-      }
+      const [profile, patients] = await Promise.all([getProfile(user), getAuthorizedPatients()]);
+      patientsRef.current = patients;
+      const activePatientId = pickActivePatient(patients, getActivePatientId() ?? readPreferredPatient());
+      setStoreActivePatientId(activePatientId);
+      writePreferredPatient(activePatientId);
+      setData({ userId: user.id, profile, patients, activePatientId, error: null });
     } catch (err) {
-      console.error("Auth session load error:", err);
-    } finally {
-      setLoading(false);
+      console.error("Auth data load error:", err);
+      setData({
+        userId: user.id,
+        profile: null,
+        patients: [],
+        activePatientId: null,
+        error: err instanceof Error ? err.message : "Could not load your account.",
+      });
     }
   }, []);
 
+  // Session lifecycle. The callback only records the session: calling other
+  // Supabase methods (or awaiting) inside it can deadlock the auth client, so the
+  // profile/membership fetch lives in the effect below.
   useEffect(() => {
-    let active = true;
-    const init = async () => {
-      if (active) await loadSession();
-    };
-    init();
+    if (!isSupabaseConfigured) return;
 
-    if (isSupabaseConfigured) {
-      const {
-        data: { subscription },
-      } = supabase.auth.onAuthStateChange((event, session) => {
-        if (session?.user && active) {
-          loadSession();
-        }
-      });
-      return () => {
-        active = false;
-        subscription.unsubscribe();
-      };
-    }
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      const nextUser = session?.user ?? null;
+      const previousId = lastUserIdRef.current;
 
+      if (event === "SIGNED_OUT") {
+        // Includes a sign-out performed in another tab.
+        clearAllPatientCaches();
+        setStoreActivePatientId(null);
+        setTimeout(() => void clearLocalUserData(), 0);
+      } else if (previousId && nextUser && previousId !== nextUser.id) {
+        // A different account took over this browser: nothing of the old one may linger.
+        clearAllPatientCaches();
+        setStoreActivePatientId(null);
+      }
+
+      lastUserIdRef.current = nextUser?.id ?? null;
+      resolvedRef.current = true;
+      // TOKEN_REFRESHED / repeated SIGNED_IN for the same user must not reload everything.
+      setAuthUser((prev) => (prev?.id === nextUser?.id && event !== "USER_UPDATED" ? prev : nextUser));
+      setAuthResolved(true);
+    });
+
+    // Safety net in case the INITIAL_SESSION event is not delivered.
+    void supabase.auth.getSession().then(({ data: { session } }) => {
+      if (resolvedRef.current) return;
+      resolvedRef.current = true;
+      lastUserIdRef.current = session?.user?.id ?? null;
+      setAuthUser(session?.user ?? null);
+      setAuthResolved(true);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    if (!authUser) return;
+    let cancelled = false;
+    // Deferred a tick so the fetch's state updates never happen synchronously in the effect body.
+    void Promise.resolve().then(() => (cancelled ? undefined : loadData(authUser)));
     return () => {
-      active = false;
+      cancelled = true;
     };
-  }, [loadSession]);
+  }, [authUser, loadData]);
 
-  const login = async (phone: string, password: string) => {
-    const res = await loginWithPhonePassword(phone, password);
-    setUser(res.user);
-    setProfile(res.profile);
-    const patients = await getAuthorizedPatients();
-    setAuthorizedPatients(patients);
-    if (patients.length > 0) {
-      setActivePatientId(patients[0].id);
-    }
-    return res;
-  };
+  const setActivePatientId = useCallback((patientId: string) => {
+    if (!patientsRef.current.some((p) => p.id === patientId)) return;
+    setStoreActivePatientId(patientId);
+    writePreferredPatient(patientId);
+    setData((prev) => (prev ? { ...prev, activePatientId: patientId } : prev));
+  }, []);
 
-  const register = async (phone: string, password: string) => {
-    const res = await registerUserWithPassword(phone, password);
-    setUser(res.user);
-    setProfile(res.profile);
-    const patients = await getAuthorizedPatients();
-    setAuthorizedPatients(patients);
-    if (patients.length > 0) {
-      setActivePatientId(patients[0].id);
-    }
-    return res;
-  };
+  const refreshSession = useCallback(async () => {
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+    if (session?.user) await loadData(session.user);
+  }, [loadData]);
 
-  const sendOtp = async (phone: string) => {
-    return await sendPasswordResetOtp(phone);
-  };
+  const signOut = useCallback(async () => {
+    lastUserIdRef.current = null;
+    await signOutService();
+    setAuthUser(null);
+    setData(null);
+  }, []);
 
-  const verifyOtp = async (phone: string, otpCode: string, newPassword: string) => {
-    return await verifyOtpAndResetPassword(phone, otpCode, newPassword);
-  };
+  const value = useMemo<AuthContextType>(() => {
+    const current = authUser && data?.userId === authUser.id ? data : null;
+    const patients = current?.patients ?? [];
+    const activePatientId = current?.activePatientId ?? null;
+    const memberRole = patients.find((p) => p.id === activePatientId)?.member_role ?? null;
+    return {
+      user: authUser,
+      profile: current?.profile ?? null,
+      loading: isSupabaseConfigured && (!authResolved || (authUser !== null && current === null)),
+      loadError: current?.error ?? null,
+      supabaseConfigured: isSupabaseConfigured,
+      activePatientId,
+      authorizedPatients: patients,
+      memberRole,
+      canWrite: memberRole === "owner" || memberRole === "editor",
+      setActivePatientId,
+      refreshSession,
+      signOut,
+    };
+  }, [authUser, authResolved, data, setActivePatientId, refreshSession, signOut]);
 
-  const resetPassword = async (phone: string, last4Digits: string, newPassword: string) => {
-    return await resetPasswordWithLast4Digits(phone, last4Digits, newPassword);
-  };
-
-  const loginDemo = async () => {
-    const res = await loginDemoUser();
-    setUser(res.user);
-    setProfile(res.profile);
-    const patients = await getAuthorizedPatients();
-    setAuthorizedPatients(patients);
-    if (patients.length > 0) {
-      setActivePatientId(patients[0].id);
-    }
-    return res;
-  };
-
-  const logout = async () => {
-    await signOut();
-    setUser(null);
-    setProfile(null);
-    setAuthorizedPatients([]);
-  };
-
-  return (
-    <AuthContext.Provider
-      value={{
-        user,
-        profile,
-        activePatientId,
-        authorizedPatients,
-        loading,
-        login,
-        register,
-        sendOtp,
-        verifyOtp,
-        resetPassword,
-        loginDemo,
-        logout,
-        setActivePatientId,
-        refreshSession: loadSession,
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 export function useAuth(): AuthContextType {

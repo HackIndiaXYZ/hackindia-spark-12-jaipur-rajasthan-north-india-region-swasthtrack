@@ -1,13 +1,22 @@
-"use client";
-
 import Link from "next/link";
 import { Heart } from "lucide-react";
 
+const footerLinks = [
+  { href: "/about", label: "About" },
+  { href: "/contact", label: "Contact" },
+  { href: "/privacy", label: "Privacy Policy" },
+  { href: "/terms", label: "Terms of Use" },
+  { href: "/medical-disclaimer", label: "Medical Disclaimer" },
+];
+
 export function Footer() {
   return (
-    <footer className="mt-10 border-t border-line bg-surface px-4 py-8 text-sm text-ink-muted sm:px-6 lg:px-8">
+    <footer
+      lang="en"
+      className="mt-10 border-t border-line bg-surface px-4 py-8 text-sm text-ink-muted sm:px-6 lg:px-8"
+    >
       <div className="mx-auto max-w-6xl">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+        <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
           {/* Brand & Subtitle */}
           <div className="space-y-1">
             <div className="flex items-center gap-2">
@@ -26,13 +35,7 @@ export function Footer() {
             className="flex flex-wrap items-center gap-x-1 gap-y-0.5"
             aria-label="Footer navigation"
           >
-            {[
-              { href: "/about", label: "About" },
-              { href: "/contact", label: "Contact" },
-              { href: "/privacy", label: "Privacy Policy" },
-              { href: "/terms", label: "Terms of Use" },
-              { href: "/medical-disclaimer", label: "Medical Disclaimer" },
-            ].map((item) => (
+            {footerLinks.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
@@ -46,12 +49,14 @@ export function Footer() {
         </div>
 
         {/* Bottom Attribution & Copyright */}
-        <div className="mt-6 flex flex-col gap-3 border-t border-line pt-6 text-xs text-ink-subtle sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-6 flex flex-col gap-3 border-t border-line pt-6 text-xs text-ink-muted sm:flex-row sm:items-center sm:justify-between">
           <p>© {new Date().getFullYear()} SwasthTrack. All rights reserved.</p>
-          <div className="flex items-center gap-1 text-ink-muted">
+          <div className="flex items-center gap-1">
             <span>Made with</span>
             <Heart aria-hidden className="inline h-3.5 w-3.5 fill-bp text-bp" />
-            <span>by <strong className="font-semibold text-ink">Pawan Kumar</strong></span>
+            <span>
+              by <strong className="font-semibold text-ink">Pawan Kumar</strong>
+            </span>
           </div>
         </div>
       </div>

@@ -47,7 +47,7 @@ export function SmartDailySummaryCard({ summary }: SmartDailySummaryProps) {
             <ul className="space-y-1 text-positive font-medium">
               {completedItems.map((item, idx) => (
                 <li key={idx} className="flex items-center gap-1.5">
-                  <span className="h-1.5 w-1.5 rounded-full bg-positive shrink-0" />
+                  <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-positive shrink-0" />
                   <span>{item.labelHi}</span>
                 </li>
               ))}
@@ -66,16 +66,16 @@ export function SmartDailySummaryCard({ summary }: SmartDailySummaryProps) {
               {missingItems.map((item, idx) => (
                 <li key={idx} className="flex items-center justify-between gap-2">
                   <div className="flex items-center gap-1.5">
-                    <span className="h-1.5 w-1.5 rounded-full bg-attention shrink-0" />
+                    <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-attention shrink-0" />
                     <span>{item.labelHi}</span>
                   </div>
                   {item.actionUrl && (
                     <Link
                       href={item.actionUrl}
-                      className="inline-flex items-center gap-1 text-2xs font-semibold text-attention hover:underline"
+                      className="inline-flex min-h-control shrink-0 items-center gap-1 px-1 text-xs font-semibold text-attention hover:underline"
                     >
-                      लॉग करें
-                      <ArrowRight className="h-2.5 w-2.5" />
+                      <span lang="hi">दर्ज करें</span>
+                      <ArrowRight aria-hidden className="h-3 w-3" />
                     </Link>
                   )}
                 </li>

@@ -1,0 +1,377 @@
+/**
+ * The Claude agent loop (manual, so every stop reason is handled explicitly).
+ *
+ * Contract with the model: it may call data tools and the server-side
+ * web_search tool, and must END by calling `submit_answer`. Forced tool use is
+ * not available on current models, so the loop enforces it: one nudge, then a
+ * best-effort parse of text, then failure (the caller falls back to the rules
+ * engine; nothing fails silently).
+ *
+ * The model client is an injectable interface (`LlmClient`). Production uses
+ * anthropic-client.ts; the evaluation harness uses a scripted fake, which is how
+ * the loop, pause_turn, repair-on-violation and fabricated-number rejection are
+ * tested without a network.
+ *
+ * Handled stop reasons: tool_use (ALL tool_results go back in ONE user message),
+ * pause_turn (re-send the assistant turn unchanged; the server resumes),
+ * refusal (inspect stop_details, fail over), max_tokens (raise once, then fail),
+ * end_turn without submit_answer (nudge once).
+ */
+
+import type Anthropic from "@anthropic-ai/sdk";
+import { knownRefs, refEvidenceText } from "./evidence";
+import { NUDGE_SUBMIT, SYSTEM_PROMPT, buildSnapshot, buildUserMessage, snapshotBase, type HistoryTurn } from "./prompt";
+import { TOOL_LABEL_HI, buildToolDefs, executeTool, type ToolDeps, type ToolRuntime } from "./tools";
+import { coerceDraft, formatViolations, verifyAnswer, type VerifyContext } from "./verify";
+import type { AnswerDraft, Ledger, PatientContext, ProgressEvent, SafetyAssessment, TraceStep, TurnTelemetry } from "./types";
+
+export type Effort = "low" | "medium" | "high" | "xhigh" | "max";
+
+export interface LlmRequest {
+  model: string;
+  max_tokens: number;
+  system: Anthropic.TextBlockParam[];
+  tools: Anthropic.ToolUnion[];
+  messages: Anthropic.MessageParam[];
+  effort: Effort;
+  /** Milliseconds this single request may take. */
+  timeoutMs: number;
+}
+
+export interface LlmTurn {
+  content: Anthropic.ContentBlock[];
+  stop_reason: Anthropic.StopReason | null;
+  stop_details: Anthropic.RefusalStopDetails | null;
+  usage: { input_tokens: number; output_tokens: number; cache_read_input_tokens?: number | null; cache_creation_input_tokens?: number | null };
+  model: string;
+}
+
+export interface LlmHooks {
+  /** A server tool (web_search) started; its input is not known yet. */
+  onServerToolStart?(name: string): void;
+}
+
+export interface LlmClient {
+  complete(req: LlmRequest, hooks: LlmHooks, signal?: AbortSignal): Promise<LlmTurn>;
+}
+
+export type AgentFailureReason = "refusal" | "max_tokens" | "no_submit" | "verification_failed" | "iterations" | "timeout" | "api_error" | "aborted";
+
+export interface AgentFailure {
+  reason: AgentFailureReason;
+  detail: string;
+}
+
+export interface AgentOptions {
+  client: LlmClient;
+  model: string;
+  effort: Effort;
+  ctx: PatientContext;
+  ledger: Ledger;
+  safety: SafetyAssessment;
+  /** Sanitised question. */
+  message: string;
+  history: HistoryTurn[];
+  webSearch: boolean;
+  canWrite: boolean;
+  deps: ToolDeps;
+  emit: (e: ProgressEvent) => void;
+  signal?: AbortSignal;
+  /** Whole-turn budget in ms (default 100 s). */
+  deadlineMs?: number;
+  maxIterations?: number;
+  maxTokens?: number;
+}
+
+export interface AgentResult {
+  draft: AnswerDraft | null;
+  validation: "passed" | "repaired" | null;
+  failure: AgentFailure | null;
+  trace: TraceStep[];
+  telemetry: TurnTelemetry;
+  webSearchUsed: boolean;
+  webUrls: string[];
+  model: string;
+  /** Snapshot + tool results (what the verifier treated as evidence). */
+  evidenceTexts: string[];
+  /** Web queries that looked like they contained identifying data (should be 0). */
+  privacyFlags: number;
+  /** Data-tool results the model may have cited as "tool:N". */
+  toolEvidence: Array<{ ref: string; label: string; text: string }>;
+}
+
+export const MAX_REPAIRS = 2;
+const DEFAULT_DEADLINE_MS = 100_000;
+const MAX_CONTINUATIONS = 6;
+
+const STAGE = {
+  reading: { hi: "डेटा पढ़ रहा हूँ", en: "Reading the data" },
+  analysing: { hi: "विश्लेषण कर रहा हूँ", en: "Analysing" },
+  searching: { hi: "इंटरनेट पर खोज रहा हूँ", en: "Searching the web" },
+  checking: { hi: "जवाब की जाँच कर रहा हूँ", en: "Checking the answer against your data" },
+} as const;
+
+function webUrlsFrom(content: Anthropic.ContentBlock[]): string[] {
+  const urls: string[] = [];
+  for (const b of content) {
+    if (b.type === "web_search_tool_result" && Array.isArray(b.content)) {
+      for (const r of b.content) if (r.type === "web_search_result" && r.url) urls.push(r.url);
+    }
+    if (b.type === "text" && Array.isArray(b.citations)) {
+      for (const c of b.citations) if ("url" in c && typeof c.url === "string") urls.push(c.url);
+    }
+  }
+  return urls;
+}
+
+/** A web query must stay generic: flag BP pairs, ISO dates or long digit runs. */
+function looksIdentifying(query: string): boolean {
+  return /\d{2,3}\s*\/\s*\d{2,3}/.test(query) || /\d{4}-\d{2}-\d{2}/.test(query) || /\d{5,}/.test(query);
+}
+
+function textOf(content: Anthropic.ContentBlock[]): string {
+  return content
+    .filter((b): b is Anthropic.TextBlock => b.type === "text")
+    .map((b) => b.text)
+    .join("\n");
+}
+
+function tryParseJson(text: string): unknown {
+  const t = text.trim().replace(/^```(?:json)?\s*/i, "").replace(/```\s*$/i, "");
+  const start = t.indexOf("{");
+  const end = t.lastIndexOf("}");
+  if (start < 0 || end <= start) return null;
+  try {
+    return JSON.parse(t.slice(start, end + 1));
+  } catch {
+    return null;
+  }
+}
+
+export async function runAgent(opts: AgentOptions): Promise<AgentResult> {
+  const t0 = Date.now();
+  const trace: TraceStep[] = [];
+  const step = (kind: TraceStep["kind"], label: string, detail?: string) => trace.push({ t: Date.now() - t0, kind, label, detail });
+  const tele: TurnTelemetry = { intent: null, toolsUsed: [], dataPoints: 0, inputTokens: 0, outputTokens: 0, cacheReadTokens: 0, webSearches: 0, repairs: 0 };
+  const webUrls = new Set<string>();
+  let privacyFlags = 0;
+  let model = opts.model;
+
+  const snapshot = buildSnapshot(opts.ctx, opts.ledger, opts.safety);
+  const evidence: string[] = [snapshot];
+  const refs = knownRefs(opts.ctx, opts.ledger);
+  // Each data-tool result gets a citable tag ("tool:N") whose text is what that tag backs.
+  const toolTexts = new Map<string, string>();
+  const toolEvidence: AgentResult["toolEvidence"] = [];
+  let toolSeq = 0;
+  const rt: ToolRuntime = { ctx: opts.ctx, ledger: opts.ledger, canWrite: opts.canWrite, allowSave: opts.safety.rememberRequest, deps: opts.deps };
+  const vctx = (): VerifyContext => ({
+    userMessage: opts.message,
+    today: opts.ctx.today,
+    range: { from: opts.ctx.range.from, to: opts.ctx.today },
+    evidenceTexts: evidence,
+    baseTexts: [snapshotBase(snapshot)],
+    refText: (r) => toolTexts.get(r) ?? refEvidenceText(r, opts.ctx, opts.ledger),
+    knownRefs: refs,
+    webUrls,
+    medicineChangeRequest: opts.safety.medicineChangeRequest,
+    diagnosisRequest: opts.safety.diagnosisRequest,
+    hasAlertFlag: opts.ledger.flags.some((f) => f.severity !== "info"),
+  });
+
+  const system: Anthropic.TextBlockParam[] = [{ type: "text", text: SYSTEM_PROMPT, cache_control: { type: "ephemeral" } }];
+  const tools = buildToolDefs({ webSearch: opts.webSearch });
+  const messages: Anthropic.MessageParam[] = [{ role: "user", content: [{ type: "text", text: buildUserMessage(snapshot, opts.message, opts.history) }] }];
+
+  const ac = new AbortController();
+  const deadline = opts.deadlineMs ?? DEFAULT_DEADLINE_MS;
+  const timer = setTimeout(() => ac.abort(), deadline);
+  const onCallerAbort = () => ac.abort();
+  opts.signal?.addEventListener("abort", onCallerAbort);
+
+  const done = (partial: Partial<AgentResult> & { failure: AgentFailure | null }): AgentResult => {
+    clearTimeout(timer);
+    opts.signal?.removeEventListener("abort", onCallerAbort);
+    return {
+      draft: null,
+      validation: null,
+      trace,
+      telemetry: tele,
+      webSearchUsed: tele.webSearches > 0,
+      webUrls: Array.from(webUrls),
+      model,
+      evidenceTexts: evidence,
+      privacyFlags,
+      toolEvidence,
+      ...partial,
+    };
+  };
+
+  let maxTokens = opts.maxTokens ?? 32_000;
+  let maxTokensRetried = false;
+  let nudges = 0;
+  let continuations = 0;
+  let failedSubmits = 0;
+  const maxIter = opts.maxIterations ?? 14;
+
+  opts.emit({ type: "status", stage: "reading", ...STAGE.reading });
+  step("context", "agent start", `model=${opts.model} effort=${opts.effort} web=${opts.webSearch}`);
+
+  for (let iter = 0; iter < maxIter; iter++) {
+    if (ac.signal.aborted) {
+      const timedOut = !opts.signal?.aborted;
+      return done({ failure: { reason: timedOut ? "timeout" : "aborted", detail: timedOut ? `deadline ${deadline} ms` : "client disconnected" } });
+    }
+
+    let turn: LlmTurn;
+    try {
+      turn = await opts.client.complete(
+        { model: opts.model, max_tokens: maxTokens, system, tools, messages, effort: opts.effort, timeoutMs: Math.max(5_000, deadline - (Date.now() - t0)) },
+        {
+          onServerToolStart: (name) => {
+            if (name === "web_search") {
+              opts.emit({ type: "status", stage: "searching", ...STAGE.searching });
+              opts.emit({ type: "tool", name: "web_search", hi: TOOL_LABEL_HI.web_search });
+            }
+          },
+        },
+        ac.signal,
+      );
+    } catch (err) {
+      if (ac.signal.aborted) {
+        const timedOut = !opts.signal?.aborted;
+        return done({ failure: { reason: timedOut ? "timeout" : "aborted", detail: timedOut ? `deadline ${deadline} ms` : "client disconnected" } });
+      }
+      const e = err as { status?: number; name?: string };
+      // Never include err.message: it can echo request content.
+      step("llm", "api error", `${e.name ?? "Error"} status=${e.status ?? "n/a"}`);
+      return done({ failure: { reason: "api_error", detail: `${e.name ?? "Error"} status=${e.status ?? "n/a"}` } });
+    }
+
+    model = turn.model || model;
+    tele.inputTokens += turn.usage.input_tokens;
+    tele.outputTokens += turn.usage.output_tokens;
+    tele.cacheReadTokens += turn.usage.cache_read_input_tokens ?? 0;
+    for (const u of webUrlsFrom(turn.content)) webUrls.add(u);
+    for (const b of turn.content) {
+      if (b.type === "server_tool_use" && b.name === "web_search") {
+        tele.webSearches += 1;
+        const q = isObjectWithQuery(b.input) ? b.input.query : "";
+        if (looksIdentifying(q)) privacyFlags += 1;
+        step("tool", "web_search", `query_chars=${q.length}`);
+      }
+    }
+    step("llm", `turn ${iter + 1}`, `stop=${turn.stop_reason} in=${turn.usage.input_tokens} out=${turn.usage.output_tokens}`);
+
+    switch (turn.stop_reason) {
+      case "refusal":
+        return done({ failure: { reason: "refusal", detail: `category=${turn.stop_details?.category ?? "unknown"}` } });
+
+      case "max_tokens": {
+        if (maxTokensRetried) return done({ failure: { reason: "max_tokens", detail: `limit ${maxTokens}` } });
+        // A truncated turn is discarded whole (never run a half-written tool call).
+        maxTokensRetried = true;
+        maxTokens = Math.min(maxTokens * 2, 64_000);
+        step("llm", "max_tokens: retry larger", String(maxTokens));
+        continue;
+      }
+
+      case "pause_turn": {
+        if (++continuations > MAX_CONTINUATIONS) return done({ failure: { reason: "iterations", detail: "too many pause_turn continuations" } });
+        // Re-send the assistant turn unchanged; the server resumes where it paused.
+        messages.push({ role: "assistant", content: turn.content as Anthropic.ContentBlockParam[] });
+        continue;
+      }
+
+      default:
+        break;
+    }
+
+    const uses = turn.content.filter((b): b is Anthropic.ToolUseBlock => b.type === "tool_use");
+
+    if (uses.length > 0) {
+      messages.push({ role: "assistant", content: turn.content as Anthropic.ContentBlockParam[] });
+      const results: Anthropic.ToolResultBlockParam[] = [];
+      let accepted: AnswerDraft | null = null;
+      let submitSeen = false;
+      opts.emit({ type: "status", stage: "analysing", ...STAGE.analysing });
+
+      // Data tools first so their output counts as evidence for a submit in the same turn.
+      for (const use of uses.filter((u) => u.name !== "submit_answer")) {
+        opts.emit({ type: "tool", name: use.name, hi: TOOL_LABEL_HI[use.name] ?? use.name });
+        const res = await executeTool(use.name, use.input, rt);
+        tele.toolsUsed.push(use.name);
+        tele.dataPoints += res.dataPoints;
+        let content = res.content;
+        if (!res.isError) {
+          // The overview is cited by fact id; every other result is cited by its own tag.
+          if (use.name !== "get_overview") {
+            const tag = `tool:${++toolSeq}`;
+            toolTexts.set(tag, res.content);
+            toolEvidence.push({ ref: tag, label: res.label ?? use.name, text: res.content });
+            refs.add(tag);
+            content = `[${tag}] ${res.content}`;
+          }
+          evidence.push(content);
+        }
+        step("tool", use.name, res.isError ? "error" : `rows=${res.dataPoints}`);
+        results.push({ type: "tool_result", tool_use_id: use.id, content, ...(res.isError ? { is_error: true } : {}) });
+      }
+
+      for (const use of uses.filter((u) => u.name === "submit_answer")) {
+        if (submitSeen) {
+          results.push({ type: "tool_result", tool_use_id: use.id, is_error: true, content: "submit_answer was already called this turn." });
+          continue;
+        }
+        submitSeen = true;
+        opts.emit({ type: "status", stage: "checking", ...STAGE.checking });
+        tele.toolsUsed.push("submit_answer");
+        const v = verifyAnswer(use.input, vctx());
+        if (v.ok && v.draft) {
+          accepted = v.draft;
+          step("verify", "accepted", `repairs=${failedSubmits}`);
+          results.push({ type: "tool_result", tool_use_id: use.id, content: "Answer accepted." });
+        } else {
+          failedSubmits += 1;
+          tele.repairs = failedSubmits;
+          step("verify", "rejected", v.violations.map((x) => x.code).join(","));
+          results.push({ type: "tool_result", tool_use_id: use.id, is_error: true, content: formatViolations(v.violations) });
+        }
+      }
+
+      if (accepted) return done({ draft: accepted, validation: failedSubmits > 0 ? "repaired" : "passed", failure: null });
+      if (failedSubmits > MAX_REPAIRS) return done({ failure: { reason: "verification_failed", detail: `${failedSubmits} submissions rejected` } });
+      // ALL tool results in ONE user message.
+      messages.push({ role: "user", content: results });
+      continue;
+    }
+
+    // The turn ended without a submit_answer tool call.
+    if (nudges < 1) {
+      nudges += 1;
+      step("llm", "nudge: submit_answer missing");
+      if (turn.content.length > 0) messages.push({ role: "assistant", content: turn.content as Anthropic.ContentBlockParam[] });
+      messages.push({ role: "user", content: [{ type: "text", text: NUDGE_SUBMIT }] });
+      continue;
+    }
+    // Best effort: maybe the model wrote the JSON as text.
+    const parsed = tryParseJson(textOf(turn.content));
+    if (parsed) {
+      const { draft } = coerceDraft(parsed);
+      if (draft) {
+        opts.emit({ type: "status", stage: "checking", ...STAGE.checking });
+        const v = verifyAnswer(parsed, vctx());
+        if (v.ok && v.draft) return done({ draft: v.draft, validation: "repaired", failure: null });
+        step("verify", "text answer rejected", v.violations.map((x) => x.code).join(","));
+        return done({ failure: { reason: "verification_failed", detail: "text answer failed verification" } });
+      }
+    }
+    return done({ failure: { reason: "no_submit", detail: "model ended without submit_answer" } });
+  }
+
+  return done({ failure: { reason: "iterations", detail: `exceeded ${maxIter} iterations` } });
+}
+
+function isObjectWithQuery(v: unknown): v is { query: string } {
+  return typeof v === "object" && v !== null && typeof (v as { query?: unknown }).query === "string";
+}

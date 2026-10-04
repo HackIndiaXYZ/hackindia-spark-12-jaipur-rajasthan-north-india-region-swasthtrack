@@ -9,14 +9,50 @@
    Every value below is referenced through Tailwind utilities
    (bg-canvas, text-ink, rounded-card, shadow-e2, …) so screens never
    hard-code one-off colours, radii or shadows.
+
+   USAGE GUIDE (read before writing UI)
+   - Cascade: tokens live in `@theme`, resets in `@layer base`, the custom
+     classes below in `@layer components`, so any Tailwind utility on an
+     element (`text-xs`, `rounded-full`, `bg-…`) always wins over them. Never
+     add unlayered rules — an unlayered rule silently beats every utility.
+   - Colour: never use raw palette names (indigo-500, emerald-100, slate-…).
+     Vitals own one hue each (bp, weight, food, meds, activity, sleep, with
+     -soft / -line variants); status uses info / attention / critical /
+     positive (+ -soft / -line); neutrals are ink / ink-muted / ink-subtle.
+     Text pairs are all >= 4.5:1: `text-X` on `bg-X-soft`, on `bg-surface`,
+     `bg-canvas` and `bg-surface-sunken`; `text-ink-inverse` on `bg-brand`.
+   - Gold is for hero surfaces (`Card tone="premium"`, `.gold-edge`, the
+     wellness ring, `ProgressBar`) and the primary `Button` only. A button
+     with text on gold must use `.grad-gold-button` (what `Button
+     variant="primary"` does). `.grad-spring` is the full foil and fails AA
+     for text, so it is for fills without text. Never hand-roll
+     `shine-sweep grad-spring` buttons — use `<Button variant="primary">`.
+   - Tap targets are >= 44px (`min-h-control`); form controls are 16px
+     (`text-field`) so iOS Safari does not zoom on focus.
+   - Mobile layout: use `dvh`, not `vh`; sticky bottom UI sits above
+     `var(--bottom-nav-h)` (0 on desktop) plus `env(safe-area-inset-bottom)`.
+   - Layers (z-index): header/sidebar 30, bottom nav 40, popovers 50,
+     modal 60, toasts 80.
+
+   CHART TOKENS — charts must use `var(--…)`, never hex literals:
+     --color-chart-bp-sys      systolic line / dots
+     --color-chart-bp-dia      diastolic line / dots
+     --color-chart-target      target / threshold reference line
+     --color-chart-grid        grid lines
+     --color-chart-axis        axis ticks and labels (>= 4.5:1 on white)
+     --color-bp / weight / food / meds / activity / sleep   single series
+     --color-spring-1..3       gold foil stops for the hero series only
    ========================================================================== */
 
-@theme {
+/* `static` so every token is emitted even when it is only referenced from JS
+   (e.g. `stroke="var(--color-chart-grid)"` in chart code), which Tailwind's
+   class scanner would not see. */
+@theme static {
   /* ---- Typography -------------------------------------------------------
      Inter for Latin, Noto Sans Devanagari for Hindi. Both are loaded through
      next/font in app/layout.tsx, so there is no external network request and
-     no layout shift. Devanagari is listed first for the shared glyphs it owns
-     (matras, danda) and Inter carries the Latin. */
+     no layout shift. Inter is listed first so it carries Latin glyphs and
+     digits; Devanagari characters, which Inter lacks, fall through to Noto. */
   --font-sans: var(--font-ui-latin), var(--font-ui-devanagari), ui-sans-serif,
     system-ui, "Segoe UI", sans-serif;
   --font-hindi: var(--font-ui-devanagari), var(--font-ui-latin), sans-serif;
@@ -34,6 +70,8 @@
   --text-sm--line-height: 1.55;
   --text-base: 0.9375rem;     /* 15px — body default */
   --text-base--line-height: 1.6;
+  --text-field: 1rem;         /* 16px — inputs/selects/textareas (no iOS zoom) */
+  --text-field--line-height: 1.5;
   --text-lg: 1.0625rem;       /* 17px — card titles */
   --text-lg--line-height: 1.5;
   --text-xl: 1.25rem;         /* 20px — section titles */
@@ -47,7 +85,8 @@
 
   /* ---- Colour: neutrals -------------------------------------------------
      A warm, very slightly green-tinted grey ramp. Cooler slate reads as
-     "admin dashboard"; this reads as calm and cared-for. */
+     "admin dashboard"; this reads as calm and cared-for. ink-muted and
+     ink-subtle both hold >= 4.5:1 on surface, canvas and surface-sunken. */
   --color-canvas: #f5f7f6;          /* app background */
   --color-surface: #ffffff;         /* cards */
   --color-surface-sunken: #f1f4f3;  /* wells, inputs, inactive tracks */
@@ -57,15 +96,16 @@
   --color-line-strong: #cfd7d4;     /* emphasised border, dividers */
 
   --color-ink: #14201d;             /* primary text */
-  --color-ink-muted: #52625d;       /* secondary text */
-  --color-ink-subtle: #7c8a85;      /* metadata, placeholders */
+  --color-ink-muted: #4a5a55;       /* secondary text   (7.0:1 on white) */
+  --color-ink-subtle: #64706c;      /* metadata, placeholders (5.1:1 on white,
+                                       4.6:1 on surface-sunken) */
   --color-ink-inverse: #ffffff;
 
   /* ---- Colour: brand ----------------------------------------------------
-     A deeper, less saturated emerald than stock Tailwind. Passes 4.5:1 on
-     white at --color-brand and above. */
-  --color-brand: #0f8a5f;
-  --color-brand-strong: #0b6e4c;
+     A deeper, less saturated emerald than stock Tailwind. --color-brand is
+     4.9:1 on white and white-on-brand is 4.9:1, so it carries text either way. */
+  --color-brand: #0d7b55;
+  --color-brand-strong: #095e41;
   --color-brand-soft: #e6f4ee;
   --color-brand-softer: #f2faf6;
   --color-brand-line: #b9dfcd;
@@ -83,24 +123,25 @@
   /* ---- Colour: gold accent -----------------------------------------------
      For chrome that isn't the gradient itself — badges, hairline borders,
      text — so gold reads consistently whether it's a fill, a stroke or a
-     label. --color-gold-ink carries AA text contrast on both white and
-     --color-gold-soft. */
+     label. --color-gold-ink carries AA text contrast on white,
+     --color-gold-soft and the whole grad-gold-button range. */
   --color-gold-soft: #fbf3da;
   --color-gold-line: #e6c976;
   --color-gold-ink: #6b4a0c;
 
   /* ---- Colour: metric identity -----------------------------------------
      Each vital keeps one hue across the whole product, so a colour always
-     means the same thing. */
+     means the same thing. Each hue is >= 4.5:1 as text on white, canvas,
+     surface-sunken and its own -soft tint. */
   --color-bp: #c2384c;              /* blood pressure  */
   --color-bp-soft: #fdeef0;
   --color-bp-line: #f4ccd3;
 
-  --color-weight: #2a6fb0;          /* weight          */
+  --color-weight: #2a6eae;          /* weight          */
   --color-weight-soft: #eaf2fa;
   --color-weight-line: #c3ddf1;
 
-  --color-food: #b0710f;            /* food / calories */
+  --color-food: #97610d;            /* food / calories */
   --color-food-soft: #fdf3e3;
   --color-food-line: #f0d9b0;
 
@@ -108,7 +149,7 @@
   --color-meds-soft: #f2eefb;
   --color-meds-line: #d9cdf0;
 
-  --color-activity: #0d7d76;        /* activity        */
+  --color-activity: #0c7871;        /* activity        */
   --color-activity-soft: #e5f4f3;
   --color-activity-line: #b5ddd9;
 
@@ -118,11 +159,11 @@
 
   /* ---- Colour: status ---------------------------------------------------
      Three levels only (§34). Never turn the whole screen red. */
-  --color-info: #2a6fb0;
+  --color-info: #2a6eae;
   --color-info-soft: #eaf2fa;
   --color-info-line: #c3ddf1;
 
-  --color-attention: #a86a08;
+  --color-attention: #996007;
   --color-attention-soft: #fdf4e4;
   --color-attention-line: #f0dcb2;
 
@@ -130,9 +171,19 @@
   --color-critical-soft: #fdeef0;
   --color-critical-line: #f4ccd3;
 
-  --color-positive: #0f8a5f;
+  --color-positive: #0d7b55;
   --color-positive-soft: #e6f4ee;
   --color-positive-line: #b9dfcd;
+
+  /* ---- Colour: charts ---------------------------------------------------
+     Lines and dots need 3:1 against white (non-text contrast); axis labels
+     are text and need 4.5:1. Systolic keeps the BP hue; diastolic is a
+     distinct plum so the two series are separable even without a legend. */
+  --color-chart-bp-sys: #c2384c;
+  --color-chart-bp-dia: #8f3b6e;
+  --color-chart-target: #6b4a0c;
+  --color-chart-grid: #e3e8e6;
+  --color-chart-axis: #64706c;
 
   /* ---- Radii ------------------------------------------------------------ */
   --radius-field: 0.625rem;   /* 10px — inputs, small chips */
@@ -169,15 +220,21 @@
     inset 0 1px 2px rgba(16, 32, 28, 0.07),
     inset 0 -1px 0 rgba(255, 255, 255, 0.6);
 
+  /* The raised gold button: contact shadow, bronze ambient glow, lit top edge. */
+  --shadow-gold-button:
+    0 1px 2px rgba(16, 32, 28, 0.12),
+    0 6px 16px -6px rgba(156, 109, 30, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+
   /* Coloured ambient glow. Used only on the hero ring and pressed quick
      actions — one accent moment per screen, never on every card. */
-  --shadow-glow-brand: 0 12px 32px -10px rgba(212, 169, 54, 0.5);
+  --shadow-glow-brand: 0 12px 32px -10px rgba(13, 123, 85, 0.4);
   --shadow-glow-gold: 0 12px 32px -10px rgba(212, 169, 54, 0.5);
   --shadow-glow-bp: 0 12px 32px -10px rgba(194, 56, 76, 0.35);
-  --shadow-glow-weight: 0 12px 32px -10px rgba(42, 111, 176, 0.35);
-  --shadow-glow-food: 0 12px 32px -10px rgba(176, 113, 15, 0.35);
+  --shadow-glow-weight: 0 12px 32px -10px rgba(42, 110, 174, 0.35);
+  --shadow-glow-food: 0 12px 32px -10px rgba(151, 97, 13, 0.35);
   --shadow-glow-meds: 0 12px 32px -10px rgba(109, 75, 176, 0.35);
-  --shadow-glow-activity: 0 12px 32px -10px rgba(13, 125, 118, 0.35);
+  --shadow-glow-activity: 0 12px 32px -10px rgba(12, 120, 113, 0.35);
   --shadow-glow-sleep: 0 12px 32px -10px rgba(69, 80, 155, 0.35);
 
   /* ---- Control heights --------------------------------------------------
@@ -195,166 +252,363 @@
   --duration-reveal: 420ms;
 }
 
+/* Height of the fixed mobile bottom navigation (0 once the sidebar takes
+   over at lg). Sticky composers / floating buttons should sit at
+   `bottom: var(--bottom-nav-h)`; page content is already padded for it. The
+   value covers the 60px tap row, its padding and the home-indicator inset. */
+:root {
+  --bottom-nav-h: 0px;
+  --header-h: 3.5rem;
+}
+
+@media (width < 64rem) {
+  :root {
+    --bottom-nav-h: calc(4.75rem + env(safe-area-inset-bottom, 0px));
+  }
+}
+
 /* ==========================================================================
-   BASE
+   BASE — element defaults. Everything here is inside `@layer base` on
+   purpose: unlayered rules beat Tailwind utilities, which used to flatten
+   every `text-xs font-bold` button to 15px/400 and square every focused
+   rounded control.
    ========================================================================== */
 
-* {
-  box-sizing: border-box;
-  min-width: 0; /* flex/grid children shrink instead of forcing page overflow */
+@layer base {
+  * {
+    min-width: 0; /* flex/grid children shrink instead of forcing page overflow */
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    color-scheme: light;
+    /* Anchors and focus scrolling clear the sticky header. */
+    scroll-padding-top: calc(var(--header-h) + 1rem);
+  }
+
+  html,
+  body {
+    background: var(--color-canvas);
+    color: var(--color-ink);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    line-height: var(--text-base--line-height);
+    font-synthesis-weight: none;
+    text-rendering: optimizeLegibility;
+  }
+
+  /*
+    Ambient ground. Three very low-opacity radials keep the canvas from reading
+    as flat grey without ever competing with content — the strongest stop is 6%
+    alpha. Fixed so it does not repaint on scroll. Built from tokens (activity
+    teal, brand emerald, weight blue) rather than raw rgba.
+  */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      radial-gradient(
+        80ch 60ch at 8% -10%,
+        color-mix(in srgb, var(--color-activity) 6%, transparent),
+        transparent 60%
+      ),
+      radial-gradient(
+        70ch 55ch at 100% 4%,
+        color-mix(in srgb, var(--color-brand) 5%, transparent),
+        transparent 62%
+      ),
+      radial-gradient(
+        90ch 60ch at 50% 108%,
+        color-mix(in srgb, var(--color-weight) 4%, transparent),
+        transparent 60%
+      );
+  }
+
+  /* Text-entry controls are 16px so iOS Safari never zooms the page on focus
+     (a utility such as `text-sm` can still shrink one on desktop; the
+     coarse-pointer rule below keeps phones at 16px regardless). */
+  input,
+  select,
+  textarea {
+    font-size: var(--text-field);
+    line-height: var(--text-field--line-height);
+  }
+
+  ::placeholder {
+    color: var(--color-ink-subtle);
+    opacity: 1;
+  }
+
+  /* Visible, consistent focus for every interactive element (§44). Outline
+     only — it follows the element's own border-radius in current browsers, so
+     a rounded button keeps a rounded ring. */
+  :focus-visible {
+    outline: 2px solid var(--color-brand);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background: var(--color-brand-soft);
+    color: var(--color-brand-ink);
+  }
+
+  /* Native hidden attribute must win over `display:flex` utilities. */
+  [hidden]:not([hidden="until-found"]) {
+    display: none !important;
+  }
 }
 
-html {
-  -webkit-text-size-adjust: 100%;
+/* Deliberately unlayered: iOS zooms any focused field under 16px, and a
+   utility like `text-sm` on an input must not be able to reintroduce that
+   on touch devices. This is the only intentional unlayered rule. */
+@media (pointer: coarse) {
+  input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"],
+      [type="color"], [type="button"], [type="submit"]),
+  select,
+  textarea {
+    font-size: 16px;
+  }
 }
 
-html,
-body {
-  background: var(--color-canvas);
-  color: var(--color-ink);
-  -webkit-tap-highlight-color: transparent;
+/* ==========================================================================
+   COMPONENT PRIMITIVES — `@layer components`, so utilities always override.
+   ========================================================================== */
+
+@layer components {
+  /* Horizontal scrollers (tab strips, chip rows). Deliberate, contained
+     overflow — the page itself must never scroll sideways. */
+  .scroll-x {
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x proximity;
+  }
+
+  .scroll-x::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Expands a small control's touch target to ~44px without changing layout.
+     Used for the icon-sized remove buttons inside food chips, which were 16px
+     squares sitting next to the chip's own tap area (§44, §46). */
+  .hit-target {
+    position: relative;
+  }
+
+  .hit-target::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 44px;
+    height: 44px;
+    transform: translate(-50%, -50%);
+  }
+
+  /*
+    Elevated surface with a hairline gradient edge. The border is drawn with
+    a second background layer whose top is brighter than its bottom, which
+    reads as a lit edge rather than a flat stroke.
+  */
+  .surface-lift {
+    position: relative;
+    /* `--lift-fill` lets a variant (hover/active) retint the face while the
+       lit edge stays: a plain `bg-*` utility would sit under the gradient. */
+    background:
+      linear-gradient(
+          var(--lift-fill, var(--color-surface)),
+          var(--lift-fill, var(--color-surface))
+        )
+        padding-box,
+      linear-gradient(
+          to bottom,
+          rgba(255, 255, 255, 0.9),
+          rgba(16, 32, 28, 0.09)
+        )
+        border-box;
+    border: 1px solid transparent;
+    box-shadow: var(--shadow-e3);
+  }
+
+  /*
+    Premium surface: the same lit-edge idea as `.surface-lift`, but the border
+    itself is gold foil instead of a neutral highlight. Reserved for the one or
+    two hero surfaces per screen — a hairline gold edge on every card would
+    read as gaudy rather than premium.
+  */
+  .gold-edge {
+    position: relative;
+    background:
+      linear-gradient(var(--color-surface), var(--color-surface)) padding-box,
+      linear-gradient(
+          135deg,
+          var(--color-spring-1),
+          var(--color-spring-2) 45%,
+          var(--color-spring-3)
+        )
+        border-box;
+    border: 1px solid transparent;
+    box-shadow: var(--shadow-e3);
+  }
+
+  /* Frosted overlay for sticky chrome. */
+  .frost {
+    background: color-mix(in srgb, var(--color-surface) 82%, transparent);
+    backdrop-filter: saturate(1.6) blur(14px);
+    -webkit-backdrop-filter: saturate(1.6) blur(14px);
+  }
+
+  /*
+    Light sweep across a gold surface on hover/focus — the one "shine" gesture
+    in the product. Reserved for the primary button and hero-tier cards; used
+    on more than a couple of elements per screen it stops reading as premium
+    and starts reading as busy.
+  */
+  .shine-sweep {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .shine-sweep::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    width: 45%;
+    background: linear-gradient(
+      100deg,
+      transparent,
+      rgba(255, 255, 255, 0.5) 45%,
+      rgba(255, 255, 255, 0.85) 50%,
+      rgba(255, 255, 255, 0.5) 55%,
+      transparent
+    );
+    transform: translateX(-140%) skewX(-18deg);
+    pointer-events: none;
+  }
+
+  .shine-sweep:hover::after,
+  .shine-sweep:focus-visible::after {
+    animation: st-shine-sweep 850ms var(--ease-out-soft);
+  }
+
+  /* Tactile press for cards and quick actions. */
+  .pressable {
+    transition:
+      transform var(--duration-tap) var(--ease-out-soft),
+      box-shadow var(--duration-ui) var(--ease-out-soft),
+      background-color var(--duration-ui) var(--ease-out-soft),
+      border-color var(--duration-ui) var(--ease-out-soft);
+  }
+
+  .pressable:active {
+    transform: translateY(1px) scale(0.99);
+  }
+
+  /* Skeleton shimmer for loading states (§40). */
+  .skeleton {
+    background-image: linear-gradient(
+      90deg,
+      var(--color-surface-sunken) 0%,
+      color-mix(in srgb, var(--color-line) 70%, var(--color-surface-sunken)) 50%,
+      var(--color-surface-sunken) 100%
+    );
+    background-size: 200% 100%;
+    animation: st-shimmer 1.4s linear infinite;
+    border-radius: var(--radius-field);
+  }
+
+  /* Loading spinner for buttons / inline progress. Kept visible (just
+     slower) under reduced motion: it is feedback, not decoration. */
+  .st-spinner {
+    animation: st-spin 0.8s linear infinite;
+  }
+
+  /*
+    Content reveal.
+
+    CSS rather than JS on purpose: `animation-fill-mode: both` guarantees the
+    element lands at its visible resting state even if the main thread stalls or
+    the tab is backgrounded. A JS opacity tween that never gets frames leaves the
+    screen blank.
+  */
+  .reveal {
+    animation: st-rise var(--duration-reveal) var(--ease-out-soft) both;
+    animation-delay: calc(var(--stagger-base, 0ms) + var(--stagger-i, 0) * 55ms);
+  }
+
+  /*
+    Page-level entrance. Every in-flow direct child of a page body rises in
+    sequence, so a screen assembles itself rather than appearing all at once
+    — without any page needing to know about it. Pure CSS, so it also survives
+    a stalled main thread.
+
+    Overlays are excluded: a `fixed` child, a dialog, or anything marked
+    `data-no-reveal` must never be held invisible by a delayed entrance
+    (Modal also portals to <body>, so it is not a page-body child at all).
+  */
+  .page-body > :not(.fixed, [role="dialog"], [role="alertdialog"], [data-no-reveal]) {
+    animation: st-rise var(--duration-reveal) var(--ease-out-soft) both;
+  }
+
+  .page-body > :nth-child(1) { animation-delay: 0ms; }
+  .page-body > :nth-child(2) { animation-delay: 60ms; }
+  .page-body > :nth-child(3) { animation-delay: 110ms; }
+  .page-body > :nth-child(4) { animation-delay: 155ms; }
+  .page-body > :nth-child(5) { animation-delay: 195ms; }
+  .page-body > :nth-child(6) { animation-delay: 230ms; }
+  .page-body > :nth-child(n + 7) { animation-delay: 260ms; }
+
+  /* Ring arc sweeping to its measured length. */
+  .arc-sweep {
+    stroke-dasharray: var(--arc-to);
+    animation: st-sweep 1.1s var(--ease-out-soft) both;
+  }
+
+  /* Dialog panel: bottom sheet that slides up on phones, a centred card that
+     pops in from >= sm. Used by Modal. */
+  .modal-backdrop {
+    animation: st-fade 180ms var(--ease-out-soft) both;
+  }
+
+  .modal-panel {
+    animation: st-sheet-up 260ms var(--ease-out-soft) both;
+  }
+
+  @media (min-width: 40rem) {
+    .modal-panel {
+      animation: st-pop 200ms var(--ease-out-soft) both;
+    }
+  }
+
+  /* Toast entrance. */
+  .toast-in {
+    animation: st-toast-in 240ms var(--ease-out-soft) both;
+  }
 }
 
-/*
-  Ambient ground. Three very low-opacity radials keep the canvas from reading
-  as flat grey without ever competing with content — the strongest stop is 7%
-  alpha. Fixed so it does not repaint on scroll.
-*/
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  background:
-    radial-gradient(80ch 60ch at 8% -10%, rgba(34, 211, 238, 0.07), transparent 60%),
-    radial-gradient(70ch 55ch at 100% 4%, rgba(16, 185, 129, 0.06), transparent 62%),
-    radial-gradient(90ch 60ch at 50% 108%, rgba(125, 211, 252, 0.05), transparent 60%);
-}
-
-body {
-  font-family: var(--font-sans);
-  font-size: var(--text-base);
-  line-height: var(--text-base--line-height);
-  font-synthesis-weight: none;
-}
-
-/* Devanagari sits a touch small next to Inter at the same px size. */
-:lang(hi) {
-  font-family: var(--font-hindi);
-}
-
-button,
-input,
-select,
-textarea {
-  font: inherit;
-  color: inherit;
-}
-
-/* Visible, consistent focus for every interactive element (§44). */
-:focus-visible {
-  outline: 2px solid var(--color-brand);
-  outline-offset: 2px;
-  border-radius: 4px;
-}
-
-::selection {
-  background: var(--color-brand-soft);
-  color: var(--color-brand-ink);
-}
+/* ==========================================================================
+   GRADIENT + NUMERAL UTILITIES — real `@utility`s (not plain classes) so
+   variants work: `before:grad-spring`, `hover:grad-gold-button`, `lg:tabular`.
+   ========================================================================== */
 
 /* Numeric health values line up in columns and never jitter while counting. */
-.tabular {
+@utility tabular {
   font-variant-numeric: tabular-nums;
   font-feature-settings: "tnum" 1;
 }
 
-/* ==========================================================================
-   COMPONENT PRIMITIVES
-   ========================================================================== */
-
-/* Horizontal scrollers (tab strips, chip rows). Deliberate, contained
-   overflow — the page itself must never scroll sideways. */
-.scroll-x {
-  overflow-x: auto;
-  overflow-y: hidden;
-  scrollbar-width: none;
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior-x: contain;
-  scroll-snap-type: x proximity;
-}
-
-.scroll-x::-webkit-scrollbar {
-  display: none;
-}
-
-/* Expands a small control's touch target to ~44px without changing layout.
-   Used for the icon-sized remove buttons inside food chips, which were 16px
-   squares sitting next to the chip's own tap area (§44, §46). */
-.hit-target {
-  position: relative;
-}
-
-.hit-target::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 44px;
-  height: 44px;
-  transform: translate(-50%, -50%);
-}
-
-/*
-  Elevated surface with a hairline gradient edge. The `::before` draws a 1px
-  border whose top is brighter than its bottom, which reads as a lit edge
-  rather than a flat stroke.
-*/
-.surface-lift {
-  position: relative;
-  background:
-    linear-gradient(var(--color-surface), var(--color-surface)) padding-box,
-    linear-gradient(
-        to bottom,
-        rgba(255, 255, 255, 0.9),
-        rgba(16, 32, 28, 0.09)
-      )
-      border-box;
-  border: 1px solid transparent;
-  box-shadow: var(--shadow-e3);
-}
-
-/*
-  Premium surface: the same lit-edge idea as `.surface-lift`, but the border
-  itself is gold foil instead of a neutral highlight. Reserved for the one or
-  two hero surfaces per screen — a hairline gold edge on every card would
-  read as gaudy rather than premium.
-*/
-.gold-edge {
-  position: relative;
-  background:
-    linear-gradient(var(--color-surface), var(--color-surface)) padding-box,
-    linear-gradient(
-        135deg,
-        var(--color-spring-1),
-        var(--color-spring-2) 45%,
-        var(--color-spring-3)
-      )
-      border-box;
-  border: 1px solid transparent;
-  box-shadow: var(--shadow-e3);
-}
-
-/* Frosted overlay for sticky chrome. */
-.frost {
-  background: color-mix(in srgb, var(--color-surface) 82%, transparent);
-  backdrop-filter: saturate(1.6) blur(14px);
-  -webkit-backdrop-filter: saturate(1.6) blur(14px);
-}
-
-/* The one gradient the product repeats, in text or fill form. */
-.grad-spring {
+/* The one gradient the product repeats, in fill form. The full foil
+   (spring-1 -> spring-3) is for fills WITHOUT text on top. */
+@utility grad-spring {
   background-image: linear-gradient(
     115deg,
     var(--color-spring-1),
@@ -363,7 +617,9 @@ textarea {
   );
 }
 
-.grad-text {
+/* Gold foil used as text colour — decorative display numerals / headings
+   only, never for body copy (the gradient is not AA against white). */
+@utility grad-text {
   background-image: linear-gradient(
     115deg,
     var(--color-spring-1),
@@ -381,17 +637,20 @@ textarea {
   --color-spring-2 it drops to ~3.7:1, and against --color-spring-3 to
   ~1.8:1. This stays within spring-1..gold-line, both of which pass
   (6.1:1 / 5.0:1), instead of reaching into the darker bronze stop.
+  `Button variant="primary"` applies it; do not hand-roll gold buttons.
 */
-.grad-gold-button {
-  background-image: linear-gradient(115deg, var(--color-spring-1), var(--color-gold-line));
+@utility grad-gold-button {
+  background-image: linear-gradient(
+    115deg,
+    var(--color-spring-1),
+    var(--color-gold-line)
+  );
 }
 
-/*
-  Light sweep across a gold surface on hover/focus — the one "shine" gesture
-  in the product. Reserved for the primary button and hero-tier cards; used
-  on more than a couple of elements per screen it stops reading as premium
-  and starts reading as busy.
-*/
+/* ==========================================================================
+   KEYFRAMES
+   ========================================================================== */
+
 @keyframes st-shine-sweep {
   from {
     transform: translateX(-140%) skewX(-18deg);
@@ -401,47 +660,6 @@ textarea {
   }
 }
 
-.shine-sweep {
-  position: relative;
-  overflow: hidden;
-}
-
-.shine-sweep::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  width: 45%;
-  background: linear-gradient(
-    100deg,
-    transparent,
-    rgba(255, 255, 255, 0.5) 45%,
-    rgba(255, 255, 255, 0.85) 50%,
-    rgba(255, 255, 255, 0.5) 55%,
-    transparent
-  );
-  transform: translateX(-140%) skewX(-18deg);
-  pointer-events: none;
-}
-
-.shine-sweep:hover::after,
-.shine-sweep:focus-visible::after {
-  animation: st-shine-sweep 850ms var(--ease-out-soft);
-}
-
-/* Tactile press for cards and quick actions. */
-.pressable {
-  transition:
-    transform var(--duration-tap) var(--ease-out-soft),
-    box-shadow var(--duration-ui) var(--ease-out-soft),
-    background-color var(--duration-ui) var(--ease-out-soft),
-    border-color var(--duration-ui) var(--ease-out-soft);
-}
-
-.pressable:active {
-  transform: translateY(1px) scale(0.99);
-}
-
-/* Skeleton shimmer for loading states (§40). */
 @keyframes st-shimmer {
   0% {
     background-position: 100% 0;
@@ -451,26 +669,12 @@ textarea {
   }
 }
 
-.skeleton {
-  background-image: linear-gradient(
-    90deg,
-    var(--color-surface-sunken) 0%,
-    #e8edeb 50%,
-    var(--color-surface-sunken) 100%
-  );
-  background-size: 200% 100%;
-  animation: st-shimmer 1.4s linear infinite;
-  border-radius: var(--radius-field);
+@keyframes st-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
-/*
-  Content reveal.
-
-  CSS rather than JS on purpose: `animation-fill-mode: both` guarantees the
-  element lands at its visible resting state even if the main thread stalls or
-  the tab is backgrounded. A JS opacity tween that never gets frames leaves the
-  screen blank.
-*/
 @keyframes st-rise {
   from {
     opacity: 0;
@@ -482,46 +686,48 @@ textarea {
   }
 }
 
-.reveal {
-  animation: st-rise var(--duration-reveal) var(--ease-out-soft) both;
-  animation-delay: calc(var(--stagger-base, 0ms) + var(--stagger-i, 0) * 55ms);
-  will-change: opacity, transform;
-}
-
-/*
-  Page-level entrance. Every direct child of a page body rises in sequence, so
-  a screen assembles itself rather than appearing all at once — without any
-  page needing to know about it. Pure CSS, so it also survives a stalled main
-  thread.
-*/
-.page-body > * {
-  animation: st-rise var(--duration-reveal) var(--ease-out-soft) both;
-}
-
-.page-body > *:nth-child(1) { animation-delay: 0ms; }
-.page-body > *:nth-child(2) { animation-delay: 60ms; }
-.page-body > *:nth-child(3) { animation-delay: 110ms; }
-.page-body > *:nth-child(4) { animation-delay: 155ms; }
-.page-body > *:nth-child(5) { animation-delay: 195ms; }
-.page-body > *:nth-child(6) { animation-delay: 230ms; }
-.page-body > *:nth-child(n + 7) { animation-delay: 260ms; }
-
-/* Progress bar filling from zero to its `--grow-to` width. */
-@keyframes st-grow {
+@keyframes st-fade {
   from {
-    width: 0%;
+    opacity: 0;
   }
   to {
-    width: var(--grow-to, 0%);
+    opacity: 1;
   }
 }
 
-.grow-bar {
-  width: var(--grow-to, 0%);
-  animation: st-grow 0.8s var(--ease-out-soft) both;
+@keyframes st-sheet-up {
+  from {
+    opacity: 0.4;
+    transform: translate3d(0, 2.5rem, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
-/* Ring arc sweeping to its measured length. */
+@keyframes st-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translate3d(0, 6px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes st-toast-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 0.75rem, 0) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 @keyframes st-sweep {
   from {
     stroke-dasharray: var(--arc-from);
@@ -531,9 +737,115 @@ textarea {
   }
 }
 
-.arc-sweep {
-  stroke-dasharray: var(--arc-to);
-  animation: st-sweep 1.1s var(--ease-out-soft) both;
+/* ==========================================================================
+   ENTER / EXIT UTILITIES
+   `animate-in fade-in zoom-in-95 slide-in-from-bottom-2 duration-150` was
+   written against tw-animate-css, which this project does not install, so
+   every one of those classes used to do nothing. These are the equivalents:
+   `animate-in` / `animate-out` run the keyframe, and the modifiers set the
+   start (enter) or end (exit) state. `duration-*` is honoured through
+   Tailwind's own `--tw-duration`.
+   ========================================================================== */
+
+@keyframes st-enter {
+  from {
+    opacity: var(--tw-enter-opacity, 1);
+    transform: translate3d(
+        var(--tw-enter-translate-x, 0),
+        var(--tw-enter-translate-y, 0),
+        0
+      )
+      scale(var(--tw-enter-scale, 1));
+  }
+}
+
+@keyframes st-exit {
+  to {
+    opacity: var(--tw-exit-opacity, 1);
+    transform: translate3d(
+        var(--tw-exit-translate-x, 0),
+        var(--tw-exit-translate-y, 0),
+        0
+      )
+      scale(var(--tw-exit-scale, 1));
+  }
+}
+
+@utility animate-in {
+  animation: st-enter var(--tw-duration, 200ms) var(--ease-out-soft) both;
+}
+
+@utility animate-out {
+  animation: st-exit var(--tw-duration, 150ms) var(--ease-out-soft) both;
+}
+
+@utility fade-in {
+  --tw-enter-opacity: 0;
+}
+
+@utility fade-in-* {
+  --tw-enter-opacity: calc(--value(integer) / 100);
+}
+
+@utility fade-out {
+  --tw-exit-opacity: 0;
+}
+
+@utility fade-out-* {
+  --tw-exit-opacity: calc(--value(integer) / 100);
+}
+
+@utility zoom-in-* {
+  --tw-enter-scale: calc(--value(integer) / 100);
+}
+
+@utility zoom-out-* {
+  --tw-exit-scale: calc(--value(integer) / 100);
+}
+
+@utility slide-in-from-top-* {
+  --tw-enter-translate-y: calc(--value(integer) * var(--spacing) * -1);
+}
+
+@utility slide-in-from-bottom-* {
+  --tw-enter-translate-y: calc(--value(integer) * var(--spacing));
+}
+
+@utility slide-in-from-left-* {
+  --tw-enter-translate-x: calc(--value(integer) * var(--spacing) * -1);
+}
+
+@utility slide-in-from-right-* {
+  --tw-enter-translate-x: calc(--value(integer) * var(--spacing));
+}
+
+@utility slide-in-from-top-full {
+  --tw-enter-translate-y: -100%;
+}
+
+@utility slide-in-from-bottom-full {
+  --tw-enter-translate-y: 100%;
+}
+
+@utility slide-out-to-top-* {
+  --tw-exit-translate-y: calc(--value(integer) * var(--spacing) * -1);
+}
+
+@utility slide-out-to-bottom-* {
+  --tw-exit-translate-y: calc(--value(integer) * var(--spacing));
+}
+
+@utility slide-out-to-bottom-full {
+  --tw-exit-translate-y: 100%;
+}
+
+/* Safe-area helpers for fixed chrome (notch / home indicator). */
+@utility pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+@utility pt-safe {
+  padding-top: env(safe-area-inset-top, 0px);
 }
 
 /* ==========================================================================
@@ -556,10 +868,13 @@ textarea {
 
   /* Land on the resting state rather than flashing through it. */
   .reveal,
-  .grow-bar,
   .arc-sweep,
   .page-body > *,
-  .shine-sweep::after {
+  .shine-sweep::after,
+  .skeleton,
+  .modal-backdrop,
+  .modal-panel,
+  .toast-in {
     animation: none !important;
   }
 
@@ -567,6 +882,11 @@ textarea {
   .page-body > * {
     opacity: 1;
     transform: none;
+  }
+
+  /* A frozen spinner reads as a hung app; keep it turning, gently. */
+  .st-spinner {
+    animation: st-spin 1.6s linear infinite !important;
   }
 }
 
@@ -588,15 +908,10 @@ textarea {
   */
   .reveal,
   .page-body > *,
-  .grow-bar,
   .arc-sweep {
     animation: none !important;
     opacity: 1 !important;
     transform: none !important;
-  }
-
-  .grow-bar {
-    width: var(--grow-to, 0%) !important;
   }
 
   .arc-sweep {
@@ -619,7 +934,9 @@ textarea {
   footer,
   button,
   .no-print,
-  [aria-label="Mobile navigation"] {
+  [aria-label="Mobile navigation"],
+  [data-toast-region],
+  [data-offline-banner] {
     display: none !important;
   }
 
@@ -633,7 +950,7 @@ textarea {
   article,
   section {
     box-shadow: none !important;
-    border: 1px solid #cbd5e1 !important;
+    border: 1px solid var(--color-line-strong) !important;
     page-break-inside: avoid;
   }
 

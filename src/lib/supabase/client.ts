@@ -13,7 +13,17 @@ export const isSupabaseConfigured = Boolean(
     supabaseAnonKey.length > 5,
 );
 
+// When the env vars are missing the app shows a "Setup required" screen and
+// never calls this client; the placeholders only keep module import from throwing.
 export const supabase = createClient<Database>(
   supabaseUrl || "https://placeholder-project.supabase.co",
   supabaseAnonKey || "placeholder-anon-key",
+  {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true,
+      // Sign-in is by emailed code, never by a magic link, so there is no token to read from the URL.
+      detectSessionInUrl: false,
+    },
+  },
 );

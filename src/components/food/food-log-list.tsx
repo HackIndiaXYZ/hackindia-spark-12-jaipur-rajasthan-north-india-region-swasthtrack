@@ -1,429 +1,380 @@
 "use client";
 
 import { useState } from "react";
-import { Trash2, Edit, AlertCircle, Copy, Check, Calendar, ChevronLeft, ChevronRight, Lock } from "lucide-react";
+import { AlertCircle, CalendarDays, ChevronLeft, ChevronRight, Copy, Pencil, Trash2, Utensils } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { Button, IconButton } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Field, Select, TextInput } from "@/components/ui/form-field";
-import { deleteFoodLog, updateFoodLog, copyPreviousMeal, type FoodLogEntry } from "@/services/patient-service";
+import { Field, NumberInput, Select } from "@/components/ui/form-field";
+import { Modal } from "@/components/ui/modal";
+import { EmptyState, ErrorState } from "@/components/ui/page";
+import { ProgressBar } from "@/components/ui/progress-bar";
+import { useConfirm } from "@/components/ui/confirm-dialog";
+import { useToast } from "@/components/ui/toast";
+import { fmtDateStrFull, fmtTime, relativeDayLabel } from "@/components/health/format";
+import {
+  MEAL_ORDER,
+  MEAL_SLOTS,
+  OIL_OPTIONS,
+  UNKNOWN_OIL_NOTE,
+  mealLabel,
+  oilCalories,
+} from "@/components/food/food-math";
+import { addDaysIST, todayIST } from "@/lib/health-rules";
 import { getExactFoodEmoji } from "@/lib/utils";
+import { copyPreviousMeal, deleteFoodLog, updateFoodLog, type FoodLogEntry } from "@/services/patient-service";
 
 type FoodLogListProps = {
-  logs: FoodLogEntry[];
+  logs: FoodLogEntry[] | null;
+  loading: boolean;
+  error: boolean;
+  onRetry: () => void;
   patientId: string;
   selectedDate: string;
   onRefresh: () => void;
   onDateChange: (date: string) => void;
+  /** The patient's own daily target from settings. */
   dailyCalorieTarget: number;
+  /** False for viewers: no edit, delete or copy. */
+  canWrite: boolean;
 };
 
-const MEAL_ORDER = [
-  "Breakfast",
-  "Mid-morning",
-  "Lunch",
-  "Evening snack",
-  "Dinner",
-  "Bedtime",
-  "Other"
-];
+const confidenceVariant = { High: "positive", Medium: "info", Low: "attention" } as const;
 
-const MEAL_LABELS_HI: Record<string, string> = {
-  "Breakfast": "नाश्ता (Breakfast)",
-  "Mid-morning": "बीच का स्नैक (Mid-morning)",
-  "Lunch": "दोपहर का खाना (Lunch)",
-  "Evening snack": "शाम का स्नैक (Evening snack)",
-  "Dinner": "रात का खाना (Dinner)",
-  "Bedtime": "सोने से पहले (Bedtime)",
-  "Other": "अन्य (Other)"
-};
+/* ---- Edit dialog ------------------------------------------------------------------- */
+
+function EditFoodModal({ item, onClose, onSaved }: { item: FoodLogEntry; onClose: () => void; onSaved: () => void }) {
+  const toast = useToast();
+  const [qty, setQty] = useState(String(item.quantity));
+  const [oil, setOil] = useState(item.oil_quantity || "None");
+  const [error, setError] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
+
+  async function save() {
+    const next = parseFloat(qty);
+    if (!qty.trim() || Number.isNaN(next) || next <= 0 || next > 20) {
+      setError("मात्रा 0 से ज़्यादा और 20 तक होनी चाहिए");
+      return;
+    }
+    setError(null);
+
+    // Scale the stored numbers by the change in quantity; the oil is swapped separately.
+    const ratio = next / item.quantity;
+    const base = (item.calories - (item.oil_calories || 0)) * ratio;
+    const newOil = oilCalories(oil);
+
+    setSaving(true);
+    try {
+      await updateFoodLog(item.id, {
+        quantity: next,
+        oil_quantity: oil,
+        oil_calories: newOil,
+        calories: Math.round(base + newOil),
+        standardized_grams: item.standardized_grams ? Math.round(item.standardized_grams * ratio) : item.standardized_grams,
+        protein_g: Math.round((item.protein_g || 0) * ratio),
+        carbs_g: Math.round((item.carbs_g || 0) * ratio),
+        fat_g: Math.round((item.fat_g || 0) * ratio),
+        fibre_g: Math.round((item.fibre_g || 0) * ratio),
+        calorie_confidence: oil === "Unknown" ? "Low" : item.calorie_confidence,
+        notes: oil === "Unknown" ? UNKNOWN_OIL_NOTE : item.notes === UNKNOWN_OIL_NOTE ? null : item.notes,
+      });
+      toast.success("बदलाव सुरक्षित हो गए", `${item.food_name}`);
+      onSaved();
+      onClose();
+    } catch (err) {
+      toast.error("बदलाव सेव नहीं हो पाए", err instanceof Error ? err.message : undefined);
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <Modal
+      isOpen
+      onClose={onClose}
+      title="दर्ज भोजन बदलें"
+      hindiTitle="Edit logged food"
+      description={item.food_name}
+      size="sm"
+      footer={
+        <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+          <Button variant="secondary" onClick={onClose}>
+            रद्द करें
+          </Button>
+          <Button variant="primary" loading={saving} onClick={() => void save()}>
+            सहेजें (Save)
+          </Button>
+        </div>
+      }
+    >
+      <div className="space-y-4">
+        <Field label="मात्रा (Quantity)" hint={`अभी: ${item.quantity} ${item.unit}`} error={error ?? undefined} required>
+          <NumberInput allowDecimal maxLength={5} value={qty} onChange={(e) => setQty(e.target.value)} />
+        </Field>
+        <Field label="बनाने में तेल (Cooking oil)">
+          <Select value={oil} onChange={(e) => setOil(e.target.value)}>
+            {OIL_OPTIONS.map((o) => (
+              <option key={o.id} value={o.id}>
+                {o.label}
+                {o.cal > 0 ? ` (+${o.cal} cal)` : ""}
+              </option>
+            ))}
+          </Select>
+        </Field>
+        <p lang="hi" className="text-xs text-ink-subtle">
+          मात्रा बदलने पर कैलोरी और प्रोटीन उसी अनुपात में बदलते हैं।
+        </p>
+      </div>
+    </Modal>
+  );
+}
+
+/* ---- List -------------------------------------------------------------------------- */
 
 export function FoodLogList({
   logs,
+  loading,
+  error,
+  onRetry,
   patientId,
   selectedDate,
   onRefresh,
   onDateChange,
-  dailyCalorieTarget
+  dailyCalorieTarget,
+  canWrite,
 }: FoodLogListProps) {
-  const [editingItem, setEditingItem] = useState<FoodLogEntry | null>(null);
-  const [editQty, setEditQty] = useState("");
-  const [editOil, setEditOil] = useState("None");
-  const [errorMsg, setErrorMsg] = useState("");
-  const [successMsg, setSuccessMsg] = useState("");
-  const [isCopying, setIsCopying] = useState(false);
+  const toast = useToast();
+  const confirm = useConfirm();
+  const [editing, setEditing] = useState<FoodLogEntry | null>(null);
+  const [copySlot, setCopySlot] = useState<string>("Breakfast");
+  const [copying, setCopying] = useState(false);
 
-  // Group logs by meal type
-  const groupedLogs = MEAL_ORDER.reduce((acc, meal) => {
-    const mealLogs = logs.filter(l => l.meal_type === meal);
-    if (mealLogs.length > 0) {
-      acc[meal] = mealLogs;
+  const today = todayIST();
+  const isToday = selectedDate === today;
+  const dayBefore = addDaysIST(selectedDate, -1);
+  const items = logs ?? [];
+
+  // Group by meal slot (anything unrecognised goes to "Other").
+  const grouped = MEAL_ORDER.map((slot) => ({
+    slot,
+    items: items.filter((l) => (MEAL_ORDER.includes(l.meal_type) ? l.meal_type === slot : slot === "Other")),
+  })).filter((g) => g.items.length > 0);
+
+  const totalCalories = items.reduce((sum, l) => sum + l.calories, 0);
+  const totalProtein = items.reduce((sum, l) => sum + (l.protein_g || 0), 0);
+  const diff = totalCalories - dailyCalorieTarget;
+
+  async function handleDelete(item: FoodLogEntry) {
+    const ok = await confirm({
+      title: "यह भोजन हटाएँ?",
+      message: `${item.food_name} · ${item.calories} kcal। यह वापस नहीं आएगा।`,
+      tone: "danger",
+    });
+    if (!ok) return;
+    try {
+      await deleteFoodLog(item.id);
+      toast.success("भोजन सूची से हटा दिया गया");
+      onRefresh();
+    } catch (err) {
+      toast.error("हटाया नहीं जा सका", err instanceof Error ? err.message : undefined);
     }
-    return acc;
-  }, {} as Record<string, FoodLogEntry[]>);
-
-  // Remaining logs that might not match standard order
-  const customMeals = logs.filter(l => !MEAL_ORDER.includes(l.meal_type));
-  if (customMeals.length > 0) {
-    groupedLogs["Other"] = [...(groupedLogs["Other"] || []), ...customMeals];
   }
 
-  // Calculate day totals
-  const totalCalories = logs.reduce((sum, item) => sum + item.calories, 0);
-  const totalProtein = logs.reduce((sum, item) => sum + (item.protein_g || 0), 0);
-  const overTarget = totalCalories - dailyCalorieTarget;
-
-  // Date handlers (IST Safe)
-  const adjustDate = (days: number) => {
-    if (!selectedDate) return;
-    const [y, m, d] = selectedDate.split("-").map(Number);
-    const dateObj = new Date(y, m - 1, d + days);
-    const nextY = dateObj.getFullYear();
-    const nextM = String(dateObj.getMonth() + 1).padStart(2, "0");
-    const nextD = String(dateObj.getDate()).padStart(2, "0");
-    onDateChange(`${nextY}-${nextM}-${nextD}`);
-  };
-
-  const handleEditClick = (item: FoodLogEntry) => {
-    setEditingItem(item);
-    setEditQty(String(item.quantity));
-    setEditOil(item.oil_quantity || "None");
-    setErrorMsg("");
-  };
-
-  const handleSaveEdit = async () => {
-    if (!editingItem) return;
-    setErrorMsg("");
-
-    const newQty = parseFloat(editQty);
-    if (isNaN(newQty) || newQty <= 0) {
-      setErrorMsg("मात्रा 0 से अधिक होनी चाहिए।");
-      return;
-    }
-
-    try {
-      // Calculate updated calories based on ratio
-      const ratio = newQty / editingItem.quantity;
-      const baseFoodCals = (editingItem.calories - (editingItem.oil_calories || 0)) * ratio;
-      
-      let newOilCals = 0;
-      if (editOil === "1/2 tsp") newOilCals = 22;
-      else if (editOil === "1 tsp") newOilCals = 45;
-      else if (editOil === "2 tsp") newOilCals = 90;
-      else if (editOil === "1 tbsp") newOilCals = 120;
-
-      const finalCals = Math.round(baseFoodCals + newOilCals);
-
-      await updateFoodLog(editingItem.id, {
-        quantity: newQty,
-        oil_quantity: editOil,
-        oil_calories: newOilCals,
-        calories: finalCals,
-        protein_g: editingItem.protein_g ? Math.round(editingItem.protein_g * ratio) : 0,
-        carbs_g: editingItem.carbs_g ? Math.round(editingItem.carbs_g * ratio) : 0,
-        fat_g: editingItem.fat_g ? Math.round(editingItem.fat_g * ratio) : 0,
-        calorie_confidence: editOil === "Unknown" ? "Low" : editingItem.calorie_confidence,
-        notes: editOil === "Unknown" ? "तेल की मात्रा पता नहीं है, इसलिए calorie estimate कम accurate हो सकता है।" : null
+  async function handleCopy() {
+    const slotLabel = MEAL_SLOTS.find((m) => m.id === copySlot)?.label ?? copySlot;
+    const existing = items.filter((l) => l.meal_type === copySlot).length;
+    if (existing > 0) {
+      const ok = await confirm({
+        title: `${slotLabel} में पहले से ${existing} चीज़ें हैं`,
+        message: `${relativeDayLabel(dayBefore, today)} का ${slotLabel} कॉपी करने पर ये दोबारा जुड़ जाएँगी। जारी रखें?`,
+        confirmLabel: "हाँ, कॉपी करें",
+        cancelLabel: "रद्द करें",
       });
-
-      setEditingItem(null);
-      setSuccessMsg("बदलाव सुरक्षित हो गए हैं!");
-      onRefresh();
-      setTimeout(() => setSuccessMsg(""), 3000);
-    } catch (err) {
-      setErrorMsg(err instanceof Error ? err.message : "बदलाव सहेजने में विफल।");
+      if (!ok) return;
     }
-  };
-
-  const handleDeleteClick = async (id: string) => {
-    if (confirm("क्या आप इस भोजन प्रविष्टि को हटाना चाहते हैं? (Remove log?)")) {
-      try {
-        await deleteFoodLog(id);
-        setSuccessMsg("भोजन सूची से हटा दिया गया है।");
-        onRefresh();
-        setTimeout(() => setSuccessMsg(""), 3000);
-      } catch {
-        setErrorMsg("हटाने में विफलता आई।");
-      }
-    }
-  };
-
-  // Copy yesterday's specific meal slot to today
-  const handleCopyMeal = async (mealSlot: string) => {
-    setIsCopying(true);
-    setErrorMsg("");
-    setSuccessMsg("");
-    
-    // Get yesterday's date
-    const d = new Date(selectedDate);
-    d.setDate(d.getDate() - 1);
-    const yesterdayStr = d.toISOString().split("T")[0];
-    
+    setCopying(true);
     try {
-      const success = await copyPreviousMeal(patientId, yesterdayStr, selectedDate, mealSlot);
-      if (success) {
-        setSuccessMsg(`कल का ${mealSlot} आज की सूची में कॉपी हो गया!`);
+      const copied = await copyPreviousMeal(patientId, dayBefore, selectedDate, copySlot);
+      if (copied) {
+        toast.success(`${relativeDayLabel(dayBefore, today)} का ${slotLabel} कॉपी हो गया`);
         onRefresh();
       } else {
-        setErrorMsg(`कल के ${mealSlot} में कोई भोजन प्रविष्टि नहीं मिली।`);
+        toast.info(`${relativeDayLabel(dayBefore, today)} को ${slotLabel} में कुछ दर्ज नहीं था`);
       }
-    } catch {
-      setErrorMsg("कॉपी करने में विफलता आई।");
+    } catch (err) {
+      toast.error("कॉपी नहीं हो पाया", err instanceof Error ? err.message : undefined);
     } finally {
-      setIsCopying(false);
-      setTimeout(() => {
-        setSuccessMsg("");
-        setErrorMsg("");
-      }, 4000);
+      setCopying(false);
     }
-  };
+  }
 
   return (
-    <Card className="border-line">
-      {/* Date Navigation Bar */}
-      <div className="bg-surface-sunken border-b border-line px-3 sm:px-6 py-3 sm:py-4 flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-1.5 sm:gap-2">
-          <Button
-            type="button"
-            variant="ghost"
-            onClick={() => adjustDate(-1)}
-            className="p-2 h-8 w-8 sm:h-9 sm:w-9 rounded-control shrink-0"
-          >
-            <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5 text-ink-muted" />
-          </Button>
-          <div className="flex items-center gap-1.5 font-semibold text-ink text-xs sm:text-base min-w-0 text-center justify-center">
-            <Calendar className="h-4 w-4 text-brand shrink-0" />
-            <span className="truncate">{selectedDate === new Date().toISOString().split("T")[0] ? "आज (Today)" : selectedDate}</span>
+    <Card flush className="overflow-hidden">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line bg-surface-sunken px-3 py-3 sm:px-6 sm:py-4">
+        <div className="flex min-w-0 items-center gap-1.5 sm:gap-2">
+          <IconButton variant="ghost" aria-label="पिछला दिन (Previous day)" onClick={() => onDateChange(dayBefore)}>
+            <ChevronLeft aria-hidden className="h-5 w-5" />
+          </IconButton>
+          <div className="min-w-0 text-center">
+            <p className="flex items-center justify-center gap-1.5 text-sm font-semibold text-ink sm:text-base">
+              <CalendarDays aria-hidden className="h-4 w-4 shrink-0 text-brand" />
+              <span className="truncate">{relativeDayLabel(selectedDate, today)}</span>
+            </p>
+            <p className="truncate text-2xs text-ink-subtle">{fmtDateStrFull(selectedDate)}</p>
           </div>
-          <Button
-            type="button"
+          <IconButton
             variant="ghost"
-            onClick={() => adjustDate(1)}
-            className="p-2 h-8 w-8 sm:h-9 sm:w-9 rounded-control shrink-0"
+            aria-label="अगला दिन (Next day)"
+            disabled={isToday}
+            onClick={() => onDateChange(addDaysIST(selectedDate, 1))}
           >
-            <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5 text-ink-muted" />
-          </Button>
+            <ChevronRight aria-hidden className="h-5 w-5" />
+          </IconButton>
+          {!isToday ? (
+            <Button variant="secondary" size="sm" onClick={() => onDateChange(today)}>
+              आज
+            </Button>
+          ) : null}
         </div>
 
-        {/* Dynamic target calorie indicator */}
-        <div className="text-right">
-          <span className="text-xs text-ink-subtle font-semibold block">आज का कैलोरी उपयोग (Calorie Budget)</span>
-          <span className="text-lg font-bold text-ink">
+        <div className="min-w-0 text-right" aria-live="polite">
+          <span className="block text-xs font-medium text-ink-subtle">
+            {isToday ? "आज की कैलोरी" : "इस दिन की कैलोरी"}
+          </span>
+          <span className="tabular text-lg font-semibold text-ink">
             {totalCalories} / {dailyCalorieTarget} kcal
           </span>
-          <span className="text-xs font-semibold text-brand block mt-0.5">
-            Total Protein: {totalProtein} g
-          </span>
-          {logs.length > 0 && (
-            <span className="text-xs font-semibold block mt-0.5">
-              {overTarget > 0 ? (
-                <span className="text-critical">
-                  +{overTarget} kcal over target (आज calorie target से ऊपर रहा। कल portions/oil पर ध्यान दें।)
-                </span>
-              ) : (
-                <span className="text-positive">
-                  Remaining: {Math.abs(overTarget)} kcal
-                </span>
-              )}
+          {items.length > 0 ? (
+            <span lang="hi" className="mt-0.5 block text-xs text-ink-muted">
+              {diff > 0 ? `लक्ष्य से ${diff} kcal ज़्यादा` : `${Math.abs(diff)} kcal बाकी`}
+              {totalProtein > 0 ? ` · प्रोटीन ${Math.round(totalProtein)} g` : ""}
             </span>
-          )}
+          ) : null}
         </div>
       </div>
 
-      <div className="p-6 space-y-6">
-        {/* Status indicators */}
-        {errorMsg && (
-          <div className="rounded-card border border-critical-line bg-critical-soft p-3 text-sm font-semibold text-critical">
-            {errorMsg}
-          </div>
-        )}
+      {items.length > 0 ? (
+        <div className="px-4 pt-4 sm:px-6">
+          <ProgressBar value={totalCalories} max={dailyCalorieTarget} label="कैलोरी लक्ष्य का हिस्सा" />
+        </div>
+      ) : null}
 
-        {successMsg && (
-          <div className="rounded-card border border-positive-line bg-positive-soft p-3 text-sm font-semibold text-positive flex gap-2 items-center">
-            <Check className="h-4 w-4 text-positive" />
-            {successMsg}
+      <div className="space-y-5 p-4 sm:p-6">
+        {canWrite ? (
+          <div className="flex flex-wrap items-end gap-2 rounded-card border border-line bg-surface p-3">
+            <Field label={`${relativeDayLabel(dayBefore, today)} से कॉपी करें`} className="min-w-44 flex-1">
+              <Select value={copySlot} onChange={(e) => setCopySlot(e.target.value)}>
+                {MEAL_SLOTS.map((m) => (
+                  <option key={m.id} value={m.id}>
+                    {m.label}
+                  </option>
+                ))}
+              </Select>
+            </Field>
+            <Button variant="secondary" loading={copying} onClick={() => void handleCopy()}>
+              <Copy aria-hidden className="h-4 w-4" />
+              कॉपी करें
+            </Button>
           </div>
-        )}
+        ) : null}
 
-        {/* Render meal groups */}
-        {logs.length > 0 ? (
-          <div className="space-y-6">
-            {Object.entries(groupedLogs).map(([mealName, mealItems]) => {
-              const mealTotal = mealItems.reduce((sum, i) => sum + i.calories, 0);
+        {error ? (
+          <ErrorState
+            title="भोजन का रिकॉर्ड लोड नहीं हो पाया"
+            englishTitle="Food records could not be loaded"
+            onRetry={onRetry}
+          />
+        ) : loading ? (
+          <div aria-busy="true" aria-label="लोड हो रहा है" className="space-y-3">
+            <div className="skeleton h-24 rounded-card" />
+            <div className="skeleton h-24 rounded-card" />
+          </div>
+        ) : grouped.length > 0 ? (
+          <div className="space-y-5">
+            {grouped.map(({ slot, items: slotItems }) => {
+              const slotTotal = slotItems.reduce((sum, i) => sum + i.calories, 0);
               return (
-                <div key={mealName} className="rounded-card border border-line bg-surface overflow-hidden shadow-xs">
-                  {/* Meal Group Header */}
-                  <div className="bg-surface-sunken/70 border-b border-line px-4 py-3 flex items-center justify-between">
-                    <div>
-                      <h4 className="font-semibold text-ink text-sm">
-                        {MEAL_LABELS_HI[mealName] || mealName}
-                      </h4>
-                      <span className="text-2xs text-ink-subtle font-semibold block mt-0.5">
-                        {mealItems.length} items logged
-                      </span>
+                <section key={slot} aria-label={mealLabel(slot)} className="overflow-hidden rounded-card border border-line bg-surface shadow-e1">
+                  <div className="flex items-center justify-between gap-3 border-b border-line bg-surface-sunken px-4 py-3">
+                    <div className="min-w-0">
+                      <h3 lang="hi" className="text-sm font-semibold text-ink">
+                        {mealLabel(slot)}
+                      </h3>
+                      <span className="text-2xs text-ink-subtle">{slotItems.length} चीज़ें</span>
                     </div>
-                    <div className="flex items-center gap-3">
-                      {/* Copy Previous breakfast/lunch shortcut */}
-                      <button
-                        type="button"
-                        onClick={() => handleCopyMeal(mealName)}
-                        disabled={isCopying}
-                        className="text-xs font-semibold text-brand-ink bg-brand-soft hover:bg-brand-soft/80 border border-brand-line/50 px-2.5 py-1 rounded-control flex items-center gap-1 transition-all disabled:opacity-50"
-                        title="कल के इस भोजन को आज दोहराएं"
-                      >
-                        <Copy className="h-3 w-3" />
-                        कल का कॉपी करें
-                      </button>
-                      <span className="font-semibold text-ink text-sm">
-                        ~{mealTotal} kcal
-                      </span>
-                    </div>
+                    <span className="tabular text-sm font-semibold text-ink">~{slotTotal} kcal</span>
                   </div>
 
-                  {/* Meal Group Items */}
-                  <div className="divide-y divide-line">
-                    {mealItems.map((item) => {
-                      const loggedTime = new Date(item.consumed_at).getTime();
-                      const currentTime = new Date().getTime();
-                      const canEdit = (currentTime - loggedTime) < (2 * 60 * 60 * 1000);
-
-                      return (
-                        <div key={item.id} className="p-4 hover:bg-surface-sunken/30 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 transition-colors">
-                          <div className="space-y-1">
-                            <div className="flex items-center gap-2 flex-wrap">
-                              <span className="text-xl shrink-0">{getExactFoodEmoji(item.food_name)}</span>
-                              <span className="font-semibold text-ink">{item.food_name}</span>
-                              <Badge variant={item.calorie_confidence === "High" ? "green" : item.calorie_confidence === "Medium" ? "blue" : "amber"}>
-                                {item.calorie_confidence} confidence
-                              </Badge>
-                              <span className="text-xs text-ink-subtle font-semibold bg-surface-sunken px-1.5 py-0.5 rounded">
-                                🕐 {new Date(item.consumed_at).toLocaleTimeString("hi-IN", { hour: "2-digit", minute: "2-digit" })}
-                              </span>
-                            </div>
-                            <div className="text-xs text-ink-subtle font-medium space-x-2">
-                              <span>मात्रा (Quantity): {item.quantity} {item.unit}</span>
-                              {item.standardized_grams && <span>({item.standardized_grams}g)</span>}
-                              {item.oil_quantity && item.oil_quantity !== "None" && (
-                                <span className="text-amber-800 bg-amber-50 px-1.5 py-0.5 rounded font-semibold border border-amber-100">
-                                  🍳 तेल: {item.oil_quantity} (+{item.oil_calories} kcal)
-                                </span>
-                              )}
-                            </div>
-                            {item.notes && (
-                              <p className="text-xs text-amber-700 font-medium italic flex items-center gap-1 bg-amber-50/40 p-1.5 rounded border border-amber-100/50">
-                                <AlertCircle className="h-3.5 w-3.5 text-amber-600 flex-shrink-0" />
-                                {item.notes}
-                              </p>
-                            )}
-                          </div>
-
-                          {/* Actions */}
-                          <div className="flex items-center justify-between sm:justify-end gap-4">
-                            <span className="font-bold text-ink text-base">
-                              ~{item.calories} kcal
+                  <ul className="divide-y divide-line">
+                    {slotItems.map((item) => (
+                      <li key={item.id} className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between">
+                        <div className="min-w-0 space-y-1">
+                          <div className="flex flex-wrap items-center gap-2">
+                            <span aria-hidden className="shrink-0 text-xl">
+                              {getExactFoodEmoji(item.food_name)}
                             </span>
-                            <div className="flex gap-1.5 items-center">
-                              {canEdit ? (
-                                <>
-                                  <Button
-                                    type="button"
-                                    variant="ghost"
-                                    onClick={() => handleEditClick(item)}
-                                    className="p-2 h-11 w-11 text-ink-subtle hover:text-info hover:bg-info-soft rounded-control transition-colors"
-                                    title="बदलाव करें (Edit entry)"
-                                  >
-                                    <Edit className="h-6 w-6" />
-                                  </Button>
-                                  <Button
-                                    type="button"
-                                    variant="ghost"
-                                    onClick={() => handleDeleteClick(item.id)}
-                                    className="p-2 h-11 w-11 text-ink-subtle hover:text-critical hover:bg-critical-soft rounded-control transition-colors"
-                                    title="हटाएं (Delete entry)"
-                                  >
-                                    <Trash2 className="h-6 w-6" />
-                                  </Button>
-                                </>
-                              ) : (
-                                <span 
-                                  className="p-2 text-ink-subtle flex items-center justify-center cursor-help" 
-                                  title="2 घंटे बीत चुके हैं, अब इसे बदला या हटाया नहीं जा सकता (Locked after 2 hours)"
-                                >
-                                  <Lock className="h-6 w-6 text-ink-subtle" />
-                                </span>
-                              )}
-                            </div>
+                            <span className="font-semibold text-ink">{item.food_name}</span>
+                            <Badge variant={confidenceVariant[item.calorie_confidence] ?? "neutral"}>
+                              {item.calorie_confidence} confidence
+                            </Badge>
+                            <span className="text-xs text-ink-subtle">{fmtTime(item.consumed_at)}</span>
                           </div>
+                          <p className="text-xs text-ink-muted">
+                            मात्रा: {item.quantity} {item.unit}
+                            {item.standardized_grams ? ` (${item.standardized_grams} g)` : ""}
+                            {item.oil_quantity === "Unknown" ? (
+                              <span lang="hi" className="ml-2 text-attention">
+                                तेल की मात्रा पता नहीं
+                              </span>
+                            ) : item.oil_quantity && item.oil_quantity !== "None" ? (
+                              <span lang="hi" className="ml-2 rounded border border-food-line bg-food-soft px-1.5 py-0.5 font-medium text-food">
+                                तेल: {item.oil_quantity} (+{item.oil_calories} kcal)
+                              </span>
+                            ) : null}
+                          </p>
+                          {item.notes ? (
+                            <p className="flex items-start gap-1.5 rounded border border-attention-line bg-attention-soft p-1.5 text-xs text-ink-muted">
+                              <AlertCircle aria-hidden className="mt-0.5 h-3.5 w-3.5 shrink-0 text-attention" />
+                              {item.notes}
+                            </p>
+                          ) : null}
                         </div>
-                      );
-                    })}
-                  </div>
-                </div>
+
+                        <div className="flex items-center justify-between gap-3 sm:justify-end">
+                          <span className="tabular text-base font-semibold text-ink">~{item.calories} kcal</span>
+                          {canWrite ? (
+                            <div className="flex items-center gap-1">
+                              <IconButton variant="ghost" aria-label={`बदलें (Edit) — ${item.food_name}`} onClick={() => setEditing(item)}>
+                                <Pencil aria-hidden className="h-4 w-4" />
+                              </IconButton>
+                              <IconButton variant="ghost" aria-label={`हटाएँ (Delete) — ${item.food_name}`} onClick={() => void handleDelete(item)}>
+                                <Trash2 aria-hidden className="h-4 w-4" />
+                              </IconButton>
+                            </div>
+                          ) : null}
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </section>
               );
             })}
           </div>
         ) : (
-          <div className="rounded-card border-2 border-dashed border-line bg-surface-sunken/50 p-10 text-center">
-            <p className="text-ink-subtle font-medium text-sm">
-              आज अभी तक कोई भोजन प्रविष्टि नहीं की गई है। (No meals logged today)
-            </p>
-            <p className="text-ink-subtle text-xs mt-1">
-              दवाइयों और स्वास्थ्य के अनुकूल भोजन लॉग करने के लिए ऊपर दिए गए सर्च फॉर्म का उपयोग करें।
-            </p>
-          </div>
+          <EmptyState
+            icon={Utensils}
+            title={isToday ? "आज अभी तक कोई भोजन दर्ज नहीं हुआ" : "इस दिन कोई भोजन दर्ज नहीं है"}
+            hindiTitle="No meals logged"
+            description={
+              canWrite
+                ? "ऊपर खोज से भोजन चुनकर दर्ज करें, या पिछले दिन का भोजन कॉपी करें।"
+                : "अभी इस दिन का कोई रिकॉर्ड नहीं है।"
+            }
+          />
         )}
       </div>
 
-      {/* Structured Edit Modal */}
-      {editingItem && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-ink/60 backdrop-blur-xs p-4">
-          <div className="bg-surface rounded-sheet w-full max-w-md overflow-hidden shadow-e4 border border-line flex flex-col">
-            <div className="bg-brand px-6 py-4 text-ink-inverse">
-              <h3 className="font-semibold text-lg">प्रविष्टि संपादित करें (Edit Logged Food)</h3>
-              <p className="text-ink-inverse/80 text-xs mt-0.5">{editingItem.food_name}</p>
-            </div>
-
-            <div className="p-6 space-y-4">
-              {errorMsg && (
-                <div className="rounded-card border border-critical-line bg-critical-soft p-3 text-xs font-semibold text-critical">
-                  {errorMsg}
-                </div>
-              )}
-
-              <Field label="Quantity (मात्रा multiplier)">
-                <TextInput
-                  type="number"
-                  step="0.25"
-                  min="0.25"
-                  value={editQty}
-                  onChange={(e) => setEditQty(e.target.value)}
-                  required
-                />
-              </Field>
-
-              <Field label="Cooking Oil Quantity (तेल उपयोग)">
-                <Select value={editOil} onChange={(e) => setEditOil(e.target.value)}>
-                  <option value="None">बिना तेल (None)</option>
-                  <option value="1/2 tsp">½ चम्मच (+22 cal)</option>
-                  <option value="1 tsp">1 चम्मच (+45 cal)</option>
-                  <option value="2 tsp">2 चम्मच (+90 cal)</option>
-                  <option value="1 tbsp">1 बड़ा चम्मच (+120 cal)</option>
-                  <option value="Unknown">पता नहीं (Unknown)</option>
-                </Select>
-              </Field>
-            </div>
-
-            <div className="bg-surface-sunken px-6 py-4 flex justify-end gap-2 border-t border-line">
-              <Button type="button" variant="ghost" onClick={() => setEditingItem(null)}>
-                Cancel
-              </Button>
-              <Button type="button" variant="primary" onClick={handleSaveEdit}>
-                Save Changes
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
+      {editing ? <EditFoodModal key={editing.id} item={editing} onClose={() => setEditing(null)} onSaved={onRefresh} /> : null}
     </Card>
   );
 }

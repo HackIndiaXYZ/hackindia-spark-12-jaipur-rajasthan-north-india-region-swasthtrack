@@ -1,3 +1,4 @@
+import { isPlausibleBP } from "@/lib/health-rules";
 import type {
   ActivityLogEntry,
   BPLogEntry,
@@ -14,129 +15,111 @@ export interface QualityValidationResult<T> {
   reasonHi?: string;
 }
 
-/**
- * Validate Blood Pressure reading
- */
-export function validateBPRecord(
-  log: BPLogEntry,
-): QualityValidationResult<BPLogEntry> {
-  const sys = log.systolic;
-  const dia = log.diastolic;
-  const pulse = log.pulse;
+/** What the analytics did with questionable / unusable rows, so the UI can say so. */
+export interface DataQualitySummary {
+  /** Kept in the calculation but flagged (e.g. unusually high reading, odd pulse). */
+  questionableCount: number;
+  /** Left out of the calculation (impossible values). */
+  invalidCount: number;
+  notes: Array<{ en: string; hi: string }>;
+}
 
-  if (sys <= 0 || dia <= 0) {
+export const EMPTY_QUALITY: DataQualitySummary = { questionableCount: 0, invalidCount: 0, notes: [] };
+
+/**
+ * Validate Blood Pressure reading. Plausibility comes from health-rules so every
+ * service agrees on what an impossible reading is.
+ */
+export function validateBPRecord(log: BPLogEntry): QualityValidationResult<BPLogEntry> {
+  const { systolic: sys, diastolic: dia, pulse } = log;
+
+  if (!(sys > 0) || !(dia > 0)) {
     return {
       record: log,
       status: "invalid",
       reason: "Blood pressure values cannot be zero or negative.",
-      reasonHi: "रक्तचाप मान शून्य या ऋणात्मक नहीं हो सकते।",
+      reasonHi: "रक्तचाप के मान शून्य या ऋणात्मक नहीं हो सकते।",
     };
   }
-
-  if (sys < 50 || sys > 280 || dia < 30 || dia > 180) {
-    return {
-      record: log,
-      status: "invalid",
-      reason: `Physiologically impossible reading (${sys}/${dia} mmHg).`,
-      reasonHi: `अमान्य रक्तचाप मान (${sys}/${dia} mmHg)।`,
-    };
-  }
-
   if (sys <= dia) {
     return {
       record: log,
       status: "invalid",
-      reason: "Systolic must be strictly greater than diastolic.",
-      reasonHi: "ऊपर वाला BP (सिस्टोलिक) नीचे वाले (डायस्टोलिक) से अधिक होना चाहिए।",
+      reason: "Systolic must be higher than diastolic.",
+      reasonHi: "ऊपर वाला BP (सिस्टोलिक) नीचे वाले (डायस्टोलिक) से ज़्यादा होना चाहिए।",
     };
   }
-
-  if (pulse !== null && (pulse < 30 || pulse > 220)) {
+  if (!isPlausibleBP(sys, dia, pulse)) {
+    return {
+      record: log,
+      status: "invalid",
+      reason: `Physiologically implausible reading (${sys}/${dia} mmHg${pulse != null ? `, pulse ${pulse}` : ""}).`,
+      reasonHi: `असंभव BP मान (${sys}/${dia} mmHg${pulse != null ? `, नब्ज़ ${pulse}` : ""}) — शायद एंट्री में गलती हुई।`,
+    };
+  }
+  if (pulse != null && (pulse < 30 || pulse > 220)) {
     return {
       record: log,
       status: "questionable",
-      reason: `Pulse rate outside typical range (${pulse} bpm).`,
-      reasonHi: `धड़कन दर असामान्य है (${pulse} bpm)।`,
+      reason: `Pulse rate outside the usual range (${pulse} bpm). Please verify.`,
+      reasonHi: `नब्ज़ सामान्य सीमा से बाहर है (${pulse} bpm) — कृपया जाँच लें।`,
     };
   }
-
   if (sys > 200 || dia > 120) {
     return {
       record: log,
       status: "questionable",
-      reason: "Very high reading requiring attention.",
-      reasonHi: "अत्यधिक उच्च माप, सावधानी आवश्यक।",
+      reason: "Very high reading. It is kept and treated as urgent, but please verify the entry.",
+      reasonHi: "बहुत ज़्यादा माप। इसे गंभीर माना गया है, पर कृपया जाँच लें कि मान सही दर्ज हुआ है।",
     };
   }
-
   return { record: log, status: "valid" };
 }
 
-/**
- * Validate Weight reading
- */
-export function validateWeightRecord(
-  log: WeightLogEntry,
-): QualityValidationResult<WeightLogEntry> {
+export function validateWeightRecord(log: WeightLogEntry): QualityValidationResult<WeightLogEntry> {
   const wt = log.weight_kg;
-
-  if (wt <= 0) {
+  if (!(wt > 0)) {
     return {
       record: log,
       status: "invalid",
       reason: "Weight cannot be zero or negative.",
-      reasonHi: "वजन शून्य या ऋणात्मक नहीं हो सकता।",
+      reasonHi: "वज़न शून्य या ऋणात्मक नहीं हो सकता।",
     };
   }
-
   if (wt < 20 || wt > 300) {
     return {
       record: log,
       status: "invalid",
-      reason: `Weight outside plausible human range (${wt} kg).`,
-      reasonHi: `अमान्य वजन मान (${wt} kg)।`,
+      reason: `Weight outside the plausible human range (${wt} kg).`,
+      reasonHi: `असंभव वज़न (${wt} kg)।`,
     };
   }
-
   return { record: log, status: "valid" };
 }
 
-/**
- * Validate Activity / Step Log
- */
-export function validateActivityRecord(
-  log: ActivityLogEntry,
-): QualityValidationResult<ActivityLogEntry> {
+export function validateActivityRecord(log: ActivityLogEntry): QualityValidationResult<ActivityLogEntry> {
   if (log.steps < 0) {
     return {
       record: log,
       status: "invalid",
       reason: "Step count cannot be negative.",
-      reasonHi: "कदम संख्या ऋणात्मक नहीं हो सकती।",
+      reasonHi: "कदम की संख्या ऋणात्मक नहीं हो सकती।",
     };
   }
-
   if (log.steps > 100000) {
     return {
       record: log,
       status: "questionable",
-      reason: `Extremely high step count (${log.steps.toLocaleString()}).`,
-      reasonHi: `असामान्य रूप से उच्च कदम संख्या (${log.steps.toLocaleString()})।`,
+      reason: `Extremely high step count (${log.steps.toLocaleString("en-IN")}). Please verify.`,
+      reasonHi: `कदम की संख्या बहुत ज़्यादा है (${log.steps.toLocaleString("en-IN")}) — कृपया जाँच लें।`,
     };
   }
-
   return { record: log, status: "valid" };
 }
 
-/**
- * Validate Sleep Log
- */
-export function validateSleepRecord(
-  log: SleepLogEntry,
-): QualityValidationResult<SleepLogEntry> {
+export function validateSleepRecord(log: SleepLogEntry): QualityValidationResult<SleepLogEntry> {
   const hours = Number(log.sleep_hours);
-
-  if (hours <= 0 || hours > 24) {
+  if (!(hours > 0) || hours > 24) {
     return {
       record: log,
       status: "invalid",
@@ -144,63 +127,82 @@ export function validateSleepRecord(
       reasonHi: "नींद की अवधि 0 से 24 घंटे के बीच होनी चाहिए।",
     };
   }
-
   if (hours > 18) {
     return {
       record: log,
       status: "questionable",
-      reason: `Very long sleep duration recorded (${hours} hrs).`,
-      reasonHi: `अत्यधिक लंबी नींद की अवधि (${hours} घंटे)।`,
+      reason: `Very long sleep duration (${hours} hrs). Please verify.`,
+      reasonHi: `नींद बहुत लंबी दर्ज है (${hours} घंटे) — कृपया जाँच लें।`,
     };
   }
-
   return { record: log, status: "valid" };
 }
 
-/**
- * Validate Food Item & Calorie Log
- */
-export function validateFoodLog(
-  item: { calories?: number | null; name?: string },
-): QualityValidationResult<{ calories?: number | null; name?: string }> {
-  const cal = Number(item.calories || 0);
-
-  if (cal < 0) {
-    return {
-      record: item,
-      status: "invalid",
-      reason: "Calories cannot be negative.",
-      reasonHi: "कैलोरी मान ऋणात्मक नहीं हो सकता।",
-    };
+/** Split rows by quality so callers can use `valid`+`questionable` and report the rest. */
+function assess<T>(rows: T[], validate: (r: T) => QualityValidationResult<T>) {
+  const valid: T[] = [];
+  const questionable: Array<QualityValidationResult<T>> = [];
+  const invalid: Array<QualityValidationResult<T>> = [];
+  for (const row of rows) {
+    const res = validate(row);
+    if (res.status === "invalid") invalid.push(res);
+    else {
+      valid.push(row);
+      if (res.status === "questionable") questionable.push(res);
+    }
   }
+  return { usable: valid, questionable, invalid };
+}
 
-  if (cal > 5000) {
-    return {
-      record: item,
-      status: "questionable",
-      reason: `Single item calories very high (${cal} kcal).`,
-      reasonHi: `एकल भोजन की कैलोरी अत्यधिक उच्च है (${cal} kcal)।`,
-    };
+export const assessBPLogs = (logs: BPLogEntry[]) => assess(logs, validateBPRecord);
+export const assessWeightLogs = (logs: WeightLogEntry[]) => assess(logs, validateWeightRecord);
+export const assessActivityLogs = (logs: ActivityLogEntry[]) => assess(logs, validateActivityRecord);
+export const assessSleepLogs = (logs: SleepLogEntry[]) => assess(logs, validateSleepRecord);
+
+/** Roll several assessments into one summary the UI can show ("2 readings were flagged"). */
+export function summarizeQuality(
+  parts: Array<{
+    label: { en: string; hi: string };
+    questionable: Array<QualityValidationResult<unknown>>;
+    invalid: Array<QualityValidationResult<unknown>>;
+  }>,
+): DataQualitySummary {
+  const out: DataQualitySummary = { questionableCount: 0, invalidCount: 0, notes: [] };
+  for (const p of parts) {
+    out.questionableCount += p.questionable.length;
+    out.invalidCount += p.invalid.length;
+    if (p.invalid.length > 0) {
+      out.notes.push({
+        en: `${p.invalid.length} ${p.label.en} record(s) look like entry errors and were left out of the analysis.`,
+        hi: `${p.invalid.length} ${p.label.hi} रिकॉर्ड गलत एंट्री जैसे लगे, इसलिए विश्लेषण में नहीं गिने।`,
+      });
+    }
+    if (p.questionable.length > 0) {
+      out.notes.push({
+        en: `${p.questionable.length} ${p.label.en} record(s) are unusual; they are included but worth double-checking.`,
+        hi: `${p.questionable.length} ${p.label.hi} रिकॉर्ड असामान्य हैं; इन्हें गिना गया है, पर एक बार जाँच लें।`,
+      });
+    }
   }
-
-  return { record: item, status: "valid" };
+  return out;
 }
 
 /**
- * Filter out invalid records before feeding into baseline/ML models
+ * Drop only impossible rows. Questionable rows are kept (a very high BP must never
+ * vanish from the analysis); use the assess* functions to report them.
  */
 export function filterValidBPLogs(logs: BPLogEntry[]): BPLogEntry[] {
-  return logs.filter((log) => validateBPRecord(log).status !== "invalid");
+  return assessBPLogs(logs).usable;
 }
 
 export function filterValidWeightLogs(logs: WeightLogEntry[]): WeightLogEntry[] {
-  return logs.filter((log) => validateWeightRecord(log).status !== "invalid");
+  return assessWeightLogs(logs).usable;
 }
 
 export function filterValidActivityLogs(logs: ActivityLogEntry[]): ActivityLogEntry[] {
-  return logs.filter((log) => validateActivityRecord(log).status !== "invalid");
+  return assessActivityLogs(logs).usable;
 }
 
 export function filterValidSleepLogs(logs: SleepLogEntry[]): SleepLogEntry[] {
-  return logs.filter((log) => validateSleepRecord(log).status !== "invalid");
+  return assessSleepLogs(logs).usable;
 }

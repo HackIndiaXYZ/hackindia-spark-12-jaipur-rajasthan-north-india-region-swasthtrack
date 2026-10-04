@@ -1,1067 +1,1013 @@
 "use client";
 
-import { useEffect, useState, useCallback, useRef } from "react";
-import {
-  Check,
-  Plus,
-  Search,
-  Sparkles,
-  AlertTriangle,
-  History,
-  Star,
-  ExternalLink,
-  ChevronRight,
-  X,
-  Bookmark,
-  BookmarkPlus,
-  Trash2,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Field, Select, TextInput } from "@/components/ui/form-field";
+import { useEffect, useId, useMemo, useRef, useState, type FormEvent, type KeyboardEvent } from "react";
+import { AlertTriangle, Bookmark, BookmarkPlus, ChevronRight, ExternalLink, History, Plus, Search, Sparkles, Star, Trash2, X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { Button, IconButton } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Field, NumberInput, Select, TextInput } from "@/components/ui/form-field";
+import { Segmented, type SegmentedOption } from "@/components/ui/segmented";
+import { useToast } from "@/components/ui/toast";
+import { useAsyncData } from "@/components/health/use-async-data";
+import { fmtTime } from "@/components/health/format";
 import {
-  searchFoodItems,
-  getFoodPortions,
+  MEAL_SLOTS,
+  OIL_OPTIONS,
+  UNKNOWN_OIL_NOTE,
+  isCatalogueId,
+  oilCalories,
+  type Confidence,
+} from "@/components/food/food-math";
+import { istHour } from "@/lib/health-rules";
+import { cn, getExactFoodEmoji, readLocalPref, writeLocalPref } from "@/lib/utils";
+import {
   addCustomFood,
-  logFood,
   getFavorites,
+  getFoodPortions,
+  logFood,
+  searchFoodItems,
   toggleFavorite,
   type FoodItem,
-  type FoodPortion
+  type FoodPortion,
 } from "@/services/patient-service";
 import {
   getPersonalizedQuickFoods,
-  recordQuickAddUsage,
   hideQuickFood,
+  recordQuickAddUsage,
   type PersonalizedQuickFoodItem,
 } from "@/services/quick-food-service";
-import {
-  getSavedFoods,
-  saveCustomFoodAsMyFood,
-  removeSavedFood,
-  type SavedFoodItem,
-} from "@/services/saved-food-service";
-import { getExactFoodEmoji } from "@/lib/utils";
+import { getSavedFoods, removeSavedFood, saveCustomFoodAsMyFood, type SavedFoodItem } from "@/services/saved-food-service";
 
 type FoodEntryPanelProps = {
   patientId: string;
   /** Shown in the banner so the copy always matches the patient being logged. */
   patientName?: string;
   calorieTarget?: number | null;
+  /** False for viewers: the panel then only explains that logging is switched off. */
+  canWrite: boolean;
   onSuccess?: () => void;
 };
 
-// Returns the appropriate meal slot based on current local time
-function getMealTypeByTime(): string {
-  const hour = new Date().getHours();
-  if (hour >= 6 && hour < 10) return "Breakfast";        // 6:00 AM – 9:59 AM
-  if (hour >= 10 && hour < 12) return "Mid-morning";     // 10:00 AM – 11:59 AM
-  if (hour >= 12 && hour < 16) return "Lunch";           // 12:00 PM – 3:59 PM
-  if (hour >= 16 && hour < 19) return "Evening snack";   // 4:00 PM – 6:59 PM
-  if (hour >= 19 && hour < 22) return "Dinner";          // 7:00 PM – 9:59 PM
-  return "Bedtime";                                       // 10:00 PM – 5:59 AM
+const HISTORY_KEY = "swasthtrack_search_history";
+
+/** Slot for the current India time, so the right meal is pre-selected (the reader can change it). */
+function mealSlotNow(): string {
+  const hour = istHour(new Date());
+  if (hour >= 6 && hour < 10) return "Breakfast";
+  if (hour >= 10 && hour < 12) return "Mid-morning";
+  if (hour >= 12 && hour < 16) return "Lunch";
+  if (hour >= 16 && hour < 19) return "Evening snack";
+  if (hour >= 19 && hour < 22) return "Dinner";
+  return "Bedtime";
 }
 
-export function FoodEntryPanel({
-  patientId,
-  patientName,
-  calorieTarget,
-  onSuccess,
-}: FoodEntryPanelProps) {
-  // Primary States
-  const [mealType, setMealType] = useState(() => getMealTypeByTime());
-  const [searchQuery, setSearchQuery] = useState("");
-  const [searchResults, setSearchResults] = useState<FoodItem[]>([]);
-  const [suggestions, setSuggestions] = useState<FoodItem[]>([]);
-  const [correctedQuery, setCorrectedQuery] = useState<string | undefined>(undefined);
-  const [selectedFood, setSelectedFood] = useState<FoodItem | null>(null);
-  
-  // Dynamic Learned Quick Foods State
-  const [quickFoods, setQuickFoods] = useState<PersonalizedQuickFoodItem[]>([]);
-  const [quickFoodsLoading, setQuickFoodsLoading] = useState(true);
-  const quickActionLockRef = useRef(false);
+const MEAL_OPTIONS: SegmentedOption<string>[] = MEAL_SLOTS.map((m) => ({ value: m.id, label: m.label }));
 
-  // Portions & Calculations
-  const [portionOptions, setPortionOptions] = useState<FoodPortion[]>([]);
-  const [selectedPortion, setSelectedPortion] = useState<FoodPortion | null>(null);
-  const [quantity, setQuantity] = useState("1");
-  const [oilQuantity, setOilQuantity] = useState("None"); // 'None', '1/2 tsp', '1 tsp', '2 tsp', '1 tbsp', 'Unknown'
-  
-  // Custom Food Form
-  const [showCustomForm, setShowCustomForm] = useState(false);
-  const [customName, setCustomName] = useState("");
-  const [customNameHi, setCustomNameHi] = useState("");
-  const [customCategory, setCustomCategory] = useState("Other");
-  const [customCalories, setCustomCalories] = useState("");
-  const [customWeightG, setCustomWeightG] = useState("100");
-  const [customUnit, setCustomUnit] = useState("g");
-  const [customNotes, setCustomNotes] = useState("");
-  const [customSourceType, setCustomSourceType] = useState("user_entered"); // user_entered, web_reference
-  const [customSourceWebsite, setCustomSourceWebsite] = useState("");
-  const [customProtein, setCustomProtein] = useState("");
+function confidenceVariant(c: Confidence) {
+  return c === "High" ? "positive" : c === "Medium" ? "info" : "attention";
+}
 
-  // Favorites & Saved Foods (My Foods)
-  const [favorites, setFavorites] = useState<FoodItem[]>([]);
-  const [savedFoods, setSavedFoods] = useState<SavedFoodItem[]>(() =>
-    patientId ? getSavedFoods(patientId) : []
+/* ---- Search (combobox + listbox) ---------------------------------------------- */
+
+type SearchState = { results: FoodItem[]; corrected?: string; notFound: boolean; failed: boolean; searching: boolean };
+const EMPTY_SEARCH: SearchState = { results: [], notFound: false, failed: false, searching: false };
+
+function FoodSearch({
+  onPick,
+  onAddCustom,
+  onOnlineSearch,
+}: {
+  onPick: (food: FoodItem) => void;
+  onAddCustom: (name: string) => void;
+  onOnlineSearch: (name: string) => void;
+}) {
+  const inputId = useId();
+  const listId = useId();
+  const [query, setQuery] = useState("");
+  const [state, setState] = useState<SearchState>(EMPTY_SEARCH);
+  const [active, setActive] = useState(-1);
+  const [history, setHistory] = useState<string[]>(() => readLocalPref<string[]>(HISTORY_KEY, []));
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Only the newest request may update the list.
+  const seq = useRef(0);
+
+  useEffect(
+    () => () => {
+      if (timer.current) clearTimeout(timer.current);
+    },
+    [],
   );
 
-  // UI Status
-  const [loading, setLoading] = useState(false);
-  const [errorMsg, setErrorMsg] = useState("");
-  const [successMsg, setSuccessMsg] = useState("");
-  const [recentSearchHistory, setRecentSearchHistory] = useState<string[]>([]);
-  const [noFoodFound, setNoFoodFound] = useState(false);
-
-  // Debounced search logic
-  const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-
-  const fetchFavorites = useCallback(() => {
-    getFavorites(patientId).then(setFavorites);
-  }, [patientId]);
-
-  const loadSavedFoodsList = useCallback(() => {
-    setSavedFoods(getSavedFoods(patientId));
-  }, [patientId]);
-
-  const loadPersonalizedQuickFoods = useCallback(() => {
-    getPersonalizedQuickFoods(patientId, mealType, 8)
-      .then((items) => {
-        setQuickFoods(items);
-        setQuickFoodsLoading(false);
-      })
-      .catch((err) => {
-        console.error("Error loading personalized quick foods:", err);
-        setQuickFoodsLoading(false);
-      });
-  }, [patientId, mealType]);
-
-  useEffect(() => {
-    fetchFavorites();
-    setTimeout(() => {
-      loadSavedFoodsList();
-    }, 0);
-    loadPersonalizedQuickFoods();
-    // Load search history from localStorage
-    if (typeof window !== "undefined") {
-      try {
-        const hist = localStorage.getItem("swasthtrack_search_history");
-        if (hist) {
-          setTimeout(() => {
-            setRecentSearchHistory(JSON.parse(hist));
-          }, 0);
-        }
-      } catch {}
-    }
-  }, [fetchFavorites, loadSavedFoodsList, loadPersonalizedQuickFoods]);
-
-  const handleSearch = useCallback(async (query: string) => {
-    if (!query.trim()) {
-      setSearchResults([]);
-      setSuggestions([]);
-      setCorrectedQuery(undefined);
-      setNoFoodFound(false);
+  function run(q: string) {
+    const mine = ++seq.current;
+    if (!q.trim()) {
+      setState(EMPTY_SEARCH);
       return;
     }
+    setState((s) => ({ ...s, searching: true, failed: false }));
+    searchFoodItems(q)
+      .then((res) => {
+        if (mine !== seq.current) return;
+        const results = [...res.exactMatches, ...res.suggestions];
+        setState({ results, corrected: res.correctedQuery, notFound: results.length === 0, failed: false, searching: false });
+        setActive(-1);
+      })
+      .catch(() => {
+        if (mine !== seq.current) return;
+        setState({ results: [], notFound: false, failed: true, searching: false });
+      });
+  }
 
-    try {
-      const { exactMatches, suggestions: suggs, correctedQuery: corr } = await searchFoodItems(query);
-      setSearchResults(exactMatches);
-      setSuggestions(suggs);
-      setCorrectedQuery(corr);
-      setNoFoodFound(exactMatches.length === 0 && suggs.length === 0);
-    } catch {
-      setErrorMsg("खोजने में समस्या आई।");
+  function handleChange(value: string) {
+    setQuery(value);
+    if (timer.current) clearTimeout(timer.current);
+    if (!value.trim()) {
+      seq.current += 1;
+      setState(EMPTY_SEARCH);
+      return;
     }
-  }, []);
+    // Typing is debounced so the catalogue is matched once per pause, not per key.
+    timer.current = setTimeout(() => run(value), 300);
+  }
 
-  const onSearchQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = e.target.value;
-    setSearchQuery(val);
+  function pick(food: FoodItem) {
+    const next = [food.name, ...history.filter((h) => h.toLowerCase() !== food.name.toLowerCase())].slice(0, 5);
+    setHistory(next);
+    writeLocalPref(HISTORY_KEY, next);
+    seq.current += 1;
+    setQuery("");
+    setState(EMPTY_SEARCH);
+    onPick(food);
+  }
 
-    if (searchTimeoutRef.current) {
-      clearTimeout(searchTimeoutRef.current);
+  function handleKeyDown(e: KeyboardEvent<HTMLInputElement>) {
+    const count = state.results.length;
+    if (e.key === "ArrowDown" && count > 0) {
+      e.preventDefault();
+      setActive((i) => (i + 1) % count);
+    } else if (e.key === "ArrowUp" && count > 0) {
+      e.preventDefault();
+      setActive((i) => (i <= 0 ? count - 1 : i - 1));
+    } else if (e.key === "Enter" && active >= 0 && state.results[active]) {
+      e.preventDefault();
+      pick(state.results[active]);
+    } else if (e.key === "Escape" && query) {
+      e.preventDefault();
+      handleChange("");
     }
+  }
 
-    searchTimeoutRef.current = setTimeout(() => {
-      handleSearch(val);
-    }, 300);
-  };
+  const open = state.results.length > 0;
+  const announcement = state.searching
+    ? "खोज रहे हैं"
+    : open
+      ? `${state.results.length} नतीजे मिले। ऊपर-नीचे तीर से चुनें, Enter से सेलेक्ट करें।`
+      : state.notFound
+        ? "कोई नतीजा नहीं मिला"
+        : "";
 
-  const handleSelectFood = async (food: FoodItem) => {
-    setSelectedFood(food);
-    setSearchQuery("");
-    setSearchResults([]);
-    setSuggestions([]);
-    setNoFoodFound(false);
-    setOilQuantity("None");
-    setQuantity("1");
-    
-    // Save to search history
-    const updatedHistory = [
-      food.name,
-      ...recentSearchHistory.filter(h => h.toLowerCase() !== food.name.toLowerCase())
-    ].slice(0, 5);
-    setRecentSearchHistory(updatedHistory);
-    localStorage.setItem("swasthtrack_search_history", JSON.stringify(updatedHistory));
+  return (
+    <div className="space-y-3">
+      <Field label="भोजन खोजें (Search food)" hint="हिंदी या English में लिखें, जैसे रोटी, दाल, सेब, paneer">
+        <div className="relative">
+          <Search aria-hidden className="pointer-events-none absolute left-3.5 top-1/2 h-5 w-5 -translate-y-1/2 text-ink-subtle" />
+          <TextInput
+            id={inputId}
+            type="text"
+            role="combobox"
+            aria-expanded={open}
+            aria-controls={listId}
+            aria-autocomplete="list"
+            aria-activedescendant={active >= 0 ? `${listId}-${active}` : undefined}
+            autoComplete="off"
+            autoCapitalize="none"
+            spellCheck={false}
+            placeholder="खोजें…"
+            value={query}
+            onChange={(e) => handleChange(e.target.value)}
+            onKeyDown={handleKeyDown}
+            className="pl-11"
+          />
+        </div>
+      </Field>
 
-    // Load portions
-    try {
-      const portions = await getFoodPortions(food.id);
-      setPortionOptions(portions);
-      if (portions.length > 0) {
-        setSelectedPortion(portions[0]);
-      } else {
-        setSelectedPortion(null);
-      }
-    } catch {
-      setPortionOptions([]);
-    }
-  };
+      <p role="status" aria-live="polite" className="sr-only">
+        {announcement}
+      </p>
 
-  // Calorie calculations
-  const calculateCalories = () => {
-    if (!selectedFood) return 0;
-    
-    const baseCals = selectedFood.calories_per_100g || 0;
-    let weightG = 100;
+      {state.corrected ? (
+        <p className="flex items-center gap-2 rounded-card border border-attention-line bg-attention-soft p-3 text-sm text-ink-muted">
+          <Sparkles aria-hidden className="h-4 w-4 shrink-0 text-attention" />
+          <span lang="hi">
+            क्या आपका मतलब <strong className="text-ink">&quot;{state.corrected}&quot;</strong> से है?
+          </span>
+        </p>
+      ) : null}
 
-    if (selectedPortion) {
-      weightG = selectedPortion.standardized_grams;
+      {state.failed ? (
+        <p role="alert" lang="hi" className="rounded-card border border-critical-line bg-critical-soft p-3 text-sm text-ink-muted">
+          खोजने में समस्या आई। इंटरनेट जाँचकर दोबारा लिखें।
+        </p>
+      ) : null}
+
+      {open ? (
+        <ul
+          id={listId}
+          role="listbox"
+          aria-label="खोज के नतीजे — Search results"
+          className="max-h-80 divide-y divide-line overflow-y-auto rounded-card border border-line bg-surface shadow-e1"
+        >
+          {state.results.map((food, i) => (
+            <li
+              key={food.id}
+              id={`${listId}-${i}`}
+              role="option"
+              aria-selected={i === active}
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={() => pick(food)}
+              className={cn(
+                "flex min-h-control cursor-pointer items-center justify-between gap-3 p-3",
+                i === active ? "bg-brand-soft" : "hover:bg-surface-sunken",
+              )}
+            >
+              <span className="flex min-w-0 items-center gap-3">
+                <span aria-hidden className="shrink-0 text-2xl">
+                  {getExactFoodEmoji(food.name, food.category)}
+                </span>
+                <span className="min-w-0">
+                  <span className="block truncate font-semibold text-ink">
+                    {food.name}
+                    {food.name_hi ? (
+                      <span lang="hi" className="ml-2 text-sm font-normal text-ink-subtle">
+                        ({food.name_hi})
+                      </span>
+                    ) : null}
+                  </span>
+                  <span className="block text-xs text-ink-subtle">
+                    {food.category} · {food.calories_per_100g ? `${food.calories_per_100g} kcal/100g` : "कैलोरी की जानकारी नहीं"}
+                  </span>
+                </span>
+              </span>
+              <ChevronRight aria-hidden className="h-5 w-5 shrink-0 text-ink-subtle" />
+            </li>
+          ))}
+        </ul>
+      ) : null}
+
+      {state.notFound && query.trim() ? (
+        <div className="rounded-card border border-line bg-surface-sunken p-4 text-center">
+          <p lang="hi" className="mb-3 text-sm text-ink-muted">
+            &quot;{query}&quot; हमारी सूची में नहीं मिला।
+          </p>
+          <div className="flex flex-wrap justify-center gap-2">
+            <Button variant="secondary" onClick={() => onOnlineSearch(query.trim())}>
+              <ExternalLink aria-hidden className="h-4 w-4" />
+              ऑनलाइन खोजें
+            </Button>
+            <Button variant="secondary" onClick={() => onAddCustom(query.trim())}>
+              <Plus aria-hidden className="h-4 w-4" />
+              खुद जोड़ें (Custom)
+            </Button>
+            <Button variant="ghost" onClick={() => handleChange("")}>
+              रद्द करें
+            </Button>
+          </div>
+        </div>
+      ) : null}
+
+      {history.length > 0 && !query ? (
+        <div className="flex flex-wrap items-center gap-2 text-xs">
+          <span className="flex items-center gap-1.5 text-ink-subtle">
+            <History aria-hidden className="h-3.5 w-3.5" />
+            हाल में खोजे:
+          </span>
+          {history.map((h) => (
+            <button
+              key={h}
+              type="button"
+              onClick={() => {
+                setQuery(h);
+                run(h);
+              }}
+              className="pressable min-h-control cursor-pointer rounded-full bg-surface-sunken px-3 font-medium text-ink-muted hover:text-ink"
+            >
+              {h}
+            </button>
+          ))}
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+/* ---- Selected food: portion, quantity, oil, estimate, save --------------------- */
+
+function SelectedFoodEditor({
+  food,
+  patientId,
+  mealType,
+  initialQuantity,
+  isFavorite,
+  onToggleFavorite,
+  onCancel,
+  onSaved,
+}: {
+  food: FoodItem;
+  patientId: string;
+  mealType: string;
+  initialQuantity?: number;
+  isFavorite: boolean;
+  onToggleFavorite: () => void;
+  onCancel: () => void;
+  onSaved: () => void;
+}) {
+  const toast = useToast();
+  const { data: portions } = useAsyncData(() => getFoodPortions(food.id).catch(() => [] as FoodPortion[]), [food.id]);
+  const [portionId, setPortionId] = useState("");
+  const [quantity, setQuantity] = useState(initialQuantity ? String(initialQuantity) : "1");
+  const [oil, setOil] = useState<string>("None");
+  const [manualKcal, setManualKcal] = useState("");
+  const [saving, setSaving] = useState(false);
+
+  const portion = portions?.find((p) => p.id === portionId) ?? portions?.[0] ?? null;
+  const qty = parseFloat(quantity);
+  const qtyValid = Number.isFinite(qty) && qty > 0 && qty <= 20;
+  const needsManual = food.calories_per_100g == null;
+  const manual = parseFloat(manualKcal);
+  const manualValid = Number.isFinite(manual) && manual >= 0 && manual <= 5000;
+
+  const estimate = useMemo(() => {
+    if (!qtyValid) return null;
+    const grams = (portion ? portion.standardized_grams : food.reference_weight_g || 100) * qty;
+    let foodKcal: number;
+    if (needsManual) {
+      if (!manualValid) return null;
+      foodKcal = manual * qty;
     } else {
-      weightG = selectedFood.reference_weight_g || 100;
+      foodKcal = ((food.calories_per_100g ?? 0) / 100) * grams;
     }
+    const oilKcal = oilCalories(oil);
 
-    const qty = parseFloat(quantity) || 1;
-    const foodCals = (baseCals / 100) * weightG * qty;
+    let confidence: Confidence;
+    let reason: string;
+    if (needsManual || food.is_custom || food.source_type === "web_reference" || food.source_type === "user_entered") {
+      confidence = "Low";
+      reason = "यह भोजन खुद जोड़ा गया है या कैलोरी हाथ से लिखी है, इसलिए जाँची हुई नहीं है।";
+    } else if (oil === "Unknown") {
+      confidence = "Low";
+      reason = UNKNOWN_OIL_NOTE;
+    } else if (portion) {
+      confidence = "High";
+      reason = "मानक मात्रा (portion) चुनी गई है।";
+    } else {
+      confidence = "Medium";
+      reason = "मानक मात्रा नहीं मिली, इसलिए संदर्भ मात्रा मानकर अनुमान लगाया है।";
+    }
+    return { kcal: Math.round(foodKcal + oilKcal), grams, oilKcal, confidence, reason };
+  }, [food, portion, qty, qtyValid, oil, needsManual, manual, manualValid]);
 
-    // Oil addition
-    let oilCals = 0;
-    if (oilQuantity === "1/2 tsp") oilCals = 22;
-    else if (oilQuantity === "1 tsp") oilCals = 45;
-    else if (oilQuantity === "2 tsp") oilCals = 90;
-    else if (oilQuantity === "1 tbsp") oilCals = 120;
-
-    return Math.round(foodCals + oilCals);
-  };
-
-  const getConfidenceLevel = (): "High" | "Medium" | "Low" => {
-    if (!selectedFood) return "Low";
-    if (selectedFood.is_custom || selectedFood.source_type === "web_reference") return "Low";
-    if (oilQuantity === "Unknown") return "Low";
-    if (selectedPortion) return "High";
-    return "Medium";
-  };
-
-  // Submit Logger
-  const handleSaveFood = async () => {
-    if (!selectedFood) return;
-    setErrorMsg("");
-    setSuccessMsg("");
-
-    const calculatedCals = calculateCalories();
-    const qty = parseFloat(quantity) || 1;
-    const confidence = getConfidenceLevel();
-
-    const standardizedGrams = selectedPortion 
-      ? selectedPortion.standardized_grams * qty 
-      : selectedFood.reference_weight_g * qty;
-
-    let oilCals = 0;
-    if (oilQuantity === "1/2 tsp") oilCals = 22;
-    else if (oilQuantity === "1 tsp") oilCals = 45;
-    else if (oilQuantity === "2 tsp") oilCals = 90;
-    else if (oilQuantity === "1 tbsp") oilCals = 120;
-
+  async function save() {
+    if (!estimate) return;
+    const per100 = (n: number | null | undefined) => ((n ?? 0) / 100) * estimate.grams;
+    setSaving(true);
     try {
-      setLoading(true);
       await logFood({
         patient_id: patientId,
-        food_item_id: selectedFood.id,
+        food_item_id: isCatalogueId(food.id) ? food.id : null,
         meal_type: mealType,
-        food_name: selectedFood.name_hi ? `${selectedFood.name} (${selectedFood.name_hi})` : selectedFood.name,
+        food_name: food.name_hi ? `${food.name} (${food.name_hi})` : food.name,
         quantity: qty,
-        unit: selectedPortion ? selectedPortion.portion_name : selectedFood.reference_unit,
-        standardized_grams: standardizedGrams,
-        calories: calculatedCals,
-        protein_g: Math.round(((selectedFood.protein_g_100g || 0) / 100) * standardizedGrams),
-        carbs_g: Math.round(((selectedFood.carbs_g_100g || 0) / 100) * standardizedGrams),
-        fat_g: Math.round(((selectedFood.fat_g_100g || 0) / 100) * standardizedGrams + (oilCals / 9)),
-        fibre_g: Math.round(((selectedFood.fibre_g_100g || 0) / 100) * standardizedGrams),
-        sodium_mg: selectedFood.sodium_mg_100g ? Math.round((selectedFood.sodium_mg_100g / 100) * standardizedGrams) : null,
-        oil_quantity: oilQuantity,
-        oil_calories: oilCals,
-        calorie_confidence: confidence,
-        source_type: selectedFood.source_type,
-        source_note: selectedFood.source_note || "Standard database entry",
+        unit: portion ? portion.portion_name : food.reference_unit,
+        standardized_grams: Math.round(estimate.grams),
+        calories: estimate.kcal,
+        protein_g: Math.round(per100(food.protein_g_100g)),
+        carbs_g: Math.round(per100(food.carbs_g_100g)),
+        fat_g: Math.round(per100(food.fat_g_100g) + estimate.oilKcal / 9),
+        fibre_g: Math.round(per100(food.fibre_g_100g)),
+        sodium_mg: food.sodium_mg_100g ? Math.round(per100(food.sodium_mg_100g)) : null,
+        oil_quantity: oil,
+        oil_calories: estimate.oilKcal,
+        calorie_confidence: estimate.confidence,
+        source_type: needsManual ? "user_entered" : food.source_type,
+        source_note: food.source_note || (needsManual ? "Calories typed by hand" : "Standard database entry"),
         consumed_at: new Date().toISOString(),
-        notes: oilQuantity === "Unknown" ? "तेल की मात्रा पता नहीं है, इसलिए calorie estimate कम accurate हो सकता है।" : null
+        notes: oil === "Unknown" ? UNKNOWN_OIL_NOTE : null,
       });
-
-      setSuccessMsg("भोजन सफलतापूर्वक दर्ज कर लिया गया है! (Saved!)");
-      setSelectedFood(null);
-      setSearchQuery("");
-      loadPersonalizedQuickFoods();
-      onSuccess?.();
-      setTimeout(() => setSuccessMsg(""), 3500);
+      toast.success(`${food.name} दर्ज हो गया`, `~${estimate.kcal} kcal · ${estimate.confidence} confidence`);
+      onSaved();
     } catch (err) {
-      setErrorMsg(err instanceof Error ? err.message : "लॉग सेव करने में त्रुटि हुई।");
+      toast.error("भोजन दर्ज नहीं हो पाया", err instanceof Error ? err.message : undefined);
     } finally {
-      setLoading(false);
+      setSaving(false);
     }
-  };
+  }
 
-  // Custom Food Logger
-  const handleSaveCustomFood = async (e: React.FormEvent) => {
+  return (
+    <div className="space-y-4 rounded-card border border-line bg-surface-sunken p-4 sm:p-5">
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0">
+          <Badge variant="brand">{food.category}</Badge>
+          <h3 className="mt-1 text-lg font-semibold text-ink">
+            {food.name}
+            {food.name_hi ? (
+              <span lang="hi" className="ml-2 text-base font-normal text-ink-muted">
+                ({food.name_hi})
+              </span>
+            ) : null}
+          </h3>
+          {food.source_note ? <p className="mt-0.5 text-xs text-ink-subtle">{food.source_note}</p> : null}
+        </div>
+        <div className="flex shrink-0 items-center gap-1">
+          {isCatalogueId(food.id) ? (
+            <IconButton
+              variant="ghost"
+              aria-pressed={isFavorite}
+              aria-label={isFavorite ? "पसंदीदा से हटाएँ" : "पसंदीदा में जोड़ें"}
+              onClick={onToggleFavorite}
+            >
+              <Star aria-hidden className={cn("h-5 w-5", isFavorite && "fill-gold-line text-gold-ink")} />
+            </IconButton>
+          ) : null}
+          <Button variant="ghost" size="sm" onClick={onCancel}>
+            बदलें
+          </Button>
+        </div>
+      </div>
+
+      <div className="grid gap-3.5 sm:grid-cols-2">
+        <Field label="मात्रा की इकाई (Portion size)">
+          {portions && portions.length > 0 ? (
+            <Select value={portion?.id ?? ""} onChange={(e) => setPortionId(e.target.value)}>
+              {portions.map((p) => (
+                <option key={p.id} value={p.id}>
+                  {p.portion_name_hi || p.portion_name} (~{p.standardized_grams}g)
+                </option>
+              ))}
+            </Select>
+          ) : (
+            <Select value="default" disabled onChange={() => {}}>
+              <option value="default">मानक: {food.reference_weight_g || 100} g ({food.reference_unit})</option>
+            </Select>
+          )}
+        </Field>
+
+        <Field
+          label="कितनी मात्रा खाई? (Quantity)"
+          hint="1 = एक पूरी मात्रा, 0.5 = आधी"
+          error={quantity && !qtyValid ? "0 से ज़्यादा और 20 तक लिखें" : undefined}
+        >
+          <NumberInput allowDecimal maxLength={5} placeholder="जैसे 1" value={quantity} onChange={(e) => setQuantity(e.target.value)} />
+        </Field>
+      </div>
+
+      {needsManual ? (
+        <Field
+          label="एक मात्रा की कैलोरी (kcal)"
+          hint="इस भोजन की कैलोरी डेटाबेस में नहीं है। अंदाज़े से लिखें; इसे कम भरोसेमंद माना जाएगा।"
+          error={manualKcal && !manualValid ? "0 से 5000 के बीच लिखें" : undefined}
+          required
+        >
+          <NumberInput allowDecimal maxLength={5} placeholder="जैसे 120" value={manualKcal} onChange={(e) => setManualKcal(e.target.value)} />
+        </Field>
+      ) : null}
+
+      <div role="radiogroup" aria-label="बनाने में तेल की मात्रा — Cooking oil" className="space-y-1.5">
+        <p className="text-sm font-medium text-ink">बनाने में तेल कितना लगा?</p>
+        <div className="flex flex-wrap gap-2">
+          {OIL_OPTIONS.map((o) => (
+            <button
+              key={o.id}
+              type="button"
+              role="radio"
+              aria-checked={oil === o.id}
+              onClick={() => setOil(o.id)}
+              className={cn(
+                "pressable min-h-control cursor-pointer rounded-control border px-3 text-sm font-medium",
+                oil === o.id ? "border-brand bg-brand text-ink-inverse" : "border-line bg-surface text-ink-muted hover:border-line-strong",
+              )}
+            >
+              {o.label}
+              {o.cal > 0 ? <span className="ml-1 text-xs opacity-80">(+{o.cal})</span> : null}
+            </button>
+          ))}
+        </div>
+        {oil === "Unknown" ? (
+          <p className="flex items-start gap-2 rounded-field border border-attention-line bg-attention-soft p-2.5 text-xs text-ink-muted">
+            <AlertTriangle aria-hidden className="mt-0.5 h-4 w-4 shrink-0 text-attention" />
+            <span lang="hi">{UNKNOWN_OIL_NOTE}</span>
+          </p>
+        ) : null}
+      </div>
+
+      <div className="flex flex-wrap items-end justify-between gap-4 border-t border-line pt-4">
+        <div aria-live="polite">
+          <span className="text-xs text-ink-subtle">अनुमानित कैलोरी (Estimate)</span>
+          {estimate ? (
+            <>
+              <div className="flex flex-wrap items-baseline gap-2">
+                <span className="tabular text-3xl font-semibold text-ink">~{estimate.kcal} kcal</span>
+                <Badge variant={confidenceVariant(estimate.confidence)}>{estimate.confidence} confidence</Badge>
+              </div>
+              <p lang="hi" className="mt-1 max-w-sm text-xs text-ink-subtle">
+                {estimate.reason}
+              </p>
+            </>
+          ) : (
+            <p lang="hi" className="text-sm text-ink-subtle">
+              {needsManual ? "ऊपर कैलोरी और मात्रा लिखें।" : "सही मात्रा लिखें।"}
+            </p>
+          )}
+        </div>
+        <div className="flex gap-2">
+          <Button variant="ghost" onClick={onCancel} disabled={saving}>
+            रद्द करें
+          </Button>
+          <Button variant="primary" loading={saving} disabled={!estimate} onClick={() => void save()}>
+            सुरक्षित करें (Save)
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ---- Custom food ----------------------------------------------------------------- */
+
+type CustomErrors = Partial<Record<"name" | "calories" | "serving" | "protein", string>>;
+
+function CustomFoodForm({
+  patientId,
+  mealType,
+  initialName,
+  sourceType,
+  onCancel,
+  onCreated,
+  onSavedAsMyFood,
+}: {
+  patientId: string;
+  mealType: string;
+  initialName: string;
+  sourceType: "user_entered" | "web_reference";
+  onCancel: () => void;
+  onCreated: (food: FoodItem) => void;
+  onSavedAsMyFood: () => void;
+}) {
+  const toast = useToast();
+  const [name, setName] = useState(initialName);
+  const [nameHi, setNameHi] = useState("");
+  const [calories, setCalories] = useState("");
+  const [protein, setProtein] = useState("");
+  const [serving, setServing] = useState("");
+  const [unit, setUnit] = useState("g");
+  const [category, setCategory] = useState("Other");
+  const [website, setWebsite] = useState(sourceType === "web_reference" ? "Google Web Search" : "");
+  const [notes, setNotes] = useState("");
+  const [errors, setErrors] = useState<CustomErrors>({});
+  const [saving, setSaving] = useState(false);
+
+  function validate() {
+    const found: CustomErrors = {};
+    const kcal = parseFloat(calories);
+    const size = parseFloat(serving);
+    const prot = protein.trim() ? parseFloat(protein) : 0;
+    if (!name.trim()) found.name = "भोजन का नाम लिखें";
+    if (!calories.trim() || Number.isNaN(kcal) || kcal < 0 || kcal > 5000) found.calories = "0 से 5000 के बीच कैलोरी लिखें";
+    if (!serving.trim() || Number.isNaN(size) || size <= 0) found.serving = "मात्रा 0 से ज़्यादा लिखें";
+    if (Number.isNaN(prot) || prot < 0) found.protein = "सही संख्या लिखें";
+    setErrors(found);
+    return Object.keys(found).length === 0 ? { kcal, size, prot } : null;
+  }
+
+  async function submit(e: FormEvent) {
     e.preventDefault();
-    setErrorMsg("");
-    setSuccessMsg("");
-
-    if (!customName.trim()) {
-      setErrorMsg("भोजन का नाम लिखना आवश्यक है।");
-      return;
-    }
-
-    const cals = parseFloat(customCalories);
-    if (isNaN(cals) || cals < 0) {
-      setErrorMsg("कैलोरी सही संख्या में दर्ज करें।");
-      return;
-    }
-
+    const ok = validate();
+    if (!ok) return;
+    setSaving(true);
     try {
-      setLoading(true);
-      const refWeight = parseFloat(customWeightG) || 100;
-      const prot = parseFloat(customProtein) || 0;
-
-      const foodItem = await addCustomFood({
-        name: customName.trim(),
-        name_hi: customNameHi.trim() || null,
-        category: customCategory,
+      const created = await addCustomFood({
+        name: name.trim(),
+        name_hi: nameHi.trim() || null,
+        category,
         subcategory: "custom",
-        reference_weight_g: refWeight,
-        reference_unit: customUnit,
-        calories_per_100g: Math.round((cals / refWeight) * 100),
-        protein_g_100g: Math.round((prot / refWeight) * 100),
+        reference_weight_g: ok.size,
+        reference_unit: unit,
+        calories_per_100g: Math.round((ok.kcal / ok.size) * 100),
+        protein_g_100g: Math.round((ok.prot / ok.size) * 100),
         carbs_g_100g: 0,
         fat_g_100g: 0,
         fibre_g_100g: 0,
         sodium_mg_100g: null,
-        source_type: customSourceType,
-        source_name: customSourceWebsite.trim() || "User Entered Custom",
-        source_note: customNotes.trim() || "Caregiver Custom Entry",
+        source_type: sourceType,
+        source_name: website.trim() || "User Entered Custom",
+        source_note: notes.trim() || "Caregiver custom entry",
         is_verified: false,
         is_custom: true,
-        is_active: true
+        is_active: true,
       });
-
-      setShowCustomForm(false);
-      setCustomName("");
-      setCustomNameHi("");
-      setCustomCalories("");
-      setCustomProtein("");
-      setCustomNotes("");
-      setCustomSourceWebsite("");
-      
-      // Auto select the new custom food item
-      handleSelectFood(foodItem);
-      showToastNotification("Custom भोजन डेटाबेस में सुरक्षित हो गया!");
+      toast.success("नया भोजन सेव हो गया", "अब मात्रा चुनकर दर्ज करें।");
+      onCreated(created);
     } catch (err) {
-      setErrorMsg(err instanceof Error ? err.message : "सहेजने में विफल।");
+      toast.error("सेव नहीं हो पाया", err instanceof Error ? err.message : undefined);
     } finally {
-      setLoading(false);
+      setSaving(false);
     }
-  };
+  }
 
-  const showToastNotification = (msg: string) => {
-    setSuccessMsg(msg);
-    setTimeout(() => setSuccessMsg(""), 3500);
-  };
+  function saveForLater() {
+    const ok = validate();
+    if (!ok) return;
+    saveCustomFoodAsMyFood(patientId, {
+      name: name.trim(),
+      calories: ok.kcal,
+      quantity: ok.size,
+      unit,
+      protein: ok.prot,
+      meal_context: mealType,
+    });
+    toast.success(`"${name.trim()}" आपके भोजन में सेव हो गया`, "Saved on this device for one-tap reuse.");
+    onSavedAsMyFood();
+  }
 
-  // Google Search Fallback Trigger
-  const triggerOnlineSearch = () => {
-    const q = encodeURIComponent(`${searchQuery} calories per 100g`);
-    window.open(`https://www.google.com/search?q=${q}`, "_blank");
-    // Show custom form prefilled with query
-    setCustomName(searchQuery);
-    setCustomSourceType("web_reference");
-    setCustomSourceWebsite("Google Web Search");
-    setShowCustomForm(true);
-    setNoFoodFound(false);
-  };
+  return (
+    <form onSubmit={(e) => void submit(e)} noValidate className="space-y-4 rounded-card border border-line bg-surface-sunken p-4 sm:p-5">
+      <h3 className="flex items-center gap-2 text-lg font-semibold text-ink">
+        <Plus aria-hidden className="h-5 w-5 text-brand" />
+        {sourceType === "web_reference" ? "वेब से मिली जानकारी जोड़ें" : "नया भोजन जोड़ें (Custom food)"}
+      </h3>
 
-  const handleToggleFav = async (food: FoodItem, e: React.MouseEvent) => {
-    e.stopPropagation();
-    const isCurrentlyFav = favorites.some(f => f.id === food.id);
-    await toggleFavorite(patientId, food.id, !isCurrentlyFav);
-    fetchFavorites();
-    showToastNotification(!isCurrentlyFav ? "पसंदीदा (Favorite) सूची में जोड़ा गया!" : "पसंदीदा सूची से हटाया गया।");
+      <div className="grid gap-3.5 sm:grid-cols-2">
+        <Field label="भोजन का नाम (Food name)" error={errors.name} required>
+          <TextInput placeholder="जैसे Paneer Tikka Masala" value={name} onChange={(e) => setName(e.target.value)} />
+        </Field>
+        <Field label="हिंदी नाम (वैकल्पिक)">
+          <TextInput lang="hi" placeholder="जैसे पनीर टिक्का मसाला" value={nameHi} onChange={(e) => setNameHi(e.target.value)} />
+        </Field>
+        <Field label="कैलोरी (kcal)" hint="नीचे लिखी मात्रा की" error={errors.calories} required>
+          <NumberInput allowDecimal maxLength={5} placeholder="जैसे 320" value={calories} onChange={(e) => setCalories(e.target.value)} />
+        </Field>
+        <Field label="प्रोटीन (g, वैकल्पिक)" error={errors.protein}>
+          <NumberInput allowDecimal maxLength={5} placeholder="जैसे 8" value={protein} onChange={(e) => setProtein(e.target.value)} />
+        </Field>
+        <Field label="कितनी मात्रा की (Serving size)" error={errors.serving} required>
+          <NumberInput allowDecimal maxLength={5} placeholder="जैसे 100" value={serving} onChange={(e) => setServing(e.target.value)} />
+        </Field>
+        <Field label="इकाई (Unit)">
+          <Select value={unit} onChange={(e) => setUnit(e.target.value)}>
+            <option value="g">ग्राम (g)</option>
+            <option value="piece">टुकड़ा (piece)</option>
+            <option value="cup">कप (cup)</option>
+            <option value="katori">कटोरी (katori)</option>
+            <option value="ml">मिलीलीटर (ml)</option>
+          </Select>
+        </Field>
+        <Field label="श्रेणी (Category)">
+          <Select value={category} onChange={(e) => setCategory(e.target.value)}>
+            <option value="indian_preparation">भारतीय व्यंजन</option>
+            <option value="fruit">फल</option>
+            <option value="dairy">दूध / दही</option>
+            <option value="salad_vegetable">सलाद / सब्ज़ी</option>
+            <option value="beverage">पेय पदार्थ</option>
+            <option value="junk_food">बाहर का खाना</option>
+            <option value="Other">अन्य</option>
+          </Select>
+        </Field>
+        {sourceType === "web_reference" ? (
+          <Field label="जानकारी का स्रोत (वेबसाइट)">
+            <TextInput placeholder="जैसे Healthline" value={website} onChange={(e) => setWebsite(e.target.value)} />
+          </Field>
+        ) : null}
+      </div>
+
+      <Field label="टिप्पणी (वैकल्पिक)">
+        <TextInput value={notes} onChange={(e) => setNotes(e.target.value)} />
+      </Field>
+
+      <div className="flex flex-col gap-2 border-t border-line pt-4 sm:flex-row sm:items-center sm:justify-end">
+        <Button variant="ghost" onClick={onCancel} disabled={saving}>
+          रद्द करें
+        </Button>
+        <Button variant="secondary" onClick={saveForLater} disabled={saving}>
+          <BookmarkPlus aria-hidden className="h-4 w-4" />
+          आगे के लिए रखें (My Food)
+        </Button>
+        <Button type="submit" variant="primary" loading={saving}>
+          सेव करके दर्ज करें
+        </Button>
+      </div>
+    </form>
+  );
+}
+
+/* ---- Panel -------------------------------------------------------------------------- */
+
+type Picked = { food: FoodItem; initialQuantity?: number };
+
+export function FoodEntryPanel({ patientId, patientName, calorieTarget, canWrite, onSuccess }: FoodEntryPanelProps) {
+  const toast = useToast();
+  const [mealType, setMealType] = useState(mealSlotNow);
+  const [picked, setPicked] = useState<Picked | null>(null);
+  const [custom, setCustom] = useState<{ name: string; sourceType: "user_entered" | "web_reference" } | null>(null);
+  const [savedFoods, setSavedFoods] = useState<SavedFoodItem[]>(() => getSavedFoods(patientId));
+  const quickLock = useRef(false);
+
+  // Viewers never see the entry form, so they do not pay for these reads either.
+  const favorites = useAsyncData(() => getFavorites(patientId), [patientId], canWrite);
+  const quick = useAsyncData(() => getPersonalizedQuickFoods(patientId, mealType, 8), [patientId, mealType], canWrite);
+  const favoriteIds = new Set((favorites.data ?? []).map((f) => f.id));
+
+  if (!canWrite) {
+    return (
+      <p lang="hi" className="rounded-card border border-info-line bg-info-soft p-4 text-sm text-ink-muted">
+        आपके पास सिर्फ़ देखने की अनुमति है, इसलिए भोजन दर्ज करना बंद है। नीचे दर्ज किया हुआ भोजन देख सकते हैं।
+      </p>
+    );
+  }
+
+  async function handleToggleFavorite(food: FoodItem) {
+    const makeFav = !favoriteIds.has(food.id);
+    try {
+      await toggleFavorite(patientId, food.id, makeFav);
+      toast.info(makeFav ? "पसंदीदा में जोड़ा गया" : "पसंदीदा से हटाया गया");
+      favorites.reload();
+    } catch (err) {
+      toast.error("पसंदीदा बदला नहीं जा सका", err instanceof Error ? err.message : undefined);
+    }
+  }
+
+  function openOnlineSearch(query: string) {
+    // Opens a normal web search in a new tab; nothing about the patient is sent.
+    window.open(`https://www.google.com/search?q=${encodeURIComponent(`${query} calories per 100g`)}`, "_blank", "noopener,noreferrer");
+    setCustom({ name: query, sourceType: "web_reference" });
+  }
+
+  async function pickQuickFood(q: PersonalizedQuickFoodItem) {
+    if (quickLock.current) return;
+    quickLock.current = true;
+    try {
+      recordQuickAddUsage(patientId, q.name);
+      let match: FoodItem | undefined;
+      try {
+        match = (await searchFoodItems(q.name)).exactMatches[0];
+      } catch {
+        match = undefined;
+      }
+      setPicked({
+        food:
+          match ??
+          {
+            id: `quick-${q.canonicalKey}`,
+            name: q.name,
+            name_hi: q.name_hi,
+            category: q.category,
+            subcategory: "quick_food",
+            reference_weight_g: 100,
+            reference_unit: "serving",
+            // An unknown average (0 with caloriesKnown false) is never shown as 0 kcal: the editor asks for the number instead.
+            calories_per_100g: q.caloriesKnown ? q.defaultCal : null,
+            protein_g_100g: 0,
+            carbs_g_100g: 0,
+            fat_g_100g: 0,
+            fibre_g_100g: 0,
+            sodium_mg_100g: null,
+            source_type: "user_entered",
+            source_name: "Quick food (your past entries)",
+            source_note: "आपके पिछले रिकॉर्ड का औसत",
+            is_verified: false,
+            is_custom: false,
+            is_active: true,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+          },
+      });
+    } finally {
+      setTimeout(() => {
+        quickLock.current = false;
+      }, 400);
+    }
+  }
+
+  function pickSavedFood(s: SavedFoodItem) {
+    setPicked({
+      initialQuantity: s.default_quantity || 1,
+      food: {
+        id: s.id,
+        name: s.name,
+        name_hi: null,
+        category: "indian_preparation",
+        subcategory: null,
+        reference_weight_g: 100,
+        reference_unit: s.default_unit || "serving",
+        calories_per_100g: s.default_calories,
+        protein_g_100g: s.default_protein || 0,
+        carbs_g_100g: 0,
+        fat_g_100g: 0,
+        fibre_g_100g: 0,
+        sodium_mg_100g: null,
+        source_type: "user_entered",
+        source_name: "Saved Food",
+        source_note: "आपका सेव किया हुआ भोजन",
+        is_verified: false,
+        is_custom: true,
+        is_active: true,
+        created_at: s.created_at,
+        updated_at: s.updated_at,
+      },
+    });
+  }
+
+  const finishEntry = () => {
+    setPicked(null);
+    quick.reload();
+    onSuccess?.();
   };
 
   return (
     <Card flush className="overflow-hidden">
-      {/* Head banner. The subtitle used to name a different patient at a
-          different age with a hard-coded 1600 kcal target; it now reads from
-          the profile it is actually logging for. */}
-      <div className="bg-brand px-5 py-4 text-ink-inverse sm:px-6 sm:py-5">
+      <div className="grad-gold-button px-5 py-4 text-gold-ink sm:px-6 sm:py-5">
         <h2 lang="hi" className="text-xl font-semibold tracking-tight">
           आज क्या खाया?
           <span className="ml-2 text-base font-normal opacity-90">Log a meal</span>
         </h2>
         <p lang="hi" className="mt-1 text-xs opacity-90">
           {calorieTarget
-            ? `${patientName ? `${patientName} ` : ""}का दैनिक लक्ष्य ${calorieTarget} kcal — हर भोजन यहाँ दर्ज करें।`
+            ? `${patientName ? `${patientName} ` : ""}का रोज़ का लक्ष्य ${calorieTarget} kcal। हर भोजन यहाँ दर्ज करें।`
             : "हर भोजन यहाँ दर्ज करें ताकि कैलोरी और प्रोटीन का हिसाब रहे।"}
         </p>
       </div>
 
       <div className="space-y-6 p-4 sm:p-6">
-        {/* Error / Success Alerts */}
-        {errorMsg && (
-          <div className="rounded-card border border-critical-line bg-critical-soft p-4 text-sm font-medium text-critical flex gap-2.5 items-start">
-            <AlertTriangle className="h-5 w-5 text-critical flex-shrink-0 mt-0.5" />
-            <div>{errorMsg}</div>
-          </div>
-        )}
-
-        {successMsg && (
-          <div className="rounded-card border border-positive-line bg-positive-soft p-4 text-sm font-semibold text-positive flex gap-2.5 items-start">
-            <Check className="h-5 w-5 text-positive flex-shrink-0 mt-0.5" />
-            <div>{successMsg}</div>
-          </div>
-        )}
-
-        {/* 1. MEAL TYPE SELECTION */}
         <div>
-          <div className="flex items-center justify-between mb-2">
-            <label className="text-sm font-semibold text-ink-muted">भोजन का समय (Select Meal Slot):</label>
-            <span className="text-xs text-brand-ink font-semibold bg-brand-soft border border-brand-line px-2.5 py-1 rounded-field">
-              🕐 {new Date().toLocaleTimeString("hi-IN", { hour: "2-digit", minute: "2-digit" })} → {mealType}
-            </span>
+          <div className="mb-1 flex flex-wrap items-center justify-between gap-2">
+            <p id="meal-slot-label" className="text-sm font-medium text-ink">
+              कौन सा भोजन? (Meal)
+            </p>
+            <span className="text-xs text-ink-subtle">अभी का समय {fmtTime(new Date())}</span>
           </div>
-          <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
-            {[
-              { id: "Breakfast",     label: "नाश्ता",         sub: "6–10 AM" },
-              { id: "Mid-morning",   label: "बीच का स्नैक",   sub: "10–12 PM" },
-              { id: "Lunch",         label: "दोपहर",          sub: "12–4 PM" },
-              { id: "Evening snack", label: "शाम",            sub: "4–7 PM" },
-              { id: "Dinner",        label: "रात का खाना",    sub: "7–10 PM" },
-              { id: "Bedtime",       label: "सोने से पहले",   sub: "10 PM–6 AM" }
-            ].map((meal) => (
-              <button
-                key={meal.id}
-                type="button"
-                onClick={() => setMealType(meal.id)}
-                className={`py-2 px-1 rounded-control text-center border-2 transition-all flex flex-col items-center justify-center ${
-                  mealType === meal.id
-                    ? "border-brand bg-brand-soft text-brand-ink font-semibold scale-[1.02]"
-                    : "border-line hover:border-line-strong text-ink-muted hover:bg-surface-sunken"
-                }`}
-              >
-                <span className="text-sm">{meal.label}</span>
-                <span className="text-2xs text-ink-subtle font-medium">{meal.sub}</span>
-              </button>
-            ))}
-          </div>
+          <Segmented options={MEAL_OPTIONS} value={mealType} onChange={setMealType} ariaLabel="Meal slot — कौन सा भोजन" size="sm" />
         </div>
 
-        {/* 2. FOOD SEARCH & RESULTS AREA */}
-        {!selectedFood && !showCustomForm && (
-          <div className="space-y-4">
-            <div className="relative">
-              <label className="text-sm font-semibold text-ink-muted block mb-2">खोजें (Search Food Item):</label>
-              <div className="relative">
-                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-5 w-5 text-ink-subtle" />
-                <input
-                  type="text"
-                  placeholder="खोजें... (उदा: रोटी, दाल, सेब, Pizza...)"
-                  value={searchQuery}
-                  onChange={onSearchQueryChange}
-                  className="w-full pl-11 pr-4 py-3 rounded-field border border-line focus:outline-none focus:ring-2 focus:ring-brand bg-surface-sunken focus:bg-surface text-base shadow-e1 transition-all"
-                />
-              </div>
-            </div>
+        {picked ? (
+          <SelectedFoodEditor
+            key={picked.food.id}
+            food={picked.food}
+            patientId={patientId}
+            mealType={mealType}
+            initialQuantity={picked.initialQuantity}
+            isFavorite={favoriteIds.has(picked.food.id)}
+            onToggleFavorite={() => void handleToggleFavorite(picked.food)}
+            onCancel={() => setPicked(null)}
+            onSaved={finishEntry}
+          />
+        ) : custom ? (
+          <CustomFoodForm
+            patientId={patientId}
+            mealType={mealType}
+            initialName={custom.name}
+            sourceType={custom.sourceType}
+            onCancel={() => setCustom(null)}
+            onCreated={(food) => {
+              setCustom(null);
+              setPicked({ food });
+            }}
+            onSavedAsMyFood={() => {
+              setSavedFoods(getSavedFoods(patientId));
+              setCustom(null);
+            }}
+          />
+        ) : (
+          <div className="space-y-6">
+            <FoodSearch
+              onPick={(food) => setPicked({ food })}
+              onAddCustom={(name) => setCustom({ name, sourceType: "user_entered" })}
+              onOnlineSearch={openOnlineSearch}
+            />
 
-            {/* Typo Correction Suggestion */}
-            {correctedQuery && (
-              <div className="flex items-center gap-2 text-sm text-amber-800 bg-amber-50 rounded-card p-3 border border-amber-200">
-                <Sparkles className="h-4.5 w-4.5 text-amber-600 flex-shrink-0" />
-                <span>
-                  क्या आपका मतलब <strong>&quot;{correctedQuery}&quot;</strong> से है?
-                </span>
-              </div>
-            )}
-
-            {/* Search Results / Suggestions list */}
-            {(searchResults.length > 0 || suggestions.length > 0) && (
-              <div className="rounded-card border border-line divide-y divide-line overflow-hidden bg-surface shadow-e1 max-h-80 overflow-y-auto">
-                {[...searchResults, ...suggestions].map((food) => {
-                  const isFav = favorites.some(f => f.id === food.id);
-                  return (
-                    <div
-                      key={food.id}
-                      onClick={() => handleSelectFood(food)}
-                      className="p-3.5 hover:bg-surface-sunken cursor-pointer flex items-center justify-between transition-colors group"
-                    >
-                      <div className="flex items-center gap-3 min-w-0">
-                        <span className="text-2xl shrink-0">
-                          {getExactFoodEmoji(food.name, food.category)}
-                        </span>
-                        <div className="min-w-0">
-                          <span className="font-semibold text-ink group-hover:text-brand-ink transition-colors truncate block">
-                            {food.name}
-                          </span>
-                          {food.name_hi && (
-                            <span className="ml-2 text-sm text-ink-subtle font-hindi">
-                              ({food.name_hi})
-                            </span>
-                          )}
-                          <div className="text-xs text-ink-subtle mt-0.5">
-                            {food.category} · {food.calories_per_100g ? `${food.calories_per_100g} kcal/100g` : "Calorie info missing"}
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <button
-                          type="button"
-                          onClick={(e) => handleToggleFav(food, e)}
-                          className="hit-target p-2 text-ink-subtle hover:text-amber-500 transition-colors"
-                          title="पसंदीदा सूची में जोड़ें"
-                        >
-                          <Star className={`h-5 w-5 ${isFav ? "fill-amber-500 text-amber-500" : ""}`} />
-                        </button>
-                        <ChevronRight className="h-5 w-5 text-ink-subtle group-hover:translate-x-0.5 transition-transform" />
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-
-            {/* Food Not Found Fallback */}
-            {noFoodFound && searchQuery.trim().length > 0 && (
-              <div className="rounded-card border border-line bg-surface-sunken p-5 text-center shadow-inner">
-                <p className="text-ink-muted font-medium mb-3.5">
-                  &quot;{searchQuery}&quot; हमारी लिस्ट में नहीं मिला। (Food not found in database)
-                </p>
-                <div className="flex flex-wrap justify-center gap-2">
-                  <Button
-                    type="button"
-                    onClick={triggerOnlineSearch}
-                    variant="secondary"
-                    className="gap-1.5"
-                  >
-                    <ExternalLink className="h-4 w-4" />
-                    Online Search (गूगल खोजें)
-                  </Button>
-                  <Button
-                    type="button"
-                    onClick={() => {
-                      setCustomName(searchQuery);
-                      setCustomSourceType("user_entered");
-                      setShowCustomForm(true);
-                      setNoFoodFound(false);
-                    }}
-                    variant="secondary"
-                    className="gap-1.5"
-                  >
-                    <Plus className="h-4 w-4" />
-                    Custom Food जोड़ें
-                  </Button>
-                  <Button
-                    type="button"
-                    onClick={() => {
-                      setSearchQuery("");
-                      setNoFoodFound(false);
-                    }}
-                    variant="ghost"
-                  >
-                    Cancel
-                  </Button>
-                </div>
-              </div>
-            )}
-
-            {/* Search History */}
-            {recentSearchHistory.length > 0 && !searchQuery && (
-              <div className="flex flex-wrap items-center gap-2 pt-1 text-xs">
-                <span className="text-ink-subtle flex items-center gap-1.5">
-                  <History className="h-3.5 w-3.5" /> हाल ही में खोजे गए:
-                </span>
-                {recentSearchHistory.map((h, idx) => (
-                  <button
-                    key={idx}
-                    type="button"
-                    onClick={() => {
-                      setSearchQuery(h);
-                      handleSearch(h);
-                    }}
-                    className="bg-surface-sunken hover:bg-surface-sunken text-ink-muted px-2.5 py-1 rounded-full font-medium transition-colors"
-                  >
-                    {h}
-                  </button>
-                ))}
-              </div>
-            )}
-
-            {/* 2.5 SAVED FOODS SECTION (Your Foods / My Foods) */}
-            {savedFoods.length > 0 && (
-              <div className="space-y-2">
+            {savedFoods.length > 0 ? (
+              <section aria-labelledby="saved-foods-heading" className="space-y-2">
                 <div className="flex items-center justify-between gap-2">
-                  <div className="flex items-center gap-1.5 text-sm font-bold text-indigo-950">
-                    <Bookmark className="h-4 w-4 text-indigo-600" />
-                    <span>आपके सेव किए गए भोजन (Your Saved Foods)</span>
-                  </div>
-                  <span className="text-xs text-ink-subtle font-medium">1-टैप में लोड करें</span>
+                  <h3 id="saved-foods-heading" className="flex items-center gap-1.5 text-sm font-semibold text-ink">
+                    <Bookmark aria-hidden className="h-4 w-4 text-brand" />
+                    आपके सेव किए भोजन
+                  </h3>
+                  <span className="text-xs text-ink-subtle">1-टैप में चुनें · इसी फ़ोन पर</span>
                 </div>
-
-                <div className="flex flex-wrap gap-2">
+                <ul className="flex flex-wrap gap-2">
                   {savedFoods.map((s) => (
-                    <div
-                      key={s.id}
-                      onClick={() => {
-                        setSelectedFood({
-                          id: s.id,
-                          name: s.name,
-                          name_hi: null,
-                          category: "indian_preparation",
-                          subcategory: null,
-                          reference_weight_g: 100,
-                          reference_unit: s.default_unit || "serving",
-                          calories_per_100g: s.default_calories,
-                          protein_g_100g: s.default_protein || 0,
-                          carbs_g_100g: 0,
-                          fat_g_100g: 0,
-                          fibre_g_100g: 0,
-                          sodium_mg_100g: null,
-                          source_type: "user_entered",
-                          source_name: "Saved Food",
-                          source_note: null,
-                          is_verified: true,
-                          is_custom: true,
-                          is_active: true,
-                          created_at: s.created_at,
-                          updated_at: s.updated_at,
-                        });
-                        setQuantity(String(s.default_quantity || 1));
-                      }}
-                      className="inline-flex items-center gap-1.5 py-1.5 px-3 rounded-control border-2 border-indigo-200 bg-indigo-50/70 hover:bg-indigo-100 text-indigo-950 font-semibold text-xs transition-all cursor-pointer shadow-2xs"
-                    >
-                      <span>{getExactFoodEmoji(s.name)}</span>
-                      <span>{s.name}</span>
-                      <span className="text-2xs text-indigo-700 font-semibold">({s.default_calories} kcal)</span>
+                    <li key={s.id} className="flex items-center overflow-hidden rounded-control border border-brand-line bg-brand-softer">
                       <button
                         type="button"
-                        title="Remove from Saved Foods (इतिहास सुरक्षित रहेगा)"
-                        onClick={(e) => {
-                          e.stopPropagation();
+                        onClick={() => pickSavedFood(s)}
+                        className="pressable flex min-h-control cursor-pointer items-center gap-1.5 px-3 text-sm font-medium text-ink"
+                      >
+                        <span aria-hidden>{getExactFoodEmoji(s.name)}</span>
+                        {s.name}
+                        <span className="text-xs text-ink-subtle">({s.default_calories} kcal)</span>
+                      </button>
+                      <IconButton
+                        variant="ghost"
+                        size="sm"
+                        aria-label={`${s.name} को सेव किए भोजन से हटाएँ`}
+                        onClick={() => {
                           removeSavedFood(patientId, s.id);
-                          loadSavedFoodsList();
+                          setSavedFoods(getSavedFoods(patientId));
+                          toast.info(`"${s.name}" हटाया गया`, "पुराने रिकॉर्ड सुरक्षित हैं।");
                         }}
-                        className="hit-target ml-1 rounded-sm p-0.5 text-ink-subtle hover:text-critical"
                       >
-                        <Trash2 className="h-3 w-3" />
-                      </button>
-                    </div>
+                        <Trash2 aria-hidden className="h-4 w-4" />
+                      </IconButton>
+                    </li>
                   ))}
-                </div>
-              </div>
-            )}
+                </ul>
+              </section>
+            ) : null}
 
-            {/* 3. PROMINENT PERSONALIZED QUICK FOODS SECTION */}
-            <div>
-              <div className="flex items-center justify-between gap-2 mb-2.5">
-                <div className="flex items-center gap-1.5 text-sm font-semibold text-ink">
-                  <Sparkles className="h-4 w-4 text-brand" />
-                  <span>आपके नियमित भोजन · Quick Food Shortcuts</span>
-                </div>
-                <span className="text-xs text-ink-subtle font-medium">
-                  {mealType ? `(${mealType} Relevance)` : "(Learned)"}
-                </span>
-              </div>
-
-              {quickFoodsLoading ? (
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                  {[...Array(4)].map((_, i) => (
-                    <div key={i} className="h-20 rounded-card bg-surface-sunken animate-pulse border border-line" />
-                  ))}
-                </div>
-              ) : quickFoods.length > 0 ? (
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                  {quickFoods.map((q) => (
-                    <div
-                      key={q.canonicalKey}
-                      className="group relative p-3 rounded-card border border-line hover:border-brand-line bg-surface hover:bg-brand-soft/50 text-left transition-all shadow-2xs flex flex-col justify-between cursor-pointer"
-                      onClick={async () => {
-                        if (quickActionLockRef.current) return;
-                        quickActionLockRef.current = true;
-
-                        recordQuickAddUsage(patientId, q.name);
-
-                        // Fetch full food item details
-                        const { exactMatches } = await searchFoodItems(q.name);
-                        if (exactMatches.length > 0) {
-                          handleSelectFood(exactMatches[0]);
-                        } else {
-                          const fallbackFood: FoodItem = {
-                            id: `quick-${q.canonicalKey}`,
-                            name: q.name,
-                            name_hi: q.name_hi,
-                            category: q.category,
-                            subcategory: "quick_food",
-                            reference_weight_g: 100,
-                            reference_unit: "g",
-                            calories_per_100g: q.defaultCal,
-                            protein_g_100g: 0,
-                            carbs_g_100g: 0,
-                            fat_g_100g: 0,
-                            fibre_g_100g: 0,
-                            sodium_mg_100g: null,
-                            source_type: "user_entered",
-                            source_name: "Quick Food Learned",
-                            source_note: null,
-                            is_verified: true,
-                            is_custom: false,
-                            is_active: true,
-                            created_at: new Date().toISOString(),
-                            updated_at: new Date().toISOString(),
-                          };
-                          handleSelectFood(fallbackFood);
-                        }
-
-                        setTimeout(() => {
-                          quickActionLockRef.current = false;
-                        }, 400);
-                      }}
-                    >
-                      {/* Hide button */}
+            {favorites.data && favorites.data.length > 0 ? (
+              <section aria-labelledby="fav-foods-heading" className="space-y-2">
+                <h3 id="fav-foods-heading" className="flex items-center gap-1.5 text-sm font-semibold text-ink">
+                  <Star aria-hidden className="h-4 w-4 text-gold-ink" />
+                  पसंदीदा भोजन
+                </h3>
+                <ul className="flex flex-wrap gap-2">
+                  {favorites.data.map((f) => (
+                    <li key={f.id}>
                       <button
                         type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          hideQuickFood(patientId, q.name);
-                          setQuickFoods((prev) => prev.filter((item) => item.canonicalKey !== q.canonicalKey));
-                        }}
-                        className="hit-target absolute top-1.5 right-1.5 flex h-6 w-6 items-center justify-center rounded-full bg-surface-sunken text-2xs text-ink-subtle transition-colors hover:bg-critical-soft hover:text-critical"
-                        title="Remove from Quick Food"
+                        onClick={() => setPicked({ food: f })}
+                        className="pressable flex min-h-control cursor-pointer items-center gap-1.5 rounded-control border border-gold-line bg-gold-soft px-3 text-sm font-medium text-gold-ink"
                       >
-                        <X className="h-3 w-3" />
+                        <span aria-hidden>{getExactFoodEmoji(f.name, f.category)}</span>
+                        {f.name}
                       </button>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            ) : null}
 
-                      <div className="flex items-center gap-1.5 min-w-0 pr-3">
-                        <span className="text-lg shrink-0">{getExactFoodEmoji(q.name, q.category)}</span>
-                        <span className="text-xs font-semibold text-ink truncate">{q.name}</span>
-                      </div>
-                      <div className="mt-1 flex items-center justify-between text-xs text-ink-subtle font-hindi">
-                        <span className="truncate">{q.name_hi || `${q.distinctDays30d} days`}</span>
-                        <span className="text-brand font-bold font-sans shrink-0 ml-1">~{q.defaultCal} cal</span>
-                      </div>
-                    </div>
+            <section aria-labelledby="quick-foods-heading">
+              <div className="mb-2.5 flex items-center justify-between gap-2">
+                <h3 id="quick-foods-heading" className="flex items-center gap-1.5 text-sm font-semibold text-ink">
+                  <Sparkles aria-hidden className="h-4 w-4 text-brand" />
+                  आपके नियमित भोजन
+                  <span className="text-xs font-normal text-ink-subtle">Quick foods</span>
+                </h3>
+                <span className="text-xs text-ink-subtle">आपके पुराने रिकॉर्ड से</span>
+              </div>
+
+              {quick.loading ? (
+                <div aria-busy="true" className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+                  {[0, 1, 2, 3].map((i) => (
+                    <div key={i} className="skeleton h-20 rounded-card" />
                   ))}
                 </div>
+              ) : quick.data && quick.data.length > 0 ? (
+                <ul className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+                  {quick.data.map((q) => (
+                    <li key={q.canonicalKey} className="relative">
+                      <button
+                        type="button"
+                        onClick={() => void pickQuickFood(q)}
+                        className="pressable flex min-h-20 w-full cursor-pointer flex-col justify-between rounded-card border border-line bg-surface p-3 pr-9 text-left shadow-e1 hover:border-brand-line"
+                      >
+                        <span className="flex min-w-0 items-center gap-1.5">
+                          <span aria-hidden className="shrink-0 text-lg">
+                            {getExactFoodEmoji(q.name, q.category)}
+                          </span>
+                          <span className="truncate text-xs font-semibold text-ink">{q.name}</span>
+                        </span>
+                        <span className="mt-1 flex items-center justify-between gap-1 text-xs text-ink-subtle">
+                          <span lang="hi" className="truncate">
+                            {q.name_hi || `${q.distinctDays30d} दिन`}
+                          </span>
+                          <span className="tabular shrink-0 font-semibold text-brand-ink">
+                            {q.caloriesKnown ? `~${q.defaultCal} kcal` : "kcal ?"}
+                          </span>
+                        </span>
+                      </button>
+                      <IconButton
+                        variant="ghost"
+                        size="sm"
+                        aria-label={`${q.name} को शॉर्टकट से हटाएँ`}
+                        className="absolute right-0.5 top-0.5"
+                        onClick={() => {
+                          hideQuickFood(patientId, q.name);
+                          quick.reload();
+                        }}
+                      >
+                        <X aria-hidden className="h-3.5 w-3.5" />
+                      </IconButton>
+                    </li>
+                  ))}
+                </ul>
               ) : (
-                <div className="rounded-card border border-dashed border-line bg-surface-sunken/70 p-4 text-center">
-                  <p className="text-xs font-semibold text-ink-muted">
-                    आपके बार-बार खाए जाने वाले भोजन यहाँ automatically सीख कर दिखाई देंगे।
-                  </p>
-                  <p className="text-xs text-ink-subtle mt-0.5">
-                    (Your personalized frequently logged foods will adapt and appear here automatically.)
+                <div className="rounded-card border border-dashed border-line-strong bg-surface-sunken p-4 text-center">
+                  <p lang="hi" className="text-xs font-medium text-ink-muted">
+                    जो भोजन आप बार-बार दर्ज करेंगे (कम से कम 3 अलग दिन), वे यहाँ अपने-आप दिखने लगेंगे।
                   </p>
                 </div>
               )}
-            </div>
+            </section>
           </div>
-        )}
-
-        {/* 4. SELECTION PORTIONS & OIL SECTOR (SAVING WORKFLOW) */}
-        {selectedFood && (
-          <div className="bg-surface-sunken rounded-card p-5 border border-line space-y-4">
-            <div className="flex items-start justify-between">
-              <div>
-                <span className="text-xs font-semibold uppercase tracking-wider text-brand-ink bg-brand-soft px-2 py-0.5 rounded">
-                  {selectedFood.category}
-                </span>
-                <h3 className="text-lg font-semibold text-ink mt-1">
-                  {selectedFood.name} {selectedFood.name_hi ? `(${selectedFood.name_hi})` : ""}
-                </h3>
-                {selectedFood.source_note && (
-                  <p className="text-xs text-ink-subtle mt-0.5">{selectedFood.source_note}</p>
-                )}
-              </div>
-              <button
-                type="button"
-                onClick={() => setSelectedFood(null)}
-                className="text-xs font-semibold text-ink-subtle hover:text-ink-muted"
-              >
-                Change (बदलें)
-              </button>
-            </div>
-
-            <div className="grid gap-3.5 sm:grid-cols-2">
-              {/* Portion Unit selection */}
-              <Field label="मात्रा इकाई (Select Portion Size)">
-                {portionOptions.length > 0 ? (
-                  <Select
-                    value={selectedPortion?.id || ""}
-                    onChange={(e) => {
-                      const port = portionOptions.find(p => p.id === e.target.value);
-                      if (port) setSelectedPortion(port);
-                    }}
-                  >
-                    {portionOptions.map((port) => (
-                      <option key={port.id} value={port.id}>
-                        {port.portion_name_hi || port.portion_name} (~{port.standardized_grams}g)
-                      </option>
-                    ))}
-                  </Select>
-                ) : (
-                  <Select
-                    value="default"
-                    onChange={() => {}}
-                    disabled
-                  >
-                    <option value="default">Standard Portion (100 {selectedFood.reference_unit})</option>
-                  </Select>
-                )}
-              </Field>
-
-              {/* Quantity input */}
-              <Field label="कितनी बार खाया? (Portion Multiplier)">
-                <TextInput
-                  type="number"
-                  step="0.25"
-                  min="0.25"
-                  inputMode="decimal"
-                  placeholder="e.g. 1"
-                  value={quantity}
-                  onChange={(e) => setQuantity(e.target.value)}
-                  required
-                />
-              </Field>
-            </div>
-
-            {/* Cooking Oil Input */}
-            <div>
-              <label className="text-xs font-semibold text-ink-muted block mb-1.5">
-                बनाने में तेल की मात्रा (Cooking Oil Used):
-              </label>
-              <div className="flex flex-wrap gap-1.5">
-                {[
-                  { id: "None", label: "बिना तेल (None)", cal: 0 },
-                  { id: "1/2 tsp", label: "½ चम्मच (+22 cal)", cal: 22 },
-                  { id: "1 tsp", label: "1 चम्मच (+45 cal)", cal: 45 },
-                  { id: "2 tsp", label: "2 चम्मच (+90 cal)", cal: 90 },
-                  { id: "1 tbsp", label: "1 बड़ा चम्मच (+120 cal)", cal: 120 },
-                  { id: "Unknown", label: "पता नहीं (Unknown)", cal: 0 }
-                ].map((oil) => (
-                  <button
-                    key={oil.id}
-                    type="button"
-                    onClick={() => setOilQuantity(oil.id)}
-                    className={`px-3 py-1.5 rounded-control text-xs font-medium border transition-colors ${
-                      oilQuantity === oil.id
-                        ? "border-brand bg-brand text-ink-inverse font-semibold"
-                        : "border-line hover:border-line-strong text-ink-muted bg-surface"
-                    }`}
-                  >
-                    {oil.label}
-                  </button>
-                ))}
-              </div>
-              {oilQuantity === "Unknown" && (
-                <p className="mt-2 text-xs font-medium text-amber-700 bg-amber-50 p-2.5 rounded-lg border border-amber-200 flex gap-2 items-start">
-                  <AlertTriangle className="h-4 w-4 text-amber-600 flex-shrink-0 mt-0.5" />
-                  <span>
-                    तेल की मात्रा पता नहीं है, इसलिए calorie estimate कम accurate हो सकता है।
-                  </span>
-                </p>
-              )}
-            </div>
-
-            {/* Calorie Engine output display */}
-            <div className="border-t border-line/80 pt-4 flex flex-wrap items-center justify-between gap-4">
-              <div>
-                <span className="text-xs text-ink-subtle font-medium">अनुमानित कैलोरी (Estimated Calories):</span>
-                <div className="flex items-baseline gap-2">
-                  <span className="text-3xl font-bold text-ink">
-                    ~{calculateCalories()} kcal
-                  </span>
-                  <Badge variant={getConfidenceLevel() === "High" ? "green" : getConfidenceLevel() === "Medium" ? "blue" : "amber"}>
-                    {getConfidenceLevel()} Confidence
-                  </Badge>
-                </div>
-              </div>
-
-              <div className="flex gap-2">
-                <Button
-                  type="button"
-                  variant="ghost"
-                  onClick={() => setSelectedFood(null)}
-                  disabled={loading}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  type="button"
-                  variant="primary"
-                  onClick={handleSaveFood}
-                  disabled={loading || (parseFloat(quantity) <= 0)}
-                  className="px-5"
-                >
-                  {loading ? "सुरक्षित हो रहा है..." : "सुरक्षित करें (Save)"}
-                </Button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* 5. ONLINE REFERENCE / CUSTOM FOOD MANUAL FORM */}
-        {showCustomForm && (
-          <form onSubmit={handleSaveCustomFood} className="bg-surface-sunken rounded-card p-5 border border-line space-y-4">
-            <h3 className="text-lg font-semibold text-ink flex items-center gap-2">
-              <Plus className="h-5 w-5 text-brand" />
-              {customSourceType === "web_reference" ? "Web Search Reference Entry" : "Add Custom Food (नया भोजन जोड़ें)"}
-            </h3>
-
-            <div className="grid gap-3.5 sm:grid-cols-2">
-              <Field label="Food Name (अंग्रेजी में)">
-                <TextInput
-                  type="text"
-                  placeholder="e.g. Paneer Tikka Masala"
-                  value={customName}
-                  onChange={(e) => setCustomName(e.target.value)}
-                  required
-                />
-              </Field>
-
-              <Field label="Hindi Name (optional - हिंदी नाम)">
-                <TextInput
-                  type="text"
-                  placeholder="उदा: पनीर टिक्का मसाला"
-                  value={customNameHi}
-                  onChange={(e) => setCustomNameHi(e.target.value)}
-                />
-              </Field>
-
-              <Field label="Calories (कैलोरी kcal)">
-                <TextInput
-                  type="number"
-                  inputMode="numeric"
-                  placeholder="e.g. 320"
-                  value={customCalories}
-                  onChange={(e) => setCustomCalories(e.target.value)}
-                  required
-                />
-              </Field>
-
-              <Field label="Protein (optional - प्रोटीन g)">
-                <TextInput
-                  type="number"
-                  inputMode="numeric"
-                  placeholder="e.g. 8"
-                  value={customProtein}
-                  onChange={(e) => setCustomProtein(e.target.value)}
-                />
-              </Field>
-
-              <Field label="Serving Size Quantity">
-                <TextInput
-                  type="number"
-                  inputMode="numeric"
-                  placeholder="100"
-                  value={customWeightG}
-                  onChange={(e) => setCustomWeightG(e.target.value)}
-                  required
-                />
-              </Field>
-
-              <Field label="Serving Unit (इकाई)">
-                <Select value={customUnit} onChange={(e) => setCustomUnit(e.target.value)}>
-                  <option value="g">grams (ग्राम)</option>
-                  <option value="piece">piece (टुकड़ा)</option>
-                  <option value="cup">cup (कप)</option>
-                  <option value="katori">katori (कटोरी)</option>
-                  <option value="ml">ml (मिलीलीटर)</option>
-                </Select>
-              </Field>
-
-              <Field label="Food Category (श्रेणी)">
-                <Select value={customCategory} onChange={(e) => setCustomCategory(e.target.value)}>
-                  <option value="indian_preparation">Indian Preparation (भारतीय व्यंजन)</option>
-                  <option value="fruit">Fruit (फल)</option>
-                  <option value="dairy">Dairy (दूध / दही)</option>
-                  <option value="salad_vegetable">Salad (सलाद)</option>
-                  <option value="beverage">Beverage (पेय पदार्थ)</option>
-                  <option value="junk_food">Fast Food (बाहर का खाना)</option>
-                  <option value="Other">Other (अन्य)</option>
-                </Select>
-              </Field>
-            </div>
-
-            {customSourceType === "web_reference" && (
-              <Field label="Reference Website / Source (वेबसाइट का नाम)">
-                <TextInput
-                  type="text"
-                  placeholder="e.g. Healthline, MyFitnessPal"
-                  value={customSourceWebsite}
-                  onChange={(e) => setCustomSourceWebsite(e.target.value)}
-                />
-              </Field>
-            )}
-
-            <Field label="Notes (टिप्पणी / विवरण)">
-              <TextInput
-                type="text"
-                placeholder="e.g. Added via Google search fallback"
-                value={customNotes}
-                onChange={(e) => setCustomNotes(e.target.value)}
-              />
-            </Field>
-
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-end gap-2 border-t border-line pt-4">
-              <Button
-                type="button"
-                variant="ghost"
-                onClick={() => {
-                  setShowCustomForm(false);
-                  setSearchQuery("");
-                }}
-                disabled={loading}
-              >
-                Cancel
-              </Button>
-
-              <button
-                type="button"
-                onClick={() => {
-                  if (!customName.trim()) return;
-                  saveCustomFoodAsMyFood(patientId, {
-                    name: customName.trim(),
-                    calories: parseFloat(customCalories) || 150,
-                    quantity: parseFloat(customWeightG) || 100,
-                    unit: customUnit || "g",
-                    protein: parseFloat(customProtein) || 0,
-                    meal_context: mealType,
-                  });
-                  loadSavedFoodsList();
-                  setSuccessMsg(`"${customName}" को "Your Foods" में सेव कर लिया गया है!`);
-                  setShowCustomForm(false);
-                }}
-                className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-control border-2 border-indigo-300 bg-indigo-50 text-indigo-950 font-semibold text-xs sm:text-sm hover:bg-indigo-100 transition-colors cursor-pointer"
-              >
-                <BookmarkPlus className="h-4 w-4 text-indigo-600" />
-                Save as My Food (भविष्य के लिए रखें)
-              </button>
-
-              <Button
-                type="submit"
-                variant="primary"
-                disabled={loading}
-              >
-                {loading ? "सहेज रहा है..." : "Log to Meal (अभी दर्ज करें)"}
-              </Button>
-            </div>
-          </form>
         )}
       </div>
     </Card>

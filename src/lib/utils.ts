@@ -7,64 +7,107 @@ export function formatNumber(value: number) {
 }
 
 /**
+ * Per-device UI preferences (dismissed banners, hidden quick-foods, ...).
+ * Not for health data: that lives in the database. Every access is guarded
+ * because storage can be blocked (private mode) or full.
+ */
+export function readLocalPref<T>(key: string, fallback: T): T {
+  if (typeof window === "undefined") return fallback;
+  try {
+    const raw = window.localStorage.getItem(key);
+    return raw === null ? fallback : (JSON.parse(raw) as T);
+  } catch {
+    return fallback;
+  }
+}
+
+export function writeLocalPref<T>(key: string, value: T): void {
+  if (typeof window === "undefined") return;
+  try {
+    window.localStorage.setItem(key, JSON.stringify(value));
+  } catch {
+    // Storage unavailable: the preference simply is not remembered.
+  }
+}
+
+export function removeLocalPref(key: string): void {
+  if (typeof window === "undefined") return;
+  try {
+    window.localStorage.removeItem(key);
+  } catch {
+    // ignore
+  }
+}
+
+/**
  * Returns the exact, matching emoji for any food name or category
  */
 export function getExactFoodEmoji(foodName = "", category = ""): string {
   const lower = `${foodName} ${category}`.toLowerCase();
 
+  // ASCII keywords match whole words ("tea" must not fire on "steak", "dal" not on "dalia").
+  // Devanagari keywords match at the start of a word, so "आम" finds "आम रस" but not a word that
+  // merely contains those letters; matras/suffixes after the key are fine.
+  const has = (...keys: string[]): boolean =>
+    keys.some((k) =>
+      /^[\x00-\x7f]+$/.test(k)
+        ? new RegExp(`(^|[^a-z])${k}s?($|[^a-z])`).test(lower)
+        : new RegExp(`(^|[\\s(),/+-])${k}`).test(lower),
+    );
+
   // 1. Specific Fruits
-  if (lower.includes("apple") || lower.includes("सेब")) return "🍎";
-  if (lower.includes("banana") || lower.includes("केला")) return "🍌";
-  if (lower.includes("mango") || lower.includes("आम")) return "🥭";
-  if (lower.includes("orange") || lower.includes("संतरा") || lower.includes("नारंगी") || lower.includes("मौसमी")) return "🍊";
-  if (lower.includes("papaya") || lower.includes("पपीता")) return "🍈";
-  if (lower.includes("watermelon") || lower.includes("तरबूज")) return "🍉";
-  if (lower.includes("grape") || lower.includes("अंगूर")) return "🍇";
-  if (lower.includes("guava") || lower.includes("अमरूद") || lower.includes("pear") || lower.includes("नाशपाती")) return "🍐";
-  if (lower.includes("pomegranate") || lower.includes("अनार")) return "🍎";
-  if (lower.includes("lemon") || lower.includes("नींबू")) return "🍋";
-  if (lower.includes("fruit") || lower.includes("फल")) return "🍎";
+  if (has("apple") || has("सेब")) return "🍎";
+  if (has("banana") || has("केला")) return "🍌";
+  if (has("mango") || has("आम")) return "🥭";
+  if (has("orange") || has("संतरा") || has("नारंगी") || has("मौसमी")) return "🍊";
+  if (has("papaya") || has("पपीता")) return "🍈";
+  if (has("watermelon") || has("तरबूज")) return "🍉";
+  if (has("grape") || has("अंगूर")) return "🍇";
+  if (has("guava") || has("अमरूद") || has("pear") || has("नाशपाती")) return "🍐";
+  if (has("pomegranate") || has("अनार")) return "🍎";
+  if (has("lemon") || has("नींबू")) return "🍋";
+  if (has("fruit") || has("फल")) return "🍎";
 
   // 2. Hot Beverages & Dairy
-  if (lower.includes("tea") || lower.includes("चाय") || lower.includes("chai")) return "☕";
-  if (lower.includes("coffee") || lower.includes("कॉफ़ी") || lower.includes("कॉफी")) return "☕";
-  if (lower.includes("milk") || lower.includes("दूध") || lower.includes("doodh") || lower.includes("haldi")) return "🥛";
-  if (lower.includes("curd") || lower.includes("yogurt") || lower.includes("dahi") || lower.includes("दही") || lower.includes("chaas") || lower.includes("छाछ") || lower.includes("lassi") || lower.includes("लस्सी") || lower.includes("buttermilk")) return "🥛";
-  if (lower.includes("paneer") || lower.includes("पनीर") || lower.includes("cheese")) return "🧀";
+  if (has("tea") || has("चाय") || has("chai")) return "☕";
+  if (has("coffee") || has("कॉफ़ी") || has("कॉफी")) return "☕";
+  if (has("milk") || has("दूध") || has("doodh") || has("haldi")) return "🥛";
+  if (has("curd") || has("yogurt") || has("dahi") || has("दही") || has("chaas") || has("छाछ") || has("lassi") || has("लस्सी") || has("buttermilk")) return "🥛";
+  if (has("paneer") || has("पनीर") || has("cheese")) return "🧀";
 
   // 3. Indian Breads & Grains
-  if (lower.includes("roti") || lower.includes("रोटी") || lower.includes("chapati") || lower.includes("चपाती") || lower.includes("phulka") || lower.includes("फुल्का") || lower.includes("paratha") || lower.includes("पराठा") || lower.includes("naan") || lower.includes("नान")) return "🫓";
-  if (lower.includes("rice") || lower.includes("चावल") || lower.includes("chawal") || lower.includes("pulao") || lower.includes("पुलाव") || lower.includes("biryani") || lower.includes("बिरयानी")) return "🍚";
-  if (lower.includes("khichdi") || lower.includes("खिचड़ी")) return "🍲";
-  if (lower.includes("dalia") || lower.includes("दलिया") || lower.includes("oats") || lower.includes("ओट्स") || lower.includes("porridge")) return "🥣";
-  if (lower.includes("dal") || lower.includes("दाल") || lower.includes("moong") || lower.includes("मूंग") || lower.includes("chana") || lower.includes("चना") || lower.includes("rajma") || lower.includes("राजमा") || lower.includes("chole") || lower.includes("छोले") || lower.includes("lentil") || lower.includes("legume")) return "🥣";
-  if (lower.includes("soup") || lower.includes("सूप")) return "🥣";
+  if (has("roti") || has("रोटी") || has("chapati") || has("चपाती") || has("phulka") || has("फुल्का") || has("paratha") || has("पराठा") || has("naan") || has("नान")) return "🫓";
+  if (has("rice") || has("चावल") || has("chawal") || has("pulao") || has("पुलाव") || has("biryani") || has("बिरयानी")) return "🍚";
+  if (has("khichdi") || has("खिचड़ी")) return "🍲";
+  if (has("dalia") || has("दलिया") || has("oats") || has("ओट्स") || has("porridge")) return "🥣";
+  if (has("dal") || has("दाल") || has("moong") || has("मूंग") || has("chana") || has("चना") || has("rajma") || has("राजमा") || has("chole") || has("छोले") || has("lentil") || has("legume")) return "🥣";
+  if (has("soup") || has("सूप")) return "🥣";
 
   // 4. Vegetables & Salads
-  if (lower.includes("bhindi") || lower.includes("भिंडी") || lower.includes("okra")) return "🥒";
-  if (lower.includes("lauki") || lower.includes("लौकी") || lower.includes("bottle gourd") || lower.includes("tori") || lower.includes("तरोई") || lower.includes("tinda") || lower.includes("टिंडा")) return "🥒";
-  if (lower.includes("cucumber") || lower.includes("खीरा") || lower.includes("kakdi") || lower.includes("ककड़ी")) return "🥒";
-  if (lower.includes("tomato") || lower.includes("टमाटर")) return "🍅";
-  if (lower.includes("carrot") || lower.includes("गाजर")) return "🥕";
-  if (lower.includes("salad") || lower.includes("सलाद")) return "🥗";
-  if (lower.includes("palak") || lower.includes("पालक") || lower.includes("spinach") || lower.includes("saag") || lower.includes("साग") || lower.includes("methi") || lower.includes("मेथी") || lower.includes("gobhi") || lower.includes("गोभी") || lower.includes("cabbage") || lower.includes("cauliflower") || lower.includes("broccoli") || lower.includes("vegetable") || lower.includes("sabzi") || lower.includes("सब्जी")) return "🥦";
-  if (lower.includes("potato") || lower.includes("aloo") || lower.includes("आलू")) return "🥔";
-  if (lower.includes("corn") || lower.includes("भुट्टा") || lower.includes("मक्का")) return "🌽";
+  if (has("bhindi") || has("भिंडी") || has("okra")) return "🥒";
+  if (has("lauki") || has("लौकी") || has("bottle gourd") || has("tori") || has("तरोई") || has("tinda") || has("टिंडा")) return "🥒";
+  if (has("cucumber") || has("खीरा") || has("kakdi") || has("ककड़ी")) return "🥒";
+  if (has("tomato") || has("टमाटर")) return "🍅";
+  if (has("carrot") || has("गाजर")) return "🥕";
+  if (has("salad") || has("सलाद")) return "🥗";
+  if (has("palak") || has("पालक") || has("spinach") || has("saag") || has("साग") || has("methi") || has("मेथी") || has("gobhi") || has("गोभी") || has("cabbage") || has("cauliflower") || has("broccoli") || has("vegetable") || has("sabzi") || has("सब्जी")) return "🥦";
+  if (has("potato") || has("aloo") || has("आलू")) return "🥔";
+  if (has("corn") || has("भुट्टा") || has("मक्का")) return "🌽";
 
   // 5. Snacks, Nuts, Breakfast Items
-  if (lower.includes("makhana") || lower.includes("मखाना") || lower.includes("popcorn")) return "🍿";
-  if (lower.includes("almond") || lower.includes("बादाम") || lower.includes("kaju") || lower.includes("cashew") || lower.includes("काजू") || lower.includes("walnut") || lower.includes("अखरोट") || lower.includes("pista") || lower.includes("पिस्ता") || lower.includes("dry fruit") || lower.includes("kishmish") || lower.includes("किशमिश") || lower.includes("nuts")) return "🥜";
-  if (lower.includes("peanut") || lower.includes("मूंगफली")) return "🥜";
-  if (lower.includes("poha") || lower.includes("पोहा") || lower.includes("upma") || lower.includes("उपमा") || lower.includes("idli") || lower.includes("इडली") || lower.includes("dosa") || lower.includes("डोसा")) return "🥞";
-  if (lower.includes("bread") || lower.includes("ब्रेड") || lower.includes("toast") || lower.includes("टोस्ट")) return "🍞";
-  if (lower.includes("biscuit") || lower.includes("बिस्कुट") || lower.includes("cookie") || lower.includes("rusk") || lower.includes("रस्क")) return "🍪";
-  if (lower.includes("cake") || lower.includes("केक") || lower.includes("pastry")) return "🍰";
-  if (lower.includes("sweet") || lower.includes("mithai") || lower.includes("मिठाई") || lower.includes("halwa") || lower.includes("हलवा") || lower.includes("kheer") || lower.includes("खीर") || lower.includes("jalebi") || lower.includes("ladoo") || lower.includes("लड्डू")) return "🍨";
+  if (has("makhana") || has("मखाना") || has("popcorn")) return "🍿";
+  if (has("almond") || has("बादाम") || has("kaju") || has("cashew") || has("काजू") || has("walnut") || has("अखरोट") || has("pista") || has("पिस्ता") || has("dry fruit") || has("kishmish") || has("किशमिश") || has("nuts")) return "🥜";
+  if (has("peanut") || has("मूंगफली")) return "🥜";
+  if (has("poha") || has("पोहा") || has("upma") || has("उपमा") || has("idli") || has("इडली") || has("dosa") || has("डोसा")) return "🥞";
+  if (has("bread") || has("ब्रेड") || has("toast") || has("टोस्ट")) return "🍞";
+  if (has("biscuit") || has("बिस्कुट") || has("cookie") || has("rusk") || has("रस्क")) return "🍪";
+  if (has("cake") || has("केक") || has("pastry")) return "🍰";
+  if (has("sweet") || has("mithai") || has("मिठाई") || has("halwa") || has("हलवा") || has("kheer") || has("खीर") || has("jalebi") || has("ladoo") || has("लड्डू")) return "🍨";
 
   // 6. Protein & Others
-  if (lower.includes("egg") || lower.includes("अंडा")) return "🥚";
-  if (lower.includes("chicken") || lower.includes("meat") || lower.includes("fish") || lower.includes("मछली")) return "🍗";
-  if (lower.includes("water") || lower.includes("पानी") || lower.includes("beverage")) return "💧";
+  if (has("egg") || has("अंडा")) return "🥚";
+  if (has("chicken") || has("meat") || has("fish") || has("मछली")) return "🍗";
+  if (has("water") || has("पानी") || has("beverage")) return "💧";
 
   if (category === "fruit") return "🍎";
   if (category === "dairy") return "🥛";

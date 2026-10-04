@@ -1,0 +1,8 @@
+{
+  "crons": [
+    { "path": "/api/cron/missed-alerts", "schedule": "30 8 * * *" },
+    { "path": "/api/cron/daily-report", "schedule": "30 15 * * *" },
+    { "path": "/api/cron/weekly-report", "schedule": "30 14 * * 0" },
+    { "path": "/api/cron/monthly-report", "schedule": "30 3 1 * *" }
+  ]
+}

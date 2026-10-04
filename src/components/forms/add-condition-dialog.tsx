@@ -3,71 +3,71 @@
 import { useState, type FormEvent } from "react";
 import { Activity } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Field, TextInput } from "@/components/ui/form-field";
+import { Field, NumberInput, TextInput } from "@/components/ui/form-field";
 import { Modal } from "@/components/ui/modal";
+import { useAuth } from "@/context/auth-context";
+import { todayIST } from "@/lib/health-rules";
 import { addMedicalCondition } from "@/services/patient-service";
 
 type AddConditionDialogProps = {
   isOpen: boolean;
   onClose: () => void;
   patientId: string;
+  /** Called after a successful save; the caller shows the confirmation. */
   onSuccess?: () => void;
 };
 
-export function AddConditionDialog({
-  isOpen,
-  onClose,
-  patientId,
-  onSuccess,
-}: AddConditionDialogProps) {
-  const [conditionName, setConditionName] = useState("");
-  const [diagnosedYear, setDiagnosedYear] = useState(new Date().getFullYear().toString());
-  const [notes, setNotes] = useState("");
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+const FORM_ID = "condition-form";
 
-  const quickSuggestions = [
-    "Hypertension",
-    "Fatty Liver",
-    "Type 2 Diabetes",
-    "Previous Stroke",
-    "High Cholesterol",
-    "Thyroid",
-  ];
+const QUICK_SUGGESTIONS = [
+  "Hypertension",
+  "Fatty Liver",
+  "Type 2 Diabetes",
+  "Previous Stroke",
+  "High Cholesterol",
+  "Thyroid",
+];
+
+function ConditionDialogBody({ isOpen, onClose, patientId, onSuccess }: AddConditionDialogProps) {
+  const { canWrite } = useAuth();
+
+  const [conditionName, setConditionName] = useState("");
+  // Left blank: the year of diagnosis is the doctor's, not "this year".
+  const [diagnosedYear, setDiagnosedYear] = useState("");
+  const [notes, setNotes] = useState("");
+  const [errors, setErrors] = useState<Partial<Record<"name" | "year", string>>>({});
+  const [formError, setFormError] = useState("");
+  const [saving, setSaving] = useState(false);
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
-    setError("");
+    if (saving || !canWrite) return;
+    setFormError("");
 
-    if (!conditionName.trim()) {
-      setError("Please enter the condition name (बीमारी/स्वास्थ्य स्थिति का नाम दर्ज करें)");
-      return;
+    const next: typeof errors = {};
+    if (!conditionName.trim()) next.name = "बीमारी / स्थिति का नाम लिखें (Enter the condition)";
+    const currentYear = Number(todayIST().slice(0, 4));
+    const yearNum = diagnosedYear.trim() === "" ? null : parseInt(diagnosedYear, 10);
+    if (yearNum !== null && (!Number.isFinite(yearNum) || yearNum < 1920 || yearNum > currentYear)) {
+      next.year = `वर्ष 1920 से ${currentYear} के बीच लिखें, या खाली छोड़ें`;
     }
+    setErrors(next);
+    if (Object.keys(next).length > 0) return;
 
-    const yearNum = diagnosedYear ? parseInt(diagnosedYear, 10) : undefined;
-    const currentYear = new Date().getFullYear();
-    if (yearNum && (isNaN(yearNum) || yearNum < 1920 || yearNum > currentYear)) {
-      setError(`Year must be between 1920 and ${currentYear} (सही वर्ष दर्ज करें)`);
-      return;
-    }
-
+    setSaving(true);
     try {
-      setLoading(true);
       await addMedicalCondition({
         patient_id: patientId,
         condition_name: conditionName.trim(),
-        diagnosed_year: yearNum || null,
+        diagnosed_year: yearNum,
         notes: notes.trim() || null,
       });
-
-      setConditionName("");
-      setNotes("");
-      onClose();
       onSuccess?.();
+      onClose();
     } catch {
-      setError("Failed to add medical condition. Please try again.");
+      setFormError("स्थिति सेव नहीं हो पाई। इंटरनेट जाँचकर दोबारा कोशिश करें। (Could not save the condition.)");
     } finally {
-      setLoading(false);
+      setSaving(false);
     }
   }
 
@@ -77,68 +77,69 @@ export function AddConditionDialog({
       onClose={onClose}
       title="Add Medical Condition"
       hindiTitle="स्वास्थ्य स्थिति जोड़ें"
-      description="Add diagnosed medical conditions, chronic illnesses, or historical events."
+      description="डॉक्टर ने जो बीमारी या स्थिति बताई हो, वही दर्ज करें।"
+      footer={
+        <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+          <Button variant="secondary" onClick={onClose} disabled={saving}>
+            <span lang="hi">रद्द करें</span>
+          </Button>
+          <Button variant="primary" type="submit" form={FORM_ID} loading={saving} disabled={!canWrite}>
+            <Activity aria-hidden className="h-4 w-4" />
+            <span lang="hi">जोड़ें</span>
+          </Button>
+        </div>
+      }
     >
-      <form onSubmit={handleSubmit} className="space-y-4">
-        {error ? (
-          <div className="rounded-card border border-critical-line bg-critical-soft p-3 text-sm font-medium text-critical">
-            {error}
-          </div>
+      <form id={FORM_ID} onSubmit={handleSubmit} noValidate className="space-y-4">
+        {!canWrite ? (
+          <p role="status" lang="hi" className="rounded-card border border-info-line bg-info-soft p-3 text-sm text-info">
+            आपके पास केवल देखने का एक्सेस है, इसलिए स्थिति जोड़ी नहीं जा सकती।
+          </p>
         ) : null}
+        <div aria-live="polite">
+          {formError ? (
+            <p className="rounded-card border border-critical-line bg-critical-soft p-3 text-sm font-medium text-critical">
+              {formError}
+            </p>
+          ) : null}
+        </div>
 
-        <Field label="Condition Name (स्थिति का नाम)">
+        <Field label="स्थिति का नाम (Condition)" required error={errors.name}>
           <TextInput
-            autoFocus
             type="text"
-            placeholder="e.g. Hypertension, Fatty Liver"
+            autoComplete="off"
+            maxLength={100}
+            placeholder="जैसे Hypertension"
             value={conditionName}
             onChange={(e) => setConditionName(e.target.value)}
-            required
           />
         </Field>
 
-        <div className="flex flex-wrap gap-2 pt-1 pb-2">
-          {quickSuggestions.map((item) => (
+        <div role="group" aria-label="सुझाव (Suggestions)" className="flex flex-wrap gap-2">
+          {QUICK_SUGGESTIONS.map((item) => (
             <button
               type="button"
               key={item}
               onClick={() => setConditionName(item)}
-              className="rounded-control border border-brand-line bg-brand-soft px-2.5 py-1 text-xs font-semibold text-brand-ink hover:bg-brand-line/40 transition-colors"
+              className="pressable min-h-control cursor-pointer rounded-field border border-brand-line bg-brand-soft px-3 text-xs font-semibold text-brand-ink hover:bg-brand-softer"
             >
               + {item}
             </button>
           ))}
         </div>
 
-        <Field label="Year Diagnosed (निदान का वर्ष)" hint="e.g. 2018 or 2023">
-          <TextInput
-            type="number"
-            inputMode="numeric"
-            placeholder="e.g. 2023"
-            value={diagnosedYear}
-            onChange={(e) => setDiagnosedYear(e.target.value)}
-          />
+        <Field label="निदान का वर्ष (Year diagnosed) — ऐच्छिक" error={errors.year}>
+          <NumberInput placeholder="जैसे 2018" value={diagnosedYear} maxLength={4} onChange={(e) => setDiagnosedYear(e.target.value)} />
         </Field>
 
-        <Field label="Notes (टिप्पणी / विवरण)" hint="Optional notes from physician">
-          <TextInput
-            type="text"
-            placeholder="e.g. Managed with Telmisartan 40mg"
-            value={notes}
-            onChange={(e) => setNotes(e.target.value)}
-          />
+        <Field label="टिप्पणी (Notes) — ऐच्छिक" hint="डॉक्टर की कोई बात, जैसे इलाज या सलाह">
+          <TextInput type="text" maxLength={300} value={notes} onChange={(e) => setNotes(e.target.value)} />
         </Field>
-
-        <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
-          <Button variant="ghost" onClick={onClose} disabled={loading}>
-            Cancel (रद्द करें)
-          </Button>
-          <Button variant="primary" type="submit" disabled={loading}>
-            <Activity className="h-4 w-4" />
-            {loading ? "Saving..." : "Add Condition (जोड़ें)"}
-          </Button>
-        </div>
       </form>
     </Modal>
   );
+}
+
+export function AddConditionDialog(props: AddConditionDialogProps) {
+  return props.isOpen ? <ConditionDialogBody {...props} /> : null;
 }

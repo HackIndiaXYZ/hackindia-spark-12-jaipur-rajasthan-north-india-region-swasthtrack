@@ -1,205 +1,184 @@
 "use client";
 
 import { useState } from "react";
-import { Moon, Plus, Clock, CheckCircle2, BedDouble, Calendar } from "lucide-react";
+import { BedDouble, CheckCircle2, Clock, Moon, Plus } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { EmptyState } from "@/components/ui/page";
 import { AddSleepDialog } from "@/components/forms/add-sleep-dialog";
+import { fmtDateStrWeekday } from "@/components/health/format";
+import { SmallNote } from "@/components/health/panel-parts";
+import { SLEEP_SHORT_HOURS, mean } from "@/lib/health-rules";
 import type { SleepLogEntry } from "@/services/patient-service";
 
 type SleepPanelProps = {
   patientId: string;
+  /** Newest first. */
   logs: SleepLogEntry[];
+  /** The patient's own goal from settings. */
+  targetHours: number;
+  /** False for viewers: the panel is read-only. */
+  canWrite: boolean;
   onSuccess?: () => void;
 };
 
-export function SleepPanel({ patientId, logs, onSuccess }: SleepPanelProps) {
+export function SleepPanel({ patientId, logs, targetHours, canWrite, onSuccess }: SleepPanelProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  // Compute summary stats
-  const totalLogs = logs.length;
-  const avgSleepHours =
-    totalLogs > 0
-      ? (logs.reduce((sum, item) => sum + (item.sleep_hours || 0), 0) / totalLogs).toFixed(1)
-      : "0";
-  const latestLog = logs[0] || null;
-
-  const optimalNights = logs.filter((l) => l.sleep_hours >= 7 && l.sleep_hours <= 9).length;
-  const optimalPercentage = totalLogs > 0 ? Math.round((optimalNights / totalLogs) * 100) : 0;
+  const total = logs.length;
+  const avg = total > 0 ? Number(mean(logs.map((l) => l.sleep_hours))!.toFixed(1)) : null;
+  const metNights = logs.filter((l) => l.sleep_hours >= targetHours).length;
+  const metPct = total > 0 ? Math.round((metNights / total) * 100) : null;
+  const latest = logs[0] ?? null;
 
   return (
     <>
-      <Card className="border-indigo-100/80 shadow-xs overflow-hidden">
-        <CardHeader className="bg-linear-to-r from-indigo-50/60 via-surface-sunken/40 to-surface pb-4 border-b border-indigo-100/50">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-            <div>
-              <div className="flex items-center gap-2">
-                <div className="h-8 w-8 rounded-control bg-indigo-600 text-white flex items-center justify-center shadow-xs">
-                  <Moon className="h-4.5 w-4.5" />
-                </div>
-                <CardTitle className="text-lg font-bold text-ink">
-                  Sleep Tracker (नींद मॉनिटरिंग)
-                </CardTitle>
-                <Badge variant="blue">दैनिक रिकॉर्ड</Badge>
+      <Card className="overflow-hidden">
+        <CardHeader>
+          <div className="flex min-w-0 items-center gap-3">
+            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-control bg-sleep-soft text-sleep">
+              <Moon aria-hidden className="h-5 w-5" />
+            </span>
+            <div className="min-w-0">
+              <div className="flex flex-wrap items-center gap-2">
+                <CardTitle>Sleep</CardTitle>
+                <Badge variant="neutral" lang="hi">
+                  नींद
+                </Badge>
               </div>
-              <CardDescription className="text-xs font-semibold text-ink-subtle mt-1">
-                रोजाना 7 से 8 घंटे की अच्छी नींद स्वास्थ्य व ब्लड प्रेशर नियंत्रण के लिए आवश्यक है।
+              <CardDescription>
+                लक्ष्य: रोज़ {targetHours} घंटे या ज़्यादा · Goal from settings
               </CardDescription>
             </div>
-
-            <Button
-              onClick={() => setIsDialogOpen(true)}
-              className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-control h-11 px-4 shadow-xs"
-            >
-              <Plus className="h-4 w-4 mr-1.5" />
-              + Log Sleep (नींद दर्ज करें)
-            </Button>
           </div>
+          {canWrite ? (
+            <Button variant="primary" onClick={() => setIsDialogOpen(true)}>
+              <Plus aria-hidden className="h-4 w-4" />
+              नींद दर्ज करें (Log sleep)
+            </Button>
+          ) : null}
         </CardHeader>
 
-        <div className="p-4 sm:p-6 space-y-6">
-          {/* STATS HIGHLIGHTS */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
-            <div className="p-4 rounded-card border border-indigo-100 bg-indigo-50/50 flex flex-col justify-between">
+        <div className="space-y-5">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+            <div className="rounded-card border border-sleep-line bg-sleep-soft p-4">
               <div className="flex items-center justify-between text-ink-muted">
-                <span className="text-xs font-bold uppercase tracking-wider text-indigo-900">
-                  औसत नींद (Average)
-                </span>
-                <Clock className="h-4 w-4 text-indigo-600" />
+                <span className="text-xs font-semibold">औसत नींद (Average)</span>
+                <Clock aria-hidden className="h-4 w-4 text-sleep" />
               </div>
-              <div className="mt-2 flex items-baseline gap-1.5">
-                <span className="text-3xl font-bold text-indigo-950">{avgSleepHours}</span>
-                <span className="text-sm font-semibold text-indigo-800">घंटे / रात</span>
-              </div>
-              <span className="text-xs font-semibold text-indigo-700 mt-1">
-                लक्ष्य: 7 - 8 घंटे प्रतिदिन
-              </span>
+              <p className="tabular mt-2 text-3xl font-semibold text-ink">
+                {avg !== null ? avg : "—"}
+                {avg !== null ? <span className="ml-1.5 text-sm font-medium text-ink-muted">घंटे / रात</span> : null}
+              </p>
+              <p className="mt-1 text-xs text-ink-muted">
+                {total > 0 ? `पिछली ${total} रातों का औसत` : "अभी कोई रिकॉर्ड नहीं"}
+              </p>
             </div>
 
-            <div className="p-4 rounded-card border border-positive-line bg-positive-soft/50 flex flex-col justify-between">
+            <div className="rounded-card border border-line bg-surface-sunken p-4">
               <div className="flex items-center justify-between text-ink-muted">
-                <span className="text-xs font-bold uppercase tracking-wider text-positive">
-                  पर्याप्त नींद दर (Goal Met)
-                </span>
-                <CheckCircle2 className="h-4 w-4 text-positive" />
+                <span className="text-xs font-semibold">लक्ष्य पूरा (Goal met)</span>
+                <CheckCircle2 aria-hidden className="h-4 w-4 text-sleep" />
               </div>
-              <div className="mt-2 flex items-baseline gap-1.5">
-                <span className="text-3xl font-bold text-positive">{optimalPercentage}%</span>
-                <span className="text-sm font-semibold text-positive">दिन पूरे</span>
-              </div>
-              <span className="text-xs font-semibold text-positive mt-1">
-                {optimalNights} में से {totalLogs} दिन लक्ष्य पूरा हुआ
-              </span>
+              <p className="tabular mt-2 text-3xl font-semibold text-ink">{metPct !== null ? `${metPct}%` : "—"}</p>
+              <p className="mt-1 text-xs text-ink-muted">
+                {total > 0 ? `${total} में से ${metNights} रातें ${targetHours}+ घंटे` : "अभी कोई रिकॉर्ड नहीं"}
+              </p>
             </div>
 
-            <div className="p-4 rounded-card border border-line bg-surface-sunken/70 flex flex-col justify-between">
+            <div className="rounded-card border border-line bg-surface-sunken p-4">
               <div className="flex items-center justify-between text-ink-muted">
-                <span className="text-xs font-bold uppercase tracking-wider text-ink-muted">
-                  हालिया रिकॉर्ड (Latest)
-                </span>
-                <BedDouble className="h-4 w-4 text-ink-muted" />
+                <span className="text-xs font-semibold">ताज़ा रिकॉर्ड (Latest)</span>
+                <BedDouble aria-hidden className="h-4 w-4 text-sleep" />
               </div>
-              <div className="mt-2 flex items-baseline gap-1.5">
-                <span className="text-3xl font-bold text-ink">
-                  {latestLog ? `${latestLog.sleep_hours}h` : "--"}
-                </span>
-                <span className="text-xs font-semibold text-ink-subtle">
-                  {latestLog ? `(${latestLog.date})` : ""}
-                </span>
-              </div>
-              <span className="text-xs font-semibold text-ink-muted mt-1 truncate">
-                {latestLog?.notes || "समय पर गहरी नींद"}
-              </span>
+              <p className="tabular mt-2 text-3xl font-semibold text-ink">{latest ? `${latest.sleep_hours} h` : "—"}</p>
+              <p className="mt-1 truncate text-xs text-ink-muted">
+                {latest ? fmtDateStrWeekday(latest.date) : "अभी कोई रिकॉर्ड नहीं"}
+              </p>
             </div>
           </div>
 
-          {/* SLEEP HISTORY LIST */}
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <h4 className="text-sm font-bold text-ink flex items-center gap-2">
-                <Calendar className="h-4 w-4 text-indigo-600" />
-                नींद का इतिहास (Sleep Log History)
-              </h4>
-              <span className="text-xs font-semibold text-ink-subtle">
-                कुल {logs.length} रिकॉर्ड
-              </span>
+          {total > 0 && total < 5 ? (
+            <SmallNote>सिर्फ़ {total} रातों का रिकॉर्ड है, इसलिए औसत और प्रतिशत मोटा अंदाज़ा है। (Small sample.)</SmallNote>
+          ) : null}
+
+          <div>
+            <div className="mb-2 flex items-center justify-between gap-2">
+              <h3 className="text-sm font-semibold text-ink">नींद का इतिहास · Sleep history</h3>
+              <span className="text-xs text-ink-subtle">{total} रातें</span>
             </div>
 
-            {logs.length === 0 ? (
-              <div className="text-center py-8 rounded-card border border-dashed border-line bg-surface-sunken/50">
-                <Moon className="h-8 w-8 text-ink-subtle mx-auto mb-2" />
-                <p className="text-sm font-semibold text-ink-muted">कोई नींद का रिकॉर्ड दर्ज नहीं है</p>
-                <p className="text-xs text-ink-subtle mt-0.5">ऊपर दिए गए बटन से अपनी नींद दर्ज करें।</p>
-              </div>
+            {total === 0 ? (
+              <EmptyState
+                icon={Moon}
+                title="अभी कोई नींद का रिकॉर्ड नहीं"
+                description="No sleep recorded yet."
+                action={
+                  canWrite ? (
+                    <Button variant="primary" onClick={() => setIsDialogOpen(true)}>
+                      <Plus aria-hidden className="h-4 w-4" />
+                      पहली रात दर्ज करें
+                    </Button>
+                  ) : undefined
+                }
+              />
             ) : (
-              <div className="rounded-card border border-line divide-y divide-line overflow-hidden bg-surface shadow-2xs">
+              <ul className="divide-y divide-line overflow-hidden rounded-card border border-line bg-surface">
                 {logs.map((log) => {
-                  const isGood = log.sleep_hours >= 7;
+                  const met = log.sleep_hours >= targetHours;
+                  const short = log.sleep_hours < SLEEP_SHORT_HOURS;
                   return (
-                    <div
-                      key={log.id}
-                      className="p-3.5 sm:p-4 hover:bg-surface-sunken/70 transition-colors flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5"
-                    >
-                      <div className="flex items-center gap-3">
-                        <div
-                          className={`h-11 w-11 rounded-control flex flex-col items-center justify-center shrink-0 border ${
-                            isGood
-                              ? "bg-positive-soft border-positive-line text-positive font-bold"
-                              : "bg-attention-soft border-attention-line text-attention font-bold"
-                          }`}
-                        >
-                          <span className="text-base leading-none">{log.sleep_hours}</span>
-                          <span className="text-2xs font-semibold uppercase text-ink-subtle">घंटे</span>
-                        </div>
-
-                        <div>
-                          <div className="flex items-center gap-2 flex-wrap">
-                            <span className="text-sm font-semibold text-ink">
-                              {new Date(log.date).toLocaleDateString("hi-IN", {
-                                weekday: "short",
-                                day: "numeric",
-                                month: "short",
-                                year: "numeric",
-                              })}
-                            </span>
-                            <Badge variant={isGood ? "green" : "amber"}>
-                              {isGood ? "पर्याप्त नींद (7+ hrs)" : "कम नींद (< 7 hrs)"}
-                            </Badge>
-                          </div>
-
-                          <div className="text-xs text-ink-subtle font-medium mt-0.5 space-x-2">
-                            {log.bedtime && log.wake_time && (
-                              <span>
-                                🕐 {log.bedtime} से {log.wake_time}
-                              </span>
-                            )}
-                            {log.notes && (
-                              <span className="text-ink-muted font-semibold">
-                                · {log.notes}
-                              </span>
-                            )}
-                          </div>
-                        </div>
+                    <li key={log.id} className="flex items-center gap-3 p-3.5">
+                      <div
+                        className={`flex h-11 w-11 shrink-0 flex-col items-center justify-center rounded-control border ${
+                          met
+                            ? "border-sleep-line bg-sleep-soft text-sleep"
+                            : short
+                              ? "border-attention-line bg-attention-soft text-attention"
+                              : "border-line bg-surface-sunken text-ink-muted"
+                        }`}
+                      >
+                        <span className="tabular text-base font-semibold leading-none">{log.sleep_hours}</span>
+                        <span className="text-2xs">घंटे</span>
                       </div>
-                    </div>
+                      <div className="min-w-0">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span className="text-sm font-semibold text-ink">{fmtDateStrWeekday(log.date)}</span>
+                          {met ? (
+                            <Badge variant="positive">लक्ष्य पूरा</Badge>
+                          ) : short ? (
+                            <Badge variant="attention">कम नींद ({SLEEP_SHORT_HOURS} घंटे से कम)</Badge>
+                          ) : null}
+                        </div>
+                        {(log.bedtime && log.wake_time) || log.notes ? (
+                          <p className="mt-0.5 text-xs text-ink-subtle">
+                            {log.bedtime && log.wake_time ? `${log.bedtime} से ${log.wake_time}` : ""}
+                            {log.bedtime && log.wake_time && log.notes ? " · " : ""}
+                            {log.notes ?? ""}
+                          </p>
+                        ) : null}
+                      </div>
+                    </li>
                   );
                 })}
-              </div>
+              </ul>
             )}
           </div>
         </div>
       </Card>
 
-      <AddSleepDialog
-        isOpen={isDialogOpen}
-        onClose={() => setIsDialogOpen(false)}
-        patientId={patientId}
-        onSuccess={() => {
-          setIsDialogOpen(false);
-          onSuccess?.();
-        }}
-      />
+      {canWrite ? (
+        <AddSleepDialog
+          isOpen={isDialogOpen}
+          onClose={() => setIsDialogOpen(false)}
+          patientId={patientId}
+          onSuccess={() => {
+            setIsDialogOpen(false);
+            onSuccess?.();
+          }}
+        />
+      ) : null}
     </>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Activity,
   AlertCircle,
@@ -9,397 +9,316 @@ import {
   ChevronUp,
   HeartPulse,
   Info,
+  Moon,
   Pill,
   Scale,
   Sparkles,
   UserCheck,
   Utensils,
-  Moon,
 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { Card } from "@/components/ui/card";
-import {
-  calculateDailyWellnessScore,
-  getScoreCategory,
-  type DailyWellnessScoreResult,
-} from "@/services/wellness-score-service";
-import { getTodayDateString } from "@/services/patient-service";
+import { Button } from "@/components/ui/button";
+import { Card, metricChipClasses, type MetricTone } from "@/components/ui/card";
+import { ErrorState } from "@/components/ui/page";
+import { ProgressBar } from "@/components/ui/progress-bar";
+import type { WellnessView } from "@/components/dashboard/hero-health-card";
+import { cn } from "@/lib/utils";
+import type { ComponentKey } from "@/lib/analytics/wellness-calc";
+import { getScoreCategory } from "@/services/wellness-score-service";
 
 type WellnessScoreCardProps = {
-  patientId: string;
-  /**
-   * Score computed by the parent. When supplied the card renders it directly
-   * instead of recomputing — the dashboard needs the same score for its hero
-   * card, and running the calculation twice meant two full passes over every
-   * log for the day (§47, §57).
-   */
-  result?: DailyWellnessScoreResult | null;
-  onRefresh?: () => void;
+  wellness: WellnessView;
+  onRetry?: () => void;
 };
 
-export function WellnessScoreCard({ patientId, result }: WellnessScoreCardProps) {
-  const isControlled = result !== undefined;
-  const [ownResult, setOwnResult] = useState<DailyWellnessScoreResult | null>(null);
-  const [ownLoading, setOwnLoading] = useState(true);
+const COMPONENTS: Array<{ key: ComponentKey; nameHi: string; icon: LucideIcon; tone: MetricTone }> = [
+  { key: "medicine", nameHi: "दवाइयाँ", icon: Pill, tone: "meds" },
+  { key: "food", nameHi: "भोजन", icon: Utensils, tone: "food" },
+  { key: "activity", nameHi: "गतिविधि", icon: Activity, tone: "activity" },
+  { key: "sleep", nameHi: "नींद", icon: Moon, tone: "sleep" },
+  { key: "bp", nameHi: "रक्तचाप", icon: HeartPulse, tone: "bp" },
+  { key: "weight", nameHi: "वजन", icon: Scale, tone: "weight" },
+];
+
+function CardTitleRow() {
+  return (
+    <div className="flex items-center gap-2">
+      <span className="flex h-7 w-7 items-center justify-center rounded-control bg-gold-soft text-gold-ink">
+        <Sparkles aria-hidden className="h-4 w-4" />
+      </span>
+      <h2 className="text-base font-semibold text-ink sm:text-lg">
+        Today&apos;s Wellness Score <span lang="hi" className="font-normal text-ink-muted">· दैनिक ट्रैकिंग स्कोर</span>
+      </h2>
+    </div>
+  );
+}
+
+const DISCLAIMER =
+  "यह स्कोर रोज़ के रिकॉर्ड और अच्छी आदतों की निरंतरता दिखाता है। यह डॉक्टरी जाँच या सलाह का विकल्प नहीं है।";
+
+export function WellnessScoreCard({ wellness, onRetry }: WellnessScoreCardProps) {
   const [showExplanation, setShowExplanation] = useState(false);
   const [showCaregiverView, setShowCaregiverView] = useState(false);
 
-  useEffect(() => {
-    if (isControlled) return;
-
-    let active = true;
-    const todayStr = getTodayDateString();
-
-    calculateDailyWellnessScore(patientId, todayStr)
-      .then((res) => {
-        if (active) setOwnResult(res);
-      })
-      .catch((err) => {
-        console.error("Error calculating wellness score:", err);
-      })
-      .finally(() => {
-        if (active) setOwnLoading(false);
-      });
-
-    return () => {
-      active = false;
-    };
-  }, [patientId, isControlled]);
-
-  const scoreResult = isControlled ? result : ownResult;
-  const loading = isControlled ? result === null : ownLoading;
-
-  if (loading) {
+  if (wellness.status === "loading") {
     return (
-      <Card className="p-5 border-line animate-pulse bg-surface">
+      <Card aria-busy="true" aria-label="स्कोर की गणना हो रही है">
         <div className="flex items-center justify-between">
-          <div className="h-4 w-40 rounded bg-surface-sunken" />
-          <div className="h-6 w-20 rounded bg-surface-sunken" />
+          <div className="skeleton h-5 w-48" />
+          <div className="skeleton h-6 w-20" />
         </div>
-        <div className="mt-4 flex items-baseline gap-2">
-          <div className="h-10 w-24 rounded bg-surface-sunken" />
-          <div className="h-4 w-32 rounded bg-surface-sunken" />
-        </div>
-        <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-6">
-          {[...Array(6)].map((_, i) => (
-            <div key={i} className="h-20 rounded-card bg-surface-sunken p-3" />
+        <div className="mt-4 skeleton h-16 w-full" />
+        <div className="mt-4 grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-6">
+          {COMPONENTS.map((c) => (
+            <div key={c.key} className="skeleton h-20" />
           ))}
         </div>
       </Card>
     );
   }
 
-  if (!scoreResult) return null;
+  if (wellness.status === "error") {
+    return (
+      <Card>
+        <CardTitleRow />
+        <ErrorState
+          className="mt-3"
+          title="आज का स्कोर नहीं बन पाया"
+          englishTitle="The wellness score could not be calculated"
+          description="आपके रिकॉर्ड सुरक्षित हैं। इंटरनेट जाँचकर दोबारा कोशिश करें।"
+          onRetry={onRetry}
+        />
+      </Card>
+    );
+  }
 
-  const { totalScore, maxScore, category, categoryHi, components, reasons, missingDataItems, nutritionContext } = scoreResult;
-  const categoryInfo = getScoreCategory(totalScore);
+  const r = wellness.result;
 
-  const componentList = [
-    {
-      key: "medicine",
-      name: "Medicine",
-      nameHi: "दवाइयाँ",
-      icon: Pill,
-      score: components.medicine.score,
-      max: components.medicine.maxScore,
-      percent: components.medicine.percent,
-      details: components.medicine.detailsHi,
-      status: components.medicine.status,
-      color: "emerald",
-    },
-    {
-      key: "food",
-      name: "Food",
-      nameHi: "भोजन",
-      icon: Utensils,
-      score: components.food.score,
-      max: components.food.maxScore,
-      percent: components.food.percent,
-      details: components.food.detailsHi,
-      status: components.food.status,
-      color: "green",
-    },
-    {
-      key: "activity",
-      name: "Activity",
-      nameHi: "गतिविधि",
-      icon: Activity,
-      score: components.activity.score,
-      max: components.activity.maxScore,
-      percent: components.activity.percent,
-      details: components.activity.detailsHi,
-      status: components.activity.status,
-      color: "sky",
-    },
-    {
-      key: "sleep",
-      name: "Sleep",
-      nameHi: "नींद",
-      icon: Moon,
-      score: components.sleep.score,
-      max: components.sleep.maxScore,
-      percent: components.sleep.percent,
-      details: components.sleep.detailsHi,
-      status: components.sleep.status,
-      color: "indigo",
-    },
-    {
-      key: "bp",
-      name: "BP Tracking",
-      nameHi: "रक्तचाप",
-      icon: HeartPulse,
-      score: components.bp.score,
-      max: components.bp.maxScore,
-      percent: components.bp.percent,
-      details: components.bp.detailsHi,
-      status: components.bp.status,
-      color: "rose",
-    },
-    {
-      key: "weight",
-      name: "Weight",
-      nameHi: "वजन",
-      icon: Scale,
-      score: components.weight.score,
-      max: components.weight.maxScore,
-      percent: components.weight.percent,
-      details: components.weight.detailsHi,
-      status: components.weight.status,
-      color: "amber",
-    },
-  ];
+  if (!r.isSufficient) {
+    return (
+      <Card>
+        <CardTitleRow />
+        <div className="mt-3 rounded-card border border-dashed border-line-strong bg-surface-sunken p-4">
+          <p lang="hi" className="text-sm font-semibold text-ink">
+            अभी स्कोर बनाने लायक डेटा नहीं है
+          </p>
+          <p lang="hi" className="mt-1 text-sm text-ink-muted">
+            {r.insufficientReasonHi ?? "कुछ रिकॉर्ड दर्ज करते ही आज का स्कोर दिखेगा।"}
+          </p>
+          {r.missingDataItems.length > 0 ? (
+            <ul lang="hi" className="mt-2 list-inside list-disc space-y-0.5 text-sm text-ink-muted">
+              {r.missingDataItems.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+          ) : null}
+        </div>
+        <p className="mt-3 flex items-start gap-1.5 text-xs text-ink-muted">
+          <AlertCircle aria-hidden className="mt-0.5 h-3.5 w-3.5 shrink-0" />
+          <span lang="hi">{DISCLAIMER}</span>
+        </p>
+      </Card>
+    );
+  }
+
+  const categoryInfo = getScoreCategory(r.totalScore);
 
   return (
-    <Card className="border-line bg-surface p-5 transition-all">
-      {/* Top Banner */}
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+    <Card>
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <div className="flex items-center gap-2">
-            <span className="flex h-6 w-6 items-center justify-center rounded-control bg-brand-soft text-brand-ink">
-              <Sparkles className="h-3.5 w-3.5" />
-            </span>
-            <h3 className="font-semibold text-ink text-base sm:text-lg">
-              Today&apos;s Wellness Score · दैनिक ट्रैकिंग स्कोर
-            </h3>
-          </div>
-          <p className="mt-0.5 text-xs text-ink-subtle">
-            यह आपके daily tracking और healthy habits की consistency का score है। यह medical assessment नहीं है।
+          <CardTitleRow />
+          <p lang="hi" className="mt-1 text-xs text-ink-muted">
+            {DISCLAIMER}
           </p>
         </div>
-
-        <div className="flex items-center gap-2 self-start sm:self-auto">
-          <button
-            type="button"
-            onClick={() => setShowCaregiverView(!showCaregiverView)}
-            className={`flex items-center gap-1.5 rounded-control border px-2.5 py-1.5 text-xs font-semibold transition-colors ${
-              showCaregiverView
-                ? "border-brand bg-brand-soft text-brand-ink shadow-2xs"
-                : "border-line bg-surface text-ink-muted hover:bg-surface-sunken"
-            }`}
-          >
-            <UserCheck className="h-3.5 w-3.5" />
-            {showCaregiverView ? "Standard View" : "Caregiver Summary"}
-          </button>
-        </div>
+        <Button
+          size="sm"
+          variant={showCaregiverView ? "primary" : "secondary"}
+          onClick={() => setShowCaregiverView((v) => !v)}
+          aria-pressed={showCaregiverView}
+          className="self-start"
+        >
+          <UserCheck aria-hidden className="h-4 w-4" />
+          <span lang="hi">{showCaregiverView ? "सामान्य व्यू" : "परिवार का सारांश"}</span>
+        </Button>
       </div>
 
-      {/* Main Score Hero Display — the one gold moment in this card */}
-      <div className="mt-4 flex flex-col gap-4 rounded-panel gold-edge p-4 sm:flex-row sm:items-center sm:justify-between">
+      {/* Score hero: the one gold moment in this card */}
+      <div className="gold-edge mt-4 flex flex-col gap-4 rounded-panel p-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-baseline gap-3">
           <div className="flex items-baseline">
-            <span className="grad-text text-4xl sm:text-5xl font-bold tracking-tight">
-              {totalScore}
-            </span>
-            <span className="text-sm sm:text-base font-semibold text-ink-subtle">
-              /{maxScore}
-            </span>
+            <span className="grad-text tabular text-4xl font-bold tracking-tight sm:text-5xl">{r.totalScore}</span>
+            <span className="text-sm font-semibold text-ink-muted sm:text-base">/{r.maxScore}</span>
           </div>
-
           <div className="space-y-0.5">
-            <div className="flex items-center gap-2">
-              <Badge variant={categoryInfo.badgeTone}>
-                {category}
-              </Badge>
-            </div>
-            <p className="text-xs font-medium text-ink-muted">
-              {categoryHi}
+            <Badge variant={categoryInfo.badgeTone}>{r.category}</Badge>
+            <p lang="hi" className="text-xs font-medium text-ink-muted">
+              {r.categoryHi}
             </p>
           </div>
         </div>
 
-        {/* Action button to expand reasons */}
-        <button
-          type="button"
-          onClick={() => setShowExplanation(!showExplanation)}
-          className="flex items-center justify-center gap-1.5 rounded-control border border-line bg-surface px-3 py-2 text-xs font-semibold text-ink-muted shadow-2xs hover:border-brand-line hover:bg-surface-sunken transition-all"
-        >
-          <Info className="h-3.5 w-3.5 text-brand" />
-          <span>आज score क्यों मिला?</span>
+        <Button variant="secondary" onClick={() => setShowExplanation((v) => !v)} aria-expanded={showExplanation}>
+          <Info aria-hidden className="h-4 w-4 text-brand" />
+          <span lang="hi">आज यह स्कोर क्यों?</span>
           {showExplanation ? (
-            <ChevronUp className="h-3.5 w-3.5 text-ink-subtle" />
+            <ChevronUp aria-hidden className="h-4 w-4 text-ink-muted" />
           ) : (
-            <ChevronDown className="h-3.5 w-3.5 text-ink-subtle" />
+            <ChevronDown aria-hidden className="h-4 w-4 text-ink-muted" />
           )}
-        </button>
+        </Button>
       </div>
 
-      {/* CAREGIVER QUICK SUMMARY CALLOUT */}
-      {showCaregiverView && (
-        <div className="mt-3 rounded-card border border-positive-line bg-positive-soft/70 p-4 animate-in fade-in">
+      {r.scoreCap ? (
+        <p role="status" lang="hi" className="mt-3 rounded-card border border-attention-line bg-attention-soft p-3 text-sm text-attention">
+          स्कोर सीमित रखा गया है ({r.scoreCap.cap} तक): {r.scoreCap.reasonHi}
+        </p>
+      ) : null}
+
+      <div className="mt-3">
+        <ProgressBar
+          label="आज तक का ज़रूरी डेटा दर्ज हुआ"
+          value={r.dataCompleteness}
+          max={100}
+        />
+      </div>
+
+      {r.alerts.length > 0 ? (
+        <ul className="mt-3 space-y-2">
+          {r.alerts.map((a) => (
+            <li
+              key={`${a.severity}-${a.messageHi}`}
+              lang="hi"
+              className={cn(
+                "rounded-card border p-3 text-sm",
+                a.severity === "URGENT" || a.severity === "IMPORTANT"
+                  ? "border-critical-line bg-critical-soft text-critical"
+                  : "border-attention-line bg-attention-soft text-attention",
+              )}
+            >
+              {a.messageHi}
+            </li>
+          ))}
+        </ul>
+      ) : null}
+
+      {showCaregiverView ? (
+        <div className="mt-3 rounded-card border border-positive-line bg-positive-soft p-4">
           <div className="flex items-start gap-2">
-            <UserCheck className="mt-0.5 h-4 w-4 shrink-0 text-positive" />
-            <div className="space-y-1 text-xs">
-              <p className="font-semibold text-positive">
-                Caregiver Quick View · पारिवारिक सारांश
+            <UserCheck aria-hidden className="mt-0.5 h-4 w-4 shrink-0 text-positive" />
+            <div className="space-y-1 text-sm">
+              <p lang="hi" className="font-semibold text-positive">
+                परिवार के लिए सारांश
               </p>
-              {missingDataItems.length > 0 ? (
+              {r.missingDataItems.length > 0 ? (
                 <div>
-                  <p className="font-semibold text-positive">
-                    आज {missingDataItems.length} बातें दर्ज होना शेष हैं:
+                  <p lang="hi" className="font-medium text-ink">
+                    अभी {r.missingDataItems.length} बातें दर्ज होना बाकी हैं:
                   </p>
-                  <ul className="mt-1 list-disc list-inside space-y-0.5 text-ink-muted font-medium">
-                    {missingDataItems.map((item, idx) => (
-                      <li key={idx}>
-                        <span className="text-ink">{item}</span>
-                      </li>
+                  <ul lang="hi" className="mt-1 list-inside list-disc space-y-0.5 text-ink-muted">
+                    {r.missingDataItems.map((item) => (
+                      <li key={item}>{item}</li>
                     ))}
                   </ul>
                 </div>
               ) : (
-                <p className="font-semibold text-positive flex items-center gap-1">
-                  <CheckCircle2 className="h-3.5 w-3.5 text-positive" />
-                  आज के सभी मुख्य ट्रैकिंग रिकॉर्ड सफलतापूर्वक पूर्ण हो चुके हैं!
+                <p lang="hi" className="flex items-center gap-1 font-medium text-positive">
+                  <CheckCircle2 aria-hidden className="h-4 w-4" />
+                  अब तक के सभी ज़रूरी रिकॉर्ड दर्ज हैं।
                 </p>
               )}
             </div>
           </div>
         </div>
-      )}
+      ) : null}
 
-      {/* EXPANDABLE SCORE EXPLANATION (+ / -) */}
-      {showExplanation && (
-        <div className="mt-3 space-y-2 rounded-card border border-line bg-surface p-4 text-xs animate-in fade-in">
-          <p className="font-semibold text-ink text-xs uppercase tracking-wider mb-2">
-            Score Breakdown Factors · मुख्य कारण
+      {showExplanation ? (
+        <div className="mt-3 space-y-2 rounded-card border border-line bg-surface-sunken p-4 text-sm">
+          <p lang="hi" className="text-xs font-semibold text-ink-muted">
+            स्कोर के मुख्य कारण
           </p>
-
-          {reasons.positive.length > 0 && (
-            <div className="space-y-1.5">
-              {reasons.positive.map((pos, idx) => (
-                <div key={idx} className="flex items-start gap-2 text-positive font-medium">
-                  <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-positive-soft text-positive font-bold text-xs">
-                    +
-                  </span>
-                  <span>{pos}</span>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {reasons.deductions.length > 0 && (
-            <div className="mt-2 space-y-1.5 border-t border-line pt-2">
-              {reasons.deductions.map((ded, idx) => (
-                <div key={idx} className="flex items-start gap-2 text-critical font-medium">
-                  <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-critical-soft text-critical font-bold text-xs">
-                    -
-                  </span>
-                  <span>{ded}</span>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {nutritionContext?.calorieStatusMessage && (
-            <div className="mt-2 rounded-card bg-surface-sunken p-2 text-xs text-ink-muted border border-line">
-              <span className="font-semibold text-ink-muted">Calorie Note: </span>
-              {nutritionContext.calorieStatusMessage}
-            </div>
-          )}
+          {r.reasons.positive.map((pos) => (
+            <p key={pos} lang="hi" className="flex items-start gap-2 font-medium text-positive">
+              <span aria-hidden className="grid h-5 w-5 shrink-0 place-items-center rounded-full bg-positive-soft text-xs font-bold">
+                +
+              </span>
+              <span>{pos}</span>
+            </p>
+          ))}
+          {r.reasons.deductions.map((ded) => (
+            <p key={ded} lang="hi" className="flex items-start gap-2 font-medium text-critical">
+              <span aria-hidden className="grid h-5 w-5 shrink-0 place-items-center rounded-full bg-critical-soft text-xs font-bold">
+                −
+              </span>
+              <span>{ded}</span>
+            </p>
+          ))}
+          {r.reasons.positive.length === 0 && r.reasons.deductions.length === 0 ? (
+            <p lang="hi" className="text-ink-muted">
+              अभी कोई अलग कारण दर्ज नहीं हुआ।
+            </p>
+          ) : null}
+          {r.nutritionContext?.calorieStatusMessage ? (
+            <p lang="hi" className="rounded-field border border-line bg-surface p-2 text-xs text-ink-muted">
+              <span className="font-semibold text-ink">कैलोरी नोट: </span>
+              {r.nutritionContext.calorieStatusMessage}
+            </p>
+          ) : null}
         </div>
-      )}
+      ) : null}
 
-      {/* 6 COMPONENT BREAKDOWN GRID */}
-      <div className="mt-4 grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-6">
-        {componentList.map((comp) => {
-          const Icon = comp.icon;
-          const isComplete = comp.status === "completed";
-          const isPartial = comp.status === "partial";
-
+      {/* Component breakdown */}
+      <ul className="mt-4 grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-6">
+        {COMPONENTS.map(({ key, nameHi, icon: Icon, tone }) => {
+          const c = r.components[key];
+          const scored = c.isScored;
           return (
-            <div
-              key={comp.key}
-              className={`flex flex-col justify-between rounded-card border p-3 transition-all ${
-                isComplete
-                  ? "border-line bg-surface"
-                  : isPartial
-                  ? "border-attention-line/80 bg-attention-soft/30"
-                  : "border-line bg-surface-sunken/60 text-ink-subtle"
-              }`}
+            <li
+              key={key}
+              className={cn(
+                "flex flex-col justify-between rounded-card border p-3",
+                scored ? "border-line bg-surface" : "border-line bg-surface-sunken",
+              )}
             >
-              <div>
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-semibold text-ink-muted">
-                    {comp.nameHi}
-                  </span>
-                  <Icon
-                    className={`h-3.5 w-3.5 ${
-                      isComplete
-                        ? "text-positive"
-                        : isPartial
-                        ? "text-attention"
-                        : "text-ink-subtle"
-                    }`}
-                  />
-                </div>
-
-                <div className="mt-2 flex items-baseline justify-between">
-                  <span className="text-lg font-extrabold text-ink">
-                    {comp.score}
-                    <span className="text-xs font-medium text-ink-subtle">/{comp.max}</span>
-                  </span>
-                  <span
-                    className={`text-2xs font-semibold ${
-                      isComplete
-                        ? "text-positive"
-                        : isPartial
-                        ? "text-attention"
-                        : "text-ink-subtle"
-                    }`}
-                  >
-                    {comp.percent}%
-                  </span>
-                </div>
-
-                {/* Progress bar line */}
-                <div className="mt-1.5 h-1.5 w-full rounded-full bg-surface-sunken overflow-hidden">
-                  <div
-                    className={`h-full rounded-full transition-all ${
-                      isComplete
-                        ? "bg-positive"
-                        : isPartial
-                        ? "bg-attention"
-                        : "bg-line-strong"
-                    }`}
-                    style={{ width: `${comp.percent}%` }}
-                  />
-                </div>
+              <div className="flex items-center justify-between gap-2">
+                <span lang="hi" className="text-xs font-semibold text-ink-muted">
+                  {nameHi}
+                </span>
+                <span className={cn("grid h-6 w-6 place-items-center rounded-field", metricChipClasses[tone])}>
+                  <Icon aria-hidden className="h-3.5 w-3.5" />
+                </span>
               </div>
-
-              <p className="mt-2 text-2xs text-ink-subtle font-medium truncate" title={comp.details}>
-                {comp.details}
+              {scored ? (
+                <>
+                  <p className="tabular mt-2 text-lg font-bold text-ink">
+                    {c.score}
+                    <span className="text-xs font-medium text-ink-muted">/{c.maxScore}</span>
+                  </p>
+                  <div
+                    role="progressbar"
+                    aria-label={`${nameHi} ${c.percent}%`}
+                    aria-valuemin={0}
+                    aria-valuemax={100}
+                    aria-valuenow={c.percent}
+                    className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-surface-sunken"
+                  >
+                    <div className="h-full rounded-full bg-brand" style={{ width: `${c.percent}%` }} />
+                  </div>
+                </>
+              ) : (
+                <p lang="hi" className="mt-2 text-sm font-semibold text-ink-muted">
+                  अभी लागू नहीं
+                </p>
+              )}
+              <p lang="hi" className="mt-2 line-clamp-2 text-2xs text-ink-muted" title={c.detailsHi}>
+                {c.detailsHi}
               </p>
-            </div>
+            </li>
           );
         })}
-      </div>
-
-      {/* Small medical disclaimer footnote */}
-      <div className="mt-3.5 flex items-center gap-1.5 text-xs text-ink-subtle">
-        <AlertCircle className="h-3 w-3 shrink-0" />
-        <span>
-          यह score केवल health tracking और habit consistency के लिए है। यह medical diagnosis या doctor की सलाह का विकल्प नहीं है।
-        </span>
-      </div>
+      </ul>
     </Card>
   );
 }

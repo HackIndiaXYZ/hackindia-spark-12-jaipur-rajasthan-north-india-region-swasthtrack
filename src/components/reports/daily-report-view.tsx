@@ -1,350 +1,250 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import {
-  Activity,
-  AlertCircle,
-  Calendar,
-  CheckCircle2,
-  HeartPulse,
-  Moon,
-  Pill,
-  Scale,
-  Sparkles,
-  Utensils,
-} from "lucide-react";
+import { useState } from "react";
+import { Activity, AlertCircle, CheckCircle2, HeartPulse, Moon, Pill, Scale, Utensils, type LucideIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import {
-  calculateDailyWellnessScore,
-  getScoreCategory,
-  type DailyWellnessScoreResult,
-} from "@/services/wellness-score-service";
-import {
-  getFoodLogsByDate,
-  getTodayDateString,
-  type FoodLogEntry,
-} from "@/services/patient-service";
+import { Card, CardDescription, CardHeader, CardTitle, metricChipClasses, type MetricTone } from "@/components/ui/card";
+import { EmptyState, ErrorState } from "@/components/ui/page";
+import { Segmented, type SegmentedOption } from "@/components/ui/segmented";
+import { TextInput } from "@/components/ui/form-field";
+import { fmtDateStrFull, fmtDateStrWeekday } from "@/components/health/format";
+import { loadErrorMessage, useAsyncData } from "@/components/health/use-async-data";
+import { ReportDisclaimer, ReportHero, ReportSkeleton } from "@/components/reports/report-parts";
+import { addDaysIST, todayIST } from "@/lib/health-rules";
 import { cn } from "@/lib/utils";
+import { calculateDailyWellnessScore, getScoreCategory } from "@/services/wellness-score-service";
+import { getFoodLogsByDate } from "@/services/patient-service";
 
 type DailyReportViewProps = {
   patientId: string;
 };
 
+type DayChoice = "today" | "yesterday" | "other";
+
+const COMPONENTS: Array<{
+  key: "medicine" | "food" | "activity" | "sleep" | "bp" | "weight";
+  title: string;
+  hindi: string;
+  icon: LucideIcon;
+  tone: MetricTone;
+}> = [
+  { key: "medicine", title: "Medicines", hindi: "दवाइयाँ", icon: Pill, tone: "meds" },
+  { key: "food", title: "Food", hindi: "भोजन", icon: Utensils, tone: "food" },
+  { key: "activity", title: "Steps", hindi: "कदम", icon: Activity, tone: "activity" },
+  { key: "sleep", title: "Sleep", hindi: "नींद", icon: Moon, tone: "sleep" },
+  { key: "bp", title: "Blood pressure", hindi: "रक्तचाप", icon: HeartPulse, tone: "bp" },
+  { key: "weight", title: "Weight", hindi: "वजन", icon: Scale, tone: "weight" },
+];
+
+const ALERT_TONE = { URGENT: "critical", IMPORTANT: "attention", ATTENTION: "attention" } as const;
+
 export function DailyReportView({ patientId }: DailyReportViewProps) {
-  const [selectedDate, setSelectedDate] = useState(getTodayDateString());
-  const [scoreResult, setScoreResult] = useState<DailyWellnessScoreResult | null>(null);
-  const [dayFoods, setDayFoods] = useState<FoodLogEntry[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [selectedDate, setSelectedDate] = useState(todayIST);
+  const today = todayIST();
+  const yesterday = addDaysIST(today, -1);
+  const choice: DayChoice = selectedDate === today ? "today" : selectedDate === yesterday ? "yesterday" : "other";
 
-  useEffect(() => {
-    let active = true;
+  const options: SegmentedOption<DayChoice>[] = [
+    { value: "today", label: "Today", hindiLabel: "आज" },
+    { value: "yesterday", label: "Yesterday", hindiLabel: "कल" },
+    ...(choice === "other" ? [{ value: "other" as const, label: fmtDateStrWeekday(selectedDate) }] : []),
+  ];
 
-    Promise.all([
-      calculateDailyWellnessScore(patientId, selectedDate),
-      getFoodLogsByDate(patientId, selectedDate),
-    ])
-      .then(([score, foods]) => {
-        if (active) {
-          setScoreResult(score);
-          setDayFoods(foods);
-        }
-      })
-      .catch((err) => {
-        console.error("Error loading daily report:", err);
-      })
-      .finally(() => {
-        if (active) setLoading(false);
-      });
+  const { data, error, loading, reload } = useAsyncData(
+    async () => {
+      const [score, foods] = await Promise.all([
+        calculateDailyWellnessScore(patientId, selectedDate),
+        getFoodLogsByDate(patientId, selectedDate),
+      ]);
+      return { score, foods };
+    },
+    [patientId, selectedDate],
+  );
 
-    return () => {
-      active = false;
-    };
-  }, [patientId, selectedDate]);
-
-  const categoryInfo = scoreResult ? getScoreCategory(scoreResult.totalScore) : null;
-
-  // `new Date(Date.now() - ...)` is an impure call and isn't safe to run
-  // directly in the render body (or in useMemo, which still runs during
-  // render) — computed once in an effect instead. Empty-string/undefined
-  // until then is fine: the button simply isn't shown as "active" for the
-  // one frame before this resolves.
-  const [yesterday, setYesterday] = useState<{ dateStr: string; label: string } | null>(null);
-  useEffect(() => {
-    // Deferred to a microtask rather than called synchronously in the effect
-    // body — react-hooks/set-state-in-effect flags synchronous setState calls
-    // here as a cascading-render risk.
-    Promise.resolve().then(() => {
-      const yesterdayDate = new Date(Date.now() - 86400000);
-      setYesterday({
-        dateStr: `${yesterdayDate.getFullYear()}-${String(yesterdayDate.getMonth() + 1).padStart(2, "0")}-${String(yesterdayDate.getDate()).padStart(2, "0")}`,
-        label: yesterdayDate.toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" }),
-      });
-    });
-  }, []);
-  const yesterdayDateStr = yesterday?.dateStr ?? "";
-  const yesterdayLabel = yesterday?.label ?? "…";
+  const score = data?.score ?? null;
+  const category = score && score.isSufficient ? getScoreCategory(score.totalScore) : null;
 
   return (
     <div className="space-y-5">
-      {/* Date Header & Selector */}
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between bg-surface border border-line rounded-card p-4 shadow-e1">
-        <div className="flex items-center gap-2">
-          <Calendar className="h-5 w-5 text-brand" />
-          <div>
-            <h3 className="font-semibold text-ink text-sm sm:text-base">
-              Daily Health & Adherence Summary · दैनिक स्वास्थ्य सारांश
-            </h3>
-            <p className="text-xs text-ink-subtle">
-              Selected Day: {new Date(selectedDate).toLocaleDateString("en-IN", { weekday: "long", day: "numeric", month: "long", year: "numeric" })}
-            </p>
+      <ReportHero
+        title="Daily summary"
+        hindiTitle="दैनिक सारांश"
+        period={fmtDateStrFull(selectedDate)}
+        scoreLabel="Tracking score"
+        score={score && score.isSufficient ? score.totalScore : null}
+        controls={
+          <div className="flex flex-wrap items-center gap-2">
+            <Segmented
+              options={options}
+              value={choice}
+              onChange={(v) => {
+                if (v === "today") setSelectedDate(today);
+                else if (v === "yesterday") setSelectedDate(yesterday);
+              }}
+              ariaLabel="Day — दिन चुनें"
+              size="sm"
+            />
+            <label className="flex items-center gap-2 text-xs text-ink-muted">
+              <span>दूसरी तारीख़</span>
+              <TextInput
+                type="date"
+                value={selectedDate}
+                max={today}
+                onChange={(e) => {
+                  if (e.target.value) setSelectedDate(e.target.value);
+                }}
+                className="min-h-control w-auto"
+                aria-label="Pick a date — तारीख़ चुनें"
+              />
+            </label>
           </div>
-        </div>
+        }
+      />
 
-        <div className="flex flex-wrap items-center gap-2">
-          <button
-            type="button"
-            onClick={() => setSelectedDate(yesterdayDateStr)}
-            className={cn(
-              "px-3 py-1.5 rounded-control text-xs font-bold transition-all cursor-pointer shadow-2xs",
-              selectedDate === yesterdayDateStr
-                ? "bg-brand text-ink-inverse shadow-e1"
-                : "bg-surface border border-line-strong text-ink-muted hover:bg-surface-sunken",
-            )}
-          >
-            {yesterdayLabel} (कल)
-          </button>
-          <button
-            type="button"
-            onClick={() => setSelectedDate(getTodayDateString())}
-            className={cn(
-              "px-3 py-1.5 rounded-control text-xs font-bold transition-all cursor-pointer shadow-2xs",
-              selectedDate === getTodayDateString()
-                ? "bg-brand text-ink-inverse shadow-e1"
-                : "bg-surface border border-line-strong text-ink-muted hover:bg-surface-sunken",
-            )}
-          >
-            आज (Today)
-          </button>
-          <input
-            type="date"
-            value={selectedDate}
-            max={getTodayDateString()}
-            onChange={(e) => setSelectedDate(e.target.value)}
-            className="rounded-control border border-line-strong px-3 py-1.5 text-xs font-semibold text-ink shadow-2xs focus:border-brand focus:ring-1 focus:ring-brand"
-          />
-        </div>
-      </div>
-
-      {loading ? (
-        <div className="space-y-4 animate-pulse">
-          <div className="h-36 rounded-card bg-surface-sunken" />
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {[...Array(6)].map((_, i) => (
-              <div key={i} className="h-28 rounded-control bg-surface-sunken" />
-            ))}
-          </div>
-        </div>
-      ) : scoreResult ? (
+      {error ? (
+        <ErrorState
+          title="दैनिक रिपोर्ट लोड नहीं हो पाई"
+          englishTitle="The daily report could not be loaded"
+          description={loadErrorMessage(error)}
+          onRetry={reload}
+        />
+      ) : loading || !data || !score ? (
+        <ReportSkeleton blocks={2} />
+      ) : (
         <>
-          {/* Daily Score Hero — the one number that matters most on this screen */}
-          <Card tone="premium" className="p-5">
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-              <div>
-                <div className="flex items-center gap-2">
-                  <span className="flex h-6 w-6 items-center justify-center rounded-field bg-gold-soft text-gold-ink">
-                    <Sparkles className="h-3.5 w-3.5" />
-                  </span>
-                  <h4 className="font-semibold text-ink text-base">
-                    Daily Wellness & Tracking Score
-                  </h4>
+          {!score.isSufficient ? (
+            <EmptyState
+              icon={AlertCircle}
+              title="इस दिन का कोई रिकॉर्ड नहीं"
+              hindiTitle="Nothing logged for this day"
+              description={score.insufficientReasonHi ?? "इस दिन कुछ दर्ज नहीं हुआ, इसलिए स्कोर नहीं बन सकता।"}
+            />
+          ) : (
+            <Card tone="premium">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                <div className="min-w-0">
+                  <h3 className="text-base font-semibold text-ink">Tracking score · ट्रैकिंग स्कोर</h3>
+                  <p lang="hi" className="mt-1 text-xs text-ink-subtle">
+                    यह स्कोर बताता है कि आज कितना रिकॉर्ड नियमित दर्ज हुआ। यह स्वास्थ्य का निदान नहीं है।
+                  </p>
                 </div>
-                <p className="mt-1 text-xs text-ink-subtle">
-                  यह स्कोर आपकी ट्रैकिंग निरंतरता का माप है। यह कोई मेडिकल डायग्नोसिस नहीं है।
-                </p>
+                {category ? <Badge variant={category.badgeTone}>{score.categoryHi}</Badge> : null}
               </div>
 
-              <div className="flex items-baseline gap-3">
-                <div className="flex items-baseline">
-                  <span className="text-4xl sm:text-5xl font-bold text-ink">
-                    {scoreResult.totalScore}
-                  </span>
-                  <span className="text-base font-semibold text-ink-subtle">/{scoreResult.maxScore}</span>
-                </div>
-                <Badge variant={categoryInfo?.badgeTone || "blue"}>
-                  {scoreResult.category}
-                </Badge>
+              {score.alerts.length > 0 ? (
+                <ul className="mt-4 space-y-2">
+                  {score.alerts.map((a) => (
+                    <li
+                      key={a.messageHi}
+                      lang="hi"
+                      className={cn(
+                        "rounded-control border px-3 py-2 text-xs",
+                        ALERT_TONE[a.severity] === "critical"
+                          ? "border-critical-line bg-critical-soft text-ink-muted"
+                          : "border-attention-line bg-attention-soft text-ink-muted",
+                      )}
+                    >
+                      {a.messageHi}
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
+
+              <div className="mt-4 grid gap-3 border-t border-line pt-4 text-xs md:grid-cols-2">
+                {score.reasons.positive.length > 0 ? (
+                  <div className="space-y-1.5 rounded-control border border-positive-line bg-positive-soft p-3">
+                    <p className="flex items-center gap-1.5 font-semibold text-positive">
+                      <CheckCircle2 aria-hidden className="h-3.5 w-3.5" />
+                      जो अच्छा रहा
+                    </p>
+                    <ul lang="hi" className="space-y-1 text-ink-muted">
+                      {score.reasons.positive.map((p) => (
+                        <li key={p}>• {p}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : null}
+                {score.reasons.deductions.length > 0 ? (
+                  <div className="space-y-1.5 rounded-control border border-attention-line bg-attention-soft p-3">
+                    <p className="flex items-center gap-1.5 font-semibold text-attention">
+                      <AlertCircle aria-hidden className="h-3.5 w-3.5" />
+                      जो छूटा या ध्यान माँगता है
+                    </p>
+                    <ul lang="hi" className="space-y-1 text-ink-muted">
+                      {score.reasons.deductions.map((d) => (
+                        <li key={d}>• {d}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : null}
               </div>
-            </div>
+            </Card>
+          )}
 
-            {/* Explanations List */}
-            <div className="mt-4 grid gap-3 md:grid-cols-2 pt-4 border-t border-line text-xs">
-              {scoreResult.reasons.positive.length > 0 && (
-                <div className="rounded-control border border-positive-line bg-positive-soft p-3 space-y-1.5">
-                  <p className="font-semibold text-positive flex items-center gap-1.5">
-                    <CheckCircle2 className="h-3.5 w-3.5 text-positive" />
-                    सफल ट्रैकिंग (+ Positive Points):
-                  </p>
-                  <ul className="space-y-1 text-positive">
-                    {scoreResult.reasons.positive.map((p, idx) => (
-                      <li key={idx}>• {p}</li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-
-              {scoreResult.reasons.deductions.length > 0 && (
-                <div className="rounded-control border border-critical-line bg-critical-soft p-3 space-y-1.5">
-                  <p className="font-semibold text-critical flex items-center gap-1.5">
-                    <AlertCircle className="h-3.5 w-3.5 text-critical" />
-                    छूटी हुई प्रविष्टियां (- Missing Logs):
-                  </p>
-                  <ul className="space-y-1 text-critical">
-                    {scoreResult.reasons.deductions.map((d, idx) => (
-                      <li key={idx}>• {d}</li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-            </div>
-          </Card>
-
-          {/* 6 Category Detail Grid */}
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {/* 1. Medicine */}
-            <div className="rounded-card border border-line bg-surface p-4 shadow-e1">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Pill className="h-4 w-4 text-emerald-600" />
-                  <h5 className="font-semibold text-ink text-sm">Medicine Adherence</h5>
+            {COMPONENTS.map(({ key, title, hindi, icon: Icon, tone }) => {
+              const c = score.components[key];
+              return (
+                <div key={key} className="rounded-card border border-line bg-surface p-4 shadow-e1">
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="flex min-w-0 items-center gap-2">
+                      <span className={cn("grid h-8 w-8 shrink-0 place-items-center rounded-field", metricChipClasses[tone])}>
+                        <Icon aria-hidden className="h-4 w-4" />
+                      </span>
+                      <h4 className="truncate text-sm font-semibold text-ink">
+                        {title}
+                        <span lang="hi" className="ml-1.5 text-xs font-normal text-ink-subtle">
+                          {hindi}
+                        </span>
+                      </h4>
+                    </div>
+                    <span className="tabular shrink-0 text-xs font-semibold text-ink-muted">
+                      {c.isScored ? `${c.score}/${c.maxScore}` : "—"}
+                    </span>
+                  </div>
+                  <p lang="hi" className="mt-2 text-xs text-ink-muted">
+                    {c.isScored ? c.detailsHi : (c.detailsHi || "आज इसकी बारी अभी नहीं आई, इसलिए गिना नहीं गया।")}
+                  </p>
+                  {key === "food" && score.nutritionContext ? (
+                    <p className="tabular mt-1 text-xs text-ink-subtle">
+                      {score.nutritionContext.caloriesConsumed} / {score.nutritionContext.calorieTarget} kcal
+                    </p>
+                  ) : null}
                 </div>
-                <span className="text-xs font-semibold text-emerald-700">
-                  {scoreResult.components.medicine.score}/{scoreResult.components.medicine.maxScore} pts
-                </span>
-              </div>
-              <p className="mt-2 text-xs text-ink-muted font-medium">
-                {scoreResult.components.medicine.detailsHi}
-              </p>
-            </div>
-
-            {/* 2. Food */}
-            <div className="rounded-card border border-line bg-surface p-4 shadow-e1">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Utensils className="h-4 w-4 text-green-600" />
-                  <h5 className="font-semibold text-ink text-sm">Food Tracking</h5>
-                </div>
-                <span className="text-xs font-semibold text-green-700">
-                  {scoreResult.components.food.score}/{scoreResult.components.food.maxScore} pts
-                </span>
-              </div>
-              <p className="mt-2 text-xs text-ink-muted font-medium">
-                {scoreResult.components.food.detailsHi}
-              </p>
-              {scoreResult.nutritionContext && (
-                <p className="mt-1 text-xs text-ink-subtle">
-                  {scoreResult.nutritionContext.caloriesConsumed} / {scoreResult.nutritionContext.calorieTarget} kcal
-                </p>
-              )}
-            </div>
-
-            {/* 3. Activity */}
-            <div className="rounded-card border border-line bg-surface p-4 shadow-e1">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Activity className="h-4 w-4 text-sky-600" />
-                  <h5 className="font-semibold text-ink text-sm">Activity & Steps</h5>
-                </div>
-                <span className="text-xs font-semibold text-sky-700">
-                  {scoreResult.components.activity.score}/{scoreResult.components.activity.maxScore} pts
-                </span>
-              </div>
-              <p className="mt-2 text-xs text-ink-muted font-medium">
-                {scoreResult.components.activity.detailsHi}
-              </p>
-            </div>
-
-            {/* 4. Sleep */}
-            <div className="rounded-card border border-line bg-surface p-4 shadow-e1">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Moon className="h-4 w-4 text-indigo-600" />
-                  <h5 className="font-semibold text-ink text-sm">Sleep Logging</h5>
-                </div>
-                <span className="text-xs font-semibold text-indigo-700">
-                  {scoreResult.components.sleep.score}/{scoreResult.components.sleep.maxScore} pts
-                </span>
-              </div>
-              <p className="mt-2 text-xs text-ink-muted font-medium">
-                {scoreResult.components.sleep.detailsHi}
-              </p>
-            </div>
-
-            {/* 5. BP */}
-            <div className="rounded-card border border-line bg-surface p-4 shadow-e1">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <HeartPulse className="h-4 w-4 text-rose-600" />
-                  <h5 className="font-semibold text-ink text-sm">BP Tracking</h5>
-                </div>
-                <span className="text-xs font-semibold text-rose-700">
-                  {scoreResult.components.bp.score}/{scoreResult.components.bp.maxScore} pts
-                </span>
-              </div>
-              <p className="mt-2 text-xs text-ink-muted font-medium">
-                {scoreResult.components.bp.detailsHi}
-              </p>
-            </div>
-
-            {/* 6. Weight */}
-            <div className="rounded-card border border-line bg-surface p-4 shadow-e1">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Scale className="h-4 w-4 text-amber-600" />
-                  <h5 className="font-semibold text-ink text-sm">Weight Tracking</h5>
-                </div>
-                <span className="text-xs font-semibold text-amber-700">
-                  {scoreResult.components.weight.score}/{scoreResult.components.weight.maxScore} pts
-                </span>
-              </div>
-              <p className="mt-2 text-xs text-ink-muted font-medium">
-                {scoreResult.components.weight.detailsHi}
-              </p>
-            </div>
+              );
+            })}
           </div>
 
-          {/* Meals Timeline */}
-          {dayFoods.length > 0 && (
-            <Card className="p-5">
-              <CardHeader className="p-0 pb-3">
-                <CardTitle className="text-sm font-semibold text-ink">
-                  Meals Logged on {new Date(selectedDate).toLocaleDateString("en-IN", { month: "short", day: "numeric" })}
-                </CardTitle>
-                <CardDescription>
-                  कुल {dayFoods.length} खाद्य वस्तुएं दर्ज
-                </CardDescription>
+          {data.foods.length > 0 ? (
+            <Card>
+              <CardHeader>
+                <div>
+                  <CardTitle className="text-sm">Meals logged · दर्ज भोजन</CardTitle>
+                  <CardDescription>कुल {data.foods.length} चीज़ें दर्ज</CardDescription>
+                </div>
               </CardHeader>
-
-              <div className="divide-y divide-line">
-                {dayFoods.map((food) => (
-                  <div key={food.id} className="py-2.5 flex items-center justify-between text-xs">
-                    <div>
+              <ul className="divide-y divide-line">
+                {data.foods.map((food) => (
+                  <li key={food.id} className="flex items-center justify-between gap-3 py-2.5 text-xs">
+                    <div className="min-w-0">
                       <span className="font-semibold text-ink">{food.food_name}</span>
                       <span className="ml-2 text-ink-subtle">
                         ({food.quantity} {food.unit}) · {food.meal_type}
                       </span>
                     </div>
-                    <div className="font-semibold text-ink">
+                    <div className="tabular shrink-0 font-semibold text-ink">
                       {food.calories} kcal
-                      {food.protein_g > 0 && <span className="ml-2 text-ink-subtle font-normal">({food.protein_g}g protein)</span>}
+                      {food.protein_g > 0 ? <span className="ml-2 font-normal text-ink-subtle">{food.protein_g}g protein</span> : null}
                     </div>
-                  </div>
+                  </li>
                 ))}
-              </div>
+              </ul>
             </Card>
-          )}
+          ) : null}
+
+          <ReportDisclaimer>यह रिपोर्ट सिर्फ़ रिकॉर्ड की निरंतरता दिखाती है। यह डॉक्टर की सलाह या निदान का विकल्प नहीं है।</ReportDisclaimer>
         </>
-      ) : null}
+      )}
     </div>
   );
 }

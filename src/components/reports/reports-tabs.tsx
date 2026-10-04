@@ -1,18 +1,18 @@
 "use client";
 
-import { useState } from "react";
+import { useId, useState } from "react";
 import { FileSpreadsheet, Printer } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Segmented, type SegmentedOption } from "@/components/ui/segmented";
+import { Segmented, segmentedPanelId, segmentedTabId, type SegmentedOption } from "@/components/ui/segmented";
+import { useToast } from "@/components/ui/toast";
+import { safeFileName } from "@/lib/analytics/csv";
+import { todayIST } from "@/lib/health-rules";
 import { DoctorVisitReportView } from "./doctor-visit-report-view";
 import { DailyReportView } from "./daily-report-view";
 import { WeeklyReportView } from "./weekly-report-view";
 import { MonthlyReportView } from "./monthly-report-view";
 import { YearlyReportView } from "./yearly-report-view";
-import {
-  generateCSVReport,
-  getWeeklyReportData,
-} from "@/services/reports-analytics-service";
+import { generateCSVReport, getWeeklyReportData } from "@/services/reports-analytics-service";
 import { getPatientProfile } from "@/services/patient-service";
 
 type ReportTabType = "daily" | "weekly" | "monthly" | "yearly" | "doctor";
@@ -21,85 +21,70 @@ type ReportsTabsProps = {
   patientId: string;
 };
 
+const TABS: SegmentedOption<ReportTabType>[] = [
+  { value: "daily", label: "Daily", hindiLabel: "दैनिक" },
+  { value: "weekly", label: "Weekly", hindiLabel: "साप्ताहिक" },
+  { value: "monthly", label: "Monthly", hindiLabel: "मासिक" },
+  { value: "yearly", label: "Yearly", hindiLabel: "वार्षिक" },
+  { value: "doctor", label: "Doctor visit", hindiLabel: "डॉक्टर" },
+];
+
 export function ReportsTabs({ patientId }: ReportsTabsProps) {
+  const toast = useToast();
+  const tabsId = useId();
   const [activeTab, setActiveTab] = useState<ReportTabType>("weekly");
   const [exporting, setExporting] = useState(false);
 
-  const tabs: SegmentedOption<ReportTabType>[] = [
-    { value: "daily", label: "Daily", hindiLabel: "दैनिक" },
-    { value: "weekly", label: "Weekly", hindiLabel: "साप्ताहिक" },
-    { value: "monthly", label: "Monthly", hindiLabel: "मासिक" },
-    { value: "yearly", label: "Yearly", hindiLabel: "वार्षिक" },
-    { value: "doctor", label: "Doctor visit", hindiLabel: "डॉक्टर" },
-  ];
-
   async function handleDownloadCSV() {
+    setExporting(true);
     try {
-      setExporting(true);
-      const [weekly, profile] = await Promise.all([
-        getWeeklyReportData(patientId),
-        getPatientProfile(),
-      ]);
+      const [weekly, profile] = await Promise.all([getWeeklyReportData(patientId), getPatientProfile(patientId)]);
       const csv = generateCSVReport(weekly, profile.name);
+      // generateCSVReport already starts with a BOM, so Excel reads Devanagari names correctly.
       const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
-      link.setAttribute("href", url);
-      link.setAttribute(
-        "download",
-        `SwasthTrack_Report_${profile.name.replace(/\s+/g, "_")}_${new Date().toISOString().split("T")[0]}.csv`,
-      );
+      link.href = url;
+      link.download = `SwasthTrack_${safeFileName(profile.name)}_${todayIST()}.csv`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
       URL.revokeObjectURL(url);
-    } catch (err) {
-      console.error("CSV export error:", err);
+      toast.success("CSV तैयार है", "Last 7 days downloaded.");
+    } catch {
+      toast.error("CSV नहीं बन पाई", "Could not prepare the file. Please try again.");
     } finally {
       setExporting(false);
     }
   }
 
-  function handlePrint() {
-    window.print();
-  }
-
   return (
     <div className="space-y-5">
-      {/* Tabs and export actions */}
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <div className="no-print flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between print:hidden">
         <Segmented
-          options={tabs}
+          mode="tabs"
+          idPrefix={tabsId}
+          options={TABS}
           value={activeTab}
           onChange={setActiveTab}
-          ariaLabel="Report period"
+          ariaLabel="Report period — रिपोर्ट की अवधि"
           size="sm"
           className="min-w-0 flex-1"
         />
 
         <div className="flex shrink-0 items-center gap-2 self-end sm:self-auto">
-          {/* These labels used to be hidden behind an `xs:` breakpoint that
-              does not exist in this Tailwind config, so both buttons rendered
-              as unlabelled icons at every width. */}
-          <Button
-            variant="secondary"
-            size="sm"
-            onClick={handleDownloadCSV}
-            disabled={exporting}
-          >
+          <Button variant="secondary" size="sm" loading={exporting} onClick={() => void handleDownloadCSV()}>
             <FileSpreadsheet aria-hidden className="h-4 w-4" />
-            <span>{exporting ? "Generating…" : "CSV"}</span>
+            CSV (7 दिन)
           </Button>
-
-          <Button variant="secondary" size="sm" onClick={handlePrint}>
+          <Button variant="secondary" size="sm" onClick={() => window.print()}>
             <Printer aria-hidden className="h-4 w-4" />
-            <span>Print</span>
+            Print
           </Button>
         </div>
       </div>
 
-      {/* Tab content */}
-      <div>
+      <div role="tabpanel" id={segmentedPanelId(tabsId, activeTab)} aria-labelledby={segmentedTabId(tabsId, activeTab)}>
         {activeTab === "daily" && <DailyReportView patientId={patientId} />}
         {activeTab === "weekly" && <WeeklyReportView patientId={patientId} />}
         {activeTab === "monthly" && <MonthlyReportView patientId={patientId} />}

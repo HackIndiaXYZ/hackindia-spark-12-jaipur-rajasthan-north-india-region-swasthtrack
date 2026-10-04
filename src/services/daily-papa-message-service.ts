@@ -10,10 +10,12 @@
  * - Deterministic daily selection per patient & date (stable across rerenders).
  * - Anti-repetition memory (excludes last 14 displayed messages).
  * - Occasional special love message ("पापा, हम आपसे बहुत प्यार करते हैं ❤️").
- * - Full persistence in Supabase / Local Storage.
+ * - The recent-message history is a per-device preference (message ids and dates only).
+ * - Days and greetings follow India time (IST), not the device clock or UTC.
  */
 
-import { getStorageItem, setStorageItem } from "@/services/patient-service";
+import { dayPartIST, todayIST, type DayPart as ISTDayPart } from "@/lib/health-rules";
+import { readLocalPref, writeLocalPref } from "@/lib/utils";
 
 export type MessageCategory =
   | "love_family"
@@ -1005,7 +1007,7 @@ export const DAILY_PAPA_MESSAGES: DailyPapaMessage[] = [
 // TIME-AWARE HINDI GREETING BUILDER
 // ----------------------------------------------------
 
-export type DayPart = "morning" | "afternoon" | "evening" | "night";
+export type DayPart = ISTDayPart;
 
 export interface GreetingParts {
   part: DayPart;
@@ -1013,28 +1015,23 @@ export interface GreetingParts {
   english: string;
 }
 
+const GREETINGS: Record<DayPart, { hindi: string; english: string }> = {
+  morning: { hindi: "शुभ प्रभात", english: "Good Morning" },
+  afternoon: { hindi: "शुभ दोपहर", english: "Good Afternoon" },
+  evening: { hindi: "शुभ संध्या", english: "Good Evening" },
+  night: { hindi: "शुभ रात्रि", english: "Good Night" },
+};
+
 /**
- * The single source of truth for time-of-day greetings (§57).
- *
- * The dashboard hero used to compute its own greeting with no night branch,
- * so between midnight and 4am it said "सुप्रभात (Good Morning)" directly above
- * this function's "शुभ रात्रि". Both surfaces now read from here.
+ * The single source of truth for time-of-day greetings. The part of day is read
+ * in India time, so it matches the IST date the daily message rotates on.
  */
 export function getGreetingParts(at: Date = new Date()): GreetingParts {
-  const hour = at.getHours();
-
-  if (hour >= 4 && hour < 12) {
-    return { part: "morning", hindi: "शुभ प्रभात", english: "Good Morning" };
-  }
-  if (hour >= 12 && hour < 17) {
-    return { part: "afternoon", hindi: "शुभ दोपहर", english: "Good Afternoon" };
-  }
-  if (hour >= 17 && hour < 21) {
-    return { part: "evening", hindi: "शुभ संध्या", english: "Good Evening" };
-  }
-  return { part: "night", hindi: "शुभ रात्रि", english: "Good Night" };
+  const part = dayPartIST(at);
+  return { part, ...GREETINGS[part] };
 }
 
+/** "शुभ प्रभात <name> ❤️". The default address is the family's "पापा"; pass a name to change it. */
 export function getTimeAwareGreeting(patientName = "पापा"): string {
   return `${getGreetingParts().hindi} ${patientName} ❤️`;
 }
@@ -1046,123 +1043,72 @@ export function getTimeAwareGreeting(patientName = "पापा"): string {
 function simpleHash(str: string): number {
   let hash = 0;
   for (let i = 0; i < str.length; i++) {
-    const char = str.charCodeAt(i);
-    hash = (hash << 5) - hash + char;
+    hash = (hash << 5) - hash + str.charCodeAt(i);
     hash |= 0;
   }
   return Math.abs(hash);
 }
 
 // ----------------------------------------------------
-// STORAGE KEYS
+// HISTORY (per patient, per device)
 // ----------------------------------------------------
 
-function getMessageHistoryStorageKey(patientId: string): string {
+function historyKey(patientId: string): string {
   return `swasthtrack_msg_history_${patientId}`;
 }
 
-/**
- * Retrieves the last 14 message IDs shown to this patient
- */
+/** The last shown message records for this patient, newest first. */
 export function getRecentMessageHistory(patientId: string): PatientDailyMessageRecord[] {
-  return getStorageItem<PatientDailyMessageRecord[]>(
-    getMessageHistoryStorageKey(patientId),
-    []
-  );
+  return readLocalPref<PatientDailyMessageRecord[]>(historyKey(patientId), []);
 }
+
+function recordMessageDisplay(record: PatientDailyMessageRecord): void {
+  const history = getRecentMessageHistory(record.patientId).filter((h) => h.dateStr !== record.dateStr);
+  writeLocalPref(historyKey(record.patientId), [record, ...history].slice(0, 30));
+}
+
+// ----------------------------------------------------
+// DAILY MESSAGE SELECTION
+// ----------------------------------------------------
 
 /**
- * Saves a new daily message record to history
+ * One message per patient per IST day. The pick depends only on the patient id
+ * and the date (so every device agrees), avoiding anything shown in the last 14 days.
  */
-function recordMessageDisplay(record: PatientDailyMessageRecord): void {
-  const history = getRecentMessageHistory(record.patientId);
-  const filtered = history.filter((h) => h.dateStr !== record.dateStr);
-  const updated = [record, ...filtered].slice(0, 30);
-  setStorageItem(getMessageHistoryStorageKey(record.patientId), updated);
-}
-
-// ----------------------------------------------------
-// DAILY MESSAGE SELECTION ALGORITHM
-// ----------------------------------------------------
-
 export function getDailyPapaMessage(
   patientId: string,
-  dateStr = new Date().toISOString().split("T")[0]
+  dateStr: string = todayIST(),
 ): {
   message: DailyPapaMessage;
   greetingText: string;
   isSpecialLoveMessage: boolean;
 } {
   const greetingText = getTimeAwareGreeting("पापा");
-
-  // 1. Check if already selected for this exact date
   const history = getRecentMessageHistory(patientId);
-  const existingRecord = history.find((h) => h.dateStr === dateStr);
 
-  if (existingRecord) {
-    const existingMsg = DAILY_PAPA_MESSAGES.find((m) => m.id === existingRecord.messageId);
-    if (existingMsg) {
-      return {
-        message: existingMsg,
-        greetingText,
-        isSpecialLoveMessage: Boolean(existingMsg.isSpecialLoveMessage),
-      };
-    }
+  const existing = history.find((h) => h.dateStr === dateStr);
+  const existingMessage = existing ? DAILY_PAPA_MESSAGES.find((m) => m.id === existing.messageId) : undefined;
+  if (existingMessage) {
+    return { message: existingMessage, greetingText, isSpecialLoveMessage: Boolean(existingMessage.isSpecialLoveMessage) };
   }
 
-  // 2. Determine recent message IDs to exclude (last 14 days)
-  const recentExcludedIds = new Set(
-    history.slice(0, 14).map((h) => h.messageId)
-  );
-
-  // 3. Special "I Love You Papa ❤️" rule (appears ~once every 7-10 days)
-  const specialShownRecently = history
-    .slice(0, 7)
-    .some((h) => h.messageId === 1);
-
+  const pastHistory = history.filter((h) => h.dateStr !== dateStr);
+  const recentExcludedIds = new Set(pastHistory.slice(0, 14).map((h) => h.messageId));
   const daySeed = simpleHash(`${patientId}_${dateStr}`);
-  if (!specialShownRecently && daySeed % 8 === 0) {
-    const specialMsg = DAILY_PAPA_MESSAGES[0];
-    recordMessageDisplay({
-      patientId,
-      dateStr,
-      messageId: specialMsg.id,
-      greetingText,
-      createdAt: new Date().toISOString(),
-    });
-    return {
-      message: specialMsg,
-      greetingText,
-      isSpecialLoveMessage: true,
-    };
-  }
 
-  // 4. Filter candidate pool excluding recent IDs
-  let candidates = DAILY_PAPA_MESSAGES.filter(
-    (m) => !recentExcludedIds.has(m.id)
-  );
+  const save = (message: DailyPapaMessage) => {
+    recordMessageDisplay({ patientId, dateStr, messageId: message.id, greetingText, createdAt: new Date().toISOString() });
+    return { message, greetingText, isSpecialLoveMessage: Boolean(message.isSpecialLoveMessage) };
+  };
 
+  // The "I love you Papa" message surfaces about once every 8 days, never twice within a week.
+  const specialShownRecently = pastHistory.slice(0, 7).some((h) => h.messageId === 1);
+  if (!specialShownRecently && daySeed % 8 === 0) return save(DAILY_PAPA_MESSAGES[0]);
+
+  let candidates = DAILY_PAPA_MESSAGES.filter((m) => !recentExcludedIds.has(m.id));
   if (candidates.length === 0) {
-    const yesterdayId = history[0]?.messageId;
+    const yesterdayId = pastHistory[0]?.messageId;
     candidates = DAILY_PAPA_MESSAGES.filter((m) => m.id !== yesterdayId);
   }
-
-  // 5. Pick deterministically based on patient ID + date seed
-  const selectedIndex = daySeed % candidates.length;
-  const selectedMessage = candidates[selectedIndex] || DAILY_PAPA_MESSAGES[0];
-
-  // 6. Record to patient history
-  recordMessageDisplay({
-    patientId,
-    dateStr,
-    messageId: selectedMessage.id,
-    greetingText,
-    createdAt: new Date().toISOString(),
-  });
-
-  return {
-    message: selectedMessage,
-    greetingText,
-    isSpecialLoveMessage: Boolean(selectedMessage.isSpecialLoveMessage),
-  };
+  return save(candidates[daySeed % candidates.length] || DAILY_PAPA_MESSAGES[0]);
 }

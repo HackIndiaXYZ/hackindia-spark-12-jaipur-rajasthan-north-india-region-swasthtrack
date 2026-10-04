@@ -1,0 +1,137 @@
+"use client";
+
+import { useCallback, useEffect, useState } from "react";
+import { Plus, Trash2 } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Button, IconButton } from "@/components/ui/button";
+import { Field, Select, TextArea } from "@/components/ui/form-field";
+import { Modal } from "@/components/ui/modal";
+import { EmptyState } from "@/components/ui/page";
+import { useConfirm } from "@/components/ui/confirm-dialog";
+import { useToast } from "@/components/ui/toast";
+import { supabase } from "@/lib/supabase/client";
+import { MAX_MEMORIES_PER_PATIENT, MAX_MEMORY_CHARS, MEMORY_KINDS, type MemoryKind } from "@/services/soie/types";
+
+const KIND_HI: Record<MemoryKind, string> = { allergy: "एलर्जी", preference: "पसंद", routine: "दिनचर्या", goal: "लक्ष्य", note: "नोट" };
+
+interface Row {
+  id: string;
+  kind: MemoryKind;
+  content: string;
+  created_at: string;
+}
+
+/** Notes the family asked SOIE to remember about this patient. Owners and editors can add or remove; viewers can read. */
+export function MemoriesManager({ isOpen, onClose, patientId, canWrite }: { isOpen: boolean; onClose: () => void; patientId: string | null; canWrite: boolean }) {
+  const [rows, setRows] = useState<Row[] | null>(null);
+  const [kind, setKind] = useState<MemoryKind>("note");
+  const [content, setContent] = useState("");
+  const [busy, setBusy] = useState(false);
+  const confirm = useConfirm();
+  const toast = useToast();
+
+  const load = useCallback(async () => {
+    if (!patientId) return;
+    const { data, error } = await supabase.from("soie_memories").select("id,kind,content,created_at").eq("patient_id", patientId).order("created_at", { ascending: false });
+    setRows(error ? [] : ((data ?? []) as Row[]));
+  }, [patientId]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    let live = true;
+    (async () => {
+      await load();
+      if (!live) return;
+    })();
+    return () => {
+      live = false;
+    };
+  }, [isOpen, load]);
+
+  async function add() {
+    const text = content.trim();
+    if (!text || !patientId || busy) return;
+    if ((rows?.length ?? 0) >= MAX_MEMORIES_PER_PATIENT) {
+      toast({ title: `अधिकतम ${MAX_MEMORIES_PER_PATIENT} बातें सेव हो सकती हैं`, tone: "error" });
+      return;
+    }
+    setBusy(true);
+    const { error } = await supabase.from("soie_memories").insert({ patient_id: patientId, kind, content: text.slice(0, MAX_MEMORY_CHARS) });
+    setBusy(false);
+    if (error) {
+      toast({ title: "सेव नहीं हो सका", tone: "error" });
+      return;
+    }
+    setContent("");
+    await load();
+    toast({ title: "सेव हो गया", tone: "success" });
+  }
+
+  async function remove(id: string) {
+    const ok = await confirm({ title: "यह बात हटाएँ?", message: "SOIE आगे इसे इस्तेमाल नहीं करेगा।", confirmLabel: "हटाएँ", tone: "danger" });
+    if (!ok) return;
+    const { error } = await supabase.from("soie_memories").delete().eq("id", id);
+    if (error) {
+      toast({ title: "हटाया नहीं जा सका", tone: "error" });
+      return;
+    }
+    setRows((r) => (r ?? []).filter((x) => x.id !== id));
+  }
+
+  return (
+    <Modal isOpen={isOpen} onClose={onClose} title="सेव की गई बातें" hindiTitle="Saved notes" description="आपके फीडबैक और सेव की गई बातें अगले जवाबों में इस्तेमाल होती हैं। (AI चालू होने पर; नियम-आधारित जवाब इन्हें नहीं पढ़ते।)" size="md">
+      <div className="space-y-4">
+        {canWrite ? (
+          <div className="space-y-3 rounded-card border border-line bg-surface-sunken p-3">
+            <Field label="किस तरह की बात?">
+              <Select value={kind} onChange={(e) => setKind(e.target.value as MemoryKind)}>
+                {MEMORY_KINDS.map((k) => (
+                  <option key={k} value={k}>
+                    {KIND_HI[k]}
+                  </option>
+                ))}
+              </Select>
+            </Field>
+            <Field label="बात लिखें" hint={`${content.length}/${MAX_MEMORY_CHARS} · जैसे: दूध से एलर्जी है / रात के खाने के बाद टहलते हैं`}>
+              <TextArea value={content} maxLength={MAX_MEMORY_CHARS} onChange={(e) => setContent(e.target.value)} />
+            </Field>
+            <Button variant="primary" onClick={add} disabled={busy || content.trim().length === 0}>
+              <Plus aria-hidden className="h-4 w-4" />
+              सेव करें
+            </Button>
+          </div>
+        ) : (
+          <p className="rounded-field bg-surface-sunken p-3 text-sm text-ink-muted">आपके पास केवल देखने की अनुमति है, इसलिए बातें जोड़ या हटा नहीं सकते।</p>
+        )}
+
+        {rows === null ? (
+          <p className="py-4 text-center text-sm text-ink-muted" role="status">
+            लोड हो रहा है…
+          </p>
+        ) : rows.length === 0 ? (
+          <EmptyState title="Nothing saved yet" hindiTitle="अभी कोई बात सेव नहीं है" description="चैट में लिखें “याद रखो कि …” या ऊपर से जोड़ें।" />
+        ) : (
+          <ul className="space-y-2">
+            {rows.map((m) => (
+              <li key={m.id} className="flex items-start gap-2 rounded-card border border-line bg-surface p-3">
+                <div className="min-w-0 flex-1">
+                  <Badge variant="gold">
+                    <span lang="hi">{KIND_HI[m.kind]}</span>
+                  </Badge>
+                  <p lang="hi" className="mt-1.5 whitespace-pre-line text-sm text-ink">
+                    {m.content}
+                  </p>
+                </div>
+                {canWrite ? (
+                  <IconButton aria-label="हटाएँ" onClick={() => remove(m.id)}>
+                    <Trash2 aria-hidden className="h-4 w-4" />
+                  </IconButton>
+                ) : null}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </Modal>
+  );
+}

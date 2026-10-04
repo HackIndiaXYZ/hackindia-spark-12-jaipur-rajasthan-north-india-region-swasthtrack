@@ -1,29 +1,42 @@
+import { getActivePatientId } from "@/lib/active-patient";
 import {
-  getActivityLogs,
-  getBloodPressureLogs,
-  getFoodLogs,
-  getFoodLogsByDate,
-  getMedicines,
-  getMedicineLogsByDate,
-  getPatientProfile,
-  getSleepLogs,
-  getWeightLogs,
-  type ActivityLogEntry,
-  type BPLogEntry,
-  type FoodLogEntry,
-  type MedicineItem,
-  type MedicineLogEntry,
-  type SleepLogEntry,
-  type WeightLogEntry,
-} from "./patient-service";
-import { getPatientSettings } from "./settings-service";
-import { calculateDailyWellnessScore } from "./wellness-score-service";
+  addDaysIST,
+  bpSlotOf,
+  classifyBP,
+  isPlausibleBP,
+  istMinutesOfDay,
+  todayIST,
+} from "@/lib/health-rules";
+import { buildDoseRecords, summarizeAdherence } from "@/lib/analytics/adherence";
+import {
+  bpAboveLines,
+  bpTrendOver,
+  buildAttentionItems,
+  deriveRoutineStatus,
+  eveningGapDays,
+  lowSleepNights,
+  mean,
+  trailingDates,
+  usualMedian,
+  weightTrendOver,
+  type CaregiverAttentionItem,
+  type CaregiverAttentionLevel,
+  type MonthlyBPTrend,
+  type MonthlyWeightTrend,
+  type PeriodBP,
+  type RoutineStatus,
+} from "@/lib/analytics/caregiver-calc";
+import { groupByDay } from "@/lib/analytics/dates";
+import { bpDay, foodDay, loadSeries, weightDay } from "./analytics-data";
+import { detectHealthAnomaliesAndTrends } from "./anomaly-detection-service";
+import { filterValidActivityLogs, filterValidBPLogs, filterValidSleepLogs, filterValidWeightLogs } from "./data-quality-service";
+import { getPatientProfile } from "./patient-service";
+import { getPatientSettingsOrDefault } from "./settings-service";
+import { calculateDailyWellnessScore, calculateWellnessScoresForRange } from "./wellness-score-service";
 import { getHealthChanges } from "./what-changed-service";
-import { calculatePersonalBaseline } from "./personal-baseline-service";
-import { generateSmartInsightsAndAlerts } from "./smart-insights-service";
 
+export type { CaregiverAttentionItem, CaregiverAttentionLevel };
 export type CaregiverViewMode = "daily" | "weekly" | "monthly";
-export type CaregiverAttentionLevel = "IMPORTANT" | "ATTENTION" | "INFO";
 
 export interface CaregiverSnapshotVital {
   label: string;
@@ -32,15 +45,6 @@ export interface CaregiverSnapshotVital {
   subtext?: string;
   isLogged: boolean;
   iconName: string;
-}
-
-export interface CaregiverAttentionItem {
-  id: string;
-  level: CaregiverAttentionLevel;
-  text: string;
-  textHi: string;
-  detail?: string;
-  category: "bp" | "medicine" | "food" | "activity" | "sleep" | "weight" | "missing_data";
 }
 
 export interface TodayVsUsualComparison {
@@ -57,25 +61,26 @@ export interface TodayVsUsualComparison {
 export interface CaregiverDailyBrief {
   patientId: string;
   patientName: string;
+  /** Always false now: nothing is keyed to a particular patient id or name. Kept so older UI compiles. */
   isPapa: boolean;
   dateStr: string; // YYYY-MM-DD (IST)
   dateLabelHi: string;
-  cachedAt: string; // e.g. "10:32 AM"
+  /** IST time the brief was computed, e.g. "10:32 am". */
+  cachedAt: string;
   cacheTimestamp: number;
 
-  // 1. Natural language summary (strictly factual, warm, non-shaming)
   naturalLanguageSummaryHi: string;
 
-  // 2. Tracking Routine Status & Completeness (§32, §34, §35)
-  routineStatus: "Routine on track" | "Needs attention" | "Data incomplete";
+  routineStatus: RoutineStatus;
   routineStatusHi: "रूटीन ट्रैक पर है" | "ध्यान देने योग्य" | "डेटा अधूरा है";
-  routineScore: number; // 0-100 from wellness score engine
+  /** Wellness score for the day (0 when `isScoreSufficient` is false: show "no data" instead). */
+  routineScore: number;
+  isScoreSufficient: boolean;
   expectedItemsCount: number;
   recordedItemsCount: number;
   completenessPercent: number;
   completenessLabelHi: string;
 
-  // 3. Snapshot (§6)
   snapshot: {
     bp: CaregiverSnapshotVital;
     medicines: CaregiverSnapshotVital;
@@ -85,788 +90,513 @@ export interface CaregiverDailyBrief {
     weight: CaregiverSnapshotVital;
   };
 
-  // 4. Highlights (Up to 3 positive factual observations, §7)
   highlights: string[];
-
-  // 5. Attention Items (Ranked IMPORTANT -> ATTENTION -> INFO, max 3 visible, §8, §9)
   attentionItems: CaregiverAttentionItem[];
-
-  // 6. Today vs Usual Baseline Comparisons (§12, §13)
   todayVsUsual: TodayVsUsualComparison[];
 
-  // 7. What Changed summary (§15)
   whatChangedCompactHi: string;
+  /** True only when a compared measure moved (or adherence is low) in a sustained way. */
   hasPersistentChanges: boolean;
 }
 
 export interface CaregiverWeeklyBrief {
   patientId: string;
   patientName: string;
+  /** IST dates (inclusive). */
   weekStartStr: string;
   weekEndStr: string;
   avgBP: string;
   avgSteps: number;
   avgCalories: number;
   avgSleepHours: number;
-  medAdherencePercent: number;
+  /** null when no dose was due in the window. */
+  medAdherencePercent: number | null;
   weightChangeStr: string;
+  /** Mean of the daily scores over days that had any data (0 when `routineScoreIsSufficient` is false). */
   routineScore: number;
+  routineScoreIsSufficient: boolean;
   dataCompletenessPercent: number;
   topChanges: string[];
   topAttention: string[];
+  /** Which averages are backed by data; a 0 above with `false` here means "no data", not zero. */
+  hasData: { bp: boolean; steps: boolean; sleep: boolean; calories: boolean; medicines: boolean; weight: boolean };
 }
 
 export interface CaregiverMonthlyBrief {
   patientId: string;
   patientName: string;
   monthLabel: string;
-  weightTrend: "Gaining" | "Losing" | "Stable";
-  bpTrend: "Stable" | "Elevated" | "Fluctuating";
+  weightTrend: MonthlyWeightTrend;
+  bpTrend: MonthlyBPTrend;
   stepsAvg: number;
   sleepAvgHours: number;
-  medAdherencePercent: number;
+  /** null when no dose was due in the window. */
+  medAdherencePercent: number | null;
   foodConsistencyPercent: number;
   routineScore: number;
+  routineScoreIsSufficient: boolean;
   notableChanges: string[];
+  hasData: { bp: boolean; steps: boolean; sleep: boolean; medicines: boolean; weight: boolean };
 }
 
-// In-memory cache to prevent heavy re-computations on every render
-const _caregiverCache = new Map<string, { brief: CaregiverDailyBrief; timestamp: number }>();
-const CACHE_TTL_MS = 60 * 1000; // 1 minute TTL
+const _inflight = new Map<string, Promise<CaregiverDailyBrief>>();
 
-/**
- * Format IST Date string to human Hindi label
- */
-function formatHumanDateHi(dateStr: string, todayStr: string, yesterdayStr: string): string {
-  if (dateStr === todayStr) return "आज (Today)";
-  if (dateStr === yesterdayStr) return "कल (Yesterday)";
-  try {
-    const parts = dateStr.split("-");
-    const d = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
-    return d.toLocaleDateString("hi-IN", { day: "numeric", month: "short", weekday: "short" });
-  } catch {
-    return dateStr;
-  }
-}
-
-/**
- * Convert Date or ISO to YYYY-MM-DD in Asia/Kolkata
- */
-function getISTDateStr(dateOrIso?: Date | string): string {
-  const d = dateOrIso ? (typeof dateOrIso === "string" ? new Date(dateOrIso) : dateOrIso) : new Date();
-  try {
-    return d.toLocaleDateString("en-CA", { timeZone: "Asia/Kolkata" });
-  } catch {
-    return d.toISOString().slice(0, 10);
-  }
-}
-
-/**
- * Format current timestamp for user display
- */
-function formatCurrentTimeIST(): string {
-  try {
-    return new Date().toLocaleTimeString("en-IN", {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: true,
-      timeZone: "Asia/Kolkata",
-    });
-  } catch {
-    return "Recently";
-  }
-}
-
-/**
- * Build the list of IST date strings (YYYY-MM-DD, oldest first, inclusive of
- * today) for the trailing N-day window ending today. Used so weekly/monthly
- * briefs can aggregate real logs over a consistent window instead of relying
- * on hardcoded stats.
- */
-function getTrailingDateStrings(days: number): string[] {
-  const dates: string[] = [];
-  for (let i = days - 1; i >= 0; i--) {
-    dates.push(getISTDateStr(new Date(Date.now() - i * 24 * 60 * 60 * 1000)));
-  }
-  return dates;
-}
-
-/**
- * Clear cached caregiver brief for a patient
- */
-export function invalidateCaregiverCache(patientId?: string) {
+/** Kept for callers that invalidate after logging; reads are cached (and write-invalidated) in patient-service. */
+export function invalidateCaregiverCache(patientId?: string): void {
   if (!patientId) {
-    _caregiverCache.clear();
+    _inflight.clear();
     return;
   }
-  for (const key of _caregiverCache.keys()) {
-    if (key.startsWith(patientId)) {
-      _caregiverCache.delete(key);
-    }
-  }
+  for (const key of _inflight.keys()) if (key.startsWith(patientId)) _inflight.delete(key);
 }
 
+function resolvePatientId(patientId?: string): string | undefined {
+  return patientId || getActivePatientId() || undefined;
+}
+
+function formatHumanDateHi(dateStr: string, today: string): string {
+  if (dateStr === today) return "आज (Today)";
+  if (dateStr === addDaysIST(today, -1)) return "कल (Yesterday)";
+  const [y, m, d] = dateStr.split("-").map(Number);
+  return new Date(Date.UTC(y, m - 1, d)).toLocaleDateString("hi-IN", {
+    day: "numeric",
+    month: "short",
+    weekday: "short",
+    timeZone: "UTC",
+  });
+}
+
+function formatNowIST(): string {
+  return new Date().toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit", hour12: true, timeZone: "Asia/Kolkata" });
+}
+
+const ROUTINE_HI: Record<RoutineStatus, CaregiverDailyBrief["routineStatusHi"]> = {
+  "Routine on track": "रूटीन ट्रैक पर है",
+  "Needs attention": "ध्यान देने योग्य",
+  "Data incomplete": "डेटा अधूरा है",
+};
+
 /**
- * Primary Caregiver Daily Brief Engine: Answers "आज पापा कैसे रहे?"
- * Reuses existing wellness, baseline, what-changed, and patient data services.
+ * Daily brief: answers "how was today?". Facts come from the same wellness result
+ * the dashboard shows, so the two can never disagree.
  */
-export async function getCaregiverDailyBrief(
+export function getCaregiverDailyBrief(
   patientId?: string,
   targetDateStr?: string,
-  forceRefresh: boolean = false
+  _forceRefresh: boolean = false,
 ): Promise<CaregiverDailyBrief> {
-  const todayIST = getISTDateStr();
-  const dateStr = targetDateStr || todayIST;
-  const yesterdayDate = new Date(Date.now() - 24 * 60 * 60 * 1000);
-  const yesterdayIST = getISTDateStr(yesterdayDate);
+  void _forceRefresh;
+  const key = `${patientId ?? ""}|${targetDateStr ?? ""}`;
+  const pending = _inflight.get(key);
+  if (pending) return pending;
+  const request = computeDailyBrief(resolvePatientId(patientId), targetDateStr).finally(() => {
+    _inflight.delete(key);
+  });
+  _inflight.set(key, request);
+  return request;
+}
+
+async function computeDailyBrief(patientId: string | undefined, targetDateStr?: string): Promise<CaregiverDailyBrief> {
+  const today = todayIST();
+  const dateStr = targetDateStr || today;
+  const isToday = dateStr === today;
+  const nowMinutes = isToday ? istMinutesOfDay(new Date()) : null;
 
   const profile = await getPatientProfile(patientId);
   const pid = patientId || profile.id;
-  const cacheKey = `${pid}_${dateStr}`;
 
-  // Check cache
-  if (!forceRefresh && _caregiverCache.has(cacheKey)) {
-    const cached = _caregiverCache.get(cacheKey)!;
-    if (Date.now() - cached.timestamp < CACHE_TTL_MS) {
-      return cached.brief;
-    }
-  }
-
-  const isPapa =
-    profile.id === "6c4fcb90-5dc1-4ff5-89fe-3049f927f4ac" ||
-    profile.name.toLowerCase().includes("raj kishore");
-
-  // Concurrently fetch all foundational services without duplicating analytics
-  const [
-    settings,
-    wellnessResult,
-    medicines,
-    medLogs,
-    foodLogs,
-    actLogs,
-    bpLogs,
-    sleepLogs,
-    weightLogs,
-    whatChanged,
-    baseline,
-    smartData,
-  ] = await Promise.all([
-    getPatientSettings(pid).catch(() => null),
+  const [settings, wellness, series, whatChanged, intelligence] = await Promise.all([
+    getPatientSettingsOrDefault(pid),
     calculateDailyWellnessScore(pid, dateStr).catch(() => null),
-    getMedicines(pid).catch(() => [] as MedicineItem[]),
-    getMedicineLogsByDate(pid, dateStr).catch(() => [] as MedicineLogEntry[]),
-    getFoodLogsByDate(pid, dateStr).catch(() => [] as FoodLogEntry[]),
-    getActivityLogs(pid, 15).catch(() => [] as ActivityLogEntry[]),
-    getBloodPressureLogs(pid, 20).catch(() => [] as BPLogEntry[]),
-    getSleepLogs(pid, 15).catch(() => [] as SleepLogEntry[]),
-    getWeightLogs(pid, 15).catch(() => [] as WeightLogEntry[]),
+    loadSeries(pid, addDaysIST(dateStr, -14), dateStr, ["bp", "weight", "food", "sleep", "activity", "medicineLogs", "medicines"]),
     getHealthChanges(pid, "7d").catch(() => null),
-    calculatePersonalBaseline(pid, "7d").catch(() => null),
-    generateSmartInsightsAndAlerts(pid).catch(() => null),
+    isToday ? detectHealthAnomaliesAndTrends(pid).catch(() => null) : Promise.resolve(null),
   ]);
 
-  // 1. EXTRACT TARGET DATE'S ACTUAL DATA
-  // Filter BP for this local date
-  const targetBPLogs = bpLogs.filter((b) => getISTDateStr(b.measured_at || b.created_at) === dateStr);
-  // Only a reading explicitly typed "Morning" (or a single untyped/"Manual"
-  // reading) is treated as the morning slot — a reading typed "Evening" must
-  // never be relabeled as morning just because it happens to be first in the
-  // list.
-  const morningBP =
-    targetBPLogs.find((b) => b.reading_type === "Morning") ||
-    targetBPLogs.find((b) => !b.reading_type || b.reading_type === "Manual") ||
-    null;
-  const eveningBP = targetBPLogs.find((b) => b.reading_type === "Evening") || null;
+  const t = settings.bp_targets;
+  const bpToday = filterValidBPLogs(series.bp).filter((b) => bpDay(b) === dateStr);
+  const plausibleToday = bpToday.filter((b) => isPlausibleBP(b.systolic, b.diastolic, b.pulse));
+  const slotOf = (b: (typeof bpToday)[number]) => bpSlotOf(b.reading_type, istMinutesOfDay(b.measured_at));
+  const morningBP = plausibleToday.find((b) => slotOf(b) === "morning") ?? null;
+  const eveningBP = plausibleToday.find((b) => slotOf(b) === "evening") ?? null;
 
-  // Filter Activity
-  const targetAct = actLogs.find((a) => a.date === dateStr) || null;
+  const foodToday = series.food.filter((f) => foodDay(f) === dateStr);
+  const totalCalories = foodToday.reduce((s, f) => s + Number(f.calories || 0), 0);
+  const actToday = filterValidActivityLogs(series.activity).filter((a) => a.date === dateStr).pop() ?? null;
+  const sleepToday = filterValidSleepLogs(series.sleep).filter((s) => s.date === dateStr).pop() ?? null;
+  const weightRows = filterValidWeightLogs(series.weight);
+  const latestWeight = weightRows.length > 0 ? weightRows[weightRows.length - 1] : null;
 
-  // Filter Sleep
-  const targetSleep = sleepLogs.find((s) => s.date === dateStr) || null;
+  const doses = buildDoseRecords(series.medicines, series.medicineLogs, dateStr, dateStr);
+  const adherence = summarizeAdherence(doses);
+  const activeMedCount = series.medicines.filter((m) => m.active).length;
 
-  // Filter Weight (either today's or most recent known)
-  const targetWeight = weightLogs.find((w) => getISTDateStr(w.measured_at || w.created_at) === dateStr) || weightLogs[0] || null;
+  const attentionAll = buildAttentionItems({
+    today,
+    dateStr,
+    nowMinutes,
+    wellness,
+    doses,
+    anomalies: intelligence?.anomalies ?? [],
+    alerts: settings.alerts_enabled,
+  });
+  const routineStatus = deriveRoutineStatus({ wellness, isToday, doses, attention: attentionAll });
 
-  // Total Calories
-  const totalCalories = foodLogs.reduce((acc, f) => acc + (f.calories || 0), 0);
+  const expectedItemsCount = wellness?.itemsExpected ?? 0;
+  const recordedItemsCount = wellness?.itemsLogged ?? 0;
+  const completenessPercent = expectedItemsCount > 0 ? Math.round((recordedItemsCount / expectedItemsCount) * 100) : 0;
 
-  // Medicine Adherence
-  const activeMeds = medicines.filter((m) => m.active);
-  const totalExpectedMeds = activeMeds.length;
-  const takenMedsCount = activeMeds.filter((m) => {
-    const l = medLogs.find((log) => log.medicine_id === m.id);
-    return l && (l.status === "taken" || l.status === "late");
-  }).length;
-  const isMedLoggingComplete = totalExpectedMeds > 0 && takenMedsCount >= totalExpectedMeds;
-
-  // 2. DATA COMPLETENESS CALCULATION (§34, §35)
-  // Expected tracking items based on patient settings:
-  let expectedItemsCount = 0;
-  let recordedItemsCount = 0;
-
-  // A. BP schedule
-  const bpSchedule = settings?.bp_monitoring_schedule || "morning_evening";
-  if (bpSchedule === "morning_evening") {
-    expectedItemsCount += 2; // morning + evening
-    if (morningBP) recordedItemsCount += 1;
-    if (eveningBP) recordedItemsCount += 1;
-  } else {
-    expectedItemsCount += 1;
-    if (morningBP || eveningBP) recordedItemsCount += 1;
-  }
-
-  // B. Medicine schedule
-  if (totalExpectedMeds > 0) {
-    expectedItemsCount += totalExpectedMeds;
-    recordedItemsCount += takenMedsCount;
-  }
-
-  // C. Food
-  expectedItemsCount += 1;
-  if (foodLogs.length > 0) recordedItemsCount += 1;
-
-  // D. Activity / Steps
-  expectedItemsCount += 1;
-  if (targetAct && targetAct.steps > 0) recordedItemsCount += 1;
-
-  // E. Sleep
-  expectedItemsCount += 1;
-  if (targetSleep && Number(targetSleep.sleep_hours) > 0) recordedItemsCount += 1;
-
-  const completenessPercent = expectedItemsCount > 0
-    ? Math.round((recordedItemsCount / expectedItemsCount) * 100)
-    : 0;
-
-  // Routine Status (§32)
-  let routineStatus: "Routine on track" | "Needs attention" | "Data incomplete" = "Routine on track";
-  let routineStatusHi: "रूटीन ट्रैक पर है" | "ध्यान देने योग्य" | "डेटा अधूरा है" = "रूटीन ट्रैक पर है";
-
-  if (completenessPercent < 50) {
-    routineStatus = "Data incomplete";
-    routineStatusHi = "डेटा अधूरा है";
-  } else if (
-    (totalExpectedMeds > 0 && takenMedsCount < totalExpectedMeds) ||
-    (morningBP && morningBP.systolic >= 160)
-  ) {
-    routineStatus = "Needs attention";
-    routineStatusHi = "ध्यान देने योग्य";
-  }
-
-  // 3. SNAPSHOT VITALS (§6)
-  // Strict rule: do not show fake zero. If missing, show "Not logged".
+  // ---- snapshot (missing is shown as missing, never as a zero) ----
+  const bpValueOf = (b: { systolic: number; diastolic: number }) => `${b.systolic} / ${b.diastolic}`;
+  const bpClass = (b: { systolic: number; diastolic: number }) => classifyBP(b.systolic, b.diastolic, t);
+  const first = morningBP ?? eveningBP ?? plausibleToday[0] ?? null;
   const snapshot: CaregiverDailyBrief["snapshot"] = {
     bp: {
       label: "Blood Pressure",
       labelHi: "रक्तचाप (BP)",
-      value: morningBP
-        ? `${morningBP.systolic} / ${morningBP.diastolic}`
-        : eveningBP
-        ? `${eveningBP.systolic} / ${eveningBP.diastolic}`
-        : "Not logged",
-      subtext:
-        morningBP && eveningBP
-          ? `सुबह: ${morningBP.systolic}/${morningBP.diastolic}, शाम: ${eveningBP.systolic}/${eveningBP.diastolic}`
-          : morningBP
-          ? "सुबह का दर्ज · शाम का प्रतीक्षित"
-          : eveningBP
-          ? "शाम का दर्ज · सुबह का प्रतीक्षित"
-          : "आज दर्ज नहीं हुआ",
-      isLogged: Boolean(morningBP || eveningBP),
+      value: first ? bpValueOf(first) : "Not logged",
+      subtext: first
+        ? morningBP && eveningBP
+          ? `सुबह: ${morningBP.systolic}/${morningBP.diastolic}, शाम: ${eveningBP.systolic}/${eveningBP.diastolic} · ${bpClass(first).labelHi}`
+          : `${plausibleToday.length} माप दर्ज · ${bpClass(first).labelHi}`
+        : isToday
+          ? "आज दर्ज नहीं हुआ"
+          : "इस दिन दर्ज नहीं हुआ",
+      isLogged: Boolean(first),
       iconName: "HeartPulse",
     },
     medicines: {
       label: "Medicines",
       labelHi: "दवाइयाँ (Medicines)",
-      value: totalExpectedMeds > 0 ? `${takenMedsCount} / ${totalExpectedMeds}` : "0 / 0",
-      subtext: isMedLoggingComplete ? "सभी खुराकें ली गईं ✓" : `${totalExpectedMeds - takenMedsCount} खुराकें बाकी`,
-      isLogged: takenMedsCount > 0,
+      value:
+        adherence.due > 0
+          ? `${adherence.adherent} / ${adherence.due}`
+          : activeMedCount > 0
+            ? "अभी समय नहीं हुआ"
+            : "दवाई जोड़ी नहीं गई",
+      subtext:
+        adherence.due === 0
+          ? undefined
+          : adherence.adherent === adherence.due
+            ? "अब तक की सभी खुराकें ली गईं ✓"
+            : [
+                adherence.missed > 0 ? `${adherence.missed} छूटीं` : null,
+                adherence.pending > 0 ? `${adherence.pending} दर्ज होनी बाकी` : null,
+              ]
+                .filter(Boolean)
+                .join(" · "),
+      isLogged: adherence.adherent > 0,
       iconName: "Pill",
     },
     food: {
       label: "Food Intake",
       labelHi: "भोजन (Food)",
-      value: foodLogs.length > 0 ? `${totalCalories.toLocaleString()} kcal` : "Not logged",
-      subtext: foodLogs.length > 0 ? `${foodLogs.length} बार दर्ज किया गया` : "आज भोजन दर्ज नहीं हुआ",
-      isLogged: foodLogs.length > 0,
+      value: foodToday.length > 0 ? `${Math.round(totalCalories).toLocaleString("en-IN")} kcal` : "Not logged",
+      subtext: foodToday.length > 0 ? `${foodToday.length} बार दर्ज किया गया` : isToday ? "आज भोजन दर्ज नहीं हुआ" : "इस दिन भोजन दर्ज नहीं हुआ",
+      isLogged: foodToday.length > 0,
       iconName: "Utensils",
     },
     activity: {
       label: "Steps",
       labelHi: "दैनिक कदम (Steps)",
-      value: targetAct && targetAct.steps > 0 ? `${targetAct.steps.toLocaleString()} कदम` : "Not logged",
-      subtext: targetAct?.distance_km ? `${targetAct.distance_km} किमी दूरी` : undefined,
-      isLogged: Boolean(targetAct && targetAct.steps > 0),
+      value: actToday && actToday.steps > 0 ? `${actToday.steps.toLocaleString("en-IN")} कदम` : "Not logged",
+      subtext: actToday?.distance_km ? `${actToday.distance_km} किमी दूरी` : undefined,
+      isLogged: Boolean(actToday && actToday.steps > 0),
       iconName: "Activity",
     },
     sleep: {
       label: "Sleep",
       labelHi: "नींद (Sleep)",
-      value: targetSleep ? `${targetSleep.sleep_hours} घंटे` : "Not logged",
-      subtext: targetSleep?.bedtime && targetSleep?.wake_time ? `${targetSleep.bedtime} - ${targetSleep.wake_time}` : undefined,
-      isLogged: Boolean(targetSleep),
+      value: sleepToday ? `${sleepToday.sleep_hours} घंटे` : "Not logged",
+      subtext: sleepToday?.bedtime && sleepToday?.wake_time ? `${sleepToday.bedtime} - ${sleepToday.wake_time}` : undefined,
+      isLogged: Boolean(sleepToday),
       iconName: "Moon",
     },
     weight: {
       label: "Weight",
       labelHi: "वजन (Weight)",
-      value: targetWeight ? `${targetWeight.weight_kg} kg` : "Not logged",
-      subtext: targetWeight ? "नवीनतम दर्ज माप" : "माप दर्ज नहीं",
-      isLogged: Boolean(targetWeight),
+      value: latestWeight ? `${latestWeight.weight_kg} kg` : "Not logged",
+      subtext: latestWeight
+        ? weightDay(latestWeight) === dateStr
+          ? "आज का माप"
+          : `पिछला माप · ${Math.round((Date.parse(dateStr) - Date.parse(weightDay(latestWeight))) / 86_400_000)} दिन पहले`
+        : "माप दर्ज नहीं",
+      isLogged: Boolean(latestWeight),
       iconName: "Scale",
     },
   };
 
-  // 4. HIGHLIGHTS (§7 — Up to 3 positive factual observations)
+  // ---- highlights: only things that are true and logged ----
   const highlights: string[] = [];
-  if (isMedLoggingComplete) {
-    highlights.push("आज की सभी निर्धारित दवाइयाँ समय पर दर्ज हुईं।");
-  } else if (takenMedsCount > 0) {
-    highlights.push(`दवाइयों की ${takenMedsCount} खुराकें सफलतापूर्वक ली गईं।`);
+  if (adherence.due > 0 && adherence.adherent === adherence.due) {
+    highlights.push(`अब तक की सभी ${adherence.due} निर्धारित दवाइयाँ दर्ज हुईं।`);
+  } else if (adherence.adherent > 0) {
+    highlights.push(`${adherence.adherent} खुराकें ली गईं।`);
+  }
+  if (plausibleToday.length > 0 && plausibleToday.every((b) => !bpClass(b).aboveTarget && bpClass(b).category !== "low")) {
+    highlights.push(`आज का BP मरीज़ के लक्ष्य (${t.target_systolic}/${t.target_diastolic}) के भीतर रहा।`);
   }
 
-  const baselineSteps = baseline?.dailySteps?.median || baseline?.dailySteps?.mean || 5900;
-  if (targetAct && targetAct.steps > 0) {
-    if (targetAct.steps >= baselineSteps) {
-      highlights.push(`दैनिक कदम (${targetAct.steps.toLocaleString()}) सामान्य स्तर से अधिक रहे।`);
-    } else {
-      highlights.push(`शारीरिक गतिविधि (${targetAct.steps.toLocaleString()} कदम) दर्ज की गई।`);
-    }
-  }
-
-  if (foodLogs.length >= 2) {
-    highlights.push("भोजन का समय पर नियमित रूप से लॉग दर्ज हुआ।");
-  } else if (morningBP) {
-    highlights.push("सुबह का रक्तचाप नियमपूर्वक मापा और दर्ज किया गया।");
-  }
-
-  // 5. ATTENTION ITEMS (§8, §9 — Ranked IMPORTANT -> ATTENTION -> INFO)
-  const attentionItems: CaregiverAttentionItem[] = [];
-
-  if (bpSchedule === "morning_evening" && morningBP && !eveningBP) {
-    attentionItems.push({
-      id: "att-evening-bp-missing",
-      level: "ATTENTION",
-      text: "Evening BP not logged.",
-      textHi: "शाम का रक्तचाप (Evening BP) अभी दर्ज होना बाकी है।",
-      detail: "शाम 6 से 8 बजे के बीच बीपी माप लेने से दैनिक रिकॉर्ड पूरा रहता है।",
-      category: "bp",
-    });
-  } else if (bpSchedule === "morning_evening" && eveningBP && !morningBP) {
-    attentionItems.push({
-      id: "att-morning-bp-missing",
-      level: "ATTENTION",
-      text: "Morning BP not logged.",
-      textHi: "सुबह का रक्तचाप (Morning BP) अभी दर्ज होना बाकी है।",
-      detail: "सुबह उठने के बाद बीपी माप लेने से दैनिक रिकॉर्ड पूरा रहता है।",
-      category: "bp",
-    });
-  } else if (!morningBP && !eveningBP) {
-    attentionItems.push({
-      id: "att-bp-missing",
-      level: "ATTENTION",
-      text: "BP has not been recorded today.",
-      textHi: "आज का ब्लड प्रेशर अभी दर्ज नहीं किया गया है।",
-      category: "bp",
-    });
-  }
-
-  if (totalExpectedMeds > 0 && takenMedsCount < totalExpectedMeds) {
-    const missingMedsCount = totalExpectedMeds - takenMedsCount;
-    attentionItems.push({
-      id: "att-meds-missing",
-      level: "IMPORTANT",
-      text: `${missingMedsCount} scheduled medicine entries are missing.`,
-      textHi: `दवाइयों की ${missingMedsCount} खुराकें अभी दर्ज नहीं हुई हैं।`,
-      detail: "कृपया सुनिश्चित करें कि समय पर खुराक ली गई हो।",
-      category: "medicine",
-    });
-  }
-
-  if (!targetSleep) {
-    attentionItems.push({
-      id: "att-sleep-missing",
-      level: "INFO",
-      text: "Sleep has not been recorded.",
-      textHi: "नींद की अवधि (Sleep) अभी दर्ज नहीं हुई है।",
-      category: "sleep",
-    });
-  }
-
-  // Check for repeated BP deviation from smartData
-  if (smartData?.alerts?.some((al) => al.category === "bp" && al.severity === "IMPORTANT")) {
-    attentionItems.unshift({
-      id: "att-bp-deviation",
-      level: "IMPORTANT",
-      text: "Several recent BP readings differ from recent pattern.",
-      textHi: "हालिया रक्तचाप माप सामान्य पैटर्न से भिन्न दर्ज हुए हैं।",
-      detail: "लगातार विचलन दिखने पर चिकित्सक से नियमित परामर्श लें।",
-      category: "bp",
-    });
-  }
-
-  // 6. TODAY VS USUAL COMPARISONS (§12, §13)
+  // ---- today vs usual: the usual is the 14 days BEFORE the target day ----
+  const priorActs = filterValidActivityLogs(series.activity).filter((a) => a.date < dateStr && a.steps > 0).map((a) => a.steps);
+  const priorSleep = filterValidSleepLogs(series.sleep).filter((s) => s.date < dateStr && Number(s.sleep_hours) > 0).map((s) => Number(s.sleep_hours));
   const todayVsUsual: TodayVsUsualComparison[] = [];
 
-  // Steps comparison
-  if (targetAct && targetAct.steps > 0 && baseline?.dailySteps?.median) {
-    const usualSteps = baseline.dailySteps.median;
-    const diff = targetAct.steps - usualSteps;
-    const diffPct = Math.round((diff / usualSteps) * 100);
+  const usualSteps = usualMedian(priorActs);
+  if (actToday && actToday.steps > 0 && usualSteps) {
+    const diffPct = Math.round(((actToday.steps - usualSteps.value) / usualSteps.value) * 100);
     const direction = Math.abs(diffPct) < 8 ? "similar" : diffPct > 0 ? "above" : "below";
-    const sign = diffPct > 0 ? "+" : "";
-
     todayVsUsual.push({
       metric: "Steps",
       metricHi: "दैनिक कदम (Steps)",
-      todayValueStr: `${targetAct.steps.toLocaleString()} कदम`,
-      usualValueStr: `${usualSteps.toLocaleString()} कदम`,
+      todayValueStr: `${actToday.steps.toLocaleString("en-IN")} कदम`,
+      usualValueStr: `${Math.round(usualSteps.value).toLocaleString("en-IN")} कदम`,
       diffPercent: diffPct,
       direction,
-      comparisonTextHi: direction === "similar"
-        ? "हालिया सामान्य पैटर्न के बराबर"
-        : `${sign}${diffPct}% हालिया पैटर्न की तुलना में`,
-      confidence: (baseline.dailySteps.observationCount || 0) >= 4 ? "High" : "Medium",
+      comparisonTextHi: direction === "similar" ? "पिछले 2 हफ्तों के सामान्य के बराबर" : `${diffPct > 0 ? "+" : ""}${diffPct}% पिछले 2 हफ्तों की तुलना में`,
+      confidence: usualSteps.count >= 7 ? "High" : "Medium",
     });
+    if (direction === "above") highlights.push(`कदम (${actToday.steps.toLocaleString("en-IN")}) सामान्य से ज़्यादा रहे।`);
   }
-
-  // Sleep comparison
-  if (targetSleep && baseline?.sleepDuration?.median) {
-    const usualSleep = baseline.sleepDuration.median;
-    const todaySleep = Number(targetSleep.sleep_hours);
-    const diff = Number((todaySleep - usualSleep).toFixed(1));
-    const diffPct = Math.round((diff / usualSleep) * 100);
+  const usualSleep = usualMedian(priorSleep);
+  if (sleepToday && usualSleep) {
+    const hours = Number(sleepToday.sleep_hours);
+    const diff = Math.round((hours - usualSleep.value) * 10) / 10;
     const direction = Math.abs(diff) < 0.4 ? "similar" : diff > 0 ? "above" : "below";
-
     todayVsUsual.push({
       metric: "Sleep",
       metricHi: "नींद की अवधि (Sleep)",
-      todayValueStr: `${todaySleep} घंटे`,
-      usualValueStr: `${usualSleep} घंटे`,
-      diffPercent: diffPct,
+      todayValueStr: `${hours} घंटे`,
+      usualValueStr: `${usualSleep.value} घंटे`,
+      diffPercent: Math.round((diff / usualSleep.value) * 100),
       direction,
-      comparisonTextHi: direction === "similar"
-        ? "सामान्य नींद पैटर्न के अनुरूप"
-        : `${diff > 0 ? "+" : ""}${diff} घंटे हालिया औसत से`,
-      confidence: (baseline.sleepDuration.observationCount || 0) >= 3 ? "High" : "Medium",
+      comparisonTextHi: direction === "similar" ? "सामान्य नींद के अनुरूप" : `${diff > 0 ? "+" : ""}${diff} घंटे पिछले 2 हफ्तों के सामान्य से`,
+      confidence: usualSleep.count >= 7 ? "High" : "Medium",
     });
   }
-
-  // Calories comparison
-  if (foodLogs.length > 0 && settings?.daily_calorie_target) {
-    const targetCal = settings.daily_calorie_target;
-    const diff = totalCalories - targetCal;
-    const diffPct = Math.round((diff / targetCal) * 100);
+  if (wellness?.nutritionContext && wellness.components.food.healthPct !== null && settings.daily_calorie_target) {
+    const target = settings.daily_calorie_target;
+    const diffPct = Math.round(((wellness.nutritionContext.caloriesConsumed - target) / target) * 100);
     const direction = Math.abs(diffPct) < 10 ? "similar" : diffPct > 0 ? "above" : "below";
-
     todayVsUsual.push({
       metric: "Calories",
       metricHi: "कैलोरी सेवन (Calories)",
-      todayValueStr: `${totalCalories.toLocaleString()} kcal`,
-      usualValueStr: `${targetCal.toLocaleString()} kcal`,
+      todayValueStr: `${wellness.nutritionContext.caloriesConsumed.toLocaleString("en-IN")} kcal`,
+      usualValueStr: `${target.toLocaleString("en-IN")} kcal (लक्ष्य)`,
       diffPercent: diffPct,
       direction,
-      comparisonTextHi: direction === "similar"
-        ? "दैनिक कैलोरी लक्ष्य के संतुलित दायरे में"
-        : `${diffPct > 0 ? "+" : ""}${diffPct}% दैनिक लक्ष्य से`,
+      comparisonTextHi: direction === "similar" ? "दैनिक कैलोरी लक्ष्य के पास" : `${diffPct > 0 ? "+" : ""}${diffPct}% दैनिक लक्ष्य से`,
       confidence: "High",
     });
   }
 
-  // 7. NATURAL LANGUAGE SUMMARY GENERATION PIPELINE (§4, §10, §11, §30)
-  // Strictly factual, warm, neutral, never shaming Papa.
-  const summarySentences: string[] = [];
-
-  // Observation 1: Meds & Activity
-  if (isMedLoggingComplete && targetAct && targetAct.steps > 0) {
-    summarySentences.push("आज दवाइयों की ट्रैकिंग पूरी रही और शारीरिक गतिविधि भी दर्ज की गई।");
-  } else if (isMedLoggingComplete) {
-    summarySentences.push("आज की सभी निर्धारित दवाइयाँ समय पर दर्ज हो चुकी हैं।");
-  } else if (takenMedsCount > 0) {
-    summarySentences.push(`दवाइयों की ${takenMedsCount} खुराकें दर्ज हुईं, कुछ खुराकें अभी बाकी हैं।`);
-  } else {
-    summarySentences.push("दवाइयों का रिकॉर्ड अभी दर्ज होना बाकी है।");
+  // ---- natural-language summary (facts only) ----
+  const sentences: string[] = [];
+  const urgent = attentionAll.find((a) => a.isUrgent);
+  if (urgent) sentences.push(urgent.textHi);
+  if (adherence.due > 0) {
+    if (adherence.adherent === adherence.due) sentences.push(`अब तक की सभी ${adherence.due} निर्धारित दवाइयाँ दर्ज हुईं।`);
+    else if (adherence.adherent > 0)
+      sentences.push(`${adherence.due} में से ${adherence.adherent} दवाइयाँ दर्ज हुईं${adherence.missed > 0 ? `, ${adherence.missed} छूटीं` : ""}।`);
+    else if (adherence.missed > 0) sentences.push(`${adherence.missed} दवाई छूटी हुई है।`);
+    else sentences.push("दवाइयों का रिकॉर्ड अभी दर्ज होना बाकी है।");
   }
+  if (morningBP && eveningBP) sentences.push("सुबह और शाम दोनों का ब्लड प्रेशर दर्ज है।");
+  else if (first) sentences.push(`ब्लड प्रेशर ${bpValueOf(first).replace(" / ", "/")} दर्ज हुआ (${bpClass(first).labelHi})।`);
+  else if (wellness?.components.bp.isScored) sentences.push("ब्लड प्रेशर अभी दर्ज नहीं हुआ है।");
+  if (sleepToday) sentences.push(`नींद ${sleepToday.sleep_hours} घंटे दर्ज हुई।`);
+  if (actToday && actToday.steps > 0) sentences.push(`${actToday.steps.toLocaleString("en-IN")} कदम दर्ज हुए।`);
+  const naturalLanguageSummaryHi = sentences.length > 0 ? sentences.join(" ") : isToday ? "आज अभी तक कोई रिकॉर्ड दर्ज नहीं हुआ है।" : "इस दिन कोई रिकॉर्ड दर्ज नहीं हुआ।";
 
-  // Observation 2: BP
-  if (morningBP && eveningBP) {
-    summarySentences.push("सुबह और शाम दोनों समय का ब्लड प्रेशर दर्ज है।");
-  } else if (morningBP) {
-    summarySentences.push("सुबह का BP दर्ज हुआ है, शाम का रिकॉर्ड अभी प्रतीक्षित है।");
-  } else if (eveningBP) {
-    summarySentences.push("शाम का BP दर्ज हुआ है, सुबह का रिकॉर्ड अभी प्रतीक्षित है।");
-  } else {
-    summarySentences.push("आज का रक्तचाप अभी दर्ज नहीं हुआ है।");
-  }
-
-  // Observation 3: Sleep or Nutrition
-  if (targetSleep) {
-    summarySentences.push(`रात्रि विश्राम ${targetSleep.sleep_hours} घंटे का दर्ज रहा।`);
-  } else {
-    summarySentences.push("नींद का डेटा अभी अधूरा है।");
-  }
-
-  const naturalLanguageSummaryHi = summarySentences.join(" ");
-
-  // 8. WHAT CHANGED REUSE (§15)
-  const whatChangedCompactHi = whatChanged?.compactSummaryHi || "हालिया 7 दिनों में अधिकांश स्वास्थ्य रिकॉर्ड स्थिर रहे।";
-  const hasPersistentChanges = Boolean(whatChanged?.metrics?.some((m) => m.isPersistent));
-
-  const brief: CaregiverDailyBrief = {
-    patientId: pid,
-    patientName: profile.name,
-    isPapa,
-    dateStr,
-    dateLabelHi: formatHumanDateHi(dateStr, todayIST, yesterdayIST),
-    cachedAt: formatCurrentTimeIST(),
-    cacheTimestamp: Date.now(),
-    naturalLanguageSummaryHi,
-    routineStatus,
-    routineStatusHi,
-    routineScore: wellnessResult?.totalScore ?? 78,
-    expectedItemsCount,
-    recordedItemsCount,
-    completenessPercent,
-    completenessLabelHi: `${recordedItemsCount} / ${expectedItemsCount} ट्रैकिंग मदें पूरी (${completenessPercent}% Complete)`,
-    snapshot,
-    highlights: highlights.slice(0, 3),
-    attentionItems: attentionItems.slice(0, 5),
-    todayVsUsual,
-    whatChangedCompactHi,
-    hasPersistentChanges,
-  };
-
-  _caregiverCache.set(cacheKey, { brief, timestamp: Date.now() });
-  return brief;
-}
-
-/**
- * Weekly Caregiver Brief (§28)
- */
-export async function getCaregiverWeeklyBrief(patientId?: string): Promise<CaregiverWeeklyBrief> {
-  const profile = await getPatientProfile(patientId);
-  const pid = patientId || profile.id;
-
-  const weekDates = getTrailingDateStrings(7);
-
-  const [actLogs, bpLogs, sleepLogs, weightLogs, foodLogs, medicines, medLogsByDay, whatChanged, wellness] =
-    await Promise.all([
-      getActivityLogs(pid, 14),
-      getBloodPressureLogs(pid, 14),
-      getSleepLogs(pid, 14),
-      getWeightLogs(pid, 10),
-      getFoodLogs(pid, 100),
-      getMedicines(pid),
-      Promise.all(weekDates.map((d) => getMedicineLogsByDate(pid, d).catch(() => [] as MedicineLogEntry[]))),
-      getHealthChanges(pid, "7d"),
-      calculateDailyWellnessScore(pid, getISTDateStr()),
-    ]);
-
-  // Compute averages
-  const stepsAvg = actLogs.length > 0
-    ? Math.round(actLogs.reduce((s, a) => s + (a.steps || 0), 0) / actLogs.length)
-    : 0;
-
-  const sleepAvgHours = sleepLogs.length > 0
-    ? Number((sleepLogs.reduce((s, a) => s + Number(a.sleep_hours || 0), 0) / sleepLogs.length).toFixed(1))
-    : 0;
-
-  const avgSys = bpLogs.length > 0
-    ? Math.round(bpLogs.reduce((s, b) => s + (b.systolic || 0), 0) / bpLogs.length)
-    : 0;
-  const avgDia = bpLogs.length > 0
-    ? Math.round(bpLogs.reduce((s, b) => s + (b.diastolic || 0), 0) / bpLogs.length)
-    : 0;
-
-  const firstWeight = weightLogs[weightLogs.length - 1]?.weight_kg ?? null;
-  const latestWeight = weightLogs[0]?.weight_kg ?? null;
-  const weightDiff =
-    firstWeight !== null && latestWeight !== null ? Number((latestWeight - firstWeight).toFixed(1)) : null;
-  const weightChangeStr =
-    weightDiff === null
-      ? "पर्याप्त डेटा नहीं"
-      : weightDiff === 0
-      ? "वजन स्थिर (0.0 kg)"
-      : `${weightDiff > 0 ? "+" : ""}${weightDiff} kg बदलाव`;
-
-  // Food: real calories logged within the week window, averaged per day actually logged
-  const weekFoodLogs = foodLogs.filter((f) => weekDates.includes(getISTDateStr(f.consumed_at)));
-  const foodDaysLogged = new Set(weekFoodLogs.map((f) => getISTDateStr(f.consumed_at)));
-  const totalWeekCalories = weekFoodLogs.reduce((s, f) => s + Number(f.calories || 0), 0);
-  const avgCalories = foodDaysLogged.size > 0 ? Math.round(totalWeekCalories / foodDaysLogged.size) : 0;
-
-  // Medicine adherence: real taken/expected doses across the week, same rule
-  // (status "taken" or "late" counts) as the Daily Brief above.
-  const activeMeds = medicines.filter((m) => m.active);
-  const medAdherencePercent =
-    activeMeds.length > 0
-      ? Math.round(
-          (medLogsByDay.reduce(
-            (takenCount, dayLogs) =>
-              takenCount +
-              activeMeds.filter((m) =>
-                dayLogs.some((l) => l.medicine_id === m.id && (l.status === "taken" || l.status === "late")),
-              ).length,
-            0,
-          ) /
-            (activeMeds.length * weekDates.length)) *
-            100,
-        )
-      : 100;
-
-  // Data completeness: share of days this week with at least one real vital logged
-  const daysWithAnyLog = weekDates.filter(
-    (d) =>
-      bpLogs.some((b) => getISTDateStr(b.measured_at || b.created_at) === d) ||
-      foodDaysLogged.has(d) ||
-      actLogs.some((a) => a.date === d && a.steps > 0) ||
-      sleepLogs.some((s) => s.date === d && Number(s.sleep_hours) > 0),
-  ).length;
-  const dataCompletenessPercent = Math.round((daysWithAnyLog / weekDates.length) * 100);
-
-  const topChanges = whatChanged?.metrics
-    ?.filter((m) => m.isSufficient && m.direction !== "stable")
-    .map((m) => `${m.metricHi}: ${m.directionLabelHi} (${m.percentChange > 0 ? "+" : ""}${m.percentChange}%)`)
-    .slice(0, 3) || ["इस सप्ताह कोई उल्लेखनीय बदलाव दर्ज नहीं हुआ।"];
-
-  // Top attention: only real, cheaply-derivable observations — no padding.
-  let eveningGapDays = 0;
-  weekDates.forEach((d) => {
-    const dayBP = bpLogs.filter((b) => getISTDateStr(b.measured_at || b.created_at) === d);
-    if (dayBP.some((b) => b.reading_type === "Morning") && !dayBP.some((b) => b.reading_type === "Evening")) {
-      eveningGapDays += 1;
-    }
-  });
-  const lowSleepDays = sleepLogs.filter(
-    (s) => weekDates.includes(s.date) && Number(s.sleep_hours) > 0 && Number(s.sleep_hours) < 6,
-  ).length;
-
-  const topAttention: string[] = [];
-  if (eveningGapDays > 0) {
-    topAttention.push(`शाम के बीपी रिकॉर्ड में ${eveningGapDays} दिन का अंतराल रहा`);
-  }
-  if (lowSleepDays > 0) {
-    topAttention.push(`इस सप्ताह ${lowSleepDays} दिन नींद की अवधि सामान्य से कम (6 घंटे से कम) रही`);
-  }
-  if (topAttention.length === 0) {
-    topAttention.push("इस सप्ताह कोई विशेष चेतावनी दर्ज नहीं हुई।");
-  }
+  // ---- what changed (only a real, compared change counts) ----
+  const sufficientMetrics = whatChanged?.metrics.filter((m) => m.isSufficient) ?? [];
+  const hasPersistentChanges = sufficientMetrics.some(
+    (m) => m.isPersistent && (m.direction !== "stable" || m.metric === "medicine_adherence"),
+  );
 
   return {
     patientId: pid,
     patientName: profile.name,
-    weekStartStr: "7 दिन पूर्व",
-    weekEndStr: "आज",
-    avgBP: bpLogs.length > 0 ? `${avgSys} / ${avgDia} mmHg` : "पर्याप्त डेटा नहीं",
-    avgSteps: stepsAvg,
-    avgCalories,
-    avgSleepHours: sleepAvgHours,
-    medAdherencePercent,
-    weightChangeStr,
+    isPapa: false,
+    dateStr,
+    dateLabelHi: formatHumanDateHi(dateStr, today),
+    cachedAt: formatNowIST(),
+    cacheTimestamp: Date.now(),
+    naturalLanguageSummaryHi,
+    routineStatus,
+    routineStatusHi: ROUTINE_HI[routineStatus],
     routineScore: wellness?.totalScore ?? 0,
-    dataCompletenessPercent,
-    topChanges,
-    topAttention,
+    isScoreSufficient: wellness?.isSufficient ?? false,
+    expectedItemsCount,
+    recordedItemsCount,
+    completenessPercent,
+    completenessLabelHi:
+      expectedItemsCount > 0
+        ? `${recordedItemsCount} / ${expectedItemsCount} ट्रैकिंग मदें पूरी (${completenessPercent}% Complete)`
+        : "अभी कोई मद दर्ज करने का समय नहीं हुआ",
+    snapshot,
+    highlights: highlights.slice(0, 3),
+    attentionItems: attentionAll.slice(0, 5),
+    todayVsUsual,
+    whatChangedCompactHi: whatChanged?.compactSummaryHi || "तुलना के लिए अभी पर्याप्त डेटा नहीं है।",
+    hasPersistentChanges,
   };
 }
 
-/**
- * Monthly Caregiver Brief (§29)
- */
-export async function getCaregiverMonthlyBrief(patientId?: string): Promise<CaregiverMonthlyBrief> {
-  const profile = await getPatientProfile(patientId);
-  const pid = patientId || profile.id;
+// ---------------------------------------------------------------------------
+// Weekly / monthly
+// ---------------------------------------------------------------------------
 
-  const monthDates = getTrailingDateStrings(30);
-
-  const [actLogs, bpLogs, sleepLogs, weightLogs, foodLogs, medicines, medLogsByDay, wellness] = await Promise.all([
-    getActivityLogs(pid, 30),
-    getBloodPressureLogs(pid, 30),
-    getSleepLogs(pid, 30),
-    getWeightLogs(pid, 15),
-    getFoodLogs(pid, 200),
-    getMedicines(pid),
-    Promise.all(monthDates.map((d) => getMedicineLogsByDate(pid, d).catch(() => [] as MedicineLogEntry[]))),
-    calculateDailyWellnessScore(pid, getISTDateStr()).catch(() => null),
+async function loadPeriod(pid: string, days: number) {
+  const today = todayIST();
+  const start = addDaysIST(today, -(days - 1));
+  const dates = trailingDates(days, today);
+  const [settings, series, scores] = await Promise.all([
+    getPatientSettingsOrDefault(pid),
+    loadSeries(pid, start, today, ["bp", "weight", "food", "sleep", "activity", "medicineLogs", "medicines"]),
+    calculateWellnessScoresForRange(pid, start, today).catch(() => []),
   ]);
+  const bp: PeriodBP[] = filterValidBPLogs(series.bp)
+    .filter((b) => isPlausibleBP(b.systolic, b.diastolic, b.pulse))
+    .map((b) => ({
+      day: bpDay(b),
+      systolic: b.systolic,
+      diastolic: b.diastolic,
+      readingType: b.reading_type,
+      minutesOfDay: istMinutesOfDay(b.measured_at),
+    }));
+  const activity = filterValidActivityLogs(series.activity).filter((a) => a.steps > 0);
+  const sleep = filterValidSleepLogs(series.sleep)
+    .map((s) => ({ day: s.date, hours: Number(s.sleep_hours) }))
+    .filter((s) => s.hours > 0);
+  const weights = filterValidWeightLogs(series.weight).map((w) => ({ day: weightDay(w), kg: Number(w.weight_kg) }));
+  const foodByDay = groupByDay(series.food, foodDay);
+  const doses = buildDoseRecords(series.medicines, series.medicineLogs, start, today);
+  const scored = scores.filter((s) => s.isSufficient);
+  const routineScore = scored.length > 0 ? Math.round(scored.reduce((s, r) => s + r.totalScore, 0) / scored.length) : 0;
+  return { today, start, dates, settings, series, bp, activity, sleep, weights, foodByDay, doses, scores, scored, routineScore };
+}
 
-  const stepsAvg = actLogs.length > 0
-    ? Math.round(actLogs.reduce((s, a) => s + (a.steps || 0), 0) / actLogs.length)
-    : 0;
+export async function getCaregiverWeeklyBrief(patientId?: string): Promise<CaregiverWeeklyBrief> {
+  const profile = await getPatientProfile(resolvePatientId(patientId));
+  const pid = resolvePatientId(patientId) || profile.id;
+  const [p, whatChanged] = await Promise.all([loadPeriod(pid, 7), getHealthChanges(pid, "7d").catch(() => null)]);
 
-  const sleepAvgHours = sleepLogs.length > 0
-    ? Number((sleepLogs.reduce((s, a) => s + Number(a.sleep_hours || 0), 0) / sleepLogs.length).toFixed(1))
-    : 0;
+  const stepsAvg = mean(p.activity.map((a) => a.steps));
+  const sleepAvg = mean(p.sleep.map((s) => s.hours));
+  const calDays = [...p.foodByDay.entries()].filter(([day]) => day !== p.today);
+  const kcalDays = calDays.map(([, rows]) => rows.reduce((s, f) => s + Number(f.calories || 0), 0)).filter((k) => k > 0);
+  const calAvg = mean(kcalDays);
+  const avgSys = mean(p.bp.map((b) => b.systolic));
+  const avgDia = mean(p.bp.map((b) => b.diastolic));
+  const adherence = summarizeAdherence(p.doses);
 
-  let weightTrend: "Gaining" | "Losing" | "Stable" = "Stable";
-  if (weightLogs.length >= 2) {
-    const diff = weightLogs[0].weight_kg - weightLogs[weightLogs.length - 1].weight_kg;
-    if (diff > 0.8) weightTrend = "Gaining";
-    else if (diff < -0.8) weightTrend = "Losing";
+  const w = p.weights;
+  const weightChange = w.length >= 2 && w[0].day !== w[w.length - 1].day ? Math.round((w[w.length - 1].kg - w[0].kg) * 10) / 10 : null;
+  const weightChangeStr =
+    weightChange === null
+      ? "पर्याप्त डेटा नहीं"
+      : weightChange === 0
+        ? "वज़न स्थिर (0.0 kg)"
+        : `${weightChange > 0 ? "+" : ""}${weightChange} kg बदलाव (इसी सप्ताह के पहले और आख़िरी माप के बीच)`;
+
+  const topChanges = whatChanged?.metrics
+    .filter((m) => m.isSufficient && m.direction !== "stable")
+    .map((m) => `${m.metricHi}: ${m.directionLabelHi} (${m.percentChange > 0 ? "+" : ""}${m.percentChange}%)`)
+    .slice(0, 3) ?? [];
+  if (topChanges.length === 0) {
+    topChanges.push(
+      whatChanged?.dataSufficiency.isSufficient
+        ? "तुलना किए गए मापों में कोई बड़ा बदलाव नहीं दिखा।"
+        : "तुलना के लिए अभी पर्याप्त डेटा नहीं है।",
+    );
   }
 
-  let bpTrend: "Stable" | "Elevated" | "Fluctuating" = "Stable";
-  if (bpLogs.length >= 4) {
-    const highReadings = bpLogs.filter((b) => b.systolic >= 140).length;
-    if (highReadings > bpLogs.length * 0.5) bpTrend = "Elevated";
-    else if (highReadings > 1) bpTrend = "Fluctuating";
-  }
+  const topAttention: string[] = [];
+  const lines = bpAboveLines(p.bp, p.settings.bp_targets);
+  if (lines.crisis > 0) topAttention.push(`${lines.crisis} BP माप क्राइसिस रेंज में रहे — डॉक्टर को ज़रूर बताएँ`);
+  else if (lines.exceedsAlert > 0) topAttention.push(`${lines.exceedsAlert} BP माप अलर्ट सीमा से ऊपर रहे`);
+  if (lines.low > 0) topAttention.push(`${lines.low} BP माप सामान्य से कम रहे`);
+  if (adherence.missed > 0) topAttention.push(`इस सप्ताह ${adherence.missed} खुराकें छूटीं`);
+  const gap = eveningGapDays(p.bp, p.settings.bp_monitoring_schedule, p.dates, p.today);
+  if (gap > 0) topAttention.push(`शाम के BP रिकॉर्ड में ${gap} दिन का अंतराल रहा`);
+  const lowSleep = lowSleepNights(p.sleep);
+  if (lowSleep > 0) topAttention.push(`इस सप्ताह ${lowSleep} दिन नींद सामान्य से कम (6 घंटे से कम) रही`);
+  if (topAttention.length === 0) topAttention.push("इस सप्ताह के दर्ज रिकॉर्ड में कोई विशेष चेतावनी नहीं मिली।");
 
-  // Medicine adherence: real taken/expected doses across the month, same
-  // rule (status "taken" or "late" counts) as the Daily Brief above.
-  const activeMeds = medicines.filter((m) => m.active);
-  const medAdherencePercent =
-    activeMeds.length > 0
-      ? Math.round(
-          (medLogsByDay.reduce(
-            (takenCount, dayLogs) =>
-              takenCount +
-              activeMeds.filter((m) =>
-                dayLogs.some((l) => l.medicine_id === m.id && (l.status === "taken" || l.status === "late")),
-              ).length,
-            0,
-          ) /
-            (activeMeds.length * monthDates.length)) *
-            100,
-        )
-      : 100;
+  return {
+    patientId: pid,
+    patientName: profile.name,
+    weekStartStr: p.start,
+    weekEndStr: p.today,
+    avgBP: avgSys !== null && avgDia !== null ? `${Math.round(avgSys)} / ${Math.round(avgDia)} mmHg` : "पर्याप्त डेटा नहीं",
+    avgSteps: stepsAvg === null ? 0 : Math.round(stepsAvg),
+    avgCalories: calAvg === null ? 0 : Math.round(calAvg),
+    avgSleepHours: sleepAvg === null ? 0 : Math.round(sleepAvg * 10) / 10,
+    medAdherencePercent: adherence.pct,
+    weightChangeStr,
+    routineScore: p.routineScore,
+    routineScoreIsSufficient: p.scored.length > 0,
+    dataCompletenessPercent: Math.round((p.scored.length / p.dates.length) * 100),
+    topChanges,
+    topAttention,
+    hasData: {
+      bp: p.bp.length > 0,
+      steps: p.activity.length > 0,
+      sleep: p.sleep.length > 0,
+      calories: kcalDays.length > 0,
+      medicines: adherence.evaluated > 0,
+      weight: w.length > 0,
+    },
+  };
+}
 
-  // Food consistency: share of days this month with at least one real food log
-  const monthFoodLogs = foodLogs.filter((f) => monthDates.includes(getISTDateStr(f.consumed_at)));
-  const foodDaysLogged = new Set(monthFoodLogs.map((f) => getISTDateStr(f.consumed_at))).size;
-  const foodConsistencyPercent = Math.round((foodDaysLogged / monthDates.length) * 100);
+export async function getCaregiverMonthlyBrief(patientId?: string): Promise<CaregiverMonthlyBrief> {
+  const profile = await getPatientProfile(resolvePatientId(patientId));
+  const pid = resolvePatientId(patientId) || profile.id;
+  const p = await loadPeriod(pid, 30);
+
+  const stepsAvg = mean(p.activity.map((a) => a.steps));
+  const sleepAvg = mean(p.sleep.map((s) => s.hours));
+  const adherence = summarizeAdherence(p.doses);
+  const weight = weightTrendOver(p.weights);
+  const bpTrend = bpTrendOver(p.bp, p.settings.bp_targets);
+  const foodDays = [...p.foodByDay.keys()].filter((d) => d >= p.start && d <= p.today).length;
+  const lines = bpAboveLines(p.bp, p.settings.bp_targets);
 
   const notableChanges: string[] = [];
-  if (activeMeds.length > 0) {
-    notableChanges.push(`मासिक दवा नियमितता ${medAdherencePercent}% रही।`);
+  if (adherence.pct !== null) notableChanges.push(`मासिक दवा नियमितता ${adherence.pct}% रही (${adherence.adherent} / ${adherence.evaluated} खुराकें)।`);
+  if (stepsAvg !== null) notableChanges.push(`औसत दैनिक कदम ${Math.round(stepsAvg).toLocaleString("en-IN")} रहे (${p.activity.length} दर्ज दिनों में)।`);
+  if (weight.change !== null) {
+    const last = p.weights[p.weights.length - 1].kg;
+    notableChanges.push(
+      weight.trend === "Stable"
+        ? `वज़न स्थिर रहा (${last} kg)।`
+        : `इस माह वज़न का रुझान ${weight.trend === "Gaining" ? "बढ़ने" : "घटने"} का रहा (लगभग ${weight.change > 0 ? "+" : ""}${weight.change} kg; अभी ${last} kg)।`,
+    );
   }
-  if (actLogs.length > 0) {
-    notableChanges.push(`औसत दैनिक कदम ${stepsAvg.toLocaleString()} रहे।`);
-  }
-  const latestWeight = weightLogs[0]?.weight_kg;
-  if (latestWeight !== undefined) {
-    if (weightTrend === "Stable") {
-      notableChanges.push(`वजन स्थिर बना हुआ है (${latestWeight} kg)।`);
-    } else if (weightTrend === "Gaining") {
-      notableChanges.push(`इस माह वजन में हल्की वृद्धि दर्ज हुई (${latestWeight} kg)।`);
-    } else {
-      notableChanges.push(`इस माह वजन में हल्की कमी दर्ज हुई (${latestWeight} kg)।`);
-    }
-  }
-  if (notableChanges.length === 0) {
-    notableChanges.push("इस माह पर्याप्त डेटा उपलब्ध नहीं है।");
-  }
+  if (lines.crisis + lines.exceedsAlert > 0) notableChanges.push(`${lines.crisis + lines.exceedsAlert} BP माप अलर्ट सीमा से ऊपर रहे।`);
+  if (notableChanges.length === 0) notableChanges.push("इस माह पर्याप्त डेटा उपलब्ध नहीं है।");
 
   return {
     patientId: pid,
     patientName: profile.name,
     monthLabel: "विगत 30 दिन (Last 30 Days)",
-    weightTrend,
+    weightTrend: weight.trend,
     bpTrend,
-    stepsAvg,
-    sleepAvgHours,
-    medAdherencePercent,
-    foodConsistencyPercent,
-    routineScore: wellness?.totalScore ?? 0,
+    stepsAvg: stepsAvg === null ? 0 : Math.round(stepsAvg),
+    sleepAvgHours: sleepAvg === null ? 0 : Math.round(sleepAvg * 10) / 10,
+    medAdherencePercent: adherence.pct,
+    foodConsistencyPercent: Math.round((foodDays / p.dates.length) * 100),
+    routineScore: p.routineScore,
+    routineScoreIsSufficient: p.scored.length > 0,
     notableChanges,
+    hasData: {
+      bp: p.bp.length > 0,
+      steps: p.activity.length > 0,
+      sleep: p.sleep.length > 0,
+      medicines: adherence.evaluated > 0,
+      weight: p.weights.length > 0,
+    },
   };
 }

@@ -1,27 +1,32 @@
-import {
-  filterValidActivityLogs,
-  filterValidBPLogs,
-  filterValidWeightLogs,
-} from "./data-quality-service";
-import {
-  getActivityLogs,
-  getBloodPressureLogs,
-  getStorageItem,
-  getWeightLogs,
-  isSupabaseConfigured,
-  setStorageItem,
-  supabase,
-} from "./patient-service";
-import { calculatePersonalBaseline } from "./personal-baseline-service";
-import { getPatientSettings } from "./settings-service";
-
 /**
- * `health_predictions` is written by this service but exists in no migration,
- * so every dashboard load produced a failing upsert. Once confirmed missing we
- * stop writing for the rest of the session; predictions are still cached
- * locally and still returned to the caller.
+ * Short-range "forecast from recent history" for weight, systolic BP and steps.
+ *
+ * Despite the file name this is not machine learning: it is a robust straight-line
+ * trend over the last weeks (see src/lib/analytics/forecast-calc.ts) projected 7
+ * days ahead with an honest band. Nothing is persisted (there is no table for it);
+ * predictions are recomputed on demand from the real logs.
  */
-let _remotePredictionsUnavailable = false;
+import { getActivePatientId } from "@/lib/active-patient";
+import {
+  BP_RELATIVE_MIN_MARGIN_MMHG,
+  WEIGHT_STABLE_KG,
+  addDaysIST,
+  median,
+  round,
+  todayIST,
+} from "@/lib/health-rules";
+import { ageInDays, groupByDay } from "@/lib/analytics/dates";
+import { forecastRange, type ForecastResult } from "@/lib/analytics/forecast-calc";
+import { readLocalPref, writeLocalPref } from "@/lib/utils";
+import { bpDay, loadSeries, weightDay } from "./analytics-data";
+import {
+  assessActivityLogs,
+  assessBPLogs,
+  assessWeightLogs,
+  summarizeQuality,
+  type DataQualitySummary,
+} from "./data-quality-service";
+import { getPatientSettingsOrDefault } from "./settings-service";
 
 export type ConfidenceLevel = "High" | "Medium" | "Low";
 
@@ -36,6 +41,7 @@ export interface HealthPrediction {
   upperBound: number;
   unit: string;
   confidence: ConfidenceLevel;
+  /** Number of data points (days with a reading) behind the range. */
   dataPointsUsed: number;
   explanation: string;
   explanationHi: string;
@@ -45,6 +51,10 @@ export interface HealthPrediction {
   isAvailable: boolean;
   unavailableReason?: string;
   unavailableReasonHi?: string;
+  /** Robust trend over the history used, per week (null when unavailable). */
+  trendPerWeek?: number | null;
+  /** First and last day of the history behind this range (IST). */
+  basedOn?: { from: string; to: string };
 }
 
 export interface InsightFeedback {
@@ -55,317 +65,298 @@ export interface InsightFeedback {
   submittedAt: string;
 }
 
+/** Real, measured numbers only; fields are null/zero when nothing has run yet this session. */
 export interface MLDiagnostics {
   modelVersion: string;
   modelType: string;
+  /** Forecast ranges produced (available ones) since this page was opened. */
   predictionCount: number;
-  lastInferenceTime: string;
-  averageInferenceLatencyMs: number;
+  lastInferenceTime: string | null;
+  /** Mean wall-clock time of generateHealthPredictions runs this session; null before the first run. */
+  averageInferenceLatencyMs: number | null;
+  /** Confidence of the available ranges from the most recent run. */
   confidenceDistribution: { high: number; medium: number; low: number };
+  /** Distinct patients forecast this session. */
   activePatientBaselines: number;
+  /** Feedback saved on this device for the active patient. */
   feedbackStats: { positive: number; negative: number };
 }
 
-const MODEL_VERSION = "swasthtrack-ml-v1.0 (Statistical & Time-Series Engine)";
-const FEEDBACK_STORAGE_KEY = "swasthtrack_insight_feedback";
+export const MODEL_VERSION = "history-range-v2 (robust trend + median/MAD band)";
+const HORIZON_DAYS = 7;
+const HISTORY_DAYS = 45;
+
+// ---------------------------------------------------------------------------
+// Session statistics (in memory; nothing here is invented)
+// ---------------------------------------------------------------------------
+
+const session = {
+  runs: 0,
+  predictions: 0,
+  latenciesMs: [] as number[],
+  lastAt: null as string | null,
+  lastConfidence: { high: 0, medium: 0, low: 0 },
+  patients: new Set<string>(),
+};
+
+function feedbackKey(patientId: string): string {
+  return `swasthtrack_forecast_feedback_${patientId}`;
+}
+
+function formatRange(lower: number, upper: number, decimals: number, unit: string): string {
+  const f = (n: number) => (decimals ? n.toFixed(decimals) : Math.round(n).toLocaleString("en-IN"));
+  return `${f(lower)}–${f(upper)} ${unit}`;
+}
+
+function toPoints(series: Array<{ day: string; value: number }>) {
+  if (series.length === 0) return [];
+  const origin = series[0].day;
+  return series.map((s) => ({ x: ageInDays(origin, s.day), y: s.value }));
+}
+
+/** One value per IST day (median of that day's readings) so a morning+evening pair is one point. */
+function dailyMedians<T>(rows: T[], day: (r: T) => string, value: (r: T) => number): Array<{ day: string; value: number }> {
+  return [...groupByDay(rows, day).entries()]
+    .map(([d, list]) => ({ day: d, value: median(list.map(value)) as number }))
+    .sort((a, b) => a.day.localeCompare(b.day));
+}
+
+function build(
+  patientId: string,
+  type: HealthPrediction["predictionType"],
+  labels: { en: string; hi: string },
+  unit: string,
+  decimals: number,
+  fit: ForecastResult,
+  basedOn: { from: string; to: string } | undefined,
+  generatedAt: string,
+  expiresAt: string,
+  texts: { en: string; hi: string },
+): HealthPrediction {
+  const base = {
+    id: `pred-${type}-${patientId}`,
+    patientId,
+    predictionType: type,
+    metricLabel: labels.en,
+    metricLabelHi: labels.hi,
+    unit,
+    modelVersion: MODEL_VERSION,
+    generatedAt,
+    expiresAt,
+    dataPointsUsed: fit.points,
+  };
+  if (!fit.isAvailable) {
+    return {
+      ...base,
+      rangeFormatted: "--",
+      lowerBound: 0,
+      upperBound: 0,
+      confidence: "Low",
+      explanation: fit.reason?.en ?? "Not enough readings for a forecast range.",
+      explanationHi: fit.reason?.hi ?? "अनुमान के लिए अभी पर्याप्त माप नहीं हैं।",
+      isAvailable: false,
+      unavailableReason: fit.reason?.en,
+      unavailableReasonHi: fit.reason?.hi,
+    };
+  }
+  const lower = round(fit.lower, decimals);
+  const upper = round(fit.upper, decimals);
+  return {
+    ...base,
+    rangeFormatted: formatRange(lower, upper, decimals, unit),
+    lowerBound: lower,
+    upperBound: upper,
+    confidence: fit.confidence,
+    explanation: texts.en,
+    explanationHi: texts.hi,
+    isAvailable: true,
+    trendPerWeek: round(fit.slopePerDay * 7, decimals + 1),
+    basedOn,
+  };
+}
 
 /**
- * Generate personal short-term health trend forecasts
+ * Forecast ranges for the next 7 days, from the last ~6 weeks of real readings.
+ * The range is where readings are likely to fall if the recent pattern simply
+ * continues. It is not a diagnosis and says nothing about causes.
  */
-export async function generateHealthPredictions(
-  patientId: string,
-): Promise<{
+export async function generateHealthPredictions(patientId: string): Promise<{
   predictions: HealthPrediction[];
   modelVersion: string;
   generatedAt: string;
+  dataQuality: DataQualitySummary;
 }> {
+  const started = typeof performance !== "undefined" ? performance.now() : Date.now();
+  const pid = patientId || getActivePatientId() || "";
+  const today = todayIST();
+  const start = addDaysIST(today, -(HISTORY_DAYS - 1));
   const generatedAt = new Date().toISOString();
   const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
 
-  const [baseline, settings, rawBP, rawWeight, rawActivity] =
-    await Promise.all([
-      calculatePersonalBaseline(patientId, "30d"),
-      getPatientSettings(patientId),
-      getBloodPressureLogs(patientId, 50),
-      getWeightLogs(patientId, 30),
-      getActivityLogs(patientId, 30),
-    ]);
+  const [settings, series] = await Promise.all([
+    getPatientSettingsOrDefault(pid),
+    loadSeries(pid, start, today, ["weight", "bp", "activity"]),
+  ]);
 
-  const validBP = filterValidBPLogs(rawBP);
-  const validWeight = filterValidWeightLogs(rawWeight);
-  const validActivity = filterValidActivityLogs(rawActivity);
+  const weight = assessWeightLogs(series.weight);
+  const bp = assessBPLogs(series.bp);
+  const activity = assessActivityLogs(series.activity);
 
   const predictions: HealthPrediction[] = [];
 
-  // ----------------------------------------------------
-  // 1. WEIGHT TREND FORECAST (Next 7 Days Range)
-  // ----------------------------------------------------
-  if (validWeight.length >= 3 && baseline.weight.isAvailable) {
-    const recentWeights = validWeight.slice(0, 10).map((w) => w.weight_kg);
-    const avg = recentWeights.reduce((s, w) => s + w, 0) / recentWeights.length;
-    const mad = baseline.weight.mad || 0.3;
-    const lower = Number((avg - Math.max(0.3, mad)).toFixed(1));
-    const upper = Number((avg + Math.max(0.3, mad)).toFixed(1));
-    const confidence: ConfidenceLevel =
-      validWeight.length >= 10 ? "High" : validWeight.length >= 5 ? "Medium" : "Low";
-
-    predictions.push({
-      id: `pred-wt-${Date.now()}`,
-      patientId,
-      predictionType: "weight_forecast",
-      metricLabel: "7-Day Weight Projection",
-      metricLabelHi: "7-दिवसीय अनुमानित वजन रुझान",
-      rangeFormatted: `${lower}–${upper} kg`,
-      lowerBound: lower,
-      upperBound: upper,
-      unit: "kg",
-      confidence,
-      dataPointsUsed: validWeight.length,
-      explanation: `Based on your recent measurements (median ${baseline.weight.median} kg), your weight is estimated to remain within ${lower}–${upper} kg over the next 7 days.`,
-      explanationHi: `आपकी हाल की मापों (मीडियन ${baseline.weight.median} kg) के आधार पर, अगले 7 दिनों में वजन ${lower}–${upper} kg के दायरे में रहने का अनुमान है।`,
-      modelVersion: MODEL_VERSION,
-      generatedAt,
-      expiresAt,
-      isAvailable: true,
+  // ---- weight: band never narrower than the "stable" distance ----
+  {
+    const days = dailyMedians(weight.usable, weightDay, (w) => Number(w.weight_kg));
+    const fit = forecastRange(toPoints(days), {
+      horizonDays: HORIZON_DAYS,
+      minPoints: 3,
+      minSpanDays: 5,
+      minHalfWidth: WEIGHT_STABLE_KG,
+      highConfidenceRelWidth: 0.02,
+      floor: 20,
     });
-  } else {
-    predictions.push({
-      id: `pred-wt-na`,
-      patientId,
-      predictionType: "weight_forecast",
-      metricLabel: "7-Day Weight Projection",
-      metricLabelHi: "7-दिवसीय वजन अनुमान",
-      rangeFormatted: "--",
-      lowerBound: 0,
-      upperBound: 0,
-      unit: "kg",
-      confidence: "Low",
-      dataPointsUsed: validWeight.length,
-      explanation: "Insufficient weight observations to compute a reliable projection.",
-      explanationHi: "अभी पर्याप्त वजन डेटा उपलब्ध नहीं है।",
-      modelVersion: MODEL_VERSION,
-      generatedAt,
-      expiresAt,
-      isAvailable: false,
-      unavailableReason: "Minimum 3 valid weight logs required.",
-      unavailableReasonHi: "अनुमान के लिए कम से कम 3 वजन माप आवश्यक हैं।",
-    });
+    const weekly = round(fit.slopePerDay * 7, 1);
+    predictions.push(
+      build(
+        pid,
+        "weight_forecast",
+        { en: "Weight range, next 7 days (from recent history)", hi: "अगले 7 दिनों का संभावित वज़न दायरा (हाल के माप के आधार पर)" },
+        "kg",
+        1,
+        fit,
+        days.length ? { from: days[0].day, to: days[days.length - 1].day } : undefined,
+        generatedAt,
+        expiresAt,
+        {
+          en: `If the recent pattern continues (about ${weekly > 0 ? "+" : ""}${weekly} kg a week), weight is likely to fall in this range. Based on ${fit.points} weigh-in days over ${fit.spanDays} days; the range is wider when readings are few or uneven. An estimate, not a diagnosis.`,
+          hi: `अगर हाल का पैटर्न जारी रहा (लगभग ${weekly > 0 ? "+" : ""}${weekly} kg प्रति सप्ताह), तो वज़न इस दायरे में रहने की संभावना है। ${fit.spanDays} दिनों के ${fit.points} माप-दिनों पर आधारित; माप कम या बिखरे हों तो दायरा चौड़ा रहता है। यह अनुमान है, निदान नहीं।`,
+        },
+      ),
+    );
   }
 
-  // ----------------------------------------------------
-  // 2. DAILY ACTIVITY / STEP FORECAST
-  // ----------------------------------------------------
-  if (validActivity.length >= 3 && baseline.dailySteps.isAvailable) {
-    const medianSteps = baseline.dailySteps.median || 6000;
-    const mad = baseline.dailySteps.mad || 600;
-    const lower = Math.max(0, Math.round(medianSteps - mad * 1.2));
-    const upper = Math.round(medianSteps + mad * 1.2);
-    const confidence: ConfidenceLevel =
-      validActivity.length >= 10 ? "High" : "Medium";
-
-    predictions.push({
-      id: `pred-act-${Date.now()}`,
-      patientId,
-      predictionType: "activity_trend",
-      metricLabel: "Expected Daily Movement",
-      metricLabelHi: "अनुमानित दैनिक गतिविधि सीमा",
-      rangeFormatted: `${lower.toLocaleString()}–${upper.toLocaleString()} steps`,
-      lowerBound: lower,
-      upperBound: upper,
-      unit: "steps",
-      confidence,
-      dataPointsUsed: validActivity.length,
-      explanation: `Projected daily step volume based on recent consistency (Target: ${(settings.daily_step_goal || 6000).toLocaleString()} steps).`,
-      explanationHi: `आपकी हालिया नियमितता पर आधारित संभावित दैनिक कदम सीमा (लक्ष्य: ${(settings.daily_step_goal || 6000).toLocaleString()} कदम)।`,
-      modelVersion: MODEL_VERSION,
-      generatedAt,
-      expiresAt,
-      isAvailable: true,
+  // ---- systolic BP (daily median; band never narrower than the personal-baseline margin) ----
+  {
+    const days = dailyMedians(bp.usable, bpDay, (b) => b.systolic);
+    const fit = forecastRange(toPoints(days), {
+      horizonDays: HORIZON_DAYS,
+      minPoints: 4,
+      minSpanDays: 6,
+      minHalfWidth: BP_RELATIVE_MIN_MARGIN_MMHG,
+      highConfidenceRelWidth: 0.08,
+      floor: 50,
     });
-  } else {
-    predictions.push({
-      id: `pred-act-na`,
-      patientId,
-      predictionType: "activity_trend",
-      metricLabel: "Expected Daily Movement",
-      metricLabelHi: "दैनिक गतिविधि अनुमान",
-      rangeFormatted: "--",
-      lowerBound: 0,
-      upperBound: 0,
-      unit: "steps",
-      confidence: "Low",
-      dataPointsUsed: validActivity.length,
-      explanation: "Insufficient step records for activity forecasting.",
-      explanationHi: "अभी पर्याप्त गतिविधि डेटा उपलब्ध नहीं है।",
-      modelVersion: MODEL_VERSION,
-      generatedAt,
-      expiresAt,
-      isAvailable: false,
-    });
+    const weekly = round(fit.slopePerDay * 7, 1);
+    const t = settings.bp_targets;
+    predictions.push(
+      build(
+        pid,
+        "bp_trend",
+        { en: "Systolic BP range, next 7 days (from recent history)", hi: "अगले 7 दिनों का संभावित सिस्टोलिक BP दायरा (हाल के माप के आधार पर)" },
+        "mmHg",
+        0,
+        fit,
+        days.length ? { from: days[0].day, to: days[days.length - 1].day } : undefined,
+        generatedAt,
+        expiresAt,
+        {
+          en: `Where the daily systolic reading is likely to fall if the recent pattern continues (about ${weekly > 0 ? "+" : ""}${weekly} mmHg a week). The target for this patient is below ${t.target_systolic}/${t.target_diastolic}; this range is a reference for comparing new readings, not a target and not a diagnosis.`,
+          hi: `अगर हाल का पैटर्न जारी रहा (लगभग ${weekly > 0 ? "+" : ""}${weekly} mmHg प्रति सप्ताह), तो रोज़ का सिस्टोलिक माप इस दायरे में आ सकता है। इस मरीज़ का लक्ष्य ${t.target_systolic}/${t.target_diastolic} से कम है; यह दायरा नए माप की तुलना के लिए संदर्भ है, लक्ष्य या निदान नहीं।`,
+        },
+      ),
+    );
   }
 
-  // ----------------------------------------------------
-  // 3. BLOOD PRESSURE MONITORING PATTERN FORECAST
-  // ----------------------------------------------------
-  if (validBP.length >= 4 && baseline.systolicBP.isAvailable) {
-    const sysMedian = baseline.systolicBP.median || 130;
-    const diaMedian = baseline.diastolicBP.median || 84;
-    const lowerSys = Math.round(sysMedian - (baseline.systolicBP.mad || 5));
-    const upperSys = Math.round(sysMedian + (baseline.systolicBP.mad || 5));
-    const confidence: ConfidenceLevel =
-      validBP.length >= 14 ? "High" : validBP.length >= 6 ? "Medium" : "Low";
-
-    predictions.push({
-      id: `pred-bp-${Date.now()}`,
-      patientId,
-      predictionType: "bp_trend",
-      metricLabel: "Expected Systolic Monitoring Pattern",
-      metricLabelHi: "अनुमानित सिस्टोलिक रक्तचाप दायरा",
-      rangeFormatted: `${lowerSys}–${upperSys} mmHg`,
-      lowerBound: lowerSys,
-      upperBound: upperSys,
-      unit: "mmHg",
-      confidence,
-      dataPointsUsed: validBP.length,
-      explanation: `Observational monitoring band (median ${sysMedian}/${diaMedian} mmHg). Non-diagnostic reference.`,
-      explanationHi: `अवलोकन आधारित संभावित सिस्टोलिक दायरा (मीडियन ${sysMedian}/${diaMedian} mmHg)। यह केवल निगरानी संदर्भ है।`,
-      modelVersion: MODEL_VERSION,
-      generatedAt,
-      expiresAt,
-      isAvailable: true,
+  // ---- steps (only days that have steps) ----
+  {
+    const days = dailyMedians(
+      activity.usable.filter((a) => a.steps > 0),
+      (a) => a.date,
+      (a) => a.steps,
+    );
+    const centerGuess = days.length ? (median(days.map((d) => d.value)) as number) : 0;
+    const fit = forecastRange(toPoints(days), {
+      horizonDays: HORIZON_DAYS,
+      minPoints: 4,
+      minSpanDays: 6,
+      minHalfWidth: Math.max(500, centerGuess * 0.1),
+      highConfidenceRelWidth: 0.25,
+      floor: 0,
     });
-  } else {
-    predictions.push({
-      id: `pred-bp-na`,
-      patientId,
-      predictionType: "bp_trend",
-      metricLabel: "Expected BP Pattern",
-      metricLabelHi: "रक्तचाप पैटर्न अनुमान",
-      rangeFormatted: "--",
-      lowerBound: 0,
-      upperBound: 0,
-      unit: "mmHg",
-      confidence: "Low",
-      dataPointsUsed: validBP.length,
-      explanation: "Insufficient BP records to compute monitoring band.",
-      explanationHi: "अभी पर्याप्त रक्तचाप डेटा उपलब्ध नहीं है।",
-      modelVersion: MODEL_VERSION,
-      generatedAt,
-      expiresAt,
-      isAvailable: false,
-    });
+    const goal = settings.daily_step_goal;
+    predictions.push(
+      build(
+        pid,
+        "activity_trend",
+        { en: "Daily steps range, next 7 days (from recent history)", hi: "अगले 7 दिनों के रोज़ के कदमों का संभावित दायरा (हाल के माप के आधार पर)" },
+        "steps",
+        0,
+        fit,
+        days.length ? { from: days[0].day, to: days[days.length - 1].day } : undefined,
+        generatedAt,
+        expiresAt,
+        {
+          en: `Likely daily step count if the recent pattern continues, based on ${fit.points} logged days. The patient's goal is ${goal.toLocaleString("en-IN")} steps.`,
+          hi: `अगर हाल का पैटर्न जारी रहा तो रोज़ के कदम इस दायरे में रह सकते हैं (${fit.points} दर्ज दिनों पर आधारित)। मरीज़ का लक्ष्य ${goal.toLocaleString("en-IN")} कदम है।`,
+        },
+      ),
+    );
   }
 
-  // Store in LocalStorage and Supabase if configured
-  if (isSupabaseConfigured && !_remotePredictionsUnavailable) {
-    try {
-      const validPredictionsToSave = predictions.filter((p) => p.isAvailable);
-
-      // One request per prediction, serially, was up to six round trips on
-      // every dashboard load. A single upsert writes them together (§47).
-      if (validPredictionsToSave.length > 0) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const { error } = await (supabase as any).from("health_predictions").upsert(
-          validPredictionsToSave.map((p) => ({
-            patient_id: p.patientId,
-            prediction_type: p.predictionType,
-            lower_bound: p.lowerBound,
-            upper_bound: p.upperBound,
-            confidence: p.confidence,
-            data_points_used: p.dataPointsUsed,
-            explanation: p.explanation,
-            model_version: p.modelVersion,
-            created_at: p.generatedAt,
-            expires_at: p.expiresAt,
-          })),
-          { onConflict: "patient_id,prediction_type" },
-        );
-
-        if (error && (error.code === "PGRST205" || error.code === "42P01")) {
-          _remotePredictionsUnavailable = true;
-        }
-      }
-    } catch {
-      _remotePredictionsUnavailable = true;
-    }
-  }
-
-  setStorageItem(`swasthtrack_predictions_${patientId}`, predictions);
+  // ---- real session telemetry ----
+  const elapsed = (typeof performance !== "undefined" ? performance.now() : Date.now()) - started;
+  const available = predictions.filter((p) => p.isAvailable);
+  session.runs += 1;
+  session.predictions += available.length;
+  session.latenciesMs.push(elapsed);
+  session.lastAt = generatedAt;
+  session.patients.add(pid);
+  session.lastConfidence = {
+    high: available.filter((p) => p.confidence === "High").length,
+    medium: available.filter((p) => p.confidence === "Medium").length,
+    low: available.filter((p) => p.confidence === "Low").length,
+  };
 
   return {
     predictions,
     modelVersion: MODEL_VERSION,
     generatedAt,
+    dataQuality: summarizeQuality([
+      { label: { en: "weight", hi: "वज़न" }, questionable: weight.questionable, invalid: weight.invalid },
+      { label: { en: "blood pressure", hi: "BP" }, questionable: bp.questionable, invalid: bp.invalid },
+      { label: { en: "step", hi: "कदम" }, questionable: activity.questionable, invalid: activity.invalid },
+    ]),
   };
 }
 
 /**
- * Submit user feedback on insights/predictions
+ * Remember whether an insight was useful. Saved on this device only (no readings
+ * in it, just the insight id and a thumbs up/down).
  */
-export function submitInsightFeedback(
-  insightId: string,
-  patientId: string,
-  isHelpful: boolean,
-  reason?: string,
-): void {
-  const current = getStorageItem<InsightFeedback[]>(FEEDBACK_STORAGE_KEY, []);
-  const newFeedback: InsightFeedback = {
-    insightId,
-    patientId,
-    isHelpful,
-    reason,
-    submittedAt: new Date().toISOString(),
-  };
-  setStorageItem(FEEDBACK_STORAGE_KEY, [newFeedback, ...current]);
+export function submitInsightFeedback(insightId: string, patientId: string, isHelpful: boolean, reason?: string): void {
+  const key = feedbackKey(patientId);
+  const current = readLocalPref<InsightFeedback[]>(key, []);
+  const entry: InsightFeedback = { insightId, patientId, isHelpful, reason, submittedAt: new Date().toISOString() };
+  // One vote per insight: the latest wins.
+  writeLocalPref(key, [entry, ...current.filter((f) => f.insightId !== insightId)].slice(0, 100));
 }
 
-/**
- * Retrieve admin / developer diagnostics.
- *
- * This has no patientId of its own (it backs a device-wide diagnostics
- * panel), so predictionCount / confidenceDistribution / activePatientBaselines
- * are computed by scanning every `swasthtrack_predictions_<patientId>` cache
- * this device has written via generateHealthPredictions() above, rather than
- * being hardcoded - that keeps them honest even though they're not scoped to
- * a single "current" patient the way the rest of this file is.
- */
+/** Diagnostics for the developer panel: measured this session, never hard-coded. */
 export function getMLDiagnostics(): MLDiagnostics {
-  const feedbacks = getStorageItem<InsightFeedback[]>(FEEDBACK_STORAGE_KEY, []);
-  const positive = feedbacks.filter((f) => f.isHelpful).length;
-  const negative = feedbacks.filter((f) => !f.isHelpful).length;
-
-  const predictionsByPatient: HealthPrediction[][] = [];
-  if (typeof window !== "undefined") {
-    try {
-      for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-        if (key && key.startsWith("swasthtrack_predictions_")) {
-          const stored = getStorageItem<HealthPrediction[]>(key, []);
-          if (stored.length > 0) predictionsByPatient.push(stored);
-        }
-      }
-    } catch {
-      // localStorage inaccessible (SSR, private mode, etc.) - fall back to
-      // an empty diagnostics view rather than fabricated numbers.
-    }
-  }
-
-  const allPredictions = predictionsByPatient.flat();
-  const availablePredictions = allPredictions.filter((p) => p.isAvailable);
-  const confidenceDistribution = {
-    high: availablePredictions.filter((p) => p.confidence === "High").length,
-    medium: availablePredictions.filter((p) => p.confidence === "Medium").length,
-    low: availablePredictions.filter((p) => p.confidence === "Low").length,
-  };
-
+  const pid = getActivePatientId();
+  const feedback = pid ? readLocalPref<InsightFeedback[]>(feedbackKey(pid), []) : [];
+  const avg = session.latenciesMs.length > 0 ? session.latenciesMs.reduce((a, b) => a + b, 0) / session.latenciesMs.length : null;
   return {
     modelVersion: MODEL_VERSION,
-    modelType: "Deterministic Robust Statistical & EWMA Time-Series",
-    predictionCount: allPredictions.length,
-    lastInferenceTime: new Date().toISOString(),
-    averageInferenceLatencyMs: 14,
-    confidenceDistribution,
-    activePatientBaselines: predictionsByPatient.length,
-    feedbackStats: { positive, negative },
+    modelType: "Robust statistics: Theil-Sen trend, median/MAD band",
+    predictionCount: session.predictions,
+    lastInferenceTime: session.lastAt,
+    averageInferenceLatencyMs: avg === null ? null : Math.round(avg),
+    confidenceDistribution: { ...session.lastConfidence },
+    activePatientBaselines: session.patients.size,
+    feedbackStats: {
+      positive: feedback.filter((f) => f.isHelpful).length,
+      negative: feedback.filter((f) => !f.isHelpful).length,
+    },
   };
 }

@@ -1,5 +1,8 @@
-import type { ReactNode } from "react";
-import type { LucideIcon } from "lucide-react";
+"use client";
+
+import { useState, type ReactNode } from "react";
+import { RefreshCw, type LucideIcon } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 /**
@@ -69,7 +72,7 @@ export function PageHeader({
         ) : null}
       </div>
       {actions ? (
-        <div className="flex shrink-0 flex-wrap items-center gap-2">
+        <div className="flex min-w-0 max-w-full flex-wrap items-center gap-2 sm:shrink-0">
           {actions}
         </div>
       ) : null}
@@ -171,21 +174,36 @@ export function EmptyState({
 
 /**
  * Error state. Human-readable message plus a retry — raw Supabase/API errors
- * are never shown to the reader (§42).
+ * are never shown to the reader (§42). `onRetry` may be async: the button
+ * shows a spinner and ignores further presses until it settles.
  */
 export function ErrorState({
   title = "कुछ गड़बड़ हो गई",
   englishTitle = "Something went wrong",
   description,
   onRetry,
+  retryLabel = "फिर कोशिश करें (Try Again)",
   className,
 }: {
   title?: string;
   englishTitle?: string;
   description?: string;
-  onRetry?: () => void;
+  onRetry?: () => void | Promise<unknown>;
+  retryLabel?: string;
   className?: string;
 }) {
+  const [retrying, setRetrying] = useState(false);
+
+  const retry = async () => {
+    if (!onRetry) return;
+    setRetrying(true);
+    try {
+      await onRetry();
+    } finally {
+      setRetrying(false);
+    }
+  };
+
   return (
     <div
       role="alert"
@@ -202,13 +220,15 @@ export function ErrorState({
         <p className="mt-1.5 text-sm text-ink-muted">{description}</p>
       ) : null}
       {onRetry ? (
-        <button
-          type="button"
-          onClick={onRetry}
-          className="pressable mt-3 inline-flex min-h-control cursor-pointer items-center rounded-control border border-critical-line bg-surface px-4 text-sm font-semibold text-critical"
+        <Button
+          onClick={retry}
+          loading={retrying}
+          variant="secondary"
+          className="mt-3"
         >
-          फिर कोशिश करें (Try Again)
-        </button>
+          {retrying ? null : <RefreshCw aria-hidden className="h-4 w-4" />}
+          {retryLabel}
+        </Button>
       ) : null}
     </div>
   );

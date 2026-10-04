@@ -1,150 +1,194 @@
 "use client";
 
 import {
-  LineChart,
+  CartesianGrid,
   Line,
+  LineChart,
+  ReferenceLine,
+  ResponsiveContainer,
+  Tooltip,
   XAxis,
   YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  ReferenceLine,
+  type TooltipContentProps,
 } from "recharts";
+import { addDaysIST, daysBetweenIST, istInstant, toISTDate, type BPThresholds } from "@/lib/health-rules";
+import { classifyReading, statusTextClass } from "@/components/health/bp-chip";
+import { fmtDateStr, fmtDay, fmtTime } from "@/components/health/format";
 import type { BPLogEntry } from "@/services/patient-service";
 
 type BPTrendChartProps = {
+  /** Readings in the window, any order. */
   logs: BPLogEntry[];
+  thresholds: BPThresholds;
+  /** IST window shown on the x axis (defaults to the span of the data). */
+  startDate?: string;
+  endDate?: string;
 };
 
-function formatDate(iso: string): string {
-  const d = new Date(iso);
-  return d.toLocaleDateString("en-IN", { day: "numeric", month: "short" });
-}
+type Point = {
+  t: number;
+  systolic: number;
+  diastolic: number;
+  pulse: number | null;
+  type: string;
+};
 
-function formatTime(iso: string): string {
-  const d = new Date(iso);
-  return d.toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" });
-}
+const AXIS_TICK = { fontSize: 11, fill: "var(--color-chart-axis)" } as const;
+const MS_PER_DAY = 86_400_000;
 
-function getBPCategory(systolic: number, diastolic: number): { label: string; color: string } {
-  if (systolic >= 140 || diastolic >= 90) return { label: "High BP", color: "#ef4444" };
-  if (systolic >= 130 || diastolic >= 85) return { label: "Elevated", color: "#f97316" };
-  if (systolic >= 121 || diastolic >= 81) return { label: "Pre-Hypertension", color: "#eab308" };
-  if (systolic < 90 || diastolic < 60) return { label: "Low BP", color: "#3b82f6" };
-  return { label: "Normal", color: "#22c55e" };
-}
+const dayStart = (date: string) => istInstant(date, "00:00").getTime();
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-function CustomTooltip({ active, payload }: any) {
-  if (active && payload && payload.length > 0) {
-    const data = payload[0].payload;
-    const cat = getBPCategory(data.systolic, data.diastolic);
-    return (
-      <div className="rounded-field border border-line bg-surface p-3 shadow-e3 text-xs">
-        <p className="font-semibold text-ink">
-          {data.systolic}/{data.diastolic} mmHg
-        </p>
-        <p className="text-ink-muted">
-          Pulse: {data.pulse || "--"} bpm
-        </p>
-        <p className="text-ink-subtle">
-          {data.type} · {data.fullDate}
-        </p>
-        <p style={{ color: cat.color }} className="mt-1 font-semibold">
-          {cat.label} range
-        </p>
-      </div>
-    );
-  }
-  return null;
-}
-/* eslint-enable @typescript-eslint/no-explicit-any */
-
-export function BPTrendChart({ logs }: BPTrendChartProps) {
-  if (logs.length === 0) {
-    return (
-      <div className="flex h-48 items-center justify-center rounded-card border border-dashed border-line bg-surface-sunken/70">
-        <p className="text-xs text-ink-subtle">
-          पर्याप्त data नहीं है chart के लिए
-        </p>
-      </div>
-    );
-  }
-
-  // Sort chronologically (oldest first for chart)
-  const sorted = [...logs].sort(
-    (a, b) => new Date(a.measured_at).getTime() - new Date(b.measured_at).getTime()
+function BPTooltip({ active, payload, thresholds }: Partial<TooltipContentProps> & { thresholds: BPThresholds }) {
+  const point = active && payload && payload.length > 0 ? (payload[0].payload as Point) : null;
+  if (!point) return null;
+  const { classification, tone } = classifyReading(point.systolic, point.diastolic, thresholds);
+  const when = new Date(point.t);
+  return (
+    <div className="rounded-field border border-line bg-surface p-3 text-xs shadow-e3">
+      <p className="tabular text-sm font-semibold text-ink">
+        {point.systolic}/{point.diastolic} <span className="text-xs font-normal text-ink-subtle">mmHg</span>
+      </p>
+      {point.pulse ? <p className="tabular text-ink-muted">नब्ज़ · Pulse {point.pulse} bpm</p> : null}
+      <p className="text-ink-subtle">
+        {point.type} · {fmtDay(when)}, {fmtTime(when)}
+      </p>
+      <p lang="hi" className={`mt-1 font-semibold ${statusTextClass[tone]}`}>
+        {classification.labelHi}
+      </p>
+    </div>
   );
+}
 
-  const chartData = sorted.map((log) => ({
-    date: formatDate(log.measured_at),
-    fullDate: `${formatDate(log.measured_at)} ${formatTime(log.measured_at)}`,
-    systolic: log.systolic,
-    diastolic: log.diastolic,
-    pulse: log.pulse,
-    type: log.reading_type || "Recorded",
-  }));
+export function BPTrendChart({ logs, thresholds, startDate, endDate }: BPTrendChartProps) {
+  if (logs.length < 2) {
+    return (
+      <div className="flex h-48 flex-col items-center justify-center gap-1 rounded-card border border-dashed border-line-strong bg-surface-sunken px-4 text-center">
+        <p lang="hi" className="text-sm font-medium text-ink-muted">
+          कम से कम 2 रीडिंग चाहिए
+        </p>
+        <p className="text-xs text-ink-subtle">At least 2 readings are needed to draw a trend.</p>
+      </div>
+    );
+  }
+
+  const points: Point[] = logs
+    .map((log) => ({
+      t: new Date(log.measured_at).getTime(),
+      systolic: log.systolic,
+      diastolic: log.diastolic,
+      pulse: log.pulse,
+      type: log.reading_type || "Recorded",
+    }))
+    .sort((a, b) => a.t - b.t);
+
+  const firstDay = startDate ?? toISTDate(points[0].t);
+  const lastDay = endDate ?? toISTDate(points[points.length - 1].t);
+  const span = Math.max(0, daysBetweenIST(firstDay, lastDay));
+  const step = Math.max(1, Math.ceil(span / 5));
+  const ticks: number[] = [];
+  for (let d = 0; d <= span; d += step) ticks.push(dayStart(addDaysIST(firstDay, d)));
+
+  const minDia = Math.min(...points.map((p) => p.diastolic));
+  const maxSys = Math.max(...points.map((p) => p.systolic));
+  const yMin = Math.floor((Math.min(minDia, thresholds.low_diastolic) - 10) / 10) * 10;
+  const yMax = Math.ceil((Math.max(maxSys, thresholds.alert_systolic) + 10) / 10) * 10;
+
+  const avgSys = Math.round(points.reduce((s, p) => s + p.systolic, 0) / points.length);
+  const avgDia = Math.round(points.reduce((s, p) => s + p.diastolic, 0) / points.length);
+  const summary = `${points.length} रीडिंग, ${fmtDateStr(toISTDate(points[0].t))} से ${fmtDateStr(toISTDate(points[points.length - 1].t))}। औसत ${avgSys}/${avgDia} mmHg, ऊपर का ${Math.min(...points.map((p) => p.systolic))}–${maxSys}।`;
 
   return (
-    <div className="h-64 w-full relative z-20 overflow-visible">
-      <ResponsiveContainer width="100%" height="100%">
-        <LineChart data={chartData} margin={{ top: 15, right: 15, left: -10, bottom: 10 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-          <XAxis
-            dataKey="date"
-            interval="preserveStartEnd"
-            minTickGap={18}
-            tick={{ fontSize: 10, fill: "#64748b", fontWeight: "600" }}
-            tickLine={false}
-            axisLine={{ stroke: "#cbd5e1" }}
-          />
-          <YAxis
-            domain={[40, 200]}
-            tick={{ fontSize: 10, fill: "#64748b", fontWeight: "600" }}
-            tickLine={false}
-            axisLine={{ stroke: "#cbd5e1" }}
-          />
-          <Tooltip content={<CustomTooltip />} wrapperStyle={{ zIndex: 9999 }} />
+    <figure className="min-w-0">
+      <figcaption className="mb-2 text-xs text-ink-muted">{summary}</figcaption>
+      <div className="h-64 w-full min-w-0">
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart data={points} margin={{ top: 12, right: 8, left: 0, bottom: 4 }}>
+            <CartesianGrid stroke="var(--color-chart-grid)" strokeDasharray="3 3" vertical={false} />
+            <XAxis
+              dataKey="t"
+              type="number"
+              scale="time"
+              domain={[dayStart(firstDay), dayStart(lastDay) + MS_PER_DAY]}
+              ticks={ticks}
+              tickFormatter={(t: number) => fmtDay(new Date(t))}
+              tick={AXIS_TICK}
+              tickLine={false}
+              axisLine={{ stroke: "var(--color-chart-grid)" }}
+            />
+            <YAxis
+              domain={[yMin, yMax]}
+              width={34}
+              tick={AXIS_TICK}
+              tickLine={false}
+              axisLine={false}
+              allowDecimals={false}
+            />
+            <Tooltip content={(props) => <BPTooltip {...props} thresholds={thresholds} />} wrapperStyle={{ zIndex: 20, outline: "none" }} />
 
-          {/* Normal range reference lines */}
-          <ReferenceLine y={120} stroke="#22c55e" strokeDasharray="5 5" strokeOpacity={0.5} />
-          <ReferenceLine y={80} stroke="#22c55e" strokeDasharray="5 5" strokeOpacity={0.5} />
+            <ReferenceLine
+              y={thresholds.target_systolic}
+              stroke="var(--color-chart-target)"
+              strokeDasharray="5 4"
+              strokeOpacity={0.7}
+              label={{ value: `लक्ष्य ${thresholds.target_systolic}`, position: "insideTopRight", fill: "var(--color-chart-axis)", fontSize: 10 }}
+            />
+            <ReferenceLine
+              y={thresholds.target_diastolic}
+              stroke="var(--color-chart-target)"
+              strokeDasharray="5 4"
+              strokeOpacity={0.7}
+              label={{ value: `लक्ष्य ${thresholds.target_diastolic}`, position: "insideBottomRight", fill: "var(--color-chart-axis)", fontSize: 10 }}
+            />
+            <ReferenceLine
+              y={thresholds.alert_systolic}
+              stroke="var(--color-critical)"
+              strokeDasharray="2 3"
+              strokeOpacity={0.7}
+              label={{ value: `अलर्ट ${thresholds.alert_systolic}`, position: "insideTopRight", fill: "var(--color-chart-axis)", fontSize: 10 }}
+            />
 
-          {/* Systolic line (red) */}
-          <Line
-            type="monotone"
-            dataKey="systolic"
-            stroke="#ef4444"
-            strokeWidth={2.5}
-            dot={{ r: 3, fill: "#ef4444" }}
-            activeDot={{ r: 6 }}
-            name="Systolic"
-          />
-          {/* Diastolic line (blue) */}
-          <Line
-            type="monotone"
-            dataKey="diastolic"
-            stroke="#3b82f6"
-            strokeWidth={2.5}
-            dot={{ r: 3, fill: "#3b82f6" }}
-            activeDot={{ r: 6 }}
-            name="Diastolic"
-          />
-        </LineChart>
-      </ResponsiveContainer>
-
-      {/* Legend */}
-      <div className="mt-2 flex flex-wrap items-center justify-center gap-4 text-xs font-semibold text-ink-muted">
-        <span className="flex items-center gap-1.5">
-          <span className="inline-block h-2.5 w-4 rounded bg-red-500" /> Systolic (ऊपर)
-        </span>
-        <span className="flex items-center gap-1.5">
-          <span className="inline-block h-2.5 w-4 rounded bg-blue-500" /> Diastolic (नीचे)
-        </span>
-        <span className="flex items-center gap-1.5">
-          <span className="inline-block h-0.5 w-4 border-t-2 border-dashed border-green-500" /> Normal range
-        </span>
+            <Line
+              type="monotone"
+              dataKey="systolic"
+              name="Systolic"
+              stroke="var(--color-chart-bp-sys)"
+              strokeWidth={2}
+              dot={{ r: 3, fill: "var(--color-chart-bp-sys)", stroke: "var(--color-surface)", strokeWidth: 1 }}
+              activeDot={{ r: 6 }}
+              isAnimationActive={false}
+            />
+            <Line
+              type="monotone"
+              dataKey="diastolic"
+              name="Diastolic"
+              stroke="var(--color-chart-bp-dia)"
+              strokeWidth={2}
+              dot={{ r: 3, fill: "var(--color-chart-bp-dia)", stroke: "var(--color-surface)", strokeWidth: 1 }}
+              activeDot={{ r: 6 }}
+              isAnimationActive={false}
+            />
+          </LineChart>
+        </ResponsiveContainer>
       </div>
-    </div>
+
+      <ul className="mt-2 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs font-medium text-ink-muted">
+        <li className="flex items-center gap-1.5">
+          <span aria-hidden className="inline-block h-0.5 w-4 rounded bg-chart-bp-sys" />
+          Systolic (ऊपर)
+        </li>
+        <li className="flex items-center gap-1.5">
+          <span aria-hidden className="inline-block h-0.5 w-4 rounded bg-chart-bp-dia" />
+          Diastolic (नीचे)
+        </li>
+        <li className="flex items-center gap-1.5">
+          <span aria-hidden className="inline-block w-4 border-t-2 border-dashed border-chart-target" />
+          लक्ष्य (Target)
+        </li>
+        <li className="flex items-center gap-1.5">
+          <span aria-hidden className="inline-block w-4 border-t-2 border-dotted border-critical" />
+          अलर्ट (Alert)
+        </li>
+      </ul>
+    </figure>
   );
 }

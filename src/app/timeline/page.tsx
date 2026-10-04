@@ -1,50 +1,32 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { PageTitle } from "@/components/ui/page-title";
+import { NoPatientState } from "@/components/health/no-patient-state";
+import { PageBody, PageHeader } from "@/components/ui/page";
 import { TimelineView } from "@/components/timeline/timeline-view";
-import { getPatientProfile, type PatientProfile } from "@/services/patient-service";
+import { useAuth } from "@/context/auth-context";
 
 export default function TimelinePage() {
-  const [patient, setPatient] = useState<PatientProfile | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    let active = true;
-    getPatientProfile()
-      .then((p) => {
-        if (active) setPatient(p);
-      })
-      .finally(() => {
-        if (active) setLoading(false);
-      });
-
-    return () => {
-      active = false;
-    };
-  }, []);
-
-  if (loading || !patient) {
-    return (
-      <div className="space-y-6">
-        <PageTitle
-          eyebrow="My Health Journey · स्वास्थ्य यात्रा"
-          title="Health Timeline"
-          description="A chronological journey of all your daily health events, vitals, nutrition, and activities."
-        />
-        <div className="h-64 rounded-panel border-2 border-line bg-surface animate-pulse" />
-      </div>
-    );
-  }
+  const { activePatientId, loading } = useAuth();
 
   return (
-    <div className="space-y-6">
-      <PageTitle
+    <PageBody>
+      <PageHeader
         eyebrow="Timeline · एकीकृत स्वास्थ्य यात्रा"
-        title="मेरी स्वास्थ्य यात्रा"
-        description="आपके स्वास्थ्य से जुड़े महत्वपूर्ण रिकॉर्ड एक जगह — भोजन, रक्तचाप, दवाइयाँ, कदम, नींद और वाइटल्स का एकीकृत क्रोनोलॉजिकल प्रवाह।"
+        title="Health timeline"
+        hindiTitle="स्वास्थ्य यात्रा"
+        description="भोजन, रक्तचाप, दवाइयाँ, कदम, नींद और वजन के सारे रिकॉर्ड एक जगह, तारीख़ के क्रम में।"
       />
-      <TimelineView patientId={patient.id} />
-    </div>
+      {loading ? (
+        <div aria-busy="true" aria-label="लोड हो रहा है" className="space-y-3">
+          <div className="skeleton h-11 rounded-control" />
+          <div className="skeleton h-24 rounded-card" />
+          <div className="skeleton h-24 rounded-card" />
+        </div>
+      ) : activePatientId ? (
+        <TimelineView key={activePatientId} patientId={activePatientId} />
+      ) : (
+        <NoPatientState what="टाइमलाइन" />
+      )}
+    </PageBody>
   );
 }

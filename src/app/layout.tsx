@@ -1,47 +1,58 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Noto_Sans_Devanagari } from "next/font/google";
 import { AppShell } from "@/components/layout/app-shell";
+import { BRAND_COLOR } from "@/lib/brand";
 import "./globals.css";
 
 /**
- * Latin UI face. Variable weights 400–800 cover the whole type scale.
+ * Latin UI face (variable, so one file covers every weight in the type scale).
  */
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-ui-latin",
   display: "swap",
-  weight: ["400", "500", "600", "700", "800"],
 });
 
 /**
  * Devanagari face. Roughly half of SwasthTrack's copy is Hindi, so this is a
- * first-class UI font, not a fallback.
+ * first-class UI font, not a fallback. Inter carries Latin and digits (it is
+ * first in the font stack), so only the Devanagari subset is shipped.
  */
 const notoDevanagari = Noto_Sans_Devanagari({
-  subsets: ["devanagari", "latin"],
+  subsets: ["devanagari"],
   variable: "--font-ui-devanagari",
   display: "swap",
-  weight: ["400", "500", "600", "700"],
 });
 
 export const viewport: Viewport = {
-  // Kept in sync with theme_color in src/app/manifest.ts, the single source
-  // of truth for the web app manifest.
-  themeColor: "#059669",
+  // Same value as theme_color in src/app/manifest.ts (both from lib/brand.ts)
+  // and as --color-brand in globals.css.
+  themeColor: BRAND_COLOR,
+  colorScheme: "light",
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
 };
 
 export const metadata: Metadata = {
-  title: "SwasthTrack — Health Intelligence & Family Care",
+  title: {
+    default: "SwasthTrack — Health Intelligence & Family Care",
+    template: "%s · SwasthTrack",
+  },
   description: "A personal health tracking and family care companion for parents and caregivers.",
   applicationName: "SwasthTrack",
+  // Emits mobile-web-app-capable, apple-mobile-web-app-title and
+  // apple-mobile-web-app-status-bar-style. No hand-written <meta> duplicates.
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
     title: "SwasthTrack",
   },
+  // iOS Safari otherwise turns a reading like "120/80" or "98765" into a phone link.
+  formatDetection: { telephone: false, email: false, address: false },
+  // Older iOS only honours the apple- prefixed capability tag, which
+  // `appleWebApp` does not emit.
+  other: { "apple-mobile-web-app-capable": "yes" },
   icons: {
     icon: [
       { url: "/favicon.png", sizes: "64x64", type: "image/png" },
@@ -63,16 +74,7 @@ export default function RootLayout({
       lang="hi"
       className={`h-full antialiased ${inter.variable} ${notoDevanagari.variable}`}
     >
-      <head>
-        {/* src/app/manifest.ts (the file-convention route) already injects
-            the <link rel="manifest"> tag pointing at /manifest.webmanifest;
-            a second manual tag here would compete with it. */}
-        <meta name="mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="apple-mobile-web-app-title" content="SwasthTrack" />
-      </head>
-      <body className="min-h-full bg-canvas text-ink font-sans">
+      <body className="min-h-dvh bg-canvas font-sans text-ink">
         <AppShell>{children}</AppShell>
       </body>
     </html>

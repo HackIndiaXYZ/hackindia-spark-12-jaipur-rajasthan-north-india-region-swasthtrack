@@ -1,0 +1,41 @@
+import Link from "next/link";
+import { Compass } from "lucide-react";
+import { buttonClasses } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+
+export default function NotFound() {
+  return (
+    <div className="mx-auto max-w-lg py-10">
+      <Card tone="raised" className="text-center">
+        <span className="mx-auto grid h-12 w-12 place-items-center rounded-card bg-gold-soft text-gold-ink">
+          <Compass aria-hidden className="h-6 w-6" />
+        </span>
+        <p className="tabular mt-4 text-2xs font-semibold uppercase tracking-wide text-ink-muted">
+          404
+        </p>
+        <h1 lang="hi" className="mt-1 text-xl font-semibold text-ink">
+          यह पेज नहीं मिला
+        </h1>
+        <p className="mt-0.5 text-sm text-ink-muted">We could not find that page.</p>
+        <p lang="hi" className="mt-3 text-sm text-ink-muted">
+          लिंक पुराना हो सकता है या पता गलत टाइप हुआ है। नीचे से आगे बढ़ें।
+        </p>
+
+        <div className="mt-6 flex flex-col gap-2 sm:flex-row sm:justify-center">
+          <Link
+            href="/"
+            className={buttonClasses({ variant: "primary" })}
+          >
+            होम पर जाएँ (Home)
+          </Link>
+          <Link
+            href="/health"
+            className={buttonClasses({ variant: "secondary" })}
+          >
+            स्वास्थ्य (Health)
+          </Link>
+        </div>
+      </Card>
+    </div>
+  );
+}

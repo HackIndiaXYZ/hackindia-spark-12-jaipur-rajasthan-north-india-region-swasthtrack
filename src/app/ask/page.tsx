@@ -1,679 +1,225 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import {
-  ArrowRight,
-  Bot,
-  CheckCircle2,
-  ChevronDown,
-  ChevronUp,
-  MessageSquareText,
-  Send,
-  ShieldAlert,
-  Sparkles,
-  ThumbsDown,
-  ThumbsUp,
-  Trash2,
-  User,
-  UserCheck,
-} from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { BookMarked, Globe, History, MessageSquarePlus, ShieldCheck, Sparkles } from "lucide-react";
+import { AnswerCard } from "@/components/ask/answer-card";
+import { Composer } from "@/components/ask/composer";
+import { MemoriesManager } from "@/components/ask/memories-manager";
+import { ProgressCard } from "@/components/ask/progress";
+import { SessionDrawer } from "@/components/ask/session-drawer";
+import { TracePanel } from "@/components/ask/trace-panel";
+import { saveFeedback, useSoie, type AssistantMsg, type ErrorMsg } from "@/components/ask/use-soie";
 import { Badge } from "@/components/ui/badge";
-import { DepthCard } from "@/components/ui/depth-card";
-import { cn } from "@/lib/utils";
-import { getAuthorizedPatients } from "@/services/auth-service";
-import {
-  getPatientProfile,
-  recordAIFeedback,
-  type PatientProfile,
-} from "@/services/patient-service";
-import {
-  executeAskPipeline,
-  type ChatMessageItem,
-  type AskResponseContract,
-} from "@/services/ask-data-service";
-import { AskUnderstandingStrip } from "@/components/ask/ask-understanding-strip";
-import { AskDeveloperTracePanel } from "@/components/ask/ask-developer-trace-panel";
-import { AskFollowUpChips } from "@/components/ask/ask-followup-chips";
+import { Button, IconButton } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Field, Select } from "@/components/ui/form-field";
+import { EmptyState, PageBody, PageHeader } from "@/components/ui/page";
+import { useToast } from "@/components/ui/toast";
 import { useAuth } from "@/context/auth-context";
+import { authFetch } from "@/lib/supabase/auth-fetch";
+import { cn } from "@/lib/utils";
 
 const QUICK_PROMPTS = [
-  "आज पापा कैसे रहे?",
-  "पिछले 7 दिन का average BP kya tha?",
-  "Last week se kya change hua?",
-  "Is week Papa ne kitne steps chale?",
-  "Papa ki medicine adherence kitni rahi?",
-  "Kal dinner mein kya khaya tha?",
-  "Weight target se kitna door hai?",
-  "Is week kya kya missing raha?",
-  "Sleep average kaisa raha?",
-  "15 August ko weight kya tha?",
+  "आज का हाल बताइए",
+  "पिछले 7 दिन का औसत BP क्या रहा?",
+  "पिछले हफ़्ते से क्या बदला?",
+  "इस हफ़्ते दवा पालन कैसा रहा?",
+  "कल खाने में क्या दर्ज है?",
+  "BP कम रखने के लिए खाने में क्या बदलाव करें?",
+  "पिछले 14 दिन की नींद कैसी रही?",
+  "वज़न लक्ष्य से कितना दूर है?",
 ];
 
-let _msgCounter = 0;
-function getNextMessageId(prefix: string): string {
-  _msgCounter += 1;
-  return `${prefix}-${_msgCounter}`;
+interface EngineInfo {
+  ai: boolean;
+  webSearch: boolean;
+  model: string | null;
 }
 
-export default function AskSwasthTrackPage() {
-  const [patient, setPatient] = useState<PatientProfile | null>(null);
-  const [authorizedPatients, setAuthorizedPatients] = useState<PatientProfile[]>([]);
-  const [activePatientId, setActivePatientId] = useState<string | undefined>(undefined);
-  const [isPatientDropdownOpen, setIsPatientDropdownOpen] = useState(false);
+function ErrorBanner({ m }: { m: ErrorMsg }) {
+  const tone = m.kind === "rate_limited" ? "attention" : "critical";
+  return (
+    <div
+      role="alert"
+      className={cn("rounded-card border px-4 py-3 text-sm", tone === "attention" ? "border-attention-line bg-attention-soft text-attention" : "border-critical-line bg-critical-soft text-critical")}
+    >
+      <p lang="hi" className="font-medium">
+        {m.text}
+      </p>
+      {m.kind === "auth" ? (
+        <Link href="/login" className="mt-1 inline-block underline">
+          साइन इन करें
+        </Link>
+      ) : null}
+    </div>
+  );
+}
 
-  const [inputQuery, setInputQuery] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [messages, setMessages] = useState<ChatMessageItem[]>([]);
-  const [expandedCalculationId, setExpandedCalculationId] = useState<string | null>(null);
-  const [feedbackMap, setFeedbackMap] = useState<Record<string, "helpful" | "not_helpful">>({});
+export default function AskPage() {
+  const { profile, loading, activePatientId, authorizedPatients, setActivePatientId, canWrite, memberRole } = useAuth();
+  const isAdmin = profile?.role === "admin";
+  const toast = useToast();
+  const chat = useSoie(activePatientId);
+  const [engine, setEngine] = useState<EngineInfo | null>(null);
+  const [historyOpen, setHistoryOpen] = useState(false);
+  const [memoriesOpen, setMemoriesOpen] = useState(false);
+  const endRef = useRef<HTMLDivElement>(null);
 
-  const chatBottomRef = useRef<HTMLDivElement>(null);
-
-  // 1. Initial Load of Patient & Authorized Family Profiles
+  // What the server can really do right now (key present? web search on?). Drives the honest engine notice.
   useEffect(() => {
-    let active = true;
-
-    Promise.all([
-      getPatientProfile(activePatientId),
-      getAuthorizedPatients().catch(() => [] as PatientProfile[]),
-    ])
-      .then(([prof, authPts]) => {
-        if (!active) return;
-        setPatient(prof);
-        setAuthorizedPatients(authPts);
-
-        // Populate initial welcome message
-        const isPapa =
-          prof.id === "6c4fcb90-5dc1-4ff5-89fe-3049f927f4ac" ||
-          prof.name.toLowerCase().includes("raj kishore");
-        const name = isPapa ? "पापा (Raj Kishore Gupta)" : prof.name;
-
-        setMessages([
-          {
-            id: "msg-welcome",
-            role: "assistant",
-            content: `नमस्ते! मैं स्वास्थट्रैक हेल्थ डेटा सहायक हूँ। आप ${name} के वास्तविक स्वास्थ्य आंकड़ों (BP, वजन, दवाइयाँ, कदम, नींद, भोजन और बदलाव) के बारे में कोई भी प्रश्न पूछ सकते हैं। नीचे दिए गए सुझाए गए प्रश्नों में से किसी एक पर टैप करें या अपना प्रश्न टाइप करें।`,
-            timestamp: new Date().toLocaleTimeString("en-IN", {
-              hour: "2-digit",
-              minute: "2-digit",
-              hour12: true,
-            }),
-          },
-        ]);
-      })
-      .catch((err) => console.error("Error loading patient in /ask:", err));
-
+    let live = true;
+    (async () => {
+      try {
+        const res = await authFetch("/api/soie");
+        if (!res.ok) return;
+        const json = (await res.json()) as EngineInfo;
+        if (live) setEngine(json);
+      } catch {
+        // leave unknown; the first answer carries its own notice
+      }
+    })();
     return () => {
-      active = false;
+      live = false;
     };
   }, [activePatientId]);
 
-  // Scroll to bottom on new message
   useEffect(() => {
-    chatBottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, loading]);
+    endRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+  }, [chat.messages.length, chat.sending]);
 
-  const [isDevMode, setIsDevMode] = useState(false);
-  const { profile: authProfile } = useAuth();
-  const isAdmin = authProfile?.role === "admin";
-  const [contractMap, setContractMap] = useState<Record<string, AskResponseContract>>({});
-
-  async function handleSendQuestion(textToSend?: string) {
-    const query = (textToSend || inputQuery).trim();
-    if (!query || !patient || loading) return;
-
-    setInputQuery("");
-    const userMsgId = getNextMessageId("msg-user");
-    const userMsg: ChatMessageItem = {
-      id: userMsgId,
-      role: "user",
-      content: query,
-      timestamp: new Date().toLocaleTimeString("en-IN", {
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: true,
-      }),
-    };
-
-    setMessages((prev) => [...prev, userMsg]);
-    setLoading(true);
-
-    try {
-      const contract = await executeAskPipeline(patient.id, query);
-      // executeAskPipeline always returns exactly one card — including clinical-safety
-      // refusals — so it is the single source of truth here (see ask-data-service.ts).
-      const card = contract.cards[0] as unknown as ChatMessageItem["card"];
-
-      const ansMsgId = getNextMessageId("msg-ans");
-      setContractMap((prev) => ({ ...prev, [ansMsgId]: contract }));
-
-      const assistantMsg: ChatMessageItem = {
-        id: ansMsgId,
-        role: "assistant",
-        content: contract.answer_text,
-        card,
-        timestamp: new Date().toLocaleTimeString("en-IN", {
-          hour: "2-digit",
-          minute: "2-digit",
-          hour12: true,
-        }),
-      };
-      setMessages((prev) => [...prev, assistantMsg]);
-    } catch (err) {
-      console.error("AskSwasthTrack query error:", err);
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: getNextMessageId("msg-err"),
-          role: "assistant",
-          content:
-            "डेटा विश्लेषण के दौरान कुछ समस्या आई। कृपया पुनः प्रयास करें या प्रश्न को सरल रूप में पूछें।",
-          timestamp: new Date().toLocaleTimeString("en-IN", {
-            hour: "2-digit",
-            minute: "2-digit",
-            hour12: true,
-          }),
-        },
-      ]);
-    } finally {
-      setLoading(false);
+  async function rate(m: AssistantMsg, rating: "helpful" | "not_helpful", comment: string | null) {
+    if (!m.messageId) {
+      toast({ title: "फीडबैक सेव नहीं हो सका", description: "यह जवाब सेव नहीं हुआ था।", tone: "error" });
+      return;
     }
+    const ok = await saveFeedback(m.messageId, rating, comment);
+    if (ok) {
+      chat.setFeedback(m.id, rating);
+      toast({ title: "धन्यवाद, फीडबैक सेव हो गया", tone: "success" });
+    } else toast({ title: "फीडबैक सेव नहीं हो सका", tone: "error" });
   }
 
-  function handleFeedback(cardId: string, rating: "helpful" | "not_helpful") {
-    setFeedbackMap((prev) => ({ ...prev, [cardId]: rating }));
-    if (patient) {
-      recordAIFeedback(patient.id, cardId, rating);
-    }
-  }
-
-  function handleClearChat() {
-    if (!patient) return;
-    const isPapa =
-      patient.id === "6c4fcb90-5dc1-4ff5-89fe-3049f927f4ac" ||
-      patient.name.toLowerCase().includes("raj kishore");
-    const name = isPapa ? "पापा" : patient.name;
-    setMessages([
-      {
-        id: getNextMessageId("msg-welcome"),
-        role: "assistant",
-        content: `बातचीत रीसेट कर दी गई है। ${name} के स्वास्थ्य डेटा के बारे में कोई भी प्रश्न पूछें।`,
-        timestamp: new Date().toLocaleTimeString("en-IN", {
-          hour: "2-digit",
-          minute: "2-digit",
-          hour12: true,
-        }),
-      },
-    ]);
-  }
-
-  const isPapa =
-    patient?.id === "6c4fcb90-5dc1-4ff5-89fe-3049f927f4ac" ||
-    (patient?.name && patient.name.toLowerCase().includes("raj kishore"));
+  const noPatient = !loading && !activePatientId;
+  const stage = chat.live?.stage ?? "reading";
 
   return (
-    <div className="flex flex-col min-h-[calc(100vh-4rem)] max-w-3xl mx-auto px-3 sm:px-4 py-3 space-y-3.5">
-      {/* 1. TOP HEADER & PATIENT SELECTOR CONTEXT (§42) */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-2 border-b border-line">
-        <div className="flex items-center gap-2.5 min-w-0">
-          <div className="h-10 w-10 rounded-control bg-linear-to-br from-purple-600 to-indigo-700 text-white flex items-center justify-center shadow-xs shrink-0">
-            <MessageSquareText className="h-5 w-5" />
-          </div>
-          <div className="min-w-0">
-            <h1 className="text-base sm:text-lg font-bold text-ink truncate leading-tight">
-              Ask SwasthTrack · स्वास्थ्य डेटा सहायक
-            </h1>
-            <p className="text-xs font-semibold text-purple-800 leading-tight truncate">
-              वास्तविक डेटा पर आधारित उत्तर (No hallucinations)
-            </p>
-          </div>
-        </div>
+    <PageBody>
+      <PageHeader
+        eyebrow="SOIE"
+        title="Ask SwasthTrack"
+        hindiTitle="डेटा से पूछें"
+        description="आपके दर्ज किए आँकड़ों से सीधा जवाब। आँकड़े कोड से गिने जाते हैं और हर जवाब में उनका प्रमाण दिखता है।"
+        actions={
+          <>
+            <IconButton aria-label="नई बातचीत" onClick={chat.reset} disabled={noPatient}>
+              <MessageSquarePlus aria-hidden className="h-5 w-5" />
+            </IconButton>
+            <IconButton aria-label="पुरानी बातचीत" onClick={() => setHistoryOpen(true)} disabled={noPatient}>
+              <History aria-hidden className="h-5 w-5" />
+            </IconButton>
+            <IconButton aria-label="सेव की गई बातें" onClick={() => setMemoriesOpen(true)} disabled={noPatient}>
+              <BookMarked aria-hidden className="h-5 w-5" />
+            </IconButton>
+          </>
+        }
+      />
 
-        {/* Patient Switcher */}
-        <div className="flex items-center gap-2 self-start sm:self-auto">
-          {/* The execution-trace toggle is internal QA tooling. It used to be
-              the most prominent control on the page for every patient and
-              caregiver; it is now admin-only. */}
-          {isAdmin ? (
-            <button
-              type="button"
-              onClick={() => setIsDevMode(!isDevMode)}
-              className={cn(
-                "pressable flex min-h-9 cursor-pointer items-center gap-1 rounded-control border px-2.5 text-xs font-semibold",
-                isDevMode
-                  ? "border-ink bg-ink text-ink-inverse"
-                  : "border-line bg-surface-sunken text-ink-muted",
-              )}
-              title="Toggle developer execution trace"
-            >
-              <span>Dev trace: {isDevMode ? "ON" : "OFF"}</span>
-            </button>
-          ) : null}
+      <div className="flex min-h-[calc(100dvh-15rem)] flex-col gap-4">
+        {authorizedPatients.length > 1 ? (
+          <Field label="किसके बारे में पूछ रहे हैं?" labelHidden>
+            <Select value={activePatientId ?? ""} onChange={(e) => setActivePatientId(e.target.value)} aria-label="मरीज़ चुनें">
+              {authorizedPatients.map((p) => (
+                <option key={p.id} value={p.id}>
+                  {p.name}
+                </option>
+              ))}
+            </Select>
+          </Field>
+        ) : null}
 
-          <div className="relative">
-            <button
-              type="button"
-              onClick={() => setIsPatientDropdownOpen(!isPatientDropdownOpen)}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-control bg-surface-sunken hover:bg-line border border-line-strong text-xs font-bold text-ink transition-colors cursor-pointer"
-            >
-              <UserCheck className="h-3.5 w-3.5 text-purple-600 shrink-0" />
-              <span className="truncate max-w-[150px]">
-                Viewing: {isPapa ? "पापा" : patient?.name || "Patient"}
-              </span>
-              <ChevronDown className="h-3.5 w-3.5 text-ink-subtle shrink-0" />
-            </button>
-
-          {isPatientDropdownOpen && (
-            <div className="absolute right-0 top-full mt-1.5 w-56 bg-surface rounded-card shadow-e3 border border-line py-1 z-50 animate-in fade-in zoom-in-95 duration-100">
-              <div className="px-3 py-1.5 text-xs font-bold text-ink-subtle uppercase tracking-wider border-b border-line">
-                मरीज़ का चयन करें
-              </div>
-              {authorizedPatients.length > 0 ? (
-                authorizedPatients.map((p) => (
-                  <button
-                    key={p.id}
-                    type="button"
-                    onClick={() => {
-                      setActivePatientId(p.id);
-                      setIsPatientDropdownOpen(false);
-                    }}
-                    className={cn(
-                      "w-full text-left px-3 py-2 text-xs font-semibold flex items-center justify-between hover:bg-purple-50 transition-colors cursor-pointer",
-                      patient?.id === p.id
-                        ? "text-purple-700 bg-purple-50/60 font-bold"
-                        : "text-ink-muted"
-                    )}
-                  >
-                    <span className="truncate">
-                      {p.id === "6c4fcb90-5dc1-4ff5-89fe-3049f927f4ac" ||
-                      p.name.toLowerCase().includes("raj kishore")
-                        ? "पापा (Raj Kishore Gupta)"
-                        : p.name}
-                    </span>
-                    {patient?.id === p.id && (
-                      <CheckCircle2 className="h-3.5 w-3.5 text-purple-600 shrink-0" />
-                    )}
-                  </button>
-                ))
-              ) : (
-                <div className="px-3 py-2 text-xs text-ink-subtle font-semibold">
-                  {patient?.name || "Active Patient"}
-                </div>
-              )}
+        {engine ? (
+          engine.ai ? (
+            <div className="flex flex-wrap items-center gap-2 text-xs text-ink-muted">
+              <Badge variant={engine.webSearch ? "gold" : "brand"}>
+                {engine.webSearch ? <Globe aria-hidden className="h-3 w-3" /> : <Sparkles aria-hidden className="h-3 w-3" />}
+                <span lang="hi">{engine.webSearch ? "AI + इंटरनेट खोज चालू" : "AI चालू · इंटरनेट खोज बंद"}</span>
+              </Badge>
+              <span lang="hi">हर आँकड़ा जवाब देने से पहले आपके डेटा से मिलाकर जाँचा जाता है।</span>
             </div>
-          )}
-        </div>
-      </div>
-      </div>
+          ) : (
+            <Card tone="sunken" className="flex items-start gap-2.5 text-sm text-ink-muted">
+              <ShieldCheck aria-hidden className="mt-0.5 h-4 w-4 shrink-0 text-ink-subtle" />
+              <p lang="hi">AI अभी चालू नहीं है (सर्वर पर API कुंजी सेट नहीं है)। जवाब नियम-आधारित इंजन से आएँगे: सिर्फ़ आपके दर्ज आँकड़ों से, बिना इंटरनेट खोज के और खुले सवालों की सलाह के बिना।</p>
+            </Card>
+          )
+        ) : null}
 
-      {/* 2. QUICK QUESTION CHIPS (§39 - Contained horizontal scroll only) */}
-      <div className="relative">
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-1.5 no-scrollbar touch-pan-x">
-          {QUICK_PROMPTS.map((prompt, idx) => (
-            <button
-              key={idx}
-              type="button"
-              disabled={loading}
-              onClick={() => handleSendQuestion(prompt)}
-              className="shrink-0 px-3 py-1.5 rounded-control bg-purple-50/80 hover:bg-purple-100 border border-purple-200 text-xs font-bold text-purple-900 shadow-2xs transition-all active:scale-95 cursor-pointer disabled:opacity-50"
-            >
-              💬 {prompt}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* 3. CHAT MESSAGES / ANSWER CARDS STREAM */}
-      <div className="flex-1 space-y-4 overflow-y-auto pr-0.5 pb-24">
-        {messages.map((msg) => {
-          const isUser = msg.role === "user";
-          const card = msg.card;
-
-          if (isUser) {
-            return (
-              <div key={msg.id} className="flex justify-end items-end gap-2">
-                <div className="max-w-[85%] sm:max-w-[75%] rounded-card rounded-br-sm bg-purple-700 text-white p-3.5 shadow-xs">
-                  <p className="text-xs sm:text-sm font-semibold leading-relaxed">{msg.content}</p>
-                  <span className="text-2xs text-purple-200 block text-right mt-1 font-medium">
-                    {msg.timestamp}
+        {noPatient ? (
+          <EmptyState title="No patient yet" hindiTitle="अभी कोई मरीज़ नहीं जुड़ा है" description="पहले मरीज़ की प्रोफाइल बनाइए या कोड से जुड़िए, फिर यहाँ पूछ सकेंगे।" action={<Link href="/onboarding"><Button variant="primary">मरीज़ जोड़ें</Button></Link>} />
+        ) : chat.messages.length === 0 && !chat.sending ? (
+          <Card className="space-y-4">
+            <div>
+              <h2 lang="hi" className="text-lg font-semibold text-ink">
+                क्या जानना है?
+              </h2>
+              <p lang="hi" className="mt-1 text-sm text-ink-muted">
+                BP, वज़न, खाना, नींद, कदम और दवाइयों के बारे में पूछिए। खान-पान या जीवनशैली की समस्या पर AI चालू हो तो इंटरनेट से भरोसेमंद स्रोत देखकर योजना भी बताएगा।
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {QUICK_PROMPTS.map((q) => (
+                <Button key={q} size="sm" variant="secondary" onClick={() => chat.send(q)}>
+                  <span lang="hi" className="whitespace-normal text-left">
+                    {q}
                   </span>
+                </Button>
+              ))}
+            </div>
+            <p lang="hi" className="rounded-field bg-surface-sunken px-3 py-2 text-xs text-ink-subtle">
+              आपके फीडबैक और सेव की गई बातें अगले जवाबों में इस्तेमाल होती हैं।
+            </p>
+          </Card>
+        ) : (
+          <div role="log" aria-label="बातचीत" className="space-y-4">
+            {chat.messages.map((m) => {
+              if (m.role === "user") {
+                return (
+                  <div key={m.id} className="flex justify-end">
+                    <p lang="hi" className="max-w-[85%] whitespace-pre-line rounded-card rounded-br-sm border border-brand-line bg-brand-soft px-4 py-2.5 text-base text-brand-ink">
+                      {m.text}
+                    </p>
+                  </div>
+                );
+              }
+              if (m.role === "error") return <ErrorBanner key={m.id} m={m} />;
+              return (
+                <div key={m.id} className="space-y-2">
+                  <AnswerCard answer={m.answer} feedback={m.feedback} canRate={m.status !== "stored" || Boolean(m.messageId)} onFeedback={(r, c) => rate(m, r, c)} onAsk={chat.send} />
+                  {isAdmin && m.trace ? <TracePanel trace={m.trace} /> : null}
                 </div>
-                <div className="h-7 w-7 rounded-full bg-purple-200 text-purple-800 flex items-center justify-center shrink-0 mb-0.5">
-                  <User className="h-4 w-4" />
-                </div>
-              </div>
-            );
-          }
-
-          // Assistant Response Card
-          return (
-            <div key={msg.id} className="flex items-start gap-2.5">
-              <div className="h-8 w-8 rounded-control bg-linear-to-br from-purple-600 to-indigo-700 text-white flex items-center justify-center shadow-2xs shrink-0 mt-1">
-                <Bot className="h-4 w-4" />
-              </div>
-
-              <div className="flex-1 min-w-0 space-y-2">
-                <DepthCard
-                  depth={1}
-                  className={cn(
-                    "p-4 border",
-                    card?.intent.startsWith("SAFETY")
-                      ? "border-attention-line bg-attention-soft/50"
-                      : "border-line bg-surface"
-                  )}
-                >
-                  {/* Card Header & Intent Badge */}
-                  {card && (
-                    <div className="flex items-center justify-between gap-2 mb-2">
-                      <Badge
-                        variant={
-                          card.intent.startsWith("SAFETY")
-                            ? "amber"
-                            : card.intent === "WHAT_CHANGED"
-                            ? "blue"
-                            : "green"
-                        }
-                        className="text-xs font-bold"
-                      >
-                        {card.intent === "PATIENT_TODAY_OVERALL_SUMMARY"
-                          ? "आज का दैनिक स्वास्थ्य (Daily Brief)"
-                          : card.intent === "CURRENT_VALUE"
-                          ? "नवीनतम स्थिति (Current)"
-                          : card.intent === "WHAT_CHANGED"
-                          ? "स्वास्थ्य में बदलाव (What Changed)"
-                          : card.intent === "BP_SUMMARY"
-                          ? "रक्तचाप (BP)"
-                          : card.intent === "WEIGHT_SUMMARY"
-                          ? "वजन (Weight)"
-                          : card.intent === "ACTIVITY_SUMMARY"
-                          ? "गतिविधि (Activity)"
-                          : card.intent === "MEDICINE_ADHERENCE"
-                          ? "दवाइयाँ (Medicines)"
-                          : card.intent === "FOOD_SUMMARY"
-                          ? "भोजन (Nutrition)"
-                          : card.intent === "SLEEP_SUMMARY"
-                          ? "नींद (Sleep)"
-                          : card.intent === "WELLNESS_SCORE"
-                          ? "रूटीन स्कोर (Wellness)"
-                          : card.intent.startsWith("SAFETY")
-                          ? "सुरक्षा नियम (Safety)"
-                          : "हेल्थ डेटा"}
-                      </Badge>
-                      <span className="text-2xs text-ink-subtle font-semibold">{msg.timestamp}</span>
-                    </div>
-                  )}
-
-                  {/* Natural Language Summary Text */}
-                  <p className="text-xs sm:text-sm font-semibold text-ink leading-relaxed">
-                    {msg.content}
+              );
+            })}
+            {chat.sending ? (
+              <>
+                <ProgressCard stage={stage} tools={chat.liveTools} webSearch={Boolean(engine?.webSearch)} />
+                {chat.liveNotices.map((n) => (
+                  <p key={n.code} lang="hi" className="rounded-field border border-attention-line bg-attention-soft px-3 py-2 text-xs text-attention">
+                    {n.hi}
                   </p>
-
-                  {/* Main Metric Highlight Card (if available) */}
-                  {card?.mainMetric && (
-                    <div className="mt-3 p-3 rounded-card bg-surface-sunken border border-line/90 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                      <div>
-                        <span className="text-2xs font-semibold text-ink-subtle uppercase tracking-wider block">
-                          {card.mainMetric.labelHi}
-                        </span>
-                        <span className="text-base sm:text-lg font-bold text-ink">
-                          {card.mainMetric.value}
-                        </span>
-                        {card.mainMetric.subvalue && (
-                          <span className="text-xs font-semibold text-ink-subtle block mt-0.5">
-                            {card.mainMetric.subvalue}
-                          </span>
-                        )}
-                      </div>
-
-                      {card.mainMetric.changeTextHi && (
-                        <div
-                          className={cn(
-                            "px-2.5 py-1 rounded-control text-xs font-bold self-start sm:self-center border",
-                            card.mainMetric.changeDirection === "up"
-                              ? "bg-positive-soft text-positive border-positive-line"
-                              : card.mainMetric.changeDirection === "down"
-                              ? "bg-info-soft text-info border-info-line"
-                              : "bg-surface-sunken text-ink-muted border-line"
-                          )}
-                        >
-                          {card.mainMetric.changeTextHi}
-                        </div>
-                      )}
-                    </div>
-                  )}
-
-                  {/* Actionable Health Solution & Guidance Card */}
-                  {card?.healthSolutionHi && (
-                    <div className="mt-3 p-3 rounded-card bg-positive-soft/90 border border-positive-line text-positive text-xs font-semibold space-y-1">
-                      <p className="font-bold text-positive flex items-center gap-1.5">
-                        <Sparkles className="h-4 w-4 text-positive shrink-0" />
-                        <span>स्वास्थ्य सुझाव एवं उपाय (Action Plan)</span>
-                      </p>
-                      <p className="leading-relaxed text-positive">
-                        {card.healthSolutionHi.replace(/^💡\s*स्वास्थ्य\s*(सलाह|समाधान)\s*&\s*उपाय:\s*/, "")}
-                      </p>
-                    </div>
-                  )}
-
-                  {/* Bullet Points */}
-                  {card?.bullets && card.bullets.length > 0 && (
-                    <div className="mt-2.5 space-y-1 bg-surface-sunken/60 p-2.5 rounded-card border border-line">
-                      {card.bullets.map((b, idx) => (
-                        <p key={idx} className="text-xs font-semibold text-ink-muted flex items-start gap-1.5">
-                          <span className="text-purple-600 font-bold">•</span>
-                          <span>{b}</span>
-                        </p>
-                      ))}
-                    </div>
-                  )}
-
-                  {/* Safety Disclaimer Banner */}
-                  {card?.disclaimerHi && (
-                    <div className="mt-3 p-2.5 rounded-card bg-attention-soft border border-attention-line text-attention text-xs font-semibold flex items-center gap-2">
-                      <ShieldAlert className="h-4 w-4 shrink-0 text-attention" />
-                      <span>{card.disclaimerHi}</span>
-                    </div>
-                  )}
-
-                  {/* Evidence & Confidence Bar (§30, §31) */}
-                  {card && (
-                    <div className="mt-3 pt-2.5 border-t border-line flex flex-wrap items-center justify-between gap-2 text-xs font-semibold text-ink-subtle">
-                      <div className="flex items-center gap-1.5 flex-wrap">
-                        <span>📊 {card.evidence.recordsEvaluated} मान्य रिकॉर्ड्स</span>
-                        <span>·</span>
-                        <span>दिनांक: {card.evidence.dataThroughDate}</span>
-                        <span>·</span>
-                        <span
-                          className={cn(
-                            "px-1.5 py-0.5 rounded text-2xs font-bold uppercase",
-                            card.evidence.confidence === "High"
-                              ? "bg-positive-soft text-positive"
-                              : "bg-attention-soft text-attention"
-                          )}
-                        >
-                          विश्वास: {card.evidence.confidence}
-                        </span>
-                      </div>
-
-                      {/* Expandable Explanation Button (§46) */}
-                      <button
-                        type="button"
-                        onClick={() =>
-                          setExpandedCalculationId(
-                            expandedCalculationId === card.id ? null : card.id
-                          )
-                        }
-                        className="text-purple-700 hover:text-purple-950 font-bold flex items-center gap-0.5 cursor-pointer underline"
-                      >
-                        <span>विश्लेषण कैसे हुआ?</span>
-                        {expandedCalculationId === card.id ? (
-                          <ChevronUp className="h-3 w-3" />
-                        ) : (
-                          <ChevronDown className="h-3 w-3" />
-                        )}
-                      </button>
-                    </div>
-                  )}
-
-                  {/* Explanation on Demand Drawer (§46) */}
-                  {card && expandedCalculationId === card.id && (
-                    <div className="mt-2.5 p-3 rounded-card bg-surface-sunken border border-line text-xs space-y-1.5 animate-in fade-in duration-100">
-                      <p className="font-bold text-ink">
-                        विधि: {card.evidence.calculationMethodHi}
-                      </p>
-                      {card.evidence.formulaDetails && (
-                        <p className="font-semibold text-ink-muted">
-                          तर्क: {card.evidence.formulaDetails}
-                        </p>
-                      )}
-                      <p className="font-semibold text-ink-subtle">
-                        मूल्यांकित रिकॉर्ड्स: {card.evidence.recordsEvaluated} प्रविष्टियाँ
-                      </p>
-                    </div>
-                  )}
-
-                  {/* Action Link & Feedback Buttons (§47, §48) */}
-                  {card && (
-                    <div className="mt-3 pt-2 border-t border-line flex flex-col gap-2">
-                      <div className="flex items-center justify-between gap-2 flex-wrap">
-                        {card.evidence.relatedActionUrl ? (
-                          <Link
-                            href={card.evidence.relatedActionUrl}
-                            className="inline-flex items-center gap-1 text-xs font-bold text-purple-700 hover:text-purple-900"
-                          >
-                            <span>{card.evidence.relatedActionLabelHi || "डेटा संशोधन करें"}</span>
-                            <ArrowRight className="h-3 w-3" />
-                          </Link>
-                        ) : (
-                          <div />
-                        )}
-
-                        <div className="flex items-center gap-1.5 text-xs font-semibold text-ink-muted bg-surface-sunken px-2.5 py-1 rounded-control border border-line">
-                          <span className="text-xs font-bold">उपयोगी रहा?</span>
-                          <button
-                            type="button"
-                            onClick={() => handleFeedback(card.id, "helpful")}
-                            className={cn(
-                              "p-1 rounded-control hover:bg-positive-soft transition-colors cursor-pointer",
-                              feedbackMap[card.id] === "helpful" && "text-positive font-bold bg-positive-soft"
-                            )}
-                            title="हाँ, उपयोगी रहा"
-                          >
-                            <ThumbsUp className="h-4 w-4" />
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => handleFeedback(card.id, "not_helpful")}
-                            className={cn(
-                              "p-1 rounded-control hover:bg-critical-soft transition-colors cursor-pointer",
-                              feedbackMap[card.id] === "not_helpful" && "text-critical font-bold bg-critical-soft"
-                            )}
-                            title="नहीं"
-                          >
-                            <ThumbsDown className="h-4 w-4" />
-                          </button>
-                        </div>
-                      </div>
-
-                      {/* Toast Feedback Feedback Confirmation */}
-                      {feedbackMap[card.id] === "helpful" && (
-                        <p className="text-xs font-semibold text-positive bg-positive-soft px-2.5 py-1 rounded-control border border-positive-line animate-in fade-in">
-                          👍 धन्यवाद! आपकी सकारात्मक प्रतिक्रिया AI मॉडल को और सटीक बनाने के लिए सहेज ली गई है।
-                        </p>
-                      )}
-                      {feedbackMap[card.id] === "not_helpful" && (
-                        <p className="text-xs font-semibold text-attention bg-attention-soft px-2.5 py-1 rounded-control border border-attention-line animate-in fade-in">
-                          👎 धन्यवाद! आपकी प्रतिक्रिया दर्ज कर ली गई है। हमारी AI इंटेलिजेंस अगले उत्तर को बेहतर करने के लिए सीख रही है।
-                        </p>
-                      )}
-                    </div>
-                  )}
-                </DepthCard>
-
-                {/* Understanding Strip (§2, §41) */}
-                {contractMap[msg.id] && (
-                  <AskUnderstandingStrip
-                    patientLabel={contractMap[msg.id].patient.label}
-                    resolvedDate={contractMap[msg.id].date_range?.end}
-                    metricLabel={contractMap[msg.id].intent}
-                    understandingConfidence={contractMap[msg.id].confidence.understanding}
-                  />
-                )}
-
-                {/* Follow-up Chips (§2) */}
-                {contractMap[msg.id]?.follow_up_suggestions && (
-                  <AskFollowUpChips
-                    suggestions={contractMap[msg.id].follow_up_suggestions}
-                    onSelectSuggestion={(txt) => handleSendQuestion(txt)}
-                    disabled={loading}
-                  />
-                )}
-
-                {/* Developer Execution Trace Panel (§17) */}
-                {isAdmin && isDevMode && contractMap[msg.id]?.trace && (
-                  <AskDeveloperTracePanel trace={contractMap[msg.id].trace} />
-                )}
-              </div>
-            </div>
-          );
-        })}
-
-        {loading && (
-          <div className="flex items-center gap-2.5 p-3 rounded-card bg-surface border border-line shadow-2xs w-fit">
-            <div className="h-6 w-6 rounded-control bg-purple-600 text-white flex items-center justify-center animate-spin">
-              <Sparkles className="h-3.5 w-3.5" />
-            </div>
-            <span className="text-xs font-bold text-ink-muted">
-              वास्तविक स्वास्थ्य रिकॉर्ड्स विश्लेषित किए जा रहे हैं...
-            </span>
+                ))}
+              </>
+            ) : null}
           </div>
         )}
 
-        <div ref={chatBottomRef} />
+        <div ref={endRef} />
+        {/* A direct child of the column so `sticky` has the whole column as its containing block. */}
+        <Composer className="mt-auto" disabled={noPatient || loading} sending={chat.sending} onSend={chat.send} onCancel={chat.cancel} />
       </div>
 
-      {/* 4. STICKY INPUT BAR AT BOTTOM (§53 - Mobile-first, above keyboard) */}
-      <div className="sticky bottom-2 z-20 frost p-2 rounded-panel border border-line shadow-e2">
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            handleSendQuestion();
-          }}
-          className="flex items-center gap-1.5"
-        >
-          <button
-            type="button"
-            onClick={handleClearChat}
-            className="h-10 w-10 rounded-control bg-surface-sunken hover:bg-line text-ink-muted flex items-center justify-center shrink-0 transition-colors cursor-pointer"
-            title="बातचीत साफ करें"
-          >
-            <Trash2 className="h-4 w-4" />
-          </button>
-
-          <input
-            type="text"
-            value={inputQuery}
-            onChange={(e) => setInputQuery(e.target.value)}
-            placeholder={
-              isPapa
-                ? "पापा के स्वास्थ्य डेटा के बारे में पूछें (e.g. कल का BP, 7 दिन के steps)..."
-                : "स्वास्थ्य डेटा के बारे में पूछें..."
-            }
-            disabled={loading}
-            className="flex-1 h-10 px-3.5 rounded-control border border-line-strong bg-surface text-xs sm:text-sm font-semibold text-ink focus:outline-purple-600 focus:border-purple-600 placeholder:text-ink-subtle"
-          />
-
-          <button
-            type="submit"
-            disabled={!inputQuery.trim() || loading}
-            className="h-10 px-3.5 rounded-control bg-purple-700 hover:bg-purple-800 disabled:opacity-40 text-white font-bold text-xs sm:text-sm flex items-center gap-1.5 shrink-0 transition-colors cursor-pointer"
-          >
-            <span>पूछें</span>
-            <Send className="h-3.5 w-3.5" />
-          </button>
-        </form>
-      </div>
-    </div>
+      <SessionDrawer isOpen={historyOpen} onClose={() => setHistoryOpen(false)} patientId={activePatientId} activeId={chat.sessionId} onOpen={chat.loadSession} onNew={chat.reset} />
+      <MemoriesManager isOpen={memoriesOpen} onClose={() => setMemoriesOpen(false)} patientId={activePatientId} canWrite={canWrite && memberRole !== "viewer"} />
+    </PageBody>
   );
 }

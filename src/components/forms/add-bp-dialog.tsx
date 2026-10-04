@@ -1,10 +1,17 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
-import { HeartPulse } from "lucide-react";
+import { useEffect, useState, type FormEvent } from "react";
+import { AlertTriangle, HeartPulse } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Field, NumberInput, TextInput } from "@/components/ui/form-field";
+import { useConfirm } from "@/components/ui/confirm-dialog";
+import { ChoiceGroup, Field, NumberInput, TextInput } from "@/components/ui/form-field";
 import { Modal } from "@/components/ui/modal";
+import { useToast } from "@/components/ui/toast";
+import { BPStatusChip } from "@/components/dashboard/bp-status";
+import { MeasuredAtFields, hourOfTime, nowIST, resolveMeasuredAt } from "@/components/forms/measured-at-fields";
+import { useAuth } from "@/context/auth-context";
+import { DEFAULT_BP_THRESHOLDS, classifyBP, isPlausibleBP, type BPThresholds } from "@/lib/health-rules";
+import { getBPThresholds } from "@/services/settings-service";
 import { logBloodPressure } from "@/services/patient-service";
 
 type AddBPDialogProps = {
@@ -14,272 +21,276 @@ type AddBPDialogProps = {
   onSuccess?: () => void;
 };
 
-const BP_PRESETS = [
-  { label: "120 / 80", hint: "सामान्य (Normal)", sys: "120", dia: "80" },
-  { label: "130 / 85", hint: "हल्का बढ़ा (Mild High)", sys: "130", dia: "85" },
-  { label: "140 / 90", hint: "उच्च (High BP)", sys: "140", dia: "90" },
-  { label: "115 / 75", hint: "उत्तम (Optimal)", sys: "115", dia: "75" },
-];
+type ReadingType = "Morning" | "Evening";
 
-function BPForm({
-  patientId,
-  onClose,
-  onSuccess,
-}: {
-  patientId: string;
-  onClose: () => void;
-  onSuccess?: () => void;
-}) {
-  const [systolic, setSystolic] = useState("120");
-  const [diastolic, setDiastolic] = useState("80");
-  const [pulse, setPulse] = useState("72");
-  const [readingType, setReadingType] = useState<"Morning" | "Evening">("Morning");
+const FORM_ID = "bp-form";
+
+/** The reading-type buttons are a suggestion from the clock; the person always has the last word. */
+function suggestReadingType(time: string): ReadingType {
+  const hour = hourOfTime(time);
+  return hour !== null && hour >= 15 ? "Evening" : "Morning";
+}
+
+type FieldErrors = Partial<Record<"systolic" | "diastolic" | "pulse" | "measuredAt", string>>;
+
+function toInt(value: string): number {
+  return /^\d+$/.test(value.trim()) ? parseInt(value, 10) : NaN;
+}
+
+function BPDialogBody({ isOpen, onClose, patientId, onSuccess }: AddBPDialogProps) {
+  const { canWrite } = useAuth();
+  const toast = useToast();
+  const confirm = useConfirm();
+
+  // Nothing is pre-filled: a blood pressure is whatever the cuff showed.
+  const [systolic, setSystolic] = useState("");
+  const [diastolic, setDiastolic] = useState("");
+  const [pulse, setPulse] = useState("");
   const [notes, setNotes] = useState("");
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [when, setWhen] = useState(nowIST);
+  const [pickedType, setPickedType] = useState<ReadingType | null>(null);
+  const [thresholds, setThresholds] = useState<BPThresholds>(DEFAULT_BP_THRESHOLDS);
+  const [errors, setErrors] = useState<FieldErrors>({});
+  const [formError, setFormError] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [safetyNote, setSafetyNote] = useState<{ category: "crisis" | "low"; text: string } | null>(null);
 
-  function adjustSystolic(delta: number) {
-    const val = parseInt(systolic, 10) || 120;
-    setSystolic(String(Math.max(60, Math.min(260, val + delta))));
-  }
+  useEffect(() => {
+    let active = true;
+    getBPThresholds(patientId)
+      .then((t) => {
+        if (active) setThresholds(t);
+      })
+      .catch(() => {});
+    return () => {
+      active = false;
+    };
+  }, [patientId]);
 
-  function adjustDiastolic(delta: number) {
-    const val = parseInt(diastolic, 10) || 80;
-    setDiastolic(String(Math.max(40, Math.min(180, val + delta))));
-  }
+  const readingType = pickedType ?? suggestReadingType(when.time);
+
+  const sysNum = toInt(systolic);
+  const diaNum = toInt(diastolic);
+  const preview = isPlausibleBP(sysNum, diaNum) ? classifyBP(sysNum, diaNum, thresholds) : null;
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
-    setError("");
+    if (saving || !canWrite) return;
+    setFormError("");
 
-    const sysNum = parseInt(systolic, 10);
-    const diaNum = parseInt(diastolic, 10);
-    const pulseNum = pulse ? parseInt(pulse, 10) : undefined;
+    const next: FieldErrors = {};
+    const pulseNum = pulse.trim() === "" ? null : toInt(pulse);
 
-    if (isNaN(sysNum) || sysNum < 50 || sysNum > 280) {
-      setError("कृपया सही सिस्टोलिक BP दर्ज करें (ऊपर वाला मान 50 से 280 के बीच)");
+    if (Number.isNaN(sysNum)) next.systolic = "ऊपर वाला अंक लिखें (Enter the top number)";
+    else if (sysNum < 50 || sysNum > 280) next.systolic = "ऊपर वाला अंक 50 से 280 के बीच होना चाहिए";
+    if (Number.isNaN(diaNum)) next.diastolic = "नीचे वाला अंक लिखें (Enter the bottom number)";
+    else if (diaNum < 30 || diaNum > 180) next.diastolic = "नीचे वाला अंक 30 से 180 के बीच होना चाहिए";
+    if (!next.systolic && !next.diastolic && sysNum <= diaNum) {
+      next.systolic = "ऊपर वाला अंक नीचे वाले से बड़ा होना चाहिए";
+    }
+    if (pulseNum !== null && (Number.isNaN(pulseNum) || pulseNum < 25 || pulseNum > 250)) {
+      next.pulse = "नब्ज़ 25 से 250 के बीच लिखें, या खाली छोड़ें";
+    }
+    const at = resolveMeasuredAt(when.date, when.time);
+    if (at.instant === null) next.measuredAt = at.error;
+
+    setErrors(next);
+    if (Object.keys(next).length > 0 || at.instant === null) return;
+    if (!isPlausibleBP(sysNum, diaNum, pulseNum)) {
+      setErrors({ systolic: "यह रीडिंग संभव नहीं लगती — अंक दोबारा जाँचें" });
       return;
     }
 
-    if (isNaN(diaNum) || diaNum < 30 || diaNum > 180) {
-      setError("कृपया सही डायस्टोलिक BP दर्ज करें (नीचे वाला मान 30 से 180 के बीच)");
-      return;
+    const category = classifyBP(sysNum, diaNum, thresholds).category;
+
+    // Plausible but striking: make sure it is a typo-free reading, not a slip of a finger.
+    if (category === "crisis") {
+      const ok = await confirm({
+        title: "यह बहुत ज़्यादा है — क्या यह सही रीडिंग है?",
+        message: `${sysNum}/${diaNum} बहुत ऊँचे दायरे में आता है। क्या मशीन पर यही रीडिंग थी? गलत हो तो वापस जाकर ठीक करें।`,
+        confirmLabel: "हाँ, यही रीडिंग है",
+        cancelLabel: "दोबारा जाँचता हूँ",
+      });
+      if (!ok) return;
+    } else if (sysNum < 70 || diaNum < 40 || sysNum > 250 || diaNum > 150 || sysNum - diaNum < 15 || sysNum - diaNum > 120) {
+      const ok = await confirm({
+        title: "यह रीडिंग असामान्य लगती है — क्या यह सही है?",
+        message: `${sysNum}/${diaNum} आम रीडिंग से काफ़ी अलग है। अंक एक बार फिर देख लें।`,
+        confirmLabel: "हाँ, सही है",
+        cancelLabel: "दोबारा जाँचता हूँ",
+      });
+      if (!ok) return;
+    } else if (pulseNum !== null && (pulseNum < 35 || pulseNum > 180)) {
+      const ok = await confirm({
+        title: "नब्ज़ असामान्य लगती है — क्या यह सही है?",
+        message: `नब्ज़ ${pulseNum} bpm काफ़ी अलग है। एक बार फिर देख लें।`,
+        confirmLabel: "हाँ, सही है",
+        cancelLabel: "दोबारा जाँचता हूँ",
+      });
+      if (!ok) return;
     }
 
-    if (sysNum <= diaNum) {
-      setError("सिस्टोलिक BP (ऊपर वाला) डायस्टोलिक से अधिक होना चाहिए");
-      return;
-    }
-
+    setSaving(true);
     try {
-      setLoading(true);
       await logBloodPressure({
         patient_id: patientId,
         systolic: sysNum,
         diastolic: diaNum,
-        pulse: pulseNum ?? null,
+        pulse: pulseNum,
         reading_type: readingType,
-        measured_at: new Date().toISOString(),
+        measured_at: at.instant.toISOString(),
         notes: notes.trim() || null,
       });
-
-      onClose();
       onSuccess?.();
-    } catch {
-      setError("रक्तचाप सेव करने में समस्या आई। पुनः प्रयास करें।");
+
+      if (category === "crisis" || category === "low") {
+        // Keep the sheet open so the safety note is read, not swiped past with a toast.
+        setSafetyNote({
+          category,
+          text:
+            category === "crisis"
+              ? "यह रीडिंग बहुत ऊँचे दायरे में है। 5 मिनट आराम से बैठकर दोबारा नापें। अगर रीडिंग अब भी इतनी ही है, या सीने में दर्द, साँस फूलना, कमज़ोरी, बोलने में दिक्कत, तेज़ सिरदर्द या धुंधला दिखे — तुरंत इमरजेंसी (112) बुलाएँ और डॉक्टर से संपर्क करें।"
+              : "यह रीडिंग कम है। चक्कर, कमज़ोरी या बेहोशी जैसा लगे तो लेट जाएँ और डॉक्टर से बात करें। अपनी दवा खुद से बंद या कम न करें।",
+        });
+      } else {
+        toast.success(`BP ${sysNum}/${diaNum} दर्ज हो गया`, "Blood pressure saved");
+        onClose();
+      }
+    } catch (err) {
+      setFormError(
+        err instanceof Error && err.message
+          ? err.message
+          : "रक्तचाप सेव नहीं हो पाया। इंटरनेट जाँचकर दोबारा कोशिश करें।",
+      );
     } finally {
-      setLoading(false);
+      setSaving(false);
     }
   }
 
-  return (
-    <form onSubmit={handleSubmit} className="space-y-5">
-      {error ? (
-        <div className="rounded-card border border-critical-line bg-critical-soft p-3.5 text-sm font-semibold text-critical">
-          {error}
-        </div>
-      ) : null}
+  const crisisNote = safetyNote?.category === "crisis";
 
-      {/* 1. TIME OF DAY (Morning vs Evening) */}
-      <div className="space-y-2">
-        <label className="block text-sm font-bold text-ink">
-          ⭐ नापने का समय (Reading Time):
-        </label>
-        <div className="grid grid-cols-2 gap-3">
-          <button
-            type="button"
-            onClick={() => setReadingType("Morning")}
-            className={`p-3 rounded-card border-2 text-sm sm:text-base font-bold transition-all flex items-center justify-center gap-2 cursor-pointer ${
-              readingType === "Morning"
-                ? "border-bp bg-bp-soft text-bp ring-2 ring-bp/30 shadow-xs"
-                : "border-line bg-surface text-ink-muted hover:bg-surface-sunken"
-            }`}
-          >
-            <span>🌅 सुबह (Morning)</span>
-          </button>
-          <button
-            type="button"
-            onClick={() => setReadingType("Evening")}
-            className={`p-3 rounded-card border-2 text-sm sm:text-base font-bold transition-all flex items-center justify-center gap-2 cursor-pointer ${
-              readingType === "Evening"
-                ? "border-bp bg-bp-soft text-bp ring-2 ring-bp/30 shadow-xs"
-                : "border-line bg-surface text-ink-muted hover:bg-surface-sunken"
-            }`}
-          >
-            <span>🌆 शाम (Evening)</span>
-          </button>
-        </div>
-      </div>
-
-      {/* 2. 1-TAP PRESETS */}
-      <div className="space-y-2">
-        <label className="block text-sm font-bold text-ink">
-          ⭐ 1-टैप त्वरित मान (Quick Presets):
-        </label>
-        <div className="grid grid-cols-2 gap-2">
-          {BP_PRESETS.map((p) => {
-            const isSelected = systolic === p.sys && diastolic === p.dia;
-            return (
-              <button
-                type="button"
-                key={p.label}
-                onClick={() => {
-                  setSystolic(p.sys);
-                  setDiastolic(p.dia);
-                }}
-                className={`p-2.5 rounded-field border-2 text-left transition-all cursor-pointer ${
-                  isSelected
-                    ? "border-bp bg-bp-soft text-bp font-bold ring-2 ring-bp/30 shadow-2xs"
-                    : "border-line bg-surface text-ink hover:bg-surface-sunken font-semibold"
-                }`}
-              >
-                <p className="text-base font-bold leading-tight">{p.label}</p>
-                <p className="text-xs font-semibold text-ink-subtle">{p.hint}</p>
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* 3. STEPPERS & DIRECT MANUAL INPUTS FOR SYSTOLIC & DIASTOLIC */}
-      <div className="space-y-3 pt-2 border-t border-line">
-        <p className="text-xs font-bold uppercase tracking-wider text-ink-subtle">
-          सटीक मान (टाइप करें या + / - बटन दबाएं):
-        </p>
-
-        <div className="grid grid-cols-2 gap-3">
-          <div className="p-3.5 rounded-card border-2 border-line bg-surface-sunken/80 text-center">
-            <p className="text-xs font-bold text-ink-muted uppercase">ऊपर वाला (Systolic)</p>
-            <div className="my-2">
-              <NumberInput
-                value={systolic}
-                onChange={(e) => setSystolic(e.target.value)}
-                className="w-full text-center text-3xl font-bold text-bp bg-surface border border-line-strong rounded-field py-1 focus:ring-2 focus:ring-bp focus:outline-none"
-                placeholder="120"
-              />
-            </div>
-            <div className="flex items-center justify-center gap-2 mt-2">
-              <button
-                type="button"
-                onClick={() => adjustSystolic(-5)}
-                className="h-11 w-11 rounded-field bg-surface border-2 border-line-strong font-bold text-base text-ink hover:bg-surface-sunken flex items-center justify-center active:scale-95 shadow-2xs"
-              >
-                -5
-              </button>
-              <button
-                type="button"
-                onClick={() => adjustSystolic(+5)}
-                className="h-11 w-11 rounded-field bg-surface border-2 border-line-strong font-bold text-base text-ink hover:bg-surface-sunken flex items-center justify-center active:scale-95 shadow-2xs"
-              >
-                +5
-              </button>
-            </div>
-          </div>
-
-          <div className="p-3.5 rounded-card border-2 border-line bg-surface-sunken/80 text-center">
-            <p className="text-xs font-bold text-ink-muted uppercase">नीचे वाला (Diastolic)</p>
-            <div className="my-2">
-              <NumberInput
-                value={diastolic}
-                onChange={(e) => setDiastolic(e.target.value)}
-                className="w-full text-center text-3xl font-bold text-bp bg-surface border border-line-strong rounded-field py-1 focus:ring-2 focus:ring-bp focus:outline-none"
-                placeholder="80"
-              />
-            </div>
-            <div className="flex items-center justify-center gap-2 mt-2">
-              <button
-                type="button"
-                onClick={() => adjustDiastolic(-5)}
-                className="h-11 w-11 rounded-field bg-surface border-2 border-line-strong font-bold text-base text-ink hover:bg-surface-sunken flex items-center justify-center active:scale-95 shadow-2xs"
-              >
-                -5
-              </button>
-              <button
-                type="button"
-                onClick={() => adjustDiastolic(+5)}
-                className="h-11 w-11 rounded-field bg-surface border-2 border-line-strong font-bold text-base text-ink hover:bg-surface-sunken flex items-center justify-center active:scale-95 shadow-2xs"
-              >
-                +5
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-2 gap-3 pt-1">
-          <Field label="पल्स रेट (Pulse bpm - ऐच्छिक)">
-            <NumberInput
-              placeholder="उदा. 72"
-              value={pulse}
-              onChange={(e) => setPulse(e.target.value)}
-              className="text-base font-semibold"
-            />
-          </Field>
-
-          <Field label="टिप्पणी (Notes - ऐच्छिक)">
-            <TextInput
-              placeholder="उदा. दवाई लेने के बाद"
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-              className="text-base font-medium"
-            />
-          </Field>
-        </div>
-      </div>
-
-      {/* SUBMIT BUTTON */}
-      <div className="pt-2">
-        <Button
-          variant="primary"
-          type="submit"
-          disabled={loading}
-          className="w-full min-h-control-lg text-base font-bold"
-        >
-          <HeartPulse className="h-5 w-5 mr-2" />
-          {loading ? "सेव हो रहा है..." : `🩺 BP ${systolic}/${diastolic} सेव करें (Save BP)`}
-        </Button>
-      </div>
-    </form>
-  );
-}
-
-export function AddBPDialog({
-  isOpen,
-  onClose,
-  patientId,
-  onSuccess,
-}: AddBPDialogProps) {
   return (
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title="Record Blood Pressure"
-      hindiTitle="रक्तचाप (BP) दर्ज करें"
-      description="त्वरित 1-टैप में चुनें या खुद से सही मान टाइप करें।"
-      maxWidth="md"
+      title={safetyNote ? "BP saved" : "Record Blood Pressure"}
+      hindiTitle={safetyNote ? "रीडिंग दर्ज हो गई" : "रक्तचाप (BP) दर्ज करें"}
+      description={safetyNote ? undefined : "BP मशीन पर जो अंक दिखे, वही लिखें।"}
+      footer={
+        safetyNote ? (
+          <div className="flex justify-end">
+            <Button variant="primary" onClick={onClose}>
+              <span lang="hi">ठीक है</span>
+            </Button>
+          </div>
+        ) : (
+          <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+            <Button variant="secondary" onClick={onClose} disabled={saving}>
+              <span lang="hi">रद्द करें</span>
+            </Button>
+            <Button variant="primary" type="submit" form={FORM_ID} loading={saving} disabled={!canWrite}>
+              <HeartPulse aria-hidden className="h-4 w-4" />
+              <span lang="hi">BP सेव करें</span>
+            </Button>
+          </div>
+        )
+      }
     >
-      {isOpen ? (
-        <BPForm patientId={patientId} onClose={onClose} onSuccess={onSuccess} />
-      ) : null}
+      {safetyNote ? (
+        <div
+          role="status"
+          className={`rounded-card border p-4 ${crisisNote ? "border-critical-line bg-critical-soft" : "border-attention-line bg-attention-soft"}`}
+        >
+          <p lang="hi" className={`flex items-center gap-2 text-sm font-semibold ${crisisNote ? "text-critical" : "text-attention"}`}>
+            <AlertTriangle aria-hidden className="h-4 w-4 shrink-0" />
+            {sysNum}/{diaNum} दर्ज हुआ
+          </p>
+          <p lang="hi" className="mt-2 text-sm text-ink">
+            {safetyNote.text}
+          </p>
+          <p className="mt-2 text-xs text-ink-muted">
+            This is a screening notice from the number entered, not a diagnosis. Please confirm with a doctor.
+          </p>
+        </div>
+      ) : (
+        <form id={FORM_ID} onSubmit={handleSubmit} noValidate className="space-y-5">
+          {!canWrite ? (
+            <p role="status" lang="hi" className="rounded-card border border-info-line bg-info-soft p-3 text-sm text-info">
+              आपके पास केवल देखने का एक्सेस है, इसलिए रीडिंग दर्ज नहीं हो सकती।
+            </p>
+          ) : null}
+          <div aria-live="polite">
+            {formError ? (
+              <p className="rounded-card border border-critical-line bg-critical-soft p-3 text-sm font-medium text-critical">
+                {formError}
+              </p>
+            ) : null}
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <Field label="ऊपर वाला (Systolic)" required error={errors.systolic} hint="mmHg">
+              <NumberInput
+                placeholder="ऊपर वाला अंक"
+                value={systolic}
+                maxLength={3}
+                onChange={(e) => setSystolic(e.target.value)}
+                className="text-center text-2xl font-semibold"
+              />
+            </Field>
+            <Field label="नीचे वाला (Diastolic)" required error={errors.diastolic} hint="mmHg">
+              <NumberInput
+                placeholder="नीचे वाला अंक"
+                value={diastolic}
+                maxLength={3}
+                onChange={(e) => setDiastolic(e.target.value)}
+                className="text-center text-2xl font-semibold"
+              />
+            </Field>
+          </div>
+
+          <div aria-live="polite" className="min-h-6">
+            {preview ? <BPStatusChip systolic={sysNum} diastolic={diaNum} thresholds={thresholds} /> : null}
+          </div>
+
+          <ChoiceGroup<ReadingType>
+            label="नापने का समय (Reading time)"
+            value={readingType}
+            onChange={setPickedType}
+            options={[
+              { value: "Morning", label: "सुबह", hindiLabel: "Morning" },
+              { value: "Evening", label: "शाम", hindiLabel: "Evening" },
+            ]}
+            hint={pickedType ? undefined : "समय के हिसाब से सुझाया गया है — चाहें तो बदल दें।"}
+          />
+
+          <MeasuredAtFields
+            date={when.date}
+            time={when.time}
+            onDateChange={(date) => setWhen((w) => ({ ...w, date }))}
+            onTimeChange={(time) => setWhen((w) => ({ ...w, time }))}
+            error={errors.measuredAt}
+          />
+
+          <div className="grid gap-3 sm:grid-cols-2">
+            <Field label="नब्ज़ (Pulse, bpm) — ऐच्छिक" error={errors.pulse}>
+              <NumberInput placeholder="जैसे 72" value={pulse} maxLength={3} onChange={(e) => setPulse(e.target.value)} />
+            </Field>
+            <Field label="टिप्पणी (Notes) — ऐच्छिक">
+              <TextInput
+                placeholder="जैसे दवाई लेने के बाद"
+                value={notes}
+                maxLength={200}
+                onChange={(e) => setNotes(e.target.value)}
+              />
+            </Field>
+          </div>
+        </form>
+      )}
     </Modal>
   );
+}
+
+export function AddBPDialog(props: AddBPDialogProps) {
+  // Mounted only while open, so every opening starts blank and "now" is the moment it was opened.
+  return props.isOpen ? <BPDialogBody {...props} /> : null;
 }

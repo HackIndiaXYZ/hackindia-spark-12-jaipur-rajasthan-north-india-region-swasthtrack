@@ -1,152 +1,169 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import {
-  AlertCircle,
-  Calendar,
-  HeartPulse,
-  Sparkles,
-} from "lucide-react";
-import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import {
-  getYearlyReportData,
-  type YearlyReportSummary,
-} from "@/services/reports-analytics-service";
+import { useState } from "react";
+import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Field, Select } from "@/components/ui/form-field";
+import { ErrorState } from "@/components/ui/page";
+import { loadErrorMessage, useAsyncData } from "@/components/health/use-async-data";
+import { NotEnoughData, ReportDisclaimer, ReportHero, ReportSkeleton, InsightList } from "@/components/reports/report-parts";
+import { todayIST } from "@/lib/health-rules";
+import { getYearlyReportData, type YearlyMonthSummary } from "@/services/reports-analytics-service";
 
 type YearlyReportViewProps = {
   patientId: string;
 };
 
+function cellsOf(m: YearlyMonthSummary) {
+  const tracked = m.daysTracked > 0;
+  return {
+    score: tracked ? `${m.averageScore}/100` : "—",
+    days: tracked ? `${m.daysTracked}` : "—",
+    bp: m.bpReadingsCount > 0 ? `${m.bpReadingsCount}` : "—",
+    weight: m.averageWeightKg ? `${m.averageWeightKg} kg` : "—",
+    meds: tracked && m.hasMedicineData ? `${m.medicineAdherencePercent}%` : "—",
+  };
+}
+
 export function YearlyReportView({ patientId }: YearlyReportViewProps) {
-  const [yearlyData, setYearlyData] = useState<YearlyReportSummary | null>(null);
-  const [loading, setLoading] = useState(true);
+  const thisYear = Number(todayIST().slice(0, 4));
+  const [year, setYear] = useState(thisYear);
+  const { data, error, loading, reload } = useAsyncData(() => getYearlyReportData(patientId, year), [patientId, year]);
 
-  useEffect(() => {
-    let active = true;
+  const yearPicker = (
+    <Field label="साल (Year)" className="max-w-40">
+      <Select value={String(year)} onChange={(e) => setYear(Number(e.target.value))}>
+        {[thisYear, thisYear - 1, thisYear - 2].map((y) => (
+          <option key={y} value={y}>
+            {y}
+          </option>
+        ))}
+      </Select>
+    </Field>
+  );
 
-    getYearlyReportData(patientId)
-      .then((res) => {
-        if (active) setYearlyData(res);
-      })
-      .catch((err) => {
-        console.error("Error loading yearly report:", err);
-      })
-      .finally(() => {
-        if (active) setLoading(false);
-      });
-
-    return () => {
-      active = false;
-    };
-  }, [patientId]);
-
-  if (loading) {
+  if (error) {
     return (
-      <div className="space-y-4 animate-pulse">
-        <div className="h-28 rounded-card bg-surface-sunken" />
-        <div className="h-64 rounded-card bg-surface-sunken" />
+      <div className="space-y-4">
+        {yearPicker}
+        <ErrorState
+          title="वार्षिक रिपोर्ट लोड नहीं हो पाई"
+          englishTitle="The yearly report could not be loaded"
+          description={loadErrorMessage(error)}
+          onRetry={reload}
+        />
+      </div>
+    );
+  }
+  if (loading || !data) {
+    return (
+      <div className="space-y-4">
+        {yearPicker}
+        <ReportSkeleton blocks={2} />
       </div>
     );
   }
 
-  if (!yearlyData) return null;
-
   return (
     <div className="space-y-5">
-      {/* Header Banner — hero: the one number the report exists to show */}
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between rounded-panel gold-edge p-5">
-        <div>
-          <div className="flex items-center gap-2">
-            <Calendar className="h-5 w-5 text-brand" />
-            <h3 className="font-semibold text-ink text-base">
-              Yearly Analytics & Trends ({yearlyData.year}) · वार्षिक स्वास्थ्य विश्लेषण
-            </h3>
+      <ReportHero
+        title={`Yearly report ${data.year}`}
+        hindiTitle="वार्षिक रिपोर्ट"
+        period={
+          <span>
+            जिन दिनों कुछ दर्ज हुआ: <span className="font-semibold text-ink-muted">{data.totalDaysTracked}</span>
+          </span>
+        }
+        scoreLabel="Yearly average"
+        score={data.totalDaysTracked > 0 ? data.averageScore : null}
+        controls={yearPicker}
+      />
+
+      {!data.hasSufficientData ? <NotEnoughData days={1} label="वार्षिक तालिका" /> : null}
+
+      <Card>
+        <CardHeader>
+          <div className="min-w-0">
+            <CardTitle className="text-sm">Month by month · महीने के हिसाब से</CardTitle>
+            <CardDescription>हर महीने दर्ज हुए मुख्य आँकड़े। “—” का मतलब उस महीने कुछ दर्ज नहीं हुआ।</CardDescription>
           </div>
-          <p className="mt-1 text-xs text-ink-subtle">
-            Total active tracking days: <span className="font-semibold text-ink-muted">{yearlyData.totalDaysTracked} days</span>
-          </p>
-        </div>
-
-        <div className="text-right">
-          <p className="text-2xs font-semibold uppercase tracking-wider text-ink-subtle">Yearly Avg Score</p>
-          <p className="grad-text text-3xl font-bold">
-            {yearlyData.averageScore}
-            <span className="text-xs font-semibold text-ink-subtle">/100</span>
-          </p>
-        </div>
-      </div>
-
-      {/* Month-by-Month Matrix Table */}
-      <Card className="p-5 overflow-hidden">
-        <CardHeader className="p-0 pb-4">
-          <CardTitle className="text-sm font-semibold text-ink flex items-center gap-2">
-            <Sparkles className="h-4 w-4 text-emerald-600" />
-            Month-by-Month Tracking Overview (मासिक अवलोकन)
-          </CardTitle>
-          <CardDescription className="text-xs">
-            प्रति माह दर्ज किए गए मुख्य स्वास्थ्य संकेतक
-          </CardDescription>
         </CardHeader>
 
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
+        {/* Phone: one card per month. Tablet and up: a real table with headers. */}
+        <ul className="space-y-2 sm:hidden">
+          {data.months.map((m) => {
+            const c = cellsOf(m);
+            return (
+              <li key={m.monthNumber} className="rounded-card border border-line bg-surface-sunken p-3">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-sm font-semibold text-ink">{m.monthName}</span>
+                  <span className="tabular text-sm font-semibold text-ink">{c.score}</span>
+                </div>
+                <dl className="mt-2 grid grid-cols-2 gap-x-3 gap-y-1 text-xs">
+                  <dt className="text-ink-subtle">दर्ज दिन</dt>
+                  <dd className="tabular text-right font-medium text-ink-muted">{c.days}</dd>
+                  <dt className="text-ink-subtle">BP के माप</dt>
+                  <dd className="tabular text-right font-medium text-ink-muted">{c.bp}</dd>
+                  <dt className="text-ink-subtle">औसत वजन</dt>
+                  <dd className="tabular text-right font-medium text-ink-muted">{c.weight}</dd>
+                  <dt className="text-ink-subtle">दवा अनुपालन</dt>
+                  <dd className="tabular text-right font-medium text-ink-muted">{c.meds}</dd>
+                </dl>
+              </li>
+            );
+          })}
+        </ul>
+
+        <div className="hidden overflow-x-auto sm:block">
+          <table className="w-full text-left text-sm">
+            <caption className="sr-only">Month by month tracking overview for {data.year}</caption>
             <thead>
-              <tr className="border-b border-line text-2xs font-semibold uppercase tracking-wider text-ink-subtle">
-                <th className="pb-3 pr-4">माह (Month)</th>
-                <th className="pb-3 px-4 text-center">Avg Score</th>
-                <th className="pb-3 px-4 text-center">Active Days</th>
-                <th className="pb-3 px-4 text-center">BP Readings</th>
-                <th className="pb-3 px-4 text-center">Avg Weight</th>
-                <th className="pb-3 pl-4 text-center">Medicine %</th>
+              <tr className="border-b border-line text-xs font-semibold text-ink-subtle">
+                <th scope="col" className="pb-3 pr-4">
+                  माह (Month)
+                </th>
+                <th scope="col" className="px-4 pb-3 text-center">
+                  Avg score
+                </th>
+                <th scope="col" className="px-4 pb-3 text-center">
+                  Active days
+                </th>
+                <th scope="col" className="px-4 pb-3 text-center">
+                  BP readings
+                </th>
+                <th scope="col" className="px-4 pb-3 text-center">
+                  Avg weight
+                </th>
+                <th scope="col" className="pb-3 pl-4 text-center">
+                  Medicine %
+                </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-line">
-              {yearlyData.months.map((m) => (
-                <tr key={m.monthName} className="hover:bg-surface-sunken/60 transition-colors">
-                  <td className="py-3 pr-4 font-semibold text-ink-muted">{m.monthName}</td>
-                  <td className="py-3 px-4 text-center font-bold text-ink">
-                    {m.daysTracked > 0 ? `${m.averageScore}/100` : "—"}
-                  </td>
-                  <td className="py-3 px-4 text-center font-medium text-ink-muted">
-                    {m.daysTracked > 0 ? `${m.daysTracked} days` : "—"}
-                  </td>
-                  <td className="py-3 px-4 text-center font-medium text-ink-muted">
-                    {m.bpReadingsCount > 0 ? (
-                      <span className="inline-flex items-center gap-1 text-rose-700 font-semibold">
-                        <HeartPulse className="h-3 w-3" />
-                        {m.bpReadingsCount}
-                      </span>
-                    ) : (
-                      "—"
-                    )}
-                  </td>
-                  <td className="py-3 px-4 text-center font-medium text-amber-800 font-semibold">
-                    {m.averageWeightKg ? `${m.averageWeightKg} kg` : "—"}
-                  </td>
-                  <td className="py-3 pl-4 text-center font-medium text-emerald-800 font-semibold">
-                    {m.daysTracked > 0 ? `${m.medicineAdherencePercent}%` : "—"}
-                  </td>
-                </tr>
-              ))}
+              {data.months.map((m) => {
+                const c = cellsOf(m);
+                return (
+                  <tr key={m.monthNumber}>
+                    <th scope="row" className="py-3 pr-4 font-semibold text-ink-muted">
+                      {m.monthName}
+                    </th>
+                    <td className="tabular px-4 py-3 text-center font-semibold text-ink">{c.score}</td>
+                    <td className="tabular px-4 py-3 text-center text-ink-muted">{c.days}</td>
+                    <td className="tabular px-4 py-3 text-center text-ink-muted">{c.bp}</td>
+                    <td className="tabular px-4 py-3 text-center text-ink-muted">{c.weight}</td>
+                    <td className="tabular py-3 pl-4 text-center text-ink-muted">{c.meds}</td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
       </Card>
 
-      {/* Observations */}
-      <div className="rounded-control border border-line bg-surface-sunken p-4 text-xs text-ink-muted space-y-1">
-        <p className="font-semibold text-ink">वार्षिक डेटा उपयोग:</p>
-        <p>• यह तालिका पूरे वर्ष के आपके प्रमुख आंकड़ों को संक्षिप्त रूप में संकलित करती है।</p>
-        <p>• यह रिकॉर्ड डॉक्टर के साथ वार्षिक स्वास्थ्य समीक्षा के दौरान अत्यंत उपयोगी सिद्ध होता है।</p>
-      </div>
+      <InsightList title="Year observations" hindiTitle="साल की बातें" items={data.personalizedInsights} />
 
-      {/* Disclaimer */}
-      <div className="flex items-center gap-1.5 text-xs text-ink-subtle">
-        <AlertCircle className="h-3 w-3 shrink-0" />
-        <span>
-          यह वार्षिक विश्लेषण केवल आदतों और डेटा प्रविष्टियों का रिकॉर्ड है। यह कोई मेडिकल डायग्नोसिस नहीं है।
-        </span>
-      </div>
+      <ReportDisclaimer>
+        यह सालाना तालिका डॉक्टर के साथ समीक्षा में काम आ सकती है, पर यह सिर्फ़ दर्ज रिकॉर्ड का सार है; कोई निदान नहीं।
+      </ReportDisclaimer>
     </div>
   );
 }

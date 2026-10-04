@@ -1,120 +1,192 @@
-# SwasthTrack — Production Deployment & PWA Guide
+# SwasthTrack: Deployment Guide
 
-This document provides complete instructions for deploying SwasthTrack to Vercel, connecting Supabase in production, configuring GitHub, and installing the mobile Progressive Web App (PWA) on iPhone and Android.
+How to deploy SwasthTrack to Vercel with a Supabase backend, and how to install
+it as a mobile app (PWA).
 
----
+> No secrets live in this file or anywhere else in the repository. Environment
+> variables are listed by **name only**; the values stay in `.env.local` on your
+> computer and in the Vercel project settings.
 
-## 1. Architecture Overview
+## 1. Architecture
 
 ```
-Local Repository (Git)
-        ↓
-GitHub Repository (Private / Public)
-        ↓
-Vercel Production Deployment (Next.js 16 App Router)
-        ↓
-Supabase Cloud Database & RLS Access Control
-        ↓
-Installable Mobile PWA (iOS Safari / Android Chrome)
+Git repository
+      |
+GitHub
+      |
+Vercel (Next.js 16 App Router, built with webpack)
+      |                         \
+Supabase (Auth + Postgres + RLS)  Anthropic API (SOIE "Ask" assistant, server side)
+      |
+Installable PWA (iOS Safari / Android Chrome)
 ```
 
----
+## 2. Environment variables
 
-## 2. GitHub Setup
+Copy `.env.example` to `.env.local` for local work. Set the same names in
+**Vercel > Project > Settings > Environment Variables** for deployments.
 
-### Step A: Push Local Code to GitHub
-1. Create a new empty repository on [GitHub](https://github.com/new) (e.g. `swasthtrack`).
-2. Link your local repository and push:
-```bash
-git remote add origin https://github.com/<YOUR_USERNAME>/swasthtrack.git
-git branch -M main
-git push -u origin main
-```
+| Name | Where it runs | Required? | Notes |
+| :--- | :--- | :--- | :--- |
+| `NEXT_PUBLIC_SUPABASE_URL` | Browser + server | Yes | Project URL, shaped like `https://<project-ref>.supabase.co` |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Browser + server | Yes | Public anon key. Safe to expose because RLS blocks anything outside a signed-in member's patients |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Browser + server | Optional | Newer name for the same public key. The app accepts either; set at least one of the two |
+| `NEXT_PUBLIC_APP_URL` | Browser + server | Optional | Public address of the site, for example `https://<your-domain>` |
+| `ANTHROPIC_API_KEY` | Server only | Recommended | Powers the LLM answers in Ask (SOIE). Without it the assistant answers from the rule-based engine and says so. Never prefix with `NEXT_PUBLIC_` |
+| `SOIE_MODEL` | Server only | Optional | Overrides the model name used by SOIE |
+| `SOIE_WEB_SEARCH` | Server only | Optional | `false` switches internet search off; default on |
+| `SOIE_RATE_LIMIT_PER_HOUR` | Server only | Optional | Max Ask questions per user per hour (cost and abuse guard) |
+| `CRON_SECRET`, `REPORT_PATIENT_ID`, `REPORT_EMAIL_TO`, `EMAIL_FROM`, `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS` (or `RESEND_API_KEY`) | Server only | Only if scheduled report emails are enabled | Read by `src/lib/email/` and the `/api/cron/*` routes scheduled in `vercel.json` (optional daily, weekly and missed-dose emails). These routes run without a signed-in user, so with RLS on, confirm they can actually read the patient's data before relying on them. This SMTP account is separate from the one configured inside Supabase for sign-in codes. Secrets, never `NEXT_PUBLIC_` |
+| `SUPABASE_SERVICE_ROLE_KEY` | Your computer only | Only for the food import | Used by `scripts/import-food-dataset.js`. Bypasses RLS. **Do not add it to Vercel, never use a `NEXT_PUBLIC_` name, never commit it** |
 
-> [!CAUTION]
-> **Secrets Protection**: `.env`, `.env.local`, and sensitive secrets are included in `.gitignore` and must **NEVER** be committed to GitHub.
+Rules of thumb:
 
----
+- Anything starting with `NEXT_PUBLIC_` is shipped to every visitor's browser.
+  Only the Supabase URL and the public anon key belong there.
+- Request-handling code never uses the service-role key. API routes act as the
+  signed-in user, so RLS always applies.
+- `.env*.local` and `.env` are in `.gitignore`. Keep it that way.
 
-## 3. Vercel Production Deployment
+## 3. Supabase setup
 
-### Step A: Import from GitHub to Vercel
-1. Log in to [Vercel](https://vercel.com).
-2. Click **"Add New..."** $\rightarrow$ **"Project"**.
-3. Select your `swasthtrack` GitHub repository.
-4. **Framework Preset**: Next.js (automatically detected).
-5. **Root Directory**: `./`
+Do this before the first deploy. The full walk-through is in
+[`docs/auth-setup.md`](./auth-setup.md): email provider, "Confirm email", custom
+SMTP, OTP length 6 and expiry 3600 seconds, minimum password length 8, the three
+email templates in `supabase/email-templates/`, and URL configuration (Site URL
+and Redirect URLs for localhost and your production domain).
 
-### Step B: Configure Environment Variables in Vercel
-Under the **"Environment Variables"** section in Vercel, add:
+### Migration order
 
-| Key | Value (Production) | Environments |
-| :--- | :--- | :--- |
-| `NEXT_PUBLIC_SUPABASE_URL` | `https://qtzxnpdxlifvbkathvpo.supabase.co` | Production, Preview, Dev |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | `sb_publishable_pQ1IHKLMRc1wyqMF0g173A_6JQOWFY6` | Production, Preview, Dev |
-| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | `sb_publishable_pQ1IHKLMRc1wyqMF0g173A_6JQOWFY6` | Production, Preview, Dev |
-| `NEXT_PUBLIC_APP_URL` | `https://your-deployment.vercel.app` | Production |
+Run these in the Supabase **SQL Editor**, in this order, each once (they are
+written to be safe to re-run):
 
-6. Click **"Deploy"**. Vercel will build and deploy the application in ~1 minute.
+1. `supabase/migrations/20260823000000_phase2_schema.sql`
+2. `supabase/migrations/20260824000000_phase3_food_schema.sql`
+3. `supabase/migrations/20260828000000_ask_mode_schema.sql`
+4. `supabase/migrations/20261004000000_secure_auth_rls_soie.sql`
 
----
+The last one adds accounts, patient membership, caregiver invites, the SOIE
+tables and Row Level Security, and removes the old open anon policies. Existing
+patient rows stay hidden until linked to an account with
+`supabase/scripts/link_existing_patient.sql` (see the auth guide).
 
-## 4. Supabase Production Configuration
+Heads-up: the first migration (`20260823000000_phase2_schema.sql`) still inserts
+one **demo patient** ("Mr. Rajiv Sharma", with sample conditions and medicines).
+After the secure migration nobody is a member of that row, so it is invisible in
+the app, but it is not real data. On a production database delete it once:
+`select id, name from public.patients;` to find it, then
+`delete from public.patients where id = '<demo-patient-id>';` (child rows are
+removed with it).
 
-1. Open your [Supabase Project Dashboard](https://supabase.com/dashboard).
-2. Go to **Authentication** $\rightarrow$ **URL Configuration**:
-   - **Site URL**: `https://<your-project>.vercel.app`
-   - **Redirect URLs**: Add `https://<your-project>.vercel.app/**`
-3. Verify Row Level Security (RLS) policies are active on health tables.
+`supabase/schema.sql` is **not** a setup script any more. It only documents
+that the migrations replaced it.
 
----
+### Food dataset import (optional, local only)
 
-## 5. Custom Domain Configuration (Optional)
+The food catalogue (Indian foods, household portions) is seeded from CSV files in
+`supabase/seed_data/`.
 
-If using a custom domain (e.g. `swasthtrack.in`):
-1. In Vercel Project $\rightarrow$ **Settings** $\rightarrow$ **Domains** $\rightarrow$ Add `swasthtrack.in`.
-2. Configure DNS records at your domain registrar:
-   - **A Record**: `@` $\rightarrow$ `76.76.21.21`
-   - **CNAME Record**: `www` $\rightarrow$ `cname.vercel-dns.com`
-3. In Supabase Authentication $\rightarrow$ Update Site URL to `https://swasthtrack.in`.
+1. Put `SUPABASE_SERVICE_ROLE_KEY` (and `NEXT_PUBLIC_SUPABASE_URL`) in
+   `.env.local` on your computer.
+2. Run:
 
----
+   ```bash
+   node scripts/import-food-dataset.js
+   ```
 
-## 6. Mobile PWA Installation Guide
+3. Do it from your own machine, not in CI and not on Vercel. The script refuses
+   to run without the service key. Remove the key from `.env.local` afterwards if
+   you do not need it again.
 
-### 🍏 iPhone / iPad (Safari)
-1. Open Safari on iPhone and navigate to `https://<your-deployment>.vercel.app`.
-2. Tap the **Share** button (box with an upward arrow) at the bottom toolbar.
-3. Scroll down and tap **"Add to Home Screen" (होम स्क्रीन पर जोड़ें)**.
-4. Tap **"Add"** in the top-right corner.
-5. Launch SwasthTrack directly from your iPhone Home Screen in fullscreen standalone mode!
+## 4. GitHub and Vercel
 
-### 🤖 Android (Chrome)
-1. Open Chrome on your Android device and visit `https://<your-deployment>.vercel.app`.
-2. Chrome will display an automatic banner **"Add SwasthTrack to Home screen"** (or tap the 3-dots menu $\rightarrow$ **"Install App"**).
-3. Tap **Install**. The high-resolution app icon will appear in your App Drawer and Home Screen.
+1. Push the repository to GitHub (private is recommended).
+2. In Vercel choose **Add New > Project**, select the repository. Framework
+   preset: Next.js. Root directory: `./`.
+3. Add the environment variables from the table in section 2 (everything except
+   `SUPABASE_SERVICE_ROLE_KEY`) for Production, and for Preview if you want
+   preview deployments to work.
+4. Deploy.
+5. Add your Vercel and custom domains to Supabase **Authentication > URL
+   Configuration** (Site URL and Redirect URLs) as described in the auth guide.
 
----
+The build script is `next build --webpack` (see `package.json`); Vercel runs it
+via `npm run build`.
 
-## 7. Current Authentication Model & Security Notes
+### Custom domain (optional)
 
-> [!NOTE]
-> **Authentication Status**:
-> The application uses **Mobile Number + Password Authentication** with a client-hashed credential layer and **4-Digit Mobile Reset**.
->
-> **Testing Account Recovery**:
-> Password reset is currently verified via the last 4 digits of the registered mobile number. This is designed for rapid family-caregiver testing and demo access without requiring SMS carrier gateway billing setup. When transitioning to enterprise healthcare compliance, attach a dedicated carrier SMS gateway (Twilio / DLT) for carrier-delivered SMS OTPs.
+1. Vercel > Project > **Settings > Domains** > add your domain.
+2. Create the DNS records Vercel displays at your registrar.
+3. Update Supabase **Site URL** to the new address.
+4. Update `NEXT_PUBLIC_APP_URL` if you set it.
 
----
+## 5. PWA and the service worker
 
-## 8. Rollback & Backup Procedures
+SwasthTrack is an installable PWA (`src/app/manifest.ts`). `public/sw.js` caches
+the app shell (main pages, icons) so the app opens quickly and shows something
+offline. The service worker cache is cleared on sign-out so that a shared phone
+does not keep another person's cached pages. After a deployment, users may need to
+close and reopen the app once to pick up the new service worker.
 
-### Instant Rollback (Vercel)
-If a faulty commit is deployed:
-1. Go to Vercel Dashboard $\rightarrow$ **Deployments**.
-2. Select the previous stable deployment $\rightarrow$ Click **"Instant Rollback"**.
+Install:
 
-### Supabase Database Backup
-1. Go to Supabase Dashboard $\rightarrow$ **Database** $\rightarrow$ **Backups**.
-2. Automated daily backups are maintained by Supabase cloud.
-3. For manual export: Use `pg_dump` or Supabase Table Editor CSV/JSON export.
+- **iPhone / iPad (Safari):** open the site, tap Share, then **Add to Home
+  Screen**, then **Add**.
+- **Android (Chrome):** open the site, accept the install banner or use the
+  three-dot menu > **Install app**.
+
+## 6. Post-deploy checklist
+
+- [ ] The site loads over HTTPS and `/login` shows email + password fields (no
+      phone number field).
+- [ ] **Sign up works:** a new email + password (8+ characters) is accepted.
+- [ ] **The OTP email arrives** within a minute, in Hindi and English, with a
+      6-digit code and no link. If not, see Troubleshooting in the auth guide.
+- [ ] Entering the code signs you in; onboarding creates a patient (or your
+      existing patient is linked and visible).
+- [ ] **Forgot password** sends a code and lets you set a new password.
+- [ ] **RLS check.** Using only the public anon key and no user session, a request
+      to the REST API must return nothing or "permission denied":
+
+  ```bash
+  curl -s "https://<project-ref>.supabase.co/rest/v1/patients?select=id" \
+    -H "apikey: <your-anon-key>" \
+    -H "Authorization: Bearer <your-anon-key>"
+  ```
+
+  Expected: a permission-denied error or an empty list `[]`. If you see patient
+  rows, the secure migration has not run; stop and run it.
+- [ ] A second account that is not a member of the patient sees no patient data.
+- [ ] Ask (`/ask`) answers. If `ANTHROPIC_API_KEY` is missing the page says the
+      rule-based engine is answering.
+- [ ] Signing out returns to `/login` and the browser back button does not show
+      health data.
+
+## 7. Rotate any key that was ever committed
+
+An earlier version of this document was committed with a real project URL and
+API keys in it. Those values are still in git history even though they are gone
+from the current file. Because of that:
+
+1. **Always rotate any service-role key that was ever exposed** (Supabase >
+   Project Settings > API > reset the `service_role` key). It bypasses RLS, so an
+   exposed copy is full database access.
+2. Rotating the **anon** key is recommended too, but less urgent: with the secure
+   migration in place the anon role has no table access. If you rotate it, update
+   `NEXT_PUBLIC_SUPABASE_ANON_KEY` (and the publishable key variable, if you use
+   it) in `.env.local` and in Vercel, then redeploy.
+3. Rotate the database password if it was ever shared.
+4. Consider rewriting git history (or creating a fresh repository) if you need
+   the old values gone from clones and forks.
+5. Never paste real keys into docs, issues, chat or screenshots.
+
+## 8. Rollback and backups
+
+**Instant rollback (Vercel):** Vercel Dashboard > **Deployments** > pick the last
+good deployment > **Instant Rollback**. Database migrations are not rolled back
+by this; test migrations on a copy first.
+
+**Database backups:** Supabase > **Database > Backups** keeps automated backups
+(the retention depends on your plan). For a manual copy use `pg_dump` or the
+Table Editor export. Take a backup before running a migration on a database that
+holds real health data.

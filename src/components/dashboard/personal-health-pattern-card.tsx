@@ -39,7 +39,7 @@ export function PersonalHealthPatternCard({
   }
 
   return (
-    <Card className="border-brand-line/80 bg-linear-to-br from-brand-softer to-surface p-5 transition-all">
+    <Card className="border-brand-line bg-brand-softer p-5">
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-2">
           <span className="flex h-6 w-6 items-center justify-center rounded-control bg-brand text-ink-inverse shadow-xs">
@@ -49,7 +49,7 @@ export function PersonalHealthPatternCard({
             <h3 className="font-semibold text-ink text-sm sm:text-base">
               Personal Health Pattern · आपका हाल का पैटर्न
             </h3>
-            <p className="text-xs text-ink-subtle font-medium">
+            <p className="text-xs text-ink-muted font-medium">
               Data-driven observational summary of recent logs (30-day baseline)
             </p>
           </div>
@@ -66,20 +66,20 @@ export function PersonalHealthPatternCard({
           return (
             <div
               key={idx}
-              className="flex items-start justify-between gap-3 rounded-card border border-brand-line/80 bg-surface p-3 transition-colors"
+              className="flex items-start justify-between gap-3 rounded-card border border-brand-line bg-surface p-3"
             >
               <div className="flex items-start gap-2.5">
-                <span className="mt-1 h-1.5 w-1.5 rounded-full bg-brand shrink-0" />
+                <span aria-hidden className="mt-2 h-1.5 w-1.5 rounded-full bg-brand shrink-0" />
                 <p className="text-ink font-medium leading-relaxed">
                   {b.hi}
                 </p>
               </div>
 
               {/* Feedback */}
-              <div className="flex items-center gap-1 shrink-0 pt-0.5">
+              <div className="-my-1.5 -mr-1.5 flex shrink-0 items-center">
                 {isSubmitted ? (
-                  <span className="text-2xs text-brand-ink font-semibold flex items-center gap-1">
-                    <CheckCircle2 className="h-3 w-3" />
+                  <span lang="hi" className="flex min-h-control items-center gap-1 px-2 text-xs font-semibold text-brand-ink">
+                    <CheckCircle2 aria-hidden className="h-3.5 w-3.5" />
                     धन्यवाद
                   </span>
                 ) : (
@@ -87,18 +87,18 @@ export function PersonalHealthPatternCard({
                     <button
                       type="button"
                       onClick={() => handleFeedback(insightKey, true)}
-                      className="p-1 rounded-md text-ink-subtle hover:text-brand-ink hover:bg-brand-soft transition-colors"
-                      title="उपयोगी थी (Helpful)"
+                      aria-label="उपयोगी थी (Helpful)"
+                      className="pressable grid h-11 w-11 cursor-pointer place-items-center rounded-control text-ink-muted transition-colors hover:bg-brand-soft hover:text-brand-ink"
                     >
-                      <ThumbsUp className="h-3 w-3" />
+                      <ThumbsUp aria-hidden className="h-4 w-4" />
                     </button>
                     <button
                       type="button"
                       onClick={() => handleFeedback(insightKey, false)}
-                      className="p-1 rounded-md text-ink-subtle hover:text-critical hover:bg-critical-soft transition-colors"
-                      title="सही नहीं लगी (Not helpful)"
+                      aria-label="सही नहीं लगी (Not helpful)"
+                      className="pressable grid h-11 w-11 cursor-pointer place-items-center rounded-control text-ink-muted transition-colors hover:bg-critical-soft hover:text-critical"
                     >
-                      <ThumbsDown className="h-3 w-3" />
+                      <ThumbsDown aria-hidden className="h-4 w-4" />
                     </button>
                   </>
                 )}
@@ -111,7 +111,7 @@ export function PersonalHealthPatternCard({
         {multiFactorObservations?.map((mf) => (
           <div
             key={mf.id}
-            className="flex items-start gap-2.5 rounded-card border border-info-line bg-info-soft/40 p-3 text-info"
+            className="flex items-start gap-2.5 rounded-card border border-info-line bg-info-soft p-3 text-info"
           >
             <Activity className="h-4 w-4 text-info shrink-0 mt-0.5" />
             <div>
@@ -126,7 +126,7 @@ export function PersonalHealthPatternCard({
         ))}
       </div>
 
-      <p className="mt-3 text-2xs text-ink-subtle italic">
+      <p className="mt-3 text-xs text-ink-muted italic">
         * यह अवलोकन आपकी हाल की प्रविष्टियों पर आधारित है और किसी चिकित्सीय निदान (Medical Diagnosis) का विकल्प नहीं है।
       </p>
     </Card>

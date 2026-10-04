@@ -1,14 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { Edit3, Plus, Trash2, Pill, Clock } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
+import { Clock, Edit3, Pill, Plus, Trash2 } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { useConfirm } from "@/components/ui/confirm-dialog";
 import { Modal } from "@/components/ui/modal";
-import {
-  getMedicines,
-  deleteMedicine,
-  type MedicineItem,
-} from "@/services/patient-service";
+import { EmptyState, ErrorState } from "@/components/ui/page";
+import { useToast } from "@/components/ui/toast";
 import { AddMedicineDialog } from "@/components/forms/add-medicine-dialog";
+import { useAuth } from "@/context/auth-context";
+import { notifyMedicinesChanged } from "@/hooks/use-medicine-marking";
+import { frequencyLabel, hhmm, mealRelationLabel } from "@/lib/medicine-format";
+import { deleteMedicine, getMedicines, type MedicineItem } from "@/services/patient-service";
 
 type ManageMedicinesDialogProps = {
   isOpen: boolean;
@@ -17,201 +21,201 @@ type ManageMedicinesDialogProps = {
   onSuccess?: () => void;
 };
 
-export function ManageMedicinesDialog({
-  isOpen,
-  onClose,
-  patientId,
-  onSuccess,
-}: ManageMedicinesDialogProps) {
+export function ManageMedicinesDialog({ isOpen, onClose, patientId, onSuccess }: ManageMedicinesDialogProps) {
+  const { canWrite } = useAuth();
+  const confirm = useConfirm();
+  const toast = useToast();
+
   const [medicines, setMedicines] = useState<MedicineItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
   const [medicineToEdit, setMedicineToEdit] = useState<MedicineItem | null>(null);
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
-  const [errorMsg, setErrorMsg] = useState("");
 
-  async function loadData() {
-    setLoading(true);
-    try {
-      const list = await getMedicines(patientId);
-      setMedicines(list);
-    } catch {
-      console.error("Failed to load medicines");
-    } finally {
-      setLoading(false);
-    }
-  }
+  const load = useCallback(() => {
+    return getMedicines(patientId)
+      .then((list) => {
+        setMedicines(list);
+        setLoadError(false);
+      })
+      .catch(() => setLoadError(true))
+      .finally(() => setLoading(false));
+  }, [patientId]);
 
   useEffect(() => {
-    let active = true;
-    if (isOpen) {
-      getMedicines(patientId)
-        .then((list) => {
-          if (active) {
-            setMedicines(list);
-            setLoading(false);
-          }
-        })
-        .catch(() => {
-          if (active) {
-            console.error("Failed to load medicines");
-            setLoading(false);
-          }
-        });
-    }
-    return () => {
-      active = false;
-    };
-  }, [isOpen, patientId]);
+    if (!isOpen) return;
+    // Resolves asynchronously; the first paint of an open dialog shows the loading state.
+    void load();
+  }, [isOpen, load]);
 
-  async function handleDelete(id: string) {
-    setErrorMsg("");
-    setDeletingId(id);
+  async function handleDelete(medicine: MedicineItem) {
+    const sure = await confirm({
+      title: `"${medicine.medicine_name}" हटाएँ?`,
+      message:
+        "यह दवाई सूची से हट जाएगी और इसका पुराना खुराक-रिकॉर्ड भी जा सकता है। अगर डॉक्टर ने सिर्फ़ दवाई बंद की है, तो 'बदलें' में जाकर 'सक्रिय' का टिक हटाएँ — तब रिकॉर्ड बना रहता है।",
+      confirmLabel: "हाँ, हटाएँ",
+      cancelLabel: "रहने दें",
+      tone: "danger",
+    });
+    if (!sure) return;
+
+    setDeletingId(medicine.id);
     try {
-      await deleteMedicine(id);
-      await loadData();
+      await deleteMedicine(medicine.id);
+      notifyMedicinesChanged(patientId);
+      toast.success("दवाई हटा दी गई", medicine.medicine_name);
+      await load();
       onSuccess?.();
     } catch {
-      setErrorMsg("दवाई हटाने में विफल। कृपया पुनः प्रयास करें।");
+      toast.error("दवाई हट नहीं पाई", "दोबारा कोशिश करें।");
     } finally {
       setDeletingId(null);
     }
   }
+
+  async function afterSave(message: string) {
+    toast.success(message);
+    await load();
+    onSuccess?.();
+  }
+
+  const activeCount = medicines.filter((m) => m.active).length;
 
   return (
     <>
       <Modal
         isOpen={isOpen}
         onClose={onClose}
-        title="दवाइियाँ सम्पादित करें (Manage Medicines)"
-        hindiTitle="Medicine Management"
-        description="अपनी सभी दवाओं का नाम, खुराक, समय बदलें या नई दवा जोड़ें।"
-        maxWidth="lg"
+        title="Manage Medicines"
+        hindiTitle="दवाइयाँ बदलें"
+        description="दवाई का नाम, खुराक या समय बदलें, या नई दवाई जोड़ें।"
+        size="lg"
+        footer={
+          <div className="flex justify-end">
+            <Button variant="secondary" onClick={onClose}>
+              <span lang="hi">पूरा हुआ</span>
+            </Button>
+          </div>
+        }
       >
-        <div className="space-y-4 max-w-full">
-          {errorMsg ? (
-            <div className="rounded-card border border-critical-line bg-critical-soft p-3 text-xs font-semibold text-critical">
-              {errorMsg}
-            </div>
-          ) : null}
-          {/* TOP ACTION BAR */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-card border-2 border-brand-line bg-brand-soft/70">
+        <div className="space-y-4">
+          <div className="flex flex-col gap-3 rounded-card border border-meds-line bg-meds-soft p-3.5 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-center gap-2.5">
-              <Pill className="h-5 w-5 text-brand-ink shrink-0" />
-              <div>
-                <p className="text-xs sm:text-sm font-bold text-brand-ink">
-                  कुल पंजीकृत दवाइियाँ: {medicines.length}
-                </p>
-                <p className="text-xs font-semibold text-brand-ink">
-                  सक्रिय: {medicines.filter((m) => m.active).length}
-                </p>
-              </div>
+              <Pill aria-hidden className="h-5 w-5 shrink-0 text-meds" />
+              <p lang="hi" className="text-sm font-semibold text-ink">
+                कुल दवाइयाँ: {medicines.length} · सक्रिय: {activeCount}
+              </p>
             </div>
-            <button
-              type="button"
-              onClick={() => setIsAddOpen(true)}
-              className="shine-sweep grad-spring w-full sm:w-auto px-4 py-2 rounded-control active:scale-97 text-gold-ink font-bold text-xs sm:text-sm flex items-center justify-center gap-1.5 shadow-e2 hover:brightness-105 hover:shadow-glow-gold transition-all cursor-pointer shrink-0"
-            >
-              <Plus className="h-4 w-4" />
-              <span>+ नई दवा जोड़ें</span>
-            </button>
+            {canWrite ? (
+              <Button variant="primary" onClick={() => setIsAddOpen(true)}>
+                <Plus aria-hidden className="h-4 w-4" />
+                <span lang="hi">नई दवाई जोड़ें</span>
+              </Button>
+            ) : null}
           </div>
 
-          {/* MEDICINES LIST FOR EDITING */}
-          <div className="space-y-2.5 max-h-[55vh] overflow-y-auto pr-1">
-            {loading ? (
-              <div className="p-8 text-center text-sm font-semibold text-ink-subtle">
-                दवाइयाँ लोड हो रही हैं...
-              </div>
-            ) : medicines.length === 0 ? (
-              <div className="p-6 text-center text-sm font-semibold text-ink-subtle bg-surface-sunken rounded-card border border-line">
-                कोई दवाई दर्ज नहीं है। ऊपर क्लिक करके पहली दवा जोड़ें।
-              </div>
-            ) : (
-              medicines.map((medicine) => (
-                <div
-                  key={medicine.id}
-                  className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-card border-2 border-line bg-surface hover:border-line-strong shadow-2xs transition-all"
-                >
-                  <div className="space-y-1">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <p className="font-bold text-ink text-sm sm:text-base">
+          {loading ? (
+            <div className="space-y-2.5" aria-busy="true" aria-label="दवाइयाँ लोड हो रही हैं">
+              <div className="skeleton h-16 w-full" />
+              <div className="skeleton h-16 w-full" />
+            </div>
+          ) : loadError ? (
+            <ErrorState
+              title="दवाइयाँ लोड नहीं हो पाईं"
+              englishTitle="Could not load medicines"
+              onRetry={() => {
+                setLoading(true);
+                void load();
+              }}
+            />
+          ) : medicines.length === 0 ? (
+            <EmptyState
+              icon={Pill}
+              title="No medicines yet"
+              hindiTitle="अभी कोई दवाई दर्ज नहीं है।"
+              description="ऊपर 'नई दवाई जोड़ें' दबाकर पहली दवाई जोड़ें।"
+            />
+          ) : (
+            <ul className="space-y-2.5">
+              {medicines.map((medicine) => {
+                const meal = mealRelationLabel(medicine.meal_relation);
+                const freq = frequencyLabel(medicine.frequency);
+                return (
+                  <li
+                    key={medicine.id}
+                    className="flex flex-col gap-3 rounded-card border border-line bg-surface p-3.5 sm:flex-row sm:items-center sm:justify-between"
+                  >
+                    <div className="min-w-0 space-y-1">
+                      <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-base font-semibold text-ink">
                         {medicine.medicine_name}
-                      </p>
-                      <span className="text-xs font-bold text-brand-ink bg-brand-soft px-2 py-0.5 rounded-field">
-                        {medicine.dose}
-                      </span>
-                      {!medicine.active && (
-                        <span className="text-2xs font-bold text-ink-subtle bg-surface-sunken px-2 py-0.5 rounded-field">
-                          निष्क्रिय (Inactive)
+                        <span className="rounded-field bg-meds-soft px-2 py-0.5 text-xs font-semibold text-meds">
+                          {medicine.dose}
                         </span>
-                      )}
+                        {!medicine.active ? (
+                          <Badge variant="neutral">
+                            <span lang="hi">बंद</span>
+                          </Badge>
+                        ) : null}
+                      </p>
+                      <p className="flex flex-wrap items-center gap-x-1.5 text-xs text-ink-muted">
+                        <Clock aria-hidden className="h-3.5 w-3.5 shrink-0" />
+                        <span className="tabular">{hhmm(medicine.scheduled_time)}</span>
+                        {meal ? (
+                          <>
+                            <span aria-hidden>·</span>
+                            <span lang="hi">{meal}</span>
+                          </>
+                        ) : null}
+                        {freq ? (
+                          <>
+                            <span aria-hidden>·</span>
+                            <span lang="hi">{freq}</span>
+                          </>
+                        ) : null}
+                      </p>
                     </div>
-                    <p className="text-xs font-semibold text-ink-muted flex items-center gap-1.5">
-                      <Clock className="h-3.5 w-3.5 text-brand shrink-0" />
-                      <span>⏰ {medicine.scheduled_time.slice(0, 5)}</span>
-                      <span>·</span>
-                      <span>{medicine.meal_relation ? medicine.meal_relation.replace("_", " ") : "भोजन के बाद"}</span>
-                      <span>·</span>
-                      <span className="text-ink-subtle">{medicine.frequency}</span>
-                    </p>
-                  </div>
 
-                  {/* EDIT & DELETE BUTTONS */}
-                  <div className="flex items-center gap-2 shrink-0 self-end sm:self-center">
-                    <button
-                      type="button"
-                      onClick={() => setMedicineToEdit(medicine)}
-                      className="min-h-9 px-3 text-xs font-bold text-ink-muted bg-surface-sunken hover:bg-line hover:text-ink border border-line-strong rounded-control flex items-center gap-1.5 transition-all cursor-pointer active:scale-97"
-                    >
-                      <Edit3 className="h-3.5 w-3.5 text-ink-muted" />
-                      <span>बदलें (Edit)</span>
-                    </button>
-                    <button
-                      type="button"
-                      disabled={deletingId === medicine.id}
-                      onClick={() => handleDelete(medicine.id)}
-                      className="min-h-9 px-3 text-xs font-bold text-critical bg-critical-soft hover:bg-critical-line/40 border border-critical-line rounded-control flex items-center gap-1.5 transition-all cursor-pointer active:scale-97 disabled:opacity-50"
-                    >
-                      <Trash2 className="h-3.5 w-3.5 text-critical" />
-                      <span>हटाएं</span>
-                    </button>
-                  </div>
-                </div>
-              ))
-            )}
-          </div>
+                    {canWrite ? (
+                      <div className="flex shrink-0 items-center gap-2">
+                        <Button variant="secondary" onClick={() => setMedicineToEdit(medicine)} className="flex-1 sm:flex-none">
+                          <Edit3 aria-hidden className="h-4 w-4" />
+                          <span lang="hi">बदलें</span>
+                        </Button>
+                        <Button
+                          variant="danger"
+                          onClick={() => void handleDelete(medicine)}
+                          loading={deletingId === medicine.id}
+                          aria-label={`${medicine.medicine_name} हटाएँ`}
+                          className="flex-1 sm:flex-none"
+                        >
+                          <Trash2 aria-hidden className="h-4 w-4" />
+                          <span lang="hi">हटाएँ</span>
+                        </Button>
+                      </div>
+                    ) : null}
+                  </li>
+                );
+              })}
+            </ul>
+          )}
         </div>
       </Modal>
 
-      {/* EDIT MODAL */}
-      {medicineToEdit && (
-        <AddMedicineDialog
-          isOpen={!!medicineToEdit}
-          onClose={() => setMedicineToEdit(null)}
-          patientId={patientId}
-          medicineToEdit={medicineToEdit}
-          onSuccess={async () => {
-            setMedicineToEdit(null);
-            await loadData();
-            onSuccess?.();
-          }}
-        />
-      )}
+      <AddMedicineDialog
+        isOpen={medicineToEdit !== null}
+        onClose={() => setMedicineToEdit(null)}
+        patientId={patientId}
+        medicineToEdit={medicineToEdit}
+        onSuccess={() => void afterSave("दवाई अपडेट हो गई")}
+      />
 
-      {/* ADD NEW MODAL */}
-      {isAddOpen && (
-        <AddMedicineDialog
-          isOpen={isAddOpen}
-          onClose={() => setIsAddOpen(false)}
-          patientId={patientId}
-          onSuccess={async () => {
-            setIsAddOpen(false);
-            await loadData();
-            onSuccess?.();
-          }}
-        />
-      )}
+      <AddMedicineDialog
+        isOpen={isAddOpen}
+        onClose={() => setIsAddOpen(false)}
+        patientId={patientId}
+        onSuccess={() => void afterSave("दवाई जुड़ गई")}
+      />
     </>
   );
 }

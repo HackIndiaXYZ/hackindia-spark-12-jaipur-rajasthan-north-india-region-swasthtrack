@@ -1,5 +1,4 @@
-import type { ComponentProps, PropsWithChildren, ReactNode } from "react";
-import type { LucideIcon } from "lucide-react";
+import type { ComponentProps, PropsWithChildren } from "react";
 import { cn } from "@/lib/utils";
 
 type CardTone = "default" | "sunken" | "raised" | "premium";
@@ -108,63 +107,3 @@ export const metricChipClasses: Record<MetricTone, string> = {
   sleep: "bg-sleep-soft text-sleep",
   neutral: "bg-surface-sunken text-ink-muted",
 };
-
-/**
- * Card with the standard title row: icon chip, English title, Hindi subtitle,
- * optional badge and a right-aligned action.
- */
-export function PanelCard({
-  title,
-  hindiTitle,
-  icon: Icon,
-  tone = "brand",
-  badge,
-  action,
-  children,
-  className,
-  bodyClassName,
-}: {
-  title: string;
-  hindiTitle?: string;
-  icon?: LucideIcon;
-  tone?: MetricTone;
-  badge?: ReactNode;
-  action?: ReactNode;
-  children: ReactNode;
-  className?: string;
-  bodyClassName?: string;
-}) {
-  return (
-    <Card className={className}>
-      <div className="mb-4 flex items-start justify-between gap-3">
-        <div className="flex min-w-0 items-center gap-3">
-          {Icon ? (
-            <span
-              className={cn(
-                "grid h-10 w-10 shrink-0 place-items-center rounded-control",
-                metricChipClasses[tone],
-              )}
-            >
-              <Icon aria-hidden className="h-5 w-5" />
-            </span>
-          ) : null}
-          <div className="min-w-0">
-            <div className="flex flex-wrap items-center gap-2">
-              <h2 className="truncate text-lg font-semibold text-ink">
-                {title}
-              </h2>
-              {badge}
-            </div>
-            {hindiTitle ? (
-              <p lang="hi" className="truncate text-xs text-ink-subtle">
-                {hindiTitle}
-              </p>
-            ) : null}
-          </div>
-        </div>
-        {action ? <div className="shrink-0">{action}</div> : null}
-      </div>
-      <div className={bodyClassName}>{children}</div>
-    </Card>
-  );
-}

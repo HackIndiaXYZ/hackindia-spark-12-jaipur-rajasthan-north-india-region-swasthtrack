@@ -57,8 +57,11 @@ export const informationNavigation: NavigationItem[] = [
   { href: "/medical-disclaimer", label: "Medical disclaimer", hindiLabel: "चिकित्सा अस्वीकरण", icon: ShieldCheck },
 ];
 
-/** @deprecated Use `primaryNavigation` + `secondaryNavigation`. */
-export const navigationItems: NavigationItem[] = [
-  ...primaryNavigation,
-  ...secondaryNavigation,
-];
+/**
+ * Whether `pathname` is inside the section `href` points at, so `/insights/changes/…`
+ * keeps its parent highlighted. Home only matches exactly.
+ */
+export function isNavActive(href: string, pathname: string): boolean {
+  if (href === "/") return pathname === "/";
+  return pathname === href || pathname.startsWith(`${href}/`);
+}

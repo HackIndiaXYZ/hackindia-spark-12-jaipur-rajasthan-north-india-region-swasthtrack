@@ -1,14 +1,13 @@
 /**
- * SWASTHTRACK ACTIVITY & ENERGY EXPENDITURE ENGINE — v2.0
- * 
- * Objectives:
- * - Strictly separate actual recorded data from estimates.
- * - Never overwrite actual user-entered values with generic steps formulas.
- * - Test Cases:
- *    - 7100 steps + 69 minutes + 1564 actual calories -> preserved exactly as "actual" / "manual".
- *    - 6600 steps + 1462 actual calories -> preserved exactly.
- *    - Steps only: Do NOT invent exact duration or exact calories. Display steps, mark duration unavailable or range estimate (~55-75 min), and mark calories as ~X kcal ESTIMATE with explicit confidence.
- * - Model: Transparent MET-based calculation accounting for body weight and cadence.
+ * Activity & energy estimates.
+ *
+ * - What the user typed is kept exactly as typed and labelled "manual" (self-reported).
+ * - Anything calculated is labelled an ESTIMATE, with a confidence and a plausible
+ *   range, and says which inputs it assumed. A steps-only estimate is low confidence
+ *   and never invents a single exact duration (it gives a cadence-based range).
+ * - Method: MET x body weight x hours when a duration is known (walking ~3.3 MET,
+ *   brisk ~3.8). This is total energy during the activity (it includes the resting
+ *   share), not "extra" calories.
  */
 
 export type ActivityAccuracyType = "actual" | "synced" | "estimated" | "manual";
@@ -34,67 +33,81 @@ export interface ActivityMeasurement {
   confidence: "high" | "medium" | "low";
   isEstimate: boolean;
   durationRange?: { min: number; max: number };
+  /** Plausible spread of an estimated calorie figure. */
+  calorieRange?: { min: number; max: number };
+  /** Body weight the estimate used, and whether it was the built-in default. */
+  bodyWeightKg?: number;
+  usedDefaultWeight?: boolean;
   notes?: string | null;
 }
 
 export interface ActivityEstimateParams {
   steps: number;
-  bodyWeightKg?: number; // default ~70-75kg if unknown
+  /** The patient's real weight. When omitted a default is used and the result says so. */
+  bodyWeightKg?: number;
   durationMinutes?: number | null;
   activityType?: "walking" | "brisk_walking" | "running" | "general";
 }
 
-/**
- * Transparent MET-based Active Energy Burn Estimation
- * Formula: Calories = MET * Weight(kg) * (Duration_hours)
- * Standard Walking (3.0-3.5 mph): MET ~ 3.3
- * Brisk Walking: MET ~ 4.0
- */
-export function estimateActiveCaloriesBurned(params: ActivityEstimateParams): {
+/** Used only when no weight is supplied; always flagged in the result. */
+export const DEFAULT_BODY_WEIGHT_KG = 72;
+const MET_WALKING = 3.3;
+const MET_BRISK = 3.8;
+/** Walking cadence bounds (steps/min) used for the duration range. */
+const CADENCE_MIN = 95;
+const CADENCE_MAX = 125;
+const KCAL_PER_STEP_AT_70KG = 0.04;
+
+export interface ActivityEstimate {
   estimatedCalories: number;
   confidence: "high" | "medium" | "low";
   calculationMethod: ActivityCalculationMethod;
   explanation: string;
   durationRange?: { min: number; max: number };
-} {
-  const steps = params.steps;
-  const weight = params.bodyWeightKg || 72; // default conservative weight
+  calorieRange: { min: number; max: number };
+  bodyWeightKg: number;
+  usedDefaultWeight: boolean;
+}
 
-  // If duration is provided by user:
-  if (params.durationMinutes && params.durationMinutes > 0) {
+export function estimateActiveCaloriesBurned(params: ActivityEstimateParams): ActivityEstimate {
+  const steps = Number.isFinite(params.steps) && params.steps > 0 ? params.steps : 0;
+  const hasWeight = typeof params.bodyWeightKg === "number" && Number.isFinite(params.bodyWeightKg) && params.bodyWeightKg > 20;
+  const weight = hasWeight ? (params.bodyWeightKg as number) : DEFAULT_BODY_WEIGHT_KG;
+  const weightNote = hasWeight ? `${weight} kg` : `${weight} kg (default: no weight on record)`;
+
+  if (params.durationMinutes && params.durationMinutes > 0 && params.durationMinutes <= 24 * 60) {
     const hours = params.durationMinutes / 60;
-    const met = params.activityType === "brisk_walking" ? 3.8 : 3.3;
-    const estCal = Math.round(met * weight * hours);
-
+    const met = params.activityType === "brisk_walking" ? MET_BRISK : MET_WALKING;
+    const kcal = Math.round(met * weight * hours);
     return {
-      estimatedCalories: estCal,
-      confidence: "medium",
+      estimatedCalories: kcal,
+      confidence: hasWeight ? "medium" : "low",
       calculationMethod: "MET_based_estimate",
-      explanation: `MET calculation (${met} MET * ${weight}kg * ${params.durationMinutes} min).`,
+      explanation: `Estimate: ${met} MET x ${weightNote} x ${params.durationMinutes} min = about ${kcal} kcal (total energy during the walk; real value varies by person and pace).`,
+      calorieRange: { min: Math.round(kcal * 0.75), max: Math.round(kcal * 1.25) },
+      bodyWeightKg: weight,
+      usedDefaultWeight: !hasWeight,
     };
   }
 
-  // If steps ONLY are provided:
-  // Walking cadence range: 90 - 120 steps per minute.
-  // We provide a cadence-derived range estimate for time, NEVER a single fake point measurement!
-  const minMin = Math.round(steps / 125);
-  const maxMin = Math.round(steps / 95);
-
-  // Conservative active calorie estimate: ~0.038 - 0.045 kcal per step per 70kg
-  const calPerStep = (weight / 70) * 0.04;
-  const estCal = Math.round(steps * calPerStep);
-
+  // Steps only: neither duration nor pace was measured, so give a range, never a point measurement.
+  const perStep = (weight / 70) * KCAL_PER_STEP_AT_70KG;
+  const kcal = Math.round(steps * perStep);
   return {
-    estimatedCalories: estCal,
-    confidence: "low", // Low confidence because neither duration nor speed was measured
+    estimatedCalories: kcal,
+    confidence: "low",
     calculationMethod: "step_based_estimate",
-    explanation: `Estimated from ${steps.toLocaleString()} steps (~${calPerStep.toFixed(3)} kcal/step at ${weight}kg). Not directly measured.`,
-    durationRange: { min: minMin, max: maxMin },
+    explanation: `Rough estimate from ${steps.toLocaleString("en-IN")} steps (about ${perStep.toFixed(3)} kcal per step at ${weightNote}). Not measured.`,
+    durationRange: { min: Math.round(steps / CADENCE_MAX), max: Math.round(steps / CADENCE_MIN) },
+    calorieRange: { min: Math.round(kcal * 0.6), max: Math.round(kcal * 1.4) },
+    bodyWeightKg: weight,
+    usedDefaultWeight: !hasWeight,
   };
 }
 
 /**
- * Validates and preserves actual recorded activity data without overwriting.
+ * Build the activity record to store. Values the user entered are preserved as
+ * typed (labelled manual / self-reported); only missing calories are estimated.
  */
 export function buildActivityRecord(params: {
   steps: number;
@@ -106,45 +119,43 @@ export function buildActivityRecord(params: {
   notes?: string | null;
 }): ActivityMeasurement {
   const steps = params.steps;
-  const hasManualDuration = params.durationMinutes !== undefined && params.durationMinutes !== null && params.durationMinutes > 0;
-  const hasManualCalories = params.caloriesBurned !== undefined && params.caloriesBurned !== null && params.caloriesBurned > 0;
+  const hasDuration = params.durationMinutes != null && params.durationMinutes > 0;
+  const hasCalories = params.caloriesBurned != null && params.caloriesBurned > 0;
+  const durationMinutes = hasDuration ? (params.durationMinutes as number) : null;
 
-  // Case 1: Full Actual Data Entered (e.g. 7100 steps, 69 min, 1564 calories)
-  if (hasManualCalories) {
+  if (hasCalories) {
+    const synced = params.source === "device_sync";
     return {
       steps,
-      durationMinutes: hasManualDuration ? params.durationMinutes! : null,
+      durationMinutes,
       distanceKm: params.distanceKm ?? null,
-      activeCaloriesBurned: params.caloriesBurned!,
+      activeCaloriesBurned: params.caloriesBurned as number,
       source: params.source || "manual",
-      accuracyType: "actual",
-      calculationMethod: "manual",
-      calculationVersion: "v2.0-actual",
-      confidence: "high",
+      accuracyType: synced ? "synced" : "manual",
+      calculationMethod: synced ? "device_sync" : "manual",
+      calculationVersion: "v2.1-as-entered",
+      confidence: synced ? "high" : "medium",
       isEstimate: false,
       notes: params.notes,
     };
   }
 
-  // Case 2: User entered steps but NO calories -> provide transparent estimate
-  const est = estimateActiveCaloriesBurned({
-    steps,
-    bodyWeightKg: params.bodyWeightKg,
-    durationMinutes: params.durationMinutes,
-  });
-
+  const est = estimateActiveCaloriesBurned({ steps, bodyWeightKg: params.bodyWeightKg, durationMinutes });
   return {
     steps,
-    durationMinutes: hasManualDuration ? params.durationMinutes! : null,
+    durationMinutes,
     distanceKm: params.distanceKm ?? null,
     activeCaloriesBurned: est.estimatedCalories,
     source: "estimated",
     accuracyType: "estimated",
     calculationMethod: est.calculationMethod,
-    calculationVersion: "v2.0-transparent-estimate",
+    calculationVersion: "v2.1-transparent-estimate",
     confidence: est.confidence,
     isEstimate: true,
-    durationRange: hasManualDuration ? undefined : est.durationRange,
+    durationRange: hasDuration ? undefined : est.durationRange,
+    calorieRange: est.calorieRange,
+    bodyWeightKg: est.bodyWeightKg,
+    usedDefaultWeight: est.usedDefaultWeight,
     notes: params.notes,
   };
 }
