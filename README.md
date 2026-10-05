@@ -67,6 +67,7 @@ Open <http://localhost:3000>. Scripts in `package.json`:
 | `npm run start` | Serve the production build |
 | `npm run lint` | ESLint |
 | `npm run db:migrate` | Apply `db/mysql/schema.sql` to `DATABASE_URL` (safe to repeat) |
+| `npm run db:local -- init\|start\|stop\|pma` | A MySQL server (and optional phpMyAdmin) on your own computer for development (see `docs/database.md`) |
 | `npm run db:test` | 47 integration checks against a real MySQL test database (see `docs/database.md`) |
 | `npm run db:link` | Attach a patient to an account / make an admin |
 | `npm run db:import-supabase` | One-time copy of the old Supabase data into MySQL, with checksums |

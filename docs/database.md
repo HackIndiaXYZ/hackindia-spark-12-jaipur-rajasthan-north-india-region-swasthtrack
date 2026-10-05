@@ -74,6 +74,29 @@ itself and the results are the same on 5.7 and 8.
 3. Mirror the row type in `src/lib/db/database.types.ts`.
 4. Add a test to `scripts/db/db-test.mjs`, then `npm run db:test` (see below).
 
+## A database on your own computer (development)
+
+No hosted database is needed to work on the app. `scripts/db/local-mysql.sh` runs a MySQL server for you
+(MySQL 9.x from `/usr/local/mysql`, or Homebrew's; set `MYSQL_BASEDIR` for another place). Everything lives in
+`~/.swasthtrack-mysql`, outside the repo, and listens on `127.0.0.1:3318` only. The data survives a stop.
+
+```bash
+npm run db:local -- init      # once: creates the server, the databases `swasthtrack` and `swasthtrack_test`, two logins
+npm run db:local -- start     # after every restart of the computer (or: stop / status)
+npm run db:migrate            # the tables
+npm run db:local -- sql       # a mysql shell as the admin user
+```
+
+`init` writes the logins to `~/.swasthtrack-mysql/app.env` (the app user; copy its `DATABASE_URL` line into
+`.env.local`, and add an `AUTH_SECRET`) and `admin.cnf` (root). Both are readable by you only and the passwords are
+never printed. `npm run db:test` can use `TEST_DATABASE_URL` from the same `app.env`.
+
+**phpMyAdmin (optional).** Download the "english" zip from <https://www.phpmyadmin.net/downloads/>, unzip its
+contents into `~/.swasthtrack-mysql/phpmyadmin`, then `npm run db:local -- pma` and open
+<http://127.0.0.1:8794>. Sign in as `swasthtrack` with the password from `app.env`. It reaches the server through the
+local socket, shows only the two SwasthTrack databases' data, and stops with `npm run db:local -- stop`.
+Do not expose this port to a network: it would show the family's health records.
+
 ## Tests
 
 `npm run db:test` runs 47 checks against a REAL MySQL database: sign-up and codes, sessions, rate limits,

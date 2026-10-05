@@ -12,6 +12,7 @@
     "food:check": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/food/check-catalogue.mjs",
     "soie:eval": "node scripts/soie-eval.mjs",
     "soie:wire": "node scripts/soie-wire-check.mjs",
+    "db:local": "bash scripts/db/local-mysql.sh",
     "db:migrate": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/db/migrate.mjs",
     "db:test": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/db/db-test.mjs",
     "db:link": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/db/link-patient.mjs",
