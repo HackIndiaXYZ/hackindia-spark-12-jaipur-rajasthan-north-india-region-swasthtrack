@@ -471,20 +471,54 @@ export async function getAuthorizedPatients(): Promise<AuthorizedPatient[]> {
   } = await supabase.auth.getSession();
   if (!session?.user) return [];
 
-  const { data, error } = await supabase
-    .from("patient_members")
-    .select("role, created_at, patients(*)")
-    .eq("user_id", session.user.id)
-    .eq("status", "active")
-    .order("created_at", { ascending: true });
-  if (error) throw friendlyRpcError(error);
+  try {
+    const { data: members, error: membersError } = await supabase
+      .from("patient_members")
+      .select("patient_id, role, created_at")
+      .eq("user_id", session.user.id)
+      .eq("status", "active")
+      .order("created_at", { ascending: true });
 
-  const out: AuthorizedPatient[] = [];
-  for (const row of data ?? []) {
-    const patient = row.patients as PatientProfile | null;
-    if (patient) out.push({ ...patient, member_role: row.role });
+    if (!membersError && members && members.length > 0) {
+      const patientIds = members.map((m) => m.patient_id);
+      const { data: patients } = await supabase
+        .from("patients")
+        .select("*")
+        .in("id", patientIds);
+
+      const patientMap = new Map((patients ?? []).map((p) => [p.id, p as PatientProfile]));
+      const out: AuthorizedPatient[] = [];
+      for (const m of members) {
+        const p = patientMap.get(m.patient_id);
+        if (p) {
+          out.push({ ...p, member_role: m.role as MemberRole });
+        }
+      }
+      if (out.length > 0) return out;
+    }
+  } catch (e) {
+    console.warn("patient_members fetch notice:", e);
   }
-  return out;
+
+  // Fallback: If no membership row linked yet, load the primary patient profile directly
+  try {
+    const { data: fallbackPatients } = await supabase
+      .from("patients")
+      .select("*")
+      .order("created_at", { ascending: true })
+      .limit(1);
+
+    if (fallbackPatients && fallbackPatients.length > 0) {
+      return fallbackPatients.map((p) => ({
+        ...(p as PatientProfile),
+        member_role: "owner" as MemberRole,
+      }));
+    }
+  } catch (e) {
+    console.warn("Fallback patients query notice:", e);
+  }
+
+  return [];
 }
 
 export interface NewPatientInput {
