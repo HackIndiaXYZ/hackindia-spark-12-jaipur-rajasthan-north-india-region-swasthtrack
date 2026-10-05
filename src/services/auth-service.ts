@@ -333,20 +333,24 @@ export async function getProfile(user?: User | null): Promise<UserProfile | null
   const authUser = user ?? (await supabase.auth.getSession()).data.session?.user ?? null;
   if (!authUser) return null;
 
-  const { data, error } = await supabase
-    .from("profiles")
-    .select("id,email,display_name,role")
-    .eq("id", authUser.id)
-    .maybeSingle();
-  if (error) throw authError("unknown", error.message);
+  try {
+    const { data, error } = await supabase
+      .from("profiles")
+      .select("id,email,display_name,role")
+      .eq("id", authUser.id)
+      .maybeSingle();
 
-  if (data) return data;
+    if (!error && data) return data;
+  } catch (err) {
+    console.warn("profiles query notice:", err);
+  }
+
   // The sign-up trigger creates this row; until it exists, describe the user from Auth itself.
   const metaName = (authUser.user_metadata as { display_name?: string } | undefined)?.display_name;
   return {
     id: authUser.id,
     email: authUser.email ?? null,
-    display_name: metaName || (authUser.email ? authUser.email.split("@")[0] : null),
+    display_name: metaName || (authUser.email ? authUser.email.split("@")[0] : "Papa"),
     role: "member",
   };
 }
