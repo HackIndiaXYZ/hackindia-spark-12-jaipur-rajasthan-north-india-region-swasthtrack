@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Printer, UserPlus, Users } from "lucide-react";
+import { Printer, ShieldCheck, UserPlus, Users } from "lucide-react";
 import { AddCaregiverDialog } from "@/components/forms/add-caregiver-dialog";
 import { JoinPatientDialog } from "@/components/forms/join-patient-dialog";
 import { CaregiverHeroBrief } from "@/components/caregiver/caregiver-hero-brief";
@@ -11,7 +11,7 @@ import {
   CaregiverTodayStatus,
   CaregiverWhatChanged,
 } from "@/components/caregiver/caregiver-today-status";
-import { Button, buttonClasses } from "@/components/ui/button";
+import { Button, IconButton, buttonClasses } from "@/components/ui/button";
 import { EmptyState, PageBody, PageHeader } from "@/components/ui/page";
 import { useAuth } from "@/context/auth-context";
 
@@ -19,6 +19,8 @@ export default function CaregiverPage() {
   const { activePatientId, authorizedPatients, memberRole, loading, setActivePatientId, refreshSession } = useAuth();
   const [isJoinOpen, setIsJoinOpen] = useState(false);
   const [isInviteOpen, setIsInviteOpen] = useState(false);
+  // Bumped when something is logged from the quick-log sheet, so the sections below the brief reload.
+  const [logVersion, setLogVersion] = useState(0);
 
   // The name comes from the membership list the session already loaded, so the
   // page can say who it is about before any health data has arrived.
@@ -34,19 +36,20 @@ export default function CaregiverPage() {
         <div className="no-print flex flex-wrap items-center gap-2 print:hidden">
           <Button variant="secondary" size="sm" onClick={() => setIsJoinOpen(true)}>
             <UserPlus aria-hidden className="h-4 w-4" />
-            कोड से जुड़ें (Join)
+            <span lang="hi">कोड से जुड़ें</span>
+            <span className="hidden sm:inline">(Join)</span>
           </Button>
           {memberRole === "owner" && activePatientId ? (
             <Button variant="secondary" size="sm" onClick={() => setIsInviteOpen(true)}>
               <Users aria-hidden className="h-4 w-4" />
-              परिवार को जोड़ें (Invite)
+              <span lang="hi">परिवार जोड़ें</span>
+              <span className="hidden sm:inline">(Invite)</span>
             </Button>
           ) : null}
           {activePatientId ? (
-            <Button variant="secondary" size="sm" onClick={() => window.print()}>
+            <IconButton variant="secondary" size="sm" aria-label="प्रिंट करें (Print)" title="प्रिंट करें" onClick={() => window.print()}>
               <Printer aria-hidden className="h-4 w-4" />
-              प्रिंट (Print)
-            </Button>
+            </IconButton>
           ) : null}
         </div>
       }
@@ -59,8 +62,8 @@ export default function CaregiverPage() {
 
       {loading ? (
         <div aria-busy="true" aria-label="लोड हो रहा है" className="space-y-4">
-          <div className="skeleton h-12 rounded-card" />
-          <div className="skeleton h-72 rounded-panel" />
+          <div className="skeleton h-20 rounded-card" />
+          <div className="skeleton h-72 rounded-card" />
         </div>
       ) : !activePatientId ? (
         <EmptyState
@@ -83,12 +86,18 @@ export default function CaregiverPage() {
       ) : (
         <>
           {/* Keyed by patient so every section reloads cleanly when the patient changes. */}
-          <CaregiverHeroBrief key={activePatientId} patientId={activePatientId} patientName={patientName} />
-          <CaregiverTodayStatus key={`status-${activePatientId}`} patientId={activePatientId} patientName={patientName} memberRole={memberRole} />
-          <CaregiverWhatChanged key={`changes-${activePatientId}`} patientId={activePatientId} patientName={patientName} />
-          <CaregiverPatterns key={`patterns-${activePatientId}`} patientId={activePatientId} />
+          <CaregiverHeroBrief
+            key={activePatientId}
+            patientId={activePatientId}
+            patientName={patientName}
+            onLogged={() => setLogVersion((n) => n + 1)}
+          />
+          <CaregiverTodayStatus key={`status-${activePatientId}-${logVersion}`} patientId={activePatientId} />
+          <CaregiverWhatChanged key={`changes-${activePatientId}-${logVersion}`} patientId={activePatientId} patientName={patientName} />
+          <CaregiverPatterns key={`patterns-${activePatientId}-${logVersion}`} patientId={activePatientId} />
 
-          <p lang="hi" className="rounded-card border border-line bg-surface-sunken p-3 text-xs text-ink-subtle">
+          <p lang="hi" className="flex items-start gap-2 rounded-card border border-line bg-surface-sunken px-3.5 py-3 text-xs text-ink-muted">
+            <ShieldCheck aria-hidden className="mt-0.5 h-4 w-4 shrink-0" />
             यह सारांश रोज़ की आदतों पर नज़र रखने में मदद के लिए है। किसी भी इलाज के फ़ैसले के लिए डॉक्टर से बात करें। आपात स्थिति में 112 / 108।
           </p>
         </>

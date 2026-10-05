@@ -30,12 +30,12 @@ const variantClasses: Record<ButtonVariant, string> = {
   // hand-rolls `shine-sweep grad-spring`.
   primary:
     "shine-sweep grad-gold-button text-gold-ink shadow-gold-button " +
-    "hover:brightness-105 hover:shadow-glow-gold active:brightness-95",
+    "hover:brightness-105 hover:shadow-gold-button-hover active:brightness-95",
   secondary:
-    "surface-lift text-ink hover:border-brand-line hover:[--lift-fill:var(--color-brand-softer)] " +
-    "active:[--lift-fill:var(--color-brand-soft)]",
+    "surface-lift text-ink hover:[--lift-fill:var(--color-gilt-1)] " +
+    "active:[--lift-fill:var(--color-gilt-2)]",
   ghost:
-    "text-ink-muted hover:bg-surface-sunken hover:text-ink active:bg-line",
+    "text-ink-muted hover:bg-gold-soft hover:text-ink active:bg-gilt-3",
   quiet:
     "border border-line bg-surface-sunken text-ink-muted hover:bg-surface hover:text-ink active:bg-line",
   danger:

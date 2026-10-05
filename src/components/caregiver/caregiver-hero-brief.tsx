@@ -45,6 +45,8 @@ type CaregiverHeroBriefProps = {
   patientId: string;
   /** The patient's own name from their profile. */
   patientName: string;
+  /** Something was logged from the quick-log sheet: the sections below the brief should reload. */
+  onLogged?: () => void;
 };
 
 type ViewMode = "daily" | "weekly" | "monthly";
@@ -90,12 +92,12 @@ const BP_TREND_HI: Record<CaregiverMonthlyBrief["bpTrend"], string> = {
   "Insufficient data": "डेटा कम है",
 };
 
-function Metric({ label, value, helper }: { label: string; value: string; helper?: string }) {
+function Metric({ label, value, helper, className }: { label: string; value: string; helper?: string; className?: string }) {
   const empty = value === "—";
   return (
-    <div className="rounded-card border border-line bg-surface-sunken p-3 text-center">
-      <span className="block text-2xs font-semibold text-ink-subtle">{label}</span>
-      <span className={cn("tabular mt-0.5 block text-sm font-semibold", empty ? "text-ink-subtle" : "text-ink")}>{value}</span>
+    <div className={cn("tile rounded-card p-3 text-center", className)}>
+      <span className="block text-2xs font-semibold text-ink-muted">{label}</span>
+      <span className={cn("tabular mt-0.5 block text-base font-semibold sm:text-lg", empty ? "text-ink-subtle" : "text-ink")}>{value}</span>
       {helper ? <span className="block text-2xs text-ink-subtle">{helper}</span> : null}
     </div>
   );
@@ -103,7 +105,7 @@ function Metric({ label, value, helper }: { label: string; value: string; helper
 
 function BriefSkeleton() {
   return (
-    <div aria-busy="true" aria-label="लोड हो रहा है" className="space-y-3 rounded-panel border border-line bg-surface p-5">
+    <Card aria-busy="true" aria-label="लोड हो रहा है" className="space-y-3">
       <div className="skeleton h-6 w-48" />
       <div className="skeleton h-20 rounded-card" />
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
@@ -111,7 +113,7 @@ function BriefSkeleton() {
         <div className="skeleton h-20 rounded-card" />
         <div className="skeleton h-20 rounded-card" />
       </div>
-    </div>
+    </Card>
   );
 }
 
@@ -154,25 +156,25 @@ function DailyView({
                 <span lang="hi">{brief.routineStatusHi}</span>
               </Badge>
             </div>
-            <p className="mt-0.5 text-xs text-ink-subtle">Daily health summary · {brief.dateLabelHi}</p>
+            <p className="mt-0.5 text-xs text-ink-muted">Daily health summary · {brief.dateLabelHi}</p>
           </div>
         </div>
 
         <div className="flex items-center gap-3 self-start sm:self-auto">
           <div className="sm:text-right">
-            <span className="block text-2xs font-semibold text-ink-subtle">रूटीन स्कोर</span>
+            <span className="block text-2xs font-semibold text-ink-muted">रूटीन स्कोर</span>
             {brief.isScoreSufficient ? (
               <span className="tabular text-lg font-semibold text-ink">
-                {brief.routineScore} <span className="text-xs font-medium text-ink-subtle">/ 100</span>
+                {brief.routineScore} <span className="text-xs font-medium text-ink-muted">/ 100</span>
               </span>
             ) : (
-              <span lang="hi" className="text-xs font-medium text-ink-subtle">
+              <span lang="hi" className="text-xs font-medium text-ink-muted">
                 अभी पर्याप्त रिकॉर्ड नहीं
               </span>
             )}
           </div>
           <div aria-hidden className="h-8 w-px bg-line" />
-          <div className="text-xs text-ink-subtle">
+          <div className="text-xs text-ink-muted">
             <span lang="hi">अंतिम अपडेट</span>
             <span className="block font-medium text-ink-muted">{brief.cachedAt}</span>
           </div>
@@ -193,7 +195,7 @@ function DailyView({
         </div>
       </div>
 
-      <div className="space-y-1.5 rounded-card border border-line bg-surface p-3">
+      <div className="tile space-y-1.5 rounded-card p-3">
         <ProgressBar value={brief.completenessPercent} max={100} label={`दैनिक ट्रैकिंग पूर्णता: ${brief.completenessLabelHi}`} />
         <p lang="hi" className="text-2xs text-ink-subtle">
           यह सिर्फ़ बताता है कि कितना रिकॉर्ड दर्ज हुआ, सेहत की स्थिति नहीं। ({brief.recordedItemsCount} में से {brief.expectedItemsCount} अपेक्षित चीज़ें दर्ज)
@@ -201,8 +203,8 @@ function DailyView({
       </div>
 
       <div>
-        <h3 className="mb-2.5 text-xs font-semibold text-ink-subtle">
-          मुख्य रिकॉर्ड · Snapshot
+        <h3 className="mb-2.5 text-xs font-semibold uppercase tracking-wide text-ink-muted">
+          <span lang="hi">मुख्य रिकॉर्ड</span> · Snapshot
         </h3>
         <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3">
           {Object.entries(brief.snapshot).map(([key, vital]) => {
@@ -213,21 +215,21 @@ function DailyView({
                 key={key}
                 className={cn(
                   "rounded-card border p-3",
-                  vital.isLogged ? "border-line bg-surface shadow-e1" : "border-dashed border-line-strong bg-surface-sunken",
+                  vital.isLogged ? "tile" : "border-dashed border-line-strong bg-surface-sunken/70",
                 )}
               >
                 <div className="mb-1.5 flex items-center justify-between gap-2">
-                  <span lang="hi" className="truncate text-xs font-semibold text-ink-muted">
-                    {vital.labelHi}
+                  <span lang="hi" title={vital.labelHi} className="truncate text-xs font-semibold text-ink-muted">
+                    {vital.labelHi.split(" (")[0]}
                   </span>
                   <span className={cn("grid h-6 w-6 shrink-0 place-items-center rounded-field", metricChipClasses[style.tone])}>
                     <Icon aria-hidden className="h-3.5 w-3.5" />
                   </span>
                 </div>
-                <p className={cn("tabular text-sm font-semibold sm:text-base", vital.isLogged ? "text-ink" : "text-ink-subtle")}>
+                <p className={cn("tabular text-sm font-semibold sm:text-base", vital.isLogged ? "text-ink" : "text-ink-muted")}>
                   {vital.value}
                 </p>
-                {vital.subtext ? <p className="mt-0.5 truncate text-2xs text-ink-subtle">{vital.subtext}</p> : null}
+                {vital.subtext ? <p className={cn("mt-0.5 truncate text-2xs", vital.isLogged ? "text-ink-subtle" : "text-ink-muted")}>{vital.subtext}</p> : null}
               </div>
             );
           })}
@@ -293,12 +295,12 @@ function DailyView({
 
       {brief.todayVsUsual.length > 0 ? (
         <div className="space-y-2">
-          <h3 className="text-xs font-semibold text-ink-subtle">
-            {isToday ? "आज" : "इस दिन"} बनाम सामान्य · vs usual
+          <h3 className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
+            <span lang="hi">{isToday ? "आज" : "इस दिन"} बनाम सामान्य</span> · vs usual
           </h3>
           <div className="grid gap-2.5 sm:grid-cols-3">
             {brief.todayVsUsual.map((c) => (
-              <div key={c.metric} className="space-y-1 rounded-card border border-line bg-surface p-3 shadow-e1">
+              <div key={c.metric} className="tile space-y-1 rounded-card p-3">
                 <div className="flex items-center justify-between gap-2 text-xs font-semibold text-ink">
                   <span lang="hi">{c.metricHi}</span>
                   <span lang="hi" className="text-2xs font-normal text-ink-subtle">
@@ -352,55 +354,87 @@ function DailyView({
 
 /* ---- Weekly / Monthly ----------------------------------------------------------- */
 
+/** "2026-09-29" -> "29 Sep"; anything that is not an ISO date is returned as it came. */
+function shortDate(iso: string): string {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso);
+  if (!m) return iso;
+  return new Date(Date.UTC(+m[1], +m[2] - 1, +m[3])).toLocaleDateString("en-IN", { day: "numeric", month: "short", timeZone: "UTC" });
+}
+
 function WeeklyView({ brief, patientName }: { brief: CaregiverWeeklyBrief; patientName: string }) {
   const has = brief.hasData;
+  const noAttention = brief.topAttention.length === 1 && brief.topAttention[0].startsWith("इस सप्ताह के दर्ज रिकॉर्ड में कोई विशेष चेतावनी");
   return (
     <Card className="space-y-4">
-      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-line pb-3">
+      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-gold-line pb-3">
         <div className="min-w-0">
           <h2 lang="hi" className="text-base font-semibold text-ink sm:text-lg">
             {patientName} — इस हफ़्ते का सारांश
           </h2>
-          <p className="text-xs text-ink-subtle">
-            {brief.weekStartStr} से {brief.weekEndStr} · औसत और नियमितता
+          <p className="text-xs text-ink-muted">
+            {shortDate(brief.weekStartStr)} – {shortDate(brief.weekEndStr)} · <span lang="hi">औसत और नियमितता</span>
           </p>
         </div>
         <Badge variant="neutral">
-          रूटीन स्कोर: {brief.routineScoreIsSufficient ? brief.routineScore : "—"}
+          <span lang="hi">रूटीन स्कोर</span>: {brief.routineScoreIsSufficient ? brief.routineScore : "—"}
         </Badge>
       </div>
 
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+      <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-5">
         <Metric label="औसत BP" value={has.bp ? brief.avgBP : "—"} helper={has.bp ? undefined : "रीडिंग नहीं"} />
         <Metric label="औसत कदम" value={has.steps ? `${brief.avgSteps.toLocaleString("en-IN")} / दिन` : "—"} helper={has.steps ? undefined : "डेटा नहीं"} />
         <Metric label="औसत नींद" value={has.sleep ? `${brief.avgSleepHours} घंटे` : "—"} helper={has.sleep ? undefined : "डेटा नहीं"} />
         <Metric
+          label="औसत कैलोरी"
+          value={has.calories ? `${brief.avgCalories.toLocaleString("en-IN")} kcal` : "—"}
+          helper={has.calories ? "पूरे दिनों का औसत" : "डेटा नहीं"}
+        />
+        <Metric
           label="दवा पालन"
           value={brief.medAdherencePercent === null ? "—" : `${brief.medAdherencePercent}%`}
           helper={brief.medAdherencePercent === null ? "दवा का डेटा नहीं" : undefined}
+          className="col-span-2 sm:col-span-1"
         />
       </div>
 
-      <p className="text-xs text-ink-muted">
-        <span lang="hi">डेटा पूर्णता: {brief.dataCompletenessPercent}%</span>
+      <p lang="hi" className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-ink-muted">
+        <span>डेटा पूर्णता: {brief.dataCompletenessPercent}%</span>
+        <span>वजन: {brief.weightChangeStr}</span>
       </p>
 
-      {brief.topChanges.length > 0 ? (
-        <div className="space-y-1 rounded-card border border-info-line bg-info-soft p-3.5 text-xs">
-          <span lang="hi" className="block font-semibold text-info">
-            इस हफ़्ते के मुख्य बदलाव
+      <div className="grid gap-3 sm:grid-cols-2">
+        <div className={cn("space-y-1.5 rounded-card border p-3.5 text-sm", noAttention ? "border-positive-line bg-positive-soft" : "border-attention-line bg-attention-soft")}>
+          <span lang="hi" className={cn("flex items-center gap-1.5 text-xs font-semibold sm:text-sm", noAttention ? "text-positive" : "text-attention")}>
+            {noAttention ? <CheckCircle2 aria-hidden className="h-4 w-4" /> : <AlertTriangle aria-hidden className="h-4 w-4" />}
+            {noAttention ? "इस हफ़्ते कोई चेतावनी नहीं" : "इस हफ़्ते ध्यान देने योग्य"}
           </span>
-          {brief.topChanges.map((c) => (
-            <p key={c} lang="hi" className="text-ink-muted">
-              • {c}
-            </p>
-          ))}
+          <ul lang="hi" className="space-y-1 text-xs text-ink-muted">
+            {brief.topAttention.map((a) => (
+              <li key={a} className="flex items-start gap-1.5">
+                <span aria-hidden>•</span>
+                <span>{a}</span>
+              </li>
+            ))}
+          </ul>
         </div>
-      ) : (
-        <p lang="hi" className="text-xs text-ink-subtle">
-          तुलना के लिए अभी पर्याप्त डेटा नहीं है।
-        </p>
-      )}
+
+        {brief.topChanges.length > 0 ? (
+          <div className="space-y-1.5 rounded-card border border-info-line bg-info-soft p-3.5 text-xs">
+            <span lang="hi" className="flex items-center gap-1.5 text-xs font-semibold text-info sm:text-sm">
+              <Info aria-hidden className="h-4 w-4" />
+              इस हफ़्ते के मुख्य बदलाव
+            </span>
+            <ul lang="hi" className="space-y-1 text-ink-muted">
+              {brief.topChanges.map((c) => (
+                <li key={c} className="flex items-start gap-1.5">
+                  <span aria-hidden>•</span>
+                  <span>{c}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
+      </div>
     </Card>
   );
 }
@@ -409,22 +443,24 @@ function MonthlyView({ brief, patientName }: { brief: CaregiverMonthlyBrief; pat
   const has = brief.hasData;
   return (
     <Card className="space-y-4">
-      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-line pb-3">
+      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-gold-line pb-3">
         <div className="min-w-0">
           <h2 lang="hi" className="text-base font-semibold text-ink sm:text-lg">
             {patientName} — पिछले 30 दिनों का रुझान
           </h2>
-          <p className="text-xs text-ink-subtle">{brief.monthLabel}</p>
+          <p className="text-xs text-ink-muted">{brief.monthLabel}</p>
         </div>
         <Badge variant="neutral">
-          औसत स्कोर: {brief.routineScoreIsSufficient ? brief.routineScore : "—"}
+          <span lang="hi">औसत स्कोर</span>: {brief.routineScoreIsSufficient ? brief.routineScore : "—"}
         </Badge>
       </div>
 
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+      <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-6">
         <Metric label="वजन ट्रेंड" value={WEIGHT_TREND_HI[brief.weightTrend]} />
         <Metric label="BP ट्रेंड" value={BP_TREND_HI[brief.bpTrend]} />
         <Metric label="औसत कदम" value={has.steps ? brief.stepsAvg.toLocaleString("en-IN") : "—"} helper={has.steps ? undefined : "डेटा नहीं"} />
+        <Metric label="औसत नींद" value={has.sleep ? `${brief.sleepAvgHours} घंटे` : "—"} helper={has.sleep ? undefined : "डेटा नहीं"} />
+        <Metric label="भोजन दर्ज" value={`${brief.foodConsistencyPercent}%`} helper="30 में से दर्ज दिन" />
         <Metric
           label="दवा पालन"
           value={brief.medAdherencePercent === null ? "—" : `${brief.medAdherencePercent}%`}
@@ -433,15 +469,18 @@ function MonthlyView({ brief, patientName }: { brief: CaregiverMonthlyBrief; pat
       </div>
 
       {brief.notableChanges.length > 0 ? (
-        <div className="space-y-1.5 rounded-card border border-line bg-surface-sunken p-3.5 text-xs">
-          <span lang="hi" className="block font-semibold text-ink">
+        <div className="tile space-y-1.5 rounded-card p-3.5 text-xs">
+          <span lang="hi" className="block text-sm font-semibold text-ink">
             महीने के मुख्य बिंदु
           </span>
-          {brief.notableChanges.map((item) => (
-            <p key={item} lang="hi" className="text-ink-muted">
-              • {item}
-            </p>
-          ))}
+          <ul lang="hi" className="space-y-1.5 text-ink-muted">
+            {brief.notableChanges.map((item) => (
+              <li key={item} className="flex items-start gap-1.5">
+                <span aria-hidden>•</span>
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
         </div>
       ) : null}
     </Card>
@@ -450,8 +489,16 @@ function MonthlyView({ brief, patientName }: { brief: CaregiverMonthlyBrief; pat
 
 /* ---- Container ------------------------------------------------------------------ */
 
-export function CaregiverHeroBrief({ patientId, patientName }: CaregiverHeroBriefProps) {
-  const { authorizedPatients, setActivePatientId, canWrite } = useAuth();
+const ROLE_BADGE = { owner: "मालिक · Owner", editor: "एडिटर · Editor", viewer: "सिर्फ़ देखने वाला · Viewer" } as const;
+
+function initials(name: string): string {
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+  if (parts.length === 0) return "?";
+  return (parts[0][0] + (parts[1]?.[0] ?? "")).toUpperCase();
+}
+
+export function CaregiverHeroBrief({ patientId, patientName, onLogged }: CaregiverHeroBriefProps) {
+  const { authorizedPatients, setActivePatientId, canWrite, memberRole } = useAuth();
   const tabsId = useId();
   const patientSelectId = useId();
   const today = todayIST();
@@ -467,47 +514,73 @@ export function CaregiverHeroBrief({ patientId, patientName }: CaregiverHeroBrie
   const active = viewMode === "daily" ? daily : viewMode === "weekly" ? weekly : monthly;
 
   const dayChoice: DayChoice = selectedDate === yesterday ? "yesterday" : "today";
+  const patient = authorizedPatients.find((p) => p.id === patientId);
+  const subline = [patient?.age ? `${patient.age} साल` : null, patient?.gender ?? null].filter(Boolean).join(" · ");
 
   return (
     <div className="space-y-4">
-      <div className="no-print flex flex-wrap items-end justify-between gap-3 rounded-card border border-line bg-surface p-3 shadow-e1 print:hidden">
-        {authorizedPatients.length > 1 ? (
-          <div className="min-w-0 flex-1 sm:max-w-xs">
-            <label htmlFor={patientSelectId} className="mb-1 flex items-center gap-1.5 text-xs font-medium text-ink-muted">
-              <UserCheck aria-hidden className="h-3.5 w-3.5 text-brand" />
-              मरीज़ चुनें (Viewing)
-            </label>
-            <Select id={patientSelectId} value={patientId} onChange={(e) => setActivePatientId(e.target.value)}>
-              {authorizedPatients.map((p) => (
-                <option key={p.id} value={p.id}>
-                  {p.name}
-                </option>
-              ))}
-            </Select>
+      <Card tone="raised" className="no-print print:hidden">
+        <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-3">
+          <div className="flex min-w-0 flex-1 basis-60 items-center gap-3">
+            <span
+              aria-hidden
+              className="grad-gold-button grid h-12 w-12 shrink-0 place-items-center rounded-full border border-gold-line text-base font-bold text-gold-ink shadow-gold-button"
+            >
+              {initials(patientName)}
+            </span>
+            {authorizedPatients.length > 1 ? (
+              <div className="min-w-0 flex-1 sm:max-w-xs">
+                <label htmlFor={patientSelectId} className="mb-1 flex items-center gap-1.5 text-xs font-medium text-ink-muted">
+                  <UserCheck aria-hidden className="h-3.5 w-3.5 text-brand-ink" />
+                  <span lang="hi">मरीज़ चुनें</span> (Viewing)
+                </label>
+                <Select id={patientSelectId} value={patientId} onChange={(e) => setActivePatientId(e.target.value)}>
+                  {authorizedPatients.map((p) => (
+                    <option key={p.id} value={p.id}>
+                      {p.name}
+                    </option>
+                  ))}
+                </Select>
+              </div>
+            ) : (
+              <div className="min-w-0">
+                <p className="text-xs font-medium text-ink-muted">
+                  <span lang="hi">देखभाल किसकी</span> · Viewing
+                </p>
+                <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                  <h2 className="truncate text-lg font-semibold leading-tight text-ink">{patientName}</h2>
+                  {memberRole ? (
+                    <Badge variant={memberRole === "viewer" ? "neutral" : "brand"}>
+                      <span lang="hi">{ROLE_BADGE[memberRole]}</span>
+                    </Badge>
+                  ) : null}
+                </div>
+                {subline ? (
+                  <p lang="hi" className="text-xs text-ink-muted">
+                    {subline}
+                    {patient?.target_weight_kg ? ` · लक्ष्य वजन ${patient.target_weight_kg} kg` : ""}
+                  </p>
+                ) : null}
+              </div>
+            )}
           </div>
-        ) : (
-          <p className="flex items-center gap-2 text-sm font-semibold text-ink">
-            <UserCheck aria-hidden className="h-4 w-4 text-brand" />
-            <span className="text-xs font-medium text-ink-muted">Viewing:</span>
-            {patientName}
-          </p>
-        )}
 
-        <div className="flex items-center gap-2">
-          {viewMode === "daily" ? (
-            <Segmented
-              options={DAY_OPTIONS}
-              value={dayChoice}
-              onChange={(v) => setSelectedDate(v === "yesterday" ? yesterday : today)}
-              ariaLabel="Day — दिन चुनें"
-              size="sm"
-            />
-          ) : null}
-          <IconButton aria-label="रिफ्रेश करें (Refresh)" loading={active.refreshing} onClick={active.reload}>
-            <RefreshCw aria-hidden className="h-4 w-4" />
-          </IconButton>
+          <div className="flex items-center gap-2">
+            {viewMode === "daily" ? (
+              <Segmented
+                options={DAY_OPTIONS}
+                value={dayChoice}
+                onChange={(v) => setSelectedDate(v === "yesterday" ? yesterday : today)}
+                ariaLabel="Day — दिन चुनें"
+                size="sm"
+              />
+            ) : null}
+            <IconButton variant="secondary" aria-label="रिफ्रेश करें (Refresh)" title="रिफ्रेश करें" loading={active.refreshing} onClick={active.reload}>
+              <RefreshCw aria-hidden className="h-4 w-4" />
+            </IconButton>
+          </div>
         </div>
-      </div>
+      </Card>
 
       <Segmented
         mode="tabs"
@@ -550,7 +623,10 @@ export function CaregiverHeroBrief({ patientId, patientName }: CaregiverHeroBrie
           onClose={() => setIsQuickLogOpen(false)}
           patientId={patientId}
           patientName={patientName}
-          onSuccess={daily.reload}
+          onSuccess={() => {
+            daily.reload();
+            onLogged?.();
+          }}
         />
       ) : null}
     </div>

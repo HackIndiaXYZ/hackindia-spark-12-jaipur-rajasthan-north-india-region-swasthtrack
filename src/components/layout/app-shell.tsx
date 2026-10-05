@@ -72,9 +72,9 @@ function AppShellContent({ children }: PropsWithChildren) {
         <Sidebar />
 
         {/* The sidebar is fixed at 17rem on lg+, so the content column is inset
-            rather than overlapped. On phones the column is padded by the fixed
-            bottom nav's height, so the footer is never hidden behind it. */}
-        <div className="flex min-h-dvh flex-1 flex-col pb-[var(--bottom-nav-h)] lg:pl-68">
+            rather than overlapped. On phones the footer pads itself by the fixed
+            bottom nav's height, so nothing is hidden behind it. */}
+        <div className="flex min-h-dvh flex-1 flex-col lg:pl-68">
           <Header />
 
           {/*
@@ -91,7 +91,7 @@ function AppShellContent({ children }: PropsWithChildren) {
             {children}
           </main>
 
-          <Footer />
+          <Footer reserveBottomNav />
         </div>
 
         <BottomNavigation />

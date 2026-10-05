@@ -10,7 +10,7 @@ import type { TraceInfo } from "./use-soie";
 export function TracePanel({ trace }: { trace: TraceInfo }) {
   const [open, setOpen] = useState(false);
   return (
-    <Card tone="sunken" className="text-xs">
+    <Card tone="sunken" flush className="p-3 text-xs">
       <button type="button" onClick={() => setOpen((o) => !o)} aria-expanded={open} className="flex min-h-control w-full items-center justify-between gap-2 text-left font-semibold text-ink-muted">
         <span>
           Developer trace · {trace.intent} · {trace.steps.length} steps
@@ -27,11 +27,11 @@ export function TracePanel({ trace }: { trace: TraceInfo }) {
             {trace.privacyFlags > 0 ? <Badge variant="critical">privacy flags {trace.privacyFlags}</Badge> : null}
             {trace.failure ? <Badge variant="attention">AI failure: {trace.failure.reason}</Badge> : null}
           </div>
-          <pre className="max-h-64 overflow-auto whitespace-pre-wrap rounded-field bg-surface p-2.5 font-mono text-2xs text-ink-muted">
+          <pre tabIndex={0} aria-label="Developer trace steps" className="max-h-64 overflow-auto whitespace-pre-wrap rounded-field bg-surface p-2.5 font-mono text-2xs text-ink-muted">
             {trace.steps.map((s) => `${String(s.t).padStart(5)} ms  ${s.kind.padEnd(8)} ${s.label}${s.detail ? `  (${s.detail})` : ""}`).join("\n")}
           </pre>
-          <pre className="overflow-auto rounded-field bg-surface p-2.5 font-mono text-2xs text-ink-muted">{JSON.stringify(trace.telemetry, null, 2)}</pre>
-          {trace.webUrls.length > 0 ? <p className="break-all text-ink-subtle">web results: {trace.webUrls.join(" · ")}</p> : null}
+          <pre tabIndex={0} aria-label="Developer trace telemetry" className="max-h-64 overflow-auto rounded-field bg-surface p-2.5 font-mono text-2xs text-ink-muted">{JSON.stringify(trace.telemetry, null, 2)}</pre>
+          {trace.webUrls.length > 0 ? <p className="break-all text-ink-muted">web results: {trace.webUrls.join(" · ")}</p> : null}
         </div>
       ) : null}
     </Card>

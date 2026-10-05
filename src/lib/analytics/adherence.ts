@@ -224,3 +224,40 @@ export function overduePendingDoses(doses: DoseRecord[], nowMinutes: number, tod
     (d) => d.date === today && d.status === "pending" && nowMinutes >= d.scheduledMin + graceMin,
   );
 }
+
+/** One IST day's doses, summarised (the history chart's bar). */
+export interface DayAdherence extends AdherenceSummary {
+  date: string;
+}
+
+/** One row per IST date in [startDate, endDate] (zero-filled when nothing was due), oldest first. */
+export function summarizeByDate(doses: DoseRecord[], startDate: string, endDate: string): DayAdherence[] {
+  const byDate = new Map<string, DoseRecord[]>();
+  for (const d of doses) {
+    const list = byDate.get(d.date);
+    if (list) list.push(d);
+    else byDate.set(d.date, [d]);
+  }
+  return eachIST(startDate, endDate).map((date) => ({ date, ...summarizeAdherence(byDate.get(date) ?? []) }));
+}
+
+/** Adherence per medicine over the window, in schedule order. */
+export function summarizeByMedicine(
+  doses: DoseRecord[],
+): Array<AdherenceSummary & { medicineId: string; name: string; scheduledMin: number; days: Array<{ date: string; status: DoseStatus }> }> {
+  const byMed = new Map<string, DoseRecord[]>();
+  for (const d of doses) {
+    const list = byMed.get(d.medicineId);
+    if (list) list.push(d);
+    else byMed.set(d.medicineId, [d]);
+  }
+  return [...byMed.values()]
+    .map((list) => ({
+      ...summarizeAdherence(list),
+      medicineId: list[0].medicineId,
+      name: list[0].name,
+      scheduledMin: list[0].scheduledMin,
+      days: list.map((d) => ({ date: d.date, status: d.status })),
+    }))
+    .sort((a, b) => a.scheduledMin - b.scheduledMin || a.name.localeCompare(b.name));
+}

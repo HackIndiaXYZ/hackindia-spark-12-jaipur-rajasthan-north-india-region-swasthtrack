@@ -259,9 +259,10 @@ export function agentCases(): EvalCase[] {
       c.eq(r.answer.notices[0]?.code, "no_api_key", "first notice");
     }),
     caseOf(G, "agent:crisis-lead-on-ai-answer", "an AI answer is forced to lead with the crisis reading, whatever it wrote", async (c) => {
-      const { draft, ctx } = await flow("crisis", "weight kitna hai");
+      const q = "pichle 7 din ka BP kaisa raha";
+      const { draft, ctx } = await flow("crisis", q);
       const client = scripted([turn([toolUse("t1", "get_overview", { detail: "summary" })], "tool_use"), turn([toolUse("t2", "submit_answer", draft)], "tool_use")]);
-      const r = await runTurn(input(ctx, "weight kitna hai"), cfg(client));
+      const r = await runTurn(input(ctx, q), cfg(client));
       c.eq(r.answer.engine, "ai", "engine");
       c.ok(r.answer.answer_hi.startsWith("ध्यान दें"), "lead first");
       c.eq(r.answer.safety_level, "escalate", "safety_level");

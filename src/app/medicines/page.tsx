@@ -3,27 +3,35 @@
 import { useState } from "react";
 import { Pill, Plus, UserRound } from "lucide-react";
 import { AddMedicineDialog } from "@/components/forms/add-medicine-dialog";
-import { MedicineAdherenceSummary } from "@/components/medicines/medicine-adherence-summary";
+import { MedicationSafetyNote, MedicineAdherenceSummary } from "@/components/medicines/medicine-adherence-summary";
+import { MedicineHistory } from "@/components/medicines/medicine-history";
 import { MedicineSchedule } from "@/components/medicines/medicine-schedule";
 import { Button } from "@/components/ui/button";
-import { EmptyState, ErrorState, PageBody } from "@/components/ui/page";
+import { EmptyState, ErrorState, PageBody, PageHeader } from "@/components/ui/page";
 import { useToast } from "@/components/ui/toast";
-import { PageTitle } from "@/components/ui/page-title";
 import { useAuth } from "@/context/auth-context";
 import { useMedicineMarking } from "@/hooks/use-medicine-marking";
 import { todayIST } from "@/lib/health-rules";
 
-const TITLE = {
-  eyebrow: "Medicine Tracking (दवाइयाँ)",
-  title: "Medicine Schedule & Adherence",
-};
+function Header() {
+  return (
+    <PageHeader
+      eyebrow="Medicine Tracking (दवाइयाँ)"
+      title="Medicine Schedule & Adherence"
+      hindiTitle="दवाइयाँ और नियमितता"
+      description="रोज़ की खुराक दर्ज करें और देखें कि दवाइयाँ कितनी नियमित ली जा रही हैं।"
+    />
+  );
+}
 
 export default function MedicinesPage() {
   const { activePatientId, canWrite } = useAuth();
   const [isAddOpen, setIsAddOpen] = useState(false);
+  // The day the schedule shows; the history chart and its table change it.
+  const [selectedDate, setSelectedDate] = useState(todayIST);
   const toast = useToast();
 
-  // Today's doses drive the summary and the "no medicines yet" state. The schedule
+  // Today's doses drive the hero and the "no medicines yet" state. The schedule
   // below has its own hook for whichever day is selected; both stay in sync
   // because every write re-notifies the other mounted hooks.
   const today = useMedicineMarking(activePatientId, todayIST());
@@ -31,7 +39,7 @@ export default function MedicinesPage() {
   if (!activePatientId) {
     return (
       <PageBody>
-        <PageTitle {...TITLE} />
+        <Header />
         <EmptyState
           icon={UserRound}
           title="No patient selected"
@@ -45,9 +53,9 @@ export default function MedicinesPage() {
   if (today.loading) {
     return (
       <PageBody>
-        <PageTitle {...TITLE} />
+        <Header />
         <div className="space-y-4" aria-busy="true" aria-label="दवाइयाँ लोड हो रही हैं">
-          <div className="skeleton h-36 w-full rounded-card" />
+          <div className="skeleton h-48 w-full rounded-card" />
           <div className="skeleton h-64 w-full rounded-card" />
         </div>
       </PageBody>
@@ -57,7 +65,7 @@ export default function MedicinesPage() {
   if (today.error) {
     return (
       <PageBody>
-        <PageTitle {...TITLE} />
+        <Header />
         <ErrorState
           title="दवाइयाँ लोड नहीं हो पाईं"
           englishTitle="The medicine list could not be loaded"
@@ -73,7 +81,7 @@ export default function MedicinesPage() {
   if (today.medicines.length === 0) {
     return (
       <PageBody>
-        <PageTitle {...TITLE} />
+        <Header />
         <EmptyState
           icon={Pill}
           title="No medicines added yet"
@@ -102,11 +110,27 @@ export default function MedicinesPage() {
     );
   }
 
+  function openDay(date: string) {
+    setSelectedDate(date);
+    const el = document.getElementById("med-schedule");
+    if (el) {
+      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      el.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+    }
+  }
+
   return (
     <PageBody>
-      <PageTitle {...TITLE} />
-      <MedicineAdherenceSummary summary={today.summary} />
-      <MedicineSchedule patientId={activePatientId} onAddMedicine={() => setIsAddOpen(true)} />
+      <Header />
+      <MedicineAdherenceSummary summary={today.summary} doses={today.doses} />
+      <MedicationSafetyNote />
+      <MedicineSchedule
+        patientId={activePatientId}
+        date={selectedDate}
+        onDateChange={setSelectedDate}
+        onAddMedicine={() => setIsAddOpen(true)}
+      />
+      <MedicineHistory patientId={activePatientId} selectedDate={selectedDate} onSelectDate={openDay} />
       <AddMedicineDialog
         isOpen={isAddOpen}
         onClose={() => setIsAddOpen(false)}

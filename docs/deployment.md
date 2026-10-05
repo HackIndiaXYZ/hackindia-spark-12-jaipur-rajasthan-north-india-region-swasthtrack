@@ -81,22 +81,33 @@ removed with it).
 `supabase/schema.sql` is **not** a setup script any more. It only documents
 that the migrations replaced it.
 
-### Food dataset import (optional, local only)
+### Food catalogue (bundled in the app) and the optional database copy
 
-The food catalogue (Indian foods, household portions) is seeded from CSV files in
-`supabase/seed_data/`.
+The Indian food catalogue (names in English and Hindi, spelling variants, state of
+origin, calories and macros per 100 g, household portions) ships **inside the app**
+as `src/data/food-catalogue.json`. Search, calories and emojis work straight after a
+deploy; nothing has to be seeded for them. How the data is built and checked is in
+[`docs/food-catalogue.md`](food-catalogue.md).
+
+The database copy only exists so a food can be marked as a favourite and linked from
+a food log. It is optional and safe to re-run (ids are stable):
 
 1. Put `SUPABASE_SERVICE_ROLE_KEY` (and `NEXT_PUBLIC_SUPABASE_URL`) in
    `.env.local` on your computer.
-2. Run:
+2. See what would change first, then run it for real:
 
    ```bash
+   node scripts/import-food-dataset.js --dry-run
    node scripts/import-food-dataset.js
    ```
 
 3. Do it from your own machine, not in CI and not on Vercel. The script refuses
    to run without the service key. Remove the key from `.env.local` afterwards if
    you do not need it again.
+
+The import also switches off (`is_active = false`, nothing is deleted) the rows an
+older seed left in `food_items`, and moves favourites that pointed at them to the
+matching new food. The old CSVs in `supabase/seed_data/` are no longer read.
 
 ## 4. GitHub and Vercel
 

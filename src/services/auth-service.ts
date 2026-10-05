@@ -265,6 +265,34 @@ export async function sendPasswordResetCode(email: string): Promise<void> {
   if (error && !isUnknownAccountError(error)) throw mapAuthError(error);
 }
 
+/**
+ * Verifying a recovery code signs the user in *before* the new password is set.
+ * While that is in flight the login screen must stay mounted: if the guard
+ * redirected a "signed-in" visitor to the dashboard, a rejected password
+ * (same as the old one, too weak, offline) would have nowhere to show its error
+ * and the user would just bounce back to an empty login form.
+ * `AuthGuard` subscribes to this.
+ */
+let pendingSessionFlows = 0;
+const holdListeners = new Set<() => void>();
+
+function setHold(delta: 1 | -1): void {
+  pendingSessionFlows = Math.max(0, pendingSessionFlows + delta);
+  holdListeners.forEach((listener) => listener());
+}
+
+export function subscribeAuthFlowHold(listener: () => void): () => void {
+  holdListeners.add(listener);
+  return () => {
+    holdListeners.delete(listener);
+  };
+}
+
+/** True while a multi-step auth flow has a session that is not yet complete. */
+export function isAuthFlowHeld(): boolean {
+  return pendingSessionFlows > 0;
+}
+
 /** Verify the emailed code, then set the new password. The user ends up signed in. */
 export async function resetPasswordWithCode(email: string, code: string, newPassword: string): Promise<void> {
   requireConfigured();
@@ -272,14 +300,19 @@ export async function resetPasswordWithCode(email: string, code: string, newPass
   const token = requireCode(code);
   requirePassword(newPassword);
 
-  const { error: verifyError } = await supabase.auth.verifyOtp({ email: cleanEmail, token, type: "recovery" });
-  if (verifyError) throw mapAuthError(verifyError);
+  setHold(1);
+  try {
+    const { error: verifyError } = await supabase.auth.verifyOtp({ email: cleanEmail, token, type: "recovery" });
+    if (verifyError) throw mapAuthError(verifyError);
 
-  const { error: updateError } = await supabase.auth.updateUser({ password: newPassword });
-  if (updateError) {
-    // Do not leave a half-finished recovery session behind.
-    await supabase.auth.signOut();
-    throw mapAuthError(updateError);
+    const { error: updateError } = await supabase.auth.updateUser({ password: newPassword });
+    if (updateError) {
+      // Do not leave a half-finished recovery session behind (this device only).
+      await supabase.auth.signOut({ scope: "local" });
+      throw mapAuthError(updateError);
+    }
+  } finally {
+    setHold(-1);
   }
 }
 
@@ -376,7 +409,10 @@ export async function clearLocalUserData(): Promise<void> {
 
 export async function signOut(): Promise<void> {
   try {
-    if (isSupabaseConfigured) await supabase.auth.signOut();
+    // `local`: sign out THIS device. The default (`global`) revokes every session
+    // of the account, so a caregiver leaving the laptop would log the parent out
+    // of their own phone.
+    if (isSupabaseConfigured) await supabase.auth.signOut({ scope: "local" });
   } finally {
     await clearLocalUserData();
   }

@@ -43,12 +43,16 @@ const COMPONENTS: Array<{ key: ComponentKey; nameHi: string; icon: LucideIcon; t
 
 function CardTitleRow() {
   return (
-    <div className="flex items-center gap-2">
-      <span className="flex h-7 w-7 items-center justify-center rounded-control bg-gold-soft text-gold-ink">
-        <Sparkles aria-hidden className="h-4 w-4" />
+    <div className="flex min-w-0 items-center gap-2.5">
+      <span
+        aria-hidden
+        className="grid h-8 w-8 shrink-0 place-items-center rounded-control border border-gold-line grad-gold-button text-gold-ink shadow-gold-button"
+      >
+        <Sparkles className="h-4 w-4" />
       </span>
-      <h2 className="text-base font-semibold text-ink sm:text-lg">
-        Today&apos;s Wellness Score <span lang="hi" className="font-normal text-ink-muted">· दैनिक ट्रैकिंग स्कोर</span>
+      <h2 className="flex min-w-0 flex-wrap items-baseline gap-x-2 text-base font-semibold leading-tight text-ink">
+        <span lang="hi">स्कोर किससे बना</span>
+        <span className="text-xs font-medium text-ink-muted">Score breakdown</span>
       </h2>
     </div>
   );
@@ -63,13 +67,12 @@ export function WellnessScoreCard({ wellness, onRetry }: WellnessScoreCardProps)
 
   if (wellness.status === "loading") {
     return (
-      <Card aria-busy="true" aria-label="स्कोर की गणना हो रही है">
+      <Card id="score-breakdown" aria-busy="true" aria-label="स्कोर की गणना हो रही है" className="scroll-mt-20">
         <div className="flex items-center justify-between">
           <div className="skeleton h-5 w-48" />
           <div className="skeleton h-6 w-20" />
         </div>
-        <div className="mt-4 skeleton h-16 w-full" />
-        <div className="mt-4 grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-6">
+        <div className="mt-4 grid grid-cols-2 gap-2.5">
           {COMPONENTS.map((c) => (
             <div key={c.key} className="skeleton h-20" />
           ))}
@@ -80,7 +83,7 @@ export function WellnessScoreCard({ wellness, onRetry }: WellnessScoreCardProps)
 
   if (wellness.status === "error") {
     return (
-      <Card>
+      <Card id="score-breakdown" className="scroll-mt-20">
         <CardTitleRow />
         <ErrorState
           className="mt-3"
@@ -97,7 +100,7 @@ export function WellnessScoreCard({ wellness, onRetry }: WellnessScoreCardProps)
 
   if (!r.isSufficient) {
     return (
-      <Card>
+      <Card id="score-breakdown" className="scroll-mt-20">
         <CardTitleRow />
         <div className="mt-3 rounded-card border border-dashed border-line-strong bg-surface-sunken p-4">
           <p lang="hi" className="text-sm font-semibold text-ink">
@@ -125,49 +128,47 @@ export function WellnessScoreCard({ wellness, onRetry }: WellnessScoreCardProps)
   const categoryInfo = getScoreCategory(r.totalScore);
 
   return (
-    <Card>
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-        <div>
-          <CardTitleRow />
-          <p lang="hi" className="mt-1 text-xs text-ink-muted">
-            {DISCLAIMER}
+    <Card id="score-breakdown" className="scroll-mt-20" aria-label="Wellness score breakdown — स्कोर किससे बना">
+      <div className="flex items-start justify-between gap-3">
+        <CardTitleRow />
+        {/* The hero ring already shows the score; this is the number the breakdown adds up to. */}
+        <div className="shrink-0 text-right">
+          <p className="tabular text-2xl font-semibold leading-none text-ink">
+            {r.totalScore}
+            <span className="text-sm font-medium text-ink-muted">/{r.maxScore}</span>
           </p>
+          <Badge variant={categoryInfo.badgeTone} className="mt-1.5">
+            {r.category}
+          </Badge>
         </div>
+      </div>
+      <p lang="hi" className="mt-2 text-xs text-ink-muted">
+        {DISCLAIMER}
+      </p>
+
+      <div className="mt-3 grid grid-cols-2 gap-2">
         <Button
-          size="sm"
+          variant="secondary"
+          onClick={() => setShowExplanation((v) => !v)}
+          aria-expanded={showExplanation}
+          className="px-2.5"
+        >
+          <Info aria-hidden className="h-4 w-4 shrink-0 text-brand-ink" />
+          <span lang="hi">आज यह स्कोर क्यों?</span>
+          {showExplanation ? (
+            <ChevronUp aria-hidden className="h-4 w-4 shrink-0 text-ink-muted" />
+          ) : (
+            <ChevronDown aria-hidden className="h-4 w-4 shrink-0 text-ink-muted" />
+          )}
+        </Button>
+        <Button
           variant={showCaregiverView ? "primary" : "secondary"}
           onClick={() => setShowCaregiverView((v) => !v)}
           aria-pressed={showCaregiverView}
-          className="self-start"
+          className="px-2.5"
         >
-          <UserCheck aria-hidden className="h-4 w-4" />
+          <UserCheck aria-hidden className="h-4 w-4 shrink-0" />
           <span lang="hi">{showCaregiverView ? "सामान्य व्यू" : "परिवार का सारांश"}</span>
-        </Button>
-      </div>
-
-      {/* Score hero: the one gold moment in this card */}
-      <div className="gold-edge mt-4 flex flex-col gap-4 rounded-panel p-4 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex items-baseline gap-3">
-          <div className="flex items-baseline">
-            <span className="grad-text tabular text-4xl font-bold tracking-tight sm:text-5xl">{r.totalScore}</span>
-            <span className="text-sm font-semibold text-ink-muted sm:text-base">/{r.maxScore}</span>
-          </div>
-          <div className="space-y-0.5">
-            <Badge variant={categoryInfo.badgeTone}>{r.category}</Badge>
-            <p lang="hi" className="text-xs font-medium text-ink-muted">
-              {r.categoryHi}
-            </p>
-          </div>
-        </div>
-
-        <Button variant="secondary" onClick={() => setShowExplanation((v) => !v)} aria-expanded={showExplanation}>
-          <Info aria-hidden className="h-4 w-4 text-brand" />
-          <span lang="hi">आज यह स्कोर क्यों?</span>
-          {showExplanation ? (
-            <ChevronUp aria-hidden className="h-4 w-4 text-ink-muted" />
-          ) : (
-            <ChevronDown aria-hidden className="h-4 w-4 text-ink-muted" />
-          )}
         </Button>
       </div>
 
@@ -235,7 +236,7 @@ export function WellnessScoreCard({ wellness, onRetry }: WellnessScoreCardProps)
       ) : null}
 
       {showExplanation ? (
-        <div className="mt-3 space-y-2 rounded-card border border-line bg-surface-sunken p-4 text-sm">
+        <div className="tile mt-3 space-y-2 rounded-card p-4 text-sm">
           <p lang="hi" className="text-xs font-semibold text-ink-muted">
             स्कोर के मुख्य कारण
           </p>
@@ -270,55 +271,57 @@ export function WellnessScoreCard({ wellness, onRetry }: WellnessScoreCardProps)
       ) : null}
 
       {/* Component breakdown */}
-      <ul className="mt-4 grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-6">
-        {COMPONENTS.map(({ key, nameHi, icon: Icon, tone }) => {
-          const c = r.components[key];
-          const scored = c.isScored;
-          return (
-            <li
-              key={key}
-              className={cn(
-                "flex flex-col justify-between rounded-card border p-3",
-                scored ? "border-line bg-surface" : "border-line bg-surface-sunken",
-              )}
-            >
-              <div className="flex items-center justify-between gap-2">
-                <span lang="hi" className="text-xs font-semibold text-ink-muted">
-                  {nameHi}
-                </span>
-                <span className={cn("grid h-6 w-6 place-items-center rounded-field", metricChipClasses[tone])}>
-                  <Icon aria-hidden className="h-3.5 w-3.5" />
-                </span>
-              </div>
-              {scored ? (
-                <>
-                  <p className="tabular mt-2 text-lg font-bold text-ink">
-                    {c.score}
-                    <span className="text-xs font-medium text-ink-muted">/{c.maxScore}</span>
-                  </p>
-                  <div
-                    role="progressbar"
-                    aria-label={`${nameHi} ${c.percent}%`}
-                    aria-valuemin={0}
-                    aria-valuemax={100}
-                    aria-valuenow={c.percent}
-                    className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-surface-sunken"
+      <div className="@container mt-4">
+        <ul className="grid grid-cols-2 gap-2.5 @2xl:grid-cols-3">
+          {COMPONENTS.map(({ key, nameHi, icon: Icon, tone }) => {
+            const c = r.components[key];
+            const scored = c.isScored;
+            return (
+              <li
+                key={key}
+                className={cn(
+                  "flex flex-col justify-between rounded-card p-3",
+                  scored ? "tile" : "border border-line bg-surface-sunken",
+                )}
+              >
+                <div className="flex items-center justify-between gap-2">
+                  <span lang="hi" className="text-xs font-semibold text-ink-muted">
+                    {nameHi}
+                  </span>
+                  <span
+                    aria-hidden
+                    className={cn("grid h-6 w-6 shrink-0 place-items-center rounded-field", metricChipClasses[tone])}
                   >
-                    <div className="h-full rounded-full bg-brand" style={{ width: `${c.percent}%` }} />
-                  </div>
-                </>
-              ) : (
-                <p lang="hi" className="mt-2 text-sm font-semibold text-ink-muted">
-                  अभी लागू नहीं
+                    <Icon className="h-3.5 w-3.5" />
+                  </span>
+                </div>
+                {scored ? (
+                  <>
+                    <p className="tabular mt-2 text-lg font-semibold text-ink">
+                      {c.score}
+                      <span className="text-xs font-medium text-ink-muted">/{c.maxScore}</span>
+                    </p>
+                    <ProgressBar
+                      size="sm"
+                      value={c.percent}
+                      max={100}
+                      ariaLabel={`${nameHi} ${c.percent}%`}
+                      className="mt-1.5"
+                    />
+                  </>
+                ) : (
+                  <p lang="hi" className="mt-2 text-sm font-semibold text-ink-muted">
+                    अभी लागू नहीं
+                  </p>
+                )}
+                <p lang="hi" className="mt-2 line-clamp-2 text-2xs text-ink-muted" title={c.detailsHi}>
+                  {c.detailsHi}
                 </p>
-              )}
-              <p lang="hi" className="mt-2 line-clamp-2 text-2xs text-ink-muted" title={c.detailsHi}>
-                {c.detailsHi}
-              </p>
-            </li>
-          );
-        })}
-      </ul>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
     </Card>
   );
 }

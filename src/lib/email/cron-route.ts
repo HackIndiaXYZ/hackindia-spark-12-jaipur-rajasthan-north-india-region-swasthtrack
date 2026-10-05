@@ -1,6 +1,7 @@
 import { timingSafeEqual } from "node:crypto";
 import { getNotifierClient } from "@/lib/supabase/notifier";
 import { runEmailJob } from "@/services/email-notification-service";
+import { fillRecipient } from "./layout";
 import { getReportConfig, sendMail } from "./mailer";
 import type { RenderedEmail } from "./templates";
 
@@ -48,7 +49,9 @@ export async function runCron(
     if (!email) return Response.json({ sent: false, reason: "nothing to report" });
 
     if (new URL(request.url).searchParams.get("dryRun") === "1") {
-      return new Response(email.html, { headers: { "content-type": "text/html; charset=utf-8" } });
+      return new Response(fillRecipient(email, config.recipients[0]).html, {
+        headers: { "content-type": "text/html; charset=utf-8" },
+      });
     }
 
     const result = await sendMail(config.recipients, email);

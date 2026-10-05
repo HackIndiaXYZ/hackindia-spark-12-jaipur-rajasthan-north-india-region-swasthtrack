@@ -60,13 +60,13 @@ export function PatientSwitcher({
         className={cn(
           "pressable flex w-full min-w-0 items-center gap-2.5 text-left",
           variant === "sidebar"
-            ? "min-h-11 rounded-card border border-brand-line bg-surface px-3 py-2 hover:border-brand"
-            : "min-h-11 rounded-control px-1.5 hover:bg-surface-sunken",
+            ? "surface-lift min-h-11 rounded-card px-3 py-2"
+            : "min-h-11 rounded-control px-1.5 hover:bg-surface/60",
         )}
       >
         <span
           aria-hidden
-          className="grid h-9 w-9 shrink-0 place-items-center rounded-control bg-brand-soft text-sm font-semibold text-brand-ink"
+          className="grid h-9 w-9 shrink-0 place-items-center rounded-control bg-gold-soft text-sm font-semibold text-gold-ink ring-1 ring-gold-line"
         >
           {initialsOf(active?.name)}
         </span>
@@ -92,7 +92,7 @@ export function PatientSwitcher({
           aria-label="मरीज़ चुनें — Choose patient"
           onKeyDown={onMenuKeyDown}
           className={cn(
-            "reveal absolute z-50 mt-1.5 w-72 max-w-[calc(100vw-2rem)] overflow-hidden rounded-card border border-line bg-surface py-1.5 shadow-e3",
+            "reveal surface-lift absolute z-50 mt-1.5 w-72 max-w-[calc(100vw-2rem)] overflow-hidden rounded-card py-1.5 shadow-e4",
             variant === "sidebar" ? "left-0 right-0 w-auto" : "left-0 top-full",
           )}
         >
@@ -113,13 +113,13 @@ export function PatientSwitcher({
                 className={cn(
                   "flex min-h-12 w-full items-center gap-3 px-3.5 py-1.5 text-left text-sm",
                   selected
-                    ? "bg-brand-soft text-brand-ink"
-                    : "text-ink hover:bg-surface-sunken focus-visible:bg-surface-sunken",
+                    ? "bg-gold-soft text-ink"
+                    : "text-ink hover:bg-gold-soft/70 focus-visible:bg-gold-soft/70",
                 )}
               >
                 <span
                   aria-hidden
-                  className="grid h-8 w-8 shrink-0 place-items-center rounded-field bg-surface-sunken text-xs font-semibold text-ink-muted"
+                  className="grid h-8 w-8 shrink-0 place-items-center rounded-field bg-surface-sunken text-xs font-semibold text-ink-muted ring-1 ring-line"
                 >
                   {initialsOf(patient.name)}
                 </span>

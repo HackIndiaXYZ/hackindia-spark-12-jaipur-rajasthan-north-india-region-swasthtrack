@@ -3,8 +3,8 @@
 import { useCallback, useId, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import Image from "next/image";
 import { CalendarDays, Eye, LogOut, Menu, MessageSquareText, X } from "lucide-react";
+import { LogoMark } from "@/components/brand/logo-mark";
 import { CurrentDate } from "@/components/layout/current-date";
 import { OfflineBanner } from "@/components/layout/offline-banner";
 import { PatientSwitcher } from "@/components/layout/patient-switcher";
@@ -43,7 +43,7 @@ export function Header() {
   const hasSwitcher = authorizedPatients.length > 1;
 
   return (
-    <header className="frost sticky top-0 z-30 border-b border-line pt-safe">
+    <header className="frost sticky top-0 z-30 pt-safe">
       {/* ---------- MOBILE ----------
           Two actions only. The previous header packed six 34px icon buttons
           into the right edge; they were below the 44px tap minimum and gave no
@@ -56,15 +56,7 @@ export function Header() {
             className="shrink-0 rounded-control"
             aria-label="Dashboard — होम"
           >
-            <Image
-              src="/logo.jpg"
-              alt=""
-              width={72}
-              height={72}
-              sizes="36px"
-              priority
-              className="h-9 w-9 rounded-control border border-line object-cover"
-            />
+            <LogoMark sizes="40px" priority className="h-10 w-10" />
           </Link>
 
           {hasSwitcher ? (
@@ -98,10 +90,10 @@ export function Header() {
             aria-label="Ask SwasthTrack — डेटा से पूछें"
             aria-current={pathname === "/ask" ? "page" : undefined}
             className={cn(
-              "pressable grid h-11 w-11 place-items-center rounded-control border",
+              "pressable grid h-11 w-11 place-items-center rounded-control",
               pathname === "/ask"
-                ? "border-meds bg-meds-soft text-meds"
-                : "border-line bg-surface text-ink-muted",
+                ? "grad-gold-button border border-gold-line text-gold-ink shadow-gold-button"
+                : "surface-lift text-ink-muted",
             )}
           >
             <MessageSquareText aria-hidden className="h-5 w-5" />
@@ -116,7 +108,7 @@ export function Header() {
               aria-haspopup="menu"
               aria-controls={menuOpen ? menuId : undefined}
               aria-label={menuOpen ? "Close menu — बंद करें" : "Open menu — और विकल्प"}
-              className="pressable grid h-11 w-11 place-items-center rounded-control border border-line bg-surface text-ink-muted"
+              className="pressable surface-lift grid h-11 w-11 place-items-center rounded-control text-ink-muted"
             >
               {menuOpen ? (
                 <X aria-hidden className="h-5 w-5" />
@@ -132,7 +124,7 @@ export function Header() {
                 role="menu"
                 aria-label="और विकल्प — More"
                 onKeyDown={onMenuKeyDown}
-                className="reveal absolute right-0 top-13 z-50 w-64 max-w-[calc(100vw-2rem)] overflow-hidden rounded-card border border-line bg-surface shadow-e3"
+                className="reveal surface-lift absolute right-0 top-13 z-50 w-64 max-w-[calc(100vw-2rem)] overflow-hidden rounded-card shadow-e4"
               >
                 <div className="py-1.5">
                   {secondaryNavigation.map((item) => {
@@ -148,8 +140,8 @@ export function Header() {
                         className={cn(
                           "flex min-h-11 items-center gap-3 px-3.5 text-sm focus-visible:outline-offset-[-2px]",
                           active
-                            ? "bg-brand-soft font-semibold text-brand-ink"
-                            : "text-ink hover:bg-surface-sunken",
+                            ? "bg-gold-soft font-semibold text-ink"
+                            : "text-ink hover:bg-gold-soft/70",
                         )}
                       >
                         <Icon aria-hidden className="h-4.5 w-4.5 shrink-0 text-ink-subtle" />
@@ -161,7 +153,7 @@ export function Header() {
                     );
                   })}
                 </div>
-                <div className="border-t border-line py-1.5">
+                <div className="border-t border-line-strong/50 py-1.5">
                   {informationNavigation.map((item) => (
                     <Link
                       key={item.href}
@@ -169,14 +161,17 @@ export function Header() {
                       href={item.href}
                       aria-current={isNavActive(item.href, pathname) ? "page" : undefined}
                       onClick={closeMenu}
-                      className="flex min-h-11 items-center gap-3 px-3.5 text-sm text-ink-muted hover:bg-surface-sunken focus-visible:outline-offset-[-2px]"
+                      className={cn(
+                        "flex min-h-11 items-center gap-3 px-3.5 text-sm hover:bg-gold-soft/70 focus-visible:outline-offset-[-2px]",
+                        isNavActive(item.href, pathname) ? "bg-gold-soft font-semibold text-ink" : "text-ink-muted",
+                      )}
                     >
                       <item.icon aria-hidden className="h-4.5 w-4.5 shrink-0 text-ink-subtle" />
                       <span className="truncate">{item.label}</span>
                     </Link>
                   ))}
                 </div>
-                <div className="border-t border-line py-1.5">
+                <div className="border-t border-line-strong/50 py-1.5">
                   <button
                     type="button"
                     role="menuitem"
@@ -184,7 +179,7 @@ export function Header() {
                       closeMenu();
                       void signOut();
                     }}
-                    className="flex min-h-11 w-full items-center gap-3 px-3.5 text-left text-sm text-ink-muted hover:bg-surface-sunken focus-visible:outline-offset-[-2px]"
+                    className="flex min-h-11 w-full items-center gap-3 px-3.5 text-left text-sm text-ink-muted hover:bg-gold-soft/70 focus-visible:outline-offset-[-2px]"
                   >
                     <LogOut aria-hidden className="h-4.5 w-4.5 shrink-0 text-ink-subtle" />
                     <span className="min-w-0 flex-1 truncate">Sign out</span>
@@ -208,7 +203,7 @@ export function Header() {
           <div className="mt-0.5 flex flex-wrap items-center gap-2.5">
             <Link
               href="/profile"
-              className="text-lg font-semibold text-ink hover:text-brand"
+              className="text-lg font-semibold text-ink hover:text-gold-ink"
             >
               {patient?.name || "Patient"}
             </Link>
@@ -227,8 +222,8 @@ export function Header() {
         </div>
 
         <div className="flex shrink-0 items-center gap-2.5">
-          <div className="flex min-h-11 items-center gap-2 rounded-control border border-line bg-surface px-3 text-sm text-ink-muted">
-            <CalendarDays aria-hidden className="h-4 w-4 text-brand" />
+          <div className="surface-lift flex min-h-11 items-center gap-2 rounded-control px-3 text-sm text-ink-muted shadow-e1">
+            <CalendarDays aria-hidden className="h-4 w-4 text-gold-ink" />
             <CurrentDate />
           </div>
 
@@ -236,10 +231,10 @@ export function Header() {
             href="/ask"
             aria-current={pathname === "/ask" ? "page" : undefined}
             className={cn(
-              "pressable flex min-h-11 items-center gap-2 rounded-control border px-3.5 text-sm font-semibold",
+              "pressable flex min-h-11 items-center gap-2 rounded-control px-3.5 text-sm font-semibold",
               pathname === "/ask"
-                ? "border-meds bg-meds-soft text-meds"
-                : "border-line bg-surface text-ink-muted hover:border-meds-line hover:text-meds",
+                ? "grad-gold-button border border-gold-line text-gold-ink shadow-gold-button"
+                : "surface-lift text-ink hover:[--lift-fill:var(--color-gilt-1)]",
             )}
           >
             <MessageSquareText aria-hidden className="h-4 w-4" />

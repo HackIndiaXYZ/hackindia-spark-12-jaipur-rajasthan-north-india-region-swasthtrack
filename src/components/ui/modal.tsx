@@ -98,6 +98,9 @@ function lockScroll() {
   const scrollbar = window.innerWidth - documentElement.clientWidth;
   if (scrollbar > 0) body.style.paddingRight = `${scrollbar}px`;
 
+  // Lets other fixed UI (the toast stack) get out of a bottom sheet's way.
+  documentElement.setAttribute("data-modal-open", "");
+
   body.style.position = "fixed";
   body.style.top = `-${savedScrollY}px`;
   body.style.left = "0";
@@ -110,7 +113,8 @@ function unlockScroll() {
   lockCount = Math.max(0, lockCount - 1);
   if (lockCount !== 0 || !savedBodyStyle) return;
 
-  const { body } = document;
+  const { body, documentElement } = document;
+  documentElement.removeAttribute("data-modal-open");
   Object.assign(body.style, savedBodyStyle);
   savedBodyStyle = null;
   window.scrollTo({ top: savedScrollY, behavior: "instant" });
@@ -291,17 +295,17 @@ export function Modal({
         aria-describedby={description ? descriptionId : undefined}
         tabIndex={-1}
         className={cn(
-          "modal-panel relative flex w-full flex-col overflow-hidden bg-surface shadow-e4 outline-none",
+          "modal-panel gilt relative flex w-full flex-col overflow-hidden shadow-e4 outline-none",
           // Phone: bottom sheet that stops below the status bar. `dvh` follows
           // the browser toolbars, unlike vh.
-          "max-h-[calc(100dvh-max(0.75rem,env(safe-area-inset-top)))] rounded-t-sheet border border-b-0 border-line",
+          "max-h-[calc(100dvh-max(0.75rem,env(safe-area-inset-top)))] rounded-t-sheet border-b-0",
           // Tablet / desktop: centred card.
           "sm:max-h-[calc(100dvh-2rem)] sm:rounded-sheet sm:border-b",
           widthClasses[resolvedSize],
           className,
         )}
       >
-        {/* Gold hairline — the one accent moment on an otherwise quiet sheet. */}
+        {/* Gold foil bar — the one accent moment on the sheet. */}
         <div aria-hidden className="grad-spring absolute inset-x-0 top-0 h-1" />
 
         <div className="flex shrink-0 items-start justify-between gap-4 border-b border-line px-4 pb-4 pt-5 sm:px-6 sm:pt-6">
@@ -338,7 +342,7 @@ export function Modal({
               type="button"
               onClick={onClose}
               aria-label="Close dialog — बंद करें"
-              className="pressable -mr-1 -mt-1 flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-control bg-surface-sunken text-ink-muted transition-colors hover:bg-line hover:text-ink"
+              className="pressable -mr-1 -mt-1 flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-control bg-surface/70 text-ink-muted ring-1 ring-gold-line/60 transition-colors hover:bg-surface hover:text-ink"
             >
               <X aria-hidden className="h-5 w-5" />
             </button>
@@ -358,7 +362,7 @@ export function Modal({
         ) : null}
 
         {footer ? (
-          <div className="shrink-0 border-t border-line bg-surface px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-3 sm:px-6 sm:pb-4">
+          <div className="shrink-0 border-t border-line-strong/60 bg-surface/55 px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-3 sm:px-6 sm:pb-4">
             {footer}
           </div>
         ) : null}

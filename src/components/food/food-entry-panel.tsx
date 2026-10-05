@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useId, useMemo, useRef, useState, type FormEvent, type KeyboardEvent } from "react";
-import { AlertTriangle, Bookmark, BookmarkPlus, ChevronRight, ExternalLink, History, Plus, Search, Sparkles, Star, Trash2, X } from "lucide-react";
+import { AlertTriangle, Bookmark, BookmarkPlus, CalendarClock, ChevronRight, ExternalLink, History, Plus, Search, Sparkles, Star, Trash2, UtensilsCrossed, X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button, IconButton } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -9,16 +9,21 @@ import { Field, NumberInput, Select, TextInput } from "@/components/ui/form-fiel
 import { Segmented, type SegmentedOption } from "@/components/ui/segmented";
 import { useToast } from "@/components/ui/toast";
 import { useAsyncData } from "@/components/health/use-async-data";
-import { fmtTime } from "@/components/health/format";
+import { fmtDateStrFull, fmtTime, relativeDayLabel } from "@/components/health/format";
 import {
   MEAL_SLOTS,
   OIL_OPTIONS,
   UNKNOWN_OIL_NOTE,
+  ENTRY_PANEL_ID,
+  SEARCH_INPUT_ID,
+  consumedAtFor,
   isCatalogueId,
+  mealSlotNow,
   oilCalories,
   type Confidence,
 } from "@/components/food/food-math";
-import { istHour } from "@/lib/health-rules";
+import { categoryLabel, foodSubtitle, loggedUnit } from "@/lib/food/catalogue";
+import { todayIST } from "@/lib/health-rules";
 import { cn, getExactFoodEmoji, readLocalPref, writeLocalPref } from "@/lib/utils";
 import {
   addCustomFood,
@@ -45,21 +50,16 @@ type FoodEntryPanelProps = {
   calorieTarget?: number | null;
   /** False for viewers: the panel then only explains that logging is switched off. */
   canWrite: boolean;
+  /** The IST day the log list is showing; new meals are saved onto it (default today). */
+  logDate?: string;
+  /** Selected meal slot. Pass both to let the page choose it (the meal cards' "add" buttons). */
+  mealType?: string;
+  onMealTypeChange?: (meal: string) => void;
   onSuccess?: () => void;
 };
 
 const HISTORY_KEY = "swasthtrack_search_history";
 
-/** Slot for the current India time, so the right meal is pre-selected (the reader can change it). */
-function mealSlotNow(): string {
-  const hour = istHour(new Date());
-  if (hour >= 6 && hour < 10) return "Breakfast";
-  if (hour >= 10 && hour < 12) return "Mid-morning";
-  if (hour >= 12 && hour < 16) return "Lunch";
-  if (hour >= 16 && hour < 19) return "Evening snack";
-  if (hour >= 19 && hour < 22) return "Dinner";
-  return "Bedtime";
-}
 
 const MEAL_OPTIONS: SegmentedOption<string>[] = MEAL_SLOTS.map((m) => ({ value: m.id, label: m.label }));
 
@@ -68,6 +68,17 @@ function confidenceVariant(c: Confidence) {
 }
 
 /* ---- Search (combobox + listbox) ---------------------------------------------- */
+
+/** The Indian pack mark: green dot = vegetarian, red = non-vegetarian, amber = contains egg. */
+function DietMark({ diet }: { diet: NonNullable<FoodItem["diet"]> }) {
+  const tone = diet === "veg" ? "border-positive text-positive" : diet === "egg" ? "border-attention text-attention" : "border-critical text-critical";
+  const label = diet === "veg" ? "शाकाहारी" : diet === "egg" ? "अंडा" : "मांसाहारी";
+  return (
+    <span role="img" aria-label={label} title={label} className={cn("inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-[3px] border-[1.5px]", tone)}>
+      <span aria-hidden className="h-2 w-2 rounded-full bg-current" />
+    </span>
+  );
+}
 
 type SearchState = { results: FoodItem[]; corrected?: string; notFound: boolean; failed: boolean; searching: boolean };
 const EMPTY_SEARCH: SearchState = { results: [], notFound: false, failed: false, searching: false };
@@ -81,7 +92,6 @@ function FoodSearch({
   onAddCustom: (name: string) => void;
   onOnlineSearch: (name: string) => void;
 }) {
-  const inputId = useId();
   const listId = useId();
   const [query, setQuery] = useState("");
   const [state, setState] = useState<SearchState>(EMPTY_SEARCH);
@@ -172,7 +182,7 @@ function FoodSearch({
         <div className="relative">
           <Search aria-hidden className="pointer-events-none absolute left-3.5 top-1/2 h-5 w-5 -translate-y-1/2 text-ink-subtle" />
           <TextInput
-            id={inputId}
+            id={SEARCH_INPUT_ID}
             type="text"
             role="combobox"
             aria-expanded={open}
@@ -232,7 +242,7 @@ function FoodSearch({
             >
               <span className="flex min-w-0 items-center gap-3">
                 <span aria-hidden className="shrink-0 text-2xl">
-                  {getExactFoodEmoji(food.name, food.category)}
+                  {food.emoji ?? getExactFoodEmoji(food.name, food.category)}
                 </span>
                 <span className="min-w-0">
                   <span className="block truncate font-semibold text-ink">
@@ -244,11 +254,14 @@ function FoodSearch({
                     ) : null}
                   </span>
                   <span className="block text-xs text-ink-subtle">
-                    {food.category} · {food.calories_per_100g ? `${food.calories_per_100g} kcal/100g` : "कैलोरी की जानकारी नहीं"}
+                    {foodSubtitle(food)}
                   </span>
                 </span>
               </span>
-              <ChevronRight aria-hidden className="h-5 w-5 shrink-0 text-ink-subtle" />
+              <span className="flex shrink-0 items-center gap-2">
+                {food.diet ? <DietMark diet={food.diet} /> : null}
+                <ChevronRight aria-hidden className="h-5 w-5 text-ink-subtle" />
+              </span>
             </li>
           ))}
         </ul>
@@ -306,6 +319,7 @@ function SelectedFoodEditor({
   food,
   patientId,
   mealType,
+  logDate,
   initialQuantity,
   isFavorite,
   onToggleFavorite,
@@ -315,6 +329,8 @@ function SelectedFoodEditor({
   food: FoodItem;
   patientId: string;
   mealType: string;
+  /** IST day the meal is saved onto. */
+  logDate: string;
   initialQuantity?: number;
   isFavorite: boolean;
   onToggleFavorite: () => void;
@@ -377,7 +393,7 @@ function SelectedFoodEditor({
         meal_type: mealType,
         food_name: food.name_hi ? `${food.name} (${food.name_hi})` : food.name,
         quantity: qty,
-        unit: portion ? portion.portion_name : food.reference_unit,
+        unit: portion ? loggedUnit(portion.portion_name) : food.reference_unit,
         standardized_grams: Math.round(estimate.grams),
         calories: estimate.kcal,
         protein_g: Math.round(per100(food.protein_g_100g)),
@@ -390,7 +406,7 @@ function SelectedFoodEditor({
         calorie_confidence: estimate.confidence,
         source_type: needsManual ? "user_entered" : food.source_type,
         source_note: food.source_note || (needsManual ? "Calories typed by hand" : "Standard database entry"),
-        consumed_at: new Date().toISOString(),
+        consumed_at: consumedAtFor(logDate, mealType, todayIST()),
         notes: oil === "Unknown" ? UNKNOWN_OIL_NOTE : null,
       });
       toast.success(`${food.name} दर्ज हो गया`, `~${estimate.kcal} kcal · ${estimate.confidence} confidence`);
@@ -403,10 +419,13 @@ function SelectedFoodEditor({
   }
 
   return (
-    <div className="space-y-4 rounded-card border border-line bg-surface-sunken p-4 sm:p-5">
+    <div className="tile space-y-4 rounded-card p-4 sm:p-5">
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <Badge variant="brand">{food.category}</Badge>
+          <span className="flex items-center gap-2">
+            <Badge variant="brand">{categoryLabel(food.category)}</Badge>
+            {food.diet ? <DietMark diet={food.diet} /> : null}
+          </span>
           <h3 className="mt-1 text-lg font-semibold text-ink">
             {food.name}
             {food.name_hi ? (
@@ -483,7 +502,9 @@ function SelectedFoodEditor({
               onClick={() => setOil(o.id)}
               className={cn(
                 "pressable min-h-control cursor-pointer rounded-control border px-3 text-sm font-medium",
-                oil === o.id ? "border-brand bg-brand text-ink-inverse" : "border-line bg-surface text-ink-muted hover:border-line-strong",
+                oil === o.id
+                  ? "grad-gold-button border-gold-line text-gold-ink shadow-gold-button"
+                  : "border-line bg-surface text-ink-muted hover:border-gold-line hover:text-ink",
               )}
             >
               {o.label}
@@ -575,7 +596,12 @@ function CustomFoodForm({
     if (!serving.trim() || Number.isNaN(size) || size <= 0) found.serving = "मात्रा 0 से ज़्यादा लिखें";
     if (Number.isNaN(prot) || prot < 0) found.protein = "सही संख्या लिखें";
     setErrors(found);
-    return Object.keys(found).length === 0 ? { kcal, size, prot } : null;
+    if (Object.keys(found).length > 0) {
+      // Move focus to the first field that needs fixing (after the error state has rendered).
+      requestAnimationFrame(() => document.querySelector<HTMLElement>('#custom-food-form [aria-invalid="true"]')?.focus());
+      return null;
+    }
+    return { kcal, size, prot };
   }
 
   async function submit(e: FormEvent) {
@@ -629,7 +655,7 @@ function CustomFoodForm({
   }
 
   return (
-    <form onSubmit={(e) => void submit(e)} noValidate className="space-y-4 rounded-card border border-line bg-surface-sunken p-4 sm:p-5">
+    <form id="custom-food-form" onSubmit={(e) => void submit(e)} noValidate className="tile space-y-4 rounded-card p-4 sm:p-5">
       <h3 className="flex items-center gap-2 text-lg font-semibold text-ink">
         <Plus aria-hidden className="h-5 w-5 text-brand" />
         {sourceType === "web_reference" ? "वेब से मिली जानकारी जोड़ें" : "नया भोजन जोड़ें (Custom food)"}
@@ -702,9 +728,23 @@ function CustomFoodForm({
 
 type Picked = { food: FoodItem; initialQuantity?: number };
 
-export function FoodEntryPanel({ patientId, patientName, calorieTarget, canWrite, onSuccess }: FoodEntryPanelProps) {
+export function FoodEntryPanel({
+  patientId,
+  patientName,
+  calorieTarget,
+  canWrite,
+  logDate,
+  mealType: controlledMeal,
+  onMealTypeChange,
+  onSuccess,
+}: FoodEntryPanelProps) {
   const toast = useToast();
-  const [mealType, setMealType] = useState(mealSlotNow);
+  const [ownMeal, setOwnMeal] = useState(mealSlotNow);
+  const mealType = controlledMeal ?? ownMeal;
+  const setMealType = onMealTypeChange ?? setOwnMeal;
+  const today = todayIST();
+  const targetDate = logDate ?? today;
+  const isToday = targetDate >= today;
   const [picked, setPicked] = useState<Picked | null>(null);
   const [custom, setCustom] = useState<{ name: string; sourceType: "user_entered" | "web_reference" } | null>(null);
   const [savedFoods, setSavedFoods] = useState<SavedFoodItem[]>(() => getSavedFoods(patientId));
@@ -717,7 +757,7 @@ export function FoodEntryPanel({ patientId, patientName, calorieTarget, canWrite
 
   if (!canWrite) {
     return (
-      <p lang="hi" className="rounded-card border border-info-line bg-info-soft p-4 text-sm text-ink-muted">
+      <p lang="hi" role="status" className="rounded-card border border-info-line bg-info-soft p-4 text-sm text-ink-muted">
         आपके पास सिर्फ़ देखने की अनुमति है, इसलिए भोजन दर्ज करना बंद है। नीचे दर्ज किया हुआ भोजन देख सकते हैं।
       </p>
     );
@@ -822,26 +862,40 @@ export function FoodEntryPanel({ patientId, patientName, calorieTarget, canWrite
   };
 
   return (
-    <Card flush className="overflow-hidden">
-      <div className="grad-gold-button px-5 py-4 text-gold-ink sm:px-6 sm:py-5">
-        <h2 lang="hi" className="text-xl font-semibold tracking-tight">
-          आज क्या खाया?
-          <span className="ml-2 text-base font-normal opacity-90">Log a meal</span>
-        </h2>
-        <p lang="hi" className="mt-1 text-xs opacity-90">
-          {calorieTarget
-            ? `${patientName ? `${patientName} ` : ""}का रोज़ का लक्ष्य ${calorieTarget} kcal। हर भोजन यहाँ दर्ज करें।`
-            : "हर भोजन यहाँ दर्ज करें ताकि कैलोरी और प्रोटीन का हिसाब रहे।"}
-        </p>
+    <Card flush id={ENTRY_PANEL_ID} className="scroll-mt-20 overflow-hidden">
+      <div className="flex items-start gap-3 border-b border-line px-4 py-4 sm:px-6 sm:py-5">
+        <span aria-hidden className="grid h-11 w-11 shrink-0 place-items-center rounded-control bg-food-soft text-food ring-1 ring-food-line">
+          <UtensilsCrossed className="h-5 w-5" />
+        </span>
+        <div className="min-w-0">
+          <h2 lang="hi" className="text-lg font-semibold tracking-tight text-ink">
+            {isToday ? "आज क्या खाया?" : `${relativeDayLabel(targetDate, today)} का भोजन जोड़ें`}
+            <span className="ml-2 text-sm font-normal text-ink-muted">Log a meal</span>
+          </h2>
+          <p lang="hi" className="mt-0.5 text-xs text-ink-muted">
+            {calorieTarget
+              ? `${patientName ? `${patientName} ` : ""}का रोज़ का लक्ष्य ${calorieTarget} kcal। हर भोजन यहाँ दर्ज करें।`
+              : "हर भोजन यहाँ दर्ज करें ताकि कैलोरी और प्रोटीन का हिसाब रहे।"}
+          </p>
+        </div>
       </div>
 
-      <div className="space-y-6 p-4 sm:p-6">
+      <div className="space-y-5 p-4 sm:p-6">
+        {!isToday ? (
+          <p lang="hi" role="status" className="flex items-start gap-2 rounded-card border border-info-line bg-info-soft p-3 text-xs text-ink-muted">
+            <CalendarClock aria-hidden className="mt-0.5 h-4 w-4 shrink-0 text-info" />
+            <span>
+              आप {fmtDateStrFull(targetDate)} का रिकॉर्ड देख रहे हैं। यहाँ जोड़ा गया भोजन इसी दिन में, उस भोजन के सामान्य समय पर दर्ज होगा।
+            </span>
+          </p>
+        ) : null}
+
         <div>
           <div className="mb-1 flex flex-wrap items-center justify-between gap-2">
             <p id="meal-slot-label" className="text-sm font-medium text-ink">
               कौन सा भोजन? (Meal)
             </p>
-            <span className="text-xs text-ink-subtle">अभी का समय {fmtTime(new Date())}</span>
+            {isToday ? <span className="text-xs text-ink-muted">अभी का समय {fmtTime(new Date())}</span> : null}
           </div>
           <Segmented options={MEAL_OPTIONS} value={mealType} onChange={setMealType} ariaLabel="Meal slot — कौन सा भोजन" size="sm" />
         </div>
@@ -852,6 +906,7 @@ export function FoodEntryPanel({ patientId, patientName, calorieTarget, canWrite
             food={picked.food}
             patientId={patientId}
             mealType={mealType}
+            logDate={targetDate}
             initialQuantity={picked.initialQuantity}
             isFavorite={favoriteIds.has(picked.food.id)}
             onToggleFavorite={() => void handleToggleFavorite(picked.food)}
@@ -893,7 +948,7 @@ export function FoodEntryPanel({ patientId, patientName, calorieTarget, canWrite
                 </div>
                 <ul className="flex flex-wrap gap-2">
                   {savedFoods.map((s) => (
-                    <li key={s.id} className="flex items-center overflow-hidden rounded-control border border-brand-line bg-brand-softer">
+                    <li key={s.id} className="tile flex items-center overflow-hidden rounded-control">
                       <button
                         type="button"
                         onClick={() => pickSavedFood(s)}
@@ -935,7 +990,7 @@ export function FoodEntryPanel({ patientId, patientName, calorieTarget, canWrite
                         onClick={() => setPicked({ food: f })}
                         className="pressable flex min-h-control cursor-pointer items-center gap-1.5 rounded-control border border-gold-line bg-gold-soft px-3 text-sm font-medium text-gold-ink"
                       >
-                        <span aria-hidden>{getExactFoodEmoji(f.name, f.category)}</span>
+                        <span aria-hidden>{f.emoji ?? getExactFoodEmoji(f.name, f.category)}</span>
                         {f.name}
                       </button>
                     </li>
@@ -955,19 +1010,19 @@ export function FoodEntryPanel({ patientId, patientName, calorieTarget, canWrite
               </div>
 
               {quick.loading ? (
-                <div aria-busy="true" className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+                <div aria-busy="true" aria-label="लोड हो रहा है" className="flex gap-2 overflow-hidden sm:grid sm:grid-cols-4">
                   {[0, 1, 2, 3].map((i) => (
-                    <div key={i} className="skeleton h-20 rounded-card" />
+                    <div key={i} className="skeleton h-20 w-40 shrink-0 rounded-card sm:w-auto" />
                   ))}
                 </div>
               ) : quick.data && quick.data.length > 0 ? (
-                <ul className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+                <ul className="scroll-x -mx-1 flex gap-2 px-1 pb-1 sm:mx-0 sm:grid sm:grid-cols-4 sm:overflow-visible sm:px-0">
                   {quick.data.map((q) => (
-                    <li key={q.canonicalKey} className="relative">
+                    <li key={q.canonicalKey} className="relative w-40 shrink-0 snap-start sm:w-auto">
                       <button
                         type="button"
                         onClick={() => void pickQuickFood(q)}
-                        className="pressable flex min-h-20 w-full cursor-pointer flex-col justify-between rounded-card border border-line bg-surface p-3 pr-9 text-left shadow-e1 hover:border-brand-line"
+                        className="pressable tile flex min-h-20 w-full cursor-pointer flex-col justify-between rounded-card p-3 pr-9 text-left hover:border-gold-line"
                       >
                         <span className="flex min-w-0 items-center gap-1.5">
                           <span aria-hidden className="shrink-0 text-lg">
@@ -975,7 +1030,7 @@ export function FoodEntryPanel({ patientId, patientName, calorieTarget, canWrite
                           </span>
                           <span className="truncate text-xs font-semibold text-ink">{q.name}</span>
                         </span>
-                        <span className="mt-1 flex items-center justify-between gap-1 text-xs text-ink-subtle">
+                        <span className="mt-1 flex items-center justify-between gap-1 text-xs text-ink-muted">
                           <span lang="hi" className="truncate">
                             {q.name_hi || `${q.distinctDays30d} दिन`}
                           </span>
@@ -1000,7 +1055,7 @@ export function FoodEntryPanel({ patientId, patientName, calorieTarget, canWrite
                   ))}
                 </ul>
               ) : (
-                <div className="rounded-card border border-dashed border-line-strong bg-surface-sunken p-4 text-center">
+                <div className="rounded-card border border-dashed border-line-strong bg-surface/60 p-4 text-center">
                   <p lang="hi" className="text-xs font-medium text-ink-muted">
                     जो भोजन आप बार-बार दर्ज करेंगे (कम से कम 3 अलग दिन), वे यहाँ अपने-आप दिखने लगेंगे।
                   </p>

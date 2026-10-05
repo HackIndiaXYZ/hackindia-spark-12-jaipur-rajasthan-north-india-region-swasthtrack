@@ -64,23 +64,26 @@ function makeToastApi(
   });
 }
 
+// Frosted white glass with a metal rim (the same family as menus and the raised
+// card), carrying its meaning in a coloured accent bar and icon chip rather than
+// a full tinted fill, so a toast reads as part of the gilded UI.
 const toneStyles: Record<
   ToastTone,
-  { box: string; icon: string; Icon: typeof Info }
+  { accent: string; chip: string; Icon: typeof Info }
 > = {
   success: {
-    box: "border-positive-line bg-positive-soft",
-    icon: "text-positive",
+    accent: "bg-positive",
+    chip: "bg-positive-soft text-positive",
     Icon: CircleCheck,
   },
   error: {
-    box: "border-critical-line bg-critical-soft",
-    icon: "text-critical",
+    accent: "bg-critical",
+    chip: "bg-critical-soft text-critical",
     Icon: CircleAlert,
   },
   info: {
-    box: "border-info-line bg-info-soft",
-    icon: "text-info",
+    accent: "bg-info",
+    chip: "bg-info-soft text-info",
     Icon: Info,
   },
 };
@@ -122,7 +125,7 @@ function ToastCard({
     };
   }, [start]);
 
-  const { box, icon, Icon } = toneStyles[tone];
+  const { accent, chip, Icon } = toneStyles[tone];
 
   return (
     <li
@@ -133,12 +136,17 @@ function ToastCard({
       onFocus={pause}
       onBlur={start}
       className={cn(
-        "toast-in pointer-events-auto flex w-full items-start gap-3 rounded-card border p-3.5 shadow-e3",
+        "toast-in surface-lift pointer-events-auto relative flex w-full items-start gap-3 overflow-hidden rounded-card py-3 pl-4 pr-3 shadow-e4",
         "sm:max-w-sm",
-        box,
       )}
     >
-      <Icon aria-hidden className={cn("mt-0.5 h-5 w-5 shrink-0", icon)} />
+      <span aria-hidden className={cn("absolute inset-y-0 left-0 w-1", accent)} />
+      <span
+        aria-hidden
+        className={cn("grid h-8 w-8 shrink-0 place-items-center rounded-full", chip)}
+      >
+        <Icon className="h-4.5 w-4.5" />
+      </span>
       <div className="min-w-0 flex-1">
         <p lang={langOf(title)} className="text-sm font-semibold text-ink">
           {title}
@@ -156,7 +164,7 @@ function ToastCard({
         type="button"
         onClick={() => onDismiss(id)}
         aria-label="Dismiss notification — बंद करें"
-        className="-my-2 -mr-2.5 flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-control text-ink-muted transition-colors hover:bg-surface/70 hover:text-ink"
+        className="-my-2 -mr-2.5 flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-control text-ink-muted transition-colors hover:bg-gold-soft hover:text-ink"
       >
         <X aria-hidden className="h-4 w-4" />
       </button>
@@ -204,7 +212,10 @@ export function ToastProvider({ children }: { children: ReactNode }) {
           Sits above the mobile bottom nav (and its safe-area inset). */}
       <div
         data-toast-region
-        className="pointer-events-none fixed inset-x-0 z-[80] flex flex-col items-center gap-2 px-4 bottom-[calc(var(--bottom-nav-h)+0.75rem)] sm:items-end sm:px-6 lg:bottom-6 lg:right-0"
+        // While a dialog is open on a phone the stack moves to the top edge: a
+        // bottom sheet (e.g. the delete confirmation) owns the bottom of the
+        // screen and a toast there would cover its message and buttons.
+        className="pointer-events-none fixed inset-x-0 z-[80] flex flex-col items-center gap-2 px-4 bottom-[calc(var(--bottom-nav-h)+0.75rem)] max-sm:[[data-modal-open]_&]:bottom-auto max-sm:[[data-modal-open]_&]:top-[calc(max(0.75rem,env(safe-area-inset-top))+0.5rem)] sm:items-end sm:px-6 lg:bottom-6 lg:right-0"
       >
         <ul
           role="status"

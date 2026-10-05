@@ -1,0 +1,8406 @@
+{
+ "items": [
+  {
+   "slug": "chicken-mince-keema-raw",
+   "name": "Chicken Mince (Keema), Raw",
+   "hi": "चिकन कीमा (कच्चा)",
+   "alias": [
+    "chicken keema",
+    "murgi ka keema",
+    "minced chicken",
+    "ground chicken",
+    "chicken qeema",
+    "chicken kheema",
+    "kozhi keema"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍗",
+   "unit": "g",
+   "kcal": 168,
+   "p": 19.5,
+   "c": 0,
+   "f": 10,
+   "fib": 0,
+   "na": 75,
+   "portions": [
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    },
+    {
+     "n": "1 katori raw (150 g)",
+     "hi": "1 कटोरी (कच्चा)",
+     "g": 150
+    }
+   ],
+   "src": "IFCT 2017 chicken breast (168) / thigh (200) skinless; USDA ground chicken raw 143 kcal as lower bound",
+   "conf": "medium",
+   "note": "raw weight; butcher keema is a breast+thigh mix, fat 6-12 g depending on trimming"
+  },
+  {
+   "slug": "mutton-mince-keema-raw",
+   "name": "Mutton Mince (Keema), Raw",
+   "hi": "मटन कीमा (कच्चा)",
+   "alias": [
+    "mutton keema",
+    "bakre ka keema",
+    "goat mince",
+    "minced mutton",
+    "mutton qeema",
+    "mutton kheema",
+    "lamb keema",
+    "kima"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍖",
+   "unit": "g",
+   "kcal": 188,
+   "p": 20,
+   "c": 0,
+   "f": 12,
+   "fib": 0,
+   "na": 60,
+   "portions": [
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    },
+    {
+     "n": "1 katori raw (150 g)",
+     "hi": "1 कटोरी (कच्चा)",
+     "g": 150
+    }
+   ],
+   "src": "equal to IFCT 2017 goat shoulder (188 kcal, P20.3, F11.9); butcher keema is shoulder/leg trimmings",
+   "conf": "medium",
+   "note": "raw weight; very fatty keema can reach 230+ kcal, lean leg keema ~150"
+  },
+  {
+   "slug": "chicken-breast-boiled-skinless",
+   "name": "Chicken Breast, Boiled / Grilled (Skinless, Boneless)",
+   "hi": "उबला / ग्रिल्ड चिकन ब्रेस्ट (बिना खाल)",
+   "alias": [
+    "boiled chicken breast",
+    "grilled chicken breast",
+    "chicken breast boneless cooked",
+    "cooked chicken breast",
+    "plain chicken breast",
+    "gym chicken",
+    "tandoori chicken breast plain"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍗",
+   "unit": "g",
+   "kcal": 160,
+   "p": 29.5,
+   "c": 0,
+   "f": 4.5,
+   "fib": 0,
+   "na": 110,
+   "portions": [
+    {
+     "n": "1 breast fillet (120 g)",
+     "hi": "1 ब्रेस्ट फ़िले",
+     "g": 120
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "src": "USDA roasted chicken breast without skin (165 kcal, P31, F3.6); IFCT raw breast reads fatter, so a slightly higher fat is used",
+   "conf": "medium",
+   "note": "cooked weight, lightly salted, no oil; add ~40 kcal per tsp of oil used for pan-grilling"
+  },
+  {
+   "slug": "dried-fish-sukha-machhli",
+   "name": "Dried Fish (Sukha Machhli / Karuvadu), Salted",
+   "hi": "सूखी मछली (करुवाडु)",
+   "alias": [
+    "sukha machli",
+    "sukhi machhi",
+    "sukhi machhli",
+    "sukka machhi",
+    "karuvadu",
+    "unakka meen",
+    "shutki",
+    "shutki maach",
+    "sukat",
+    "sukhat",
+    "dry fish",
+    "dried fish"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "unit": "g",
+   "kcal": 275,
+   "p": 58,
+   "c": 0,
+   "f": 4.5,
+   "fib": 0,
+   "na": 3500,
+   "portions": [
+    {
+     "n": "1 small piece (15 g)",
+     "hi": "1 छोटा टुकड़ा",
+     "g": 15
+    },
+    {
+     "n": "1 handful (30 g)",
+     "hi": "1 मुट्ठी",
+     "g": 30
+    }
+   ],
+   "src": "NIN Nutritive Value of Indian Foods dried fish range (protein 55-65 g) + USDA dried salted cod 290 kcal",
+   "conf": "low",
+   "note": "sun-dried and heavily salted; sodium varies 1500-8000 mg per 100 g, so BP patients should treat it as very high salt; usually eaten 15-30 g as a side"
+  },
+  {
+   "slug": "dried-bombay-duck-sukha-bombil",
+   "name": "Bombay Duck, Dried (Sukha Bombil)",
+   "hi": "सूखा बोंबिल (बॉम्बे डक)",
+   "alias": [
+    "sukha bombil",
+    "sukka bombil",
+    "sukhi bombil",
+    "dry bombil",
+    "bombil dry",
+    "bombil sukka",
+    "sukhat bombil",
+    "bombay duck dry",
+    "dried bombil",
+    "nehari dry"
+   ],
+   "cat": "nonveg",
+   "region": "Maharashtra",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "unit": "g",
+   "kcal": 265,
+   "p": 55,
+   "c": 0,
+   "f": 5,
+   "fib": 0,
+   "na": 3500,
+   "portions": [
+    {
+     "n": "1 piece (10 g)",
+     "hi": "1 सूखा बोंबिल",
+     "g": 10
+    },
+    {
+     "n": "5 pieces (50 g)",
+     "hi": "5 बोंबिल",
+     "g": 50
+    }
+   ],
+   "src": "estimated from dried-fish composition (NIN dried fish, USDA dried cod) scaled to IFCT Bombay duck protein",
+   "conf": "low",
+   "note": "sun-dried, heavily salted; sodium varies 2000-6000 mg per 100 g"
+  },
+  {
+   "slug": "tuna-canned-in-water-drained",
+   "name": "Tuna, Canned in Water (Drained)",
+   "hi": "डिब्बाबंद ट्यूना (पानी में, छानकर)",
+   "alias": [
+    "canned tuna",
+    "tinned tuna",
+    "tuna tin",
+    "tuna chunks",
+    "tuna in brine",
+    "tuna can",
+    "light tuna"
+   ],
+   "cat": "nonveg",
+   "region": "International",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "unit": "g",
+   "kcal": 110,
+   "p": 25,
+   "c": 0,
+   "f": 1,
+   "fib": 0,
+   "na": 300,
+   "portions": [
+    {
+     "n": "1 small can drained (100 g)",
+     "hi": "1 छोटा कैन (छना हुआ)",
+     "g": 100
+    },
+    {
+     "n": "1/2 can drained (60 g)",
+     "hi": "आधा कैन",
+     "g": 60
+    }
+   ],
+   "src": "USDA canned light tuna in water, drained (116 kcal, P25.5, F0.8); Indian cans slightly saltier",
+   "conf": "high",
+   "note": "drained weight; tuna in oil or mayo is 190-250 kcal; brined cans can reach 400-500 mg sodium"
+  },
+  {
+   "slug": "processed-cheese-slice-cube",
+   "name": "Processed Cheese (Slice / Cube)",
+   "hi": "प्रोसेस्ड चीज़ (स्लाइस / क्यूब)",
+   "alias": [
+    "cheese",
+    "cheese slice",
+    "cheese slices",
+    "amul cheese",
+    "amul cheese slice",
+    "processed cheese slice",
+    "cheese cube",
+    "sandwich cheese",
+    "chiz",
+    "प्रोसेस्ड चीज़ स्लाइस"
+   ],
+   "cat": "dairy",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🧀",
+   "unit": "g",
+   "kcal": 310,
+   "p": 20,
+   "c": 3.5,
+   "f": 24,
+   "fib": 0,
+   "na": 1200,
+   "portions": [
+    {
+     "n": "1 slice (20 g)",
+     "hi": "1 स्लाइस",
+     "g": 20
+    },
+    {
+     "n": "1 cube (25 g)",
+     "hi": "1 क्यूब",
+     "g": 25
+    },
+    {
+     "n": "2 slices (40 g)",
+     "hi": "2 स्लाइस",
+     "g": 40
+    }
+   ],
+   "src": "packaged-label range for Indian processed cheese (Amul/Britannia ~290-330 kcal, P18-22, F22-26, sodium 1000-1300)",
+   "conf": "medium",
+   "note": "high in sodium: a single slice carries ~240 mg"
+  },
+  {
+   "slug": "cheddar-cheese",
+   "name": "Cheddar Cheese",
+   "hi": "चेडर चीज़",
+   "alias": [
+    "cheddar",
+    "chedar cheese",
+    "cheddar block",
+    "cheese block",
+    "cheddar cheese slice",
+    "yellow cheese"
+   ],
+   "cat": "dairy",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🧀",
+   "unit": "g",
+   "kcal": 403,
+   "p": 24.9,
+   "c": 1.3,
+   "f": 33.1,
+   "fib": 0,
+   "na": 620,
+   "portions": [
+    {
+     "n": "1 slice (20 g)",
+     "hi": "1 स्लाइस",
+     "g": 20
+    },
+    {
+     "n": "1 tbsp grated (7 g)",
+     "hi": "1 चम्मच कद्दूकस किया",
+     "g": 7
+    },
+    {
+     "n": "1 cube (25 g)",
+     "hi": "1 क्यूब",
+     "g": 25
+    }
+   ],
+   "src": "USDA cheddar cheese (403 kcal)",
+   "conf": "high",
+   "note": "natural cheddar; Indian packaged cheddar blocks are usually processed, closer to 330-370 kcal"
+  },
+  {
+   "slug": "mozzarella-cheese",
+   "name": "Mozzarella Cheese",
+   "hi": "मोज़ेरेला चीज़",
+   "alias": [
+    "mozarella",
+    "mozzarella",
+    "mozzarella cheese",
+    "pizza cheese",
+    "moza cheese",
+    "shredded mozzarella",
+    "mozerella"
+   ],
+   "cat": "dairy",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🧀",
+   "unit": "g",
+   "kcal": 296,
+   "p": 22,
+   "c": 2.5,
+   "f": 22,
+   "fib": 0,
+   "na": 620,
+   "portions": [
+    {
+     "n": "1 handful shredded (30 g)",
+     "hi": "1 मुट्ठी कद्दूकस की हुई",
+     "g": 30
+    },
+    {
+     "n": "1 pizza topping (50 g)",
+     "hi": "1 पिज़्ज़ा टॉपिंग",
+     "g": 50
+    },
+    {
+     "n": "1 slice (28 g)",
+     "hi": "1 स्लाइस",
+     "g": 28
+    }
+   ],
+   "src": "USDA mozzarella whole milk (300 kcal) and packaged Indian pizza mozzarella labels (~280-300)",
+   "conf": "medium",
+   "note": "whole-milk mozzarella; part-skim low-moisture is ~250-280 kcal"
+  },
+  {
+   "slug": "paneer-low-fat-toned",
+   "name": "Paneer, Low Fat (Toned / Skimmed Milk)",
+   "hi": "लो फैट पनीर (टोन्ड दूध)",
+   "alias": [
+    "low fat paneer",
+    "lite paneer",
+    "toned paneer",
+    "diet paneer",
+    "skimmed paneer",
+    "light paneer",
+    "low fat panir"
+   ],
+   "cat": "dairy",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🧀",
+   "unit": "g",
+   "kcal": 196,
+   "p": 19,
+   "c": 3,
+   "f": 12,
+   "fib": 0,
+   "na": 20,
+   "portions": [
+    {
+     "n": "1 cube (20 g)",
+     "hi": "1 टुकड़ा",
+     "g": 20
+    },
+    {
+     "n": "1 small katori cubes (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    }
+   ],
+   "src": "packaged low-fat paneer labels (Amul/Mother Dairy lite ranges 170-230 kcal) vs IFCT full-fat paneer 258",
+   "conf": "low",
+   "note": "brands vary a lot, check the pack; full-fat paneer is IFCT 258 kcal"
+  },
+  {
+   "slug": "fresh-cream-25-fat",
+   "name": "Fresh Cream (25% fat)",
+   "hi": "फ्रेश क्रीम (25% फैट)",
+   "alias": [
+    "cream",
+    "dairy cream",
+    "amul cream",
+    "amul fresh cream",
+    "cooking cream",
+    "table cream",
+    "malai cream",
+    "fresh cream"
+   ],
+   "cat": "dairy",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥛",
+   "unit": "g",
+   "kcal": 250,
+   "p": 2.4,
+   "c": 3.5,
+   "f": 25,
+   "fib": 0,
+   "na": 35,
+   "portions": [
+    {
+     "n": "1 tbsp (15 g)",
+     "hi": "1 चम्मच",
+     "g": 15
+    },
+    {
+     "n": "1 tsp (5 g)",
+     "hi": "1 छोटा चम्मच",
+     "g": 5
+    },
+    {
+     "n": "1/4 cup (60 g)",
+     "hi": "1/4 कप",
+     "g": 60
+    }
+   ],
+   "src": "packaged fresh cream label (25% fat, ~245-260 kcal); heavy whipping cream is ~340",
+   "conf": "medium",
+   "note": "restaurant 'cream' in gravies is usually this; whipping cream (35% fat) ~330 kcal"
+  },
+  {
+   "slug": "malai-milk-cream",
+   "name": "Malai (Milk Cream)",
+   "hi": "मलाई (दूध की)",
+   "alias": [
+    "malai",
+    "doodh ki malai",
+    "milk malai",
+    "milk cream",
+    "dairy malai",
+    "saai",
+    "sai",
+    "paal aadai",
+    "cream of milk"
+   ],
+   "cat": "dairy",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥛",
+   "unit": "g",
+   "kcal": 278,
+   "p": 2.5,
+   "c": 3.5,
+   "f": 28,
+   "fib": 0,
+   "na": 30,
+   "portions": [
+    {
+     "n": "1 tbsp (15 g)",
+     "hi": "1 चम्मच",
+     "g": 15
+    },
+    {
+     "n": "1 heaped tbsp (20 g)",
+     "hi": "1 ढेर चम्मच",
+     "g": 20
+    },
+    {
+     "n": "2 tbsp (30 g)",
+     "hi": "2 चम्मच",
+     "g": 30
+    }
+   ],
+   "src": "home malai from boiled full-fat milk; cream fat ~20-30% (buffalo milk malai richer)",
+   "conf": "low",
+   "note": "varies with milk fat and how long it was boiled; cow-milk malai ~20-25% fat (~230 kcal), buffalo ~30% (~300)"
+  },
+  {
+   "slug": "chhena-fresh",
+   "name": "Chhena (Fresh, Unpressed Cottage Cheese)",
+   "hi": "छेना (ताज़ा)",
+   "alias": [
+    "chena",
+    "chhana",
+    "channa fresh",
+    "kancha chhena",
+    "chhena for rasgulla",
+    "rasgulla chhena",
+    "fresh chhena",
+    "छैना"
+   ],
+   "cat": "dairy",
+   "region": "West Bengal",
+   "diet": "veg",
+   "emoji": "🧀",
+   "unit": "g",
+   "kcal": 196,
+   "p": 15.5,
+   "c": 3,
+   "f": 13.5,
+   "fib": 0,
+   "na": 25,
+   "portions": [
+    {
+     "n": "1 tbsp (20 g)",
+     "hi": "1 चम्मच",
+     "g": 20
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    }
+   ],
+   "src": "Indian dairy handbook values for cow-milk chhena (moisture ~55-60 %); softer and wetter than pressed paneer (IFCT 258)",
+   "conf": "medium",
+   "note": "unsweetened, drained but not pressed; fat depends on milk used"
+  },
+  {
+   "slug": "condensed-milk-sweetened",
+   "name": "Condensed Milk, Sweetened",
+   "hi": "मीठा कंडेंस्ड मिल्क (मिल्कमेड)",
+   "alias": [
+    "milkmaid",
+    "milk maid",
+    "condensed milk",
+    "sweetened condensed milk",
+    "kandens milk",
+    "milkmade"
+   ],
+   "cat": "dairy",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥛",
+   "unit": "g",
+   "kcal": 326,
+   "p": 7.5,
+   "c": 55,
+   "f": 8.5,
+   "fib": 0,
+   "na": 120,
+   "portions": [
+    {
+     "n": "1 tbsp (20 g)",
+     "hi": "1 चम्मच",
+     "g": 20
+    },
+    {
+     "n": "1 tsp (7 g)",
+     "hi": "1 छोटा चम्मच",
+     "g": 7
+    }
+   ],
+   "src": "USDA sweetened condensed milk (321 kcal) and Nestle Milkmaid label (~320-330)",
+   "conf": "high",
+   "note": "about 55 % sugar, avoid for diabetes"
+  },
+  {
+   "slug": "milk-powder-whole-full-cream",
+   "name": "Milk Powder, Whole (Full Cream)",
+   "hi": "फुल क्रीम मिल्क पाउडर (दूध पाउडर)",
+   "alias": [
+    "milk powder",
+    "dudh powder",
+    "doodh ka powder",
+    "dry milk",
+    "full cream milk powder",
+    "whole milk powder",
+    "amul milk powder",
+    "wmp"
+   ],
+   "cat": "dairy",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥛",
+   "unit": "g",
+   "kcal": 496,
+   "p": 26,
+   "c": 38,
+   "f": 26.5,
+   "fib": 0,
+   "na": 370,
+   "portions": [
+    {
+     "n": "1 tbsp heaped (12 g)",
+     "hi": "1 ढेर चम्मच",
+     "g": 12
+    },
+    {
+     "n": "1 tsp (4 g)",
+     "hi": "1 छोटा चम्मच",
+     "g": 4
+    },
+    {
+     "n": "2 tbsp (25 g)",
+     "hi": "2 चम्मच",
+     "g": 25
+    }
+   ],
+   "src": "USDA whole milk powder (496 kcal) and Indian full-cream powder labels (~490-510)",
+   "conf": "high",
+   "note": "dry powder, not reconstituted; about 4 tbsp powder makes 1 glass"
+  },
+  {
+   "slug": "milk-powder-skimmed",
+   "name": "Milk Powder, Skimmed (Non-fat)",
+   "hi": "स्किम्ड मिल्क पाउडर (मलाई रहित)",
+   "alias": [
+    "skimmed milk powder",
+    "skim milk powder",
+    "nonfat milk powder",
+    "fat free milk powder",
+    "smp",
+    "dudh powder skimmed"
+   ],
+   "cat": "dairy",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥛",
+   "unit": "g",
+   "kcal": 360,
+   "p": 36,
+   "c": 52,
+   "f": 0.8,
+   "fib": 0,
+   "na": 530,
+   "portions": [
+    {
+     "n": "1 tbsp heaped (12 g)",
+     "hi": "1 ढेर चम्मच",
+     "g": 12
+    },
+    {
+     "n": "2 tbsp (25 g)",
+     "hi": "2 चम्मच",
+     "g": 25
+    }
+   ],
+   "src": "USDA nonfat dry milk (362 kcal)",
+   "conf": "high",
+   "note": "dry powder, not reconstituted"
+  },
+  {
+   "slug": "whey-liquid-paneer-water",
+   "name": "Whey, Liquid (Paneer Ka Pani)",
+   "hi": "पनीर का पानी (व्हे)",
+   "alias": [
+    "paneer ka pani",
+    "paneer water",
+    "chhena water",
+    "chhena pani",
+    "whey water",
+    "paneer whey",
+    "whey",
+    "phate doodh ka pani",
+    "फटे दूध का पानी"
+   ],
+   "cat": "dairy",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥛",
+   "unit": "ml",
+   "kcal": 27,
+   "p": 0.9,
+   "c": 5.1,
+   "f": 0.3,
+   "fib": 0,
+   "na": 54,
+   "portions": [
+    {
+     "n": "1 glass (200 ml)",
+     "hi": "1 गिलास",
+     "g": 200
+    },
+    {
+     "n": "1 cup (150 ml)",
+     "hi": "1 कप",
+     "g": 150
+    }
+   ],
+   "src": "USDA sweet whey, liquid (27 kcal)",
+   "conf": "high",
+   "note": "the water left after making paneer from milk; lactose is the main carb"
+  },
+  {
+   "slug": "whey-protein-powder-concentrate",
+   "name": "Whey Protein Powder (Concentrate)",
+   "hi": "व्हे प्रोटीन पाउडर",
+   "alias": [
+    "whey protein",
+    "whey concentrate",
+    "protein powder",
+    "gym protein",
+    "protein shake powder",
+    "whey protein concentrate"
+   ],
+   "cat": "dairy",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥛",
+   "unit": "g",
+   "kcal": 390,
+   "p": 77,
+   "c": 7,
+   "f": 6,
+   "fib": 0,
+   "na": 250,
+   "portions": [
+    {
+     "n": "1 scoop (30 g)",
+     "hi": "1 स्कूप",
+     "g": 30
+    },
+    {
+     "n": "1 heaped scoop (35 g)",
+     "hi": "1 ढेर स्कूप",
+     "g": 35
+    }
+   ],
+   "src": "typical whey concentrate pack label (370-400 kcal, P 72-80 per 100 g)",
+   "conf": "medium",
+   "note": "dry powder; isolates are ~360-380 kcal with P 85-90; flavoured/mass-gainer powders differ widely"
+  },
+  {
+   "slug": "milk-skimmed",
+   "name": "Milk, Skimmed (Fat-free)",
+   "hi": "स्किम्ड मिल्क (मलाई रहित दूध)",
+   "alias": [
+    "skim milk",
+    "skimmed milk",
+    "fat free milk",
+    "nonfat milk",
+    "malai rahit doodh",
+    "fat free doodh",
+    "skim doodh"
+   ],
+   "cat": "dairy",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥛",
+   "unit": "ml",
+   "kcal": 36,
+   "p": 3.3,
+   "c": 5,
+   "f": 0.3,
+   "fib": 0,
+   "na": 45,
+   "portions": [
+    {
+     "n": "1 glass (200 ml)",
+     "hi": "1 गिलास",
+     "g": 200
+    },
+    {
+     "n": "1 cup (150 ml)",
+     "hi": "1 कप",
+     "g": 150
+    },
+    {
+     "n": "1 tea cup (100 ml)",
+     "hi": "1 छोटी कटोरी / कप",
+     "g": 100
+    }
+   ],
+   "src": "USDA skim milk (34 kcal) and FSSAI skimmed milk standard (fat <=0.5 %)",
+   "conf": "high",
+   "note": "per 100 ml"
+  },
+  {
+   "slug": "milk-toned-packaged",
+   "name": "Milk, Toned (3% fat, Packaged)",
+   "hi": "टोन्ड दूध (3% फैट, पैकेट)",
+   "alias": [
+    "toned milk",
+    "taaza",
+    "tazza",
+    "amul taaza",
+    "mother dairy toned",
+    "packet milk",
+    "pouch milk",
+    "tonned milk",
+    "toned doodh"
+   ],
+   "cat": "dairy",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥛",
+   "unit": "ml",
+   "kcal": 58,
+   "p": 3.1,
+   "c": 4.7,
+   "f": 3,
+   "fib": 0,
+   "na": 45,
+   "portions": [
+    {
+     "n": "1 glass (200 ml)",
+     "hi": "1 गिलास",
+     "g": 200
+    },
+    {
+     "n": "1 cup (150 ml)",
+     "hi": "1 कप",
+     "g": 150
+    },
+    {
+     "n": "1 tea cup (100 ml)",
+     "hi": "1 छोटी कटोरी / कप",
+     "g": 100
+    }
+   ],
+   "src": "FSSAI toned milk standard (3.0 % fat, 8.5 % SNF) matches pouch labels ~58 kcal/100 ml",
+   "conf": "high",
+   "note": "per 100 ml; this is the everyday city pouch milk",
+   "core": true
+  },
+  {
+   "slug": "milk-double-toned-packaged",
+   "name": "Milk, Double Toned (1.5% fat, Packaged)",
+   "hi": "डबल टोन्ड दूध (1.5% फैट, पैकेट)",
+   "alias": [
+    "double toned milk",
+    "double tonned milk",
+    "dtm",
+    "slim milk",
+    "1.5 percent milk",
+    "double toned doodh",
+    "doubletoned milk"
+   ],
+   "cat": "dairy",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥛",
+   "unit": "ml",
+   "kcal": 46,
+   "p": 3.2,
+   "c": 4.8,
+   "f": 1.5,
+   "fib": 0,
+   "na": 45,
+   "portions": [
+    {
+     "n": "1 glass (200 ml)",
+     "hi": "1 गिलास",
+     "g": 200
+    },
+    {
+     "n": "1 cup (150 ml)",
+     "hi": "1 कप",
+     "g": 150
+    },
+    {
+     "n": "1 tea cup (100 ml)",
+     "hi": "1 छोटी कटोरी / कप",
+     "g": 100
+    }
+   ],
+   "src": "FSSAI double-toned milk standard (1.5 % fat, 9 % SNF), pouch labels ~45-47 kcal/100 ml",
+   "conf": "high",
+   "note": "per 100 ml"
+  },
+  {
+   "slug": "milk-full-cream-packaged",
+   "name": "Milk, Full Cream (6% fat, Packaged)",
+   "hi": "फुल क्रीम दूध (6% फैट, पैकेट)",
+   "alias": [
+    "full cream milk",
+    "gold milk",
+    "amul gold",
+    "mother dairy full cream",
+    "6 percent milk",
+    "full cream doodh",
+    "full fat milk"
+   ],
+   "cat": "dairy",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥛",
+   "unit": "ml",
+   "kcal": 87,
+   "p": 3.3,
+   "c": 4.8,
+   "f": 6,
+   "fib": 0,
+   "na": 45,
+   "portions": [
+    {
+     "n": "1 glass (200 ml)",
+     "hi": "1 गिलास",
+     "g": 200
+    },
+    {
+     "n": "1 cup (150 ml)",
+     "hi": "1 कप",
+     "g": 150
+    },
+    {
+     "n": "1 tea cup (100 ml)",
+     "hi": "1 छोटी कटोरी / कप",
+     "g": 100
+    }
+   ],
+   "src": "FSSAI full-cream milk standard (6 % fat, 9 % SNF), pouch labels ~85-90 kcal/100 ml",
+   "conf": "high",
+   "note": "per 100 ml; standardised 4.5 % milk is ~72 kcal"
+  },
+  {
+   "slug": "milk-a2-desi-cow",
+   "name": "Milk, A2 (Desi Cow)",
+   "hi": "A2 दूध (देसी गाय)",
+   "alias": [
+    "a2 milk",
+    "a2 cow milk",
+    "desi cow milk",
+    "gir cow milk",
+    "a2 doodh",
+    "desi gaay ka doodh",
+    "a2 gir milk"
+   ],
+   "cat": "dairy",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥛",
+   "unit": "ml",
+   "kcal": 67,
+   "p": 3.2,
+   "c": 4.7,
+   "f": 4,
+   "fib": 0,
+   "na": 45,
+   "portions": [
+    {
+     "n": "1 glass (200 ml)",
+     "hi": "1 गिलास",
+     "g": 200
+    },
+    {
+     "n": "1 cup (150 ml)",
+     "hi": "1 कप",
+     "g": 150
+    },
+    {
+     "n": "1 tea cup (100 ml)",
+     "hi": "1 छोटी कटोरी / कप",
+     "g": 100
+    }
+   ],
+   "src": "desi cow milk composition (fat 3.5-4.5 %), consistent with IFCT cow milk 73 and A2 pack labels ~65-70",
+   "conf": "medium",
+   "note": "per 100 ml; calories are the same as ordinary cow milk, only the beta-casein type differs"
+  },
+  {
+   "slug": "milk-goat",
+   "name": "Milk, Goat",
+   "hi": "बकरी का दूध",
+   "alias": [
+    "goat milk",
+    "bakri ka doodh",
+    "bakri doodh",
+    "aattu paal",
+    "meka paalu",
+    "goats milk"
+   ],
+   "cat": "dairy",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥛",
+   "unit": "ml",
+   "kcal": 72,
+   "p": 3.3,
+   "c": 4.6,
+   "f": 4.5,
+   "fib": 0,
+   "na": 45,
+   "portions": [
+    {
+     "n": "1 glass (200 ml)",
+     "hi": "1 गिलास",
+     "g": 200
+    },
+    {
+     "n": "1 cup (150 ml)",
+     "hi": "1 कप",
+     "g": 150
+    },
+    {
+     "n": "1 tea cup (100 ml)",
+     "hi": "1 छोटी कटोरी / कप",
+     "g": 100
+    }
+   ],
+   "src": "NIN Nutritive Value of Indian Foods goat milk (72 kcal); USDA 69",
+   "conf": "high",
+   "note": "per 100 ml"
+  },
+  {
+   "slug": "soy-milk-unsweetened",
+   "name": "Soy Milk, Unsweetened",
+   "hi": "सोया मिल्क (बिना चीनी)",
+   "alias": [
+    "soya milk",
+    "soy drink",
+    "soyabean milk",
+    "soya doodh",
+    "soya dudh",
+    "soymilk",
+    "soy beverage"
+   ],
+   "cat": "beverage",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥛",
+   "unit": "ml",
+   "kcal": 34,
+   "p": 3,
+   "c": 1.5,
+   "f": 1.8,
+   "fib": 0.5,
+   "na": 40,
+   "portions": [
+    {
+     "n": "1 glass (200 ml)",
+     "hi": "1 गिलास",
+     "g": 200
+    },
+    {
+     "n": "1 cup (150 ml)",
+     "hi": "1 कप",
+     "g": 150
+    },
+    {
+     "n": "1 tea cup (100 ml)",
+     "hi": "1 छोटी कटोरी / कप",
+     "g": 100
+    }
+   ],
+   "src": "USDA soy milk unsweetened (33 kcal) and Indian packaged soy milk labels",
+   "conf": "medium",
+   "note": "per 100 ml; sweetened or flavoured packs are 45-60 kcal"
+  },
+  {
+   "slug": "almond-milk-unsweetened",
+   "name": "Almond Milk, Unsweetened",
+   "hi": "बादाम मिल्क (बिना मीठा, पैकेट)",
+   "alias": [
+    "almond drink",
+    "almond beverage",
+    "unsweetened almond milk",
+    "almond mylk",
+    "badam milk packaged"
+   ],
+   "cat": "beverage",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥛",
+   "unit": "ml",
+   "kcal": 17,
+   "p": 0.6,
+   "c": 0.8,
+   "f": 1.3,
+   "fib": 0.2,
+   "na": 70,
+   "portions": [
+    {
+     "n": "1 glass (200 ml)",
+     "hi": "1 गिलास",
+     "g": 200
+    },
+    {
+     "n": "1 cup (150 ml)",
+     "hi": "1 कप",
+     "g": 150
+    },
+    {
+     "n": "1 tea cup (100 ml)",
+     "hi": "1 छोटी कटोरी / कप",
+     "g": 100
+    }
+   ],
+   "src": "USDA almond milk unsweetened (15 kcal) and Indian packaged unsweetened almond drink labels (13-24)",
+   "conf": "medium",
+   "note": "per 100 ml; commercial almond milk is mostly water with ~2 % almonds; sweetened is 40-60 kcal"
+  },
+  {
+   "slug": "oat-milk-unsweetened",
+   "name": "Oat Milk, Unsweetened",
+   "hi": "ओट मिल्क (बिना मीठा)",
+   "alias": [
+    "oat drink",
+    "oats milk",
+    "oat beverage",
+    "oat milk plain",
+    "jaee ka doodh"
+   ],
+   "cat": "beverage",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥛",
+   "unit": "ml",
+   "kcal": 45,
+   "p": 1,
+   "c": 6.5,
+   "f": 1.5,
+   "fib": 0.8,
+   "na": 40,
+   "portions": [
+    {
+     "n": "1 glass (200 ml)",
+     "hi": "1 गिलास",
+     "g": 200
+    },
+    {
+     "n": "1 cup (150 ml)",
+     "hi": "1 कप",
+     "g": 150
+    },
+    {
+     "n": "1 tea cup (100 ml)",
+     "hi": "1 छोटी कटोरी / कप",
+     "g": 100
+    }
+   ],
+   "src": "oat drink pack labels (Oatly/Indian brands 40-50 kcal/100 ml)",
+   "conf": "medium",
+   "note": "per 100 ml; carbohydrate is mostly malt sugar made during processing, so it raises blood sugar faster than soy or almond milk"
+  },
+  {
+   "slug": "curd-dahi-whole-milk",
+   "name": "Curd (Dahi), Whole Milk",
+   "hi": "दही (पूरे दूध का)",
+   "alias": [
+    "dahi",
+    "curd",
+    "yogurt",
+    "yoghurt",
+    "plain dahi",
+    "plain curd",
+    "dahee",
+    "dai",
+    "thayir",
+    "thair",
+    "perugu",
+    "mosaru",
+    "doi",
+    "full fat curd",
+    "home set dahi"
+   ],
+   "cat": "dairy",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥛",
+   "unit": "g",
+   "kcal": 62,
+   "p": 3.5,
+   "c": 4.7,
+   "f": 3.3,
+   "fib": 0,
+   "na": 46,
+   "portions": [
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 tbsp (15 g)",
+     "hi": "1 चम्मच",
+     "g": 15
+    },
+    {
+     "n": "1 cup (200 g)",
+     "hi": "1 कप",
+     "g": 200
+    }
+   ],
+   "src": "USDA plain whole-milk yogurt (61 kcal); NIN/IFCT cow-milk dahi",
+   "conf": "high",
+   "note": "home-set dahi from cow/full-fat milk, no sugar; thick buffalo-milk dahi is ~95",
+   "core": true
+  },
+  {
+   "slug": "curd-dahi-buffalo-milk",
+   "name": "Curd (Dahi), Buffalo Milk (Thick)",
+   "hi": "भैंस के दूध का दही (गाढ़ा)",
+   "alias": [
+    "buffalo milk dahi",
+    "buffalo curd",
+    "thick dahi",
+    "malai dahi",
+    "bhains ka dahi",
+    "full cream dahi"
+   ],
+   "cat": "dairy",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥛",
+   "unit": "g",
+   "kcal": 95,
+   "p": 3.9,
+   "c": 4.9,
+   "f": 6.6,
+   "fib": 0,
+   "na": 45,
+   "portions": [
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 tbsp (15 g)",
+     "hi": "1 चम्मच",
+     "g": 15
+    }
+   ],
+   "src": "derived from IFCT buffalo milk (107 kcal, F6.6) with a normal set-curd lactose loss",
+   "conf": "medium",
+   "note": "dahi set from undiluted buffalo milk, common in North India; ~50 % more calories than cow-milk dahi"
+  },
+  {
+   "slug": "curd-dahi-toned-packaged",
+   "name": "Curd (Dahi), Toned Milk (Packaged)",
+   "hi": "टोन्ड दूध का दही (पैकेट)",
+   "alias": [
+    "packet dahi",
+    "toned dahi",
+    "pouch dahi",
+    "amul masti dahi",
+    "masti dahi",
+    "mother dairy dahi",
+    "curd toned milk"
+   ],
+   "cat": "dairy",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥛",
+   "unit": "g",
+   "kcal": 55,
+   "p": 3.3,
+   "c": 4.7,
+   "f": 2.5,
+   "fib": 0,
+   "na": 48,
+   "portions": [
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 tbsp (15 g)",
+     "hi": "1 चम्मच",
+     "g": 15
+    }
+   ],
+   "src": "packaged dahi label range (toned milk, 55-60 kcal/100 g)",
+   "conf": "high",
+   "note": "plain, unsweetened"
+  },
+  {
+   "slug": "curd-dahi-low-fat",
+   "name": "Curd (Dahi), Low Fat",
+   "hi": "लो फैट दही",
+   "alias": [
+    "low fat dahi",
+    "lite dahi",
+    "diet curd",
+    "slim dahi",
+    "skimmed milk curd",
+    "low fat curd",
+    "toned curd lite"
+   ],
+   "cat": "dairy",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥛",
+   "unit": "g",
+   "kcal": 44,
+   "p": 3.6,
+   "c": 5,
+   "f": 1,
+   "fib": 0,
+   "na": 50,
+   "portions": [
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    }
+   ],
+   "src": "packaged low-fat dahi labels (40-50 kcal/100 g)",
+   "conf": "medium",
+   "note": "plain; fat-free versions ~38"
+  },
+  {
+   "slug": "hung-curd-chakka",
+   "name": "Hung Curd (Chakka / Strained Dahi)",
+   "hi": "हंग कर्ड (चक्का)",
+   "alias": [
+    "hung dahi",
+    "chakka",
+    "chakka dahi",
+    "strained curd",
+    "strained dahi",
+    "hung yogurt",
+    "dahi cheese",
+    "shrikhand base"
+   ],
+   "cat": "dairy",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥛",
+   "unit": "g",
+   "kcal": 96,
+   "p": 7,
+   "c": 4.5,
+   "f": 5.5,
+   "fib": 0,
+   "na": 45,
+   "portions": [
+    {
+     "n": "1 tbsp (20 g)",
+     "hi": "1 चम्मच",
+     "g": 20
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    }
+   ],
+   "src": "whole-milk dahi with roughly 40-50 % of the whey drained; USDA plain Greek whole-milk yogurt 97",
+   "conf": "medium",
+   "note": "thickness varies; hung overnight in muslin, no sugar"
+  },
+  {
+   "slug": "greek-yogurt-plain",
+   "name": "Greek Yogurt, Plain",
+   "hi": "ग्रीक योगर्ट (सादा)",
+   "alias": [
+    "greek dahi",
+    "greek curd",
+    "greek yoghurt",
+    "high protein dahi",
+    "plain greek yogurt",
+    "greek yogurt natural"
+   ],
+   "cat": "dairy",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🥛",
+   "unit": "g",
+   "kcal": 90,
+   "p": 8.5,
+   "c": 4,
+   "f": 4.5,
+   "fib": 0,
+   "na": 40,
+   "portions": [
+    {
+     "n": "1 small cup (100 g)",
+     "hi": "1 छोटा कप",
+     "g": 100
+    },
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    }
+   ],
+   "src": "USDA plain Greek yogurt (whole 97, nonfat 59) and Indian pack labels (~85-100)",
+   "conf": "medium",
+   "note": "unsweetened, regular-fat; fat-free versions are ~55-60 kcal, flavoured ones 100-130"
+  },
+  {
+   "slug": "buttermilk-chaas-plain",
+   "name": "Buttermilk (Chaas / Chhach), Plain",
+   "hi": "छाछ (मट्ठा)",
+   "alias": [
+    "chaas",
+    "chhaas",
+    "chas",
+    "chach",
+    "chhach",
+    "mattha",
+    "mor",
+    "majjiga",
+    "neer mor",
+    "moru",
+    "takra",
+    "taak",
+    "jeera chaas",
+    "masala chaas",
+    "छाछ"
+   ],
+   "cat": "beverage",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥛",
+   "unit": "ml",
+   "kcal": 16,
+   "p": 0.9,
+   "c": 1.5,
+   "f": 0.65,
+   "fib": 0,
+   "na": 130,
+   "portions": [
+    {
+     "n": "1 glass (200 ml)",
+     "hi": "1 गिलास",
+     "g": 200
+    },
+    {
+     "n": "1 cup (150 ml)",
+     "hi": "1 कप",
+     "g": 150
+    }
+   ],
+   "src": "NIN buttermilk (15 kcal) and 1 part dahi to 3 parts water; INDB salted lassi 19",
+   "conf": "medium",
+   "note": "thin home chaas with a pinch of salt and jeera, about 0.3 % salt; thick or packaged spiced chaas is 25-40 kcal/100 ml"
+  }
+ ],
+ "ifct": [
+  {
+   "code": "L001",
+   "slug": "milk-buffalo-whole",
+   "name": "Milk, Buffalo, Whole (Raw)",
+   "hi": "भैंस का दूध",
+   "alias": [
+    "bhains ka doodh",
+    "bhains ka dudh",
+    "buffalo milk",
+    "mhais doodh",
+    "bhes nu dudh",
+    "erumai paal",
+    "gedha palu",
+    "kerbau paal",
+    "mainsi dudha",
+    "doodh",
+    "dudh"
+   ],
+   "cat": "dairy",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥛",
+   "portions": [
+    {
+     "n": "1 glass (200 ml)",
+     "hi": "1 गिलास",
+     "g": 206
+    },
+    {
+     "n": "1 cup (150 ml)",
+     "hi": "1 कप",
+     "g": 155
+    }
+   ],
+   "core": true
+  },
+  {
+   "code": "L002",
+   "slug": "milk-cow-whole",
+   "name": "Milk, Cow, Whole (Raw)",
+   "hi": "गाय का दूध",
+   "alias": [
+    "gai ka doodh",
+    "gay ka doodh",
+    "gaay nu dudh",
+    "cow milk",
+    "milk",
+    "doodh",
+    "dudh",
+    "pasumpal",
+    "aavu paalu",
+    "hasuvina halu",
+    "gow kshiram",
+    "garu dudh"
+   ],
+   "cat": "dairy",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥛",
+   "portions": [
+    {
+     "n": "1 glass (200 ml)",
+     "hi": "1 गिलास",
+     "g": 206
+    },
+    {
+     "n": "1 cup (150 ml)",
+     "hi": "1 कप",
+     "g": 155
+    }
+   ],
+   "core": true
+  },
+  {
+   "code": "L003",
+   "slug": "paneer",
+   "name": "Paneer (Cottage Cheese)",
+   "hi": "पनीर",
+   "alias": [
+    "panir",
+    "cottage cheese",
+    "indian cottage cheese",
+    "paneer cheese",
+    "palkatti",
+    "paladai",
+    "paalavirugudu",
+    "chaman",
+    "tali"
+   ],
+   "cat": "dairy",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🧀",
+   "portions": [
+    {
+     "n": "1 cube (20 g)",
+     "hi": "1 टुकड़ा",
+     "g": 20
+    },
+    {
+     "n": "1 slice (30 g)",
+     "hi": "1 स्लाइस",
+     "g": 30
+    },
+    {
+     "n": "1 small katori cubes (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    }
+   ],
+   "core": true
+  },
+  {
+   "code": "L004",
+   "slug": "khoa",
+   "name": "Khoa (Mawa)",
+   "hi": "खोया",
+   "alias": [
+    "khoya",
+    "mawa",
+    "mava",
+    "mavo",
+    "khowa",
+    "malai khowa",
+    "thirattupal",
+    "खोआ",
+    "मावा"
+   ],
+   "cat": "dairy",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥛",
+   "portions": [
+    {
+     "n": "1 tbsp (15 g)",
+     "hi": "1 चम्मच",
+     "g": 15
+    },
+    {
+     "n": "1 small katori (50 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 50
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "M001",
+   "slug": "egg-hen-whole-raw",
+   "name": "Egg, Hen, Whole, Raw",
+   "hi": "अंडा (कच्चा, मुर्गी)",
+   "alias": [
+    "anda",
+    "ande",
+    "egg",
+    "hen egg",
+    "poultry egg",
+    "farm egg",
+    "white egg",
+    "dim",
+    "muttai",
+    "guddu",
+    "mutta",
+    "kozhi mutta"
+   ],
+   "cat": "egg",
+   "region": "Pan-India",
+   "diet": "egg",
+   "emoji": "🥚",
+   "portions": [
+    {
+     "n": "1 egg (50 g)",
+     "hi": "1 अंडा",
+     "g": 50
+    },
+    {
+     "n": "2 eggs (100 g)",
+     "hi": "2 अंडे",
+     "g": 100
+    }
+   ],
+   "core": true
+  },
+  {
+   "code": "M002",
+   "slug": "egg-hen-white-raw",
+   "name": "Egg White, Hen, Raw",
+   "hi": "अंडे का सफेद भाग (कच्चा)",
+   "alias": [
+    "anda safed hissa",
+    "egg white",
+    "egg whites",
+    "albumen",
+    "egg albumen",
+    "white of egg",
+    "safed bhag",
+    "सफेद भाग"
+   ],
+   "cat": "egg",
+   "region": "Pan-India",
+   "diet": "egg",
+   "emoji": "🥚",
+   "portions": [
+    {
+     "n": "1 egg white (33 g)",
+     "hi": "1 अंडे का सफेद भाग",
+     "g": 33
+    },
+    {
+     "n": "3 egg whites (100 g)",
+     "hi": "3 सफेद भाग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "M003",
+   "slug": "egg-hen-yolk-raw",
+   "name": "Egg Yolk, Hen, Raw",
+   "hi": "अंडे की ज़र्दी (कच्ची)",
+   "alias": [
+    "zardi",
+    "egg yolk",
+    "yolk",
+    "yellow of egg",
+    "pila bhag",
+    "anda zardi",
+    "पीला भाग"
+   ],
+   "cat": "egg",
+   "region": "Pan-India",
+   "diet": "egg",
+   "emoji": "🥚",
+   "portions": [
+    {
+     "n": "1 egg yolk (17 g)",
+     "hi": "1 ज़र्दी",
+     "g": 17
+    },
+    {
+     "n": "2 egg yolks (34 g)",
+     "hi": "2 ज़र्दी",
+     "g": 34
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "M004",
+   "slug": "egg-hen-whole-boiled",
+   "name": "Egg, Hen, Whole, Boiled",
+   "hi": "उबला अंडा",
+   "alias": [
+    "ubla anda",
+    "ubla ande",
+    "boiled egg",
+    "hard boiled egg",
+    "egg boiled",
+    "anda boiled",
+    "sabut anda",
+    "simmered egg",
+    "उबले अंडे"
+   ],
+   "cat": "egg",
+   "region": "Pan-India",
+   "diet": "egg",
+   "emoji": "🥚",
+   "portions": [
+    {
+     "n": "1 boiled egg (50 g)",
+     "hi": "1 उबला अंडा",
+     "g": 50
+    },
+    {
+     "n": "2 boiled eggs (100 g)",
+     "hi": "2 उबले अंडे",
+     "g": 100
+    }
+   ],
+   "core": true
+  },
+  {
+   "code": "M005",
+   "slug": "egg-hen-white-boiled",
+   "name": "Egg White, Hen, Boiled",
+   "hi": "उबले अंडे का सफेद भाग",
+   "alias": [
+    "boiled egg white",
+    "egg white boiled",
+    "ubla anda safed",
+    "ubale ande ka safed hissa",
+    "hard boiled egg white"
+   ],
+   "cat": "egg",
+   "region": "Pan-India",
+   "diet": "egg",
+   "emoji": "🥚",
+   "portions": [
+    {
+     "n": "1 egg white (33 g)",
+     "hi": "1 सफेद भाग",
+     "g": 33
+    },
+    {
+     "n": "3 egg whites (100 g)",
+     "hi": "3 सफेद भाग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "M006",
+   "slug": "egg-hen-yolk-boiled",
+   "name": "Egg Yolk, Hen, Boiled",
+   "hi": "उबले अंडे की ज़र्दी",
+   "alias": [
+    "boiled egg yolk",
+    "egg yolk boiled",
+    "ubla anda zardi",
+    "hard boiled yolk"
+   ],
+   "cat": "egg",
+   "region": "Pan-India",
+   "diet": "egg",
+   "emoji": "🥚",
+   "portions": [
+    {
+     "n": "1 egg yolk (17 g)",
+     "hi": "1 ज़र्दी",
+     "g": 17
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "M007",
+   "slug": "egg-hen-omelette",
+   "name": "Egg, Hen, Omelette (Cooked)",
+   "hi": "ऑमलेट (मुर्गी का अंडा)",
+   "alias": [
+    "omlet",
+    "omelet",
+    "anda omelette",
+    "egg omelette",
+    "egg omlet",
+    "plain omelette",
+    "omlette",
+    "ऑमलेट"
+   ],
+   "cat": "egg",
+   "region": "Pan-India",
+   "diet": "egg",
+   "emoji": "🥚",
+   "portions": [
+    {
+     "n": "1 egg omelette (60 g)",
+     "hi": "1 अंडे का ऑमलेट",
+     "g": 60
+    },
+    {
+     "n": "2 egg omelette (120 g)",
+     "hi": "2 अंडे का ऑमलेट",
+     "g": 120
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "M008",
+   "slug": "egg-country-hen-whole-raw",
+   "name": "Egg, Country Hen (Desi), Whole, Raw",
+   "hi": "देसी अंडा (कच्चा)",
+   "alias": [
+    "desi anda",
+    "desi ande",
+    "desi egg",
+    "country egg",
+    "country hen egg",
+    "gaon ka anda",
+    "naatu kozhi muttai",
+    "naati koli mutta",
+    "brown egg"
+   ],
+   "cat": "egg",
+   "region": "Pan-India",
+   "diet": "egg",
+   "emoji": "🥚",
+   "portions": [
+    {
+     "n": "1 desi egg (40 g)",
+     "hi": "1 देसी अंडा",
+     "g": 40
+    },
+    {
+     "n": "2 desi eggs (80 g)",
+     "hi": "2 देसी अंडे",
+     "g": 80
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "M009",
+   "slug": "egg-country-hen-whole-boiled",
+   "name": "Egg, Country Hen (Desi), Whole, Boiled",
+   "hi": "देसी उबला अंडा",
+   "alias": [
+    "desi boiled egg",
+    "desi anda boiled",
+    "country egg boiled",
+    "desi ubla anda",
+    "country hen boiled egg"
+   ],
+   "cat": "egg",
+   "region": "Pan-India",
+   "diet": "egg",
+   "emoji": "🥚",
+   "portions": [
+    {
+     "n": "1 boiled desi egg (40 g)",
+     "hi": "1 उबला देसी अंडा",
+     "g": 40
+    },
+    {
+     "n": "2 boiled desi eggs (80 g)",
+     "hi": "2 उबले देसी अंडे",
+     "g": 80
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "M010",
+   "slug": "egg-country-hen-omelette",
+   "name": "Egg, Country Hen (Desi), Omelette (Cooked)",
+   "hi": "देसी अंडे का ऑमलेट",
+   "alias": [
+    "desi omelette",
+    "desi omlet",
+    "country egg omelette",
+    "desi anda omelette"
+   ],
+   "cat": "egg",
+   "region": "Pan-India",
+   "diet": "egg",
+   "emoji": "🥚",
+   "portions": [
+    {
+     "n": "1 egg omelette (50 g)",
+     "hi": "1 अंडे का ऑमलेट",
+     "g": 50
+    },
+    {
+     "n": "2 egg omelette (100 g)",
+     "hi": "2 अंडे का ऑमलेट",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "M011",
+   "slug": "egg-duck-whole-boiled",
+   "name": "Egg, Duck, Whole, Boiled",
+   "hi": "बत्तख का उबला अंडा",
+   "alias": [
+    "batakh ka anda boiled",
+    "boiled duck egg",
+    "duck egg boiled",
+    "battakh ubla anda",
+    "hansher dim sheddho",
+    "tharavu muttai boiled"
+   ],
+   "cat": "egg",
+   "region": "Pan-India",
+   "diet": "egg",
+   "emoji": "🥚",
+   "portions": [
+    {
+     "n": "1 boiled duck egg (65 g)",
+     "hi": "1 उबला बत्तख का अंडा",
+     "g": 65
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "M012",
+   "slug": "egg-duck-whole-raw",
+   "name": "Egg, Duck, Whole, Raw",
+   "hi": "बत्तख का अंडा (कच्चा)",
+   "alias": [
+    "batakh ka anda",
+    "battakh ka anda",
+    "bata ka anda",
+    "duck egg",
+    "hansher dim",
+    "tharavu mutta",
+    "taravu muttai"
+   ],
+   "cat": "egg",
+   "region": "Pan-India",
+   "diet": "egg",
+   "emoji": "🥚",
+   "portions": [
+    {
+     "n": "1 duck egg (65 g)",
+     "hi": "1 बत्तख का अंडा",
+     "g": 65
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "M013",
+   "slug": "egg-duck-omelette",
+   "name": "Egg, Duck, Omelette (Cooked)",
+   "hi": "बत्तख के अंडे का ऑमलेट",
+   "alias": [
+    "duck egg omelette",
+    "duck omelette",
+    "batakh anda omelette",
+    "duck omlet"
+   ],
+   "cat": "egg",
+   "region": "Pan-India",
+   "diet": "egg",
+   "emoji": "🥚",
+   "portions": [
+    {
+     "n": "1 duck egg omelette (75 g)",
+     "hi": "1 बत्तख के अंडे का ऑमलेट",
+     "g": 75
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "M014",
+   "slug": "egg-quail-whole-raw",
+   "name": "Egg, Quail, Whole, Raw",
+   "hi": "बटेर का अंडा (कच्चा)",
+   "alias": [
+    "bater ka anda",
+    "bater anda",
+    "bateer ka anda",
+    "quail egg",
+    "quail eggs",
+    "kaadai muttai",
+    "kada egg"
+   ],
+   "cat": "egg",
+   "region": "Pan-India",
+   "diet": "egg",
+   "emoji": "🥚",
+   "portions": [
+    {
+     "n": "1 quail egg (10 g)",
+     "hi": "1 बटेर का अंडा",
+     "g": 10
+    },
+    {
+     "n": "5 quail eggs (50 g)",
+     "hi": "5 बटेर के अंडे",
+     "g": 50
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "M015",
+   "slug": "egg-quail-whole-boiled",
+   "name": "Egg, Quail, Whole, Boiled",
+   "hi": "बटेर का उबला अंडा",
+   "alias": [
+    "boiled quail egg",
+    "quail egg boiled",
+    "bater ka ubla anda",
+    "bater anda boiled"
+   ],
+   "cat": "egg",
+   "region": "Pan-India",
+   "diet": "egg",
+   "emoji": "🥚",
+   "portions": [
+    {
+     "n": "1 boiled quail egg (10 g)",
+     "hi": "1 उबला बटेर का अंडा",
+     "g": 10
+    },
+    {
+     "n": "5 boiled quail eggs (50 g)",
+     "hi": "5 उबले बटेर के अंडे",
+     "g": 50
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "N001",
+   "slug": "chicken-broiler-leg-skinless-raw",
+   "name": "Chicken, Broiler, Leg, Skinless, Raw",
+   "hi": "चिकन लेग (बिना खाल, कच्चा)",
+   "alias": [
+    "chicken leg",
+    "chicken leg piece",
+    "chicken drumstick",
+    "murgi ki tang",
+    "murga leg",
+    "chicken tangdi",
+    "chicken tangri",
+    "tangdi"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍗",
+   "portions": [
+    {
+     "n": "1 leg piece (90 g)",
+     "hi": "1 लेग पीस",
+     "g": 90
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "N002",
+   "slug": "chicken-broiler-thigh-skinless-raw",
+   "name": "Chicken, Broiler, Thigh, Skinless, Raw",
+   "hi": "चिकन थाई (बिना खाल, कच्चा)",
+   "alias": [
+    "chicken thigh",
+    "chicken thai",
+    "chicken jangha",
+    "murgi ki jangh",
+    "boneless chicken thigh",
+    "murgi",
+    "murga",
+    "chicken"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍗",
+   "portions": [
+    {
+     "n": "1 piece (80 g)",
+     "hi": "1 टुकड़ा",
+     "g": 80
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": true
+  },
+  {
+   "code": "N003",
+   "slug": "chicken-broiler-breast-skinless-raw",
+   "name": "Chicken, Broiler, Breast, Skinless, Raw",
+   "hi": "चिकन ब्रेस्ट (बिना खाल, कच्चा)",
+   "alias": [
+    "chicken breast",
+    "murgi ka seena",
+    "murga breast",
+    "boneless chicken",
+    "chicken breast boneless",
+    "chicken seena",
+    "murgi",
+    "murga",
+    "chicken"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍗",
+   "portions": [
+    {
+     "n": "1 breast fillet (120 g)",
+     "hi": "1 ब्रेस्ट फ़िले",
+     "g": 120
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": true
+  },
+  {
+   "code": "N004",
+   "slug": "chicken-broiler-wing-skinless-raw",
+   "name": "Chicken, Broiler, Wing, Skinless, Raw",
+   "hi": "चिकन विंग (बिना खाल, कच्चा)",
+   "alias": [
+    "chicken wing",
+    "chicken wings",
+    "murgi ka pankh",
+    "chicken pankh",
+    "wings"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍗",
+   "portions": [
+    {
+     "n": "1 wing (40 g)",
+     "hi": "1 विंग",
+     "g": 40
+    },
+    {
+     "n": "3 wings (120 g)",
+     "hi": "3 विंग",
+     "g": 120
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "N005",
+   "slug": "chicken-liver-raw",
+   "name": "Chicken Liver, Raw",
+   "hi": "चिकन कलेजी (कच्ची)",
+   "alias": [
+    "kaleji",
+    "kalegi",
+    "chicken kaleji",
+    "murgi ki kaleji",
+    "poultry liver",
+    "kozhi eeral",
+    "liver"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍗",
+   "portions": [
+    {
+     "n": "1 piece (30 g)",
+     "hi": "1 कलेजी",
+     "g": 30
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "N006",
+   "slug": "chicken-gizzard-raw",
+   "name": "Chicken Gizzard, Raw",
+   "hi": "चिकन गिज़र्ड (पोटा, कच्चा)",
+   "alias": [
+    "pota",
+    "chicken pota",
+    "gizzard",
+    "gizard",
+    "murgi ka pota",
+    "chicken gizzard curry meat"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍗",
+   "portions": [
+    {
+     "n": "1 gizzard (30 g)",
+     "hi": "1 गिज़र्ड",
+     "g": 30
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "N007",
+   "slug": "country-hen-leg-with-skin-raw",
+   "name": "Country Hen (Desi Murgi), Leg, with Skin, Raw",
+   "hi": "देसी मुर्गी की टांग (खाल सहित, कच्ची)",
+   "alias": [
+    "desi murgi leg",
+    "desi chicken leg",
+    "country chicken leg",
+    "desi murga",
+    "country hen",
+    "naatu kozhi",
+    "naati koli"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍗",
+   "portions": [
+    {
+     "n": "1 piece (60 g)",
+     "hi": "1 टुकड़ा",
+     "g": 60
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "N008",
+   "slug": "country-hen-thigh-with-skin-raw",
+   "name": "Country Hen (Desi Murgi), Thigh, with Skin, Raw",
+   "hi": "देसी मुर्गी की जांघ (खाल सहित, कच्ची)",
+   "alias": [
+    "desi murgi thigh",
+    "desi chicken thigh",
+    "country chicken thigh",
+    "desi murga jangh",
+    "country chicken"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍗",
+   "portions": [
+    {
+     "n": "1 piece (60 g)",
+     "hi": "1 टुकड़ा",
+     "g": 60
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "N009",
+   "slug": "country-hen-breast-with-skin-raw",
+   "name": "Country Hen (Desi Murgi), Breast, with Skin, Raw",
+   "hi": "देसी मुर्गी का सीना (खाल सहित, कच्चा)",
+   "alias": [
+    "desi murgi breast",
+    "desi chicken breast",
+    "country chicken breast",
+    "desi murga seena"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍗",
+   "portions": [
+    {
+     "n": "1 piece (60 g)",
+     "hi": "1 टुकड़ा",
+     "g": 60
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "N010",
+   "slug": "country-hen-wing-with-skin-raw",
+   "name": "Country Hen (Desi Murgi), Wing, with Skin, Raw",
+   "hi": "देसी मुर्गी का पंख (खाल सहित, कच्चा)",
+   "alias": [
+    "desi murgi wing",
+    "desi chicken wing",
+    "country chicken wing",
+    "desi murga pankh"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍗",
+   "portions": [
+    {
+     "n": "1 piece (60 g)",
+     "hi": "1 टुकड़ा",
+     "g": 60
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "N011",
+   "slug": "duck-meat-with-skin-raw",
+   "name": "Duck Meat, with Skin, Raw",
+   "hi": "बत्तख का मांस (खाल सहित, कच्चा)",
+   "alias": [
+    "batakh",
+    "battakh",
+    "batakh ka gosht",
+    "duck",
+    "hansher mangsho",
+    "tharavu",
+    "bata"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍗",
+   "portions": [
+    {
+     "n": "1 piece (60 g)",
+     "hi": "1 टुकड़ा",
+     "g": 60
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "N012",
+   "slug": "emu-meat-skinless-raw",
+   "name": "Emu Meat, Skinless, Raw",
+   "hi": "एमू का मांस (बिना खाल, कच्चा)",
+   "alias": [
+    "emu",
+    "emu bird",
+    "emu gosht",
+    "emu chicken"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍗",
+   "portions": [
+    {
+     "n": "1 piece (60 g)",
+     "hi": "1 टुकड़ा",
+     "g": 60
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "N013",
+   "slug": "guinea-fowl-meat-with-skin-raw",
+   "name": "Guinea Fowl Meat, with Skin, Raw",
+   "hi": "गिनी फाउल का मांस (खाल सहित, कच्चा)",
+   "alias": [
+    "guinea fowl",
+    "guinea murgi",
+    "pearl hen",
+    "guinea hen",
+    "guinea fowl gosht"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍗",
+   "portions": [
+    {
+     "n": "1 piece (60 g)",
+     "hi": "1 टुकड़ा",
+     "g": 60
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "N014",
+   "slug": "pigeon-meat-with-skin-raw",
+   "name": "Pigeon Meat, with Skin, Raw",
+   "hi": "कबूतर का मांस (खाल सहित, कच्चा)",
+   "alias": [
+    "kabutar",
+    "kabootar",
+    "kabutar ka gosht",
+    "pigeon",
+    "squab"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍗",
+   "portions": [
+    {
+     "n": "1 piece (60 g)",
+     "hi": "1 टुकड़ा",
+     "g": 60
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "N015",
+   "slug": "quail-meat-skinless-raw",
+   "name": "Quail Meat, Skinless, Raw",
+   "hi": "बटेर का मांस (बिना खाल, कच्चा)",
+   "alias": [
+    "bater",
+    "bateer",
+    "bater ka gosht",
+    "quail",
+    "kaadai",
+    "kada bird"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍗",
+   "portions": [
+    {
+     "n": "1 quail (80 g)",
+     "hi": "1 बटेर",
+     "g": 80
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "N016",
+   "slug": "turkey-leg-with-skin-raw",
+   "name": "Turkey, Leg, with Skin, Raw",
+   "hi": "टर्की की टांग (खाल सहित, कच्ची)",
+   "alias": [
+    "turkey leg",
+    "peru",
+    "peru ki tang",
+    "turkey drumstick",
+    "turkey meat"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍗",
+   "portions": [
+    {
+     "n": "1 piece (60 g)",
+     "hi": "1 टुकड़ा",
+     "g": 60
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "N017",
+   "slug": "turkey-thigh-with-skin-raw",
+   "name": "Turkey, Thigh, with Skin, Raw",
+   "hi": "टर्की की जांघ (खाल सहित, कच्ची)",
+   "alias": [
+    "turkey thigh",
+    "peru ki jangh",
+    "turkey meat thigh"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍗",
+   "portions": [
+    {
+     "n": "1 piece (60 g)",
+     "hi": "1 टुकड़ा",
+     "g": 60
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "N018",
+   "slug": "turkey-breast-with-skin-raw",
+   "name": "Turkey, Breast, with Skin, Raw",
+   "hi": "टर्की का सीना (खाल सहित, कच्चा)",
+   "alias": [
+    "turkey breast",
+    "peru ka seena",
+    "turkey meat breast"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍗",
+   "portions": [
+    {
+     "n": "1 piece (60 g)",
+     "hi": "1 टुकड़ा",
+     "g": 60
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "N019",
+   "slug": "turkey-wing-with-skin-raw",
+   "name": "Turkey, Wing, with Skin, Raw",
+   "hi": "टर्की का पंख (खाल सहित, कच्चा)",
+   "alias": [
+    "turkey wing",
+    "peru ka pankh",
+    "turkey wings"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍗",
+   "portions": [
+    {
+     "n": "1 piece (60 g)",
+     "hi": "1 टुकड़ा",
+     "g": 60
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "O001",
+   "slug": "mutton-goat-shoulder-raw",
+   "name": "Mutton (Goat), Shoulder, Raw",
+   "hi": "बकरे का मांस - कंधा (कच्चा)",
+   "alias": [
+    "mutton",
+    "mutton shoulder",
+    "goat shoulder",
+    "bakra",
+    "bakre ka gosht",
+    "bakra gosht",
+    "gosht",
+    "dast",
+    "khashir mangsho",
+    "aattu kari",
+    "meka mamsam"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍖",
+   "portions": [
+    {
+     "n": "1 curry piece (40 g)",
+     "hi": "1 टुकड़ा",
+     "g": 40
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": true
+  },
+  {
+   "code": "O002",
+   "slug": "mutton-goat-chops-raw",
+   "name": "Mutton (Goat), Chops, Raw",
+   "hi": "बकरे की चाप (कच्ची)",
+   "alias": [
+    "mutton chops",
+    "mutton chaap",
+    "goat chops",
+    "chaap",
+    "champ",
+    "bakre ki chaap",
+    "lamb chops"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍖",
+   "portions": [
+    {
+     "n": "1 chop (60 g)",
+     "hi": "1 चाप",
+     "g": 60
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "O003",
+   "slug": "mutton-goat-leg-raw",
+   "name": "Mutton (Goat), Leg, Raw",
+   "hi": "बकरे की रान (कच्ची)",
+   "alias": [
+    "mutton leg",
+    "goat leg",
+    "raan",
+    "ran",
+    "leg of mutton",
+    "bakre ki raan",
+    "mutton raan",
+    "mutton"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍖",
+   "portions": [
+    {
+     "n": "1 curry piece (40 g)",
+     "hi": "1 टुकड़ा",
+     "g": 40
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": true
+  },
+  {
+   "code": "O004",
+   "slug": "mutton-goat-brain-raw",
+   "name": "Mutton (Goat), Brain, Raw",
+   "hi": "बकरे का भेजा (मग़ज़, कच्चा)",
+   "alias": [
+    "bheja",
+    "maghaz",
+    "magaz",
+    "mutton brain",
+    "goat brain",
+    "bheja fry",
+    "bakre ka bheja"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍖",
+   "portions": [
+    {
+     "n": "1 brain (60 g)",
+     "hi": "1 भेजा",
+     "g": 60
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "O005",
+   "slug": "mutton-goat-tongue-raw",
+   "name": "Mutton (Goat), Tongue, Raw",
+   "hi": "बकरे की ज़बान (कच्ची)",
+   "alias": [
+    "zubaan",
+    "zabaan",
+    "jeebh",
+    "mutton tongue",
+    "goat tongue",
+    "bakre ki zubaan"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍖",
+   "portions": [
+    {
+     "n": "1 piece (30 g)",
+     "hi": "1 टुकड़ा",
+     "g": 30
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "O006",
+   "slug": "mutton-goat-lungs-raw",
+   "name": "Mutton (Goat), Lungs, Raw",
+   "hi": "बकरे का फेफड़ा (कच्चा)",
+   "alias": [
+    "phephda",
+    "phephra",
+    "fefda",
+    "fefde",
+    "mutton lungs",
+    "goat lungs",
+    "bakre ka phephda"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍖",
+   "portions": [
+    {
+     "n": "1 piece (30 g)",
+     "hi": "1 टुकड़ा",
+     "g": 30
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "O007",
+   "slug": "mutton-goat-heart-raw",
+   "name": "Mutton (Goat), Heart, Raw",
+   "hi": "बकरे का दिल (कच्चा)",
+   "alias": [
+    "dil",
+    "mutton heart",
+    "goat heart",
+    "bakre ka dil",
+    "dil ki sabzi"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍖",
+   "portions": [
+    {
+     "n": "1 piece (30 g)",
+     "hi": "1 टुकड़ा",
+     "g": 30
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "O008",
+   "slug": "mutton-goat-liver-raw",
+   "name": "Mutton (Goat), Liver, Raw",
+   "hi": "बकरे की कलेजी (कच्ची)",
+   "alias": [
+    "kaleji",
+    "kalegi",
+    "mutton liver",
+    "goat liver",
+    "mutton kaleji",
+    "bakre ki kaleji",
+    "liver",
+    "kaleji fry"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍖",
+   "portions": [
+    {
+     "n": "1 piece (40 g)",
+     "hi": "1 कलेजी",
+     "g": 40
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "O009",
+   "slug": "mutton-goat-tripe-raw",
+   "name": "Mutton (Goat), Tripe (Ojhri), Raw",
+   "hi": "बकरे की ओझड़ी (कच्ची)",
+   "alias": [
+    "ojhri",
+    "ojhdi",
+    "ojadi",
+    "ojri",
+    "mutton tripe",
+    "goat tripe",
+    "tripe",
+    "bakre ki ojhri",
+    "stomach"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍖",
+   "portions": [
+    {
+     "n": "1 piece (30 g)",
+     "hi": "1 टुकड़ा",
+     "g": 30
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "O010",
+   "slug": "mutton-goat-spleen-raw",
+   "name": "Mutton (Goat), Spleen, Raw",
+   "hi": "बकरे की तिल्ली (कच्ची)",
+   "alias": [
+    "tilli",
+    "mutton spleen",
+    "goat spleen",
+    "bakre ki tilli"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍖",
+   "portions": [
+    {
+     "n": "1 piece (30 g)",
+     "hi": "1 टुकड़ा",
+     "g": 30
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "O011",
+   "slug": "mutton-goat-kidneys-raw",
+   "name": "Mutton (Goat), Kidneys, Raw",
+   "hi": "बकरे के गुर्दे (कच्चे)",
+   "alias": [
+    "gurda",
+    "gurde",
+    "mutton kidney",
+    "goat kidney",
+    "kidney",
+    "bakre ke gurde",
+    "gurda fry"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍖",
+   "portions": [
+    {
+     "n": "1 kidney (40 g)",
+     "hi": "1 गुर्दा",
+     "g": 40
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "O012",
+   "slug": "mutton-goat-small-intestine-raw",
+   "name": "Mutton (Goat), Small Intestine, Raw",
+   "hi": "बकरे की आंत (कच्ची)",
+   "alias": [
+    "aant",
+    "aanth",
+    "anth",
+    "antdi",
+    "mutton intestine",
+    "goat intestine",
+    "tube",
+    "bakre ki aant"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍖",
+   "portions": [
+    {
+     "n": "1 piece (30 g)",
+     "hi": "1 टुकड़ा",
+     "g": 30
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "O013",
+   "slug": "mutton-goat-testis-raw",
+   "name": "Mutton (Goat), Testis, Raw",
+   "hi": "बकरे का कपूरा (कच्चा)",
+   "alias": [
+    "kapura",
+    "kapoora",
+    "fotey",
+    "phote",
+    "mutton testis",
+    "goat testis",
+    "bakre ka kapura"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍖",
+   "portions": [
+    {
+     "n": "1 piece (30 g)",
+     "hi": "1 टुकड़ा",
+     "g": 30
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "O014",
+   "slug": "sheep-shoulder-raw",
+   "name": "Sheep (Mutton), Shoulder, Raw",
+   "hi": "भेड़ का मांस - कंधा (कच्चा)",
+   "alias": [
+    "bhed",
+    "bhed ka gosht",
+    "sheep meat",
+    "sheep shoulder",
+    "mutton sheep",
+    "gorre mamsam",
+    "bhera mangsho",
+    "mendha"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍖",
+   "portions": [
+    {
+     "n": "1 curry piece (40 g)",
+     "hi": "1 टुकड़ा",
+     "g": 40
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "O015",
+   "slug": "sheep-chops-raw",
+   "name": "Sheep (Mutton), Chops, Raw",
+   "hi": "भेड़ की चाप (कच्ची)",
+   "alias": [
+    "sheep chops",
+    "bhed ki chaap",
+    "lamb chops raw",
+    "mutton chops sheep"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍖",
+   "portions": [
+    {
+     "n": "1 chop (60 g)",
+     "hi": "1 चाप",
+     "g": 60
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "O016",
+   "slug": "sheep-leg-raw",
+   "name": "Sheep (Mutton), Leg, Raw",
+   "hi": "भेड़ की रान (कच्ची)",
+   "alias": [
+    "sheep leg",
+    "bhed ki raan",
+    "leg of lamb",
+    "bhed ki ran"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍖",
+   "portions": [
+    {
+     "n": "1 curry piece (40 g)",
+     "hi": "1 टुकड़ा",
+     "g": 40
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "O017",
+   "slug": "sheep-brain-raw",
+   "name": "Sheep (Mutton), Brain, Raw",
+   "hi": "भेड़ का भेजा (कच्चा)",
+   "alias": [
+    "sheep brain",
+    "bhed ka bheja",
+    "sheep maghaz"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍖",
+   "portions": [
+    {
+     "n": "1 brain (60 g)",
+     "hi": "1 भेजा",
+     "g": 60
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "O018",
+   "slug": "sheep-tongue-raw",
+   "name": "Sheep (Mutton), Tongue, Raw",
+   "hi": "भेड़ की ज़बान (कच्ची)",
+   "alias": [
+    "sheep tongue",
+    "bhed ki zubaan",
+    "bhed ki jeebh"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍖",
+   "portions": [
+    {
+     "n": "1 piece (30 g)",
+     "hi": "1 टुकड़ा",
+     "g": 30
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "O019",
+   "slug": "sheep-lungs-raw",
+   "name": "Sheep (Mutton), Lungs, Raw",
+   "hi": "भेड़ का फेफड़ा (कच्चा)",
+   "alias": [
+    "sheep lungs",
+    "bhed ka phephda",
+    "bhed ka fefda"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍖",
+   "portions": [
+    {
+     "n": "1 piece (30 g)",
+     "hi": "1 टुकड़ा",
+     "g": 30
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "O020",
+   "slug": "sheep-heart-raw",
+   "name": "Sheep (Mutton), Heart, Raw",
+   "hi": "भेड़ का दिल (कच्चा)",
+   "alias": [
+    "sheep heart",
+    "bhed ka dil"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍖",
+   "portions": [
+    {
+     "n": "1 piece (30 g)",
+     "hi": "1 टुकड़ा",
+     "g": 30
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "O021",
+   "slug": "sheep-liver-raw",
+   "name": "Sheep (Mutton), Liver, Raw",
+   "hi": "भेड़ की कलेजी (कच्ची)",
+   "alias": [
+    "sheep liver",
+    "bhed ki kaleji",
+    "lamb liver"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍖",
+   "portions": [
+    {
+     "n": "1 piece (40 g)",
+     "hi": "1 कलेजी",
+     "g": 40
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "O022",
+   "slug": "sheep-tripe-raw",
+   "name": "Sheep (Mutton), Tripe, Raw",
+   "hi": "भेड़ की ओझड़ी (कच्ची)",
+   "alias": [
+    "sheep tripe",
+    "bhed ki ojhri",
+    "bhed ki ojhdi"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍖",
+   "portions": [
+    {
+     "n": "1 piece (30 g)",
+     "hi": "1 टुकड़ा",
+     "g": 30
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "O023",
+   "slug": "sheep-spleen-raw",
+   "name": "Sheep (Mutton), Spleen, Raw",
+   "hi": "भेड़ की तिल्ली (कच्ची)",
+   "alias": [
+    "sheep spleen",
+    "bhed ki tilli"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍖",
+   "portions": [
+    {
+     "n": "1 piece (30 g)",
+     "hi": "1 टुकड़ा",
+     "g": 30
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "O024",
+   "slug": "sheep-kidneys-raw",
+   "name": "Sheep (Mutton), Kidneys, Raw",
+   "hi": "भेड़ के गुर्दे (कच्चे)",
+   "alias": [
+    "sheep kidney",
+    "bhed ke gurde",
+    "lamb kidney"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍖",
+   "portions": [
+    {
+     "n": "1 kidney (40 g)",
+     "hi": "1 गुर्दा",
+     "g": 40
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "O025",
+   "slug": "beef-shoulder-raw",
+   "name": "Beef, Shoulder, Raw",
+   "hi": "बीफ़ - कंधा (कच्चा)",
+   "alias": [
+    "beef shoulder",
+    "bada gosht",
+    "bade ka gosht",
+    "gomamsam",
+    "pothirachi",
+    "maattirachi",
+    "goru mangsho",
+    "buffalo meat"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍖",
+   "portions": [
+    {
+     "n": "1 curry piece (40 g)",
+     "hi": "1 टुकड़ा",
+     "g": 40
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "O026",
+   "slug": "beef-chops-raw",
+   "name": "Beef, Chops, Raw",
+   "hi": "बीफ़ चाप (कच्ची)",
+   "alias": [
+    "beef chops",
+    "bada gosht chaap",
+    "beef ribs chops"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍖",
+   "portions": [
+    {
+     "n": "1 chop (70 g)",
+     "hi": "1 चाप",
+     "g": 70
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "O027",
+   "slug": "beef-round-leg-raw",
+   "name": "Beef, Round (Leg), Raw",
+   "hi": "बीफ़ - रान (कच्चा)",
+   "alias": [
+    "beef leg",
+    "beef round",
+    "bada gosht raan",
+    "beef boneless",
+    "beef steak meat"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍖",
+   "portions": [
+    {
+     "n": "1 curry piece (40 g)",
+     "hi": "1 टुकड़ा",
+     "g": 40
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "O028",
+   "slug": "beef-brain-raw",
+   "name": "Beef, Brain, Raw",
+   "hi": "बीफ़ का भेजा (कच्चा)",
+   "alias": [
+    "beef brain",
+    "bada bheja",
+    "bade ka bheja"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍖",
+   "portions": [
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "O029",
+   "slug": "beef-tongue-raw",
+   "name": "Beef, Tongue, Raw",
+   "hi": "बीफ़ की ज़बान (कच्ची)",
+   "alias": [
+    "beef tongue",
+    "bade ki zubaan",
+    "bada zubaan"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍖",
+   "portions": [
+    {
+     "n": "1 piece (30 g)",
+     "hi": "1 टुकड़ा",
+     "g": 30
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "O030",
+   "slug": "beef-lungs-raw",
+   "name": "Beef, Lungs, Raw",
+   "hi": "बीफ़ का फेफड़ा (कच्चा)",
+   "alias": [
+    "beef lungs",
+    "bade ka phephda",
+    "bada fefda"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍖",
+   "portions": [
+    {
+     "n": "1 piece (30 g)",
+     "hi": "1 टुकड़ा",
+     "g": 30
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "O031",
+   "slug": "beef-heart-raw",
+   "name": "Beef, Heart, Raw",
+   "hi": "बीफ़ का दिल (कच्चा)",
+   "alias": [
+    "beef heart",
+    "bade ka dil"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍖",
+   "portions": [
+    {
+     "n": "1 piece (30 g)",
+     "hi": "1 टुकड़ा",
+     "g": 30
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "O032",
+   "slug": "beef-liver-raw",
+   "name": "Beef, Liver, Raw",
+   "hi": "बीफ़ की कलेजी (कच्ची)",
+   "alias": [
+    "beef liver",
+    "bade ki kaleji",
+    "bada kaleji",
+    "beef kaleji"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍖",
+   "portions": [
+    {
+     "n": "1 piece (50 g)",
+     "hi": "1 कलेजी",
+     "g": 50
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "O033",
+   "slug": "beef-tripe-raw",
+   "name": "Beef, Tripe, Raw",
+   "hi": "बीफ़ ओझड़ी (कच्ची)",
+   "alias": [
+    "beef tripe",
+    "bade ki ojhri",
+    "tripe beef"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍖",
+   "portions": [
+    {
+     "n": "1 piece (30 g)",
+     "hi": "1 टुकड़ा",
+     "g": 30
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "O034",
+   "slug": "beef-spleen-raw",
+   "name": "Beef, Spleen, Raw",
+   "hi": "बीफ़ की तिल्ली (कच्ची)",
+   "alias": [
+    "beef spleen",
+    "bade ki tilli"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍖",
+   "portions": [
+    {
+     "n": "1 piece (30 g)",
+     "hi": "1 टुकड़ा",
+     "g": 30
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "O035",
+   "slug": "beef-kidneys-raw",
+   "name": "Beef, Kidneys, Raw",
+   "hi": "बीफ़ के गुर्दे (कच्चे)",
+   "alias": [
+    "beef kidney",
+    "bade ke gurde"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍖",
+   "portions": [
+    {
+     "n": "1 kidney (60 g)",
+     "hi": "1 गुर्दा",
+     "g": 60
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "O036",
+   "slug": "calf-shoulder-raw",
+   "name": "Calf (Veal), Shoulder, Raw",
+   "hi": "बछड़े का मांस - कंधा (कच्चा)",
+   "alias": [
+    "veal shoulder",
+    "calf shoulder",
+    "bachde ka gosht",
+    "bachda gosht",
+    "veal"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍖",
+   "portions": [
+    {
+     "n": "1 curry piece (40 g)",
+     "hi": "1 टुकड़ा",
+     "g": 40
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "O037",
+   "slug": "calf-chops-raw",
+   "name": "Calf (Veal), Chops, Raw",
+   "hi": "बछड़े की चाप (कच्ची)",
+   "alias": [
+    "veal chops",
+    "calf chops",
+    "bachde ki chaap"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍖",
+   "portions": [
+    {
+     "n": "1 chop (70 g)",
+     "hi": "1 चाप",
+     "g": 70
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "O038",
+   "slug": "calf-round-leg-raw",
+   "name": "Calf (Veal), Round (Leg), Raw",
+   "hi": "बछड़े की रान (कच्ची)",
+   "alias": [
+    "veal leg",
+    "calf leg",
+    "calf round",
+    "bachde ki raan"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍖",
+   "portions": [
+    {
+     "n": "1 curry piece (40 g)",
+     "hi": "1 टुकड़ा",
+     "g": 40
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "O039",
+   "slug": "calf-brain-raw",
+   "name": "Calf (Veal), Brain, Raw",
+   "hi": "बछड़े का भेजा (कच्चा)",
+   "alias": [
+    "calf brain",
+    "veal brain",
+    "bachde ka bheja"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍖",
+   "portions": [
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "O040",
+   "slug": "calf-tongue-raw",
+   "name": "Calf (Veal), Tongue, Raw",
+   "hi": "बछड़े की ज़बान (कच्ची)",
+   "alias": [
+    "calf tongue",
+    "veal tongue",
+    "bachde ki zubaan"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍖",
+   "portions": [
+    {
+     "n": "1 piece (30 g)",
+     "hi": "1 टुकड़ा",
+     "g": 30
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "O041",
+   "slug": "calf-heart-raw",
+   "name": "Calf (Veal), Heart, Raw",
+   "hi": "बछड़े का दिल (कच्चा)",
+   "alias": [
+    "calf heart",
+    "veal heart",
+    "bachde ka dil"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍖",
+   "portions": [
+    {
+     "n": "1 piece (30 g)",
+     "hi": "1 टुकड़ा",
+     "g": 30
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "O042",
+   "slug": "calf-liver-raw",
+   "name": "Calf (Veal), Liver, Raw",
+   "hi": "बछड़े की कलेजी (कच्ची)",
+   "alias": [
+    "calf liver",
+    "veal liver",
+    "bachde ki kaleji"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍖",
+   "portions": [
+    {
+     "n": "1 piece (50 g)",
+     "hi": "1 कलेजी",
+     "g": 50
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "O043",
+   "slug": "calf-spleen-raw",
+   "name": "Calf (Veal), Spleen, Raw",
+   "hi": "बछड़े की तिल्ली (कच्ची)",
+   "alias": [
+    "calf spleen",
+    "veal spleen",
+    "bachde ki tilli"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍖",
+   "portions": [
+    {
+     "n": "1 piece (30 g)",
+     "hi": "1 टुकड़ा",
+     "g": 30
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "O044",
+   "slug": "calf-kidneys-raw",
+   "name": "Calf (Veal), Kidneys, Raw",
+   "hi": "बछड़े के गुर्दे (कच्चे)",
+   "alias": [
+    "calf kidney",
+    "veal kidney",
+    "bachde ke gurde"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍖",
+   "portions": [
+    {
+     "n": "1 kidney (50 g)",
+     "hi": "1 गुर्दा",
+     "g": 50
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "O045",
+   "slug": "mithun-shoulder-raw",
+   "name": "Mithun (Gayal), Shoulder, Raw",
+   "hi": "मिथुन (गयाल) का मांस - कंधा (कच्चा)",
+   "alias": [
+    "mithun",
+    "mithun meat",
+    "gayal",
+    "gayal meat",
+    "mithun shoulder",
+    "mithun gosht"
+   ],
+   "cat": "nonveg",
+   "region": "North-East India",
+   "diet": "nonveg",
+   "emoji": "🍖",
+   "portions": [
+    {
+     "n": "1 curry piece (40 g)",
+     "hi": "1 टुकड़ा",
+     "g": 40
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "O046",
+   "slug": "mithun-chops-raw",
+   "name": "Mithun (Gayal), Chops, Raw",
+   "hi": "मिथुन (गयाल) की चाप (कच्ची)",
+   "alias": [
+    "mithun chops",
+    "gayal chops",
+    "mithun chaap"
+   ],
+   "cat": "nonveg",
+   "region": "North-East India",
+   "diet": "nonveg",
+   "emoji": "🍖",
+   "portions": [
+    {
+     "n": "1 chop (70 g)",
+     "hi": "1 चाप",
+     "g": 70
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "O047",
+   "slug": "mithun-round-leg-raw",
+   "name": "Mithun (Gayal), Round (Leg), Raw",
+   "hi": "मिथुन (गयाल) की रान (कच्ची)",
+   "alias": [
+    "mithun leg",
+    "gayal leg",
+    "mithun round",
+    "mithun raan"
+   ],
+   "cat": "nonveg",
+   "region": "North-East India",
+   "diet": "nonveg",
+   "emoji": "🍖",
+   "portions": [
+    {
+     "n": "1 curry piece (40 g)",
+     "hi": "1 टुकड़ा",
+     "g": 40
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "O048",
+   "slug": "pork-shoulder-raw",
+   "name": "Pork, Shoulder, Raw",
+   "hi": "सूअर का मांस - कंधा (कच्चा)",
+   "alias": [
+    "pork",
+    "pork shoulder",
+    "suar ka gosht",
+    "suwar ka gosht",
+    "sooar",
+    "pig meat",
+    "pandi kari",
+    "pandi mamsam",
+    "shuorer mangsho",
+    "dukkar"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍖",
+   "portions": [
+    {
+     "n": "1 curry piece (40 g)",
+     "hi": "1 टुकड़ा",
+     "g": 40
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "O049",
+   "slug": "pork-chops-raw",
+   "name": "Pork, Chops, Raw",
+   "hi": "सूअर की चाप (कच्ची)",
+   "alias": [
+    "pork chops",
+    "pork chop",
+    "suar ki chaap",
+    "suwar chaap"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍖",
+   "portions": [
+    {
+     "n": "1 chop (80 g)",
+     "hi": "1 चाप",
+     "g": 80
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "O050",
+   "slug": "pork-ham-raw",
+   "name": "Pork, Ham (Hind Leg), Raw",
+   "hi": "सूअर की रान - हैम (कच्ची)",
+   "alias": [
+    "pork ham",
+    "ham",
+    "pork leg",
+    "suar ki raan",
+    "fresh ham"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍖",
+   "portions": [
+    {
+     "n": "1 curry piece (40 g)",
+     "hi": "1 टुकड़ा",
+     "g": 40
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "O051",
+   "slug": "pork-lungs-raw",
+   "name": "Pork, Lungs, Raw",
+   "hi": "सूअर का फेफड़ा (कच्चा)",
+   "alias": [
+    "pork lungs",
+    "suar ka phephda"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍖",
+   "portions": [
+    {
+     "n": "1 piece (30 g)",
+     "hi": "1 टुकड़ा",
+     "g": 30
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "O052",
+   "slug": "pork-heart-raw",
+   "name": "Pork, Heart, Raw",
+   "hi": "सूअर का दिल (कच्चा)",
+   "alias": [
+    "pork heart",
+    "suar ka dil"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍖",
+   "portions": [
+    {
+     "n": "1 piece (30 g)",
+     "hi": "1 टुकड़ा",
+     "g": 30
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "O053",
+   "slug": "pork-liver-raw",
+   "name": "Pork, Liver, Raw",
+   "hi": "सूअर की कलेजी (कच्ची)",
+   "alias": [
+    "pork liver",
+    "suar ki kaleji"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍖",
+   "portions": [
+    {
+     "n": "1 piece (40 g)",
+     "hi": "1 कलेजी",
+     "g": 40
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "O054",
+   "slug": "pork-stomach-raw",
+   "name": "Pork, Stomach, Raw",
+   "hi": "सूअर का पेट (कच्चा)",
+   "alias": [
+    "pork stomach",
+    "pork tripe",
+    "suar ka pet"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍖",
+   "portions": [
+    {
+     "n": "1 piece (30 g)",
+     "hi": "1 टुकड़ा",
+     "g": 30
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "O055",
+   "slug": "pork-spleen-raw",
+   "name": "Pork, Spleen, Raw",
+   "hi": "सूअर की तिल्ली (कच्ची)",
+   "alias": [
+    "pork spleen",
+    "suar ki tilli"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍖",
+   "portions": [
+    {
+     "n": "1 piece (30 g)",
+     "hi": "1 टुकड़ा",
+     "g": 30
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "O056",
+   "slug": "pork-kidneys-raw",
+   "name": "Pork, Kidneys, Raw",
+   "hi": "सूअर के गुर्दे (कच्चे)",
+   "alias": [
+    "pork kidney",
+    "suar ke gurde"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍖",
+   "portions": [
+    {
+     "n": "1 kidney (60 g)",
+     "hi": "1 गुर्दा",
+     "g": 60
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "O057",
+   "slug": "pork-small-intestine-raw",
+   "name": "Pork, Small Intestine, Raw",
+   "hi": "सूअर की आंत (कच्ची)",
+   "alias": [
+    "pork intestine",
+    "pork tube",
+    "suar ki aant"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍖",
+   "portions": [
+    {
+     "n": "1 piece (30 g)",
+     "hi": "1 टुकड़ा",
+     "g": 30
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "O058",
+   "slug": "hare-shoulder-raw",
+   "name": "Hare (Wild Khargosh), Shoulder, Raw",
+   "hi": "जंगली खरगोश (खरहा) का मांस - कंधा (कच्चा)",
+   "alias": [
+    "hare",
+    "hare meat",
+    "kharha",
+    "kharha ka gosht",
+    "jungli khargosh",
+    "jangli khargosh",
+    "hare shoulder"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍖",
+   "portions": [
+    {
+     "n": "1 piece (60 g)",
+     "hi": "1 टुकड़ा",
+     "g": 60
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "O059",
+   "slug": "hare-chops-raw",
+   "name": "Hare (Wild Khargosh), Chops, Raw",
+   "hi": "जंगली खरगोश (खरहा) की चाप (कच्ची)",
+   "alias": [
+    "hare chops",
+    "kharha chaap",
+    "jungli khargosh chaap"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍖",
+   "portions": [
+    {
+     "n": "1 piece (60 g)",
+     "hi": "1 टुकड़ा",
+     "g": 60
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "O060",
+   "slug": "hare-leg-raw",
+   "name": "Hare (Wild Khargosh), Leg, Raw",
+   "hi": "जंगली खरगोश (खरहा) की रान (कच्ची)",
+   "alias": [
+    "hare leg",
+    "kharha raan",
+    "jungli khargosh leg"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍖",
+   "portions": [
+    {
+     "n": "1 piece (60 g)",
+     "hi": "1 टुकड़ा",
+     "g": 60
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "O061",
+   "slug": "rabbit-shoulder-raw",
+   "name": "Rabbit (Khargosh), Shoulder, Raw",
+   "hi": "खरगोश का मांस - कंधा (कच्चा)",
+   "alias": [
+    "rabbit",
+    "rabbit meat",
+    "khargosh",
+    "khargosh ka gosht",
+    "muyal kari",
+    "rabbit shoulder"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍖",
+   "portions": [
+    {
+     "n": "1 piece (60 g)",
+     "hi": "1 टुकड़ा",
+     "g": 60
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "O062",
+   "slug": "rabbit-chops-raw",
+   "name": "Rabbit (Khargosh), Chops, Raw",
+   "hi": "खरगोश की चाप (कच्ची)",
+   "alias": [
+    "rabbit chops",
+    "khargosh chaap"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍖",
+   "portions": [
+    {
+     "n": "1 piece (60 g)",
+     "hi": "1 टुकड़ा",
+     "g": 60
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "O063",
+   "slug": "rabbit-leg-raw",
+   "name": "Rabbit (Khargosh), Leg, Raw",
+   "hi": "खरगोश की रान (कच्ची)",
+   "alias": [
+    "rabbit leg",
+    "khargosh raan",
+    "khargosh ki tang"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍖",
+   "portions": [
+    {
+     "n": "1 piece (60 g)",
+     "hi": "1 टुकड़ा",
+     "g": 60
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P001",
+   "slug": "ladyfish-allathi-raw",
+   "name": "Ladyfish (Allathi), Raw",
+   "hi": "लेडीफ़िश (अल्लाथी)",
+   "alias": [
+    "allathi",
+    "tenpounder",
+    "indo pacific tarpon",
+    "valli poomeen",
+    "poomeen",
+    "shonas",
+    "dandeli",
+    "jinnagow",
+    "jallagu",
+    "ladyfish"
+   ],
+   "cat": "nonveg",
+   "region": "South India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 curry piece (80 g)",
+     "hi": "1 टुकड़ा",
+     "g": 80
+    },
+    {
+     "n": "2 pieces (160 g)",
+     "hi": "2 टुकड़े",
+     "g": 160
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P002",
+   "slug": "pomfret-black-aluva-raw",
+   "name": "Pomfret, Black (Aluva), Raw",
+   "hi": "काला पॉम्फ्रेट (अलुवा)",
+   "alias": [
+    "aluva",
+    "avoli",
+    "karuvaval",
+    "vellavoli",
+    "vavval",
+    "nalla chanduva",
+    "chanduva",
+    "brown pomfret",
+    "karuvolli"
+   ],
+   "cat": "nonveg",
+   "region": "South India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 curry piece (80 g)",
+     "hi": "1 टुकड़ा",
+     "g": 80
+    },
+    {
+     "n": "2 pieces (160 g)",
+     "hi": "2 टुकड़े",
+     "g": 160
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P003",
+   "slug": "anchovy-nethili-raw",
+   "name": "Anchovy (Nethili), Raw",
+   "hi": "एंकोवी (नेथली)",
+   "alias": [
+    "nethili",
+    "nethili meen",
+    "netholi",
+    "dindus",
+    "mandeli",
+    "indian anchovy",
+    "natoo",
+    "kozhuva"
+   ],
+   "cat": "nonveg",
+   "region": "South India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 handful (30 g)",
+     "hi": "1 मुट्ठी",
+     "g": 30
+    },
+    {
+     "n": "1 katori (100 g raw)",
+     "hi": "1 कटोरी (कच्ची)",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P004",
+   "slug": "green-jobfish-ari-raw",
+   "name": "Green Jobfish (Ari), Raw",
+   "hi": "ग्रीन जॉबफ़िश (अरी)",
+   "alias": [
+    "ari",
+    "ari meen",
+    "ari fish",
+    "jobfish",
+    "green jobfish"
+   ],
+   "cat": "nonveg",
+   "region": "South India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 curry piece (80 g)",
+     "hi": "1 टुकड़ा",
+     "g": 80
+    },
+    {
+     "n": "2 pieces (160 g)",
+     "hi": "2 टुकड़े",
+     "g": 160
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P005",
+   "slug": "barramundi-betki-raw",
+   "name": "Barramundi (Betki), Raw",
+   "hi": "भेटकी (बेटकी मछली)",
+   "alias": [
+    "bhetki",
+    "bekti",
+    "bhekti",
+    "betki fish",
+    "asian sea bass",
+    "sea bass",
+    "seabass",
+    "giant sea perch",
+    "cockup",
+    "koduva",
+    "keliji",
+    "narimeen",
+    "pandu kopa",
+    "khajura"
+   ],
+   "cat": "nonveg",
+   "region": "West Bengal",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 steak (100 g)",
+     "hi": "1 स्टीक",
+     "g": 100
+    },
+    {
+     "n": "1 large piece (150 g)",
+     "hi": "1 बड़ा टुकड़ा",
+     "g": 150
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P006",
+   "slug": "black-snapper-raw",
+   "name": "Black Snapper, Raw",
+   "hi": "काला स्नैपर",
+   "alias": [
+    "kala snapper",
+    "snapper",
+    "macolor",
+    "black snapper fish"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 curry piece (80 g)",
+     "hi": "1 टुकड़ा",
+     "g": 80
+    },
+    {
+     "n": "2 pieces (160 g)",
+     "hi": "2 टुकड़े",
+     "g": 160
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P007",
+   "slug": "bombay-duck-bombil-raw",
+   "name": "Bombay Duck (Bombil), Raw",
+   "hi": "बॉम्बे डक (बोंबिल)",
+   "alias": [
+    "bombil",
+    "bombay duck fish",
+    "bummalo",
+    "bumla",
+    "nehare",
+    "bamaloh",
+    "gulchi",
+    "lootia",
+    "lutia",
+    "lizardfish",
+    "vangaravasi"
+   ],
+   "cat": "nonveg",
+   "region": "Maharashtra",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 small fish (60 g)",
+     "hi": "1 छोटी मछली",
+     "g": 60
+    },
+    {
+     "n": "3 small fish (180 g)",
+     "hi": "3 छोटी मछली",
+     "g": 180
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P008",
+   "slug": "pike-conger-bommuralu-raw",
+   "name": "Pike Conger Eel (Bommuralu), Raw",
+   "hi": "पाइक कॉन्गर ईल (बोम्मुरालु)",
+   "alias": [
+    "bommuralu",
+    "bommaralu",
+    "daggertooth pike conger",
+    "conger eel",
+    "sea eel",
+    "eel"
+   ],
+   "cat": "nonveg",
+   "region": "Andhra Pradesh",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 curry piece (80 g)",
+     "hi": "1 टुकड़ा",
+     "g": 80
+    },
+    {
+     "n": "2 pieces (160 g)",
+     "hi": "2 टुकड़े",
+     "g": 160
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P009",
+   "slug": "sea-catfish-raw",
+   "name": "Sea Catfish, Raw",
+   "hi": "समुद्री कैटफ़िश",
+   "alias": [
+    "sea catfish",
+    "marine catfish",
+    "shingala",
+    "singala",
+    "khaga",
+    "tachysurus"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 curry piece (80 g)",
+     "hi": "1 टुकड़ा",
+     "g": 80
+    },
+    {
+     "n": "2 pieces (160 g)",
+     "hi": "2 टुकड़े",
+     "g": 160
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P010",
+   "slug": "cobia-chakla-raw",
+   "name": "Cobia (Chakla / Black Kingfish), Raw",
+   "hi": "कोबिया (चकला)",
+   "alias": [
+    "chakla",
+    "sakla",
+    "black kingfish",
+    "black king fish",
+    "ling",
+    "lemonfish",
+    "crabeater",
+    "modasa",
+    "muddus",
+    "neimeen",
+    "peddah mottah"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 steak (100 g)",
+     "hi": "1 स्टीक",
+     "g": 100
+    },
+    {
+     "n": "1 large piece (150 g)",
+     "hi": "1 बड़ा टुकड़ा",
+     "g": 150
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P011",
+   "slug": "leatherjacket-chappal-raw",
+   "name": "Unicorn Leatherjacket (Chappal), Raw",
+   "hi": "लेदरजैकेट (चप्पल मछली)",
+   "alias": [
+    "chappal",
+    "chappal fish",
+    "filefish",
+    "file fish",
+    "unicorn leatherjacket",
+    "leatherjacket"
+   ],
+   "cat": "nonveg",
+   "region": "South India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 curry piece (80 g)",
+     "hi": "1 टुकड़ा",
+     "g": 80
+    },
+    {
+     "n": "2 pieces (160 g)",
+     "hi": "2 टुकड़े",
+     "g": 160
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P012",
+   "slug": "rainbow-runner-chelu-raw",
+   "name": "Rainbow Runner (Chelu), Raw",
+   "hi": "रेनबो रनर (चेलू)",
+   "alias": [
+    "chelu",
+    "rainbow yellowtail",
+    "spanish jack",
+    "kulkul",
+    "poomeen",
+    "chameen"
+   ],
+   "cat": "nonveg",
+   "region": "South India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 curry piece (80 g)",
+     "hi": "1 टुकड़ा",
+     "g": 80
+    },
+    {
+     "n": "2 pieces (160 g)",
+     "hi": "2 टुकड़े",
+     "g": 160
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P013",
+   "slug": "snapper-five-lined-chembali-raw",
+   "name": "Snapper, Five-lined (Chembali), Raw",
+   "hi": "फ़ाइव-लाइन स्नैपर (चेम्बाली)",
+   "alias": [
+    "chembali",
+    "chemballi",
+    "five lined snapper",
+    "blue striped snapper",
+    "snapper"
+   ],
+   "cat": "nonveg",
+   "region": "South India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 curry piece (80 g)",
+     "hi": "1 टुकड़ा",
+     "g": 80
+    },
+    {
+     "n": "2 pieces (160 g)",
+     "hi": "2 टुकड़े",
+     "g": 160
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P014",
+   "slug": "snapper-crimson-eri-meen-raw",
+   "name": "Snapper, Crimson (Eri Meen), Raw",
+   "hi": "क्रिमसन स्नैपर (एरी मीन)",
+   "alias": [
+    "eri meen",
+    "erimeen",
+    "crimson jobfish",
+    "opakapaka",
+    "pink snapper",
+    "hawaiian pink snapper"
+   ],
+   "cat": "nonveg",
+   "region": "South India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 curry piece (80 g)",
+     "hi": "1 टुकड़ा",
+     "g": 80
+    },
+    {
+     "n": "2 pieces (160 g)",
+     "hi": "2 टुकड़े",
+     "g": 160
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P015",
+   "slug": "grouper-spinycheek-gobro-raw",
+   "name": "Grouper, Spinycheek (Gobro), Raw",
+   "hi": "ग्रुपर (गोबरो)",
+   "alias": [
+    "gobro",
+    "gobra",
+    "gobri",
+    "hekru",
+    "hekaru",
+    "kalava",
+    "coral cod",
+    "reef cod",
+    "grouper",
+    "guri"
+   ],
+   "cat": "nonveg",
+   "region": "West India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 steak (100 g)",
+     "hi": "1 स्टीक",
+     "g": 100
+    },
+    {
+     "n": "1 large piece (150 g)",
+     "hi": "1 बड़ा टुकड़ा",
+     "g": 150
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P016",
+   "slug": "guitarfish-raw",
+   "name": "Guitarfish, Raw",
+   "hi": "गिटारफ़िश (रे मछली)",
+   "alias": [
+    "guitar fish",
+    "ray fish",
+    "rhinobatus",
+    "ray machhi"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 curry piece (80 g)",
+     "hi": "1 टुकड़ा",
+     "g": 80
+    },
+    {
+     "n": "2 pieces (160 g)",
+     "hi": "2 टुकड़े",
+     "g": 160
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P017",
+   "slug": "hilsa-ilish-raw",
+   "name": "Hilsa (Ilish), Raw",
+   "hi": "हिल्सा (इलिश)",
+   "alias": [
+    "ilish",
+    "ilisha",
+    "elish",
+    "hilsha",
+    "hilsa fish",
+    "hilsa shad",
+    "river shad",
+    "indian shad",
+    "palla",
+    "palasa",
+    "polasa",
+    "palva",
+    "pulasa",
+    "paluva",
+    "ilish maach"
+   ],
+   "cat": "nonveg",
+   "region": "West Bengal",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 curry piece (80 g)",
+     "hi": "1 टुकड़ा",
+     "g": 80
+    },
+    {
+     "n": "2 pieces (160 g)",
+     "hi": "2 टुकड़े",
+     "g": 160
+    }
+   ],
+   "core": true
+  },
+  {
+   "code": "P018",
+   "slug": "sea-catfish-jallal-raw",
+   "name": "Sea Catfish (Jallal), Raw",
+   "hi": "समुद्री कैटफ़िश (जल्लाल)",
+   "alias": [
+    "jallal",
+    "arius",
+    "arius catfish",
+    "sea catfish arius"
+   ],
+   "cat": "nonveg",
+   "region": "South India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 curry piece (80 g)",
+     "hi": "1 टुकड़ा",
+     "g": 80
+    },
+    {
+     "n": "2 pieces (160 g)",
+     "hi": "2 टुकड़े",
+     "g": 160
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P019",
+   "slug": "pigface-bream-jathi-vela-meen-raw",
+   "name": "Pigface Bream (Jathi Vela Meen), Raw",
+   "hi": "पिगफ़ेस ब्रीम (जाति वेला मीन)",
+   "alias": [
+    "jathi vela meen",
+    "emperor fish",
+    "emperor",
+    "valamin",
+    "pullivelameen",
+    "karua",
+    "pig face bream",
+    "silver spotted sea bream"
+   ],
+   "cat": "nonveg",
+   "region": "South India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 curry piece (80 g)",
+     "hi": "1 टुकड़ा",
+     "g": 80
+    },
+    {
+     "n": "2 pieces (160 g)",
+     "hi": "2 टुकड़े",
+     "g": 160
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P020",
+   "slug": "lizardfish-kadal-bral-raw",
+   "name": "Lizardfish, Indian (Kadal Bral), Raw",
+   "hi": "लिज़र्डफ़िश (कडल ब्राल)",
+   "alias": [
+    "kadal bral",
+    "lizardfish",
+    "lizard fish",
+    "indian lizardfish",
+    "synodus"
+   ],
+   "cat": "nonveg",
+   "region": "South India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 small fish (60 g)",
+     "hi": "1 छोटी मछली",
+     "g": 60
+    },
+    {
+     "n": "3 small fish (180 g)",
+     "hi": "3 छोटी मछली",
+     "g": 180
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P021",
+   "slug": "threadfin-bream-kadali-raw",
+   "name": "Threadfin Bream, Redfilament (Kadali), Raw",
+   "hi": "थ्रेडफ़िन ब्रीम (कडली)",
+   "alias": [
+    "kadali",
+    "kilimeen",
+    "threadfin bream",
+    "red filament threadfin bream",
+    "nemipterus"
+   ],
+   "cat": "nonveg",
+   "region": "South India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 small fish (60 g)",
+     "hi": "1 छोटी मछली",
+     "g": 60
+    },
+    {
+     "n": "3 small fish (180 g)",
+     "hi": "3 छोटी मछली",
+     "g": 180
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P022",
+   "slug": "indian-salmon-rawas-kalamaara-raw",
+   "name": "Indian Salmon (Rawas / Kalamaara), Raw",
+   "hi": "इंडियन सैल्मन (रावस)",
+   "alias": [
+    "rawas",
+    "ravas",
+    "indian threadfin",
+    "kalamaara",
+    "kalamara",
+    "thamuthi",
+    "dara",
+    "darha",
+    "wahmeen",
+    "baameen",
+    "thiravalai",
+    "giant threadfin",
+    "indian salmon fish"
+   ],
+   "cat": "nonveg",
+   "region": "West India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 steak (100 g)",
+     "hi": "1 स्टीक",
+     "g": 100
+    },
+    {
+     "n": "1 large piece (150 g)",
+     "hi": "1 बड़ा टुकड़ा",
+     "g": 150
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P023",
+   "slug": "grouper-orange-spotted-kalava-raw",
+   "name": "Grouper, Orange-spotted (Kalava), Raw",
+   "hi": "ग्रुपर (कलावा)",
+   "alias": [
+    "kalava",
+    "kalawa",
+    "orange spotted grouper",
+    "estuary cod",
+    "grouper"
+   ],
+   "cat": "nonveg",
+   "region": "South India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 steak (100 g)",
+     "hi": "1 स्टीक",
+     "g": 100
+    },
+    {
+     "n": "1 large piece (150 g)",
+     "hi": "1 बड़ा टुकड़ा",
+     "g": 150
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P024",
+   "slug": "snapper-blubberlip-kanamayya-raw",
+   "name": "Snapper, Blubberlip (Kanamayya), Raw",
+   "hi": "ब्लबरलिप स्नैपर (कनमय्या)",
+   "alias": [
+    "kanamayya",
+    "kanamaya",
+    "maori snapper",
+    "multicoloured snapper",
+    "kathupiriyan",
+    "snapper"
+   ],
+   "cat": "nonveg",
+   "region": "South India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 curry piece (80 g)",
+     "hi": "1 टुकड़ा",
+     "g": 80
+    },
+    {
+     "n": "2 pieces (160 g)",
+     "hi": "2 टुकड़े",
+     "g": 160
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P025",
+   "slug": "threadfish-kannadi-paarai-raw",
+   "name": "Indian Threadfish (Kannadi Paarai), Raw",
+   "hi": "थ्रेडफ़िश (कन्नाडी पारै)",
+   "alias": [
+    "kannadi paarai",
+    "kannadi parai",
+    "diamond trevally",
+    "mirror fish",
+    "plumed trevally",
+    "trevally"
+   ],
+   "cat": "nonveg",
+   "region": "South India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 curry piece (80 g)",
+     "hi": "1 टुकड़ा",
+     "g": 80
+    },
+    {
+     "n": "2 pieces (160 g)",
+     "hi": "2 टुकड़े",
+     "g": 160
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P026",
+   "slug": "pearlspot-karimeen-raw",
+   "name": "Pearlspot (Karimeen), Raw",
+   "hi": "करिमीन (पर्लस्पॉट)",
+   "alias": [
+    "karimeen",
+    "kari meen",
+    "pearl spot",
+    "pearlspot fish",
+    "green chromide",
+    "etroplus",
+    "erimeen",
+    "irimeen",
+    "kalunder",
+    "cashimara",
+    "sethakendai"
+   ],
+   "cat": "nonveg",
+   "region": "Kerala",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 small fish (60 g)",
+     "hi": "1 छोटी मछली",
+     "g": 60
+    },
+    {
+     "n": "3 small fish (180 g)",
+     "hi": "3 छोटी मछली",
+     "g": 180
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P027",
+   "slug": "anchovy-broad-striped-karnagawala-raw",
+   "name": "Anchovy, Broad-striped (Karnagawala), Raw",
+   "hi": "एंकोवी (करनगवाला)",
+   "alias": [
+    "karnagawala",
+    "karnagawla",
+    "broad striped anchovy",
+    "anchovy"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 handful (30 g)",
+     "hi": "1 मुट्ठी",
+     "g": 30
+    },
+    {
+     "n": "1 katori (100 g raw)",
+     "hi": "1 कटोरी (कच्ची)",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P028",
+   "slug": "tuna-yellowfin-kayrai-raw",
+   "name": "Tuna, Yellowfin (Kayrai), Raw",
+   "hi": "येलोफ़िन ट्यूना (कायराई)",
+   "alias": [
+    "yellowfin tuna",
+    "yellow fin tuna",
+    "kayrai",
+    "gedar",
+    "gedara",
+    "poovan choora",
+    "kuppa",
+    "bugudi",
+    "bokado",
+    "choora",
+    "tuna fish"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 steak (100 g)",
+     "hi": "1 स्टीक",
+     "g": 100
+    },
+    {
+     "n": "1 large piece (150 g)",
+     "hi": "1 बड़ा टुकड़ा",
+     "g": 150
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P029",
+   "slug": "yellowtail-scad-kiriyan-raw",
+   "name": "Yellowtail Scad (Kiriyan), Raw",
+   "hi": "येलोटेल स्कैड (किरियन)",
+   "alias": [
+    "kiriyan",
+    "horse mackerel",
+    "yellowtail scad",
+    "one finlet scad",
+    "para",
+    "parai",
+    "gondlu",
+    "omaka"
+   ],
+   "cat": "nonveg",
+   "region": "South India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 curry piece (80 g)",
+     "hi": "1 टुकड़ा",
+     "g": 80
+    },
+    {
+     "n": "2 pieces (160 g)",
+     "hi": "2 टुकड़े",
+     "g": 160
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P030",
+   "slug": "devil-ray-kite-fish-raw",
+   "name": "Devil Ray, Shortfin (Kite Fish), Raw",
+   "hi": "डेविल रे (काइट फ़िश)",
+   "alias": [
+    "kite fish",
+    "shortfin devil ray",
+    "mobula",
+    "ray fish",
+    "ray machhi"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 curry piece (80 g)",
+     "hi": "1 टुकड़ा",
+     "g": 80
+    },
+    {
+     "n": "2 pieces (160 g)",
+     "hi": "2 टुकड़े",
+     "g": 160
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P031",
+   "slug": "crescent-grunter-korka-raw",
+   "name": "Crescent Grunter (Korka), Raw",
+   "hi": "टाइगर पर्च (कोरका)",
+   "alias": [
+    "korka",
+    "jarbua",
+    "tiger perch",
+    "tiger bass",
+    "target fish",
+    "crescent perch",
+    "keechan",
+    "keeli",
+    "naveri",
+    "kotha",
+    "garangeta",
+    "naida"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 small fish (60 g)",
+     "hi": "1 छोटी मछली",
+     "g": 60
+    },
+    {
+     "n": "3 small fish (180 g)",
+     "hi": "3 छोटी मछली",
+     "g": 180
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P032",
+   "slug": "trevally-yellowspotted-kulam-paarai-raw",
+   "name": "Trevally, Yellowspotted (Kulam Paarai), Raw",
+   "hi": "येलोस्पॉटेड ट्रेवली (कुलम पारै)",
+   "alias": [
+    "kulam paarai",
+    "kulam parai",
+    "yellowspotted kingfish",
+    "goldspotted trevally",
+    "trevally",
+    "tarrum"
+   ],
+   "cat": "nonveg",
+   "region": "South India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 curry piece (80 g)",
+     "hi": "1 टुकड़ा",
+     "g": 80
+    },
+    {
+     "n": "2 pieces (160 g)",
+     "hi": "2 टुकड़े",
+     "g": 160
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P033",
+   "slug": "threadfin-striped-maagaa-raw",
+   "name": "Striped Threadfin (Maagaa), Raw",
+   "hi": "थ्रेडफ़िन (मागा)",
+   "alias": [
+    "maaga",
+    "maagaa",
+    "magaa",
+    "striped threadfin",
+    "threadfin",
+    "polynemus"
+   ],
+   "cat": "nonveg",
+   "region": "South India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 curry piece (80 g)",
+     "hi": "1 टुकड़ा",
+     "g": 80
+    },
+    {
+     "n": "2 pieces (160 g)",
+     "hi": "2 टुकड़े",
+     "g": 160
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P034",
+   "slug": "mackerel-indian-bangda-raw",
+   "name": "Mackerel, Indian (Bangda), Raw",
+   "hi": "बांगड़ा (भारतीय मैकेरल)",
+   "alias": [
+    "bangda",
+    "bangdo",
+    "bangade",
+    "bangada",
+    "bangdi",
+    "ayila",
+    "ayala",
+    "kanangeluthi",
+    "kumala",
+    "kannangadatha",
+    "karan kita",
+    "kaula gedar",
+    "indian mackerel",
+    "mackerel fish"
+   ],
+   "cat": "nonveg",
+   "region": "West India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 small fish (60 g)",
+     "hi": "1 छोटी मछली",
+     "g": 60
+    },
+    {
+     "n": "3 small fish (180 g)",
+     "hi": "3 छोटी मछली",
+     "g": 180
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P035",
+   "slug": "unicornfish-manda-clathi-raw",
+   "name": "Reticulated Unicornfish (Manda Clathi), Raw",
+   "hi": "यूनिकॉर्नफ़िश (मंडा क्लाथी)",
+   "alias": [
+    "manda clathi",
+    "unicornfish",
+    "unicorn fish",
+    "naso"
+   ],
+   "cat": "nonveg",
+   "region": "South India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 curry piece (80 g)",
+     "hi": "1 टुकड़ा",
+     "g": 80
+    },
+    {
+     "n": "2 pieces (160 g)",
+     "hi": "2 टुकड़े",
+     "g": 160
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P036",
+   "slug": "surgeonfish-matha-raw",
+   "name": "Surgeonfish (Matha), Raw",
+   "hi": "सर्जनफ़िश (माथा)",
+   "alias": [
+    "matha",
+    "pala",
+    "surgeonfish",
+    "surgeon fish",
+    "elongate surgeonfish",
+    "blue lined surgeonfish"
+   ],
+   "cat": "nonveg",
+   "region": "South India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 small fish (60 g)",
+     "hi": "1 छोटी मछली",
+     "g": 60
+    },
+    {
+     "n": "3 small fish (180 g)",
+     "hi": "3 छोटी मछली",
+     "g": 180
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P037",
+   "slug": "milkfish-poomeen-raw",
+   "name": "Milkfish (Poomeen), Raw",
+   "hi": "मिल्कफ़िश (पूमीन)",
+   "alias": [
+    "milkfish",
+    "milk fish",
+    "poomeen",
+    "pal kendai",
+    "palmeen",
+    "hoomeen",
+    "pallabontha",
+    "chanos",
+    "bangus",
+    "white mullet"
+   ],
+   "cat": "nonveg",
+   "region": "South India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 curry piece (80 g)",
+     "hi": "1 टुकड़ा",
+     "g": 80
+    },
+    {
+     "n": "2 pieces (160 g)",
+     "hi": "2 टुकड़े",
+     "g": 160
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P038",
+   "slug": "moonfish-hakkimeen-raw",
+   "name": "Moonfish (Hakkimeen), Raw",
+   "hi": "मूनफ़िश (चाँद मछली)",
+   "alias": [
+    "moon fish",
+    "moonfish",
+    "hakkimeen",
+    "ambattan parah",
+    "vaniani",
+    "amattikatti"
+   ],
+   "cat": "nonveg",
+   "region": "South India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 curry piece (80 g)",
+     "hi": "1 टुकड़ा",
+     "g": 80
+    },
+    {
+     "n": "2 pieces (160 g)",
+     "hi": "2 टुकड़े",
+     "g": 160
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P039",
+   "slug": "grey-mullet-boi-raw",
+   "name": "Grey Mullet (Boi), Raw",
+   "hi": "मलेट (बोई)",
+   "alias": [
+    "mullet",
+    "flathead grey mullet",
+    "flathead mullet",
+    "boi",
+    "boi fish",
+    "bhomat",
+    "tirutha",
+    "madavai",
+    "kathi parega",
+    "mala",
+    "mangan",
+    "pilas",
+    "bhangan"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 curry piece (80 g)",
+     "hi": "1 टुकड़ा",
+     "g": 80
+    },
+    {
+     "n": "2 pieces (160 g)",
+     "hi": "2 टुकड़े",
+     "g": 160
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P040",
+   "slug": "needlefish-mural-raw",
+   "name": "Houndfish / Needlefish (Mural), Raw",
+   "hi": "नीडलफ़िश (मुराल)",
+   "alias": [
+    "mural",
+    "needlefish",
+    "needle fish",
+    "houndfish",
+    "crocodile needlefish",
+    "oola",
+    "keran",
+    "tol"
+   ],
+   "cat": "nonveg",
+   "region": "South India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 curry piece (80 g)",
+     "hi": "1 टुकड़ा",
+     "g": 80
+    },
+    {
+     "n": "2 pieces (160 g)",
+     "hi": "2 टुकड़े",
+     "g": 160
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P041",
+   "slug": "sailfish-myil-meen-raw",
+   "name": "Sailfish (Myil Meen), Raw",
+   "hi": "सेलफ़िश (मयिल मीन)",
+   "alias": [
+    "myil meen",
+    "mayil meen",
+    "sailfish",
+    "sail fish",
+    "indian sail fish",
+    "peacock fish",
+    "olameen",
+    "ola meen",
+    "tadmasa",
+    "tadmachhi",
+    "kunga"
+   ],
+   "cat": "nonveg",
+   "region": "South India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 steak (100 g)",
+     "hi": "1 स्टीक",
+     "g": 100
+    },
+    {
+     "n": "1 large piece (150 g)",
+     "hi": "1 बड़ा टुकड़ा",
+     "g": 150
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P042",
+   "slug": "grouper-malabar-nalla-bontha-raw",
+   "name": "Grouper, Malabar (Nalla Bontha), Raw",
+   "hi": "ग्रुपर (नल्ला बोंथा)",
+   "alias": [
+    "nalla bontha",
+    "malabar grouper",
+    "malabar rockcod",
+    "malabar cod",
+    "giant rock cod",
+    "estuary rock cod",
+    "gopra",
+    "kalawa",
+    "gobra"
+   ],
+   "cat": "nonveg",
+   "region": "South India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 steak (100 g)",
+     "hi": "1 स्टीक",
+     "g": 100
+    },
+    {
+     "n": "1 large piece (150 g)",
+     "hi": "1 बड़ा टुकड़ा",
+     "g": 150
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P043",
+   "slug": "trevally-bigeye-narba-raw",
+   "name": "Trevally, Bigeye (Narba), Raw",
+   "hi": "बिगआई ट्रेवली (नारबा)",
+   "alias": [
+    "narba",
+    "bigeye jack",
+    "great trevally",
+    "six banded trevally",
+    "dusky jack",
+    "kala bangada",
+    "maduthala",
+    "varayan para"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 curry piece (80 g)",
+     "hi": "1 टुकड़ा",
+     "g": 80
+    },
+    {
+     "n": "2 pieces (160 g)",
+     "hi": "2 टुकड़े",
+     "g": 160
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P044",
+   "slug": "trevally-blacktip-paarai-raw",
+   "name": "Trevally, Blacktip (Paarai), Raw",
+   "hi": "ब्लैकटिप ट्रेवली (पारै)",
+   "alias": [
+    "paarai",
+    "parai",
+    "blacktip kingfish",
+    "yellowtail kingfish",
+    "trevally",
+    "blacktip trevally"
+   ],
+   "cat": "nonveg",
+   "region": "South India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 curry piece (80 g)",
+     "hi": "1 टुकड़ा",
+     "g": 80
+    },
+    {
+     "n": "2 pieces (160 g)",
+     "hi": "2 टुकड़े",
+     "g": 160
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P045",
+   "slug": "triggerfish-padayappa-raw",
+   "name": "Rough Triggerfish (Padayappa), Raw",
+   "hi": "ट्रिगरफ़िश (पडयप्पा)",
+   "alias": [
+    "padayappa",
+    "triggerfish",
+    "trigger fish",
+    "spotted oceanic triggerfish"
+   ],
+   "cat": "nonveg",
+   "region": "South India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 curry piece (80 g)",
+     "hi": "1 टुकड़ा",
+     "g": 80
+    },
+    {
+     "n": "2 pieces (160 g)",
+     "hi": "2 टुकड़े",
+     "g": 160
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P046",
+   "slug": "croaker-panna-pali-kora-raw",
+   "name": "Croaker, Panna (Pali Kora), Raw",
+   "hi": "क्रोकर (पाली कोरा)",
+   "alias": [
+    "pali kora",
+    "kora",
+    "croaker",
+    "panna croaker"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 curry piece (80 g)",
+     "hi": "1 टुकड़ा",
+     "g": 80
+    },
+    {
+     "n": "2 pieces (160 g)",
+     "hi": "2 टुकड़े",
+     "g": 160
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P047",
+   "slug": "ribbonfish-pambada-raw",
+   "name": "Ribbonfish (Pambada), Raw",
+   "hi": "रिबनफ़िश (पम्बादा)",
+   "alias": [
+    "pambada",
+    "ribbon fish",
+    "ribbonfish",
+    "hairtail",
+    "hair tail",
+    "small headed hairtail",
+    "savalai",
+    "chavalai",
+    "vellasavala",
+    "patti",
+    "wagti",
+    "baia",
+    "bala",
+    "pambole",
+    "belt fish"
+   ],
+   "cat": "nonveg",
+   "region": "South India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 curry piece (80 g)",
+     "hi": "1 टुकड़ा",
+     "g": 80
+    },
+    {
+     "n": "2 pieces (160 g)",
+     "hi": "2 टुकड़े",
+     "g": 160
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P048",
+   "slug": "croaker-yellow-pandukopa-raw",
+   "name": "Croaker, Yellow (Pandukopa), Raw",
+   "hi": "येलो क्रोकर (पंडुकोपा)",
+   "alias": [
+    "pandukopa",
+    "redlip croaker",
+    "small yellow croaker",
+    "little yellow croaker",
+    "croaker",
+    "yellow corvina"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 curry piece (80 g)",
+     "hi": "1 टुकड़ा",
+     "g": 80
+    },
+    {
+     "n": "2 pieces (160 g)",
+     "hi": "2 टुकड़े",
+     "g": 160
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P049",
+   "slug": "false-trevally-parava-raw",
+   "name": "False Trevally (Parava), Raw",
+   "hi": "फ़ॉल्स ट्रेवली (परावा)",
+   "alias": [
+    "parava",
+    "paravai",
+    "suthumbu",
+    "sudumbu",
+    "guthippu",
+    "saundala",
+    "pervi",
+    "dhangari",
+    "dangri",
+    "chapla",
+    "adavu",
+    "big jawed jumper"
+   ],
+   "cat": "nonveg",
+   "region": "South India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 small fish (60 g)",
+     "hi": "1 छोटी मछली",
+     "g": 60
+    },
+    {
+     "n": "3 small fish (180 g)",
+     "hi": "3 छोटी मछली",
+     "g": 180
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P050",
+   "slug": "indian-halibut-parcus-raw",
+   "name": "Indian Halibut (Parcus), Raw",
+   "hi": "इंडियन हैलिबट (पारकस)",
+   "alias": [
+    "parcus",
+    "indian halibut",
+    "halibut",
+    "indian turbot",
+    "turbot",
+    "erumei nakku",
+    "lep",
+    "zhipali",
+    "bhakas",
+    "hario",
+    "flatfish",
+    "flat fish"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 steak (100 g)",
+     "hi": "1 स्टीक",
+     "g": 100
+    },
+    {
+     "n": "1 large piece (150 g)",
+     "hi": "1 बड़ा टुकड़ा",
+     "g": 150
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P051",
+   "slug": "parrotfish-raw",
+   "name": "Parrotfish, Raw",
+   "hi": "पैरटफ़िश",
+   "alias": [
+    "parrot fish",
+    "blue barred parrotfish",
+    "chandi",
+    "parrotfish scarus"
+   ],
+   "cat": "nonveg",
+   "region": "South India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 curry piece (80 g)",
+     "hi": "1 टुकड़ा",
+     "g": 80
+    },
+    {
+     "n": "2 pieces (160 g)",
+     "hi": "2 टुकड़े",
+     "g": 160
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P052",
+   "slug": "pinjalo-snapper-perinkilichai-raw",
+   "name": "Pinjalo Snapper (Perinkilichai), Raw",
+   "hi": "पिंजालो स्नैपर (पेरिंकिलिचाई)",
+   "alias": [
+    "perinkilichai",
+    "pinjalo",
+    "mette mirrei",
+    "polei oolavai",
+    "snapper"
+   ],
+   "cat": "nonveg",
+   "region": "South India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 curry piece (80 g)",
+     "hi": "1 टुकड़ा",
+     "g": 80
+    },
+    {
+     "n": "2 pieces (160 g)",
+     "hi": "2 टुकड़े",
+     "g": 160
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P053",
+   "slug": "mahi-mahi-phopat-raw",
+   "name": "Mahi Mahi (Phopat), Raw",
+   "hi": "माही माही (फोपट)",
+   "alias": [
+    "phopat",
+    "mahi mahi fish",
+    "common dolphinfish",
+    "dolphin fish",
+    "dorado",
+    "abanoos",
+    "himra",
+    "himra machhi"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 steak (100 g)",
+     "hi": "1 स्टीक",
+     "g": 100
+    },
+    {
+     "n": "1 large piece (150 g)",
+     "hi": "1 बड़ा टुकड़ा",
+     "g": 150
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P054",
+   "slug": "piranha-raw",
+   "name": "Piranha, Raw",
+   "hi": "पिरान्हा",
+   "alias": [
+    "piranha fish",
+    "pirana"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 curry piece (80 g)",
+     "hi": "1 टुकड़ा",
+     "g": 80
+    },
+    {
+     "n": "2 pieces (160 g)",
+     "hi": "2 टुकड़े",
+     "g": 160
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P055",
+   "slug": "pomfret-black-halwa-raw",
+   "name": "Pomfret, Black (Halwa), Raw",
+   "hi": "काला पापलेट (हलवा)",
+   "alias": [
+    "halwa",
+    "halwa fish",
+    "kala paplet",
+    "kala pomfret",
+    "black pomfret",
+    "karuvaval",
+    "vellavoli",
+    "adadio",
+    "thondrotte"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 curry piece (80 g)",
+     "hi": "1 टुकड़ा",
+     "g": 80
+    },
+    {
+     "n": "2 pieces (160 g)",
+     "hi": "2 टुकड़े",
+     "g": 160
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P056",
+   "slug": "pompano-snubnose-raw",
+   "name": "Pomfret, Snub Nose (Pompano), Raw",
+   "hi": "स्नबनोज़ पॉम्फ्रेट (पम्पानो)",
+   "alias": [
+    "snubnose pompano",
+    "snub nose pompano",
+    "pompano",
+    "indian pompano",
+    "peeyada",
+    "koottili",
+    "ladagoo",
+    "silver pomfret"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 curry piece (80 g)",
+     "hi": "1 टुकड़ा",
+     "g": 80
+    },
+    {
+     "n": "2 pieces (160 g)",
+     "hi": "2 टुकड़े",
+     "g": 160
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P057",
+   "slug": "pomfret-white-paplet-raw",
+   "name": "Pomfret, White (Paplet), Raw",
+   "hi": "सफ़ेद पापलेट (पॉम्फ्रेट)",
+   "alias": [
+    "paplet",
+    "pomfret",
+    "pamplet",
+    "paplate",
+    "white pomfret",
+    "silver pomfret",
+    "chandi",
+    "chanda",
+    "saranga",
+    "chandava",
+    "vichuda",
+    "surangat",
+    "manji",
+    "thondrette",
+    "avoli",
+    "vella vavval",
+    "vavval"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 curry piece (80 g)",
+     "hi": "1 टुकड़ा",
+     "g": 80
+    },
+    {
+     "n": "2 pieces (160 g)",
+     "hi": "2 टुकड़े",
+     "g": 160
+    }
+   ],
+   "core": true
+  },
+  {
+   "code": "P058",
+   "slug": "silver-biddy-pranel-raw",
+   "name": "Silver Biddy (Pranel), Raw",
+   "hi": "सिल्वर बिडी (प्रानेल)",
+   "alias": [
+    "pranel",
+    "pranjin",
+    "charbat",
+    "oodan",
+    "paiya",
+    "silver biddy",
+    "mojarra",
+    "whipfin silver biddy"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 small fish (60 g)",
+     "hi": "1 छोटी मछली",
+     "g": 60
+    },
+    {
+     "n": "3 small fish (180 g)",
+     "hi": "3 छोटी मछली",
+     "g": 180
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P059",
+   "slug": "trevally-golden-pulli-paarai-raw",
+   "name": "Trevally, Golden (Pulli Paarai), Raw",
+   "hi": "गोल्डन ट्रेवली (पुल्ली पारै)",
+   "alias": [
+    "pulli paarai",
+    "pulli parai",
+    "golden kingfish",
+    "king trevally",
+    "banded trevally",
+    "horse mackerel",
+    "vennai parai",
+    "komara parai",
+    "kilisai"
+   ],
+   "cat": "nonveg",
+   "region": "South India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 curry piece (80 g)",
+     "hi": "1 टुकड़ा",
+     "g": 80
+    },
+    {
+     "n": "2 pieces (160 g)",
+     "hi": "2 टुकड़े",
+     "g": 160
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P060",
+   "slug": "queenfish-talang-raw",
+   "name": "Queenfish (Talang), Raw",
+   "hi": "क्वीनफ़िश (सग / दागोल)",
+   "alias": [
+    "queen fish",
+    "queenfish",
+    "talang queenfish",
+    "doubledotted queenfish",
+    "sag",
+    "dagol",
+    "dhagol",
+    "palameen",
+    "palaimeen",
+    "toal parah",
+    "katta",
+    "pasupara"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 curry piece (80 g)",
+     "hi": "1 टुकड़ा",
+     "g": 80
+    },
+    {
+     "n": "2 pieces (160 g)",
+     "hi": "2 टुकड़े",
+     "g": 160
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P061",
+   "slug": "tripletail-raai-raw",
+   "name": "Tripletail (Raai), Raw",
+   "hi": "ट्रिपलटेल (राई मछली)",
+   "alias": [
+    "raai fish",
+    "rai fish",
+    "atlantic tripletail",
+    "brown tripletail",
+    "katkola",
+    "parrandee",
+    "musalli",
+    "chota bekkut"
+   ],
+   "cat": "nonveg",
+   "region": "South India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 curry piece (80 g)",
+     "hi": "1 टुकड़ा",
+     "g": 80
+    },
+    {
+     "n": "2 pieces (160 g)",
+     "hi": "2 टुकड़े",
+     "g": 160
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P062",
+   "slug": "grouper-brown-spotted-raai-vanthu-raw",
+   "name": "Grouper, Brown-spotted (Raai Vanthu), Raw",
+   "hi": "ग्रुपर (राई वंथु)",
+   "alias": [
+    "raai vanthu",
+    "brown spotted grouper",
+    "brown spotted reef cod",
+    "souman",
+    "vekharu",
+    "kalava",
+    "pulli kalawa",
+    "hekru",
+    "grouper"
+   ],
+   "cat": "nonveg",
+   "region": "South India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 steak (100 g)",
+     "hi": "1 स्टीक",
+     "g": 100
+    },
+    {
+     "n": "1 large piece (150 g)",
+     "hi": "1 बड़ा टुकड़ा",
+     "g": 150
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P063",
+   "slug": "pink-perch-rani-raw",
+   "name": "Pink Perch (Rani), Raw",
+   "hi": "पिंक पर्च (रानी)",
+   "alias": [
+    "rani",
+    "rani fish",
+    "rani machhi",
+    "pink perch fish",
+    "pink perch",
+    "kilimeen"
+   ],
+   "cat": "nonveg",
+   "region": "West India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 small fish (60 g)",
+     "hi": "1 छोटी मछली",
+     "g": 60
+    },
+    {
+     "n": "3 small fish (180 g)",
+     "hi": "3 छोटी मछली",
+     "g": 180
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P064",
+   "slug": "ray-fish-bowhead-raw",
+   "name": "Ray Fish, Bowhead (Shark Ray), Raw",
+   "hi": "रे मछली (बोहेड, शार्क रे)",
+   "alias": [
+    "ray fish",
+    "shark ray",
+    "bowmouth guitarfish",
+    "mud skate",
+    "sakshi",
+    "lanj",
+    "mun ultava",
+    "nella dindi",
+    "pottila sora"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 curry piece (80 g)",
+     "hi": "1 टुकड़ा",
+     "g": 80
+    },
+    {
+     "n": "2 pieces (160 g)",
+     "hi": "2 टुकड़े",
+     "g": 160
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P065",
+   "slug": "red-snapper-tambusa-raw",
+   "name": "Red Snapper (Mangrove Jack / Tambusa), Raw",
+   "hi": "रेड स्नैपर (तांबुस)",
+   "alias": [
+    "tambusa",
+    "tambus",
+    "mangrove jack",
+    "mangrove red snapper",
+    "ratado",
+    "paruthikanni",
+    "murumeen",
+    "pahari",
+    "dog bream",
+    "red bream"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 steak (100 g)",
+     "hi": "1 स्टीक",
+     "g": 100
+    },
+    {
+     "n": "1 large piece (150 g)",
+     "hi": "1 बड़ा टुकड़ा",
+     "g": 150
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P066",
+   "slug": "red-snapper-small-bullseye-raw",
+   "name": "Red Snapper, Small (Bullseye), Raw",
+   "hi": "छोटा रेड स्नैपर (बुलसाई)",
+   "alias": [
+    "bullseye",
+    "lunar tailed bigeye",
+    "moontail bullseye",
+    "goggle eye",
+    "bigeye snapper",
+    "tambi",
+    "dorali",
+    "disco meenu",
+    "alta punti",
+    "bullsai",
+    "red bigeye"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 small fish (60 g)",
+     "hi": "1 छोटी मछली",
+     "g": 60
+    },
+    {
+     "n": "3 small fish (180 g)",
+     "hi": "3 छोटी मछली",
+     "g": 180
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P067",
+   "slug": "batfish-sadaya-raw",
+   "name": "Orbicular Batfish (Sadaya), Raw",
+   "hi": "बैटफ़िश (सदया)",
+   "alias": [
+    "sadaya",
+    "batfish",
+    "bat fish",
+    "round batfish",
+    "circular batfish",
+    "orbic batfish"
+   ],
+   "cat": "nonveg",
+   "region": "South India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 curry piece (80 g)",
+     "hi": "1 टुकड़ा",
+     "g": 80
+    },
+    {
+     "n": "2 pieces (160 g)",
+     "hi": "2 टुकड़े",
+     "g": 160
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P068",
+   "slug": "salmon-atlantic-raw",
+   "name": "Salmon, Atlantic, Raw",
+   "hi": "सैल्मन मछली",
+   "alias": [
+    "salmon fish",
+    "atlantic salmon",
+    "salman machhi"
+   ],
+   "cat": "nonveg",
+   "region": "International",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 steak (100 g)",
+     "hi": "1 स्टीक",
+     "g": 100
+    },
+    {
+     "n": "1 large piece (150 g)",
+     "hi": "1 बड़ा टुकड़ा",
+     "g": 150
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P069",
+   "slug": "threadfin-bream-japanese-sangada-raw",
+   "name": "Japanese Threadfin Bream (Sangada), Raw",
+   "hi": "थ्रेडफ़िन ब्रीम (सांगडा)",
+   "alias": [
+    "sangada",
+    "sangda",
+    "japanese threadfin bream",
+    "threadfin bream",
+    "pink perch",
+    "kilimeen"
+   ],
+   "cat": "nonveg",
+   "region": "West India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 small fish (60 g)",
+     "hi": "1 छोटी मछली",
+     "g": 60
+    },
+    {
+     "n": "3 small fish (180 g)",
+     "hi": "3 छोटी मछली",
+     "g": 180
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P070",
+   "slug": "trevally-giant-sankata-paarai-raw",
+   "name": "Trevally, Giant (Sankata Paarai), Raw",
+   "hi": "जायंट ट्रेवली (संकटा पारै)",
+   "alias": [
+    "sankata paarai",
+    "sankata parai",
+    "giant kingfish",
+    "giant trevally",
+    "lowly trevally",
+    "barrier trevally",
+    "ulua",
+    "yellowfin jack",
+    "kuluvel"
+   ],
+   "cat": "nonveg",
+   "region": "South India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 steak (100 g)",
+     "hi": "1 स्टीक",
+     "g": 100
+    },
+    {
+     "n": "1 large piece (150 g)",
+     "hi": "1 बड़ा टुकड़ा",
+     "g": 150
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P071",
+   "slug": "sardine-tarli-raw",
+   "name": "Sardine, Indian Oil (Tarli / Mathi), Raw",
+   "hi": "सार्डिन (तारली)",
+   "alias": [
+    "sardine",
+    "sardines",
+    "tarli",
+    "tarali",
+    "tarlee",
+    "mathi",
+    "chaala",
+    "chala",
+    "nallamathi",
+    "oil sardine",
+    "indian oil sardine",
+    "malabar sardine",
+    "baige",
+    "buthai",
+    "haird",
+    "kanat",
+    "nonalai",
+    "paichalai",
+    "charlay",
+    "noona kavallu"
+   ],
+   "cat": "nonveg",
+   "region": "Kerala",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 small fish (60 g)",
+     "hi": "1 छोटी मछली",
+     "g": 60
+    },
+    {
+     "n": "3 small fish (180 g)",
+     "hi": "3 छोटी मछली",
+     "g": 180
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P072",
+   "slug": "shark-spot-tail-sorrah-raw",
+   "name": "Shark, Spot-tail (Sorrah), Raw",
+   "hi": "शार्क मछली (सुरा)",
+   "alias": [
+    "shark",
+    "sorrah",
+    "sura",
+    "sorra",
+    "soora",
+    "sorrah shark",
+    "spot tail shark",
+    "sravu",
+    "mori",
+    "mhori",
+    "balda",
+    "pisori",
+    "shirat"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 curry piece (80 g)",
+     "hi": "1 टुकड़ा",
+     "g": 80
+    },
+    {
+     "n": "2 pieces (160 g)",
+     "hi": "2 टुकड़े",
+     "g": 160
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P073",
+   "slug": "shark-hammerhead-raw",
+   "name": "Shark, Hammerhead, Raw",
+   "hi": "हैमरहेड शार्क",
+   "alias": [
+    "hammerhead shark",
+    "hammer head shark",
+    "great hammerhead",
+    "shark hammerhead"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 curry piece (80 g)",
+     "hi": "1 टुकड़ा",
+     "g": 80
+    },
+    {
+     "n": "2 pieces (160 g)",
+     "hi": "2 टुकड़े",
+     "g": 160
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P074",
+   "slug": "shark-spotted-zebra-raw",
+   "name": "Shark, Spotted (Zebra Shark), Raw",
+   "hi": "ज़ेब्रा शार्क (चित्तीदार शार्क)",
+   "alias": [
+    "zebra shark",
+    "spotted shark",
+    "shinawala",
+    "shinvala",
+    "magara",
+    "poochasurav",
+    "komarasi sorrah"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 curry piece (80 g)",
+     "hi": "1 टुकड़ा",
+     "g": 80
+    },
+    {
+     "n": "2 pieces (160 g)",
+     "hi": "2 टुकड़े",
+     "g": 160
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P075",
+   "slug": "barracuda-shelavu-raw",
+   "name": "Barracuda (Shelavu), Raw",
+   "hi": "बाराकुडा (शेलावु)",
+   "alias": [
+    "shelavu",
+    "sheelavu",
+    "pickhandle barracuda",
+    "banded barracuda",
+    "sea pike",
+    "kandai",
+    "cheelahoo",
+    "ghalse",
+    "badvi",
+    "bhungar"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 curry piece (80 g)",
+     "hi": "1 टुकड़ा",
+     "g": 80
+    },
+    {
+     "n": "2 pieces (160 g)",
+     "hi": "2 टुकड़े",
+     "g": 160
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P076",
+   "slug": "silond-catfish-silan-raw",
+   "name": "Silond Catfish (Silan), Raw",
+   "hi": "सिलोंड कैटफ़िश (सिलन)",
+   "alias": [
+    "silan",
+    "silond",
+    "silond catfish",
+    "silonia",
+    "silong",
+    "dhain",
+    "utti",
+    "koch",
+    "vacha"
+   ],
+   "cat": "nonveg",
+   "region": "East India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 curry piece (80 g)",
+     "hi": "1 टुकड़ा",
+     "g": 80
+    },
+    {
+     "n": "2 pieces (160 g)",
+     "hi": "2 टुकड़े",
+     "g": 160
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P077",
+   "slug": "alfonsino-silk-fish-raw",
+   "name": "Alfonsino (Silk Fish), Raw",
+   "hi": "अल्फॉन्सिनो (सिल्क फ़िश)",
+   "alias": [
+    "silk fish",
+    "alfonsino",
+    "alfonsin",
+    "red bream",
+    "imperador",
+    "beryx",
+    "long finned beryx"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 curry piece (80 g)",
+     "hi": "1 टुकड़ा",
+     "g": 80
+    },
+    {
+     "n": "2 pieces (160 g)",
+     "hi": "2 टुकड़े",
+     "g": 160
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P078",
+   "slug": "silver-carp-raw",
+   "name": "Silver Carp, Raw",
+   "hi": "सिल्वर कार्प",
+   "alias": [
+    "silver carp fish",
+    "belli gende",
+    "carp",
+    "chinese carp",
+    "hypophthalmichthys"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 curry piece (80 g)",
+     "hi": "1 टुकड़ा",
+     "g": 80
+    },
+    {
+     "n": "2 pieces (160 g)",
+     "hi": "2 टुकड़े",
+     "g": 160
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P079",
+   "slug": "sole-fish-lep-raw",
+   "name": "Sole Fish (Lep), Raw",
+   "hi": "सोल मछली (लेप)",
+   "alias": [
+    "sole",
+    "sole fish",
+    "lep",
+    "tongue sole",
+    "tonguefish",
+    "largescale tongue sole",
+    "flatfish",
+    "nakku meen"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 curry piece (80 g)",
+     "hi": "1 टुकड़ा",
+     "g": 80
+    },
+    {
+     "n": "2 pieces (160 g)",
+     "hi": "2 टुकड़े",
+     "g": 160
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P080",
+   "slug": "stingray-raw",
+   "name": "Stingray, Common, Raw",
+   "hi": "स्टिंगरे (रे मछली)",
+   "alias": [
+    "sting ray",
+    "stingray fish",
+    "common stingray",
+    "blue stingray",
+    "thirukkai",
+    "thirukay",
+    "pakat"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 curry piece (80 g)",
+     "hi": "1 टुकड़ा",
+     "g": 80
+    },
+    {
+     "n": "2 pieces (160 g)",
+     "hi": "2 टुकड़े",
+     "g": 160
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P081",
+   "slug": "sicklefish-tarlava-raw",
+   "name": "Spotted Sicklefish (Tarlava), Raw",
+   "hi": "सिकलफ़िश (तरलावा)",
+   "alias": [
+    "tarlava",
+    "sicklefish",
+    "sickle fish",
+    "spotted sicklefish",
+    "spotted batfish",
+    "chand",
+    "thotha",
+    "painthi",
+    "therattai",
+    "thetti"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 curry piece (80 g)",
+     "hi": "1 टुकड़ा",
+     "g": 80
+    },
+    {
+     "n": "2 pieces (160 g)",
+     "hi": "2 टुकड़े",
+     "g": 160
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P082",
+   "slug": "sweetlips-tholam-raw",
+   "name": "Minstrel Sweetlips (Tholam), Raw",
+   "hi": "स्वीटलिप्स (थोलम)",
+   "alias": [
+    "tholam",
+    "sweetlips",
+    "sweet lips",
+    "minstrel sweetlips",
+    "grey sweetlip",
+    "harvil"
+   ],
+   "cat": "nonveg",
+   "region": "South India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 curry piece (80 g)",
+     "hi": "1 टुकड़ा",
+     "g": 80
+    },
+    {
+     "n": "2 pieces (160 g)",
+     "hi": "2 टुकड़े",
+     "g": 160
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P083",
+   "slug": "tilapia-nile-raw",
+   "name": "Tilapia, Nile, Raw",
+   "hi": "तिलापिया मछली",
+   "alias": [
+    "tilapia fish",
+    "nile tilapia",
+    "tilapia",
+    "japani kawoi",
+    "elapi",
+    "cichlid"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 curry piece (80 g)",
+     "hi": "1 टुकड़ा",
+     "g": 80
+    },
+    {
+     "n": "2 pieces (160 g)",
+     "hi": "2 टुकड़े",
+     "g": 160
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P084",
+   "slug": "tuna-kawakawa-raw",
+   "name": "Tuna (Kawakawa / Little Tuna), Raw",
+   "hi": "ट्यूना मछली",
+   "alias": [
+    "tuna",
+    "tuna fish",
+    "little tuna",
+    "mackerel tuna",
+    "kawakawa",
+    "choora",
+    "choorai",
+    "gedar",
+    "chuki",
+    "bugudi",
+    "kuppa",
+    "ohaman",
+    "bokado",
+    "suraly"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 steak (100 g)",
+     "hi": "1 स्टीक",
+     "g": 100
+    },
+    {
+     "n": "1 large piece (150 g)",
+     "hi": "1 बड़ा टुकड़ा",
+     "g": 150
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P085",
+   "slug": "tuna-skipjack-raw",
+   "name": "Tuna, Striped (Skipjack), Raw",
+   "hi": "स्किपजैक ट्यूना",
+   "alias": [
+    "skipjack tuna",
+    "skipjack",
+    "striped tuna",
+    "oceanic bonito",
+    "aku",
+    "gedar",
+    "kuppa",
+    "bugudi",
+    "bokado",
+    "choora",
+    "tuna fish"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 steak (100 g)",
+     "hi": "1 स्टीक",
+     "g": 100
+    },
+    {
+     "n": "1 large piece (150 g)",
+     "hi": "1 बड़ा टुकड़ा",
+     "g": 150
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P086",
+   "slug": "wolf-herring-valava-raw",
+   "name": "Wolf Herring (Valava), Raw",
+   "hi": "वुल्फ़ हेरिंग (वलावा)",
+   "alias": [
+    "valava",
+    "wahlah",
+    "valla",
+    "whitefin wolf herring",
+    "tenpounder",
+    "wolf herring",
+    "kiru wahlah"
+   ],
+   "cat": "nonveg",
+   "region": "South India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 curry piece (80 g)",
+     "hi": "1 टुकड़ा",
+     "g": 80
+    },
+    {
+     "n": "2 pieces (160 g)",
+     "hi": "2 टुकड़े",
+     "g": 160
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P087",
+   "slug": "seer-fish-surmai-vanjaram-raw",
+   "name": "Seer Fish (Surmai / King Fish), Raw",
+   "hi": "सुरमई मछली (किंग फ़िश)",
+   "alias": [
+    "surmai",
+    "surmayi",
+    "surmai fish",
+    "seer",
+    "seerfish",
+    "seer fish",
+    "king fish",
+    "kingfish",
+    "king seer",
+    "vanjaram",
+    "vanjiram",
+    "neymeen",
+    "ayakora",
+    "thavar",
+    "anjal",
+    "anjari",
+    "towar",
+    "spanish mackerel",
+    "barred seer"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 steak (100 g)",
+     "hi": "1 स्टीक",
+     "g": 100
+    },
+    {
+     "n": "1 large piece (150 g)",
+     "hi": "1 बड़ा टुकड़ा",
+     "g": 150
+    }
+   ],
+   "core": true
+  },
+  {
+   "code": "P088",
+   "slug": "green-jobfish-vela-meen-raw",
+   "name": "Green Jobfish (Vela Meen), Raw",
+   "hi": "ग्रीन जॉबफ़िश (वेला मीन)",
+   "alias": [
+    "vela meen",
+    "velameen",
+    "green jobfish",
+    "jobfish",
+    "snapper"
+   ],
+   "cat": "nonveg",
+   "region": "South India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 curry piece (80 g)",
+     "hi": "1 टुकड़ा",
+     "g": 80
+    },
+    {
+     "n": "2 pieces (160 g)",
+     "hi": "2 टुकड़े",
+     "g": 160
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P089",
+   "slug": "rabbitfish-vora-raw",
+   "name": "Rabbitfish (Vora), Raw",
+   "hi": "रैबिटफ़िश (वोरा)",
+   "alias": [
+    "vora",
+    "rabbit fish",
+    "rabbitfish",
+    "streaked spinefoot",
+    "spinefoot",
+    "kunar",
+    "ottah"
+   ],
+   "cat": "nonveg",
+   "region": "South India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 small fish (60 g)",
+     "hi": "1 छोटी मछली",
+     "g": 60
+    },
+    {
+     "n": "3 small fish (180 g)",
+     "hi": "3 छोटी मछली",
+     "g": 180
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P090",
+   "slug": "shark-tiger-whale-shark-raw",
+   "name": "Tiger Shark (Listed as Whale Shark), Raw",
+   "hi": "टाइगर शार्क (व्हेल शार्क)",
+   "alias": [
+    "whale shark",
+    "tiger shark",
+    "waghbeer",
+    "valiyasurav",
+    "pulli sravu",
+    "kethalam sorrah",
+    "bhoovar"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 curry piece (80 g)",
+     "hi": "1 टुकड़ा",
+     "g": 80
+    },
+    {
+     "n": "2 pieces (160 g)",
+     "hi": "2 टुकड़े",
+     "g": 160
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P091",
+   "slug": "swordfish-raw",
+   "name": "Swordfish, Raw",
+   "hi": "स्वोर्डफ़िश (तलवार मछली)",
+   "alias": [
+    "sword fish",
+    "swordfish",
+    "xiphias",
+    "broadbill",
+    "tadmasa",
+    "tadmachhi",
+    "kunga",
+    "kuthirameen",
+    "talwar machhi"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 steak (100 g)",
+     "hi": "1 स्टीक",
+     "g": 100
+    },
+    {
+     "n": "1 large piece (150 g)",
+     "hi": "1 बड़ा टुकड़ा",
+     "g": 150
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "P092",
+   "slug": "fish-roe-catfish-eggs-raw",
+   "name": "Fish Roe (Catfish Eggs), Raw",
+   "hi": "मछली के अंडे (कैटफ़िश रो)",
+   "alias": [
+    "catfish eggs",
+    "fish eggs",
+    "fish egg",
+    "fish roe",
+    "roe",
+    "machhli ke ande",
+    "machher dim",
+    "pabda roe",
+    "butter catfish eggs"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 small piece roe (30 g)",
+     "hi": "1 छोटा टुकड़ा",
+     "g": 30
+    },
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "Q001",
+   "slug": "crab-stone-raw",
+   "name": "Crab, Stone (Florida), Raw",
+   "hi": "केकड़ा (स्टोन क्रैब)",
+   "alias": [
+    "stone crab",
+    "florida stone crab",
+    "crab meat",
+    "kekda",
+    "kekra"
+   ],
+   "cat": "nonveg",
+   "region": "International",
+   "diet": "nonveg",
+   "emoji": "🦀",
+   "portions": [
+    {
+     "n": "1 small crab, edible meat (40 g)",
+     "hi": "1 छोटा केकड़ा (खाने योग्य)",
+     "g": 40
+    },
+    {
+     "n": "1 serving crab meat (100 g)",
+     "hi": "1 सर्विंग केकड़े का मांस",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "Q002",
+   "slug": "crab-sea-swimming-raw",
+   "name": "Crab, Sea (Swimming Crab), Raw",
+   "hi": "समुद्री केकड़ा",
+   "alias": [
+    "kekda",
+    "kekra",
+    "kakda",
+    "nandu",
+    "njandu",
+    "sea crab",
+    "swimming crab",
+    "blood spotted swimming crab",
+    "three spot swimming crab",
+    "red spotted crab",
+    "crab meat",
+    "kakkada"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🦀",
+   "portions": [
+    {
+     "n": "1 small crab, edible meat (40 g)",
+     "hi": "1 छोटा केकड़ा (खाने योग्य)",
+     "g": 40
+    },
+    {
+     "n": "1 serving crab meat (100 g)",
+     "hi": "1 सर्विंग केकड़े का मांस",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "Q003",
+   "slug": "lobster-brown-slipper-raw",
+   "name": "Lobster, Brown (Slipper Lobster), Raw",
+   "hi": "लॉबस्टर (समुद्री झींगा, भूरा)",
+   "alias": [
+    "lobster",
+    "slipper lobster",
+    "flathead lobster",
+    "bay lobster",
+    "moreton bay bug",
+    "sea lobster",
+    "bada jhinga"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🦞",
+   "portions": [
+    {
+     "n": "6 medium prawns (90 g)",
+     "hi": "6 मध्यम झींगे",
+     "g": 90
+    },
+    {
+     "n": "1 katori peeled (100 g)",
+     "hi": "1 कटोरी (छिले हुए)",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "Q004",
+   "slug": "lobster-king-size-raw",
+   "name": "Lobster, King Size (Slipper), Raw",
+   "hi": "बड़ा लॉबस्टर (किंग साइज़)",
+   "alias": [
+    "king lobster",
+    "king size lobster",
+    "big lobster",
+    "flathead lobster king",
+    "lobster tail"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🦞",
+   "portions": [
+    {
+     "n": "6 medium prawns (90 g)",
+     "hi": "6 मध्यम झींगे",
+     "g": 90
+    },
+    {
+     "n": "1 katori peeled (100 g)",
+     "hi": "1 कटोरी (छिले हुए)",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "Q005",
+   "slug": "crab-mud-mangrove-raw",
+   "name": "Crab, Mud (Mangrove), Raw",
+   "hi": "मड क्रैब (कीचड़ का केकड़ा)",
+   "alias": [
+    "mud crab",
+    "mangrove crab",
+    "scylla",
+    "giant mud crab",
+    "kekda",
+    "kekra",
+    "nandu",
+    "njandu",
+    "kakda"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🦀",
+   "portions": [
+    {
+     "n": "1 small crab, edible meat (40 g)",
+     "hi": "1 छोटा केकड़ा (खाने योग्य)",
+     "g": 40
+    },
+    {
+     "n": "1 serving crab meat (100 g)",
+     "hi": "1 सर्विंग केकड़े का मांस",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "Q006",
+   "slug": "oyster-backwater-raw",
+   "name": "Oyster (Indian Backwater), Raw",
+   "hi": "सीप (ऑयस्टर)",
+   "alias": [
+    "oyster",
+    "oysters",
+    "sip",
+    "muringa",
+    "muru",
+    "kalungu",
+    "ali",
+    "backwater oyster"
+   ],
+   "cat": "nonveg",
+   "region": "South India",
+   "diet": "nonveg",
+   "emoji": "🦪",
+   "portions": [
+    {
+     "n": "6 oysters shucked (90 g)",
+     "hi": "6 ऑयस्टर (छिले हुए)",
+     "g": 90
+    },
+    {
+     "n": "1 katori shucked (100 g)",
+     "hi": "1 कटोरी (छिले हुए)",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "Q007",
+   "slug": "prawns-brown-jhinga-raw",
+   "name": "Prawns, Brown (Jhinga), Raw",
+   "hi": "भूरा झींगा (प्रॉन)",
+   "alias": [
+    "jhinga",
+    "jhinge",
+    "prawn",
+    "prawns",
+    "shrimp",
+    "brown prawns",
+    "solenocera",
+    "chingri",
+    "kolambi",
+    "royyalu",
+    "eral",
+    "chemmeen"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍤",
+   "portions": [
+    {
+     "n": "6 medium prawns (90 g)",
+     "hi": "6 मध्यम झींगे",
+     "g": 90
+    },
+    {
+     "n": "1 katori peeled (100 g)",
+     "hi": "1 कटोरी (छिले हुए)",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "Q008",
+   "slug": "prawns-tiger-orange-jhinga-raw",
+   "name": "Tiger Prawns, Orange (Jhinga), Raw",
+   "hi": "टाइगर झींगा (जंबो झींगा)",
+   "alias": [
+    "prawn",
+    "prawns",
+    "shrimp",
+    "jhinga",
+    "jhinge",
+    "chingri",
+    "kolambi",
+    "eral",
+    "iraal",
+    "chemmeen",
+    "royyalu",
+    "sungta",
+    "giant tiger prawn",
+    "asian tiger shrimp",
+    "tiger shrimp",
+    "jumbo prawns",
+    "penaeus monodon"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍤",
+   "portions": [
+    {
+     "n": "6 medium prawns (90 g)",
+     "hi": "6 मध्यम झींगे",
+     "g": 90
+    },
+    {
+     "n": "1 katori peeled (100 g)",
+     "hi": "1 कटोरी (छिले हुए)",
+     "g": 100
+    }
+   ],
+   "core": true
+  },
+  {
+   "code": "R001",
+   "slug": "clam-green-shell-mussel-raw",
+   "name": "Clam, Green Shell (Green Mussel), Raw",
+   "hi": "हरी सीप (ग्रीन मसल)",
+   "alias": [
+    "green mussel",
+    "mussel",
+    "mussels",
+    "asian green mussel",
+    "green lipped mussel",
+    "kadukka",
+    "kallumakkaya",
+    "kallumekkaya",
+    "clam"
+   ],
+   "cat": "nonveg",
+   "region": "South India",
+   "diet": "nonveg",
+   "emoji": "🦪",
+   "portions": [
+    {
+     "n": "6 shelled pieces (60 g)",
+     "hi": "6 पीस (छिले हुए)",
+     "g": 60
+    },
+    {
+     "n": "1 katori shelled (100 g)",
+     "hi": "1 कटोरी (छिले हुए)",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "R002",
+   "slug": "clam-white-shell-hard-raw",
+   "name": "Clam, White Shell (Hard Clam), Raw",
+   "hi": "सफ़ेद सीप (क्लैम)",
+   "alias": [
+    "clam",
+    "clams",
+    "tisrya",
+    "tisrya masala",
+    "kakka",
+    "asiatic hard clam",
+    "hard clam",
+    "sip"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🦪",
+   "portions": [
+    {
+     "n": "6 shelled pieces (60 g)",
+     "hi": "6 पीस (छिले हुए)",
+     "g": 60
+    },
+    {
+     "n": "1 katori shelled (100 g)",
+     "hi": "1 कटोरी (छिले हुए)",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "R003",
+   "slug": "octopus-raw",
+   "name": "Octopus, Raw",
+   "hi": "ऑक्टोपस (अष्टभुज)",
+   "alias": [
+    "octopus",
+    "ashtabhuj",
+    "common octopus",
+    "devil fish",
+    "octopus meat"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🦑",
+   "portions": [
+    {
+     "n": "1 serving (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    },
+    {
+     "n": "1 small octopus (150 g)",
+     "hi": "1 छोटा ऑक्टोपस",
+     "g": 150
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "R004",
+   "slug": "squid-black-loligo-raw",
+   "name": "Squid, Black (Loligo), Raw",
+   "hi": "स्क्विड (काला)",
+   "alias": [
+    "squid",
+    "calamari",
+    "kanava",
+    "koonthal",
+    "kanawa",
+    "loligo",
+    "squid rings",
+    "black squid"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🦑",
+   "portions": [
+    {
+     "n": "1 medium squid (60 g)",
+     "hi": "1 स्क्विड",
+     "g": 60
+    },
+    {
+     "n": "1 katori rings (100 g)",
+     "hi": "1 कटोरी",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "R005",
+   "slug": "cuttlefish-pharaoh-hard-shell-raw",
+   "name": "Cuttlefish, Pharaoh (Hard-shell Squid), Raw",
+   "hi": "कटलफ़िश (हार्ड-शेल स्क्विड)",
+   "alias": [
+    "cuttlefish",
+    "cuttle fish",
+    "sepia",
+    "sepia pharaonis",
+    "pharaoh cuttlefish",
+    "large cuttlefish",
+    "hard shell squid"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🦑",
+   "portions": [
+    {
+     "n": "1 medium squid (60 g)",
+     "hi": "1 स्क्विड",
+     "g": 60
+    },
+    {
+     "n": "1 katori rings (100 g)",
+     "hi": "1 कटोरी",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "R006",
+   "slug": "squid-red-loligo-raw",
+   "name": "Squid, Red (Loligo), Raw",
+   "hi": "स्क्विड (लाल)",
+   "alias": [
+    "red squid",
+    "squid red",
+    "calamari red",
+    "kanava red",
+    "loligo duvauceli"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🦑",
+   "portions": [
+    {
+     "n": "1 medium squid (60 g)",
+     "hi": "1 स्क्विड",
+     "g": 60
+    },
+    {
+     "n": "1 katori rings (100 g)",
+     "hi": "1 कटोरी",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "R007",
+   "slug": "squid-white-small-indian-raw",
+   "name": "Squid, White, Small (Indian Squid), Raw",
+   "hi": "छोटा सफ़ेद स्क्विड (भारतीय स्क्विड)",
+   "alias": [
+    "small squid",
+    "white squid",
+    "indian squid",
+    "indian ocean squid",
+    "baby squid",
+    "uroteuthis"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🦑",
+   "portions": [
+    {
+     "n": "1 medium squid (60 g)",
+     "hi": "1 स्क्विड",
+     "g": 60
+    },
+    {
+     "n": "1 katori rings (100 g)",
+     "hi": "1 कटोरी",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "S001",
+   "slug": "catfish-freshwater-magur-singhi-raw",
+   "name": "Catfish, Freshwater (Magur / Singhi), Raw",
+   "hi": "कैटफ़िश (मांगुर / सिंघी)",
+   "alias": [
+    "catfish",
+    "cat fish",
+    "magur",
+    "mangur",
+    "mangur fish",
+    "singhi",
+    "shingi",
+    "singi",
+    "pabda",
+    "freshwater catfish",
+    "fresh water catfish",
+    "jewfish",
+    "tandan"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 curry piece (80 g)",
+     "hi": "1 टुकड़ा",
+     "g": 80
+    },
+    {
+     "n": "2 pieces (160 g)",
+     "hi": "2 टुकड़े",
+     "g": 160
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "S002",
+   "slug": "catla-katla-raw",
+   "name": "Catla (Katla), Raw",
+   "hi": "कतला (भाकुर)",
+   "alias": [
+    "katla",
+    "catla fish",
+    "katla fish",
+    "bhakur",
+    "bhakura",
+    "bhakua",
+    "boassa",
+    "chepti",
+    "tambra",
+    "thambra",
+    "theila",
+    "thoppa",
+    "major carp",
+    "karakatla"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 curry piece (80 g)",
+     "hi": "1 टुकड़ा",
+     "g": 80
+    },
+    {
+     "n": "2 pieces (160 g)",
+     "hi": "2 टुकड़े",
+     "g": 160
+    }
+   ],
+   "core": true
+  },
+  {
+   "code": "S003",
+   "slug": "eel-freshwater-raw",
+   "name": "Eel, Freshwater (European), Raw",
+   "hi": "बाम मछली (ईल)",
+   "alias": [
+    "eel",
+    "eel fish",
+    "freshwater eel",
+    "european eel",
+    "bam",
+    "bam machhi",
+    "bain",
+    "baim",
+    "vaam"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 curry piece (80 g)",
+     "hi": "1 टुकड़ा",
+     "g": 80
+    },
+    {
+     "n": "2 pieces (160 g)",
+     "hi": "2 टुकड़े",
+     "g": 160
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "S004",
+   "slug": "goldfish-raw",
+   "name": "Goldfish, Raw",
+   "hi": "गोल्डफ़िश",
+   "alias": [
+    "gold fish",
+    "goldfish",
+    "carassius",
+    "crucian carp"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 small fish (60 g)",
+     "hi": "1 छोटी मछली",
+     "g": 60
+    },
+    {
+     "n": "3 small fish (180 g)",
+     "hi": "3 छोटी मछली",
+     "g": 180
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "S005",
+   "slug": "pangas-basa-raw",
+   "name": "Pangas (Basa), Raw",
+   "hi": "पंगास (बासा मछली)",
+   "alias": [
+    "basa",
+    "basa fish",
+    "pangasius",
+    "pangasius fish",
+    "pangas fish",
+    "pangash",
+    "pangus",
+    "panga fish",
+    "swai",
+    "iridescent shark",
+    "shark catfish",
+    "tra fish"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 curry piece (80 g)",
+     "hi": "1 टुकड़ा",
+     "g": 80
+    },
+    {
+     "n": "2 pieces (160 g)",
+     "hi": "2 टुकड़े",
+     "g": 160
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "S006",
+   "slug": "rohu-rui-raw",
+   "name": "Rohu (Rui), Raw",
+   "hi": "रोहू (रुई)",
+   "alias": [
+    "rohu fish",
+    "rui",
+    "rui maach",
+    "rui machh",
+    "rohit",
+    "rohita",
+    "roho labeo",
+    "rou",
+    "rahu",
+    "bhobhari",
+    "tambada massa",
+    "kannadi kendai",
+    "carp"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "portions": [
+    {
+     "n": "1 curry piece (80 g)",
+     "hi": "1 टुकड़ा",
+     "g": 80
+    },
+    {
+     "n": "2 pieces (160 g)",
+     "hi": "2 टुकड़े",
+     "g": 160
+    }
+   ],
+   "core": true
+  },
+  {
+   "code": "S007",
+   "slug": "crab-small-shore-raw",
+   "name": "Crab, Small Shore, Raw",
+   "hi": "छोटा तटीय केकड़ा",
+   "alias": [
+    "small crab",
+    "shore crab",
+    "freshwater crab",
+    "kekda",
+    "kekra"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🦀",
+   "portions": [
+    {
+     "n": "1 small crab, edible meat (40 g)",
+     "hi": "1 छोटा केकड़ा (खाने योग्य)",
+     "g": 40
+    },
+    {
+     "n": "1 serving crab meat (100 g)",
+     "hi": "1 सर्विंग केकड़े का मांस",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "S008",
+   "slug": "prawns-big-giant-river-raw",
+   "name": "Prawns, Big (Giant River / Scampi), Raw",
+   "hi": "बड़ा झींगा (गोल्डा चिंगड़ी)",
+   "alias": [
+    "scampi",
+    "golda chingri",
+    "galda chingri",
+    "giant freshwater prawn",
+    "giant river prawn",
+    "jumbo prawn",
+    "big prawns",
+    "malai chingri",
+    "jhinga",
+    "prawn",
+    "prawns",
+    "shrimp",
+    "macrobrachium"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍤",
+   "portions": [
+    {
+     "n": "6 medium prawns (90 g)",
+     "hi": "6 मध्यम झींगे",
+     "g": 90
+    },
+    {
+     "n": "1 katori peeled (100 g)",
+     "hi": "1 कटोरी (छिले हुए)",
+     "g": 100
+    }
+   ],
+   "core": true
+  },
+  {
+   "code": "S009",
+   "slug": "prawns-small-freshwater-raw",
+   "name": "Prawns, Small (Freshwater), Raw",
+   "hi": "छोटा झींगा (मीठे पानी का)",
+   "alias": [
+    "small prawns",
+    "small shrimp",
+    "chhota jhinga",
+    "chingri",
+    "kolambi",
+    "freshwater shrimp",
+    "freshwater prawns"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍤",
+   "portions": [
+    {
+     "n": "1 handful (40 g)",
+     "hi": "1 मुट्ठी",
+     "g": 40
+    },
+    {
+     "n": "1 katori peeled (100 g)",
+     "hi": "1 कटोरी (छिले हुए)",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "S010",
+   "slug": "prawns-tiger-freshwater-raw",
+   "name": "Prawns, Tiger-type (Freshwater), Raw",
+   "hi": "मीठे पानी का झींगा (टाइगर)",
+   "alias": [
+    "freshwater tiger prawns",
+    "tiger prawns freshwater",
+    "freshwater jhinga",
+    "macrobrachium tiger"
+   ],
+   "cat": "nonveg",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍤",
+   "portions": [
+    {
+     "n": "6 medium prawns (90 g)",
+     "hi": "6 मध्यम झींगे",
+     "g": 90
+    },
+    {
+     "n": "1 katori peeled (100 g)",
+     "hi": "1 कटोरी (छिले हुए)",
+     "g": 100
+    }
+   ],
+   "core": false
+  }
+ ]
+}

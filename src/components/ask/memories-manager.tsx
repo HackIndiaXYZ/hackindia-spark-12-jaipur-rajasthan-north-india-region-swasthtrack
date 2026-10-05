@@ -1,12 +1,13 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { Plus, Trash2 } from "lucide-react";
+import { BookMarked, Lock, Plus, Trash2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button, IconButton } from "@/components/ui/button";
-import { Field, Select, TextArea } from "@/components/ui/form-field";
+import { Field, TextArea } from "@/components/ui/form-field";
 import { Modal } from "@/components/ui/modal";
 import { EmptyState } from "@/components/ui/page";
+import { Segmented } from "@/components/ui/segmented";
 import { useConfirm } from "@/components/ui/confirm-dialog";
 import { useToast } from "@/components/ui/toast";
 import { supabase } from "@/lib/supabase/client";
@@ -27,26 +28,31 @@ export function MemoriesManager({ isOpen, onClose, patientId, canWrite }: { isOp
   const [kind, setKind] = useState<MemoryKind>("note");
   const [content, setContent] = useState("");
   const [busy, setBusy] = useState(false);
+  const [failed, setFailed] = useState(false);
   const confirm = useConfirm();
   const toast = useToast();
 
-  const load = useCallback(async () => {
-    if (!patientId) return;
+  const fetchRows = useCallback(async (): Promise<Row[] | null> => {
+    if (!patientId) return [];
     const { data, error } = await supabase.from("soie_memories").select("id,kind,content,created_at").eq("patient_id", patientId).order("created_at", { ascending: false });
-    setRows(error ? [] : ((data ?? []) as Row[]));
+    return error ? null : ((data ?? []) as Row[]);
   }, [patientId]);
+
+  const apply = useCallback((result: Row[] | null) => {
+    setFailed(result === null);
+    setRows(result ?? []);
+  }, []);
 
   useEffect(() => {
     if (!isOpen) return;
     let live = true;
-    (async () => {
-      await load();
-      if (!live) return;
-    })();
+    void fetchRows().then((result) => {
+      if (live) apply(result);
+    });
     return () => {
       live = false;
     };
-  }, [isOpen, load]);
+  }, [isOpen, fetchRows, apply]);
 
   async function add() {
     const text = content.trim();
@@ -63,7 +69,7 @@ export function MemoriesManager({ isOpen, onClose, patientId, canWrite }: { isOp
       return;
     }
     setContent("");
-    await load();
+    apply(await fetchRows());
     toast({ title: "सेव हो गया", tone: "success" });
   }
 
@@ -82,54 +88,78 @@ export function MemoriesManager({ isOpen, onClose, patientId, canWrite }: { isOp
     <Modal isOpen={isOpen} onClose={onClose} title="सेव की गई बातें" hindiTitle="Saved notes" description="आपके फीडबैक और सेव की गई बातें अगले जवाबों में इस्तेमाल होती हैं। (AI चालू होने पर; नियम-आधारित जवाब इन्हें नहीं पढ़ते।)" size="md">
       <div className="space-y-4">
         {canWrite ? (
-          <div className="space-y-3 rounded-card border border-line bg-surface-sunken p-3">
-            <Field label="किस तरह की बात?">
-              <Select value={kind} onChange={(e) => setKind(e.target.value as MemoryKind)}>
-                {MEMORY_KINDS.map((k) => (
-                  <option key={k} value={k}>
-                    {KIND_HI[k]}
-                  </option>
-                ))}
-              </Select>
-            </Field>
+          <div className="space-y-3 rounded-card border border-gold-line bg-gold-soft p-3.5">
+            <div>
+              <p id="memory-kind-label" className="mb-1 text-sm font-medium text-ink">
+                किस तरह की बात?
+              </p>
+              <Segmented
+                ariaLabel="किस तरह की बात?"
+                size="sm"
+                value={kind}
+                onChange={setKind}
+                options={MEMORY_KINDS.map((k) => ({ value: k, label: KIND_HI[k] }))}
+              />
+            </div>
             <Field label="बात लिखें" hint={`${content.length}/${MAX_MEMORY_CHARS} · जैसे: दूध से एलर्जी है / रात के खाने के बाद टहलते हैं`}>
               <TextArea value={content} maxLength={MAX_MEMORY_CHARS} onChange={(e) => setContent(e.target.value)} />
             </Field>
-            <Button variant="primary" onClick={add} disabled={busy || content.trim().length === 0}>
+            <Button variant="primary" onClick={add} loading={busy} disabled={content.trim().length === 0}>
               <Plus aria-hidden className="h-4 w-4" />
               सेव करें
             </Button>
           </div>
         ) : (
-          <p className="rounded-field bg-surface-sunken p-3 text-sm text-ink-muted">आपके पास केवल देखने की अनुमति है, इसलिए बातें जोड़ या हटा नहीं सकते।</p>
+          <p className="flex items-start gap-2 rounded-card border border-info-line bg-info-soft p-3 text-sm text-ink-muted">
+            <Lock aria-hidden className="mt-0.5 h-4 w-4 shrink-0 text-info" />
+            <span lang="hi">आपके पास केवल देखने की अनुमति है, इसलिए बातें जोड़ या हटा नहीं सकते।</span>
+          </p>
         )}
 
         {rows === null ? (
-          <p className="py-4 text-center text-sm text-ink-muted" role="status">
-            लोड हो रहा है…
-          </p>
+          <div aria-busy="true" role="status" aria-label="लोड हो रहा है" className="space-y-2">
+            <div className="skeleton h-16 rounded-card" />
+            <div className="skeleton h-16 rounded-card" />
+          </div>
+        ) : failed ? (
+          <EmptyState
+            icon={BookMarked}
+            title="Saved notes could not load"
+            hindiTitle="सेव की गई बातें लोड नहीं हो सकीं"
+            description="इंटरनेट जाँचकर फिर कोशिश करें।"
+            action={
+              <Button variant="secondary" onClick={() => void fetchRows().then(apply)}>
+                फिर कोशिश करें
+              </Button>
+            }
+          />
         ) : rows.length === 0 ? (
-          <EmptyState title="Nothing saved yet" hindiTitle="अभी कोई बात सेव नहीं है" description="चैट में लिखें “याद रखो कि …” या ऊपर से जोड़ें।" />
+          <EmptyState icon={BookMarked} title="Nothing saved yet" hindiTitle="अभी कोई बात सेव नहीं है" description="चैट में लिखें “याद रखो कि …” या ऊपर से जोड़ें।" />
         ) : (
-          <ul className="space-y-2">
-            {rows.map((m) => (
-              <li key={m.id} className="flex items-start gap-2 rounded-card border border-line bg-surface p-3">
-                <div className="min-w-0 flex-1">
-                  <Badge variant="gold">
-                    <span lang="hi">{KIND_HI[m.kind]}</span>
-                  </Badge>
-                  <p lang="hi" className="mt-1.5 whitespace-pre-line text-sm text-ink">
-                    {m.content}
-                  </p>
-                </div>
-                {canWrite ? (
-                  <IconButton aria-label="हटाएँ" onClick={() => remove(m.id)}>
-                    <Trash2 aria-hidden className="h-4 w-4" />
-                  </IconButton>
-                ) : null}
-              </li>
-            ))}
-          </ul>
+          <div>
+            <p className="mb-2 text-xs font-semibold text-ink-muted">
+              <span lang="hi">सेव की गई बातें</span> · {rows.length}/{MAX_MEMORIES_PER_PATIENT}
+            </p>
+            <ul className="space-y-2">
+              {rows.map((m) => (
+                <li key={m.id} className="flex items-start gap-2 rounded-card border border-line bg-surface p-3 shadow-e1">
+                  <div className="min-w-0 flex-1">
+                    <Badge variant="gold">
+                      <span lang="hi">{KIND_HI[m.kind]}</span>
+                    </Badge>
+                    <p lang="hi" className="mt-1.5 whitespace-pre-line break-words text-sm text-ink">
+                      {m.content}
+                    </p>
+                  </div>
+                  {canWrite ? (
+                    <IconButton variant="ghost" aria-label={`हटाएँ: ${m.content.slice(0, 30)}`} onClick={() => remove(m.id)}>
+                      <Trash2 aria-hidden className="h-4 w-4" />
+                    </IconButton>
+                  ) : null}
+                </li>
+              ))}
+            </ul>
+          </div>
         )}
       </div>
     </Modal>

@@ -1,30 +1,45 @@
 "use client";
 
-import { useId, useState, type FormEvent } from "react";
+import { useState } from "react";
 import dynamic from "next/dynamic";
-import { Info, Plus, Scale } from "lucide-react";
+import { Plus, Scale } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Field, NumberInput, TextInput } from "@/components/ui/form-field";
 import { Modal } from "@/components/ui/modal";
-import { EmptyState, ErrorState } from "@/components/ui/page";
-import { Segmented, segmentedPanelId, segmentedTabId } from "@/components/ui/segmented";
+import { EmptyState } from "@/components/ui/page";
 import { useConfirm } from "@/components/ui/confirm-dialog";
 import { useToast } from "@/components/ui/toast";
-import { fmtDateStr, fmtDateStrYear, fmtKg, istDateAndTime, relativeDayLabel } from "@/components/health/format";
+import { WeightEntryForm } from "@/components/forms/add-weight-dialog";
+import {
+  fmtDateStr,
+  fmtDateStrYear,
+  fmtKg,
+  fmtTime,
+  istDateAndTime,
+  parseDecimalInput,
+  relativeDayLabel,
+} from "@/components/health/format";
 import {
   ChartSkeleton,
-  RangeSelector,
+  DateLead,
+  HISTORY_PAGE,
+  HeroNumber,
+  HeroTile,
+  HistoryHeading,
+  HistoryList,
+  HistoryRow,
+  LoadMoreButton,
+  PanelFrame,
   RowActions,
   SmallNote,
   StatTile,
-  panelTabOptions,
-  rangeWindow,
+  TrendShell,
+  useHistoryPager,
+  useRangeData,
   type ChartRange,
   type PanelTab,
 } from "@/components/health/panel-parts";
-import { loadErrorMessage, useAsyncData } from "@/components/health/use-async-data";
 import {
   WEIGHT_RAPID_KG_7D,
   WEIGHT_RAPID_PCT_30D,
@@ -38,8 +53,8 @@ import {
 } from "@/lib/health-rules";
 import {
   deleteWeight,
+  getWeightLogs,
   getWeightLogsInRange,
-  logWeight,
   updateWeight,
   type WeightLogEntry,
 } from "@/services/patient-service";
@@ -57,13 +72,18 @@ type WeightPanelProps = {
   heightCm?: number | null;
   /** False for viewers: the panel is read-only. */
   canWrite: boolean;
+  /** False while another tracker is showing. */
+  active?: boolean;
+  /** The open New / History / Trend tab (kept by the page, so the overview can ask for "form"). */
+  tab: PanelTab;
+  onTabChange: (tab: PanelTab) => void;
   onSuccess?: () => void;
 };
 
 /** Same limits the service enforces, so the message appears before the request. */
 function weightError(raw: string): string | null {
-  const kg = parseFloat(raw);
-  if (!raw.trim() || Number.isNaN(kg)) return "वजन लिखें (kg में)";
+  const kg = parseDecimalInput(raw);
+  if (Number.isNaN(kg)) return "वजन लिखें (kg में)";
   if (kg < 20 || kg > 350) return "20 से 350 kg के बीच लिखें";
   return null;
 }
@@ -75,24 +95,29 @@ function weekStartOf(dateStr: string): string {
   return addDaysIST(dateStr, -((dow + 6) % 7));
 }
 
+/** Weekly averages, newest week first, each compared with the week before it. */
 function weeklySummaries(logs: WeightLogEntry[]) {
   const byWeek = new Map<string, number[]>();
   for (const log of logs) {
     const week = weekStartOf(toISTDate(log.measured_at));
     const list = byWeek.get(week);
-    if (list) list.push(log.weight_kg);
-    else byWeek.set(week, [log.weight_kg]);
+    if (list) list.push(Number(log.weight_kg));
+    else byWeek.set(week, [Number(log.weight_kg)]);
   }
   const weeks = [...byWeek.keys()].sort();
   let prev: number | null = null;
-  return weeks.map((week) => {
+  const out = weeks.map((week) => {
     const values = byWeek.get(week)!;
     const avg = Number(mean(values)!.toFixed(1));
     const change = prev === null ? null : Number((avg - prev).toFixed(1));
     prev = avg;
     return { week, avg, count: values.length, change };
   });
+  return out.reverse();
 }
+
+/** The weekly list stays short however long the window is. */
+const WEEKS_SHOWN = 8;
 
 /* ---- Edit dialog -------------------------------------------------------------- */
 
@@ -107,7 +132,7 @@ function EditWeightModal({
 }) {
   const toast = useToast();
   const initial = istDateAndTime(log.measured_at);
-  const [weight, setWeight] = useState(String(log.weight_kg));
+  const [weight, setWeight] = useState(fmtKg(log.weight_kg));
   const [date, setDate] = useState(initial.date);
   const [time, setTime] = useState(initial.time);
   const [notes, setNotes] = useState(log.notes || "");
@@ -123,6 +148,10 @@ function EditWeightModal({
       return;
     }
     const measuredAt = istInstant(date, time);
+    if (Number.isNaN(measuredAt.getTime())) {
+      toast.error("तारीख़ या समय सही नहीं है", "Invalid date or time.");
+      return;
+    }
     if (measuredAt.getTime() > Date.now() + 5 * 60_000) {
       toast.error("यह समय अभी से आगे का है", "Time is in the future.");
       return;
@@ -130,7 +159,7 @@ function EditWeightModal({
     setSaving(true);
     try {
       await updateWeight(log.id, {
-        weight_kg: parseFloat(weight),
+        weight_kg: parseDecimalInput(weight),
         measured_at: measuredAt.toISOString(),
         notes: notes.trim() || null,
       });
@@ -163,7 +192,7 @@ function EditWeightModal({
     >
       <div className="space-y-3">
         <Field label="वजन (Weight, kg)" error={error ?? undefined} required>
-          <NumberInput allowDecimal maxLength={5} value={weight} onChange={(e) => setWeight(e.target.value)} />
+          <NumberInput allowDecimal maxLength={6} value={weight} onChange={(e) => setWeight(e.target.value)} />
         </Field>
         <div className="grid grid-cols-2 gap-3">
           <Field label="तारीख़ (Date)">
@@ -183,29 +212,38 @@ function EditWeightModal({
 
 /* ---- Trend tab ---------------------------------------------------------------- */
 
-function WeightTrend({ patientId, targetWeight }: { patientId: string; targetWeight?: number | null }) {
-  const [range, setRange] = useState<ChartRange>("30d");
-  const win = rangeWindow(range);
-  const { data, error, loading, reload } = useAsyncData(
-    () => getWeightLogsInRange(patientId, win.startDate, win.endDate),
-    [patientId, range, win.endDate],
+function WeightTrend({
+  patientId,
+  targetWeight,
+  range,
+  onRangeChange,
+}: {
+  patientId: string;
+  targetWeight?: number | null;
+  range: ChartRange;
+  onRangeChange: (range: ChartRange) => void;
+}) {
+  const { data, win, error, loading, stale, reload } = useRangeData(
+    (start, end) => getWeightLogsInRange(patientId, start, end),
+    patientId,
+    range,
   );
 
   const stats = (() => {
     if (!data || data.length === 0) return null;
-    const kg = data.map((l) => l.weight_kg);
-    const first = data[0];
-    const last = data[data.length - 1];
+    const kg = data.map((l) => Number(l.weight_kg));
+    const first = kg[0];
+    const last = kg[kg.length - 1];
 
     // Rapid change is flagged with the shared rule (>= 2 kg in 7 days, >= 5% in 30 days).
     const today = todayIST();
     const inLast = (days: number) => data.filter((l) => toISTDate(l.measured_at) >= addDaysIST(today, -(days - 1)));
     const week = inLast(7);
     const month = inLast(30);
-    const weekChange = week.length >= 2 ? week[week.length - 1].weight_kg - week[0].weight_kg : null;
+    const weekChange = week.length >= 2 ? Number(week[week.length - 1].weight_kg) - Number(week[0].weight_kg) : null;
     const monthPct =
-      month.length >= 2 && month[0].weight_kg > 0
-        ? ((month[month.length - 1].weight_kg - month[0].weight_kg) / month[0].weight_kg) * 100
+      month.length >= 2 && Number(month[0].weight_kg) > 0
+        ? ((Number(month[month.length - 1].weight_kg) - Number(month[0].weight_kg)) / Number(month[0].weight_kg)) * 100
         : null;
     const rapid =
       (weekChange !== null && Math.abs(weekChange) >= WEIGHT_RAPID_KG_7D) ||
@@ -216,7 +254,7 @@ function WeightTrend({ patientId, targetWeight }: { patientId: string; targetWei
       avg: Number(mean(kg)!.toFixed(1)),
       min: Math.min(...kg),
       max: Math.max(...kg),
-      change: Number((last.weight_kg - first.weight_kg).toFixed(1)),
+      change: Number((last - first).toFixed(1)),
       rapid,
     };
   })();
@@ -224,68 +262,66 @@ function WeightTrend({ patientId, targetWeight }: { patientId: string; targetWei
   const weeks = data ? weeklySummaries(data) : [];
 
   return (
-    <div className="space-y-4">
-      <RangeSelector value={range} onChange={setRange} ariaLabel="Weight trend range — अवधि चुनें" />
-
-      {error ? (
-        <ErrorState
-          title="ट्रेंड लोड नहीं हो पाया"
-          englishTitle="Could not load the trend"
-          description={loadErrorMessage(error)}
-          onRetry={reload}
-        />
-      ) : loading ? (
-        <ChartSkeleton />
-      ) : (
+    <TrendShell
+      range={range}
+      onRangeChange={onRangeChange}
+      ariaLabel="Weight trend range — अवधि चुनें"
+      loading={loading}
+      stale={stale}
+      error={error}
+      onRetry={reload}
+    >
+      {stats ? (
         <>
-          <WeightTrendChart logs={data ?? []} targetWeight={targetWeight} startDate={win.startDate} endDate={win.endDate} />
-
-          {stats ? (
-            <div className="space-y-3" aria-live="polite">
-              <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4">
-                <StatTile label="औसत (Average)" value={stats.avg} unit="kg" />
-                <StatTile label="कम–ज़्यादा" value={`${stats.min}–${stats.max}`} unit="kg" />
-                <StatTile
-                  label="इस अवधि में बदलाव"
-                  value={`${stats.change > 0 ? "+" : ""}${stats.change}`}
-                  unit="kg"
-                  helper="पहली से आख़िरी तौल"
-                />
-                <StatTile label="तौल की संख्या" value={stats.count} />
-              </div>
-              {stats.rapid ? (
-                <SmallNote>
-                  <span lang="hi">वजन में हाल में तेज़ बदलाव दिखा है। इसका मतलब कुछ भी हो सकता है; अगली डॉक्टर विज़िट में ज़रूर बताएँ।</span>
-                </SmallNote>
-              ) : null}
-              {stats.count < 3 ? (
-                <SmallNote>
-                  इस अवधि में सिर्फ़ {stats.count} तौल हैं, इसलिए ट्रेंड पर ज़्यादा भरोसा न करें। (Small sample.)
-                </SmallNote>
-              ) : null}
-            </div>
-          ) : (
-            <EmptyState
-              icon={Scale}
-              title="इस अवधि में कोई वजन दर्ज नहीं"
-              description="No weigh-ins in this period. A longer range may show earlier ones."
+          <div className="tile rounded-card p-3 sm:p-4">
+            <WeightTrendChart
+              logs={data ?? []}
+              targetWeight={targetWeight}
+              startDate={win.fixed ? win.startDate : undefined}
+              endDate={win.endDate}
             />
-          )}
+          </div>
+
+          <div className="space-y-3" aria-live="polite">
+            <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4">
+              <StatTile label="औसत (Average)" value={stats.avg} unit="kg" />
+              <StatTile label="कम–ज़्यादा" value={`${stats.min}–${stats.max}`} unit="kg" />
+              <StatTile
+                label="इस अवधि में बदलाव"
+                value={`${stats.change > 0 ? "+" : ""}${stats.change}`}
+                unit="kg"
+                helper="पहली से आख़िरी तौल"
+              />
+              <StatTile label="तौल की संख्या" value={stats.count} />
+            </div>
+            {stats.rapid ? (
+              <SmallNote>
+                <span lang="hi">वजन में हाल में तेज़ बदलाव दिखा है। इसका मतलब कुछ भी हो सकता है; अगली डॉक्टर विज़िट में ज़रूर बताएँ।</span>
+              </SmallNote>
+            ) : null}
+            {stats.count < 3 ? (
+              <SmallNote>
+                इस अवधि में सिर्फ़ {stats.count} तौल हैं, इसलिए ट्रेंड पर ज़्यादा भरोसा न करें। (Small sample.)
+              </SmallNote>
+            ) : null}
+          </div>
 
           {weeks.length > 0 ? (
             <div>
               <h3 className="mb-2 text-sm font-semibold text-ink">साप्ताहिक औसत · Weekly average</h3>
               <ul className="space-y-1.5">
-                {weeks.map((w) => (
-                  <li key={w.week} className="flex items-center justify-between gap-3 rounded-field bg-surface-sunken px-3 py-2">
+                {weeks.slice(0, WEEKS_SHOWN).map((w) => (
+                  <li key={w.week} className="tile flex items-center justify-between gap-3 rounded-field px-3 py-2">
                     <span className="text-xs text-ink-muted">
-                      हफ़्ता {fmtDateStr(w.week)} से
-                      <span className="ml-1.5 text-ink-subtle">({w.count} तौल)</span>
+                      <span lang="hi">हफ़्ता</span> {fmtDateStr(w.week)} <span lang="hi">से</span>
+                      <span className="ml-1.5 text-ink-subtle">
+                        ({w.count} <span lang="hi">तौल</span>)
+                      </span>
                     </span>
                     <span className="tabular flex items-center gap-2 text-sm font-semibold text-ink">
                       {w.avg} kg
                       {w.change !== null ? (
-                        <span className="text-xs font-medium text-ink-subtle">
+                        <span className="text-xs font-medium text-ink-muted">
                           {w.change > 0 ? "↑" : w.change < 0 ? "↓" : "→"} {Math.abs(w.change)}
                         </span>
                       ) : null}
@@ -293,57 +329,59 @@ function WeightTrend({ patientId, targetWeight }: { patientId: string; targetWei
                   </li>
                 ))}
               </ul>
+              {weeks.length > WEEKS_SHOWN ? (
+                <p lang="hi" className="mt-1.5 text-xs text-ink-subtle">
+                  सबसे हाल के {WEEKS_SHOWN} हफ़्ते दिखाए गए हैं।
+                </p>
+              ) : null}
             </div>
           ) : null}
         </>
+      ) : (
+        <EmptyState
+          icon={Scale}
+          title="इस अवधि में कोई वजन दर्ज नहीं"
+          description="No weigh-ins in this period. A longer range may show earlier ones."
+        />
       )}
-    </div>
+    </TrendShell>
   );
 }
 
 /* ---- Panel -------------------------------------------------------------------- */
 
-export function WeightPanel({ patientId, logs, targetWeight, heightCm, canWrite, onSuccess }: WeightPanelProps) {
+export function WeightPanel({
+  patientId,
+  logs,
+  targetWeight,
+  heightCm,
+  canWrite,
+  active = true,
+  tab,
+  onTabChange,
+  onSuccess,
+}: WeightPanelProps) {
   const toast = useToast();
   const confirm = useConfirm();
-  const tabsId = useId();
 
-  const [tab, setTab] = useState<PanelTab>(canWrite ? "form" : "history");
-  const [weight, setWeight] = useState("");
-  const [notes, setNotes] = useState("");
-  const [error, setError] = useState<string | null>(null);
-  const [saving, setSaving] = useState(false);
+  const [range, setRange] = useState<ChartRange>("30d");
   const [editing, setEditing] = useState<WeightLogEntry | null>(null);
 
+  const pager = useHistoryPager({
+    base: logs,
+    pageSize: HISTORY_PAGE,
+    fetchRows: (limit) => getWeightLogs(patientId, limit),
+  });
+
   const latest = logs[0];
-  const bmi = latest && heightCm ? calcBMI(latest.weight_kg, heightCm) : null;
+  const latestKg = latest ? Number(latest.weight_kg) : null;
+  const bmi = latestKg && heightCm ? calcBMI(latestKg, heightCm) : null;
   const bmiClass = bmi ? classifyBMI(bmi) : null;
-  const diff = latest && targetWeight ? Number((latest.weight_kg - targetWeight).toFixed(1)) : null;
+  const diff = latestKg !== null && targetWeight ? Number((latestKg - targetWeight).toFixed(1)) : null;
 
-  async function handleSubmit(e: FormEvent) {
-    e.preventDefault();
-    const problem = weightError(weight);
-    setError(problem);
-    if (problem) return;
-
-    const kg = parseFloat(weight);
-    setSaving(true);
-    try {
-      await logWeight({
-        patient_id: patientId,
-        weight_kg: kg,
-        measured_at: new Date().toISOString(),
-        notes: notes.trim() || null,
-      });
-      setWeight("");
-      setNotes("");
-      toast.success(`वजन दर्ज हो गया: ${kg} kg`, "Weight saved.");
-      onSuccess?.();
-    } catch (err) {
-      toast.error("वजन दर्ज नहीं हो पाया", err instanceof Error ? err.message : undefined);
-    } finally {
-      setSaving(false);
-    }
+  function changed() {
+    pager.refresh();
+    onSuccess?.();
   }
 
   async function handleDelete(log: WeightLogEntry) {
@@ -356,189 +394,152 @@ export function WeightPanel({ patientId, logs, targetWeight, heightCm, canWrite,
     try {
       await deleteWeight(log.id);
       toast.success("वजन एंट्री मिटा दी गई", "Weight entry deleted.");
-      onSuccess?.();
+      changed();
     } catch (err) {
       toast.error("मिटाया नहीं जा सका", err instanceof Error ? err.message : undefined);
     }
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <div className="flex min-w-0 items-center gap-3">
-          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-control bg-weight-soft text-weight">
-            <Scale aria-hidden className="h-5 w-5" />
-          </span>
-          <div className="min-w-0">
-            <div className="flex flex-wrap items-center gap-2">
-              <CardTitle>Body Weight</CardTitle>
-              <Badge variant="info" lang="hi">
-                वजन
-              </Badge>
-            </div>
-            <CardDescription>
-              {targetWeight ? `लक्ष्य (Target): ${targetWeight} kg` : "लक्ष्य तय नहीं · Target not set"}
-            </CardDescription>
-          </div>
-        </div>
-      </CardHeader>
-
-      <div className="mb-5 rounded-card border border-line bg-surface-sunken p-4">
-        <p className="text-xs font-semibold text-ink-muted">ताज़ा वजन · Latest weight</p>
-        {latest ? (
-          <div className="mt-1 flex flex-wrap items-end justify-between gap-x-4 gap-y-2">
-            <div>
-              <p className="tabular text-4xl font-semibold text-weight">
-                {fmtKg(latest.weight_kg)}
-                <span className="ml-1 text-sm font-medium text-ink-subtle">kg</span>
-              </p>
-              <p className="mt-0.5 text-xs text-ink-subtle">
-                {relativeDayLabel(toISTDate(latest.measured_at))}
-                {latest.notes ? ` · ${latest.notes}` : ""}
-              </p>
-            </div>
-            <div className="text-right text-xs text-ink-muted">
-              {diff !== null ? (
-                <p lang="hi" className="tabular font-semibold">
-                  लक्ष्य से {diff === 0 ? "बराबर" : `${Math.abs(diff)} kg ${diff > 0 ? "ज़्यादा" : "कम"}`}
+    <>
+      <PanelFrame
+        icon={Scale}
+        tone="weight"
+        title="Body Weight"
+        hindiTitle="वजन"
+        subtitle={
+          targetWeight ? (
+            <>
+              <span lang="hi">लक्ष्य</span> (Target): {fmtKg(targetWeight)} kg
+            </>
+          ) : (
+            <>
+              <span lang="hi">लक्ष्य तय नहीं</span> · Target not set
+            </>
+          )
+        }
+        hero={
+          <HeroTile label="ताज़ा वजन · Latest weight">
+            {latest && latestKg !== null ? (
+              <div className="mt-1 flex flex-wrap items-end justify-between gap-x-4 gap-y-3">
+                <div>
+                  <HeroNumber value={fmtKg(latest.weight_kg)} unit="kg" className="text-5xl" />
+                  <p className="mt-2 text-xs text-ink-muted">
+                    <span lang="hi">{relativeDayLabel(toISTDate(latest.measured_at))}</span>, {fmtTime(latest.measured_at)}
+                    {latest.notes ? ` · ${latest.notes}` : ""}
+                  </p>
+                </div>
+                <div className="flex flex-wrap items-center gap-2">
+                  {diff !== null ? (
+                    <Badge variant="neutral" lang="hi">
+                      लक्ष्य से {diff === 0 ? "बराबर" : `${Math.abs(diff)} kg ${diff > 0 ? "ज़्यादा" : "कम"}`}
+                    </Badge>
+                  ) : null}
+                  {bmi && bmiClass ? (
+                    <Badge variant={bmiClass.category === "normal" ? "positive" : bmiClass.category === "underweight" ? "info" : "attention"}>
+                      BMI {bmi} · <span lang="hi">{bmiClass.labelHi}</span>
+                    </Badge>
+                  ) : null}
+                </div>
+              </div>
+            ) : (
+              <>
+                <HeroNumber value="—" className="text-5xl text-ink-subtle" />
+                <p lang="hi" className="mt-2 text-xs text-ink-muted">
+                  अभी तक कोई वजन दर्ज नहीं
                 </p>
-              ) : null}
-              {bmi && bmiClass ? (
-                <p className="mt-0.5">
-                  BMI <span className="tabular font-semibold text-ink">{bmi}</span> ·{" "}
-                  <span lang="hi">{bmiClass.labelHi}</span>
-                </p>
-              ) : null}
-            </div>
-          </div>
-        ) : (
-          <>
-            <p className="mt-1 text-4xl font-semibold text-ink-subtle">—</p>
-            <p className="mt-1 text-xs text-ink-subtle">अभी तक कोई वजन दर्ज नहीं</p>
-          </>
-        )}
-      </div>
-
-      <Segmented
-        mode="tabs"
-        idPrefix={tabsId}
-        options={panelTabOptions(canWrite)}
-        value={tab}
-        onChange={setTab}
+              </>
+            )}
+          </HeroTile>
+        }
+        tab={tab}
+        onTabChange={onTabChange}
+        canWrite={canWrite}
+        active={active}
         ariaLabel="Weight panel — नया, इतिहास या ट्रेंड"
-        size="sm"
-        className="mb-3"
+        form={
+          <div className="tile rounded-card p-4 lg:max-w-xl">
+            <WeightEntryForm patientId={patientId} currentWeight={latestKg} onSuccess={changed} />
+          </div>
+        }
+        history={
+          <div className="space-y-3">
+            <HistoryHeading title="वजन का इतिहास · Weight history" count={pager.rows.length} unit="तौल" />
+            {pager.rows.length > 0 ? (
+              <div className="space-y-4 lg:max-w-3xl">
+                <HistoryList label="Weight history">
+                  {pager.rows.map((log, i) => {
+                    const kg = Number(log.weight_kg);
+                    const d = targetWeight ? Number((kg - targetWeight).toFixed(1)) : null;
+                    // The next row is the previous weigh-in (newest first).
+                    const older = pager.rows[i + 1];
+                    const step = older ? Number((kg - Number(older.weight_kg)).toFixed(1)) : null;
+                    return (
+                      <HistoryRow
+                        key={log.id}
+                        lead={<DateLead date={toISTDate(log.measured_at)} />}
+                        actions={
+                          canWrite ? (
+                            <RowActions
+                              what={`${fmtKg(log.weight_kg)} kg`}
+                              onEdit={() => setEditing(log)}
+                              onDelete={() => void handleDelete(log)}
+                            />
+                          ) : null
+                        }
+                      >
+                        <p className="flex flex-wrap items-baseline gap-x-2 text-base font-semibold text-ink">
+                          <span className="tabular">
+                            {fmtKg(log.weight_kg)} <span className="text-xs font-normal text-ink-muted">kg</span>
+                          </span>
+                          {step !== null && step !== 0 ? (
+                            <span className="tabular text-xs font-medium text-ink-muted" title="पिछली तौल से बदलाव">
+                              {step > 0 ? "↑" : "↓"} {Math.abs(step)}
+                            </span>
+                          ) : null}
+                        </p>
+                        <p className="truncate text-xs text-ink-subtle">
+                          {d !== null ? (
+                            <span lang="hi">
+                              लक्ष्य से {d > 0 ? "+" : ""}
+                              {d} kg
+                            </span>
+                          ) : null}
+                          {d !== null && log.notes ? " · " : ""}
+                          {log.notes ? <span className="italic">{log.notes}</span> : null}
+                        </p>
+                      </HistoryRow>
+                    );
+                  })}
+                </HistoryList>
+                {pager.hasMore ? (
+                  <LoadMoreButton loading={pager.loading} failed={pager.failed} onClick={pager.loadMore} what="तौल" />
+                ) : null}
+              </div>
+            ) : (
+              <EmptyState
+                icon={Scale}
+                title="अभी कोई वजन दर्ज नहीं"
+                description="No weigh-ins yet."
+                action={
+                  canWrite ? (
+                    <Button variant="primary" onClick={() => onTabChange("form")}>
+                      <Plus aria-hidden className="h-4 w-4" />
+                      पहला वजन दर्ज करें
+                    </Button>
+                  ) : undefined
+                }
+              />
+            )}
+          </div>
+        }
+        chart={<WeightTrend patientId={patientId} targetWeight={targetWeight} range={range} onRangeChange={setRange} />}
+        footnote="वजन में बदलाव के कई कारण हो सकते हैं। अचानक बदलाव दिखे तो डॉक्टर से बात करें।"
       />
 
-      {tab === "form" && canWrite ? (
-        <form
-          role="tabpanel"
-          id={segmentedPanelId(tabsId, "form")}
-          aria-labelledby={segmentedTabId(tabsId, "form")}
-          onSubmit={(e) => void handleSubmit(e)}
-          noValidate
-          className="space-y-3 rounded-card border border-line bg-surface p-4"
-        >
-          <Field label="वजन (Weight, kg)" hint="जैसे 78.4 · सुबह खाली पेट सबसे सही रहता है" error={error ?? undefined} required>
-            <NumberInput
-              allowDecimal
-              maxLength={5}
-              placeholder="जैसे 78.4"
-              value={weight}
-              onChange={(e) => setWeight(e.target.value)}
-              className="text-xl font-semibold"
-            />
-          </Field>
-          <Field label="टिप्पणी (Notes)" hint="वैकल्पिक · optional">
-            <TextInput placeholder="जैसे: सुबह खाली पेट" value={notes} onChange={(e) => setNotes(e.target.value)} />
-          </Field>
-          <Button type="submit" variant="primary" loading={saving} className="w-full sm:w-auto">
-            <Plus aria-hidden className="h-4 w-4" />
-            वजन दर्ज करें (Save weight)
-          </Button>
-        </form>
-      ) : null}
-
-      {tab === "history" ? (
-        <div
-          role="tabpanel"
-          id={segmentedPanelId(tabsId, "history")}
-          aria-labelledby={segmentedTabId(tabsId, "history")}
-          className="rounded-card border border-line bg-surface p-4"
-        >
-          <h3 className="mb-1 text-sm font-semibold text-ink">वजन का इतिहास · Weight history</h3>
-          <p className="mb-3 text-xs text-ink-subtle">
-            पिछली {logs.length} तौल। पुरानी तौल देखने के लिए ट्रेंड टैब में अवधि बदलें।
-          </p>
-          {logs.length > 0 ? (
-            <ul className="divide-y divide-line">
-              {logs.map((log) => {
-                const d = targetWeight ? Number((log.weight_kg - targetWeight).toFixed(1)) : null;
-                return (
-                  <li key={log.id} className="flex items-center justify-between gap-2 py-2.5">
-                    <div className="min-w-0 flex-1">
-                      <p className="tabular text-base font-semibold text-ink">
-                        {fmtKg(log.weight_kg)} <span className="text-xs font-normal text-ink-subtle">kg</span>
-                        {d !== null ? (
-                          <span className="ml-2 text-xs font-medium text-ink-muted">
-                            (लक्ष्य से {d > 0 ? "+" : ""}
-                            {d} kg)
-                          </span>
-                        ) : null}
-                      </p>
-                      <p className="text-xs text-ink-subtle">
-                        {fmtDateStrYear(toISTDate(log.measured_at))}
-                        {log.notes ? ` · ${log.notes}` : ""}
-                      </p>
-                    </div>
-                    {canWrite ? (
-                      <RowActions
-                        what={`${fmtKg(log.weight_kg)} kg`}
-                        onEdit={() => setEditing(log)}
-                        onDelete={() => void handleDelete(log)}
-                      />
-                    ) : null}
-                  </li>
-                );
-              })}
-            </ul>
-          ) : (
-            <EmptyState
-              icon={Scale}
-              title="अभी कोई वजन दर्ज नहीं"
-              description="No weigh-ins yet."
-              action={
-                canWrite ? (
-                  <Button variant="primary" onClick={() => setTab("form")}>
-                    <Plus aria-hidden className="h-4 w-4" />
-                    पहला वजन दर्ज करें
-                  </Button>
-                ) : undefined
-              }
-            />
-          )}
-        </div>
-      ) : null}
-
-      {tab === "chart" ? (
-        <div
-          role="tabpanel"
-          id={segmentedPanelId(tabsId, "chart")}
-          aria-labelledby={segmentedTabId(tabsId, "chart")}
-          className="rounded-card border border-line bg-surface p-4"
-        >
-          <WeightTrend patientId={patientId} targetWeight={targetWeight} />
-        </div>
-      ) : null}
-
-      <p className="mt-4 flex items-start gap-2 rounded-card border border-info-line bg-info-soft p-3 text-xs text-ink-muted">
-        <Info aria-hidden className="mt-0.5 h-4 w-4 shrink-0 text-info" />
-        <span lang="hi">वजन में बदलाव के कई कारण हो सकते हैं। अचानक बदलाव दिखे तो डॉक्टर से बात करें।</span>
-      </p>
-
       {editing ? (
-        <EditWeightModal key={editing.id} log={editing} onClose={() => setEditing(null)} onSaved={() => onSuccess?.()} />
+        <EditWeightModal key={editing.id} log={editing} onClose={() => setEditing(null)} onSaved={changed} />
       ) : null}
-    </Card>
+    </>
   );
 }

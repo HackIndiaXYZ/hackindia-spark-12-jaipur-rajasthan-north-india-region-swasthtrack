@@ -1,93 +1,101 @@
 "use client";
 
-import { useEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
-import Link from "next/link";
+import { useEffect, useId, useState, type FormEvent, type ReactNode } from "react";
 import {
   AlertCircle,
   Bell,
+  BellRing,
+  Check,
   Download,
-  Eye,
-  EyeOff,
   Footprints,
   HeartPulse,
-  KeyRound,
-  Loader2,
   Lock,
-  LogOut,
   Mail,
   Moon,
   RotateCcw,
   Save,
-  ShieldCheck,
-  Trash2,
+  Target,
   User,
-  UserPlus,
   Users,
   Utensils,
 } from "lucide-react";
-import { AddCaregiverDialog } from "@/components/forms/add-caregiver-dialog";
 import { JoinPatientDialog } from "@/components/forms/join-patient-dialog";
+import { NoPatientState } from "@/components/health/no-patient-state";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { useConfirm } from "@/components/ui/confirm-dialog";
-import { Field, NumberInput, Select, TextInput } from "@/components/ui/form-field";
-import { PageTitle } from "@/components/ui/page-title";
+import { Field, NumberInput } from "@/components/ui/form-field";
+import { ErrorState, PageBody, PageHeader } from "@/components/ui/page";
+import { Segmented, segmentedPanelId, segmentedTabId, type SegmentedOption } from "@/components/ui/segmented";
 import { useToast } from "@/components/ui/toast";
 import { useAuth } from "@/context/auth-context";
 import { DEFAULT_BP_THRESHOLDS, type BPThresholds } from "@/lib/health-rules";
 import { cn } from "@/lib/utils";
-import {
-  MIN_PASSWORD_LENGTH,
-  getAuthorizedCaregivers,
-  revokeCaregiverAccess,
-  setCaregiverRole,
-  updatePassword,
-  type AuthorizedCaregiver,
-} from "@/services/auth-service";
-import { exportAllDataAsCsv, exportAllDataAsJson } from "@/services/export-data-service";
-import { sendAppEmail, sendAppEmailQuietly } from "@/services/email-client";
+import { sendAppEmail } from "@/services/email-client";
 import { getNotificationPermissionStatus, requestNotificationPermission } from "@/services/notification-service";
 import { getPatientProfile, updatePatientProfile, type PatientProfile } from "@/services/patient-service";
 import { resetQuickFoodPreferences } from "@/services/quick-food-service";
-import {
-  getPatientSettings,
-  updatePatientSettings,
-  type BPScheduleType,
-  type PatientSettings,
-} from "@/services/settings-service";
+import { getPatientSettings, updatePatientSettings, type BPScheduleType, type PatientSettings } from "@/services/settings-service";
+import { AccountPanel } from "./_components/account-panel";
+import { DataPanel } from "./_components/data-panel";
+import { FamilyPanel } from "./_components/family-panel";
+import { PresetChips, SettingsCard, ToggleRow } from "./_components/settings-ui";
+
+type Tab = "account" | "goals" | "bp" | "alerts" | "family" | "data";
+
+const TABS: SegmentedOption<Tab>[] = [
+  { value: "account", label: "Account", hindiLabel: "खाता", icon: User },
+  { value: "goals", label: "Goals", hindiLabel: "लक्ष्य", icon: Target },
+  { value: "bp", label: "BP", hindiLabel: "रक्तचाप", icon: HeartPulse },
+  { value: "alerts", label: "Alerts", hindiLabel: "अलर्ट", icon: Bell },
+  { value: "family", label: "Family", hindiLabel: "परिवार", icon: Users },
+  { value: "data", label: "Data", hindiLabel: "डेटा", icon: Download },
+];
+
+const FORM_TABS: Tab[] = ["goals", "bp", "alerts"];
 
 type BPFields = Record<keyof BPThresholds, string>;
+type AlertPrefs = PatientSettings["alerts_enabled"];
 
+/** Ordered like the clinical ladder, so the page reads low -> target -> alert -> crisis. */
 const BP_FIELD_GROUPS: {
   title: string;
+  english: string;
   hint: string;
+  dot: string;
   systolic: keyof BPThresholds;
   diastolic: keyof BPThresholds;
 }[] = [
   {
-    title: "लक्ष्य (Target)",
-    hint: "डॉक्टर का तय किया लक्ष्य। इससे ऊपर की रीडिंग \"लक्ष्य से ऊपर\" गिनी जाती है।",
+    title: "कम BP",
+    english: "Low",
+    hint: "इससे नीचे की रीडिंग “कम BP” मानी जाती है।",
+    dot: "bg-info",
+    systolic: "low_systolic",
+    diastolic: "low_diastolic",
+  },
+  {
+    title: "लक्ष्य",
+    english: "Target",
+    hint: "डॉक्टर का तय किया लक्ष्य। इससे ऊपर की रीडिंग “लक्ष्य से ऊपर” गिनी जाती है।",
+    dot: "bg-positive",
     systolic: "target_systolic",
     diastolic: "target_diastolic",
   },
   {
-    title: "चेतावनी (Alert)",
+    title: "चेतावनी",
+    english: "Alert",
     hint: "इस या इससे ऊपर की रीडिंग पर अलर्ट दिखता है।",
+    dot: "bg-attention",
     systolic: "alert_systolic",
     diastolic: "alert_diastolic",
   },
   {
-    title: "आपातकाल (Crisis)",
+    title: "आपातकाल",
+    english: "Crisis",
     hint: "इस रेंज की रीडिंग पर तुरंत डॉक्टर से संपर्क की सलाह दी जाती है।",
+    dot: "bg-critical",
     systolic: "crisis_systolic",
     diastolic: "crisis_diastolic",
-  },
-  {
-    title: "कम BP (Low)",
-    hint: "इससे नीचे की रीडिंग \"कम BP\" मानी जाती है।",
-    systolic: "low_systolic",
-    diastolic: "low_diastolic",
   },
 ];
 
@@ -97,13 +105,19 @@ const BP_SCHEDULES: { id: BPScheduleType; label: string; labelHi: string }[] = [
   { id: "evening_only", label: "Evening only", labelHi: "केवल शाम" },
 ];
 
-const ALERT_TOGGLES: { key: keyof PatientSettings["alerts_enabled"]; label: string }[] = [
-  { key: "bp", label: "रक्तचाप अलर्ट (Blood pressure alerts)" },
-  { key: "medicine", label: "दवाई रिमाइंडर (Medicine reminders)" },
-  { key: "activity", label: "गतिविधि रिमाइंडर (Activity reminders)" },
-  { key: "sleep", label: "नींद रिमाइंडर (Sleep reminders)" },
-  { key: "missingData", label: "छूटे हुए डेटा की सूचना (Missing data alerts)" },
+const ALERT_TOGGLES: { key: keyof AlertPrefs; title: string; hindiTitle: string }[] = [
+  { key: "bp", title: "Blood pressure alerts", hindiTitle: "रक्तचाप अलर्ट" },
+  { key: "medicine", title: "Medicine reminders", hindiTitle: "दवाई रिमाइंडर" },
+  { key: "activity", title: "Activity reminders", hindiTitle: "गतिविधि रिमाइंडर" },
+  { key: "sleep", title: "Sleep reminders", hindiTitle: "नींद रिमाइंडर" },
+  { key: "missingData", title: "Missing data alerts", hindiTitle: "छूटे हुए डेटा की सूचना" },
 ];
+
+const BP_ERROR_TEXT = {
+  range: "BP की सभी सीमाएं 30 से 300 के बीच पूरी संख्या में भरें। (All BP lines must be whole numbers from 30 to 300.)",
+  order: "क्रम सही रखें: कम < लक्ष्य < चेतावनी < आपातकाल (दोनों ऊपर और नीचे के BP के लिए)। (Keep low < target < alert < crisis.)",
+  pressure: "हर स्तर पर ऊपर का BP नीचे के BP से बड़ा होना चाहिए। (Systolic must be above diastolic.)",
+};
 
 function bpToFields(t: BPThresholds): BPFields {
   return Object.fromEntries(Object.entries(t).map(([k, v]) => [k, String(v)])) as BPFields;
@@ -113,19 +127,17 @@ function bpToFields(t: BPThresholds): BPFields {
 function parseBPFields(fields: BPFields): { value?: BPThresholds; error?: string } {
   const n = {} as BPThresholds;
   for (const key of Object.keys(fields) as (keyof BPThresholds)[]) {
-    const v = Number(fields[key]);
-    if (!Number.isInteger(v) || v < 30 || v > 300) {
-      return { error: "BP की सभी सीमाएं 30 से 300 के बीच पूरी संख्या में भरें। (All BP lines must be whole numbers from 30 to 300.)" };
-    }
+    const raw = fields[key].trim();
+    const v = Number(raw);
+    if (raw === "" || !Number.isInteger(v) || v < 30 || v > 300) return { error: BP_ERROR_TEXT.range };
     n[key] = v;
   }
-  const ordered = (low: number, target: number, alert: number, crisis: number) =>
-    low < target && target < alert && alert < crisis;
+  const ordered = (low: number, target: number, alert: number, crisis: number) => low < target && target < alert && alert < crisis;
   if (
     !ordered(n.low_systolic, n.target_systolic, n.alert_systolic, n.crisis_systolic) ||
     !ordered(n.low_diastolic, n.target_diastolic, n.alert_diastolic, n.crisis_diastolic)
   ) {
-    return { error: "क्रम सही रखें: कम < लक्ष्य < चेतावनी < आपातकाल (दोनों ऊपर और नीचे के BP के लिए)। (Keep low < target < alert < crisis.)" };
+    return { error: BP_ERROR_TEXT.order };
   }
   if (
     n.target_systolic <= n.target_diastolic ||
@@ -133,145 +145,78 @@ function parseBPFields(fields: BPFields): { value?: BPThresholds; error?: string
     n.crisis_systolic <= n.crisis_diastolic ||
     n.low_systolic <= n.low_diastolic
   ) {
-    return { error: "हर स्तर पर ऊपर का BP नीचे के BP से बड़ा होना चाहिए। (Systolic must be above diastolic.)" };
+    return { error: BP_ERROR_TEXT.pressure };
   }
   return { value: n };
 }
 
-function Section({
-  icon,
-  title,
-  description,
-  children,
-  action,
-}: {
-  icon: ReactNode;
-  title: string;
-  description?: string;
-  children: ReactNode;
-  action?: ReactNode;
-}) {
+interface FormValues {
+  calorie: string;
+  steps: string;
+  sleep: string;
+  schedule: BPScheduleType;
+  alerts: AlertPrefs;
+  bp: BPFields;
+}
+
+type FormErrors = Partial<Record<"calorie" | "steps" | "sleep" | "bp", string>>;
+
+function formFromSettings(setts: PatientSettings, prof: PatientProfile): FormValues {
+  return {
+    calorie: String(setts.daily_calorie_target ?? prof.daily_calorie_target ?? ""),
+    steps: String(setts.daily_step_goal ?? ""),
+    sleep: String(setts.sleep_target_hours ?? ""),
+    schedule: setts.bp_monitoring_schedule,
+    alerts: { ...setts.alerts_enabled },
+    bp: bpToFields(setts.bp_targets),
+  };
+}
+
+function sameForm(a: FormValues, b: FormValues): boolean {
   return (
-    <Card className="p-5">
-      <CardHeader className="p-0 pb-4">
-        <div className="flex w-full items-start justify-between gap-3">
-          <div>
-            <div className="flex items-center gap-2">
-              {icon}
-              <CardTitle className="text-sm font-semibold text-ink">{title}</CardTitle>
-            </div>
-            {description ? <CardDescription className="mt-1 text-xs">{description}</CardDescription> : null}
-          </div>
-          {action}
-        </div>
-      </CardHeader>
-      {children}
-    </Card>
+    a.calorie.trim() === b.calorie.trim() &&
+    a.steps.trim() === b.steps.trim() &&
+    a.sleep.trim() === b.sleep.trim() &&
+    a.schedule === b.schedule &&
+    (Object.keys(a.alerts) as (keyof AlertPrefs)[]).every((k) => a.alerts[k] === b.alerts[k]) &&
+    (Object.keys(a.bp) as (keyof BPThresholds)[]).every((k) => a.bp[k].trim() === b.bp[k].trim())
   );
 }
 
-function PresetChips({
-  values,
-  current,
-  onPick,
-  disabled,
-  format,
-}: {
-  values: number[];
-  current: string;
-  onPick: (value: string) => void;
-  disabled: boolean;
-  format: (value: number) => string;
-}) {
-  return (
-    <div className="flex flex-wrap gap-1.5">
-      {values.map((preset) => (
-        <button
-          key={preset}
-          type="button"
-          disabled={disabled}
-          onClick={() => onPick(String(preset))}
-          aria-pressed={current === String(preset)}
-          className={cn(
-            "min-h-control-sm cursor-pointer rounded-control border px-2.5 text-xs font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-60",
-            current === String(preset)
-              ? "border-brand bg-brand-soft text-brand-ink"
-              : "border-line bg-surface-sunken text-ink-muted hover:bg-line",
-          )}
-        >
-          {format(preset)}
-        </button>
-      ))}
-    </div>
-  );
-}
-
-const ROLE_LABEL = {
-  owner: "मालिक (Owner)",
-  editor: "एडिटर (Editor)",
-  viewer: "सिर्फ़ देखने वाला (Viewer)",
-} as const;
-
-export default function SettingsPage() {
-  const { user, profile, activePatientId, memberRole, canWrite, signOut } = useAuth();
+function SettingsView() {
+  const { user, activePatientId, memberRole, canWrite } = useAuth();
   const isOwner = memberRole === "owner";
   const toast = useToast();
-  const confirm = useConfirm();
+  const tabsId = useId();
 
+  const [tab, setTab] = useState<Tab>("account");
   const [patient, setPatient] = useState<PatientProfile | null>(null);
   const [settings, setSettings] = useState<PatientSettings | null>(null);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState("");
+  const [reloadNonce, setReloadNonce] = useState(0);
   const [saving, setSaving] = useState(false);
-  const [error, setError] = useState("");
+  const [saveError, setSaveError] = useState("");
+  const [errors, setErrors] = useState<FormErrors>({});
   const [sendingTestEmail, setSendingTestEmail] = useState(false);
+  const [isJoinOpen, setIsJoinOpen] = useState(false);
   const [notifPermission, setNotifPermission] = useState<string>(() =>
     typeof window !== "undefined" ? getNotificationPermissionStatus() : "default",
   );
 
   // Editable form state (strings so an empty box stays empty).
-  const [calorieTarget, setCalorieTarget] = useState("");
-  const [stepGoal, setStepGoal] = useState("");
-  const [sleepTarget, setSleepTarget] = useState("");
-  const [bpSchedule, setBpSchedule] = useState<BPScheduleType>("morning_evening");
-  const [alerts, setAlerts] = useState<PatientSettings["alerts_enabled"]>({
-    bp: true,
-    medicine: true,
-    activity: true,
-    sleep: true,
-    missingData: true,
-  });
-  const [bpFields, setBpFields] = useState<BPFields>(() => bpToFields(DEFAULT_BP_THRESHOLDS));
-
-  // Caregivers (owner only)
-  const [caregivers, setCaregivers] = useState<AuthorizedCaregiver[]>([]);
-  const [caregiversError, setCaregiversError] = useState("");
-  const [isAddCaregiverOpen, setIsAddCaregiverOpen] = useState(false);
-  const [isJoinOpen, setIsJoinOpen] = useState(false);
-
-  // Password change
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [passwordBusy, setPasswordBusy] = useState(false);
-  const [passwordError, setPasswordError] = useState("");
-  const passwordBusyRef = useRef(false);
+  const [form, setForm] = useState<FormValues | null>(null);
 
   useEffect(() => {
     if (!activePatientId) return;
     let active = true;
-
     Promise.all([getPatientProfile(activePatientId), getPatientSettings(activePatientId)])
       .then(([prof, setts]) => {
         if (!active) return;
         setPatient(prof);
         setSettings(setts);
-        setCalorieTarget(String(setts.daily_calorie_target ?? prof.daily_calorie_target ?? ""));
-        setStepGoal(String(setts.daily_step_goal ?? ""));
-        setSleepTarget(String(setts.sleep_target_hours ?? ""));
-        setBpSchedule(setts.bp_monitoring_schedule);
-        setAlerts({ ...setts.alerts_enabled });
-        setBpFields(bpToFields(setts.bp_targets));
+        setForm(formFromSettings(setts, prof));
+        setLoadError("");
         setLoading(false);
       })
       .catch((err) => {
@@ -280,47 +225,173 @@ export default function SettingsPage() {
         setLoadError(err instanceof Error ? err.message : "सेटिंग्स लोड नहीं हो सकीं। (Could not load settings.)");
         setLoading(false);
       });
-
     return () => {
       active = false;
     };
-  }, [activePatientId]);
+  }, [activePatientId, reloadNonce]);
 
-  // Roster is owner-only (the RPC refuses anyone else).
-  async function loadCaregivers(patientId: string) {
-    try {
-      const rows = await getAuthorizedCaregivers(patientId);
-      setCaregivers(rows.filter((r) => r.status === "active"));
-      setCaregiversError("");
-    } catch (err) {
-      setCaregiversError(err instanceof Error ? err.message : "सूची लोड नहीं हो सकी। (Could not load the list.)");
-    }
+  const baseline = settings && patient ? formFromSettings(settings, patient) : null;
+  const dirty = Boolean(form && baseline && !sameForm(form, baseline));
+
+  // A refresh or tab close with unsaved edits is almost always a slip.
+  useEffect(() => {
+    if (!dirty) return;
+    const warn = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = "";
+    };
+    window.addEventListener("beforeunload", warn);
+    return () => window.removeEventListener("beforeunload", warn);
+  }, [dirty]);
+
+  const header = (
+    <PageHeader
+      eyebrow="Settings & preferences"
+      title="Settings Center"
+      hindiTitle="सेटिंग्स और प्राथमिकताएं"
+      description="अपना खाता, सेहत के लक्ष्य, BP की निगरानी और मरीज़ को कौन देख सकता है, सब यहीं तय करें।"
+    />
+  );
+
+  if (loadError && !settings) {
+    return (
+      <PageBody>
+        {header}
+        <ErrorState
+          title="सेटिंग्स लोड नहीं हो सकीं"
+          englishTitle="Could not load settings"
+          description={loadError}
+          onRetry={() => {
+            setLoadError("");
+            setLoading(true);
+            setReloadNonce((n) => n + 1);
+          }}
+        />
+      </PageBody>
+    );
   }
 
-  useEffect(() => {
-    if (!activePatientId || !isOwner) return;
-    let active = true;
-    getAuthorizedCaregivers(activePatientId)
-      .then((rows) => {
-        if (!active) return;
-        setCaregivers(rows.filter((r) => r.status === "active"));
-        setCaregiversError("");
-      })
-      .catch((err) => {
-        if (active) setCaregiversError(err instanceof Error ? err.message : "सूची लोड नहीं हो सकी।");
+  if (loading || !patient || !settings || !form) {
+    return (
+      <PageBody>
+        {header}
+        <div aria-busy="true" aria-label="लोड हो रहा है" className="space-y-4">
+          <div className="skeleton h-12 rounded-control" />
+          <div className="grid gap-4 lg:grid-cols-2">
+            <div className="skeleton h-44 rounded-card" />
+            <div className="skeleton h-44 rounded-card" />
+          </div>
+        </div>
+      </PageBody>
+    );
+  }
+
+  const readOnly = !canWrite;
+  const bpReadOnly = !isOwner || readOnly;
+  const showSaveBar = !readOnly && FORM_TABS.includes(tab);
+
+  function patchForm(patch: Partial<FormValues>, clear?: keyof FormErrors) {
+    setForm((f) => (f ? { ...f, ...patch } : f));
+    if (clear && errors[clear]) setErrors((e) => ({ ...e, [clear]: undefined }));
+    if (saveError) setSaveError("");
+  }
+
+  function discard() {
+    if (!baseline) return;
+    setForm(baseline);
+    setErrors({});
+    setSaveError("");
+  }
+
+  function validate(values: FormValues): { errs: FormErrors; bp?: BPThresholds; calorie: number; steps: number; sleep: number } {
+    const errs: FormErrors = {};
+    const calorie = Number(values.calorie);
+    if (values.calorie.trim() === "" || !Number.isInteger(calorie) || calorie < 500 || calorie > 6000) {
+      errs.calorie = "कैलोरी लक्ष्य 500 से 6000 kcal के बीच रखें। (500 to 6000.)";
+    }
+    const steps = Number(values.steps);
+    if (values.steps.trim() === "" || !Number.isInteger(steps) || steps < 1000 || steps > 50000) {
+      errs.steps = "कदम लक्ष्य 1,000 से 50,000 के बीच रखें। (1,000 to 50,000.)";
+    }
+    const sleep = Number(values.sleep);
+    if (values.sleep.trim() === "" || !Number.isFinite(sleep) || sleep < 4 || sleep > 14) {
+      errs.sleep = "नींद का लक्ष्य 4 से 14 घंटे के बीच रखें। (4 to 14 hours.)";
+    }
+    let bp: BPThresholds | undefined;
+    if (isOwner) {
+      const parsed = parseBPFields(values.bp);
+      if (parsed.error) errs.bp = parsed.error;
+      bp = parsed.value;
+    }
+    return { errs, bp, calorie, steps, sleep };
+  }
+
+  async function handleSave(e: FormEvent) {
+    e.preventDefault();
+    if (!patient || !form || !canWrite || saving) return;
+    setSaveError("");
+
+    const { errs, bp, calorie, steps, sleep } = validate(form);
+    setErrors(errs);
+    if (Object.keys(errs).length > 0) {
+      // Take the person to the first tab that has something to fix.
+      setTab(errs.calorie || errs.steps || errs.sleep ? "goals" : "bp");
+      return;
+    }
+
+    setSaving(true);
+    let updated: PatientSettings;
+    try {
+      updated = await updatePatientSettings(patient.id, {
+        daily_calorie_target: calorie,
+        daily_step_goal: steps,
+        sleep_target_hours: sleep,
+        bp_monitoring_schedule: form.schedule,
+        alerts_enabled: form.alerts,
+        ...(bp ? { bp_targets: bp } : {}),
       });
-    return () => {
-      active = false;
-    };
-  }, [activePatientId, isOwner]);
+    } catch (err) {
+      setSaveError(err instanceof Error ? err.message : "सेटिंग्स सुरक्षित नहीं हो सकीं। (Could not save settings.)");
+      setSaving(false);
+      return;
+    }
+
+    // Settings are saved. The profile carries the same calorie target; keep the two in step,
+    // but a failure here must not make the saved settings look unsaved.
+    let nextPatient = patient;
+    let profileSynced = true;
+    if (patient.daily_calorie_target !== calorie) {
+      try {
+        await updatePatientProfile({ daily_calorie_target: calorie }, patient.id);
+        nextPatient = { ...patient, daily_calorie_target: calorie };
+      } catch {
+        profileSynced = false;
+      }
+    }
+    setPatient(nextPatient);
+    setSettings(updated);
+    setForm(formFromSettings(updated, nextPatient));
+    setSaving(false);
+    if (profileSynced) toast({ title: "सेटिंग्स सुरक्षित हो गईं", tone: "success" });
+    else {
+      toast({
+        title: "सेटिंग्स सुरक्षित हुईं, पर प्रोफ़ाइल का कैलोरी लक्ष्य नहीं बदला",
+        description: "Profile पेज से कैलोरी लक्ष्य एक बार फिर सेव करें।",
+        tone: "info",
+      });
+    }
+  }
 
   async function handleEnablePushNotifs() {
     const status = await requestNotificationPermission();
     setNotifPermission(status);
-    if (status === "granted") {
-      toast({ title: "ब्राउज़र नोटिफिकेशन चालू हो गए", tone: "success" });
-    } else if (status === "denied") {
-      setError("ब्राउज़र सेटिंग्स में नोटिफिकेशन ब्लॉक हैं। (Notifications are blocked in the browser settings.)");
+    if (status === "granted") toast({ title: "ब्राउज़र नोटिफिकेशन चालू हो गए", tone: "success" });
+    else if (status === "denied") {
+      toast({
+        title: "नोटिफिकेशन ब्लॉक हैं",
+        description: "ब्राउज़र की सेटिंग्स में इस साइट के लिए नोटिफिकेशन की अनुमति दें।",
+        tone: "error",
+      });
     }
   }
 
@@ -337,679 +408,377 @@ export default function SettingsPage() {
     }
   }
 
-  async function handleRevoke(member: AuthorizedCaregiver) {
-    if (!patient) return;
-    const label = member.display_name || member.email || "यह सदस्य";
-    const ok = await confirm({
-      title: "एक्सेस हटाएं?",
-      message: `${label} अब ${patient.name} की स्वास्थ्य जानकारी नहीं देख पाएंगे। बाद में नया कोड देकर दोबारा जोड़ा जा सकता है।`,
-      confirmLabel: "हटाएं (Remove)",
-      tone: "danger",
-    });
-    if (!ok) return;
-    try {
-      await revokeCaregiverAccess(member.member_id);
-      sendAppEmailQuietly({ type: "caregiver.access-changed", patientId: patient.id, memberId: member.member_id, change: "removed" });
-      await loadCaregivers(patient.id);
-      toast({ title: "एक्सेस हटा दिया गया", tone: "success" });
-    } catch (err) {
-      toast({ title: "एक्सेस नहीं हटाया जा सका", description: err instanceof Error ? err.message : undefined, tone: "error" });
-    }
-  }
-
-  async function handleRoleChange(member: AuthorizedCaregiver, role: "editor" | "viewer") {
-    if (!patient || member.role === role) return;
-    try {
-      await setCaregiverRole(member.member_id, role);
-      sendAppEmailQuietly({ type: "caregiver.access-changed", patientId: patient.id, memberId: member.member_id, change: "role-changed" });
-      await loadCaregivers(patient.id);
-      toast({ title: "भूमिका बदल दी गई", tone: "success" });
-    } catch (err) {
-      toast({ title: "भूमिका नहीं बदली जा सकी", description: err instanceof Error ? err.message : undefined, tone: "error" });
-    }
-  }
-
-  async function handleChangePassword(e: FormEvent) {
-    e.preventDefault();
-    if (passwordBusyRef.current) return;
-    setPasswordError("");
-    if (newPassword.length < MIN_PASSWORD_LENGTH) {
-      setPasswordError(`पासवर्ड कम से कम ${MIN_PASSWORD_LENGTH} अक्षरों का रखें। (At least ${MIN_PASSWORD_LENGTH} characters.)`);
-      return;
-    }
-    if (newPassword !== confirmPassword) {
-      setPasswordError("दोनों पासवर्ड एक जैसे नहीं हैं। (The two passwords do not match.)");
-      return;
-    }
-    passwordBusyRef.current = true;
-    setPasswordBusy(true);
-    try {
-      await updatePassword(newPassword);
-      setNewPassword("");
-      setConfirmPassword("");
-      toast({ title: "पासवर्ड बदल गया", tone: "success" });
-    } catch (err) {
-      setPasswordError(err instanceof Error ? err.message : "पासवर्ड नहीं बदला जा सका।");
-    } finally {
-      passwordBusyRef.current = false;
-      setPasswordBusy(false);
-    }
-  }
-
-  async function handleSignOut() {
-    const ok = await confirm({
-      title: "लॉग आउट करें?",
-      message: "इस फोन से आपका सेशन और सेव किया हुआ अस्थायी डेटा हट जाएगा।",
-      confirmLabel: "लॉग आउट (Sign out)",
-    });
-    if (ok) await signOut();
-  }
-
-  async function handleSaveSettings(e: FormEvent) {
-    e.preventDefault();
-    if (!patient || !canWrite) return;
-    setError("");
-
-    const calNum = Number(calorieTarget);
-    if (!Number.isInteger(calNum) || calNum < 500 || calNum > 6000) {
-      setError("कैलोरी लक्ष्य 500 से 6000 kcal के बीच रखें। (Calorie target 500 to 6000.)");
-      return;
-    }
-    const stepNum = Number(stepGoal);
-    if (!Number.isInteger(stepNum) || stepNum < 1000 || stepNum > 50000) {
-      setError("कदम लक्ष्य 1,000 से 50,000 के बीच रखें। (Step goal 1,000 to 50,000.)");
-      return;
-    }
-    const sleepNum = Number(sleepTarget);
-    if (!Number.isFinite(sleepNum) || sleepNum < 4 || sleepNum > 14) {
-      setError("नींद का लक्ष्य 4 से 14 घंटे के बीच रखें। (Sleep target 4 to 14 hours.)");
-      return;
-    }
-
-    let bpTargets: BPThresholds | undefined;
-    if (isOwner) {
-      const parsed = parseBPFields(bpFields);
-      if (parsed.error) {
-        setError(parsed.error);
-        return;
-      }
-      bpTargets = parsed.value;
-    }
-
-    try {
-      setSaving(true);
-      const updated = await updatePatientSettings(patient.id, {
-        daily_calorie_target: calNum,
-        daily_step_goal: stepNum,
-        sleep_target_hours: sleepNum,
-        bp_monitoring_schedule: bpSchedule,
-        alerts_enabled: alerts,
-        ...(bpTargets ? { bp_targets: bpTargets } : {}),
-      });
-      // The profile carries the same target; keep the two in step.
-      if (patient.daily_calorie_target !== calNum) {
-        setPatient(await updatePatientProfile({ daily_calorie_target: calNum }, patient.id));
-      }
-      setSettings(updated);
-      setBpFields(bpToFields(updated.bp_targets));
-      toast({ title: "सेटिंग्स सुरक्षित हो गईं", tone: "success" });
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "सेटिंग्स सुरक्षित नहीं हो सकीं। (Could not save settings.)");
-    } finally {
-      setSaving(false);
-    }
-  }
-
-  if (!activePatientId) {
-    return (
-      <div className="space-y-6">
-        <PageTitle title="Settings" eyebrow="सेटिंग्स" description="कोई मरीज़ चुना नहीं गया है।" />
-      </div>
-    );
-  }
-
-  if (loading || !patient || !settings) {
-    return (
-      <div className="space-y-6">
-        <PageTitle
-          description="Manage health goals, tracking schedule and notification preferences."
-          eyebrow="Settings (सेटिंग्स)"
-          title="Health Preferences & Settings"
-        />
-        {loadError ? (
-          <div role="alert" className="flex items-center gap-2 rounded-card border border-critical-line bg-critical-soft px-4 py-3 text-sm font-semibold text-critical">
-            <AlertCircle className="h-4 w-4 shrink-0" aria-hidden />
-            {loadError}
-          </div>
-        ) : (
-          <div className="h-96 animate-pulse rounded-panel bg-surface-sunken" />
-        )}
-      </div>
-    );
-  }
-
-  const readOnly = !canWrite;
-  const bpReadOnly = !isOwner;
-  const otherMembers = caregivers.filter((c) => c.user_id !== user?.id);
-
   return (
-    <div className="space-y-6">
-      <PageTitle
-        description="Manage your account, health goals, tracking schedule and who can see this patient."
-        eyebrow="Settings & Preferences (सेटिंग्स और प्राथमिकताएं)"
-        title="Settings Center"
+    <PageBody>
+      {header}
+
+      <Segmented
+        mode="tabs"
+        idPrefix={tabsId}
+        options={TABS}
+        value={tab}
+        onChange={setTab}
+        ariaLabel="सेटिंग्स के हिस्से — Settings sections"
       />
 
-      {/* ACCOUNT: not part of the patient form, so it has its own forms */}
-      <Section
-        icon={<User className="h-4 w-4 text-brand" aria-hidden />}
-        title="आपका खाता (Your account)"
-        description="आप जिस ईमेल से लॉगिन हैं और आपकी भूमिका"
-        action={profile?.role === "admin" ? <Badge variant="gold">Admin</Badge> : undefined}
-      >
-        <div className="space-y-4 text-xs">
-          <div className="flex flex-wrap items-center justify-between gap-3 rounded-card border border-line bg-surface-sunken p-3">
-            <div className="min-w-0">
-              <p className="truncate text-sm font-semibold text-ink">{user?.email ?? profile?.email ?? "—"}</p>
-              <p className="text-ink-muted">
-                {profile?.display_name ? `${profile.display_name} · ` : ""}
-                {patient.name} पर आपकी भूमिका: {memberRole ? ROLE_LABEL[memberRole] : "—"}
-              </p>
-            </div>
-            <Badge variant="green">लॉगिन है</Badge>
-          </div>
+      <div role="tabpanel" id={segmentedPanelId(tabsId, tab)} aria-labelledby={segmentedTabId(tabsId, tab)} className="space-y-4">
+        {tab === "account" ? <AccountPanel patient={patient} onJoin={() => setIsJoinOpen(true)} /> : null}
+        {tab === "family" ? <FamilyPanel patient={patient} /> : null}
+        {tab === "data" ? <DataPanel patient={patient} /> : null}
 
-          <form onSubmit={handleChangePassword} className="space-y-3 rounded-card border border-line p-3">
-            <p className="flex items-center gap-1.5 text-sm font-semibold text-ink">
-              <KeyRound className="h-4 w-4 text-brand" aria-hidden />
-              पासवर्ड बदलें (Change password)
-            </p>
-            <div className="grid gap-3 sm:grid-cols-2">
-              <Field label="नया पासवर्ड (New password)" hint={`कम से कम ${MIN_PASSWORD_LENGTH} अक्षर`}>
-                <div className="relative">
-                  <TextInput
-                    type={showPassword ? "text" : "password"}
-                    autoComplete="new-password"
-                    value={newPassword}
-                    onChange={(e) => setNewPassword(e.target.value)}
-                    className="pr-11"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword((v) => !v)}
-                    aria-label={showPassword ? "पासवर्ड छुपाएं" : "पासवर्ड दिखाएं"}
-                    aria-pressed={showPassword}
-                    className="absolute inset-y-0 right-0 flex w-11 cursor-pointer items-center justify-center text-ink-subtle hover:text-ink"
-                  >
-                    {showPassword ? <EyeOff className="h-4 w-4" aria-hidden /> : <Eye className="h-4 w-4" aria-hidden />}
-                  </button>
-                </div>
-              </Field>
-              <Field label="पासवर्ड दोबारा (Confirm)">
-                <TextInput
-                  type={showPassword ? "text" : "password"}
-                  autoComplete="new-password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                />
-              </Field>
-            </div>
-            <div aria-live="polite" className="empty:hidden">
-              {passwordError ? (
-                <p role="alert" className="text-xs font-semibold text-critical">
-                  {passwordError}
-                </p>
-              ) : null}
-            </div>
-            <Button type="submit" variant="secondary" disabled={passwordBusy || !newPassword}>
-              {passwordBusy ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> : <Lock className="h-4 w-4" aria-hidden />}
-              पासवर्ड बदलें
-            </Button>
-          </form>
-
-          <div className="flex flex-wrap items-center justify-between gap-2">
-            <Button type="button" variant="secondary" onClick={() => setIsJoinOpen(true)}>
-              <KeyRound className="h-4 w-4" aria-hidden />
-              इनविटेशन कोड डालें (Join a patient)
-            </Button>
-            <Button type="button" variant="danger" onClick={() => void handleSignOut()}>
-              <LogOut className="h-4 w-4" aria-hidden />
-              लॉग आउट (Sign out)
-            </Button>
-          </div>
-        </div>
-      </Section>
-
-      <form onSubmit={handleSaveSettings} className="space-y-6">
-        {readOnly ? (
-          <div role="status" className="flex items-start gap-2 rounded-card border border-info-line bg-info-soft px-4 py-3 text-sm font-medium text-info">
-            <Lock className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
-            आपके पास इस मरीज़ को सिर्फ़ देखने का एक्सेस है, इसलिए सेटिंग्स बदली नहीं जा सकतीं। (View-only access: settings are read-only.)
-          </div>
-        ) : null}
-
-        <div aria-live="polite" className="empty:hidden">
-          {error ? (
-            <div role="alert" className="flex items-center gap-2 rounded-card border border-critical-line bg-critical-soft px-4 py-3 text-sm font-semibold text-critical">
-              <AlertCircle className="h-4 w-4 shrink-0" aria-hidden />
-              {error}
-            </div>
-          ) : null}
-        </div>
-
-        {/* PATIENT SUMMARY */}
-        <Section
-          icon={<User className="h-4 w-4 text-brand" aria-hidden />}
-          title="मरीज़ का परिचय (Patient summary)"
-          description="जानकारी बदलने के लिए Profile पेज खोलें"
-          action={<Badge variant="green">Active</Badge>}
-        >
-          <div className="grid gap-3 text-xs sm:grid-cols-3">
-            <div className="rounded-card border border-line bg-surface-sunken p-3">
-              <span className="text-2xs font-semibold uppercase tracking-wider text-ink-subtle">नाम (Name)</span>
-              <p className="mt-0.5 text-sm font-semibold text-ink">{patient.name}</p>
-              <p className="text-ink-muted">
-                {[patient.age ? `${patient.age} वर्ष` : null, patient.gender].filter(Boolean).join(" · ") || "उम्र/लिंग दर्ज नहीं"}
-              </p>
-            </div>
-            <div className="rounded-card border border-line bg-surface-sunken p-3">
-              <span className="text-2xs font-semibold uppercase tracking-wider text-ink-subtle">वजन (Weight)</span>
-              <p className="mt-0.5 text-sm font-semibold text-ink">
-                {patient.current_weight_kg != null ? `${patient.current_weight_kg} kg` : "दर्ज नहीं"}
-              </p>
-              <p className="text-ink-muted">
-                {patient.target_weight_kg != null ? `लक्ष्य: ${patient.target_weight_kg} kg` : "लक्ष्य दर्ज नहीं"}
-              </p>
-            </div>
-            <div className="rounded-card border border-line bg-surface-sunken p-3">
-              <span className="text-2xs font-semibold uppercase tracking-wider text-ink-subtle">समय (Time zone)</span>
-              <p className="mt-0.5 text-sm font-semibold text-ink">भारतीय समय (IST)</p>
-              <p className="text-ink-muted">सभी दिन भारत के समय से गिने जाते हैं</p>
-            </div>
-          </div>
-        </Section>
-
-        {/* NUTRITION */}
-        <Section
-          icon={<Utensils className="h-4 w-4 text-food" aria-hidden />}
-          title="दैनिक कैलोरी लक्ष्य (Calorie target)"
-          description="भोजन के स्कोर और रिपोर्ट इसी लक्ष्य से तुलना करते हैं"
-        >
-          <div className="space-y-3">
-            <div className="flex items-start gap-2 rounded-card border border-attention-line bg-attention-soft p-3 text-xs text-attention">
-              <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
-              <p className="leading-relaxed">
-                यह लक्ष्य डॉक्टर या डायटीशियन की सलाह के अनुसार रखें। बदलने से पहले उनसे पूछ लें। (Change only on medical advice.)
-              </p>
-            </div>
-            <div className="grid gap-3 sm:grid-cols-2">
-              <Field label="Calorie target (kcal / दिन)" required>
-                <NumberInput
-                  value={calorieTarget}
-                  onChange={(e) => setCalorieTarget(e.target.value)}
-                  disabled={readOnly}
-                  placeholder="kcal"
-                />
-              </Field>
-              <div className="flex items-end">
-                <PresetChips
-                  values={[1400, 1600, 1800, 2000]}
-                  current={calorieTarget}
-                  onPick={setCalorieTarget}
-                  disabled={readOnly}
-                  format={(v) => `${v} kcal`}
-                />
+        {FORM_TABS.includes(tab) ? (
+          <form onSubmit={handleSave} noValidate aria-label="सेटिंग्स" className="space-y-4">
+            {readOnly ? (
+              <div role="status" className="flex items-start gap-2.5 rounded-card border border-info-line bg-info-soft px-4 py-3 text-sm font-medium text-ink">
+                <Lock aria-hidden className="mt-0.5 h-4 w-4 shrink-0 text-info" />
+                <span lang="hi">आपके पास इस मरीज़ को सिर्फ़ देखने का एक्सेस है, इसलिए सेटिंग्स बदली नहीं जा सकतीं। (View-only access: settings are read-only.)</span>
               </div>
-            </div>
-            <div className="flex flex-wrap items-center justify-between gap-2 border-t border-line pt-3">
-              <div>
-                <p className="text-xs font-semibold text-ink">सीखे गए त्वरित भोजन (Learned quick foods)</p>
-                <p className="text-xs text-ink-muted">भोजन का इतिहास डिलीट किए बिना सिर्फ़ रैंकिंग रीसेट होती है। (This phone only.)</p>
-              </div>
-              <Button
-                type="button"
-                variant="secondary"
-                size="sm"
-                onClick={() => {
-                  resetQuickFoodPreferences(patient.id);
-                  toast({ title: "त्वरित भोजन की रैंकिंग रीसेट हो गई", tone: "success" });
-                }}
-              >
-                <RotateCcw className="h-3.5 w-3.5" aria-hidden />
-                Reset quick foods
-              </Button>
-            </div>
-          </div>
-        </Section>
-
-        {/* ACTIVITY */}
-        <Section
-          icon={<Footprints className="h-4 w-4 text-activity" aria-hidden />}
-          title="कदम लक्ष्य (Daily step goal)"
-          description="गतिविधि स्कोर और याद दिलाने के लिए। पुराने रिकॉर्ड नहीं बदलते।"
-        >
-          <div className="grid gap-3 sm:grid-cols-2">
-            <Field label="Daily step goal (कदम / दिन)" required>
-              <NumberInput value={stepGoal} onChange={(e) => setStepGoal(e.target.value)} disabled={readOnly} placeholder="कदम" />
-            </Field>
-            <div className="flex items-end">
-              <PresetChips
-                values={[4000, 5000, 6000, 8000, 10000]}
-                current={stepGoal}
-                onPick={setStepGoal}
-                disabled={readOnly}
-                format={(v) => v.toLocaleString("en-IN")}
-              />
-            </div>
-          </div>
-        </Section>
-
-        {/* SLEEP */}
-        <Section
-          icon={<Moon className="h-4 w-4 text-sleep" aria-hidden />}
-          title="नींद का लक्ष्य (Sleep target)"
-          description="रोज़ाना के वेलनेस स्कोर में इस्तेमाल होता है"
-        >
-          <div className="grid gap-3 sm:grid-cols-2">
-            <Field label="Target hours / night (घंटे)" required>
-              <NumberInput
-                allowDecimal
-                value={sleepTarget}
-                onChange={(e) => setSleepTarget(e.target.value)}
-                disabled={readOnly}
-                placeholder="घंटे"
-              />
-            </Field>
-            <div className="flex items-end">
-              <PresetChips
-                values={[6, 6.5, 7, 7.5, 8]}
-                current={sleepTarget}
-                onPick={setSleepTarget}
-                disabled={readOnly}
-                format={(v) => `${v} hrs`}
-              />
-            </div>
-          </div>
-        </Section>
-
-        {/* BP SCHEDULE + THRESHOLDS */}
-        <Section
-          icon={<HeartPulse className="h-4 w-4 text-bp" aria-hidden />}
-          title="BP निगरानी (Blood pressure monitoring)"
-          description="कितनी बार BP नापना है, और कौन सी रीडिंग “ज़्यादा” मानी जाए"
-        >
-          <fieldset className="space-y-4" disabled={readOnly}>
-            <legend className="sr-only">BP monitoring schedule</legend>
-            <div className="grid gap-2 text-xs sm:grid-cols-3">
-              {BP_SCHEDULES.map((opt) => (
-                <label
-                  key={opt.id}
-                  className={cn(
-                    "flex min-h-control cursor-pointer items-center gap-2.5 rounded-card border p-3 transition-colors",
-                    bpSchedule === opt.id
-                      ? "border-bp bg-bp-soft font-semibold text-ink"
-                      : "border-line bg-surface text-ink-muted hover:bg-surface-sunken",
-                    readOnly && "cursor-not-allowed opacity-70",
-                  )}
-                >
-                  <input
-                    type="radio"
-                    name="bpSchedule"
-                    checked={bpSchedule === opt.id}
-                    onChange={() => setBpSchedule(opt.id)}
-                    className="h-4 w-4 accent-bp"
-                  />
-                  <span>
-                    <span className="block">{opt.label}</span>
-                    <span lang="hi" className="text-2xs font-normal text-ink-subtle">
-                      {opt.labelHi}
-                    </span>
-                  </span>
-                </label>
-              ))}
-            </div>
-          </fieldset>
-
-          <div className="mt-5 border-t border-line pt-4">
-            <div className="flex flex-wrap items-start justify-between gap-2">
-              <div>
-                <h3 className="text-sm font-semibold text-ink">BP की सीमाएं (BP thresholds, mmHg)</h3>
-                <p className="mt-0.5 text-xs text-ink-muted">
-                  डॉक्टर की सलाह से ही बदलें। ऐप में BP के सभी अलर्ट इन्हीं सीमाओं से बनते हैं।
-                </p>
-              </div>
-              {bpReadOnly ? (
-                <Badge variant="neutral">
-                  <Lock className="h-3 w-3" aria-hidden />
-                  सिर्फ़ मालिक बदल सकता है
-                </Badge>
-              ) : (
-                <Button type="button" variant="ghost" size="sm" onClick={() => setBpFields(bpToFields(DEFAULT_BP_THRESHOLDS))}>
-                  <RotateCcw className="h-3.5 w-3.5" aria-hidden />
-                  मानक सीमाएं
-                </Button>
-              )}
-            </div>
-
-            <div className="mt-3 grid gap-3 sm:grid-cols-2">
-              {BP_FIELD_GROUPS.map((group) => (
-                <div key={group.title} className="rounded-card border border-line bg-surface-sunken p-3">
-                  <p className="text-xs font-semibold text-ink">{group.title}</p>
-                  <p className="mb-2 text-2xs text-ink-subtle">{group.hint}</p>
-                  <div className="grid grid-cols-2 gap-2">
-                    <Field label="ऊपर का (Systolic)">
-                      <NumberInput
-                        value={bpFields[group.systolic]}
-                        onChange={(e) => setBpFields((f) => ({ ...f, [group.systolic]: e.target.value }))}
-                        disabled={bpReadOnly || readOnly}
-                      />
-                    </Field>
-                    <Field label="नीचे का (Diastolic)">
-                      <NumberInput
-                        value={bpFields[group.diastolic]}
-                        onChange={(e) => setBpFields((f) => ({ ...f, [group.diastolic]: e.target.value }))}
-                        disabled={bpReadOnly || readOnly}
-                      />
-                    </Field>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </Section>
-
-        {/* ALERTS */}
-        <Section
-          icon={<Bell className="h-4 w-4 text-attention" aria-hidden />}
-          title="सूचनाएं और रिमाइंडर (Alerts & reminders)"
-          description="डैशबोर्ड पर कौन से नियम-आधारित अलर्ट दिखें"
-        >
-          <fieldset disabled={readOnly} className="space-y-2.5 text-xs">
-            <legend className="sr-only">Alert preferences</legend>
-            {ALERT_TOGGLES.map((toggle) => (
-              <label
-                key={toggle.key}
-                className="flex min-h-control cursor-pointer items-center justify-between gap-3 rounded-card border border-line bg-surface-sunken p-3"
-              >
-                <span className="font-semibold text-ink">{toggle.label}</span>
-                <input
-                  type="checkbox"
-                  checked={alerts[toggle.key]}
-                  onChange={(e) => setAlerts((a) => ({ ...a, [toggle.key]: e.target.checked }))}
-                  className="h-5 w-5 shrink-0 accent-brand"
-                />
-              </label>
-            ))}
-          </fieldset>
-          <div className="pt-3">
-            {notifPermission === "unsupported" ? (
-              <p className="text-xs text-ink-muted">यह ब्राउज़र नोटिफिकेशन को सपोर्ट नहीं करता।</p>
-            ) : (
-              <Button
-                type="button"
-                variant={notifPermission === "granted" ? "quiet" : "secondary"}
-                block
-                onClick={handleEnablePushNotifs}
-                disabled={notifPermission === "granted"}
-              >
-                <Bell className="h-4 w-4" aria-hidden />
-                {notifPermission === "granted"
-                  ? "ब्राउज़र नोटिफिकेशन चालू हैं"
-                  : "ब्राउज़र नोटिफिकेशन चालू करें (Enable notifications)"}
-              </Button>
-            )}
-          </div>
-          <div className="space-y-1.5 pt-3">
-            <Button type="button" variant="secondary" block onClick={handleSendTestEmail} disabled={sendingTestEmail || !user?.email}>
-              {sendingTestEmail ? (
-                <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
-              ) : (
-                <Mail className="h-4 w-4" aria-hidden />
-              )}
-              ईमेल टेस्ट करें (Send test email)
-            </Button>
-            <p className="text-xs text-ink-muted">
-              {user?.email
-                ? `${user.email} पर एक टेस्ट ईमेल जाएगा, ताकि पता चले कि अलर्ट और रिपोर्ट पहुँचेंगे।`
-                : "टेस्ट ईमेल के लिए खाते में ईमेल पता चाहिए।"}
-            </p>
-          </div>
-        </Section>
-
-        {/* SAVE */}
-        {!readOnly ? (
-          <div className="frost sticky bottom-20 z-20 flex justify-end gap-3 rounded-panel border border-line p-4 shadow-e2 lg:bottom-4">
-            <Button type="submit" variant="primary" size="lg" disabled={saving} className="w-full sm:w-auto">
-              {saving ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> : <Save className="h-4 w-4" aria-hidden />}
-              {saving ? "सेव हो रहा है..." : "सभी सेटिंग्स सुरक्षित करें"}
-            </Button>
-          </div>
-        ) : null}
-      </form>
-
-      {/* CAREGIVERS */}
-      <Section
-        icon={<Users className="h-4 w-4 text-brand" aria-hidden />}
-        title="केयरगिवर और परिवार (Caregiver access)"
-        description={`${patient.name} की जानकारी कौन देख या भर सकता है`}
-        action={
-          isOwner ? (
-            <Button type="button" variant="secondary" size="sm" onClick={() => setIsAddCaregiverOpen(true)}>
-              <UserPlus className="h-3.5 w-3.5" aria-hidden />
-              जोड़ें (Add)
-            </Button>
-          ) : undefined
-        }
-      >
-        {isOwner ? (
-          <div className="space-y-2 text-xs">
-            {caregiversError ? (
-              <p role="alert" className="font-semibold text-critical">
-                {caregiversError}
-              </p>
             ) : null}
-            {otherMembers.length > 0 ? (
-              otherMembers.map((member) => (
-                <div
-                  key={member.member_id}
-                  className="flex flex-wrap items-center justify-between gap-3 rounded-card border border-line bg-surface p-3 shadow-e1"
+
+            {tab === "goals" ? (
+              <div className="grid items-start gap-4 lg:grid-cols-2">
+                <SettingsCard
+                  icon={Utensils}
+                  tone="food"
+                  title="दैनिक कैलोरी लक्ष्य"
+                  description="भोजन के स्कोर और रिपोर्ट इसी लक्ष्य से तुलना करते हैं"
+                  className="lg:col-span-2"
                 >
-                  <div className="min-w-0">
-                    <p className="truncate text-sm font-semibold text-ink">{member.display_name || member.email || "—"}</p>
-                    <p className="truncate text-ink-muted">
-                      {member.email ? `${member.email} · ` : ""}
-                      जुड़े: {new Date(member.added_at).toLocaleDateString("en-IN", { timeZone: "Asia/Kolkata" })}
+                  <div className="flex items-start gap-2.5 rounded-card border border-attention-line bg-attention-soft p-3 text-sm text-attention">
+                    <AlertCircle aria-hidden className="mt-0.5 h-4 w-4 shrink-0" />
+                    <p lang="hi" className="leading-relaxed">
+                      यह लक्ष्य डॉक्टर या डायटीशियन की सलाह के अनुसार रखें। बदलने से पहले उनसे पूछ लें। (Change only on medical advice.)
                     </p>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <label className="sr-only" htmlFor={`role-${member.member_id}`}>
-                      Role
-                    </label>
-                    <Select
-                      id={`role-${member.member_id}`}
-                      value={member.role === "editor" ? "editor" : "viewer"}
-                      onChange={(e) => void handleRoleChange(member, e.target.value as "editor" | "viewer")}
-                      className="min-h-control-sm w-auto text-xs"
+                  <div className="grid gap-3 sm:grid-cols-[minmax(0,16rem)_1fr] sm:items-end">
+                    <Field label="Calorie target (kcal / दिन)" required error={errors.calorie} hint="500 से 6000 के बीच">
+                      <NumberInput
+                        value={form.calorie}
+                        onChange={(e) => patchForm({ calorie: e.target.value }, "calorie")}
+                        disabled={readOnly}
+                        placeholder="kcal"
+                      />
+                    </Field>
+                    <div className="sm:pb-6">
+                      <PresetChips
+                        label="कैलोरी के सुझाव"
+                        values={[1400, 1600, 1800, 2000]}
+                        current={form.calorie}
+                        onPick={(v) => patchForm({ calorie: v }, "calorie")}
+                        disabled={readOnly}
+                        format={(v) => `${v} kcal`}
+                      />
+                    </div>
+                  </div>
+                  <div className="flex flex-wrap items-center justify-between gap-3 border-t border-gold-line pt-3">
+                    <div className="min-w-0">
+                      <p lang="hi" className="text-sm font-semibold text-ink">
+                        सीखे गए त्वरित भोजन
+                      </p>
+                      <p lang="hi" className="text-xs text-ink-muted">
+                        Food पेज की सुझाई सूची की रैंकिंग रीसेट होती है, भोजन का इतिहास डिलीट नहीं होता। (सिर्फ़ इस फोन पर।)
+                      </p>
+                    </div>
+                    <Button
+                      type="button"
+                      variant="secondary"
+                      size="sm"
+                      onClick={() => {
+                        resetQuickFoodPreferences(patient.id);
+                        toast({ title: "त्वरित भोजन की रैंकिंग रीसेट हो गई", tone: "success" });
+                      }}
                     >
-                      <option value="viewer">Viewer (देखना)</option>
-                      <option value="editor">Editor (भरना)</option>
-                    </Select>
-                    <Button type="button" variant="danger" size="sm" onClick={() => void handleRevoke(member)}>
-                      <Trash2 className="h-3.5 w-3.5" aria-hidden />
-                      हटाएं
+                      <RotateCcw aria-hidden className="h-3.5 w-3.5" />
+                      Reset quick foods
                     </Button>
                   </div>
-                </div>
-              ))
-            ) : !caregiversError ? (
-              <div className="rounded-card border border-line bg-surface-sunken p-3 text-ink-muted">
-                अभी कोई और सदस्य नहीं जुड़ा है। परिवार के किसी सदस्य को जोड़ने के लिए &quot;जोड़ें&quot; दबाएं।
+                </SettingsCard>
+
+                <SettingsCard icon={Footprints} tone="activity" title="कदम लक्ष्य" description="गतिविधि स्कोर और याद दिलाने के लिए। पुराने रिकॉर्ड नहीं बदलते।">
+                  <Field label="Daily step goal (कदम / दिन)" required error={errors.steps} hint="1,000 से 50,000 के बीच">
+                    <NumberInput value={form.steps} onChange={(e) => patchForm({ steps: e.target.value }, "steps")} disabled={readOnly} placeholder="कदम" />
+                  </Field>
+                  <PresetChips
+                    label="कदम के सुझाव"
+                    values={[4000, 5000, 6000, 8000, 10000]}
+                    current={form.steps}
+                    onPick={(v) => patchForm({ steps: v }, "steps")}
+                    disabled={readOnly}
+                    format={(v) => v.toLocaleString("en-IN")}
+                  />
+                </SettingsCard>
+
+                <SettingsCard icon={Moon} tone="sleep" title="नींद का लक्ष्य" description="रोज़ाना के वेलनेस स्कोर में इस्तेमाल होता है">
+                  <Field label="Target hours / night (घंटे)" required error={errors.sleep} hint="4 से 14 घंटे के बीच">
+                    <NumberInput
+                      allowDecimal
+                      value={form.sleep}
+                      onChange={(e) => patchForm({ sleep: e.target.value }, "sleep")}
+                      disabled={readOnly}
+                      placeholder="घंटे"
+                    />
+                  </Field>
+                  <PresetChips
+                    label="नींद के सुझाव"
+                    values={[6, 6.5, 7, 7.5, 8]}
+                    current={form.sleep}
+                    onPick={(v) => patchForm({ sleep: v }, "sleep")}
+                    disabled={readOnly}
+                    format={(v) => `${v} hrs`}
+                  />
+                </SettingsCard>
               </div>
             ) : null}
-          </div>
-        ) : (
-          <div className="flex items-start gap-2 rounded-card border border-line bg-surface-sunken p-3 text-xs text-ink-muted">
-            <Lock className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
-            केयरगिवर जोड़ना या हटाना सिर्फ़ मरीज़ का मालिक (Owner) कर सकता है।
-          </div>
-        )}
-      </Section>
 
-      {/* EXPORT */}
-      <Section
-        icon={<Download className="h-4 w-4 text-weight" aria-hidden />}
-        title="डेटा बैकअप (Data export)"
-        description="BP, वजन, भोजन, दवाई और नींद के सभी रिकॉर्ड डाउनलोड करें"
-      >
-        <div className="flex flex-col gap-3 sm:flex-row">
-          <Button type="button" variant="secondary" block onClick={() => void exportAllDataAsCsv(patient.id)}>
-            <Download className="h-4 w-4" aria-hidden />
-            CSV डाउनलोड करें
-          </Button>
-          <Button type="button" variant="secondary" block onClick={() => void exportAllDataAsJson(patient.id)}>
-            <Download className="h-4 w-4" aria-hidden />
-            JSON डाउनलोड करें
-          </Button>
-        </div>
-      </Section>
+            {tab === "bp" ? (
+              <>
+                <SettingsCard icon={HeartPulse} tone="bp" title="BP नापने का समय" description="कितनी बार BP नापना है। रिमाइंडर और अधूरे डेटा की सूचना इसी से बनती है।">
+                  <fieldset disabled={readOnly} className="min-w-0">
+                    <legend className="sr-only">BP monitoring schedule</legend>
+                    <div className="grid gap-2.5 sm:grid-cols-3">
+                      {BP_SCHEDULES.map((opt) => {
+                        const selected = form.schedule === opt.id;
+                        return (
+                          <label
+                            key={opt.id}
+                            className={cn(
+                              "flex min-h-control cursor-pointer items-center gap-3 rounded-card border p-3 transition-colors",
+                              "has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-brand",
+                              selected ? "border-gold-line bg-gold-soft shadow-e1" : "tile hover:border-gold-line",
+                              readOnly && "cursor-not-allowed opacity-70",
+                            )}
+                          >
+                            <input
+                              type="radio"
+                              name="bpSchedule"
+                              checked={selected}
+                              onChange={() => patchForm({ schedule: opt.id })}
+                              className="h-5 w-5 shrink-0 accent-bp"
+                            />
+                            <span className="min-w-0">
+                              <span className={cn("block text-sm", selected ? "font-semibold text-ink" : "font-medium text-ink")}>{opt.label}</span>
+                              <span lang="hi" className="block text-xs text-ink-muted">
+                                {opt.labelHi}
+                              </span>
+                            </span>
+                          </label>
+                        );
+                      })}
+                    </div>
+                  </fieldset>
+                </SettingsCard>
 
-      <div className="space-y-3 rounded-card border border-line bg-surface-sunken p-5 text-xs text-ink-muted">
-        <div className="flex items-center gap-1.5 font-semibold text-ink">
-          <ShieldCheck className="h-4 w-4 text-brand" aria-hidden />
-          SwasthTrack Health Companion
-        </div>
-        <p className="leading-relaxed">
-          आपके रिकॉर्ड सुरक्षित डेटाबेस में रहते हैं और सिर्फ़ उन्हीं को दिखते हैं जिन्हें आपने एक्सेस दिया है। सभी विश्लेषण नियम-आधारित हैं और ट्रैकिंग में मदद के लिए हैं, डॉक्टर की सलाह के विकल्प नहीं।
-        </p>
-        <div className="flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-line pt-3 font-semibold text-brand-ink">
-          <Link href="/about" className="hover:underline">
-            About
-          </Link>
-          <Link href="/contact" className="hover:underline">
-            Contact &amp; Support
-          </Link>
-          <Link href="/privacy" className="hover:underline">
-            Privacy Policy
-          </Link>
-          <Link href="/terms" className="hover:underline">
-            Terms of Use
-          </Link>
-          <Link href="/medical-disclaimer" className="hover:underline">
-            Medical Disclaimer
-          </Link>
-        </div>
+                <SettingsCard
+                  icon={Target}
+                  tone="bp"
+                  title="BP की सीमाएं (mmHg)"
+                  description="डॉक्टर की सलाह से ही बदलें। ऐप में BP के सभी अलर्ट इन्हीं सीमाओं से बनते हैं।"
+                  action={
+                    bpReadOnly ? (
+                      <Badge variant="neutral">
+                        <Lock aria-hidden className="h-3 w-3" />
+                        <span lang="hi">सिर्फ़ मालिक बदल सकता है</span>
+                      </Badge>
+                    ) : (
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => patchForm({ bp: bpToFields(DEFAULT_BP_THRESHOLDS) }, "bp")}
+                      >
+                        <RotateCcw aria-hidden className="h-3.5 w-3.5" />
+                        <span lang="hi">मानक सीमाएं</span>
+                      </Button>
+                    )
+                  }
+                >
+                  {errors.bp ? (
+                    <p role="alert" className="flex items-start gap-2 rounded-card border border-critical-line bg-critical-soft px-3.5 py-2.5 text-sm font-medium text-critical">
+                      <AlertCircle aria-hidden className="mt-0.5 h-4 w-4 shrink-0" />
+                      <span lang="hi">{errors.bp}</span>
+                    </p>
+                  ) : null}
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    {BP_FIELD_GROUPS.map((group) => (
+                      <div key={group.english} className="tile rounded-card p-3.5">
+                        <p className="flex items-center gap-2 text-sm font-semibold text-ink">
+                          <span aria-hidden className={cn("h-2.5 w-2.5 rounded-full", group.dot)} />
+                          <span lang="hi">{group.title}</span>
+                          <span className="text-xs font-normal text-ink-muted">{group.english}</span>
+                        </p>
+                        <p lang="hi" className="mb-3 mt-0.5 text-xs text-ink-muted">
+                          {group.hint}
+                        </p>
+                        <div className="grid grid-cols-2 gap-2.5">
+                          <Field label="ऊपर का (Systolic)">
+                            <NumberInput
+                              value={form.bp[group.systolic]}
+                              onChange={(e) => patchForm({ bp: { ...form.bp, [group.systolic]: e.target.value } }, "bp")}
+                              disabled={bpReadOnly}
+                              aria-invalid={Boolean(errors.bp)}
+                            />
+                          </Field>
+                          <Field label="नीचे का (Diastolic)">
+                            <NumberInput
+                              value={form.bp[group.diastolic]}
+                              onChange={(e) => patchForm({ bp: { ...form.bp, [group.diastolic]: e.target.value } }, "bp")}
+                              disabled={bpReadOnly}
+                              aria-invalid={Boolean(errors.bp)}
+                            />
+                          </Field>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </SettingsCard>
+              </>
+            ) : null}
+
+            {tab === "alerts" ? (
+              <div className="grid items-start gap-4 lg:grid-cols-2">
+                <SettingsCard icon={Bell} tone="meds" title="सूचनाएं और रिमाइंडर" description="डैशबोर्ड पर कौन से नियम-आधारित अलर्ट दिखें">
+                  <fieldset disabled={readOnly} className="min-w-0 space-y-2.5">
+                    <legend className="sr-only">Alert preferences</legend>
+                    {ALERT_TOGGLES.map((toggle) => (
+                      <ToggleRow
+                        key={toggle.key}
+                        checked={form.alerts[toggle.key]}
+                        onChange={(checked) => patchForm({ alerts: { ...form.alerts, [toggle.key]: checked } })}
+                        disabled={readOnly}
+                        title={toggle.title}
+                        hindiTitle={toggle.hindiTitle}
+                      />
+                    ))}
+                  </fieldset>
+                  <p lang="hi" className="text-xs text-ink-muted">
+                    गंभीर BP रीडिंग की चेतावनी इन स्विच से बंद नहीं होती।
+                  </p>
+                </SettingsCard>
+
+                <div className="space-y-4">
+                  <SettingsCard icon={BellRing} tone="food" title="ब्राउज़र नोटिफिकेशन" description="दवाई का समय होने पर इस ब्राउज़र में याद दिलाएँ">
+                    {notifPermission === "unsupported" ? (
+                      <p lang="hi" className="text-sm text-ink-muted">
+                        यह ब्राउज़र नोटिफिकेशन को सपोर्ट नहीं करता।
+                      </p>
+                    ) : (
+                      <Button
+                        type="button"
+                        variant={notifPermission === "granted" ? "quiet" : "secondary"}
+                        block
+                        onClick={() => void handleEnablePushNotifs()}
+                        disabled={notifPermission === "granted"}
+                      >
+                        {notifPermission === "granted" ? <Check aria-hidden className="h-4 w-4 text-positive" /> : <Bell aria-hidden className="h-4 w-4" />}
+                        <span lang="hi">{notifPermission === "granted" ? "ब्राउज़र नोटिफिकेशन चालू हैं" : "नोटिफिकेशन चालू करें (Enable)"}</span>
+                      </Button>
+                    )}
+                    {notifPermission === "denied" ? (
+                      <p lang="hi" className="text-xs text-attention">
+                        ब्राउज़र में नोटिफिकेशन ब्लॉक हैं। एड्रेस बार के ताले (lock) पर जाकर अनुमति दें।
+                      </p>
+                    ) : null}
+                  </SettingsCard>
+
+                  <SettingsCard icon={Mail} tone="weight" title="ईमेल सूचनाएं" description="अलर्ट और रिपोर्ट आपके ईमेल पर पहुँचेंगी या नहीं, यहाँ जाँचें">
+                    <Button type="button" variant="secondary" block onClick={() => void handleSendTestEmail()} loading={sendingTestEmail} disabled={!user?.email}>
+                      {sendingTestEmail ? null : <Mail aria-hidden className="h-4 w-4" />}
+                      <span lang="hi">ईमेल टेस्ट करें (Send test email)</span>
+                    </Button>
+                    <p lang="hi" className="text-xs text-ink-muted">
+                      {user?.email ? `${user.email} पर एक टेस्ट ईमेल जाएगा, ताकि पता चले कि अलर्ट और रिपोर्ट पहुँचेंगे।` : "टेस्ट ईमेल के लिए खाते में ईमेल पता चाहिए।"}
+                    </p>
+                  </SettingsCard>
+                </div>
+              </div>
+            ) : null}
+
+            {showSaveBar ? (
+              <div
+                className={cn(
+                  "frost frost-up sticky z-20 -mx-4 flex flex-wrap items-center justify-between gap-x-4 gap-y-2 px-4 py-3 sm:-mx-6 sm:px-6",
+                  "bottom-[var(--bottom-nav-h)] lg:bottom-0 lg:mx-0 lg:rounded-t-panel lg:px-5",
+                )}
+              >
+                <p aria-live="polite" className="flex min-w-0 items-center gap-2 text-sm">
+                  {saveError ? (
+                    <span role="alert" className="flex items-start gap-1.5 font-semibold text-critical">
+                      <AlertCircle aria-hidden className="mt-0.5 h-4 w-4 shrink-0" />
+                      {saveError}
+                    </span>
+                  ) : Object.keys(errors).some((k) => errors[k as keyof FormErrors]) ? (
+                    <span lang="hi" className="font-semibold text-critical">
+                      {errors.calorie || errors.steps || errors.sleep
+                        ? "लक्ष्य (Goals) टैब में लाल निशान वाली जानकारी ठीक करें।"
+                        : "रक्तचाप (BP) टैब में सीमाएं ठीक करें।"}
+                    </span>
+                  ) : dirty ? (
+                    <>
+                      <span aria-hidden className="h-2 w-2 shrink-0 rounded-full bg-attention" />
+                      <span lang="hi" className="font-medium text-ink">
+                        बदलाव अभी सेव नहीं हुए
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <Check aria-hidden className="h-4 w-4 shrink-0 text-positive" />
+                      <span lang="hi" className="text-ink-muted">
+                        सब कुछ सेव है
+                      </span>
+                    </>
+                  )}
+                </p>
+                <div className="ml-auto flex items-center gap-2">
+                  <Button type="button" variant="secondary" onClick={discard} disabled={!dirty || saving}>
+                    <RotateCcw aria-hidden className="h-4 w-4" />
+                    <span lang="hi">बदलाव हटाएँ</span>
+                  </Button>
+                  <Button type="submit" variant="primary" loading={saving} disabled={!dirty}>
+                    {saving ? null : <Save aria-hidden className="h-4 w-4" />}
+                    <span lang="hi">{saving ? "सेव हो रहा है…" : "सेटिंग्स सुरक्षित करें"}</span>
+                  </Button>
+                </div>
+              </div>
+            ) : null}
+          </form>
+        ) : null}
       </div>
 
-      {isOwner ? (
-        <AddCaregiverDialog
-          isOpen={isAddCaregiverOpen}
-          onClose={() => setIsAddCaregiverOpen(false)}
-          patientId={patient.id}
-          onSuccess={() => void loadCaregivers(patient.id)}
-        />
-      ) : null}
-
       <JoinPatientDialog isOpen={isJoinOpen} onClose={() => setIsJoinOpen(false)} />
-    </div>
+    </PageBody>
   );
+}
+
+/** No patient yet: the account (sign out, join with a code) must still be reachable. */
+function NoPatientSettings({ header }: { header: ReactNode }) {
+  const [isJoinOpen, setIsJoinOpen] = useState(false);
+  return (
+    <PageBody>
+      {header}
+      <NoPatientState what="सेटिंग्स" />
+      <AccountPanel patient={null} onJoin={() => setIsJoinOpen(true)} />
+      <JoinPatientDialog isOpen={isJoinOpen} onClose={() => setIsJoinOpen(false)} />
+    </PageBody>
+  );
+}
+
+export default function SettingsPage() {
+  const { activePatientId, loading } = useAuth();
+  const header = (
+    <PageHeader eyebrow="Settings & preferences" title="Settings Center" hindiTitle="सेटिंग्स और प्राथमिकताएं" />
+  );
+
+  if (!loading && !activePatientId) {
+    return <NoPatientSettings header={header} />;
+  }
+  if (!activePatientId) {
+    return (
+      <PageBody>
+        {header}
+        <div aria-busy="true" aria-label="लोड हो रहा है" className="skeleton h-44 rounded-card" />
+      </PageBody>
+    );
+  }
+  // Keyed by patient: switching patients never shows (or saves) the previous patient's form.
+  return <SettingsView key={activePatientId} />;
 }

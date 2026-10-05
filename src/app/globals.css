@@ -2,10 +2,12 @@
 
 /* ==========================================================================
    SWASTHTRACK DESIGN TOKENS — single source of truth
-   Light theme only. Calm, warm, clinical-but-human — with one deliberate
-   premium accent: a gold-foil signature gradient (grad-spring / the
-   --color-spring-* stops) carried through the wellness ring, primary
-   actions and hero surfaces.
+   Light theme only. "Gilded glass": a warm ivory canvas, champagne-gold
+   glossy cards (a lit top reflection, a diagonal specular streak and a
+   bronze-to-champagne metal rim — see `.gilt`), deep ink type and emerald
+   reserved for meaning (positive status, links). The gold-foil signature
+   gradient (grad-spring / the --color-spring-* stops) carries the wellness
+   ring, primary actions, active navigation and hero surfaces.
    Every value below is referenced through Tailwind utilities
    (bg-canvas, text-ink, rounded-card, shadow-e2, …) so screens never
    hard-code one-off colours, radii or shadows.
@@ -21,12 +23,22 @@
      positive (+ -soft / -line); neutrals are ink / ink-muted / ink-subtle.
      Text pairs are all >= 4.5:1: `text-X` on `bg-X-soft`, on `bg-surface`,
      `bg-canvas` and `bg-surface-sunken`; `text-ink-inverse` on `bg-brand`.
-   - Gold is for hero surfaces (`Card tone="premium"`, `.gold-edge`, the
-     wellness ring, `ProgressBar`) and the primary `Button` only. A button
-     with text on gold must use `.grad-gold-button` (what `Button
-     variant="primary"` does). `.grad-spring` is the full foil and fails AA
-     for text, so it is for fills without text. Never hand-roll
-     `shine-sweep grad-spring` buttons — use `<Button variant="primary">`.
+   - Surfaces: every card is `<Card>` (default tone = `.gilt`, light
+     champagne gloss). The one hero card per screen is `tone="premium"`
+     (`.gilt-rich`, deeper gold). Tiles NESTED inside a card use `.tile`
+     (frosted white) or `bg-surface-sunken`, never another gilt — gold on gold
+     flattens the gloss. Sticky chrome (header, bottom nav) is `.frost`, the
+     sidebar is `.gilt-chrome`. Never hand-roll `bg-surface border-line
+     rounded-card` cards.
+   - Text on gold: `text-ink` and `text-ink-muted` hold >= 4.5:1 everywhere
+     on a gilt surface; `text-ink-subtle` holds it on `.gilt` and `.tile` but
+     NOT on the deeper `.gilt-rich` foot — use `text-ink-muted` there. Use
+     `text-brand-ink`, not `text-brand`, for emerald text on gold.
+   - A button with text on gold must use `.grad-gold-button` (what `Button
+     variant="primary"` does, and the active state of tabs / nav).
+     `.grad-spring` is the full foil and fails AA for text, so it is for
+     fills without text. Never hand-roll `shine-sweep grad-spring` buttons —
+     use `<Button variant="primary">`.
    - Tap targets are >= 44px (`min-h-control`); form controls are 16px
      (`text-field`) so iOS Safari does not zoom on focus.
    - Mobile layout: use `dvh`, not `vh`; sticky bottom UI sits above
@@ -87,29 +99,30 @@
      A warm, very slightly green-tinted grey ramp. Cooler slate reads as
      "admin dashboard"; this reads as calm and cared-for. ink-muted and
      ink-subtle both hold >= 4.5:1 on surface, canvas and surface-sunken. */
-  --color-canvas: #f5f7f6;          /* app background */
-  --color-surface: #ffffff;         /* cards */
-  --color-surface-sunken: #f1f4f3;  /* wells, inputs, inactive tracks */
-  --color-surface-raised: #fbfcfc;  /* gradient card tops */
+  --color-canvas: #faf6ea;          /* app background — warm ivory */
+  --color-surface: #ffffff;         /* inputs, nested tiles, modals */
+  --color-surface-sunken: #f4edd8;  /* wells, inactive tracks */
+  --color-surface-raised: #fffdf6;  /* gradient card tops */
 
-  --color-line: #e3e8e6;            /* default border */
-  --color-line-strong: #cfd7d4;     /* emphasised border, dividers */
+  --color-line: #eadfc2;            /* default border — champagne hairline */
+  --color-line-strong: #d6c598;     /* emphasised border, dividers */
 
-  --color-ink: #14201d;             /* primary text */
-  --color-ink-muted: #4a5a55;       /* secondary text   (7.0:1 on white) */
-  --color-ink-subtle: #64706c;      /* metadata, placeholders (5.1:1 on white,
-                                       4.6:1 on surface-sunken) */
+  --color-ink: #1d1a12;             /* primary text (warm near-black) */
+  --color-ink-muted: #4e4733;       /* secondary text   (8.3:1 on gilt) */
+  --color-ink-subtle: #6a6147;      /* metadata, placeholders (>= 4.9:1 on
+                                       every gilt / tile / sunken surface) */
   --color-ink-inverse: #ffffff;
 
   /* ---- Colour: brand ----------------------------------------------------
-     A deeper, less saturated emerald than stock Tailwind. --color-brand is
-     4.9:1 on white and white-on-brand is 4.9:1, so it carries text either way. */
-  --color-brand: #0d7b55;
-  --color-brand-strong: #095e41;
-  --color-brand-soft: #e6f4ee;
-  --color-brand-softer: #f2faf6;
-  --color-brand-line: #b9dfcd;
-  --color-brand-ink: #0a5a3e;
+     A deep emerald — the classic partner for gold. --color-brand is 6.6:1 on
+     white and 5.3:1 on the deepest gilt, and white-on-brand is 6.6:1, so it
+     carries text either way. Emerald means "good / go / link", never chrome. */
+  --color-brand: #0a6a4a;
+  --color-brand-strong: #07553b;
+  --color-brand-soft: #e3f2ea;
+  --color-brand-softer: #f1f9f4;
+  --color-brand-line: #b4dbc8;
+  --color-brand-ink: #07553b;
 
   /* Signature gradient — premium gold foil. The wellness ring, the primary
      button, quick actions and every hero accent draw from these three
@@ -120,6 +133,19 @@
   --color-spring-2: #d8a936;
   --color-spring-3: #9c6d1e;
 
+  /* ---- Colour: gilt surfaces ---------------------------------------------
+     The stops `.gilt` / `.gilt-rich` / `.gilt-chrome` are built from. Light
+     champagne so dark ink holds >= 4.9:1 on every one, even at the foot. */
+  --color-gilt-1: #fffdf6;          /* lit top */
+  --color-gilt-2: #fdf3d3;          /* body */
+  --color-gilt-3: #f7e5ae;          /* shaded foot */
+  --color-gilt-rich-1: #fff0bd;     /* hero: lit top */
+  --color-gilt-rich-2: #f6dd8c;     /* hero: body */
+  --color-gilt-rich-3: #efcf74;     /* hero: foot */
+  --color-gilt-rim-1: #f5dc90;      /* metal rim: highlight corner */
+  --color-gilt-rim-2: #d9ae48;      /* metal rim: mid */
+  --color-gilt-rim-3: #a97a22;      /* metal rim: shadow corner */
+
   /* ---- Colour: gold accent -----------------------------------------------
      For chrome that isn't the gradient itself — badges, hairline borders,
      text — so gold reads consistently whether it's a fill, a stroke or a
@@ -127,21 +153,29 @@
      --color-gold-soft and the whole grad-gold-button range. */
   --color-gold-soft: #fbf3da;
   --color-gold-line: #e6c976;
-  --color-gold-ink: #6b4a0c;
+  --color-gold-ink: #5c3f08;
+
+  /* The gold foil a button / active tab is struck from: champagne highlight to
+     a true yellow-gold. gold-ink holds >= 5.1:1 on every stop, so a label can
+     sit anywhere on it. (grad-spring runs on into bronze and is for fills with
+     no text.) */
+  --color-gold-foil-1: #f8e4a6;
+  --color-gold-foil-2: #efcd72;
+  --color-gold-foil-3: #e4bb52;
 
   /* ---- Colour: metric identity -----------------------------------------
      Each vital keeps one hue across the whole product, so a colour always
      means the same thing. Each hue is >= 4.5:1 as text on white, canvas,
      surface-sunken and its own -soft tint. */
-  --color-bp: #c2384c;              /* blood pressure  */
+  --color-bp: #b5303f;              /* blood pressure  */
   --color-bp-soft: #fdeef0;
   --color-bp-line: #f4ccd3;
 
-  --color-weight: #2a6eae;          /* weight          */
+  --color-weight: #245f99;          /* weight          */
   --color-weight-soft: #eaf2fa;
   --color-weight-line: #c3ddf1;
 
-  --color-food: #97610d;            /* food / calories */
+  --color-food: #8a5a0a;            /* food / calories */
   --color-food-soft: #fdf3e3;
   --color-food-line: #f0d9b0;
 
@@ -149,7 +183,7 @@
   --color-meds-soft: #f2eefb;
   --color-meds-line: #d9cdf0;
 
-  --color-activity: #0c7871;        /* activity        */
+  --color-activity: #0a6b65;        /* activity        */
   --color-activity-soft: #e5f4f3;
   --color-activity-line: #b5ddd9;
 
@@ -159,19 +193,19 @@
 
   /* ---- Colour: status ---------------------------------------------------
      Three levels only (§34). Never turn the whole screen red. */
-  --color-info: #2a6eae;
+  --color-info: #245f99;
   --color-info-soft: #eaf2fa;
   --color-info-line: #c3ddf1;
 
-  --color-attention: #996007;
+  --color-attention: #8a5606;
   --color-attention-soft: #fdf4e4;
   --color-attention-line: #f0dcb2;
 
-  --color-critical: #c2384c;
+  --color-critical: #b3283d;
   --color-critical-soft: #fdeef0;
   --color-critical-line: #f4ccd3;
 
-  --color-positive: #0d7b55;
+  --color-positive: #0a6a4a;
   --color-positive-soft: #e6f4ee;
   --color-positive-line: #b9dfcd;
 
@@ -179,11 +213,11 @@
      Lines and dots need 3:1 against white (non-text contrast); axis labels
      are text and need 4.5:1. Systolic keeps the BP hue; diastolic is a
      distinct plum so the two series are separable even without a legend. */
-  --color-chart-bp-sys: #c2384c;
+  --color-chart-bp-sys: #b5303f;
   --color-chart-bp-dia: #8f3b6e;
   --color-chart-target: #6b4a0c;
-  --color-chart-grid: #e3e8e6;
-  --color-chart-axis: #64706c;
+  --color-chart-grid: #eadfc2;
+  --color-chart-axis: #6a6147;
 
   /* ---- Radii ------------------------------------------------------------ */
   --radius-field: 0.625rem;   /* 10px — inputs, small chips */
@@ -199,32 +233,58 @@
      from one direction. That is where the sense of physical depth comes from —
      not from heavier shadows (§38). */
   --shadow-e1:
-    0 1px 2px rgba(16, 32, 28, 0.05),
+    0 1px 2px rgba(74, 52, 8, 0.05),
     inset 0 1px 0 rgba(255, 255, 255, 0.9);
   --shadow-e2:
-    0 1px 1px rgba(16, 32, 28, 0.04),
-    0 4px 8px -2px rgba(16, 32, 28, 0.06),
-    0 10px 20px -6px rgba(16, 32, 28, 0.07),
+    0 1px 1px rgba(74, 52, 8, 0.04),
+    0 4px 8px -2px rgba(74, 52, 8, 0.06),
+    0 10px 20px -6px rgba(74, 52, 8, 0.07),
     inset 0 1px 0 rgba(255, 255, 255, 0.95);
   --shadow-e3:
-    0 2px 3px rgba(16, 32, 28, 0.04),
-    0 8px 16px -4px rgba(16, 32, 28, 0.07),
-    0 20px 40px -10px rgba(16, 32, 28, 0.1),
+    0 2px 3px rgba(74, 52, 8, 0.04),
+    0 8px 16px -4px rgba(74, 52, 8, 0.07),
+    0 20px 40px -10px rgba(74, 52, 8, 0.1),
     inset 0 1px 0 rgba(255, 255, 255, 1);
   --shadow-e4:
-    0 4px 6px rgba(16, 32, 28, 0.05),
-    0 16px 32px -8px rgba(16, 32, 28, 0.1),
-    0 36px 64px -16px rgba(16, 32, 28, 0.14),
+    0 4px 6px rgba(74, 52, 8, 0.05),
+    0 16px 32px -8px rgba(74, 52, 8, 0.1),
+    0 36px 64px -16px rgba(74, 52, 8, 0.14),
     inset 0 1px 0 rgba(255, 255, 255, 1);
   --shadow-inset-field:
-    inset 0 1px 2px rgba(16, 32, 28, 0.07),
+    inset 0 1px 2px rgba(74, 52, 8, 0.07),
     inset 0 -1px 0 rgba(255, 255, 255, 0.6);
 
   /* The raised gold button: contact shadow, bronze ambient glow, lit top edge. */
   --shadow-gold-button:
-    0 1px 2px rgba(16, 32, 28, 0.12),
-    0 6px 16px -6px rgba(156, 109, 30, 0.5),
-    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    0 0 0 1px rgba(156, 109, 30, 0.32),
+    0 1px 2px rgba(74, 52, 8, 0.14),
+    0 6px 16px -6px rgba(156, 109, 30, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7),
+    inset 0 -1px 0 rgba(156, 109, 30, 0.28);
+
+  /* Hover: the same bezel and highlights, with the glow opened up. */
+  --shadow-gold-button-hover:
+    0 0 0 1px rgba(156, 109, 30, 0.4),
+    0 1px 2px rgba(74, 52, 8, 0.14),
+    0 10px 22px -6px rgba(176, 124, 28, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8),
+    inset 0 -1px 0 rgba(156, 109, 30, 0.28);
+
+  /* Gilt card elevation: lit top rim, bronze under-rim, warm contact shadow
+     and a wide soft bronze bloom — the card reads as polished metal resting
+     on ivory. */
+  --shadow-gilt:
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    inset 0 -1px 0 rgba(169, 122, 34, 0.16),
+    0 1px 2px rgba(74, 52, 8, 0.1),
+    0 8px 18px -8px rgba(156, 109, 30, 0.32),
+    0 18px 36px -18px rgba(74, 52, 8, 0.2);
+  --shadow-gilt-lift:
+    inset 0 1px 0 rgba(255, 255, 255, 1),
+    inset 0 -1px 0 rgba(169, 122, 34, 0.2),
+    0 2px 3px rgba(74, 52, 8, 0.1),
+    0 14px 28px -10px rgba(156, 109, 30, 0.42),
+    0 28px 52px -22px rgba(74, 52, 8, 0.28);
 
   /* Coloured ambient glow. Used only on the hero ring and pressed quick
      actions — one accent moment per screen, never on every card. */
@@ -302,10 +362,10 @@
   }
 
   /*
-    Ambient ground. Three very low-opacity radials keep the canvas from reading
-    as flat grey without ever competing with content — the strongest stop is 6%
-    alpha. Fixed so it does not repaint on scroll. Built from tokens (activity
-    teal, brand emerald, weight blue) rather than raw rgba.
+    Ambient ground. Three soft champagne light pools keep the ivory canvas from
+    reading flat — they sit behind the cards like light spilling from a lit
+    display case. Fixed so it does not repaint on scroll. Built from the gold
+    foil tokens rather than raw rgba.
   */
   body::before {
     content: "";
@@ -316,17 +376,17 @@
     background:
       radial-gradient(
         80ch 60ch at 8% -10%,
-        color-mix(in srgb, var(--color-activity) 6%, transparent),
+        color-mix(in srgb, var(--color-spring-2) 16%, transparent),
         transparent 60%
       ),
       radial-gradient(
         70ch 55ch at 100% 4%,
-        color-mix(in srgb, var(--color-brand) 5%, transparent),
+        color-mix(in srgb, var(--color-spring-1) 30%, transparent),
         transparent 62%
       ),
       radial-gradient(
         90ch 60ch at 50% 108%,
-        color-mix(in srgb, var(--color-weight) 4%, transparent),
+        color-mix(in srgb, var(--color-spring-2) 12%, transparent),
         transparent 60%
       );
   }
@@ -346,6 +406,32 @@
     opacity: 1;
   }
 
+  /* Native checkboxes, radios and sliders take the brand emerald instead of the
+     browser's default blue. */
+  input[type="checkbox"],
+  input[type="radio"],
+  input[type="range"],
+  progress {
+    accent-color: var(--color-brand);
+  }
+
+  /* iOS Safari draws date / time fields as a collapsed, centred inline box that
+     ignores the control height. Making them plain block fields lines them up
+     with every other input. The native picker still opens on tap. */
+  input[type="date"],
+  input[type="time"],
+  input[type="datetime-local"],
+  input[type="month"] {
+    -webkit-appearance: none;
+    appearance: none;
+    display: block;
+    text-align: left;
+  }
+
+  ::-webkit-date-and-time-value {
+    text-align: left;
+  }
+
   /* Visible, consistent focus for every interactive element (§44). Outline
      only — it follows the element's own border-radius in current browsers, so
      a rounded button keeps a rounded ring. */
@@ -355,8 +441,8 @@
   }
 
   ::selection {
-    background: var(--color-brand-soft);
-    color: var(--color-brand-ink);
+    background: var(--color-gilt-rich-2);
+    color: var(--color-ink);
   }
 
   /* Native hidden attribute must win over `display:flex` utilities. */
@@ -415,14 +501,14 @@
   }
 
   /*
-    Elevated surface with a hairline gradient edge. The border is drawn with
-    a second background layer whose top is brighter than its bottom, which
-    reads as a lit edge rather than a flat stroke.
+    Frosted white surface with a metal-rim edge: secondary buttons, menus,
+    the quiet "raised" card tone. The border is a second background layer —
+    bright at the top, bronze at the foot — so it reads as a lit edge rather
+    than a flat stroke. `--lift-fill` lets a variant (hover/active) retint the
+    face while the edge stays.
   */
   .surface-lift {
     position: relative;
-    /* `--lift-fill` lets a variant (hover/active) retint the face while the
-       lit edge stays: a plain `bg-*` utility would sit under the gradient. */
     background:
       linear-gradient(
           var(--lift-fill, var(--color-surface)),
@@ -431,8 +517,8 @@
         padding-box,
       linear-gradient(
           to bottom,
-          rgba(255, 255, 255, 0.9),
-          rgba(16, 32, 28, 0.09)
+          rgba(255, 255, 255, 0.95),
+          rgba(169, 122, 34, 0.34)
         )
         border-box;
     border: 1px solid transparent;
@@ -440,31 +526,201 @@
   }
 
   /*
-    Premium surface: the same lit-edge idea as `.surface-lift`, but the border
-    itself is gold foil instead of a neutral highlight. Reserved for the one or
-    two hero surfaces per screen — a hairline gold edge on every card would
-    read as gaudy rather than premium.
+    THE CARD. Champagne-gold polished metal, built entirely from `background`
+    layers (no pseudo-elements), so text and children are never painted under
+    a sheen and nothing needs `overflow: hidden`:
+      1. a lit top reflection that fades out by mid-height (the "gloss"),
+      2. a diagonal specular streak that drifts across on hover / focus,
+      3. the champagne body gradient (light at the top, shaded at the foot),
+      4. a bronze-to-champagne metal rim drawn into the 1px border.
+    Dark ink holds >= 4.9:1 on every part of it.
   */
-  .gold-edge {
+  .gilt,
+  .gilt-rich {
     position: relative;
-    background:
-      linear-gradient(var(--color-surface), var(--color-surface)) padding-box,
-      linear-gradient(
-          135deg,
-          var(--color-spring-1),
-          var(--color-spring-2) 45%,
-          var(--color-spring-3)
-        )
-        border-box;
     border: 1px solid transparent;
-    box-shadow: var(--shadow-e3);
+    background-repeat: no-repeat;
+    background-size: 100% 100%, 260% 100%, 100% 100%, 100% 100%;
+    background-position: 0 0, 135% 0, 0 0, 0 0;
+    transition:
+      background-position 900ms var(--ease-out-soft),
+      box-shadow var(--duration-ui) var(--ease-out-soft),
+      transform var(--duration-tap) var(--ease-out-soft);
   }
 
-  /* Frosted overlay for sticky chrome. */
+  .gilt {
+    background-image:
+      linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.78) 0%,
+        rgba(255, 255, 255, 0.24) 34%,
+        rgba(255, 255, 255, 0) 52%
+      ),
+      linear-gradient(
+        112deg,
+        transparent 34%,
+        rgba(255, 255, 255, 0.5) 46%,
+        rgba(255, 255, 255, 0.12) 54%,
+        transparent 62%
+      ),
+      linear-gradient(
+        162deg,
+        var(--color-gilt-1) 0%,
+        var(--color-gilt-2) 58%,
+        var(--color-gilt-3) 100%
+      ),
+      linear-gradient(
+        140deg,
+        var(--color-gilt-rim-1),
+        var(--color-gilt-rim-2) 48%,
+        var(--color-gilt-rim-3)
+      );
+    background-origin: padding-box, padding-box, padding-box, border-box;
+    background-clip: padding-box, padding-box, padding-box, border-box;
+    box-shadow: var(--shadow-gilt);
+  }
+
+  /* Hero tier: deeper gold, stronger reflection, brighter bloom. */
+  .gilt-rich {
+    background-image:
+      linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.7) 0%,
+        rgba(255, 255, 255, 0.2) 36%,
+        rgba(255, 255, 255, 0) 56%
+      ),
+      linear-gradient(
+        112deg,
+        transparent 32%,
+        rgba(255, 255, 255, 0.62) 46%,
+        rgba(255, 255, 255, 0.14) 55%,
+        transparent 64%
+      ),
+      linear-gradient(
+        162deg,
+        var(--color-gilt-rich-1) 0%,
+        var(--color-gilt-rich-2) 55%,
+        var(--color-gilt-rich-3) 100%
+      ),
+      linear-gradient(
+        140deg,
+        var(--color-gilt-rim-1),
+        var(--color-gilt-rim-2) 45%,
+        var(--color-gilt-rim-3)
+      );
+    background-origin: padding-box, padding-box, padding-box, border-box;
+    background-clip: padding-box, padding-box, padding-box, border-box;
+    box-shadow:
+      var(--shadow-gilt),
+      0 20px 44px -22px rgba(212, 169, 54, 0.55);
+    /* One slow glint across the hero card when the page settles. */
+    animation: st-glint 1600ms var(--ease-out-soft) 500ms backwards;
+  }
+
+  /* Interactive cards (links / buttons / `.gilt-press`): the streak sweeps
+     across and the card lifts a hair. Hover-capable pointers only, so touch
+     screens never get a stuck hover state. */
+  @media (hover: hover) {
+    :is(a, button, [role="button"], .gilt-press).gilt:hover,
+    :is(a, button, [role="button"], .gilt-press).gilt-rich:hover,
+    :is(a, button, [role="button"], .gilt-press).gilt:focus-visible,
+    :is(a, button, [role="button"], .gilt-press).gilt-rich:focus-visible {
+      background-position: 0 0, -40% 0, 0 0, 0 0;
+      box-shadow: var(--shadow-gilt-lift);
+    }
+  }
+
+  :is(a, button, [role="button"], .gilt-press).gilt:active,
+  :is(a, button, [role="button"], .gilt-press).gilt-rich:active {
+    transform: translateY(1px) scale(0.995);
+  }
+
+  /* Alias kept for the surfaces that already use it (hero cards, setup /
+     error panels): the premium rim is now the same gilt-rich metal. */
+  .gold-edge {
+    position: relative;
+    border: 1px solid transparent;
+    background-repeat: no-repeat;
+    background-size: 100% 100%, 100% 100%, 100% 100%;
+    background-image:
+      linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.7) 0%,
+        rgba(255, 255, 255, 0.18) 36%,
+        rgba(255, 255, 255, 0) 56%
+      ),
+      linear-gradient(
+        162deg,
+        var(--color-gilt-rich-1) 0%,
+        var(--color-gilt-rich-2) 60%,
+        var(--color-gilt-rich-3) 100%
+      ),
+      linear-gradient(
+        140deg,
+        var(--color-gilt-rim-1),
+        var(--color-gilt-rim-2) 45%,
+        var(--color-gilt-rim-3)
+      );
+    background-origin: padding-box, padding-box, border-box;
+    background-clip: padding-box, padding-box, border-box;
+    box-shadow:
+      var(--shadow-gilt),
+      0 20px 44px -22px rgba(212, 169, 54, 0.5);
+  }
+
+  /* Sidebar: a tall champagne panel — no rim on three sides, a bronze
+     hairline on the edge that meets the content. */
+  .gilt-chrome {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.7),
+        rgba(255, 255, 255, 0) 18%
+      ),
+      linear-gradient(
+        180deg,
+        var(--color-gilt-1) 0%,
+        var(--color-gilt-2) 70%,
+        var(--color-gilt-3) 100%
+      );
+    box-shadow:
+      inset -1px 0 0 rgba(217, 174, 72, 0.55),
+      12px 0 32px -22px rgba(74, 52, 8, 0.35);
+  }
+
+  /*
+    A tile NESTED inside a gilt card: frosted white glass over the gold, with a
+    faint champagne edge and the same top highlight. Gives the card depth
+    without a second layer of gold fighting the first.
+  */
+  .tile {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.92),
+        rgba(255, 255, 255, 0.66)
+      );
+    border: 1px solid rgba(214, 197, 152, 0.62);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.95),
+      0 1px 2px rgba(74, 52, 8, 0.06);
+  }
+
+  /* Frosted champagne glass for sticky chrome. `.frost` has its rim on the
+     bottom edge (header); `.frost-up` on the top edge (bottom navigation). */
   .frost {
-    background: color-mix(in srgb, var(--color-surface) 82%, transparent);
-    backdrop-filter: saturate(1.6) blur(14px);
-    -webkit-backdrop-filter: saturate(1.6) blur(14px);
+    background: color-mix(in srgb, var(--color-gilt-1) 84%, transparent);
+    backdrop-filter: saturate(1.5) blur(16px);
+    -webkit-backdrop-filter: saturate(1.5) blur(16px);
+    box-shadow:
+      inset 0 -1px 0 rgba(217, 174, 72, 0.55),
+      0 8px 24px -16px rgba(74, 52, 8, 0.4);
+  }
+
+  .frost-up {
+    box-shadow:
+      inset 0 1px 0 rgba(217, 174, 72, 0.55),
+      0 -8px 24px -16px rgba(74, 52, 8, 0.4);
   }
 
   /*
@@ -473,22 +729,27 @@
     on more than a couple of elements per screen it stops reading as premium
     and starts reading as busy.
   */
+  /* `isolation` + a negative z-index put the sweep BEHIND the label (above the
+     element's own gold background, below its content), so the sheen never
+     washes out the text it passes. */
   .shine-sweep {
     position: relative;
     overflow: hidden;
+    isolation: isolate;
   }
 
   .shine-sweep::after {
     content: "";
     position: absolute;
     inset: 0;
+    z-index: -1;
     width: 45%;
     background: linear-gradient(
       100deg,
       transparent,
-      rgba(255, 255, 255, 0.5) 45%,
-      rgba(255, 255, 255, 0.85) 50%,
-      rgba(255, 255, 255, 0.5) 55%,
+      rgba(255, 255, 255, 0.4) 45%,
+      rgba(255, 255, 255, 0.7) 50%,
+      rgba(255, 255, 255, 0.4) 55%,
       transparent
     );
     transform: translateX(-140%) skewX(-18deg);
@@ -526,10 +787,24 @@
     border-radius: var(--radius-field);
   }
 
+  /* On a gold surface the pale-ivory bars would vanish; tint them bronze. */
+  :is(.gilt, .gilt-rich, .tile) .skeleton {
+    background-image: linear-gradient(
+      90deg,
+      rgba(169, 122, 34, 0.1) 0%,
+      rgba(169, 122, 34, 0.2) 50%,
+      rgba(169, 122, 34, 0.1) 100%
+    );
+  }
+
   /* Loading spinner for buttons / inline progress. Kept visible (just
      slower) under reduced motion: it is feedback, not decoration. */
   .st-spinner {
     animation: st-spin 0.8s linear infinite;
+  }
+
+  .st-caret {
+    animation: st-caret 1.05s steps(1, end) infinite;
   }
 
   /*
@@ -640,11 +915,19 @@
   `Button variant="primary"` applies it; do not hand-roll gold buttons.
 */
 @utility grad-gold-button {
-  background-image: linear-gradient(
-    115deg,
-    var(--color-spring-1),
-    var(--color-gold-line)
-  );
+  background-image:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.6) 0%,
+      rgba(255, 255, 255, 0.14) 48%,
+      rgba(255, 255, 255, 0) 50%
+    ),
+    linear-gradient(
+      115deg,
+      var(--color-gold-foil-1),
+      var(--color-gold-foil-2) 58%,
+      var(--color-gold-foil-3)
+    );
 }
 
 /* ==========================================================================
@@ -660,6 +943,15 @@
   }
 }
 
+@keyframes st-glint {
+  from {
+    background-position: 0 0, 135% 0, 0 0, 0 0;
+  }
+  to {
+    background-position: 0 0, -40% 0, 0 0, 0 0;
+  }
+}
+
 @keyframes st-shimmer {
   0% {
     background-position: 100% 0;
@@ -672,6 +964,18 @@
 @keyframes st-spin {
   to {
     transform: rotate(360deg);
+  }
+}
+
+/* Blinking caret in the empty OTP box. Ends visible, so reduced motion (which
+   clamps the duration) lands on a steady caret rather than none. */
+@keyframes st-caret {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
   }
 }
 
@@ -870,6 +1174,7 @@
   .reveal,
   .arc-sweep,
   .page-body > *,
+  .gilt-rich,
   .shine-sweep::after,
   .skeleton,
   .modal-backdrop,
@@ -946,7 +1251,22 @@
     max-width: 100% !important;
   }
 
+  .gilt,
+  .gilt-rich,
+  .gold-edge,
+  .gilt-chrome,
+  .surface-lift,
+  .frost,
+  .tile {
+    background: #ffffff !important;
+    animation: none !important;
+  }
+
   .card,
+  .gilt,
+  .gilt-rich,
+  .gold-edge,
+  .surface-lift,
   article,
   section {
     box-shadow: none !important;

@@ -4,32 +4,58 @@ Everything SwasthTrack e-mails, how it is triggered, and how to preview it. Logi
 (confirm sign-up, sign-in code, password reset) are separate: they are sent by Supabase Auth
 using `supabase/email-templates/*` — see `docs/auth-setup.md`.
 
-## The 11 templates
+## The templates (14 kinds, 18 variants)
 
-| Key | What | Sent when | To |
-|---|---|---|---|
-| `alert.bp` | BP above the alert line / crisis / low | Right after a BP reading is saved | `REPORT_EMAIL_TO` |
-| `alert.reminders` | Missed medicine, meals/BP/sleep not logged, no data for days | Cron 2 PM IST (only if something is missing) | `REPORT_EMAIL_TO` |
-| `alert.weight` | ≥ 2 kg in 7 days or ≥ 5% in 30 days | Right after a weigh-in is saved | `REPORT_EMAIL_TO` |
-| `report.daily` | Today's BP, medicines, calories, steps, sleep, gaps | Cron 9 PM IST | `REPORT_EMAIL_TO` |
-| `report.weekly` | Score, BP, habits, insights | Cron Sunday 8 PM IST | `REPORT_EMAIL_TO` |
-| `report.monthly` | Rolling last 30 days | Cron 9 AM IST on the 1st | `REPORT_EMAIL_TO` |
-| `account.welcome` | Welcome + what to expect | After a user creates their first patient | the user |
-| `account.test` | "Email works" check | Settings → *Send test email* | the user |
-| `caregiver.invite` | Invite code + how to join | Caregiver dialog → *Send by email* | address the owner types |
-| `caregiver.access-changed` | Access removed / role changed | Owner removes a caregiver or changes their role | that caregiver |
-| `caregiver.joined` | "X joined your care team" | Right after a caregiver redeems an invite (needs migration `20261004010000_email_owner_contact.sql`) | the owner |
+The look comes from the **SwasthTrack Email Templates** design (green header with the logo, gold rule, ruled
+white card, Hindi first / English under it, footer saying why you got the mail). One shared layout renders all of
+them, so the app's mail and the Supabase login mail cannot drift apart.
 
-Thresholds are never hard-coded here: BP lines come from the patient's `bp_targets`
-(defaults 160/100 alert, 180/120 crisis, 90/60 low), weight rules, the 4-hour missed-dose rule,
-"due at" times and the logging-gap days all come from `src/lib/health-rules.ts`. Alert toggles
-from Settings (BP, medicine, sleep, steps, missing data) are respected.
+| # | Key(s) | What | Sent when | To |
+|---|---|---|---|---|
+| 1 | `alert.bp.crisis` / `.high` / `.low` | BP outside the patient's lines | Right after a BP reading is saved | `REPORT_EMAIL_TO` |
+| 2 | `alert.reminder` / `.no-data` | Missed medicines, records not logged, no data for days | Cron 2 PM IST (only if something is missing) | `REPORT_EMAIL_TO` |
+| 3 | `alert.weight` | ≥ 2 kg in 7 days or ≥ 5% in 30 days | Right after a weigh-in is saved | `REPORT_EMAIL_TO` |
+| 4 | `report.daily` | BP, medicines, calories, steps, sleep, what is missing | Cron 9 PM IST | `REPORT_EMAIL_TO` |
+| 5 | `report.weekly` | Score, BP, habits, insights | Cron Sunday 8 PM IST | `REPORT_EMAIL_TO` |
+| 6 | `report.monthly` | Rolling last 30 days | Cron 9 AM IST on the 1st | `REPORT_EMAIL_TO` |
+| 7 | `account.welcome` | Welcome + what to expect | After a user creates their first patient | the user |
+| 8 | `account.test` | "Email works" check | Settings → *Send test email* | the user |
+| 9 | `caregiver.invite` | Invite code + how to join | Caregiver dialog → *Send by email* | address the owner types |
+| 10 | `caregiver.joined` | "X joined your care team" | Right after a caregiver redeems an invite (needs migration `20261004010000_email_owner_contact.sql`) | the owner |
+| 11 | `caregiver.access-removed` / `.role-changed` | Access removed / role changed | Owner removes a caregiver or changes their role | that caregiver |
+| 12-14 | `auth.confirm-signup` / `.sign-in-code` / `.password-reset` | 6-digit login codes | **Sent by Supabase Auth**, not by the app | the person logging in |
+
+Thresholds are never hard-coded here: BP lines come from the patient's `bp_targets` (defaults 160/100 alert,
+180/120 crisis, 90/60 low), weight rules, the 4-hour missed-dose rule, "due at" times and the logging-gap days all
+come from `src/lib/health-rules.ts`. Alert toggles from Settings (BP, medicine, sleep, steps, missing data) are
+respected. Every mail is sent as one message per recipient and its footer says "Sent to <that address>".
+
+## Logo and links
+
+The header logo is `public/email/logo.png`, and the buttons / footer links point into the app, so **set
+`NEXT_PUBLIC_APP_URL` to the public address of the deployed app** (it must serve `/email/logo.png`). Without it
+the mails still work: the logo falls back to a plain "ST" tile and the buttons and links are left out.
+
+## Login emails (Supabase)
+
+`supabase/email-templates/{confirm-signup,magic-link,reset-password}.html` are **generated** from
+`src/lib/email/templates/auth.ts`:
+
+```bash
+node scripts/build-auth-email-templates.mjs
+```
+
+Paste each file into Supabase → Authentication → Email Templates (the subject to use is the first comment in each
+file). They keep Supabase's variables (`{{ .Token }}`, `{{ .Email }}`, `{{ .SiteURL }}`); the logo and footer links
+use `{{ .SiteURL }}`, so set Authentication → URL Configuration → Site URL to the public address of the app.
 
 ## Code map
 
-- `src/lib/email/layout.ts` — shared look (green header, gold rule, Hindi first, English under it, compact).
-- `src/lib/email/templates/{alerts,reports,account}.ts` — one `render…` function per template.
-- `src/lib/email/registry.ts` — the list above, with sample data. Add a template here and it appears in the preview.
+- `src/lib/email/layout.ts` — the shared look and building blocks (header, sections, pills, tiles, progress bars, code box, footer).
+- `src/lib/email/format.ts` — Hindi + English dates, clock times, meal names and role labels, all in India time.
+- `src/lib/email/templates/{alerts,reports,account,auth}.ts` — one `render…` function per template.
+- `src/lib/email/registry.ts` — every variant, with the design's sample data. Add one here and it appears in the preview.
+- `scripts/build-auth-email-templates.mjs` — regenerates the three Supabase login-mail files.
 - `src/lib/email/mailer.ts` — SMTP (nodemailer → Resend) and `REPORT_*` config.
 - `src/services/email-notification-service.ts` — builds the alert/report content from patient data (IST-aware).
 - `src/app/api/notify/alert` — BP / weight alerts (called by `logBloodPressure` / `logWeight`). Needs the user's token; reads run as that user.
@@ -48,7 +74,8 @@ On Vercel set the same variables; the cron jobs send `Authorization: Bearer $CRO
 ## Preview
 
 ```bash
-# gallery of all templates, zoomed out (dev only; in production it needs the bearer token)
+# gallery of all templates, zoomed out (dev only; in production it needs the bearer token).
+# In dev the logo/links use this server's own address; add ?base=https://your-app to preview with another.
 open http://localhost:3000/api/email/preview
 # one template at full size / as plain text
 open "http://localhost:3000/api/email/preview?type=report.daily"

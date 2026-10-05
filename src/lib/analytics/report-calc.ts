@@ -113,7 +113,7 @@ export function summarizePeriod(p: PeriodInput): PeriodStats {
 }
 
 /** Report insights (Hindi). Every line is backed by data in the period; there is no padding. */
-export function periodInsights(p: PeriodInput, s: PeriodStats, label: "हफ्ते" | "महीने"): string[] {
+export function periodInsights(p: PeriodInput, s: PeriodStats, label: "हफ्ते" | "महीने" | "अवधि"): string[] {
   const out: string[] = [];
   const ad = s.adherence;
   if (ad.evaluated >= 3 && ad.pct !== null) {
@@ -150,6 +150,76 @@ export function periodInsights(p: PeriodInput, s: PeriodStats, label: "हफ्
 
   if (out.length === 0) out.push("इस अवधि में तुलना या निष्कर्ष के लिए पर्याप्त रिकॉर्ड नहीं हैं।");
   return out;
+}
+
+/** One IST day of the period, for the trend charts. A missing value is `null`, never 0. */
+export interface DayTrendPoint {
+  date: string;
+  /** "Mon 5" — weekday and day of month. */
+  label: string;
+  /** "5 Oct" — for axes that span weeks. */
+  shortLabel: string;
+  /** Wellness score; null when nothing was logged that day. */
+  score: number | null;
+  /** Mean of the day's plausible BP readings. */
+  sys: number | null;
+  dia: number | null;
+  bpCount: number;
+  /** The day's last weigh-in. */
+  weightKg: number | null;
+  steps: number | null;
+  sleepHours: number | null;
+  /** Total kcal; null for today until its meals can be judged. */
+  calories: number | null;
+}
+
+/** Per-day series for [dates]: the same filters and rules as `summarizePeriod`. */
+export function buildDayTrend(p: PeriodInput): DayTrendPoint[] {
+  const byDay = <T extends { day: string }>(rows: T[]) => {
+    const m = new Map<string, T[]>();
+    for (const r of rows) {
+      const list = m.get(r.day);
+      if (list) list.push(r);
+      else m.set(r.day, [r]);
+    }
+    return m;
+  };
+  const bp = byDay(p.bp.filter((b) => isPlausibleBP(b.systolic, b.diastolic)));
+  const weights = byDay([...p.weights].sort((a, b) => a.day.localeCompare(b.day)));
+  const food = byDay(p.food);
+  const steps = byDay(p.steps.filter((s) => s.steps > 0));
+  const sleep = byDay(p.sleep.filter((s) => s.hours > 0));
+  const scoreOf = new Map(p.scores.map((s) => [s.date, s]));
+
+  return p.dates.map((date) => {
+    const score = scoreOf.get(date);
+    const bpRows = bp.get(date) ?? [];
+    const foodRows = food.get(date) ?? [];
+    const kcal = foodRows.reduce((s, f) => s + (f.calories || 0), 0);
+    const judged = date !== p.today || score?.components.food.healthPct != null;
+    const w = weights.get(date);
+    const st = steps.get(date);
+    const sl = sleep.get(date);
+    return {
+      date,
+      label: formatDayLabel(date),
+      shortLabel: formatShortDate(date),
+      score: score && score.isSufficient ? score.totalScore : null,
+      sys: bpRows.length ? Math.round(bpRows.reduce((s, b) => s + b.systolic, 0) / bpRows.length) : null,
+      dia: bpRows.length ? Math.round(bpRows.reduce((s, b) => s + b.diastolic, 0) / bpRows.length) : null,
+      bpCount: bpRows.length,
+      weightKg: w && w.length ? w[w.length - 1].kg : null,
+      steps: st && st.length ? st[st.length - 1].steps : null,
+      sleepHours: sl && sl.length ? sl[sl.length - 1].hours : null,
+      calories: kcal > 0 && judged ? Math.round(kcal) : null,
+    };
+  });
+}
+
+/** "5 Oct" for an IST calendar date. */
+export function formatShortDate(date: string): string {
+  const [y, m, d] = date.split("-").map(Number);
+  return new Date(Date.UTC(y, m - 1, d)).toLocaleDateString("en-IN", { day: "numeric", month: "short", timeZone: "UTC" });
 }
 
 export function formatDayLabel(date: string): string {

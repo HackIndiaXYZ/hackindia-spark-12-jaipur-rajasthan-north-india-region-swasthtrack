@@ -22,16 +22,22 @@ import {
 } from "lucide-react";
 import { NoPatientState } from "@/components/health/no-patient-state";
 import { isNoPatientError, loadErrorMessage, useAsyncData } from "@/components/health/use-async-data";
-import { Badge } from "@/components/ui/badge";
+import { fmtDateStr, fmtDateStrYear } from "@/components/health/format";
+import { ChangeCard } from "@/components/reports/change-card";
+import { PeriodNav } from "@/components/reports/report-parts";
 import { Button } from "@/components/ui/button";
-import { Card, metricChipClasses, type MetricTone } from "@/components/ui/card";
+import { Card, type MetricTone } from "@/components/ui/card";
 import { EmptyState, ErrorState, PageBody, PageHeader } from "@/components/ui/page";
 import { Segmented, type SegmentedOption } from "@/components/ui/segmented";
 import { useAuth } from "@/context/auth-context";
+import { recentWindow } from "@/lib/analytics/dates";
+import { addDaysIST, todayIST } from "@/lib/health-rules";
 import { cn } from "@/lib/utils";
 import { getHealthChanges, type HealthChangesResult, type TrendDirection } from "@/services/what-changed-service";
 
 type Period = "7d" | "30d";
+
+const PERIOD_DAYS: Record<Period, number> = { "7d": 7, "30d": 30 };
 
 const METRIC_STYLE: Record<string, { icon: typeof Activity; tone: MetricTone }> = {
   daily_steps: { icon: Activity, tone: "activity" },
@@ -53,19 +59,50 @@ const DIR_ICON: Record<TrendDirection, typeof ArrowUpRight> = {
   stable: Minus,
 };
 
+const DIR_WORD: Record<TrendDirection, string> = {
+  up: "बढ़ोतरी देखी गई",
+  down: "कमी देखी गई",
+  stable: "स्थिर रहा",
+};
+
+/** "29 Sept – 5 Oct" (the year is added when the two ends are in different years). */
+function windowLabel(start: string, end: string): string {
+  return start.slice(0, 4) === end.slice(0, 4) ? `${fmtDateStr(start)} – ${fmtDateStr(end)}` : `${fmtDateStrYear(start)} – ${fmtDateStrYear(end)}`;
+}
+
 export default function HealthChangesPage() {
   const { activePatientId, authorizedPatients, loading: authLoading } = useAuth();
+  const today = todayIST();
   const [period, setPeriod] = useState<Period>("7d");
+  // Last day of the recent window; today = the latest comparison.
+  const [endDate, setEndDate] = useState(today);
   const [showExplanation, setShowExplanation] = useState(false);
-  const [expandedMetric, setExpandedMetric] = useState<string | null>(null);
   const [caregiverMode, setCaregiverMode] = useState(false);
 
   const patientName = authorizedPatients.find((p) => p.id === activePatientId)?.name ?? "मरीज़";
+  const days = PERIOD_DAYS[period];
+  const atLatest = endDate === today;
 
   const { data, error, loading, reload } = useAsyncData<HealthChangesResult>(
-    () => getHealthChanges(activePatientId!, period),
-    [activePatientId, period],
+    () => getHealthChanges(activePatientId!, period, endDate),
+    [activePatientId, period, endDate],
     activePatientId !== null,
+  );
+
+  const recent = recentWindow(days, endDate);
+  const nav = (
+    <PeriodNav
+      label={windowLabel(recent.start, recent.end)}
+      prevLabel={`पिछला ${days} दिन (Previous ${days} days)`}
+      nextLabel={`अगला ${days} दिन (Next ${days} days)`}
+      onPrev={() => setEndDate((e) => addDaysIST(e, -days))}
+      onNext={() => setEndDate((e) => (addDaysIST(e, days) > today ? today : addDaysIST(e, days)))}
+      canNext={!atLatest}
+      latestLabel="अभी तक · Latest"
+      atLatest={atLatest}
+      onLatest={() => setEndDate(today)}
+      datePicker={{ label: "अवधि कब तक", value: endDate, max: today, onChange: setEndDate }}
+    />
   );
 
   const header = (
@@ -86,7 +123,19 @@ export default function HealthChangesPage() {
         hindiTitle="स्वास्थ्य में क्या बदला?"
         description="हाल के रिकॉर्ड की तुलना उससे ठीक पहले की उतनी ही अवधि से। यह निदान नहीं, सिर्फ़ आपके अपने आँकड़ों का अवलोकन है।"
       />
-      <Segmented options={PERIOD_OPTIONS} value={period} onChange={setPeriod} ariaLabel="Comparison period — तुलना की अवधि" />
+      <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+        <Segmented
+          options={PERIOD_OPTIONS}
+          value={period}
+          onChange={(p) => {
+            setPeriod(p);
+            setEndDate(today);
+          }}
+          ariaLabel="Comparison period — तुलना की अवधि"
+          className="lg:min-w-0"
+        />
+        <div className="lg:shrink-0">{nav}</div>
+      </div>
     </>
   );
 
@@ -122,15 +171,19 @@ export default function HealthChangesPage() {
       <PageBody>
         {header}
         <div aria-busy="true" aria-label="लोड हो रहा है" className="space-y-4">
-          <div className="skeleton h-28 rounded-panel" />
-          <div className="skeleton h-40 rounded-panel" />
-          <div className="skeleton h-40 rounded-panel" />
+          <div className="skeleton h-44 rounded-panel" />
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="skeleton h-72 rounded-panel" />
+            <div className="skeleton h-72 rounded-panel" />
+          </div>
         </div>
       </PageBody>
     );
   }
 
   const noReference = data.metrics.every((m) => !m.hasReference);
+  // The measures that really could be compared, biggest shift first.
+  const summaryRows = data.metrics.filter((m) => m.isSufficient && m.hasReference).sort((a, b) => b.importanceScore - a.importanceScore);
 
   return (
     <PageBody>
@@ -145,47 +198,43 @@ export default function HealthChangesPage() {
         />
       ) : (
         <div className="space-y-5">
-          {caregiverMode ? (
-            <Card className="border-info-line bg-info-soft">
-              <h2 className="mb-1.5 flex items-center gap-2 text-sm font-semibold text-info">
-                <UserCheck aria-hidden className="h-4 w-4" />
-                केयरगिवर सारांश: {patientName} में क्या बदला?
-              </h2>
-              <p lang="hi" className="text-sm leading-relaxed text-ink">
-                {data.caregiverSummaryHi}
-              </p>
-            </Card>
-          ) : null}
-
-          <Card tone="premium">
-            <div className="flex items-start justify-between gap-3 border-b border-line pb-3">
-              <div className="flex min-w-0 items-center gap-2.5">
-                <span className="grid h-9 w-9 shrink-0 place-items-center rounded-control border border-gold-line bg-gold-soft text-gold-ink">
+          <Card tone="premium" className="space-y-4">
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex min-w-0 items-center gap-3">
+                <span className="tile grid h-11 w-11 shrink-0 place-items-center rounded-control text-gold-ink">
                   <Sparkles aria-hidden className="h-5 w-5" />
                 </span>
                 <div className="min-w-0">
-                  <h2 lang="hi" className="text-base font-semibold text-ink sm:text-lg">
+                  <h2 lang="hi" className="text-base font-semibold leading-tight text-ink sm:text-lg">
                     मुख्य बदलावों का सारांश
                   </h2>
-                  <p className="text-xs text-ink-subtle">
-                    हाल की अवधि: {data.dateRange.recentStart} से {data.dateRange.recentEnd} · तुलना: {data.dateRange.referenceStart} से {data.dateRange.referenceEnd}
-                  </p>
+                  <p className="text-xs text-ink-muted">Summary of the main changes</p>
                 </div>
               </div>
-              <Button
-                variant="quiet"
-                size="sm"
-                aria-expanded={showExplanation}
-                onClick={() => setShowExplanation((v) => !v)}
-              >
+              <Button variant="quiet" size="sm" aria-expanded={showExplanation} onClick={() => setShowExplanation((v) => !v)} className="shrink-0">
                 <HelpCircle aria-hidden className="h-3.5 w-3.5" />
-                तुलना का आधार
+                <span lang="hi">तुलना का आधार</span>
                 {showExplanation ? <ChevronUp aria-hidden className="h-3.5 w-3.5" /> : <ChevronDown aria-hidden className="h-3.5 w-3.5" />}
               </Button>
             </div>
 
+            <dl className="grid gap-2 text-xs sm:grid-cols-2">
+              <div className="tile rounded-control px-3 py-2">
+                <dt lang="hi" className="text-2xs font-semibold uppercase tracking-wide text-ink-muted">
+                  यह अवधि
+                </dt>
+                <dd className="tabular font-semibold text-ink">{windowLabel(data.dateRange.recentStart, data.dateRange.recentEnd)}</dd>
+              </div>
+              <div className="tile rounded-control px-3 py-2">
+                <dt lang="hi" className="text-2xs font-semibold uppercase tracking-wide text-ink-muted">
+                  तुलना किससे (पिछली अवधि)
+                </dt>
+                <dd className="tabular font-semibold text-ink">{windowLabel(data.dateRange.referenceStart, data.dateRange.referenceEnd)}</dd>
+              </div>
+            </dl>
+
             {showExplanation ? (
-              <div className="mt-3.5 space-y-1.5 rounded-card border border-info-line bg-info-soft p-3.5 text-xs text-ink-muted">
+              <div className="space-y-1.5 rounded-card border border-info-line bg-info-soft p-3.5 text-xs text-ink-muted">
                 <p className="flex items-center gap-1.5 font-semibold text-info">
                   <Info aria-hidden className="h-4 w-4 shrink-0" />
                   तुलना कैसे होती है
@@ -198,117 +247,62 @@ export default function HealthChangesPage() {
               </div>
             ) : null}
 
-            <div className="mt-4 rounded-card border border-line bg-surface p-3.5">
-              <pre lang="hi" className="whitespace-pre-wrap font-sans text-sm leading-relaxed text-ink">
-                {data.compactSummaryHi}
-              </pre>
-            </div>
+            {summaryRows.length > 0 ? (
+              <ul className="space-y-1.5">
+                {summaryRows.map((m) => {
+                  const Icon = DIR_ICON[m.direction];
+                  return (
+                    <li key={m.metric} className="tile flex items-center gap-2.5 rounded-control px-3 py-2">
+                      <span
+                        className={cn(
+                          "grid h-7 w-7 shrink-0 place-items-center rounded-full",
+                          m.direction === "stable" ? "bg-surface-sunken text-ink-muted" : "bg-info-soft text-info",
+                        )}
+                      >
+                        <Icon aria-hidden className="h-4 w-4" />
+                      </span>
+                      <span lang="hi" className="min-w-0 flex-1 text-sm text-ink">
+                        <span className="font-semibold">{m.metricHi}</span>: {DIR_WORD[m.direction]}
+                      </span>
+                      <span className="tabular shrink-0 text-xs font-semibold text-ink-muted">
+                        {m.difference > 0 ? "+" : ""}
+                        {m.difference.toLocaleString("en-IN")}
+                      </span>
+                    </li>
+                  );
+                })}
+              </ul>
+            ) : null}
 
             {noReference ? (
-              <p lang="hi" className="mt-3 text-xs text-ink-subtle">
+              <p lang="hi" className="text-xs text-ink-muted">
                 पिछली अवधि का रिकॉर्ड न होने से अभी असली तुलना नहीं हो सकी, इसलिए &ldquo;स्थिर&rdquo; या &ldquo;बदलाव&rdquo; जैसा कुछ नहीं कहा जा रहा।
               </p>
             ) : data.rankedKeyChanges.length === 0 ? (
-              <p lang="hi" className="mt-3 text-xs text-ink-subtle">
+              <p lang="hi" className="text-xs text-ink-muted">
                 जिन मापों की तुलना हो सकी, उनमें कोई बड़ा बदलाव नहीं दिखा।
               </p>
             ) : null}
           </Card>
 
-          <ul className="grid gap-3.5 sm:grid-cols-2">
+          {caregiverMode ? (
+            <Card className="border-info-line">
+              <h2 className="mb-1.5 flex items-center gap-2 text-sm font-semibold text-info">
+                <UserCheck aria-hidden className="h-4 w-4" />
+                केयरगिवर सारांश: {patientName} में क्या बदला?
+              </h2>
+              <p lang="hi" className="text-sm leading-relaxed text-ink">
+                {data.caregiverSummaryHi}
+              </p>
+            </Card>
+          ) : null}
+
+          <ul className="grid gap-5 lg:grid-cols-2">
             {data.metrics.map((m) => {
               const style = METRIC_STYLE[m.metric] ?? { icon: Activity, tone: "neutral" as MetricTone };
-              const Icon = style.icon;
-              const isExpanded = expandedMetric === m.metric;
-              const comparable = m.isSufficient && m.hasReference;
-              const DirIcon = DIR_ICON[m.direction];
-
               return (
                 <li key={m.metric}>
-                  <button
-                    type="button"
-                    disabled={!comparable}
-                    aria-expanded={comparable ? isExpanded : undefined}
-                    onClick={() => setExpandedMetric(isExpanded ? null : m.metric)}
-                    className={cn(
-                      "pressable w-full rounded-card border bg-surface p-4 text-left shadow-e1",
-                      comparable ? "cursor-pointer border-line hover:shadow-e2" : "cursor-default border-line bg-surface-sunken shadow-none",
-                    )}
-                  >
-                    <div className="mb-2.5 flex items-start justify-between gap-2">
-                      <div className="flex min-w-0 items-center gap-2.5">
-                        <span className={cn("grid h-9 w-9 shrink-0 place-items-center rounded-control", metricChipClasses[style.tone])}>
-                          <Icon aria-hidden className="h-4 w-4" />
-                        </span>
-                        <div className="min-w-0">
-                          <h3 lang="hi" className="text-sm font-semibold text-ink sm:text-base">
-                            {m.metricHi}
-                          </h3>
-                          <span lang="hi" className="text-xs text-ink-subtle">
-                            {m.dataPoints} रिकॉर्ड · {m.confidenceLabelHi}
-                          </span>
-                        </div>
-                      </div>
-
-                      {comparable ? (
-                        <Badge variant={m.direction === "stable" ? "neutral" : "info"}>
-                          <DirIcon aria-hidden className="h-3 w-3" />
-                          <span lang="hi">{m.directionLabelHi}</span>
-                        </Badge>
-                      ) : (
-                        <Badge variant="neutral">
-                          <span lang="hi">{m.isSufficient ? "पिछला रिकॉर्ड नहीं" : "डेटा कम है"}</span>
-                        </Badge>
-                      )}
-                    </div>
-
-                    {comparable ? (
-                      <div className="space-y-2">
-                        <p lang="hi" className="text-sm leading-snug text-ink">
-                          {m.explanationHi}
-                        </p>
-                        <div className="flex flex-wrap items-center justify-between gap-1 border-t border-line pt-2 text-xs text-ink-muted">
-                          {m.personalPatternRange ? <span lang="hi">सामान्य दायरा: {m.personalPatternRange}</span> : <span />}
-                          <span className="text-ink-subtle">{isExpanded ? "विवरण बंद करें" : "विवरण देखें"}</span>
-                        </div>
-
-                        {isExpanded ? (
-                          <div className="space-y-1.5 border-t border-line pt-3 text-xs text-ink-muted">
-                            <div className="grid grid-cols-2 gap-2 rounded-card border border-line bg-surface-sunken p-2.5 text-center">
-                              <div>
-                                <span lang="hi" className="block text-2xs text-ink-subtle">
-                                  हाल का मध्यमान
-                                </span>
-                                <span className="tabular text-sm font-semibold text-ink">
-                                  {m.recentValue.toLocaleString("en-IN")} {m.unit}
-                                </span>
-                              </div>
-                              <div>
-                                <span lang="hi" className="block text-2xs text-ink-subtle">
-                                  पिछली अवधि का मध्यमान
-                                </span>
-                                <span className="tabular text-sm font-semibold text-ink">
-                                  {m.referenceValue.toLocaleString("en-IN")} {m.unit}
-                                </span>
-                              </div>
-                            </div>
-                            <p lang="hi" className="tabular text-xs text-ink-subtle">
-                              अंतर: {m.difference > 0 ? "+" : ""}
-                              {m.difference} {m.unit} ({m.percentChange > 0 ? "+" : ""}
-                              {m.percentChange}%)
-                            </p>
-                          </div>
-                        ) : null}
-                      </div>
-                    ) : (
-                      <p lang="hi" className="rounded-field border border-line bg-surface p-2.5 text-xs text-ink-muted">
-                        {m.insufficientReasonHi ||
-                          (m.isSufficient
-                            ? "तुलना के लिए पिछली अवधि का रिकॉर्ड नहीं है।"
-                            : "इस माप के लिए अभी पर्याप्त डेटा नहीं है।")}
-                      </p>
-                    )}
-                  </button>
+                  <ChangeCard change={m} series={data.series[m.metric]} icon={style.icon} tone={style.tone} />
                 </li>
               );
             })}

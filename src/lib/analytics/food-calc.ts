@@ -2,7 +2,7 @@
  * Food-name normalisation and the personalised quick-food ranking (pure).
  */
 import { ageInDays } from "./dates";
-import { toISTDate, todayIST } from "../health-rules";
+import { eachIST, toISTDate, todayIST } from "../health-rules";
 
 /**
  * Stable key for a food name. Unicode-aware: Devanagari letters, digits and
@@ -220,4 +220,117 @@ export function rankQuickFoods(input: {
       b.distinctDays30d - a.distinctDays30d,
   );
   return out.slice(0, input.limit);
+}
+
+// ---------------------------------------------------------------------------
+// Daily totals, macro split and history (pure)
+// ---------------------------------------------------------------------------
+
+export interface FoodLogTotalsInput {
+  calories: number | null;
+  protein_g: number | null;
+  carbs_g: number | null;
+  fat_g: number | null;
+  fibre_g: number | null;
+  consumed_at: string;
+}
+
+export interface FoodTotals {
+  calories: number;
+  protein: number;
+  carbs: number;
+  fat: number;
+  fibre: number;
+  /** Number of logged items. */
+  entries: number;
+}
+
+export interface FoodDayTotals extends FoodTotals {
+  /** IST calendar date. */
+  date: string;
+}
+
+const num = (v: number | null | undefined): number => (typeof v === "number" && Number.isFinite(v) ? v : 0);
+
+export function sumFoodLogs(logs: Array<Omit<FoodLogTotalsInput, "consumed_at">>): FoodTotals {
+  const t: FoodTotals = { calories: 0, protein: 0, carbs: 0, fat: 0, fibre: 0, entries: 0 };
+  for (const l of logs) {
+    t.calories += num(l.calories);
+    t.protein += num(l.protein_g);
+    t.carbs += num(l.carbs_g);
+    t.fat += num(l.fat_g);
+    t.fibre += num(l.fibre_g);
+    t.entries += 1;
+  }
+  return t;
+}
+
+/** One row per IST date in [startDate, endDate], zero-filled, oldest first. Logs outside the window are ignored. */
+export function aggregateFoodByDay(logs: FoodLogTotalsInput[], startDate: string, endDate: string): FoodDayTotals[] {
+  const byDate = new Map<string, FoodLogTotalsInput[]>();
+  for (const l of logs) {
+    const d = toISTDate(l.consumed_at);
+    const list = byDate.get(d);
+    if (list) list.push(l);
+    else byDate.set(d, [l]);
+  }
+  return eachIST(startDate, endDate).map((date) => ({ date, ...sumFoodLogs(byDate.get(date) ?? []) }));
+}
+
+export interface MacroSplit {
+  /** kcal each macro contributes (Atwater 4 / 4 / 9). */
+  proteinKcal: number;
+  carbsKcal: number;
+  fatKcal: number;
+  /** Whole-number shares of the macro kcal that add up to 100 (all 0 when nothing is logged). */
+  proteinPct: number;
+  carbsPct: number;
+  fatPct: number;
+}
+
+/**
+ * Share of energy from protein / carbs / fat. Shares come from the macro grams,
+ * not from the logged calories (which also include oil and hand-typed values), so
+ * they always add up to 100.
+ */
+export function macroSplit(t: Pick<FoodTotals, "protein" | "carbs" | "fat">): MacroSplit {
+  const proteinKcal = t.protein * 4;
+  const carbsKcal = t.carbs * 4;
+  const fatKcal = t.fat * 9;
+  const total = proteinKcal + carbsKcal + fatKcal;
+  if (total <= 0) return { proteinKcal, carbsKcal, fatKcal, proteinPct: 0, carbsPct: 0, fatPct: 0 };
+  const proteinPct = Math.round((proteinKcal / total) * 100);
+  const fatPct = Math.round((fatKcal / total) * 100);
+  return { proteinKcal, carbsKcal, fatKcal, proteinPct, fatPct, carbsPct: Math.max(0, 100 - proteinPct - fatPct) };
+}
+
+export interface FoodHistorySummary {
+  /** Days in the window that have at least one entry. */
+  loggedDays: number;
+  /** Logged days that are finished (before `today`); today is still being filled in. */
+  completedLoggedDays: number;
+  /** Mean kcal over completed logged days, or today's total when it is the only logged day; null when nothing is logged. */
+  avgCalories: number | null;
+  /** Mean protein (g) over the same days. */
+  avgProtein: number | null;
+  /** Completed logged days at or under the target. */
+  withinTarget: number;
+  /** Completed logged days over the target. */
+  overTarget: number;
+}
+
+export function summarizeFoodHistory(days: FoodDayTotals[], target: number, today: string): FoodHistorySummary {
+  const logged = days.filter((d) => d.entries > 0);
+  const completed = logged.filter((d) => d.date < today);
+  const basis = completed.length > 0 ? completed : logged;
+  const mean = (pick: (d: FoodDayTotals) => number) =>
+    basis.length > 0 ? Math.round(basis.reduce((s, d) => s + pick(d), 0) / basis.length) : null;
+  return {
+    loggedDays: logged.length,
+    completedLoggedDays: completed.length,
+    avgCalories: mean((d) => d.calories),
+    avgProtein: mean((d) => d.protein),
+    withinTarget: completed.filter((d) => d.calories <= target).length,
+    overTarget: completed.filter((d) => d.calories > target).length,
+  };
 }

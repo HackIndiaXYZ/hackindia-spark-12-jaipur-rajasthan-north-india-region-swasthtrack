@@ -1,18 +1,32 @@
 "use client";
 
 import { useState } from "react";
-import { AlertCircle, CalendarDays, ChevronLeft, ChevronRight, Copy, Pencil, Trash2, Utensils } from "lucide-react";
+import {
+  AlertCircle,
+  BedDouble,
+  Cookie,
+  Coffee,
+  Copy,
+  Moon,
+  Pencil,
+  Plus,
+  Sun,
+  Sunrise,
+  Trash2,
+  Utensils,
+  type LucideIcon,
+} from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button, IconButton } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Field, NumberInput, Select } from "@/components/ui/form-field";
 import { Modal } from "@/components/ui/modal";
 import { EmptyState, ErrorState } from "@/components/ui/page";
-import { ProgressBar } from "@/components/ui/progress-bar";
 import { useConfirm } from "@/components/ui/confirm-dialog";
 import { useToast } from "@/components/ui/toast";
-import { fmtDateStrFull, fmtTime, relativeDayLabel } from "@/components/health/format";
+import { fmtTime, relativeDayLabel } from "@/components/health/format";
 import {
+  MAIN_MEALS,
   MEAL_ORDER,
   MEAL_SLOTS,
   OIL_OPTIONS,
@@ -21,7 +35,7 @@ import {
   oilCalories,
 } from "@/components/food/food-math";
 import { addDaysIST, todayIST } from "@/lib/health-rules";
-import { getExactFoodEmoji } from "@/lib/utils";
+import { cn, getExactFoodEmoji } from "@/lib/utils";
 import { copyPreviousMeal, deleteFoodLog, updateFoodLog, type FoodLogEntry } from "@/services/patient-service";
 
 type FoodLogListProps = {
@@ -30,23 +44,32 @@ type FoodLogListProps = {
   error: boolean;
   onRetry: () => void;
   patientId: string;
+  /** The IST day being viewed. */
   selectedDate: string;
   onRefresh: () => void;
-  onDateChange: (date: string) => void;
-  /** The patient's own daily target from settings. */
-  dailyCalorieTarget: number;
-  /** False for viewers: no edit, delete or copy. */
+  /** Pre-select this meal in the entry panel and jump to it. */
+  onAddToMeal: (slot: string) => void;
+  /** False for viewers: no edit, delete, copy or add. */
   canWrite: boolean;
 };
 
-const confidenceVariant = { High: "positive", Medium: "info", Low: "attention" } as const;
+const MEAL_ICON: Record<string, LucideIcon> = {
+  Breakfast: Sunrise,
+  "Mid-morning": Coffee,
+  Lunch: Sun,
+  "Evening snack": Cookie,
+  Dinner: Moon,
+  Bedtime: BedDouble,
+  Other: Utensils,
+};
+
 
 /* ---- Edit dialog ------------------------------------------------------------------- */
 
 function EditFoodModal({ item, onClose, onSaved }: { item: FoodLogEntry; onClose: () => void; onSaved: () => void }) {
   const toast = useToast();
   const [qty, setQty] = useState(String(item.quantity));
-  const [oil, setOil] = useState(item.oil_quantity || "None");
+  const [oil, setOil] = useState<string>(item.oil_quantity || "None");
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
 
@@ -61,7 +84,9 @@ function EditFoodModal({ item, onClose, onSaved }: { item: FoodLogEntry; onClose
     // Scale the stored numbers by the change in quantity; the oil is swapped separately.
     const ratio = next / item.quantity;
     const base = (item.calories - (item.oil_calories || 0)) * ratio;
-    const newOil = oilCalories(oil);
+    // An oil value the picker does not know (older free-text rows) keeps its stored calories untouched.
+    const knownOil = OIL_OPTIONS.some((o) => o.id === oil);
+    const newOil = knownOil ? oilCalories(oil) : item.oil_calories || 0;
 
     setSaving(true);
     try {
@@ -113,6 +138,7 @@ function EditFoodModal({ item, onClose, onSaved }: { item: FoodLogEntry; onClose
         </Field>
         <Field label="बनाने में तेल (Cooking oil)">
           <Select value={oil} onChange={(e) => setOil(e.target.value)}>
+            {OIL_OPTIONS.some((o) => o.id === oil) ? null : <option value={oil}>{oil}</option>}
             {OIL_OPTIONS.map((o) => (
               <option key={o.id} value={o.id}>
                 {o.label}
@@ -129,6 +155,162 @@ function EditFoodModal({ item, onClose, onSaved }: { item: FoodLogEntry; onClose
   );
 }
 
+/* ---- Meal card --------------------------------------------------------------------- */
+
+const confidenceVariant = { High: "positive", Medium: "info", Low: "attention" } as const;
+
+type MealCardProps = {
+  slot: string;
+  items: FoodLogEntry[];
+  dayTotal: number;
+  canWrite: boolean;
+  copyLabel: string;
+  copying: boolean;
+  onAdd: () => void;
+  onCopy: () => void;
+  onEdit: (item: FoodLogEntry) => void;
+  onDelete: (item: FoodLogEntry) => void;
+};
+
+function MealCard({ slot, items, dayTotal, canWrite, copyLabel, copying, onAdd, onCopy, onEdit, onDelete }: MealCardProps) {
+  const Icon = MEAL_ICON[slot] ?? Utensils;
+  const slotTotal = Math.round(items.reduce((sum, i) => sum + i.calories, 0));
+  const share = dayTotal > 0 ? Math.round((slotTotal / dayTotal) * 100) : 0;
+  const hasItems = items.length > 0;
+  const slotMeta = MEAL_SLOTS.find((m) => m.id === slot);
+  const slotLabel = slotMeta?.label ?? "भोजन";
+  const slotEnglish = slotMeta?.english ?? "Other";
+
+  const actions = canWrite && slot !== "Other" ? (
+    <div className={cn("flex gap-2", hasItems ? "border-t border-line px-3 py-3 sm:px-4" : "shrink-0")}>
+      <Button variant="secondary" onClick={onAdd} className={hasItems ? "flex-1" : undefined} aria-label={`${slotLabel} में भोजन जोड़ें`}>
+        <Plus aria-hidden className="h-4 w-4" />
+        <span lang="hi">जोड़ें</span>
+      </Button>
+      <Button
+        variant="ghost"
+        loading={copying}
+        onClick={onCopy}
+        className={hasItems ? "flex-1" : undefined}
+        aria-label={`${copyLabel} का ${slotLabel} कॉपी करें`}
+      >
+        {copying ? null : <Copy aria-hidden className="h-4 w-4" />}
+        <span lang="hi">{copyLabel} से कॉपी</span>
+      </Button>
+    </div>
+  ) : null;
+
+  if (!hasItems) {
+    return (
+      <section
+        aria-label={mealLabel(slot)}
+        className="tile flex flex-wrap items-center justify-between gap-x-3 gap-y-2 rounded-card px-3 py-2.5 sm:px-4"
+      >
+        <div className="flex min-w-0 items-center gap-2.5">
+          <span aria-hidden className="grid h-9 w-9 shrink-0 place-items-center rounded-control bg-surface-sunken text-ink-muted">
+            <Icon className="h-4 w-4" />
+          </span>
+          <div className="min-w-0">
+            <h3 className="truncate text-sm font-semibold text-ink">
+              <span lang="hi">{slotLabel}</span> <span className="text-xs font-normal text-ink-muted">{slotEnglish}</span>
+            </h3>
+            <p lang="hi" className="text-xs text-ink-muted">
+              अभी कुछ दर्ज नहीं
+            </p>
+          </div>
+        </div>
+        {actions}
+      </section>
+    );
+  }
+
+  return (
+    <Card flush aria-label={mealLabel(slot)} className="overflow-hidden">
+      <div className="flex items-start justify-between gap-3 px-3 pb-2 pt-3 sm:px-4 sm:pt-4">
+        <div className="flex min-w-0 items-center gap-2.5">
+          <span aria-hidden className="grid h-10 w-10 shrink-0 place-items-center rounded-control bg-food-soft text-food ring-1 ring-food-line">
+            <Icon className="h-5 w-5" />
+          </span>
+          <div className="min-w-0">
+            <h3 lang="hi" className="truncate text-base font-semibold text-ink">
+              {slotLabel}
+            </h3>
+            <p className="tabular text-xs text-ink-muted">
+              {slotEnglish} · {items.length} <span lang="hi">चीज़ें</span>
+            </p>
+          </div>
+        </div>
+        <div className="shrink-0 text-right">
+          <p className="tabular text-lg font-semibold text-ink">~{slotTotal} kcal</p>
+          <p className="tabular text-xs text-ink-muted">
+            {share}% <span lang="hi">दिन का</span>
+          </p>
+        </div>
+      </div>
+
+      <div aria-hidden className="mx-3 h-1.5 overflow-hidden rounded-full bg-surface/80 sm:mx-4">
+        <div className="grad-spring h-full rounded-full" style={{ width: `${Math.min(100, share)}%` }} />
+      </div>
+
+      <ul className="mt-2 divide-y divide-line">
+        {items.map((item) => (
+          <li key={item.id} className="flex items-start gap-2.5 px-3 py-3 sm:px-4">
+            <span aria-hidden className="mt-0.5 shrink-0 text-xl leading-none">
+              {getExactFoodEmoji(item.food_name)}
+            </span>
+            <div className="min-w-0 flex-1 space-y-1">
+              <p className="break-words font-semibold leading-snug text-ink">{item.food_name}</p>
+              <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-ink-muted">
+                <span className="tabular">{fmtTime(item.consumed_at)}</span>
+                <span aria-hidden>·</span>
+                <span lang="hi">
+                  मात्रा: {item.quantity} {item.unit}
+                  {item.standardized_grams ? ` (${item.standardized_grams} g)` : ""}
+                </span>
+                <Badge variant={confidenceVariant[item.calorie_confidence] ?? "neutral"} className="px-2 py-0 text-2xs">
+                  {item.calorie_confidence}
+                </Badge>
+              </p>
+              {item.oil_quantity === "Unknown" ? (
+                <p lang="hi" className="text-xs font-medium text-attention">
+                  तेल की मात्रा पता नहीं
+                </p>
+              ) : item.oil_quantity && item.oil_quantity !== "None" ? (
+                <p lang="hi" className="inline-block rounded border border-food-line bg-food-soft px-1.5 py-0.5 text-xs font-medium text-food">
+                  तेल: {item.oil_quantity} (+{item.oil_calories} kcal)
+                </p>
+              ) : null}
+              {item.notes ? (
+                <p className="flex items-start gap-1.5 rounded border border-attention-line bg-attention-soft p-1.5 text-xs text-ink-muted">
+                  <AlertCircle aria-hidden className="mt-0.5 h-3.5 w-3.5 shrink-0 text-attention" />
+                  {item.notes}
+                </p>
+              ) : null}
+            </div>
+
+            <div className="flex shrink-0 flex-col items-end gap-0.5">
+              <span className="tabular text-base font-semibold text-ink">~{item.calories}</span>
+              <span className="-mt-1 text-2xs text-ink-muted">kcal</span>
+              {canWrite ? (
+                <div className="-mr-1.5 flex items-center">
+                  <IconButton variant="ghost" aria-label={`बदलें (Edit) — ${item.food_name}`} onClick={() => onEdit(item)}>
+                    <Pencil aria-hidden className="h-4 w-4" />
+                  </IconButton>
+                  <IconButton variant="ghost" aria-label={`हटाएँ (Delete) — ${item.food_name}`} onClick={() => onDelete(item)}>
+                    <Trash2 aria-hidden className="h-4 w-4" />
+                  </IconButton>
+                </div>
+              ) : null}
+            </div>
+          </li>
+        ))}
+      </ul>
+
+      {actions}
+    </Card>
+  );
+}
+
 /* ---- List -------------------------------------------------------------------------- */
 
 export function FoodLogList({
@@ -139,30 +321,27 @@ export function FoodLogList({
   patientId,
   selectedDate,
   onRefresh,
-  onDateChange,
-  dailyCalorieTarget,
+  onAddToMeal,
   canWrite,
 }: FoodLogListProps) {
   const toast = useToast();
   const confirm = useConfirm();
   const [editing, setEditing] = useState<FoodLogEntry | null>(null);
-  const [copySlot, setCopySlot] = useState<string>("Breakfast");
-  const [copying, setCopying] = useState(false);
+  const [copyingSlot, setCopyingSlot] = useState<string | null>(null);
 
   const today = todayIST();
   const isToday = selectedDate === today;
   const dayBefore = addDaysIST(selectedDate, -1);
+  const copyLabel = relativeDayLabel(dayBefore, today);
   const items = logs ?? [];
+  const dayTotal = items.reduce((sum, l) => sum + l.calories, 0);
 
-  // Group by meal slot (anything unrecognised goes to "Other").
-  const grouped = MEAL_ORDER.map((slot) => ({
-    slot,
-    items: items.filter((l) => (MEAL_ORDER.includes(l.meal_type) ? l.meal_type === slot : slot === "Other")),
-  })).filter((g) => g.items.length > 0);
-
-  const totalCalories = items.reduce((sum, l) => sum + l.calories, 0);
-  const totalProtein = items.reduce((sum, l) => sum + (l.protein_g || 0), 0);
-  const diff = totalCalories - dailyCalorieTarget;
+  // Anything that is not one of the named slots is shown under "Other".
+  const slotOf = (l: FoodLogEntry) => (MEAL_ORDER.includes(l.meal_type) ? l.meal_type : "Other");
+  const bySlot = new Map<string, FoodLogEntry[]>();
+  for (const l of items) bySlot.set(slotOf(l), [...(bySlot.get(slotOf(l)) ?? []), l]);
+  // The four main meals always show (empty ones as a slim row); the rest only when used.
+  const slots = MEAL_ORDER.filter((slot) => MAIN_MEALS.includes(slot) || (bySlot.get(slot)?.length ?? 0) > 0);
 
   async function handleDelete(item: FoodLogEntry) {
     const ok = await confirm({
@@ -180,201 +359,92 @@ export function FoodLogList({
     }
   }
 
-  async function handleCopy() {
-    const slotLabel = MEAL_SLOTS.find((m) => m.id === copySlot)?.label ?? copySlot;
-    const existing = items.filter((l) => l.meal_type === copySlot).length;
+  async function handleCopy(slot: string) {
+    if (copyingSlot) return;
+    const slotLabel = MEAL_SLOTS.find((m) => m.id === slot)?.label ?? slot;
+    const existing = (bySlot.get(slot) ?? []).length;
     if (existing > 0) {
       const ok = await confirm({
         title: `${slotLabel} में पहले से ${existing} चीज़ें हैं`,
-        message: `${relativeDayLabel(dayBefore, today)} का ${slotLabel} कॉपी करने पर ये दोबारा जुड़ जाएँगी। जारी रखें?`,
+        message: `${copyLabel} का ${slotLabel} कॉपी करने पर ये दोबारा जुड़ जाएँगी। जारी रखें?`,
         confirmLabel: "हाँ, कॉपी करें",
         cancelLabel: "रद्द करें",
       });
       if (!ok) return;
     }
-    setCopying(true);
+    setCopyingSlot(slot);
     try {
-      const copied = await copyPreviousMeal(patientId, dayBefore, selectedDate, copySlot);
+      const copied = await copyPreviousMeal(patientId, dayBefore, selectedDate, slot);
       if (copied) {
-        toast.success(`${relativeDayLabel(dayBefore, today)} का ${slotLabel} कॉपी हो गया`);
+        toast.success(`${copyLabel} का ${slotLabel} कॉपी हो गया`);
         onRefresh();
       } else {
-        toast.info(`${relativeDayLabel(dayBefore, today)} को ${slotLabel} में कुछ दर्ज नहीं था`);
+        toast.info(`${copyLabel} को ${slotLabel} में कुछ दर्ज नहीं था`);
       }
     } catch (err) {
       toast.error("कॉपी नहीं हो पाया", err instanceof Error ? err.message : undefined);
     } finally {
-      setCopying(false);
+      setCopyingSlot(null);
     }
   }
 
   return (
-    <Card flush className="overflow-hidden">
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line bg-surface-sunken px-3 py-3 sm:px-6 sm:py-4">
-        <div className="flex min-w-0 items-center gap-1.5 sm:gap-2">
-          <IconButton variant="ghost" aria-label="पिछला दिन (Previous day)" onClick={() => onDateChange(dayBefore)}>
-            <ChevronLeft aria-hidden className="h-5 w-5" />
-          </IconButton>
-          <div className="min-w-0 text-center">
-            <p className="flex items-center justify-center gap-1.5 text-sm font-semibold text-ink sm:text-base">
-              <CalendarDays aria-hidden className="h-4 w-4 shrink-0 text-brand" />
-              <span className="truncate">{relativeDayLabel(selectedDate, today)}</span>
-            </p>
-            <p className="truncate text-2xs text-ink-subtle">{fmtDateStrFull(selectedDate)}</p>
-          </div>
-          <IconButton
-            variant="ghost"
-            aria-label="अगला दिन (Next day)"
-            disabled={isToday}
-            onClick={() => onDateChange(addDaysIST(selectedDate, 1))}
-          >
-            <ChevronRight aria-hidden className="h-5 w-5" />
-          </IconButton>
-          {!isToday ? (
-            <Button variant="secondary" size="sm" onClick={() => onDateChange(today)}>
-              आज
-            </Button>
-          ) : null}
+    <section aria-labelledby="food-meals-heading" className="space-y-3">
+      <div className="flex items-end justify-between gap-3">
+        <div className="min-w-0">
+          <h2 id="food-meals-heading" className="flex items-center gap-2 text-base font-semibold tracking-tight text-ink">
+            <span aria-hidden className="h-4 w-0.5 rounded-full grad-spring" />
+            <span lang="hi">{isToday ? "आज का भोजन" : `${relativeDayLabel(selectedDate, today)} का भोजन`}</span>
+            <span className="text-xs font-normal text-ink-muted">Meals</span>
+          </h2>
         </div>
-
-        <div className="min-w-0 text-right" aria-live="polite">
-          <span className="block text-xs font-medium text-ink-subtle">
-            {isToday ? "आज की कैलोरी" : "इस दिन की कैलोरी"}
-          </span>
-          <span className="tabular text-lg font-semibold text-ink">
-            {totalCalories} / {dailyCalorieTarget} kcal
-          </span>
-          {items.length > 0 ? (
-            <span lang="hi" className="mt-0.5 block text-xs text-ink-muted">
-              {diff > 0 ? `लक्ष्य से ${diff} kcal ज़्यादा` : `${Math.abs(diff)} kcal बाकी`}
-              {totalProtein > 0 ? ` · प्रोटीन ${Math.round(totalProtein)} g` : ""}
-            </span>
-          ) : null}
-        </div>
-      </div>
-
-      {items.length > 0 ? (
-        <div className="px-4 pt-4 sm:px-6">
-          <ProgressBar value={totalCalories} max={dailyCalorieTarget} label="कैलोरी लक्ष्य का हिस्सा" />
-        </div>
-      ) : null}
-
-      <div className="space-y-5 p-4 sm:p-6">
-        {canWrite ? (
-          <div className="flex flex-wrap items-end gap-2 rounded-card border border-line bg-surface p-3">
-            <Field label={`${relativeDayLabel(dayBefore, today)} से कॉपी करें`} className="min-w-44 flex-1">
-              <Select value={copySlot} onChange={(e) => setCopySlot(e.target.value)}>
-                {MEAL_SLOTS.map((m) => (
-                  <option key={m.id} value={m.id}>
-                    {m.label}
-                  </option>
-                ))}
-              </Select>
-            </Field>
-            <Button variant="secondary" loading={copying} onClick={() => void handleCopy()}>
-              <Copy aria-hidden className="h-4 w-4" />
-              कॉपी करें
-            </Button>
-          </div>
+        {!loading && !error && items.length > 0 ? (
+          <p className="tabular shrink-0 text-sm font-semibold text-ink">~{Math.round(dayTotal)} kcal</p>
         ) : null}
-
-        {error ? (
-          <ErrorState
-            title="भोजन का रिकॉर्ड लोड नहीं हो पाया"
-            englishTitle="Food records could not be loaded"
-            onRetry={onRetry}
-          />
-        ) : loading ? (
-          <div aria-busy="true" aria-label="लोड हो रहा है" className="space-y-3">
-            <div className="skeleton h-24 rounded-card" />
-            <div className="skeleton h-24 rounded-card" />
-          </div>
-        ) : grouped.length > 0 ? (
-          <div className="space-y-5">
-            {grouped.map(({ slot, items: slotItems }) => {
-              const slotTotal = slotItems.reduce((sum, i) => sum + i.calories, 0);
-              return (
-                <section key={slot} aria-label={mealLabel(slot)} className="overflow-hidden rounded-card border border-line bg-surface shadow-e1">
-                  <div className="flex items-center justify-between gap-3 border-b border-line bg-surface-sunken px-4 py-3">
-                    <div className="min-w-0">
-                      <h3 lang="hi" className="text-sm font-semibold text-ink">
-                        {mealLabel(slot)}
-                      </h3>
-                      <span className="text-2xs text-ink-subtle">{slotItems.length} चीज़ें</span>
-                    </div>
-                    <span className="tabular text-sm font-semibold text-ink">~{slotTotal} kcal</span>
-                  </div>
-
-                  <ul className="divide-y divide-line">
-                    {slotItems.map((item) => (
-                      <li key={item.id} className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between">
-                        <div className="min-w-0 space-y-1">
-                          <div className="flex flex-wrap items-center gap-2">
-                            <span aria-hidden className="shrink-0 text-xl">
-                              {getExactFoodEmoji(item.food_name)}
-                            </span>
-                            <span className="font-semibold text-ink">{item.food_name}</span>
-                            <Badge variant={confidenceVariant[item.calorie_confidence] ?? "neutral"}>
-                              {item.calorie_confidence} confidence
-                            </Badge>
-                            <span className="text-xs text-ink-subtle">{fmtTime(item.consumed_at)}</span>
-                          </div>
-                          <p className="text-xs text-ink-muted">
-                            मात्रा: {item.quantity} {item.unit}
-                            {item.standardized_grams ? ` (${item.standardized_grams} g)` : ""}
-                            {item.oil_quantity === "Unknown" ? (
-                              <span lang="hi" className="ml-2 text-attention">
-                                तेल की मात्रा पता नहीं
-                              </span>
-                            ) : item.oil_quantity && item.oil_quantity !== "None" ? (
-                              <span lang="hi" className="ml-2 rounded border border-food-line bg-food-soft px-1.5 py-0.5 font-medium text-food">
-                                तेल: {item.oil_quantity} (+{item.oil_calories} kcal)
-                              </span>
-                            ) : null}
-                          </p>
-                          {item.notes ? (
-                            <p className="flex items-start gap-1.5 rounded border border-attention-line bg-attention-soft p-1.5 text-xs text-ink-muted">
-                              <AlertCircle aria-hidden className="mt-0.5 h-3.5 w-3.5 shrink-0 text-attention" />
-                              {item.notes}
-                            </p>
-                          ) : null}
-                        </div>
-
-                        <div className="flex items-center justify-between gap-3 sm:justify-end">
-                          <span className="tabular text-base font-semibold text-ink">~{item.calories} kcal</span>
-                          {canWrite ? (
-                            <div className="flex items-center gap-1">
-                              <IconButton variant="ghost" aria-label={`बदलें (Edit) — ${item.food_name}`} onClick={() => setEditing(item)}>
-                                <Pencil aria-hidden className="h-4 w-4" />
-                              </IconButton>
-                              <IconButton variant="ghost" aria-label={`हटाएँ (Delete) — ${item.food_name}`} onClick={() => void handleDelete(item)}>
-                                <Trash2 aria-hidden className="h-4 w-4" />
-                              </IconButton>
-                            </div>
-                          ) : null}
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                </section>
-              );
-            })}
-          </div>
-        ) : (
-          <EmptyState
-            icon={Utensils}
-            title={isToday ? "आज अभी तक कोई भोजन दर्ज नहीं हुआ" : "इस दिन कोई भोजन दर्ज नहीं है"}
-            hindiTitle="No meals logged"
-            description={
-              canWrite
-                ? "ऊपर खोज से भोजन चुनकर दर्ज करें, या पिछले दिन का भोजन कॉपी करें।"
-                : "अभी इस दिन का कोई रिकॉर्ड नहीं है।"
-            }
-          />
-        )}
       </div>
+
+      {error ? (
+        <ErrorState title="भोजन का रिकॉर्ड लोड नहीं हो पाया" englishTitle="Food records could not be loaded" onRetry={onRetry} />
+      ) : loading ? (
+        <div aria-busy="true" aria-label="लोड हो रहा है" className="grid gap-3 lg:grid-cols-2">
+          <div className="skeleton h-40 rounded-card" />
+          <div className="skeleton h-40 rounded-card" />
+        </div>
+      ) : (
+        <>
+          {items.length === 0 ? (
+            <EmptyState
+              icon={Utensils}
+              title={isToday ? "आज अभी तक कोई भोजन दर्ज नहीं हुआ" : "इस दिन कोई भोजन दर्ज नहीं है"}
+              hindiTitle="No meals logged"
+              description={
+                canWrite
+                  ? "ऊपर खोज से भोजन चुनकर दर्ज करें, या नीचे किसी भोजन में पिछले दिन का भोजन कॉपी करें।"
+                  : "अभी इस दिन का कोई रिकॉर्ड नहीं है।"
+              }
+            />
+          ) : null}
+          <div className="grid items-start gap-3 lg:grid-cols-2">
+            {slots.map((slot) => (
+              <MealCard
+                key={slot}
+                slot={slot}
+                items={bySlot.get(slot) ?? []}
+                dayTotal={dayTotal}
+                canWrite={canWrite}
+                copyLabel={copyLabel}
+                copying={copyingSlot === slot}
+                onAdd={() => onAddToMeal(slot)}
+                onCopy={() => void handleCopy(slot)}
+                onEdit={setEditing}
+                onDelete={(item) => void handleDelete(item)}
+              />
+            ))}
+          </div>
+        </>
+      )}
 
       {editing ? <EditFoodModal key={editing.id} item={editing} onClose={() => setEditing(null)} onSaved={onRefresh} /> : null}
-    </Card>
+    </section>
   );
 }

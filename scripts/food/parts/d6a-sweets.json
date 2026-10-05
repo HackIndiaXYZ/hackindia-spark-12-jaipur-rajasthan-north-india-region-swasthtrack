@@ -1,0 +1,7793 @@
+{
+ "items": [
+  {
+   "slug": "gulab-jamun",
+   "name": "Gulab Jamun",
+   "hi": "गुलाब जामुन",
+   "alias": [
+    "gulaab jamun",
+    "gulabjamun",
+    "gulab jaman",
+    "golap jamun",
+    "gulab jamoon",
+    "गुलाबजामुन"
+   ],
+   "cat": "sweet",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 339,
+   "p": 4.5,
+   "c": 52,
+   "f": 12.5,
+   "fib": 0.3,
+   "na": 45,
+   "portions": [
+    {
+     "n": "1 piece (40 g)",
+     "hi": "1 पीस",
+     "g": 40
+    },
+    {
+     "n": "2 pieces (80 g)",
+     "hi": "2 पीस",
+     "g": 80
+    },
+    {
+     "n": "1 plate, 3 pieces (120 g)",
+     "hi": "1 प्लेट",
+     "g": 120
+    }
+   ],
+   "core": true,
+   "src": "Anchor figure 330-360 kcal/100 g; recipe check (khoya + maida ball, fried, 1:1 syrup). INDB BFP386 (471) and ASC348 (586) are too high",
+   "conf": "high",
+   "note": "Halwai style: khoya/milk-solid ball fried in ghee-oil, soaked in 1:1 sugar syrup; weight is the jamun with its absorbed syrup (about 35% syrup). Home milk-powder jamun is almost the same per piece. Very high sugar for diabetics."
+  },
+  {
+   "slug": "kala-jamun",
+   "name": "Kala Jamun",
+   "hi": "काला जामुन",
+   "alias": [
+    "kala jaman",
+    "kaala jamun",
+    "black gulab jamun",
+    "काला गुलाब जामुन"
+   ],
+   "cat": "sweet",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 354,
+   "p": 5,
+   "c": 52,
+   "f": 14,
+   "fib": 0.3,
+   "na": 45,
+   "portions": [
+    {
+     "n": "1 piece (45 g)",
+     "hi": "1 पीस",
+     "g": 45
+    },
+    {
+     "n": "2 pieces (90 g)",
+     "hi": "2 पीस",
+     "g": 90
+    }
+   ],
+   "src": "Standard halwai/home recipe computed from IFCT 2017 milk/khoya/chhena + sugar + ghee; cross-checked NIN Nutritive Value of Indian Foods and packaged-mithai labels",
+   "conf": "medium",
+   "note": "Fried longer until dark brown (caramelised), slightly more khoya and fat than plain gulab jamun; syrup-soaked."
+  },
+  {
+   "slug": "gulab-jamun-with-ice-cream",
+   "name": "Gulab Jamun with Ice Cream",
+   "hi": "गुलाब जामुन विद आइसक्रीम",
+   "alias": [
+    "gulab jamun ice cream",
+    "hot gulab jamun with vanilla",
+    "jamun with ice cream",
+    "गुलाब जामुन आइसक्रीम के साथ"
+   ],
+   "cat": "sweet",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍨",
+   "unit": "g",
+   "kcal": 280,
+   "p": 4.2,
+   "c": 40,
+   "f": 11.5,
+   "fib": 0.2,
+   "na": 50,
+   "portions": [
+    {
+     "n": "1 plate, 2 jamun + 1 scoop (140 g)",
+     "hi": "1 प्लेट",
+     "g": 140
+    },
+    {
+     "n": "1 jamun + 1 scoop (100 g)",
+     "hi": "1 जामुन + 1 स्कूप",
+     "g": 100
+    }
+   ],
+   "src": "Computed from gulab-jamun and vanilla ice-cream rows in this catalogue",
+   "conf": "medium",
+   "note": "Restaurant dessert: 2 gulab jamun (80 g) + 1 scoop vanilla ice cream (60 g); about 390 kcal per plate."
+  },
+  {
+   "slug": "rasgulla",
+   "name": "Rasgulla",
+   "hi": "रसगुल्ला",
+   "alias": [
+    "rosogolla",
+    "rasagolla",
+    "roshogolla",
+    "rasgolla",
+    "rossogolla",
+    "रसगोला"
+   ],
+   "cat": "sweet",
+   "region": "West Bengal",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 185,
+   "p": 4.5,
+   "c": 36,
+   "f": 2.5,
+   "fib": 0,
+   "na": 35,
+   "portions": [
+    {
+     "n": "1 piece (50 g)",
+     "hi": "1 पीस",
+     "g": 50
+    },
+    {
+     "n": "2 pieces (100 g)",
+     "hi": "2 पीस",
+     "g": 100
+    }
+   ],
+   "core": true,
+   "src": "NIN rasgulla ~180-190 kcal/100 g with syrup; recipe check chhena + syrup; INDB BFP392 too low",
+   "conf": "medium",
+   "note": "Spongy chhena ball boiled in light sugar syrup; weight includes about 15 g syrup per piece (about 95 kcal each). Most calories are syrup sugar, so a sweet-heavy choice for diabetics. INDB BFP392 (119) is too low."
+  },
+  {
+   "slug": "rasmalai",
+   "name": "Rasmalai",
+   "hi": "रसमलाई",
+   "alias": [
+    "ras malai",
+    "rossomalai",
+    "rasamalai",
+    "rasmalai dessert",
+    "रस मलाई"
+   ],
+   "cat": "sweet",
+   "region": "West Bengal",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 176,
+   "p": 5.5,
+   "c": 21.5,
+   "f": 7.5,
+   "fib": 0,
+   "na": 55,
+   "portions": [
+    {
+     "n": "1 piece with milk (80 g)",
+     "hi": "1 पीस",
+     "g": 80
+    },
+    {
+     "n": "2 pieces with milk (160 g)",
+     "hi": "2 पीस",
+     "g": 160
+    },
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    }
+   ],
+   "src": "Recipe computed (chhena disc + sugar-reduced milk + nuts); cross-checked packaged rasmalai labels ~160-190 kcal/100 g",
+   "conf": "medium",
+   "note": "Flattened chhena discs in sweetened thickened (rabri-style) milk with pistachio; weight includes the milk. About 140 kcal per piece. INDB BFP393 (135) is too low per 100 g for rich milk."
+  },
+  {
+   "slug": "kalakand",
+   "name": "Kalakand",
+   "hi": "कलाकंद",
+   "alias": [
+    "kala kand",
+    "kalakand barfi",
+    "milk cake kalakand",
+    "कला कंद"
+   ],
+   "cat": "sweet",
+   "region": "Rajasthan",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 330,
+   "p": 11,
+   "c": 40,
+   "f": 14,
+   "fib": 0,
+   "na": 85,
+   "portions": [
+    {
+     "n": "1 piece (35 g)",
+     "hi": "1 पीस",
+     "g": 35
+    },
+    {
+     "n": "2 pieces (70 g)",
+     "hi": "2 पीस",
+     "g": 70
+    }
+   ],
+   "src": "Standard halwai/home recipe computed from IFCT 2017 milk/khoya/chhena + sugar + ghee; cross-checked NIN Nutritive Value of Indian Foods and packaged-mithai labels",
+   "conf": "medium",
+   "note": "Grainy, moist milk-and-chhena sweet set with sugar; no flour. Home/halwai version."
+  },
+  {
+   "slug": "milk-cake-alwar",
+   "name": "Milk Cake (Alwar)",
+   "hi": "मिल्क केक (अलवर)",
+   "alias": [
+    "alwar ka mawa",
+    "alwar milk cake",
+    "milk cake",
+    "मिल्क केक",
+    "अलवर का मावा"
+   ],
+   "cat": "sweet",
+   "region": "Rajasthan",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 379,
+   "p": 9,
+   "c": 52,
+   "f": 15,
+   "fib": 0,
+   "na": 70,
+   "portions": [
+    {
+     "n": "1 piece (35 g)",
+     "hi": "1 पीस",
+     "g": 35
+    },
+    {
+     "n": "2 pieces (70 g)",
+     "hi": "2 पीस",
+     "g": 70
+    }
+   ],
+   "src": "Standard halwai/home recipe computed from IFCT 2017 milk/khoya/chhena + sugar + ghee; cross-checked NIN Nutritive Value of Indian Foods and packaged-mithai labels",
+   "conf": "medium",
+   "note": "Dense brown milk-solid sweet caramelised with sugar and a little ghee."
+  },
+  {
+   "slug": "peda-mathura",
+   "name": "Peda (Mathura, Khoya)",
+   "hi": "पेड़ा (मथुरा)",
+   "alias": [
+    "pedha",
+    "mathura peda",
+    "peda sweet",
+    "lal peda",
+    "khoya peda",
+    "पेढ़ा",
+    "मथुरा के पेड़े"
+   ],
+   "cat": "sweet",
+   "region": "Uttar Pradesh",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 376,
+   "p": 9,
+   "c": 58,
+   "f": 12,
+   "fib": 0,
+   "na": 60,
+   "portions": [
+    {
+     "n": "1 piece (20 g)",
+     "hi": "1 पीस",
+     "g": 20
+    },
+    {
+     "n": "2 pieces (40 g)",
+     "hi": "2 पीस",
+     "g": 40
+    },
+    {
+     "n": "1 piece, large (30 g)",
+     "hi": "1 बड़ा पीस",
+     "g": 30
+    }
+   ],
+   "core": true,
+   "src": "Standard halwai/home recipe computed from IFCT 2017 milk/khoya/chhena + sugar + ghee; cross-checked NIN Nutritive Value of Indian Foods and packaged-mithai labels",
+   "conf": "medium",
+   "note": "Khoya cooked with sugar and cardamom, pressed into discs; halwai figures, no added flour."
+  },
+  {
+   "slug": "dharwad-peda",
+   "name": "Dharwad Peda",
+   "hi": "धारवाड़ पेड़ा",
+   "alias": [
+    "dharwad pedha",
+    "dharwar peda",
+    "धारवाड़ पेड़े"
+   ],
+   "cat": "sweet",
+   "region": "Karnataka",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 384,
+   "p": 7,
+   "c": 62,
+   "f": 12,
+   "fib": 0,
+   "na": 55,
+   "portions": [
+    {
+     "n": "1 piece (25 g)",
+     "hi": "1 पीस",
+     "g": 25
+    },
+    {
+     "n": "2 pieces (50 g)",
+     "hi": "2 पीस",
+     "g": 50
+    }
+   ],
+   "src": "Standard halwai/home recipe computed from IFCT 2017 milk/khoya/chhena + sugar + ghee; cross-checked NIN Nutritive Value of Indian Foods and packaged-mithai labels",
+   "conf": "medium",
+   "note": "Brown caramelised milk-sugar peda, rolled in sugar; slightly sweeter and grainier than Mathura peda."
+  },
+  {
+   "slug": "kesar-peda",
+   "name": "Kesar Peda",
+   "hi": "केसर पेड़ा",
+   "alias": [
+    "saffron peda",
+    "kesariya peda",
+    "kesar pedha",
+    "केसरिया पेड़ा"
+   ],
+   "cat": "sweet",
+   "region": "Gujarat",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 368,
+   "p": 9,
+   "c": 57,
+   "f": 11.5,
+   "fib": 0,
+   "na": 60,
+   "portions": [
+    {
+     "n": "1 piece (20 g)",
+     "hi": "1 पीस",
+     "g": 20
+    },
+    {
+     "n": "2 pieces (40 g)",
+     "hi": "2 पीस",
+     "g": 40
+    }
+   ],
+   "src": "Standard halwai/home recipe computed from IFCT 2017 milk/khoya/chhena + sugar + ghee; cross-checked NIN Nutritive Value of Indian Foods and packaged-mithai labels",
+   "conf": "medium",
+   "note": "Khoya peda flavoured with saffron and cardamom; same macros as plain peda."
+  },
+  {
+   "slug": "malai-peda",
+   "name": "Malai Peda",
+   "hi": "मलाई पेड़ा",
+   "alias": [
+    "malai pedha",
+    "cream peda",
+    "मलाई पेढ़ा"
+   ],
+   "cat": "sweet",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 373,
+   "p": 8,
+   "c": 56,
+   "f": 13,
+   "fib": 0,
+   "na": 55,
+   "portions": [
+    {
+     "n": "1 piece (25 g)",
+     "hi": "1 पीस",
+     "g": 25
+    },
+    {
+     "n": "2 pieces (50 g)",
+     "hi": "2 पीस",
+     "g": 50
+    }
+   ],
+   "src": "Standard halwai/home recipe computed from IFCT 2017 milk/khoya/chhena + sugar + ghee; cross-checked NIN Nutritive Value of Indian Foods and packaged-mithai labels",
+   "conf": "medium",
+   "note": "Softer peda made with malai (cream) and milk-powder/khoya; a little more fat than plain peda."
+  },
+  {
+   "slug": "palkova",
+   "name": "Palkova",
+   "hi": "पालकोवा",
+   "alias": [
+    "palkhova",
+    "pal khoa",
+    "doodh peda",
+    "srivilliputhur palkova",
+    "पाल्कोवा"
+   ],
+   "cat": "sweet",
+   "region": "Tamil Nadu",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 344,
+   "p": 9,
+   "c": 50,
+   "f": 12,
+   "fib": 0,
+   "na": 60,
+   "portions": [
+    {
+     "n": "1 piece (25 g)",
+     "hi": "1 पीस",
+     "g": 25
+    },
+    {
+     "n": "2 pieces (50 g)",
+     "hi": "2 पीस",
+     "g": 50
+    }
+   ],
+   "src": "Standard halwai/home recipe computed from IFCT 2017 milk/khoya/chhena + sugar + ghee; cross-checked NIN Nutritive Value of Indian Foods and packaged-mithai labels",
+   "conf": "medium",
+   "note": "Milk reduced with sugar until thick and slightly caramelised (Srivilliputhur style), served as soft lumps."
+  },
+  {
+   "slug": "milk-barfi",
+   "name": "Milk Barfi (Khoya Barfi)",
+   "hi": "दूध की बर्फी (खोया बर्फी)",
+   "alias": [
+    "burfi",
+    "barfi",
+    "mawa barfi",
+    "khoya barfi",
+    "plain barfi",
+    "milk burfi",
+    "मावा बर्फी",
+    "बर्फी"
+   ],
+   "cat": "sweet",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 403,
+   "p": 12,
+   "c": 46,
+   "f": 19,
+   "fib": 0,
+   "na": 85,
+   "portions": [
+    {
+     "n": "1 piece (30 g)",
+     "hi": "1 पीस",
+     "g": 30
+    },
+    {
+     "n": "2 pieces (60 g)",
+     "hi": "2 पीस",
+     "g": 60
+    }
+   ],
+   "core": true,
+   "src": "Standard halwai/home recipe computed from IFCT 2017 milk/khoya/chhena + sugar + ghee; cross-checked NIN Nutritive Value of Indian Foods and packaged-mithai labels; INDB ASC335 matches",
+   "conf": "medium",
+   "note": "Plain khoya + sugar barfi with a little ghee, halwai style. INDB ASC335 (408) agrees."
+  },
+  {
+   "slug": "kaju-katli",
+   "name": "Kaju Katli",
+   "hi": "काजू कतली",
+   "alias": [
+    "kaju barfi",
+    "kaju katli barfi",
+    "cashew barfi",
+    "kaju burfi",
+    "काजू बर्फी"
+   ],
+   "cat": "sweet",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 471,
+   "p": 9.5,
+   "c": 52,
+   "f": 25,
+   "fib": 1.5,
+   "na": 20,
+   "portions": [
+    {
+     "n": "1 piece (20 g)",
+     "hi": "1 पीस",
+     "g": 20
+    },
+    {
+     "n": "2 pieces (40 g)",
+     "hi": "2 पीस",
+     "g": 40
+    },
+    {
+     "n": "1 piece, large (30 g)",
+     "hi": "1 बड़ा पीस",
+     "g": 30
+    }
+   ],
+   "core": true,
+   "src": "Recipe computed from IFCT cashew (553 kcal) + sugar; matches packaged kaju katli labels ~470-500 kcal/100 g",
+   "conf": "medium",
+   "note": "About 50% cashew paste and 40% sugar, thin diamond piece (20 g). INDB ASC339 (422) is slightly low."
+  },
+  {
+   "slug": "besan-barfi",
+   "name": "Besan Barfi",
+   "hi": "बेसन की बर्फी",
+   "alias": [
+    "besan burfi",
+    "gram flour barfi",
+    "besan ki barfi",
+    "chickpea flour barfi",
+    "बेसन बर्फी"
+   ],
+   "cat": "sweet",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 440,
+   "p": 9,
+   "c": 47,
+   "f": 24,
+   "fib": 3,
+   "na": 25,
+   "portions": [
+    {
+     "n": "1 piece (30 g)",
+     "hi": "1 पीस",
+     "g": 30
+    },
+    {
+     "n": "2 pieces (60 g)",
+     "hi": "2 पीस",
+     "g": 60
+    }
+   ],
+   "src": "Standard halwai/home recipe computed from IFCT 2017 milk/khoya/chhena + sugar + ghee; cross-checked NIN Nutritive Value of Indian Foods and packaged-mithai labels",
+   "conf": "medium",
+   "note": "Roasted besan in ghee set with sugar syrup. INDB ASC340 (422) consistent."
+  },
+  {
+   "slug": "coconut-barfi",
+   "name": "Coconut Barfi (Nariyal Barfi)",
+   "hi": "नारियल बर्फी",
+   "alias": [
+    "nariyal barfi",
+    "nariyal burfi",
+    "coconut burfi",
+    "khopra pak",
+    "नारियल की बर्फी"
+   ],
+   "cat": "sweet",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 404,
+   "p": 4.5,
+   "c": 56,
+   "f": 18,
+   "fib": 4.5,
+   "na": 25,
+   "portions": [
+    {
+     "n": "1 piece (30 g)",
+     "hi": "1 पीस",
+     "g": 30
+    },
+    {
+     "n": "2 pieces (60 g)",
+     "hi": "2 पीस",
+     "g": 60
+    }
+   ],
+   "src": "Standard halwai/home recipe computed from IFCT 2017 milk/khoya/chhena + sugar + ghee; cross-checked NIN Nutritive Value of Indian Foods and packaged-mithai labels",
+   "conf": "medium",
+   "note": "Desiccated coconut with sugar and a little milk/khoya; no flour. INDB ASC336 (468) and BFP396 (412) bracket the value."
+  },
+  {
+   "slug": "pista-barfi",
+   "name": "Pista Barfi",
+   "hi": "पिस्ता बर्फी",
+   "alias": [
+    "pistachio barfi",
+    "pista burfi",
+    "pista katli",
+    "पिस्ता कतली"
+   ],
+   "cat": "sweet",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 458,
+   "p": 10,
+   "c": 46,
+   "f": 26,
+   "fib": 3,
+   "na": 30,
+   "portions": [
+    {
+     "n": "1 piece (25 g)",
+     "hi": "1 पीस",
+     "g": 25
+    },
+    {
+     "n": "2 pieces (50 g)",
+     "hi": "2 पीस",
+     "g": 50
+    }
+   ],
+   "src": "Standard halwai/home recipe computed from IFCT 2017 milk/khoya/chhena + sugar + ghee; cross-checked NIN Nutritive Value of Indian Foods and packaged-mithai labels",
+   "conf": "medium",
+   "note": "Pistachio paste with sugar and a little khoya; thin katli-style piece."
+  },
+  {
+   "slug": "chocolate-barfi",
+   "name": "Chocolate Barfi",
+   "hi": "चॉकलेट बर्फी",
+   "alias": [
+    "chocolate burfi",
+    "choco barfi",
+    "चॉको बर्फी"
+   ],
+   "cat": "sweet",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 405,
+   "p": 7,
+   "c": 56,
+   "f": 17,
+   "fib": 1.5,
+   "na": 45,
+   "portions": [
+    {
+     "n": "1 piece (30 g)",
+     "hi": "1 पीस",
+     "g": 30
+    },
+    {
+     "n": "2 pieces (60 g)",
+     "hi": "2 पीस",
+     "g": 60
+    }
+   ],
+   "src": "Standard halwai/home recipe computed from IFCT 2017 milk/khoya/chhena + sugar + ghee; cross-checked NIN Nutritive Value of Indian Foods and packaged-mithai labels",
+   "conf": "low",
+   "note": "Khoya barfi with cocoa and a little chocolate; INDB ASC338 (339) is lower."
+  },
+  {
+   "slug": "badam-barfi",
+   "name": "Badam Barfi (Almond Barfi)",
+   "hi": "बादाम बर्फी",
+   "alias": [
+    "badam katli",
+    "almond barfi",
+    "badam burfi",
+    "बादाम कतली"
+   ],
+   "cat": "sweet",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 480,
+   "p": 12,
+   "c": 45,
+   "f": 28,
+   "fib": 4,
+   "na": 25,
+   "portions": [
+    {
+     "n": "1 piece (25 g)",
+     "hi": "1 पीस",
+     "g": 25
+    },
+    {
+     "n": "2 pieces (50 g)",
+     "hi": "2 पीस",
+     "g": 50
+    }
+   ],
+   "src": "Standard halwai/home recipe computed from IFCT 2017 milk/khoya/chhena + sugar + ghee; cross-checked NIN Nutritive Value of Indian Foods and packaged-mithai labels",
+   "conf": "medium",
+   "note": "Almond paste with sugar syrup, thin pieces."
+  },
+  {
+   "slug": "kaju-pista-roll",
+   "name": "Kaju Pista Roll",
+   "hi": "काजू पिस्ता रोल",
+   "alias": [
+    "kaju roll",
+    "pista roll",
+    "kaju pista rolls",
+    "काजू रोल"
+   ],
+   "cat": "sweet",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 488,
+   "p": 11,
+   "c": 48,
+   "f": 28,
+   "fib": 2,
+   "na": 25,
+   "portions": [
+    {
+     "n": "1 piece (25 g)",
+     "hi": "1 पीस",
+     "g": 25
+    },
+    {
+     "n": "2 pieces (50 g)",
+     "hi": "2 पीस",
+     "g": 50
+    }
+   ],
+   "src": "Standard halwai/home recipe computed from IFCT 2017 milk/khoya/chhena + sugar + ghee; cross-checked NIN Nutritive Value of Indian Foods and packaged-mithai labels",
+   "conf": "medium",
+   "note": "Cashew-sugar dough rolled around pistachio filling and sliced."
+  },
+  {
+   "slug": "anjeer-barfi",
+   "name": "Anjeer Barfi",
+   "hi": "अंजीर बर्फी",
+   "alias": [
+    "fig barfi",
+    "anjir barfi",
+    "anjeer burfi",
+    "अंजीर कतली"
+   ],
+   "cat": "sweet",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 388,
+   "p": 6,
+   "c": 55,
+   "f": 16,
+   "fib": 5,
+   "na": 30,
+   "portions": [
+    {
+     "n": "1 piece (30 g)",
+     "hi": "1 पीस",
+     "g": 30
+    },
+    {
+     "n": "2 pieces (60 g)",
+     "hi": "2 पीस",
+     "g": 60
+    }
+   ],
+   "src": "Standard halwai/home recipe computed from IFCT 2017 milk/khoya/chhena + sugar + ghee; cross-checked NIN Nutritive Value of Indian Foods and packaged-mithai labels",
+   "conf": "medium",
+   "note": "Dried fig paste, nuts and some sugar; naturally high in fruit sugar."
+  },
+  {
+   "slug": "dry-fruit-barfi-dates",
+   "name": "Dry Fruit Barfi (Dates and Nuts)",
+   "hi": "ड्राई फ्रूट बर्फी (खजूर)",
+   "alias": [
+    "khajur barfi",
+    "dates barfi",
+    "no sugar dry fruit barfi",
+    "dry fruit burfi",
+    "खजूर बर्फी"
+   ],
+   "cat": "sweet",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 430,
+   "p": 8,
+   "c": 50,
+   "f": 22,
+   "fib": 7,
+   "na": 25,
+   "portions": [
+    {
+     "n": "1 piece (25 g)",
+     "hi": "1 पीस",
+     "g": 25
+    },
+    {
+     "n": "2 pieces (50 g)",
+     "hi": "2 पीस",
+     "g": 50
+    }
+   ],
+   "src": "Standard halwai/home recipe computed from IFCT 2017 milk/khoya/chhena + sugar + ghee; cross-checked NIN Nutritive Value of Indian Foods and packaged-mithai labels",
+   "conf": "medium",
+   "note": "Dates, almonds, cashew, pista bound with ghee; no refined sugar but the date sugar still raises blood glucose."
+  },
+  {
+   "slug": "lauki-barfi",
+   "name": "Lauki Barfi (Doodhi Barfi)",
+   "hi": "लौकी की बर्फी",
+   "alias": [
+    "doodhi barfi",
+    "dudhi burfi",
+    "bottle gourd barfi",
+    "ghiya barfi",
+    "दूधी बर्फी"
+   ],
+   "cat": "sweet",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 297,
+   "p": 7,
+   "c": 38,
+   "f": 13,
+   "fib": 1,
+   "na": 55,
+   "portions": [
+    {
+     "n": "1 piece (30 g)",
+     "hi": "1 पीस",
+     "g": 30
+    },
+    {
+     "n": "2 pieces (60 g)",
+     "hi": "2 पीस",
+     "g": 60
+    }
+   ],
+   "src": "Standard halwai/home recipe computed from IFCT 2017 milk/khoya/chhena + sugar + ghee; cross-checked NIN Nutritive Value of Indian Foods and packaged-mithai labels",
+   "conf": "medium",
+   "note": "Grated bottle gourd cooked with khoya and sugar. INDB ASC337 (276) consistent."
+  },
+  {
+   "slug": "carrot-barfi",
+   "name": "Carrot Barfi (Gajar Barfi)",
+   "hi": "गाजर की बर्फी",
+   "alias": [
+    "gajar barfi",
+    "gajar burfi",
+    "carrot burfi",
+    "गाजर बर्फी"
+   ],
+   "cat": "sweet",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 323,
+   "p": 7,
+   "c": 40,
+   "f": 15,
+   "fib": 1.5,
+   "na": 50,
+   "portions": [
+    {
+     "n": "1 piece (30 g)",
+     "hi": "1 पीस",
+     "g": 30
+    },
+    {
+     "n": "2 pieces (60 g)",
+     "hi": "2 पीस",
+     "g": 60
+    }
+   ],
+   "src": "Standard halwai/home recipe computed from IFCT 2017 milk/khoya/chhena + sugar + ghee; cross-checked NIN Nutritive Value of Indian Foods and packaged-mithai labels",
+   "conf": "low",
+   "note": "Gajar halwa-style mix set with extra khoya into barfi pieces."
+  },
+  {
+   "slug": "naral-wadi",
+   "name": "Coconut Jaggery Barfi (Naral Wadi)",
+   "hi": "नारळ वडी (नारियल गुड़ बर्फी)",
+   "alias": [
+    "naral vadi",
+    "naralachi wadi",
+    "coconut gud barfi",
+    "nariyal gur barfi",
+    "jaggery coconut barfi",
+    "नारळाची वडी"
+   ],
+   "cat": "sweet",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 398,
+   "p": 4,
+   "c": 55,
+   "f": 18,
+   "fib": 4.5,
+   "na": 35,
+   "portions": [
+    {
+     "n": "1 piece (30 g)",
+     "hi": "1 पीस",
+     "g": 30
+    },
+    {
+     "n": "2 pieces (60 g)",
+     "hi": "2 पीस",
+     "g": 60
+    }
+   ],
+   "src": "Standard regional recipe computed from IFCT 2017 ingredients (flour, jaggery/sugar, coconut, ghee); estimate, cross-checked NIN where available",
+   "conf": "medium",
+   "note": "Fresh/desiccated coconut cooked with jaggery and ghee into wadi pieces."
+  },
+  {
+   "slug": "cham-cham",
+   "name": "Cham Cham",
+   "hi": "चमचम",
+   "alias": [
+    "chum chum",
+    "chomchom",
+    "chamcham",
+    "cham cham sweet",
+    "चुमचुम"
+   ],
+   "cat": "sweet",
+   "region": "West Bengal",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 292,
+   "p": 7,
+   "c": 48,
+   "f": 8,
+   "fib": 0,
+   "na": 40,
+   "portions": [
+    {
+     "n": "1 piece (60 g)",
+     "hi": "1 पीस",
+     "g": 60
+    },
+    {
+     "n": "2 pieces (120 g)",
+     "hi": "2 पीस",
+     "g": 120
+    }
+   ],
+   "src": "Standard halwai/home recipe computed from IFCT 2017 milk/khoya/chhena + sugar + ghee; cross-checked NIN Nutritive Value of Indian Foods and packaged-mithai labels",
+   "conf": "medium",
+   "note": "Oval chhena sweet boiled in sugar syrup, often coated with khoya and coconut; weight includes syrup."
+  },
+  {
+   "slug": "sandesh",
+   "name": "Sandesh",
+   "hi": "संदेश",
+   "alias": [
+    "sondesh",
+    "sandesh sweet",
+    "bengali sandesh",
+    "chhena sandesh",
+    "सोंदेश"
+   ],
+   "cat": "sweet",
+   "region": "West Bengal",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 287,
+   "p": 11,
+   "c": 36,
+   "f": 11,
+   "fib": 0,
+   "na": 50,
+   "portions": [
+    {
+     "n": "1 piece (30 g)",
+     "hi": "1 पीस",
+     "g": 30
+    },
+    {
+     "n": "2 pieces (60 g)",
+     "hi": "2 पीस",
+     "g": 60
+    }
+   ],
+   "src": "Standard halwai/home recipe computed from IFCT 2017 milk/khoya/chhena + sugar + ghee; cross-checked NIN Nutritive Value of Indian Foods and packaged-mithai labels",
+   "conf": "medium",
+   "note": "Fresh chhena kneaded with sugar (less sugar than milk barfi), moulded; soft-set version."
+  },
+  {
+   "slug": "nolen-gur-sandesh",
+   "name": "Nolen Gur Sandesh",
+   "hi": "नोलेन गुड़ संदेश",
+   "alias": [
+    "nolen gurer sandesh",
+    "notun gur sandesh",
+    "jaggery sandesh",
+    "date palm jaggery sandesh",
+    "नलेन गुड़ संदेश"
+   ],
+   "cat": "sweet",
+   "region": "West Bengal",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 287,
+   "p": 11,
+   "c": 36,
+   "f": 11,
+   "fib": 0,
+   "na": 55,
+   "portions": [
+    {
+     "n": "1 piece (30 g)",
+     "hi": "1 पीस",
+     "g": 30
+    },
+    {
+     "n": "2 pieces (60 g)",
+     "hi": "2 पीस",
+     "g": 60
+    }
+   ],
+   "src": "Standard halwai/home recipe computed from IFCT 2017 milk/khoya/chhena + sugar + ghee; cross-checked NIN Nutritive Value of Indian Foods and packaged-mithai labels",
+   "conf": "medium",
+   "note": "Winter sandesh sweetened with fresh date-palm jaggery (nolen gur) instead of sugar; same energy as plain sandesh."
+  },
+  {
+   "slug": "kesar-sandesh",
+   "name": "Kesar Sandesh",
+   "hi": "केसर संदेश",
+   "alias": [
+    "saffron sandesh",
+    "kesari sandesh",
+    "kesar sondesh",
+    "केसरिया संदेश"
+   ],
+   "cat": "sweet",
+   "region": "West Bengal",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 287,
+   "p": 11,
+   "c": 36,
+   "f": 11,
+   "fib": 0,
+   "na": 50,
+   "portions": [
+    {
+     "n": "1 piece (30 g)",
+     "hi": "1 पीस",
+     "g": 30
+    },
+    {
+     "n": "2 pieces (60 g)",
+     "hi": "2 पीस",
+     "g": 60
+    }
+   ],
+   "src": "Standard halwai/home recipe computed from IFCT 2017 milk/khoya/chhena + sugar + ghee; cross-checked NIN Nutritive Value of Indian Foods and packaged-mithai labels",
+   "conf": "medium",
+   "note": "Plain sandesh flavoured with saffron and cardamom."
+  },
+  {
+   "slug": "mishti-doi",
+   "name": "Mishti Doi",
+   "hi": "मिष्टी दोई",
+   "alias": [
+    "mishti dahi",
+    "misti doi",
+    "sweet curd bengali",
+    "mitha dahi",
+    "meetha dahi",
+    "मीठा दही"
+   ],
+   "cat": "sweet",
+   "region": "West Bengal",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 133,
+   "p": 4.2,
+   "c": 20,
+   "f": 4,
+   "fib": 0,
+   "na": 45,
+   "portions": [
+    {
+     "n": "1 small bhar (100 g)",
+     "hi": "1 छोटा भांड",
+     "g": 100
+    },
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    }
+   ],
+   "src": "Recipe computed (full-cream milk + sugar, set); cross-checked packaged mishti doi ~130-150 kcal/100 g",
+   "conf": "medium",
+   "note": "Full-cream milk caramelised with sugar/jaggery and set into sweet curd; clay-pot version."
+  },
+  {
+   "slug": "ledikeni",
+   "name": "Ledikeni",
+   "hi": "लेडिकेनी",
+   "alias": [
+    "lady kenny",
+    "ledi keni",
+    "ledikeni sweet",
+    "lady canning",
+    "लेडी कैनिंग"
+   ],
+   "cat": "sweet",
+   "region": "West Bengal",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 322,
+   "p": 6,
+   "c": 52,
+   "f": 10,
+   "fib": 0.2,
+   "na": 35,
+   "portions": [
+    {
+     "n": "1 piece (60 g)",
+     "hi": "1 पीस",
+     "g": 60
+    }
+   ],
+   "src": "Standard halwai/home recipe computed from IFCT 2017 milk/khoya/chhena + sugar + ghee; cross-checked NIN Nutritive Value of Indian Foods and packaged-mithai labels",
+   "conf": "low",
+   "note": "Chhena-semolina ball, deep fried and soaked in sugar syrup (Bengali cousin of gulab jamun)."
+  },
+  {
+   "slug": "rajbhog",
+   "name": "Rajbhog",
+   "hi": "राजभोग",
+   "alias": [
+    "raj bhog",
+    "rasgulla stuffed rajbhog",
+    "kesar rajbhog",
+    "राज भोग"
+   ],
+   "cat": "sweet",
+   "region": "West Bengal",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 225,
+   "p": 5,
+   "c": 40,
+   "f": 5,
+   "fib": 0.5,
+   "na": 30,
+   "portions": [
+    {
+     "n": "1 piece (80 g)",
+     "hi": "1 पीस",
+     "g": 80
+    }
+   ],
+   "src": "Standard halwai/home recipe computed from IFCT 2017 milk/khoya/chhena + sugar + ghee; cross-checked NIN Nutritive Value of Indian Foods and packaged-mithai labels",
+   "conf": "low",
+   "note": "Large saffron rasgulla stuffed with dry fruit, in syrup; weight includes syrup."
+  },
+  {
+   "slug": "pantua",
+   "name": "Pantua",
+   "hi": "पंतुआ",
+   "alias": [
+    "pantoa",
+    "pantuwa",
+    "bengali gulab jamun",
+    "पांतुआ"
+   ],
+   "cat": "sweet",
+   "region": "West Bengal",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 323,
+   "p": 6,
+   "c": 50,
+   "f": 11,
+   "fib": 0.2,
+   "na": 40,
+   "portions": [
+    {
+     "n": "1 piece (50 g)",
+     "hi": "1 पीस",
+     "g": 50
+    },
+    {
+     "n": "2 pieces (100 g)",
+     "hi": "2 पीस",
+     "g": 100
+    }
+   ],
+   "src": "Standard halwai/home recipe computed from IFCT 2017 milk/khoya/chhena + sugar + ghee; cross-checked NIN Nutritive Value of Indian Foods and packaged-mithai labels",
+   "conf": "medium",
+   "note": "Fried chhena-khoya ball soaked in sugar syrup (similar to a dark gulab jamun)."
+  },
+  {
+   "slug": "langcha",
+   "name": "Langcha",
+   "hi": "लैंगचा",
+   "alias": [
+    "lyangcha",
+    "shaktigarh langcha",
+    "langcha sweet",
+    "लंगचा"
+   ],
+   "cat": "sweet",
+   "region": "West Bengal",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 332,
+   "p": 6,
+   "c": 50,
+   "f": 12,
+   "fib": 0.2,
+   "na": 40,
+   "portions": [
+    {
+     "n": "1 piece (60 g)",
+     "hi": "1 पीस",
+     "g": 60
+    }
+   ],
+   "src": "Standard halwai/home recipe computed from IFCT 2017 milk/khoya/chhena + sugar + ghee; cross-checked NIN Nutritive Value of Indian Foods and packaged-mithai labels",
+   "conf": "medium",
+   "note": "Elongated fried chhena-khoya sweet in sugar syrup (Shaktigarh style)."
+  },
+  {
+   "slug": "chhena-poda",
+   "name": "Chhena Poda",
+   "hi": "छेना पोड़ा",
+   "alias": [
+    "chenna poda",
+    "chhena poda cake",
+    "cheese cake odisha",
+    "chena poda",
+    "छेना पोडा"
+   ],
+   "cat": "sweet",
+   "region": "Odisha",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 304,
+   "p": 11,
+   "c": 38,
+   "f": 12,
+   "fib": 0.3,
+   "na": 60,
+   "portions": [
+    {
+     "n": "1 slice (60 g)",
+     "hi": "1 टुकड़ा",
+     "g": 60
+    },
+    {
+     "n": "2 slices (120 g)",
+     "hi": "2 टुकड़े",
+     "g": 120
+    }
+   ],
+   "src": "Standard halwai/home recipe computed from IFCT 2017 milk/khoya/chhena + sugar + ghee; cross-checked NIN Nutritive Value of Indian Foods and packaged-mithai labels; INDB OSR022 matches",
+   "conf": "medium",
+   "note": "Baked chhena with sugar and semolina, caramelised outside (Odisha). INDB OSR022 (345) consistent."
+  },
+  {
+   "slug": "chhena-gaja",
+   "name": "Chhena Gaja",
+   "hi": "छेना गजा",
+   "alias": [
+    "chena gaja",
+    "chhena gaja odisha",
+    "chenna gaja",
+    "छेना गाजा"
+   ],
+   "cat": "sweet",
+   "region": "Odisha",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 285,
+   "p": 8,
+   "c": 43,
+   "f": 9,
+   "fib": 0.2,
+   "na": 40,
+   "portions": [
+    {
+     "n": "1 piece (50 g)",
+     "hi": "1 पीस",
+     "g": 50
+    }
+   ],
+   "src": "Standard halwai/home recipe computed from IFCT 2017 milk/khoya/chhena + sugar + ghee; cross-checked NIN Nutritive Value of Indian Foods and packaged-mithai labels",
+   "conf": "low",
+   "note": "Fried chhena-flour rectangles soaked in sugar syrup (Odisha)."
+  },
+  {
+   "slug": "rasabali",
+   "name": "Rasabali",
+   "hi": "रसाबली",
+   "alias": [
+    "rasabali odisha",
+    "kendrapada rasabali",
+    "रसबली"
+   ],
+   "cat": "sweet",
+   "region": "Odisha",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 225,
+   "p": 8,
+   "c": 28,
+   "f": 9,
+   "fib": 0,
+   "na": 55,
+   "portions": [
+    {
+     "n": "1 piece with milk (60 g)",
+     "hi": "1 पीस",
+     "g": 60
+    },
+    {
+     "n": "1 plate, 3 pieces (180 g)",
+     "hi": "1 प्लेट",
+     "g": 180
+    }
+   ],
+   "src": "Standard halwai/home recipe computed from IFCT 2017 milk/khoya/chhena + sugar + ghee; cross-checked NIN Nutritive Value of Indian Foods and packaged-mithai labels",
+   "conf": "low",
+   "note": "Fried chhena patties soaked in sweetened thickened milk (Kendrapara); weight includes the milk."
+  },
+  {
+   "slug": "chhena-jalebi",
+   "name": "Chhena Jalebi",
+   "hi": "छेना जलेबी",
+   "alias": [
+    "chhena jilapi",
+    "chenna jalebi",
+    "chena jilapi",
+    "छेना जिलापी"
+   ],
+   "cat": "sweet",
+   "region": "Odisha",
+   "diet": "veg",
+   "emoji": "🍩",
+   "unit": "g",
+   "kcal": 358,
+   "p": 8,
+   "c": 50,
+   "f": 14,
+   "fib": 0,
+   "na": 45,
+   "portions": [
+    {
+     "n": "1 piece (40 g)",
+     "hi": "1 पीस",
+     "g": 40
+    },
+    {
+     "n": "2 pieces (80 g)",
+     "hi": "2 पीस",
+     "g": 80
+    }
+   ],
+   "src": "Standard halwai/home recipe computed from IFCT 2017 milk/khoya/chhena + sugar + ghee; cross-checked NIN Nutritive Value of Indian Foods and packaged-mithai labels",
+   "conf": "low",
+   "note": "Fried chhena-flour coils in sugar syrup (Nayagarh/Odisha); heavier than wheat jalebi."
+  },
+  {
+   "slug": "patishapta",
+   "name": "Patishapta",
+   "hi": "पाटिशाप्टा",
+   "alias": [
+    "pati shapta",
+    "patisapta",
+    "patishapta pithe",
+    "coconut crepe bengali",
+    "पातीशप्ता"
+   ],
+   "cat": "sweet",
+   "region": "West Bengal",
+   "diet": "veg",
+   "emoji": "🥞",
+   "unit": "g",
+   "kcal": 249,
+   "p": 4,
+   "c": 38,
+   "f": 9,
+   "fib": 1,
+   "na": 40,
+   "portions": [
+    {
+     "n": "1 piece (60 g)",
+     "hi": "1 पीस",
+     "g": 60
+    },
+    {
+     "n": "2 pieces (120 g)",
+     "hi": "2 पीस",
+     "g": 120
+    }
+   ],
+   "src": "Standard regional recipe computed from IFCT 2017 ingredients (flour, jaggery/sugar, coconut, ghee); estimate, cross-checked NIN where available",
+   "conf": "medium",
+   "note": "Thin rice-semolina crepe rolled around coconut-jaggery or khoya filling (Makar Sankranti); about 150 kcal per piece."
+  },
+  {
+   "slug": "puli-pithe",
+   "name": "Puli Pithe",
+   "hi": "पुली पिठे",
+   "alias": [
+    "puli pitha",
+    "puli peetha",
+    "pulipitha",
+    "dudh puli",
+    "पुली पीठा"
+   ],
+   "cat": "sweet",
+   "region": "West Bengal",
+   "diet": "veg",
+   "emoji": "🥟",
+   "unit": "g",
+   "kcal": 222,
+   "p": 3,
+   "c": 40,
+   "f": 5.5,
+   "fib": 1.5,
+   "na": 20,
+   "portions": [
+    {
+     "n": "1 piece (45 g)",
+     "hi": "1 पीस",
+     "g": 45
+    },
+    {
+     "n": "3 pieces (135 g)",
+     "hi": "3 पीस",
+     "g": 135
+    }
+   ],
+   "src": "Standard regional recipe computed from IFCT 2017 ingredients (flour, jaggery/sugar, coconut, ghee); estimate, cross-checked NIN where available",
+   "conf": "medium",
+   "note": "Rice-flour dumplings stuffed with coconut-jaggery, boiled in thickened milk or syrup (Poush Sankranti)."
+  },
+  {
+   "slug": "bhapa-pithe",
+   "name": "Bhapa Pithe",
+   "hi": "भापा पिठे",
+   "alias": [
+    "bhapa pitha",
+    "steamed pitha bengali",
+    "bhapa pitha with nolen gur",
+    "भापा पीठा"
+   ],
+   "cat": "sweet",
+   "region": "West Bengal",
+   "diet": "veg",
+   "emoji": "🥟",
+   "unit": "g",
+   "kcal": 198,
+   "p": 2.5,
+   "c": 38,
+   "f": 4,
+   "fib": 1.5,
+   "na": 15,
+   "portions": [
+    {
+     "n": "1 piece (40 g)",
+     "hi": "1 पीस",
+     "g": 40
+    },
+    {
+     "n": "2 pieces (80 g)",
+     "hi": "2 पीस",
+     "g": 80
+    }
+   ],
+   "src": "Standard regional recipe computed from IFCT 2017 ingredients (flour, jaggery/sugar, coconut, ghee); estimate, cross-checked NIN where available",
+   "conf": "medium",
+   "note": "Steamed rice-flour cake stuffed with coconut and nolen gur."
+  },
+  {
+   "slug": "narkel-naru",
+   "name": "Narkel Naru (Coconut Ladoo, Bengali)",
+   "hi": "नारकेल नाड़ू",
+   "alias": [
+    "narikol laru",
+    "narkel nadu",
+    "nariyal naru",
+    "coconut jaggery ladoo",
+    "नारियल नाड़ू"
+   ],
+   "cat": "sweet",
+   "region": "West Bengal",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 370,
+   "p": 3,
+   "c": 58,
+   "f": 14,
+   "fib": 5,
+   "na": 20,
+   "portions": [
+    {
+     "n": "1 piece (30 g)",
+     "hi": "1 पीस",
+     "g": 30
+    },
+    {
+     "n": "2 pieces (60 g)",
+     "hi": "2 पीस",
+     "g": 60
+    }
+   ],
+   "src": "Standard regional recipe computed from IFCT 2017 ingredients (flour, jaggery/sugar, coconut, ghee); estimate, cross-checked NIN where available",
+   "conf": "medium",
+   "note": "Grated coconut cooked with jaggery/sugar and shaped into balls (also called narikol laru in Assam)."
+  },
+  {
+   "slug": "rabri",
+   "name": "Rabri",
+   "hi": "रबड़ी",
+   "alias": [
+    "rabdi",
+    "rabadi",
+    "basundi rabri",
+    "rabri sweet",
+    "रबडी"
+   ],
+   "cat": "sweet",
+   "region": "Uttar Pradesh",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 217,
+   "p": 6.5,
+   "c": 24,
+   "f": 10.5,
+   "fib": 0,
+   "na": 75,
+   "portions": [
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    }
+   ],
+   "src": "Recipe computed from IFCT buffalo/cow whole milk reduced ~4:1 + sugar; INDB OSR025 too low",
+   "conf": "medium",
+   "note": "Full-cream milk reduced to about a quarter with sugar and layers of malai; thick halwai rabri. INDB OSR025 (103) is far too low."
+  },
+  {
+   "slug": "basundi",
+   "name": "Basundi",
+   "hi": "बासुंदी",
+   "alias": [
+    "basundi sweet",
+    "basoondi",
+    "condensed milk dessert gujarat",
+    "बासुन्दी"
+   ],
+   "cat": "sweet",
+   "region": "Gujarat",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 165,
+   "p": 5.5,
+   "c": 21,
+   "f": 6.5,
+   "fib": 0,
+   "na": 65,
+   "portions": [
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    }
+   ],
+   "src": "Standard halwai/home recipe computed from IFCT 2017 milk/khoya/chhena + sugar + ghee; cross-checked NIN Nutritive Value of Indian Foods and packaged-mithai labels",
+   "conf": "medium",
+   "note": "Milk reduced to about half with sugar, cardamom and nuts; thinner than rabri."
+  },
+  {
+   "slug": "malaiyo",
+   "name": "Malaiyo (Daulat Ki Chaat Style Milk Foam)",
+   "hi": "मलाइयो",
+   "alias": [
+    "malaiyyo",
+    "banarasi malaiyo",
+    "nimish",
+    "makhan malai",
+    "मलैयो"
+   ],
+   "cat": "sweet",
+   "region": "Uttar Pradesh",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 123,
+   "p": 2.5,
+   "c": 18,
+   "f": 4.5,
+   "fib": 0,
+   "na": 40,
+   "portions": [
+    {
+     "n": "1 kulhad (60 g)",
+     "hi": "1 कुल्हड़",
+     "g": 60
+    },
+    {
+     "n": "1 plate (100 g)",
+     "hi": "1 प्लेट",
+     "g": 100
+    }
+   ],
+   "src": "Standard halwai/home recipe computed from IFCT 2017 milk/khoya/chhena + sugar + ghee; cross-checked NIN Nutritive Value of Indian Foods and packaged-mithai labels",
+   "conf": "low",
+   "note": "Winter dew-set milk foam with sugar, saffron and pistachio; mostly air so low per 100 g. Estimate."
+  },
+  {
+   "slug": "daulat-ki-chaat",
+   "name": "Daulat Ki Chaat",
+   "hi": "दौलत की चाट",
+   "alias": [
+    "daulat chaat",
+    "doulat ki chat",
+    "delhi daulat chaat",
+    "दौलत की चाट"
+   ],
+   "cat": "sweet",
+   "region": "Delhi",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 142,
+   "p": 3,
+   "c": 20,
+   "f": 5.5,
+   "fib": 0,
+   "na": 45,
+   "portions": [
+    {
+     "n": "1 plate (80 g)",
+     "hi": "1 प्लेट",
+     "g": 80
+    }
+   ],
+   "src": "Standard halwai/home recipe computed from IFCT 2017 milk/khoya/chhena + sugar + ghee; cross-checked NIN Nutritive Value of Indian Foods and packaged-mithai labels",
+   "conf": "low",
+   "note": "Old Delhi winter sweet of milk foam topped with khoya, nuts and silver leaf. Estimate."
+  },
+  {
+   "slug": "malai-kulfi",
+   "name": "Kulfi (Malai)",
+   "hi": "कुल्फी (मलाई)",
+   "alias": [
+    "matka kulfi",
+    "malai kulfi",
+    "plain kulfi",
+    "kulfi",
+    "मलाई कुल्फी"
+   ],
+   "cat": "sweet",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🍨",
+   "unit": "g",
+   "kcal": 200,
+   "p": 5.5,
+   "c": 22,
+   "f": 10,
+   "fib": 0,
+   "na": 70,
+   "portions": [
+    {
+     "n": "1 kulfi stick (70 g)",
+     "hi": "1 कुल्फी",
+     "g": 70
+    },
+    {
+     "n": "1 matka kulfi (100 g)",
+     "hi": "1 मटका कुल्फी",
+     "g": 100
+    }
+   ],
+   "core": true,
+   "src": "Typical Indian commercial ice-cream/dessert labels and standard recipe; cross-checked USDA and INDB; recipe computed from reduced milk + sugar; INDB ASC321 too low",
+   "conf": "medium",
+   "note": "Slow-boiled thickened milk with sugar, frozen without churning; halwai/street kulfi. INDB ASC321 (98) is too low."
+  },
+  {
+   "slug": "kesar-pista-kulfi",
+   "name": "Kulfi (Kesar Pista)",
+   "hi": "कुल्फी (केसर पिस्ता)",
+   "alias": [
+    "kesar pista kulfi",
+    "kesar kulfi",
+    "pista kulfi saffron",
+    "केसर कुल्फी"
+   ],
+   "cat": "sweet",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🍨",
+   "unit": "g",
+   "kcal": 211,
+   "p": 6,
+   "c": 22,
+   "f": 11,
+   "fib": 0,
+   "na": 70,
+   "portions": [
+    {
+     "n": "1 kulfi stick (70 g)",
+     "hi": "1 कुल्फी",
+     "g": 70
+    },
+    {
+     "n": "1 matka kulfi (100 g)",
+     "hi": "1 मटका कुल्फी",
+     "g": 100
+    }
+   ],
+   "src": "Typical Indian commercial ice-cream/dessert labels and standard recipe; cross-checked USDA and INDB",
+   "conf": "medium",
+   "note": "Malai kulfi with saffron and chopped pistachio."
+  },
+  {
+   "slug": "mango-kulfi",
+   "name": "Kulfi (Mango)",
+   "hi": "कुल्फी (आम)",
+   "alias": [
+    "aam kulfi",
+    "mango kulfi",
+    "आम की कुल्फी"
+   ],
+   "cat": "sweet",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🍨",
+   "unit": "g",
+   "kcal": 192,
+   "p": 4,
+   "c": 26,
+   "f": 8,
+   "fib": 0.5,
+   "na": 40,
+   "portions": [
+    {
+     "n": "1 kulfi stick (70 g)",
+     "hi": "1 कुल्फी",
+     "g": 70
+    },
+    {
+     "n": "1 matka kulfi (100 g)",
+     "hi": "1 मटका कुल्फी",
+     "g": 100
+    }
+   ],
+   "src": "Typical Indian commercial ice-cream/dessert labels and standard recipe; cross-checked USDA and INDB",
+   "conf": "medium",
+   "note": "Milk-and-mango-pulp kulfi; slightly lower in fat than malai kulfi."
+  },
+  {
+   "slug": "pista-kulfi",
+   "name": "Kulfi (Pista)",
+   "hi": "कुल्फी (पिस्ता)",
+   "alias": [
+    "pistachio kulfi",
+    "pista kulfi",
+    "पिस्ता कुल्फी"
+   ],
+   "cat": "sweet",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🍨",
+   "unit": "g",
+   "kcal": 214,
+   "p": 6.5,
+   "c": 21,
+   "f": 11.5,
+   "fib": 0,
+   "na": 70,
+   "portions": [
+    {
+     "n": "1 kulfi stick (70 g)",
+     "hi": "1 कुल्फी",
+     "g": 70
+    },
+    {
+     "n": "1 matka kulfi (100 g)",
+     "hi": "1 मटका कुल्फी",
+     "g": 100
+    }
+   ],
+   "src": "Typical Indian commercial ice-cream/dessert labels and standard recipe; cross-checked USDA and INDB",
+   "conf": "medium",
+   "note": "Malai kulfi with ground pistachio."
+  },
+  {
+   "slug": "kulfi-falooda",
+   "name": "Kulfi Falooda",
+   "hi": "कुल्फी फालूदा",
+   "alias": [
+    "kulfi faluda",
+    "falooda kulfi",
+    "kulfi with falooda",
+    "कुल्फी फलूदा"
+   ],
+   "cat": "sweet",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🍨",
+   "unit": "g",
+   "kcal": 172,
+   "p": 3.5,
+   "c": 26,
+   "f": 6,
+   "fib": 0,
+   "na": 55,
+   "portions": [
+    {
+     "n": "1 plate (220 g)",
+     "hi": "1 प्लेट",
+     "g": 220
+    },
+    {
+     "n": "1 small plate (150 g)",
+     "hi": "1 छोटी प्लेट",
+     "g": 150
+    }
+   ],
+   "src": "Typical Indian commercial ice-cream/dessert labels and standard recipe; cross-checked USDA and INDB",
+   "conf": "medium",
+   "note": "Kulfi (80 g) + falooda sev, basil seeds, rose syrup and a little milk; about 380 kcal per plate."
+  },
+  {
+   "slug": "falooda",
+   "name": "Falooda (Rose, with Ice Cream)",
+   "hi": "फालूदा",
+   "alias": [
+    "faluda",
+    "rose falooda",
+    "ice cream falooda",
+    "royal falooda",
+    "फलूदा"
+   ],
+   "cat": "sweet",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🍨",
+   "unit": "g",
+   "kcal": 139,
+   "p": 2.5,
+   "c": 22,
+   "f": 4.5,
+   "fib": 0.3,
+   "na": 40,
+   "portions": [
+    {
+     "n": "1 glass (300 g)",
+     "hi": "1 ग्लास",
+     "g": 300
+    },
+    {
+     "n": "1 small glass (200 g)",
+     "hi": "1 छोटा ग्लास",
+     "g": 200
+    }
+   ],
+   "src": "Typical Indian commercial ice-cream/dessert labels and standard recipe; cross-checked USDA and INDB",
+   "conf": "medium",
+   "note": "Rose syrup, milk, basil seeds, cornflour sev and one scoop of ice cream; sweetened drink-dessert eaten with spoon and straw, about 415 kcal per tall glass."
+  },
+  {
+   "slug": "rice-kheer",
+   "name": "Kheer (Rice)",
+   "hi": "खीर (चावल की)",
+   "alias": [
+    "chawal ki kheer",
+    "rice kheer",
+    "kheer",
+    "rice pudding indian",
+    "payas",
+    "खीर",
+    "चावल की खीर"
+   ],
+   "cat": "sweet",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 136,
+   "p": 4,
+   "c": 20.5,
+   "f": 4.2,
+   "fib": 0.2,
+   "na": 45,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 बड़ा कटोरा",
+     "g": 250
+    }
+   ],
+   "core": true,
+   "src": "Standard recipe computed from IFCT 2017 milk (toned/whole), rice/vermicelli, sugar, nuts; cross-checked INDB kheer rows; INDB ASC282 too low",
+   "conf": "medium",
+   "note": "Home kheer: whole/toned milk simmered with ~6% rice and ~8% sugar, little ghee, few nuts (about 205 kcal per katori). INDB ASC282 (75) is too low for sugar-sweetened milk."
+  },
+  {
+   "slug": "dry-fruit-kheer",
+   "name": "Kheer with Dry Fruits",
+   "hi": "ड्राई फ्रूट खीर",
+   "alias": [
+    "rich kheer",
+    "kheer with nuts",
+    "dry fruit rice kheer",
+    "मेवा खीर",
+    "ड्राई फ्रूट वाली खीर"
+   ],
+   "cat": "sweet",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 161,
+   "p": 4.5,
+   "c": 21,
+   "f": 6.5,
+   "fib": 0.4,
+   "na": 50,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 milk (toned/whole), rice/vermicelli, sugar, nuts; cross-checked INDB kheer rows",
+   "conf": "medium",
+   "note": "Rice kheer with generous almonds, cashew, pista, raisins and a little extra milk solids/cream."
+  },
+  {
+   "slug": "sewai-kheer",
+   "name": "Sewai Kheer (Seviyan Kheer)",
+   "hi": "सेवई की खीर",
+   "alias": [
+    "seviyan kheer",
+    "vermicelli kheer",
+    "semiya kheer",
+    "sevai kheer",
+    "sheer sewai",
+    "सेवइयां",
+    "सेवईं की खीर"
+   ],
+   "cat": "sweet",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 143,
+   "p": 4,
+   "c": 21,
+   "f": 4.8,
+   "fib": 0.5,
+   "na": 45,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 बड़ा कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 milk (toned/whole), rice/vermicelli, sugar, nuts; cross-checked INDB kheer rows; INDB ASC285 consistent",
+   "conf": "medium",
+   "note": "Ghee-roasted vermicelli in sweetened milk, with cardamom and nuts. INDB ASC285 (120) consistent."
+  },
+  {
+   "slug": "sabudana-kheer",
+   "name": "Sabudana Kheer",
+   "hi": "साबूदाना खीर",
+   "alias": [
+    "sago kheer",
+    "javvarisi payasam kheer",
+    "sabudana payasam",
+    "sago pudding",
+    "साबूदाने की खीर"
+   ],
+   "cat": "sweet",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 138,
+   "p": 3.5,
+   "c": 22,
+   "f": 4,
+   "fib": 0.2,
+   "na": 40,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 milk (toned/whole), rice/vermicelli, sugar, nuts; cross-checked INDB kheer rows",
+   "conf": "medium",
+   "note": "Soaked sago pearls cooked in sweetened milk (also eaten on fasting days)."
+  },
+  {
+   "slug": "makhana-kheer",
+   "name": "Makhana Kheer",
+   "hi": "मखाना खीर",
+   "alias": [
+    "makhane ki kheer",
+    "fox nut kheer",
+    "lotus seed kheer",
+    "phool makhana kheer",
+    "मखाने की खीर"
+   ],
+   "cat": "sweet",
+   "region": "Bihar",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 129,
+   "p": 4,
+   "c": 18,
+   "f": 4.5,
+   "fib": 0.5,
+   "na": 45,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 milk (toned/whole), rice/vermicelli, sugar, nuts; cross-checked INDB kheer rows",
+   "conf": "medium",
+   "note": "Ghee-roasted fox nuts simmered in sweetened milk; INDB ASC283 (108) and this value are close."
+  },
+  {
+   "slug": "lauki-kheer",
+   "name": "Lauki Kheer (Doodhi Kheer)",
+   "hi": "लौकी की खीर",
+   "alias": [
+    "doodhi kheer",
+    "dudhi kheer",
+    "bottle gourd kheer",
+    "ghiya kheer",
+    "दूधी की खीर"
+   ],
+   "cat": "sweet",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 110,
+   "p": 3.5,
+   "c": 15,
+   "f": 4,
+   "fib": 0.5,
+   "na": 40,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 milk (toned/whole), rice/vermicelli, sugar, nuts; cross-checked INDB kheer rows",
+   "conf": "medium",
+   "note": "Grated bottle gourd cooked in milk with sugar; INDB BFP334 (84) is lower, this includes standard sugar and ghee."
+  },
+  {
+   "slug": "gajar-kheer",
+   "name": "Gajar Ki Kheer (Carrot Kheer)",
+   "hi": "गाजर की खीर",
+   "alias": [
+    "carrot kheer",
+    "gajar kheer",
+    "carrot pudding indian",
+    "गाजर खीर"
+   ],
+   "cat": "sweet",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 120,
+   "p": 3.5,
+   "c": 17,
+   "f": 4.2,
+   "fib": 0.6,
+   "na": 45,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 milk (toned/whole), rice/vermicelli, sugar, nuts; cross-checked INDB kheer rows",
+   "conf": "medium",
+   "note": "Grated carrot simmered in milk with sugar and cardamom. INDB ASC289 (85) is lower."
+  },
+  {
+   "slug": "phirni",
+   "name": "Phirni",
+   "hi": "फिरनी",
+   "alias": [
+    "firni",
+    "phirni dessert",
+    "kashmiri phirni",
+    "firnee",
+    "फिरनी"
+   ],
+   "cat": "sweet",
+   "region": "Punjab",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 149,
+   "p": 4,
+   "c": 22,
+   "f": 5,
+   "fib": 0.2,
+   "na": 45,
+   "portions": [
+    {
+     "n": "1 small bowl (100 g)",
+     "hi": "1 छोटा कटोरा",
+     "g": 100
+    },
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 milk (toned/whole), rice/vermicelli, sugar, nuts; cross-checked INDB kheer rows",
+   "conf": "medium",
+   "note": "Ground rice cooked in milk with sugar and set in clay bowls; thicker than kheer. INDB ASC292 (116) is slightly low."
+  },
+  {
+   "slug": "sheer-khurma",
+   "name": "Sheer Khurma",
+   "hi": "शीर खुरमा",
+   "alias": [
+    "sheer korma",
+    "sheerkhurma",
+    "sheer khorma",
+    "seviyan sheer khurma",
+    "शीरखुरमा",
+    "शीर कोरमा"
+   ],
+   "cat": "sweet",
+   "region": "Uttar Pradesh",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 165,
+   "p": 4.5,
+   "c": 22,
+   "f": 6.5,
+   "fib": 0.8,
+   "na": 55,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 बड़ा कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 milk (toned/whole), rice/vermicelli, sugar, nuts; cross-checked INDB kheer rows",
+   "conf": "medium",
+   "note": "Eid dessert: ghee-fried vermicelli, dates, nuts simmered in sweetened milk (rich version)."
+  },
+  {
+   "slug": "dudh-pak",
+   "name": "Dudh Pak",
+   "hi": "दूध पाक",
+   "alias": [
+    "doodh pak",
+    "dudhpak",
+    "gujarati rice kheer",
+    "दुधपाक"
+   ],
+   "cat": "sweet",
+   "region": "Gujarat",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 128,
+   "p": 3.8,
+   "c": 18,
+   "f": 4.5,
+   "fib": 0.2,
+   "na": 45,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 milk (toned/whole), rice/vermicelli, sugar, nuts; cross-checked INDB kheer rows",
+   "conf": "medium",
+   "note": "Gujarati thinner kheer: milk reduced with a little rice, sugar, charoli and cardamom."
+  },
+  {
+   "slug": "payesh",
+   "name": "Payesh",
+   "hi": "पायेश",
+   "alias": [
+    "payesh bengali",
+    "gobindobhog payesh",
+    "nolen gur payesh",
+    "bengali kheer",
+    "पायस"
+   ],
+   "cat": "sweet",
+   "region": "West Bengal",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 131,
+   "p": 3.5,
+   "c": 19,
+   "f": 4.5,
+   "fib": 0.2,
+   "na": 40,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 milk (toned/whole), rice/vermicelli, sugar, nuts; cross-checked INDB kheer rows",
+   "conf": "medium",
+   "note": "Gobindobhog rice cooked in milk with sugar or nolen gur, bay leaf and cardamom."
+  },
+  {
+   "slug": "payokh",
+   "name": "Payokh (Assamese Kheer)",
+   "hi": "पायोख",
+   "alias": [
+    "payokh assam",
+    "assamese payokh",
+    "joha rice payokh",
+    "पायस असम"
+   ],
+   "cat": "sweet",
+   "region": "Assam",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 129,
+   "p": 3.8,
+   "c": 19,
+   "f": 4.2,
+   "fib": 0.3,
+   "na": 40,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 milk (toned/whole), rice/vermicelli, sugar, nuts; cross-checked INDB kheer rows",
+   "conf": "low",
+   "note": "Joha rice simmered in milk and sugar."
+  },
+  {
+   "slug": "chak-hao-kheer",
+   "name": "Chak-hao Kheer (Black Rice Kheer)",
+   "hi": "चाक-हाओ खीर",
+   "alias": [
+    "chakhao kheer",
+    "black rice kheer",
+    "manipuri black rice kheer",
+    "chak hao"
+   ],
+   "cat": "sweet",
+   "region": "Manipur",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 144,
+   "p": 4.2,
+   "c": 21,
+   "f": 4.8,
+   "fib": 0.8,
+   "na": 40,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 milk (toned/whole), rice/vermicelli, sugar, nuts; cross-checked INDB kheer rows; INDB OSR011 matches",
+   "conf": "medium",
+   "note": "Manipuri black rice cooked in milk and sugar. INDB OSR011 (148) agrees."
+  },
+  {
+   "slug": "samak-rice-kheer",
+   "name": "Samak Rice Kheer (Vrat)",
+   "hi": "समा के चावल की खीर",
+   "alias": [
+    "sama ke chawal ki kheer",
+    "vrat kheer",
+    "barnyard millet kheer",
+    "samvat kheer",
+    "व्रत की खीर",
+    "मोरधन खीर"
+   ],
+   "cat": "sweet",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 123,
+   "p": 3.8,
+   "c": 19,
+   "f": 3.5,
+   "fib": 0.5,
+   "na": 40,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 milk (toned/whole), rice/vermicelli, sugar, nuts; cross-checked INDB kheer rows",
+   "conf": "low",
+   "note": "Barnyard millet (samak) cooked in milk with sugar; eaten on fasting days."
+  },
+  {
+   "slug": "semiya-payasam",
+   "name": "Semiya Payasam",
+   "hi": "सेमिया पायसम",
+   "alias": [
+    "vermicelli payasam",
+    "semiya paysam",
+    "shavige payasa",
+    "semiya kheer south"
+   ],
+   "cat": "sweet",
+   "region": "Tamil Nadu",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 141,
+   "p": 3,
+   "c": 22,
+   "f": 4.5,
+   "fib": 0.4,
+   "na": 45,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 cup (100 g)",
+     "hi": "1 छोटा कप",
+     "g": 100
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 milk (toned/whole), rice/vermicelli, sugar, nuts; cross-checked INDB kheer rows",
+   "conf": "medium",
+   "note": "Ghee-roasted vermicelli in sweetened milk with cashew and raisin."
+  },
+  {
+   "slug": "ada-pradhaman",
+   "name": "Ada Pradhaman",
+   "hi": "अड़ा प्रधमन",
+   "alias": [
+    "ada prathaman",
+    "ada payasam",
+    "ada pradhaman kerala"
+   ],
+   "cat": "sweet",
+   "region": "Kerala",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 181,
+   "p": 1.8,
+   "c": 30,
+   "f": 6,
+   "fib": 0.5,
+   "na": 25,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 cup (100 g)",
+     "hi": "1 छोटा कप",
+     "g": 100
+    }
+   ],
+   "src": "Standard regional recipe computed from IFCT 2017 ingredients (flour, jaggery/sugar, coconut, ghee); estimate, cross-checked NIN where available",
+   "conf": "medium",
+   "note": "Rice flakes (ada) cooked in jaggery and thick coconut milk with ghee (Onam sadya)."
+  },
+  {
+   "slug": "palada-payasam",
+   "name": "Palada Payasam",
+   "hi": "पालाडा पायसम",
+   "alias": [
+    "palada pradhaman",
+    "paal ada payasam",
+    "palada kheer"
+   ],
+   "cat": "sweet",
+   "region": "Kerala",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 139,
+   "p": 3.5,
+   "c": 21,
+   "f": 4.5,
+   "fib": 0.2,
+   "na": 45,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 cup (100 g)",
+     "hi": "1 छोटा कप",
+     "g": 100
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 milk (toned/whole), rice/vermicelli, sugar, nuts; cross-checked INDB kheer rows",
+   "conf": "medium",
+   "note": "Rice ada cooked in sweetened thick milk with ghee and cardamom."
+  },
+  {
+   "slug": "paruppu-payasam",
+   "name": "Paruppu Payasam",
+   "hi": "परुप्पु पायसम",
+   "alias": [
+    "parippu payasam",
+    "moong dal payasam",
+    "pasi paruppu payasam",
+    "parippu pradhaman"
+   ],
+   "cat": "sweet",
+   "region": "Kerala",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 160,
+   "p": 3.5,
+   "c": 24,
+   "f": 5.5,
+   "fib": 1,
+   "na": 25,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 cup (100 g)",
+     "hi": "1 छोटा कप",
+     "g": 100
+    }
+   ],
+   "src": "Standard regional recipe computed from IFCT 2017 ingredients (flour, jaggery/sugar, coconut, ghee); estimate, cross-checked NIN where available",
+   "conf": "medium",
+   "note": "Roasted moong dal cooked in jaggery with coconut milk and ghee. INDB ASC291 (77, moong kheer in milk) is much lower."
+  },
+  {
+   "slug": "pal-payasam",
+   "name": "Pal Payasam",
+   "hi": "पाल पायसम",
+   "alias": [
+    "paal payasam",
+    "palpayasam",
+    "rice milk payasam"
+   ],
+   "cat": "sweet",
+   "region": "Kerala",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 131,
+   "p": 3.8,
+   "c": 20,
+   "f": 4,
+   "fib": 0.2,
+   "na": 45,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 cup (100 g)",
+     "hi": "1 छोटा कप",
+     "g": 100
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 milk (toned/whole), rice/vermicelli, sugar, nuts; cross-checked INDB kheer rows",
+   "conf": "medium",
+   "note": "Rice slow-cooked in milk and sugar; the reddish temple style takes hours to reduce."
+  },
+  {
+   "slug": "ela-ada",
+   "name": "Ela Ada",
+   "hi": "एला अड़ा",
+   "alias": [
+    "ila ada",
+    "ela ada kerala",
+    "ada steamed leaf",
+    "elai ada"
+   ],
+   "cat": "sweet",
+   "region": "Kerala",
+   "diet": "veg",
+   "emoji": "🥟",
+   "unit": "g",
+   "kcal": 194,
+   "p": 2.5,
+   "c": 38,
+   "f": 3.5,
+   "fib": 2,
+   "na": 10,
+   "portions": [
+    {
+     "n": "1 piece (45 g)",
+     "hi": "1 पीस",
+     "g": 45
+    },
+    {
+     "n": "2 pieces (90 g)",
+     "hi": "2 पीस",
+     "g": 90
+    }
+   ],
+   "src": "Standard regional recipe computed from IFCT 2017 ingredients (flour, jaggery/sugar, coconut, ghee); estimate, cross-checked NIN where available",
+   "conf": "medium",
+   "note": "Steamed rice-flour parcel in banana leaf filled with coconut and jaggery."
+  },
+  {
+   "slug": "chakka-pradhaman",
+   "name": "Chakka Pradhaman",
+   "hi": "चक्का प्रधमन",
+   "alias": [
+    "chakka payasam",
+    "jackfruit payasam",
+    "chakka varatti payasam"
+   ],
+   "cat": "sweet",
+   "region": "Kerala",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 190,
+   "p": 2,
+   "c": 32,
+   "f": 6,
+   "fib": 1.5,
+   "na": 20,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 cup (100 g)",
+     "hi": "1 छोटा कप",
+     "g": 100
+    }
+   ],
+   "src": "Standard regional recipe computed from IFCT 2017 ingredients (flour, jaggery/sugar, coconut, ghee); estimate, cross-checked NIN where available",
+   "conf": "low",
+   "note": "Jackfruit pulp cooked with jaggery, coconut milk and ghee. Estimate."
+  },
+  {
+   "slug": "aval-payasam",
+   "name": "Aval Payasam (Poha Kheer)",
+   "hi": "अवल पायसम",
+   "alias": [
+    "poha kheer",
+    "aval payasam",
+    "chivda kheer",
+    "pohe ki kheer",
+    "पोहे की खीर"
+   ],
+   "cat": "sweet",
+   "region": "Kerala",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 138,
+   "p": 3.5,
+   "c": 22,
+   "f": 4,
+   "fib": 0.4,
+   "na": 40,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 milk (toned/whole), rice/vermicelli, sugar, nuts; cross-checked INDB kheer rows",
+   "conf": "low",
+   "note": "Flattened rice cooked in milk with jaggery/sugar and ghee-fried cashew."
+  },
+  {
+   "slug": "besan-ladoo",
+   "name": "Besan Ladoo",
+   "hi": "बेसन के लड्डू",
+   "alias": [
+    "besan laddu",
+    "besan laddoo",
+    "besan ke ladoo",
+    "gram flour ladoo",
+    "besan ka laddu",
+    "बेसन लड्डू"
+   ],
+   "cat": "sweet",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 465,
+   "p": 9,
+   "c": 51,
+   "f": 25,
+   "fib": 3.5,
+   "na": 30,
+   "portions": [
+    {
+     "n": "1 ladoo (40 g)",
+     "hi": "1 लड्डू",
+     "g": 40
+    },
+    {
+     "n": "2 ladoos (80 g)",
+     "hi": "2 लड्डू",
+     "g": 80
+    },
+    {
+     "n": "1 small ladoo (25 g)",
+     "hi": "1 छोटा लड्डू",
+     "g": 25
+    }
+   ],
+   "core": true,
+   "src": "Standard halwai/home recipe computed from IFCT 2017 flours/nuts + sugar/jaggery + ghee; cross-checked INDB ladoo rows and packaged-ladoo labels; INDB ASC343 agrees",
+   "conf": "medium",
+   "note": "Besan roasted in ghee (about 25% fat) with powdered sugar. INDB ASC343 (477) agrees; a 40 g ladoo is about 186 kcal."
+  },
+  {
+   "slug": "motichoor-ladoo",
+   "name": "Motichoor Ladoo",
+   "hi": "मोतीचूर के लड्डू",
+   "alias": [
+    "motichur ladoo",
+    "motichoor laddu",
+    "motichur laddu",
+    "boondi motichoor",
+    "मोतीचूर लड्डू"
+   ],
+   "cat": "sweet",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 434,
+   "p": 6,
+   "c": 62,
+   "f": 18,
+   "fib": 1.5,
+   "na": 25,
+   "portions": [
+    {
+     "n": "1 ladoo (40 g)",
+     "hi": "1 लड्डू",
+     "g": 40
+    },
+    {
+     "n": "2 ladoos (80 g)",
+     "hi": "2 लड्डू",
+     "g": 80
+    }
+   ],
+   "core": true,
+   "src": "Standard halwai/home recipe computed from IFCT 2017 flours/nuts + sugar/jaggery + ghee; cross-checked INDB ladoo rows and packaged-ladoo labels",
+   "conf": "medium",
+   "note": "Tiny besan boondi fried in oil/ghee, soaked in sugar syrup, bound into balls (festival/wedding ladoo)."
+  },
+  {
+   "slug": "boondi-ladoo",
+   "name": "Boondi Ladoo",
+   "hi": "बूंदी के लड्डू",
+   "alias": [
+    "bundi ladoo",
+    "boondi laddu",
+    "boondi ke ladoo",
+    "bundi laddu",
+    "बूंदी लड्डू"
+   ],
+   "cat": "sweet",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 432,
+   "p": 5.5,
+   "c": 62,
+   "f": 18,
+   "fib": 1.5,
+   "na": 25,
+   "portions": [
+    {
+     "n": "1 ladoo (40 g)",
+     "hi": "1 लड्डू",
+     "g": 40
+    },
+    {
+     "n": "2 ladoos (80 g)",
+     "hi": "2 लड्डू",
+     "g": 80
+    }
+   ],
+   "src": "Standard halwai/home recipe computed from IFCT 2017 flours/nuts + sugar/jaggery + ghee; cross-checked INDB ladoo rows and packaged-ladoo labels",
+   "conf": "medium",
+   "note": "Coarser fried besan boondi in sugar syrup; slightly less fine than motichoor."
+  },
+  {
+   "slug": "rava-ladoo",
+   "name": "Rava Ladoo (Suji Ladoo)",
+   "hi": "रवा लड्डू (सूजी)",
+   "alias": [
+    "suji ladoo",
+    "sooji laddu",
+    "rava laddu",
+    "rave unde",
+    "rava undi",
+    "सूजी के लड्डू",
+    "रवा के लड्डू"
+   ],
+   "cat": "sweet",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 411,
+   "p": 5,
+   "c": 55,
+   "f": 19,
+   "fib": 2,
+   "na": 25,
+   "portions": [
+    {
+     "n": "1 ladoo (40 g)",
+     "hi": "1 लड्डू",
+     "g": 40
+    },
+    {
+     "n": "2 ladoos (80 g)",
+     "hi": "2 लड्डू",
+     "g": 80
+    }
+   ],
+   "src": "Standard halwai/home recipe computed from IFCT 2017 flours/nuts + sugar/jaggery + ghee; cross-checked INDB ladoo rows and packaged-ladoo labels",
+   "conf": "medium",
+   "note": "Ghee-roasted semolina with sugar, coconut and raisins. INDB ASC341/342 (429-464) are slightly higher."
+  },
+  {
+   "slug": "coconut-ladoo",
+   "name": "Coconut Ladoo (Nariyal Ladoo)",
+   "hi": "नारियल के लड्डू",
+   "alias": [
+    "nariyal ladoo",
+    "nariyal laddu",
+    "coconut laddu",
+    "kobbari laddu",
+    "नारियल लड्डू"
+   ],
+   "cat": "sweet",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 428,
+   "p": 5,
+   "c": 48,
+   "f": 24,
+   "fib": 6,
+   "na": 25,
+   "portions": [
+    {
+     "n": "1 ladoo (30 g)",
+     "hi": "1 लड्डू",
+     "g": 30
+    },
+    {
+     "n": "2 ladoos (60 g)",
+     "hi": "2 लड्डू",
+     "g": 60
+    }
+   ],
+   "src": "Standard halwai/home recipe computed from IFCT 2017 flours/nuts + sugar/jaggery + ghee; cross-checked INDB ladoo rows and packaged-ladoo labels",
+   "conf": "medium",
+   "note": "Desiccated coconut with condensed milk/khoya and sugar."
+  },
+  {
+   "slug": "til-ladoo",
+   "name": "Til Ladoo (Tilgul)",
+   "hi": "तिल के लड्डू",
+   "alias": [
+    "sesame ladoo",
+    "til laddu",
+    "tilgul ladoo",
+    "tilgud laddu",
+    "tilache ladoo",
+    "तिलगुल लड्डू",
+    "तिल गुड़ लड्डू"
+   ],
+   "cat": "sweet",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 482,
+   "p": 11,
+   "c": 42,
+   "f": 30,
+   "fib": 6,
+   "na": 25,
+   "portions": [
+    {
+     "n": "1 ladoo (30 g)",
+     "hi": "1 लड्डू",
+     "g": 30
+    },
+    {
+     "n": "2 ladoos (60 g)",
+     "hi": "2 लड्डू",
+     "g": 60
+    }
+   ],
+   "src": "Standard halwai/home recipe computed from IFCT 2017 flours/nuts + sugar/jaggery + ghee; cross-checked INDB ladoo rows and packaged-ladoo labels",
+   "conf": "medium",
+   "note": "About 60% sesame and 40% jaggery; Makar Sankranti sweet. INDB ASC344 (397) is a lighter version."
+  },
+  {
+   "slug": "atta-ladoo",
+   "name": "Atta Ladoo",
+   "hi": "आटे के लड्डू",
+   "alias": [
+    "aate ke ladoo",
+    "atta laddu",
+    "wheat flour ladoo",
+    "gehun ke ladoo",
+    "आटे के लड्डू"
+   ],
+   "cat": "sweet",
+   "region": "Punjab",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 460,
+   "p": 7,
+   "c": 54,
+   "f": 24,
+   "fib": 3,
+   "na": 20,
+   "portions": [
+    {
+     "n": "1 ladoo (40 g)",
+     "hi": "1 लड्डू",
+     "g": 40
+    },
+    {
+     "n": "2 ladoos (80 g)",
+     "hi": "2 लड्डू",
+     "g": 80
+    }
+   ],
+   "src": "Standard halwai/home recipe computed from IFCT 2017 flours/nuts + sugar/jaggery + ghee; cross-checked INDB ladoo rows and packaged-ladoo labels",
+   "conf": "medium",
+   "note": "Wheat flour roasted in ghee with sugar/jaggery and nuts. INDB BFP406 (502) and BFP571 (392) bracket this."
+  },
+  {
+   "slug": "dry-fruit-ladoo",
+   "name": "Dry Fruit Ladoo (Dates and Nuts)",
+   "hi": "ड्राई फ्रूट लड्डू",
+   "alias": [
+    "dry fruit laddu",
+    "dates ladoo",
+    "khajur laddu",
+    "meva ladoo",
+    "energy ladoo",
+    "ड्राई फ्रूट के लड्डू",
+    "खजूर लड्डू"
+   ],
+   "cat": "sweet",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 453,
+   "p": 9,
+   "c": 48,
+   "f": 25,
+   "fib": 8,
+   "na": 20,
+   "portions": [
+    {
+     "n": "1 ladoo (30 g)",
+     "hi": "1 लड्डू",
+     "g": 30
+    },
+    {
+     "n": "2 ladoos (60 g)",
+     "hi": "2 लड्डू",
+     "g": 60
+    }
+   ],
+   "src": "Standard halwai/home recipe computed from IFCT 2017 flours/nuts + sugar/jaggery + ghee; cross-checked INDB ladoo rows and packaged-ladoo labels",
+   "conf": "medium",
+   "note": "Dates, figs, almonds, cashew, walnut bound with little ghee; no refined sugar, but still dense and high in fruit sugar."
+  },
+  {
+   "slug": "churma-ladoo",
+   "name": "Churma Ladoo",
+   "hi": "चूरमा के लड्डू",
+   "alias": [
+    "churma laddu",
+    "choorma ladoo",
+    "churme ke ladoo",
+    "चूरमा लड्डू"
+   ],
+   "cat": "sweet",
+   "region": "Rajasthan",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 450,
+   "p": 7,
+   "c": 56,
+   "f": 22,
+   "fib": 2.5,
+   "na": 20,
+   "portions": [
+    {
+     "n": "1 ladoo (45 g)",
+     "hi": "1 लड्डू",
+     "g": 45
+    },
+    {
+     "n": "2 ladoos (90 g)",
+     "hi": "2 लड्डू",
+     "g": 90
+    }
+   ],
+   "src": "Standard halwai/home recipe computed from IFCT 2017 flours/nuts + sugar/jaggery + ghee; cross-checked INDB ladoo rows and packaged-ladoo labels",
+   "conf": "medium",
+   "note": "Fried wheat-flour crumbs (muthia) with ghee, sugar and nuts, shaped into balls."
+  },
+  {
+   "slug": "murmura-ladoo",
+   "name": "Murmura Ladoo (Moa, Lai Ladoo)",
+   "hi": "मुरमुरे के लड्डू",
+   "alias": [
+    "moa",
+    "lai ladoo",
+    "puffed rice ladoo",
+    "murmure ke laddu",
+    "kurmura laddu",
+    "मोआ",
+    "लाई के लड्डू"
+   ],
+   "cat": "sweet",
+   "region": "East India",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 358,
+   "p": 3,
+   "c": 82,
+   "f": 2,
+   "fib": 1.5,
+   "na": 15,
+   "portions": [
+    {
+     "n": "1 ladoo (40 g)",
+     "hi": "1 लड्डू",
+     "g": 40
+    },
+    {
+     "n": "2 ladoos (80 g)",
+     "hi": "2 लड्डू",
+     "g": 80
+    }
+   ],
+   "src": "Standard regional recipe computed from IFCT 2017 ingredients (flour, jaggery/sugar, coconut, ghee); estimate, cross-checked NIN where available; INDB BFP413 too low",
+   "conf": "medium",
+   "note": "Puffed rice bound with jaggery syrup, very little fat; mostly sugar. INDB BFP413 (254) is too low for a jaggery-bound ball."
+  },
+  {
+   "slug": "tirupati-laddu",
+   "name": "Tirupati Laddu (Prasadam)",
+   "hi": "तिरुपति लड्डू",
+   "alias": [
+    "tirupati laddu",
+    "tirumala laddu",
+    "tirupati ladoo",
+    "laddu prasad",
+    "ladoo prasad",
+    "तिरुमला लड्डू",
+    "लड्डू प्रसाद"
+   ],
+   "cat": "sweet",
+   "region": "Andhra Pradesh",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 464,
+   "p": 7,
+   "c": 55,
+   "f": 24,
+   "fib": 2,
+   "na": 25,
+   "portions": [
+    {
+     "n": "1 prasadam laddu, standard (175 g)",
+     "hi": "1 प्रसाद लड्डू",
+     "g": 175
+    },
+    {
+     "n": "half laddu (90 g)",
+     "hi": "आधा लड्डू",
+     "g": 90
+    },
+    {
+     "n": "1 small laddu (50 g)",
+     "hi": "1 छोटा लड्डू",
+     "g": 50
+    }
+   ],
+   "src": "Standard halwai/home recipe computed from IFCT 2017 flours/nuts + sugar/jaggery + ghee; cross-checked INDB ladoo rows and packaged-ladoo labels",
+   "conf": "low",
+   "note": "Boondi, ghee, sugar, cashew, raisin, cardamom; standard Tirumala laddu weighs about 175 g (around 800 kcal). Estimate."
+  },
+  {
+   "slug": "gond-ladoo",
+   "name": "Gond Ladoo",
+   "hi": "गोंद के लड्डू",
+   "alias": [
+    "gond laddu",
+    "dink ladoo",
+    "dinkache ladoo",
+    "edible gum ladoo",
+    "गोंद लड्डू",
+    "डिंक लड्डू"
+   ],
+   "cat": "sweet",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 460,
+   "p": 8,
+   "c": 44,
+   "f": 28,
+   "fib": 5,
+   "na": 20,
+   "portions": [
+    {
+     "n": "1 ladoo (40 g)",
+     "hi": "1 लड्डू",
+     "g": 40
+    },
+    {
+     "n": "2 ladoos (80 g)",
+     "hi": "2 लड्डू",
+     "g": 80
+    }
+   ],
+   "src": "Standard halwai/home recipe computed from IFCT 2017 flours/nuts + sugar/jaggery + ghee; cross-checked INDB ladoo rows and packaged-ladoo labels",
+   "conf": "medium",
+   "note": "Fried edible gum, wheat flour, ghee, nuts, jaggery; winter/postnatal ladoo."
+  },
+  {
+   "slug": "panjiri",
+   "name": "Panjiri",
+   "hi": "पंजीरी",
+   "alias": [
+    "panjiri prasad",
+    "atta panjiri",
+    "punjabi panjiri",
+    "pajiri",
+    "पंजीरी प्रसाद"
+   ],
+   "cat": "sweet",
+   "region": "Punjab",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 486,
+   "p": 9,
+   "c": 45,
+   "f": 30,
+   "fib": 5,
+   "na": 20,
+   "portions": [
+    {
+     "n": "1 tbsp (20 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 20
+    },
+    {
+     "n": "1 katori (50 g)",
+     "hi": "1 कटोरी",
+     "g": 50
+    }
+   ],
+   "src": "Standard halwai/home recipe computed from IFCT 2017 flours/nuts + sugar/jaggery + ghee; cross-checked INDB ladoo rows and packaged-ladoo labels",
+   "conf": "medium",
+   "note": "Roasted whole-wheat flour, ghee, sugar, makhana and nuts; crumbly, serving by tablespoon."
+  },
+  {
+   "slug": "sattu-ladoo",
+   "name": "Sattu Ladoo",
+   "hi": "सत्तू के लड्डू",
+   "alias": [
+    "sattu laddu",
+    "sattu ke ladoo",
+    "roasted gram flour ladoo",
+    "सत्तू लड्डू"
+   ],
+   "cat": "sweet",
+   "region": "Bihar",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 390,
+   "p": 12,
+   "c": 54,
+   "f": 14,
+   "fib": 6,
+   "na": 15,
+   "portions": [
+    {
+     "n": "1 ladoo (40 g)",
+     "hi": "1 लड्डू",
+     "g": 40
+    },
+    {
+     "n": "2 ladoos (80 g)",
+     "hi": "2 लड्डू",
+     "g": 80
+    }
+   ],
+   "src": "Standard halwai/home recipe computed from IFCT 2017 flours/nuts + sugar/jaggery + ghee; cross-checked INDB ladoo rows and packaged-ladoo labels",
+   "conf": "medium",
+   "note": "Roasted chana sattu, ghee and jaggery/sugar; higher protein and fibre than besan ladoo."
+  },
+  {
+   "slug": "rajgira-ladoo",
+   "name": "Rajgira Ladoo",
+   "hi": "राजगिरा लड्डू",
+   "alias": [
+    "rajgira laddu",
+    "amaranth ladoo",
+    "ramdana ladoo",
+    "ramdana laddu",
+    "राजगीरा लड्डू",
+    "रामदाना लड्डू"
+   ],
+   "cat": "sweet",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 421,
+   "p": 9,
+   "c": 58,
+   "f": 17,
+   "fib": 5,
+   "na": 15,
+   "portions": [
+    {
+     "n": "1 ladoo (30 g)",
+     "hi": "1 लड्डू",
+     "g": 30
+    },
+    {
+     "n": "2 ladoos (60 g)",
+     "hi": "2 लड्डू",
+     "g": 60
+    }
+   ],
+   "src": "Standard halwai/home recipe computed from IFCT 2017 flours/nuts + sugar/jaggery + ghee; cross-checked INDB ladoo rows and packaged-ladoo labels",
+   "conf": "medium",
+   "note": "Popped amaranth bound with jaggery and ghee (fasting sweet). INDB OSR021 (454) is higher."
+  },
+  {
+   "slug": "ragi-ladoo",
+   "name": "Ragi Ladoo",
+   "hi": "रागी लड्डू",
+   "alias": [
+    "ragi laddu",
+    "nachni ladoo",
+    "finger millet ladoo",
+    "ragi unde",
+    "रागी के लड्डू",
+    "नाचणी लड्डू"
+   ],
+   "cat": "sweet",
+   "region": "Karnataka",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 398,
+   "p": 6,
+   "c": 62,
+   "f": 14,
+   "fib": 4,
+   "na": 25,
+   "portions": [
+    {
+     "n": "1 ladoo (40 g)",
+     "hi": "1 लड्डू",
+     "g": 40
+    },
+    {
+     "n": "2 ladoos (80 g)",
+     "hi": "2 लड्डू",
+     "g": 80
+    }
+   ],
+   "src": "Standard halwai/home recipe computed from IFCT 2017 flours/nuts + sugar/jaggery + ghee; cross-checked INDB ladoo rows and packaged-ladoo labels",
+   "conf": "medium",
+   "note": "Roasted ragi flour, jaggery and ghee."
+  },
+  {
+   "slug": "peanut-ladoo",
+   "name": "Peanut Ladoo (Moongfali Ladoo)",
+   "hi": "मूंगफली के लड्डू",
+   "alias": [
+    "moongfali ladoo",
+    "peanut laddu",
+    "groundnut ladoo",
+    "shengdana ladoo",
+    "verkadalai urundai",
+    "मूंगफली लड्डू"
+   ],
+   "cat": "sweet",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 478,
+   "p": 14,
+   "c": 38,
+   "f": 30,
+   "fib": 5,
+   "na": 10,
+   "portions": [
+    {
+     "n": "1 ladoo (30 g)",
+     "hi": "1 लड्डू",
+     "g": 30
+    },
+    {
+     "n": "2 ladoos (60 g)",
+     "hi": "2 लड्डू",
+     "g": 60
+    }
+   ],
+   "src": "Standard halwai/home recipe computed from IFCT 2017 flours/nuts + sugar/jaggery + ghee; cross-checked INDB ladoo rows and packaged-ladoo labels",
+   "conf": "medium",
+   "note": "Roasted peanuts and jaggery syrup, little or no ghee."
+  },
+  {
+   "slug": "mawa-ladoo",
+   "name": "Mawa Ladoo (Khoya Ladoo)",
+   "hi": "मावा लड्डू",
+   "alias": [
+    "khoya ladoo",
+    "khoa laddu",
+    "milk ladoo",
+    "mawa laddu",
+    "मावा के लड्डू",
+    "खोया लड्डू"
+   ],
+   "cat": "sweet",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 404,
+   "p": 11,
+   "c": 45,
+   "f": 20,
+   "fib": 0,
+   "na": 65,
+   "portions": [
+    {
+     "n": "1 ladoo (40 g)",
+     "hi": "1 लड्डू",
+     "g": 40
+    },
+    {
+     "n": "2 ladoos (80 g)",
+     "hi": "2 लड्डू",
+     "g": 80
+    }
+   ],
+   "src": "Standard halwai/home recipe computed from IFCT 2017 flours/nuts + sugar/jaggery + ghee; cross-checked INDB ladoo rows and packaged-ladoo labels; INDB BFP404 matches",
+   "conf": "medium",
+   "note": "Khoya cooked with sugar and a little ghee. INDB BFP404 (396) agrees."
+  },
+  {
+   "slug": "sunnundalu",
+   "name": "Sunnundalu",
+   "hi": "सुन्नुंडालू",
+   "alias": [
+    "sunnundalu urad ladoo",
+    "minapa sunnundalu",
+    "urad dal ladoo",
+    "minapa sunni undalu",
+    "उड़द लड्डू"
+   ],
+   "cat": "sweet",
+   "region": "Andhra Pradesh",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 448,
+   "p": 10,
+   "c": 48,
+   "f": 24,
+   "fib": 4,
+   "na": 15,
+   "portions": [
+    {
+     "n": "1 ladoo (40 g)",
+     "hi": "1 लड्डू",
+     "g": 40
+    },
+    {
+     "n": "2 ladoos (80 g)",
+     "hi": "2 लड्डू",
+     "g": 80
+    }
+   ],
+   "src": "Standard regional recipe computed from IFCT 2017 ingredients (flour, jaggery/sugar, coconut, ghee); estimate, cross-checked NIN where available",
+   "conf": "medium",
+   "note": "Roasted urad flour, ghee and powdered sugar/jaggery."
+  },
+  {
+   "slug": "pinni",
+   "name": "Pinni",
+   "hi": "पिन्नी",
+   "alias": [
+    "punjabi pinni",
+    "pinni ladoo",
+    "atta pinni",
+    "पिन्नी लड्डू"
+   ],
+   "cat": "sweet",
+   "region": "Punjab",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 488,
+   "p": 7,
+   "c": 52,
+   "f": 28,
+   "fib": 3,
+   "na": 20,
+   "portions": [
+    {
+     "n": "1 pinni (45 g)",
+     "hi": "1 पिन्नी",
+     "g": 45
+    },
+    {
+     "n": "2 pinni (90 g)",
+     "hi": "2 पिन्नी",
+     "g": 90
+    }
+   ],
+   "src": "Standard halwai/home recipe computed from IFCT 2017 flours/nuts + sugar/jaggery + ghee; cross-checked INDB ladoo rows and packaged-ladoo labels",
+   "conf": "medium",
+   "note": "Whole-wheat flour roasted in lots of ghee with sugar, makhana and almonds; round winter sweet."
+  },
+  {
+   "slug": "gajar-halwa",
+   "name": "Gajar Halwa",
+   "hi": "गाजर का हलवा",
+   "alias": [
+    "gajrela",
+    "gajar ka halwa",
+    "carrot halwa",
+    "gajar halva",
+    "गाजर हलवा",
+    "गजरेला"
+   ],
+   "cat": "sweet",
+   "region": "Punjab",
+   "diet": "veg",
+   "emoji": "🍮",
+   "unit": "g",
+   "kcal": 214,
+   "p": 4,
+   "c": 28,
+   "f": 9.5,
+   "fib": 2,
+   "na": 40,
+   "portions": [
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    }
+   ],
+   "core": true,
+   "src": "Standard recipe computed from IFCT 2017 ingredients + ghee + sugar; cross-checked INDB halwa rows and NIN; INDB ASC295 slightly low",
+   "conf": "medium",
+   "note": "Winter carrots cooked with milk, ghee, sugar and a little khoya; home-style with about 1 tbsp ghee per katori. Halwai rich versions can reach 260-280 kcal/100 g. INDB ASC295 (173) is slightly low."
+  },
+  {
+   "slug": "moong-dal-halwa",
+   "name": "Moong Dal Halwa",
+   "hi": "मूंग दाल का हलवा",
+   "alias": [
+    "moong dal ka halwa",
+    "mung dal halwa",
+    "dal halwa",
+    "moong halwa",
+    "मूंग हलवा"
+   ],
+   "cat": "sweet",
+   "region": "Rajasthan",
+   "diet": "veg",
+   "emoji": "🍮",
+   "unit": "g",
+   "kcal": 414,
+   "p": 8,
+   "c": 46,
+   "f": 22,
+   "fib": 2,
+   "na": 20,
+   "portions": [
+    {
+     "n": "1 small katori (80 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 80
+    },
+    {
+     "n": "1 katori (120 g)",
+     "hi": "1 कटोरी",
+     "g": 120
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 ingredients + ghee + sugar; cross-checked INDB halwa rows and NIN",
+   "conf": "medium",
+   "note": "Slow-roasted ground moong dal with about 1:2 ghee-to-dal and sugar. Halwai version can reach 480 kcal/100 g. INDB ASC299 (350) agrees with the lighter home recipe."
+  },
+  {
+   "slug": "suji-halwa",
+   "name": "Suji Halwa (Sooji Halwa)",
+   "hi": "सूजी का हलवा",
+   "alias": [
+    "sooji halwa",
+    "rava sheera",
+    "sheera",
+    "semolina halwa",
+    "suji ka halwa",
+    "sheera prasad",
+    "सूजी हलवा",
+    "शीरा",
+    "रवा शीरा"
+   ],
+   "cat": "sweet",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍮",
+   "unit": "g",
+   "kcal": 267,
+   "p": 3,
+   "c": 40,
+   "f": 10.5,
+   "fib": 1,
+   "na": 20,
+   "portions": [
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    }
+   ],
+   "core": true,
+   "src": "Standard recipe computed from IFCT 2017 ingredients + ghee + sugar; cross-checked INDB halwa rows and NIN",
+   "conf": "medium",
+   "note": "Semolina roasted in ghee, cooked in water/milk with sugar (about 1:1:1 ghee, rava, sugar by weight). INDB ASC293 (226) is low, ASC294 (382) is the rich version."
+  },
+  {
+   "slug": "kesari-bath",
+   "name": "Kesari Bath (Rava Kesari)",
+   "hi": "केसरी बाथ",
+   "alias": [
+    "kesari bhath",
+    "rava kesari",
+    "kesari",
+    "sooji kesari",
+    "semolina kesari",
+    "केसरी भात"
+   ],
+   "cat": "sweet",
+   "region": "Karnataka",
+   "diet": "veg",
+   "emoji": "🍮",
+   "unit": "g",
+   "kcal": 277,
+   "p": 2.5,
+   "c": 43,
+   "f": 10.5,
+   "fib": 1,
+   "na": 15,
+   "portions": [
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 ingredients + ghee + sugar; cross-checked INDB halwa rows and NIN",
+   "conf": "medium",
+   "note": "Ghee-roasted rava cooked with sugar, saffron/yellow colour and cashew-raisins (tiffin sweet). INDB OSR014 (245) is slightly low."
+  },
+  {
+   "slug": "pineapple-sheera",
+   "name": "Pineapple Sheera",
+   "hi": "अनानास शीरा",
+   "alias": [
+    "pineapple halwa",
+    "pineapple kesari",
+    "ananas sheera",
+    "अनानास हलवा",
+    "पाइनएप्पल शीरा"
+   ],
+   "cat": "sweet",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🍮",
+   "unit": "g",
+   "kcal": 259,
+   "p": 2.5,
+   "c": 42,
+   "f": 9,
+   "fib": 1,
+   "na": 10,
+   "portions": [
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 ingredients + ghee + sugar; cross-checked INDB halwa rows and NIN",
+   "conf": "medium",
+   "note": "Rava sheera with pineapple pieces and juice; slightly lower fat than plain sheera."
+  },
+  {
+   "slug": "atta-halwa",
+   "name": "Atta Halwa (Aate Ka Halwa)",
+   "hi": "आटे का हलवा",
+   "alias": [
+    "aate ka halwa",
+    "wheat halwa",
+    "atte da halwa",
+    "godhumai halwa",
+    "आटा हलवा",
+    "आटे का हलवा"
+   ],
+   "cat": "sweet",
+   "region": "Punjab",
+   "diet": "veg",
+   "emoji": "🍮",
+   "unit": "g",
+   "kcal": 326,
+   "p": 4,
+   "c": 46,
+   "f": 14,
+   "fib": 3,
+   "na": 15,
+   "portions": [
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 ingredients + ghee + sugar; cross-checked INDB halwa rows and NIN",
+   "conf": "medium",
+   "note": "Whole wheat flour roasted in ghee, cooked with sugar syrup; home recipe (ghee about 14%)."
+  },
+  {
+   "slug": "kada-prasad",
+   "name": "Kada Prasad (Karah Prasad)",
+   "hi": "कड़ा प्रसाद",
+   "alias": [
+    "karah prasad",
+    "karah parshad",
+    "kada parshad",
+    "gurdwara prasad",
+    "atta prasad",
+    "कड़ाह प्रसाद",
+    "कड़ा परशाद"
+   ],
+   "cat": "sweet",
+   "region": "Punjab",
+   "diet": "veg",
+   "emoji": "🍮",
+   "unit": "g",
+   "kcal": 436,
+   "p": 5,
+   "c": 50,
+   "f": 24,
+   "fib": 2,
+   "na": 15,
+   "portions": [
+    {
+     "n": "1 handful (50 g)",
+     "hi": "1 मुट्ठी",
+     "g": 50
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 ingredients + ghee + sugar; cross-checked INDB halwa rows and NIN",
+   "conf": "medium",
+   "note": "Gurdwara prasad: equal parts atta, ghee and sugar (very ghee-rich, translucent). Served by the handful."
+  },
+  {
+   "slug": "badam-halwa",
+   "name": "Badam Halwa",
+   "hi": "बादाम का हलवा",
+   "alias": [
+    "almond halwa",
+    "badam ka halwa",
+    "badam halva",
+    "बादाम हलवा"
+   ],
+   "cat": "sweet",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍮",
+   "unit": "g",
+   "kcal": 476,
+   "p": 8,
+   "c": 48,
+   "f": 28,
+   "fib": 4,
+   "na": 25,
+   "portions": [
+    {
+     "n": "1 small katori (80 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 80
+    },
+    {
+     "n": "1 katori (120 g)",
+     "hi": "1 कटोरी",
+     "g": 120
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 ingredients + ghee + sugar; cross-checked INDB halwa rows and NIN",
+   "conf": "medium",
+   "note": "Ground almonds cooked with ghee, sugar and milk until glossy; rich halwai halwa."
+  },
+  {
+   "slug": "lauki-halwa",
+   "name": "Lauki Halwa (Doodhi Halwa)",
+   "hi": "लौकी का हलवा",
+   "alias": [
+    "doodhi halwa",
+    "dudhi halwa",
+    "ghiya halwa",
+    "bottle gourd halwa",
+    "दूधी हलवा"
+   ],
+   "cat": "sweet",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🍮",
+   "unit": "g",
+   "kcal": 197,
+   "p": 4,
+   "c": 25,
+   "f": 9,
+   "fib": 1.5,
+   "na": 35,
+   "portions": [
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 ingredients + ghee + sugar; cross-checked INDB halwa rows and NIN",
+   "conf": "medium",
+   "note": "Grated bottle gourd cooked with milk, ghee, sugar and khoya."
+  },
+  {
+   "slug": "kaddu-halwa",
+   "name": "Kaddu Halwa (Pumpkin Halwa)",
+   "hi": "कद्दू का हलवा",
+   "alias": [
+    "pumpkin halwa",
+    "kaddu ka halwa",
+    "कद्दू हलवा"
+   ],
+   "cat": "sweet",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🍮",
+   "unit": "g",
+   "kcal": 195,
+   "p": 2.5,
+   "c": 27,
+   "f": 8.5,
+   "fib": 2,
+   "na": 20,
+   "portions": [
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 ingredients + ghee + sugar; cross-checked INDB halwa rows and NIN; INDB ASC298 matches",
+   "conf": "medium",
+   "note": "Red pumpkin cooked with ghee, sugar and cardamom. INDB ASC298 (190) matches."
+  },
+  {
+   "slug": "beetroot-halwa",
+   "name": "Beetroot Halwa",
+   "hi": "चुकंदर का हलवा",
+   "alias": [
+    "chukandar halwa",
+    "beet halwa",
+    "beetroot ka halwa",
+    "चुकंदर हलवा"
+   ],
+   "cat": "sweet",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🍮",
+   "unit": "g",
+   "kcal": 205,
+   "p": 3,
+   "c": 28,
+   "f": 9,
+   "fib": 2,
+   "na": 50,
+   "portions": [
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 ingredients + ghee + sugar; cross-checked INDB halwa rows and NIN",
+   "conf": "medium",
+   "note": "Grated beetroot cooked with milk, ghee, sugar and khoya."
+  },
+  {
+   "slug": "karachi-halwa",
+   "name": "Karachi Halwa (Bombay Halwa)",
+   "hi": "कराची हलवा",
+   "alias": [
+    "bombay halwa",
+    "bombay halva",
+    "karachi halva",
+    "cornflour halwa",
+    "बॉम्बे हलवा"
+   ],
+   "cat": "sweet",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🍮",
+   "unit": "g",
+   "kcal": 366,
+   "p": 1,
+   "c": 68,
+   "f": 10,
+   "fib": 0.5,
+   "na": 10,
+   "portions": [
+    {
+     "n": "1 piece (25 g)",
+     "hi": "1 पीस",
+     "g": 25
+    },
+    {
+     "n": "2 pieces (50 g)",
+     "hi": "2 पीस",
+     "g": 50
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 ingredients + ghee + sugar; cross-checked INDB halwa rows and NIN",
+   "conf": "medium",
+   "note": "Cornflour, sugar and ghee set as a chewy jelly-like block with nuts; mostly sugar."
+  },
+  {
+   "slug": "tirunelveli-halwa",
+   "name": "Tirunelveli Halwa (Iruttu Kadai)",
+   "hi": "तिरुनेलवेली हलवा",
+   "alias": [
+    "tirunelveli halwa",
+    "nellai halwa",
+    "iruttukadai halwa",
+    "wheat halwa tirunelveli"
+   ],
+   "cat": "sweet",
+   "region": "Tamil Nadu",
+   "diet": "veg",
+   "emoji": "🍮",
+   "unit": "g",
+   "kcal": 432,
+   "p": 3,
+   "c": 60,
+   "f": 20,
+   "fib": 1,
+   "na": 15,
+   "portions": [
+    {
+     "n": "1 piece (40 g)",
+     "hi": "1 पीस",
+     "g": 40
+    },
+    {
+     "n": "2 pieces (80 g)",
+     "hi": "2 पीस",
+     "g": 80
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 ingredients + ghee + sugar; cross-checked INDB halwa rows and NIN",
+   "conf": "medium",
+   "note": "Wheat milk, sugar and about 20% ghee cooked into a glossy translucent halwa."
+  },
+  {
+   "slug": "kasi-halwa",
+   "name": "Kasi Halwa (Ash Gourd Halwa)",
+   "hi": "कासी हलवा",
+   "alias": [
+    "poosanikai halwa",
+    "petha halwa kasi",
+    "ash gourd halwa",
+    "white pumpkin halwa"
+   ],
+   "cat": "sweet",
+   "region": "Tamil Nadu",
+   "diet": "veg",
+   "emoji": "🍮",
+   "unit": "g",
+   "kcal": 224,
+   "p": 1.5,
+   "c": 33,
+   "f": 9.5,
+   "fib": 1,
+   "na": 10,
+   "portions": [
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 piece (40 g)",
+     "hi": "1 पीस",
+     "g": 40
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 ingredients + ghee + sugar; cross-checked INDB halwa rows and NIN",
+   "conf": "medium",
+   "note": "Ash gourd cooked in ghee and sugar with cashew; Tamil wedding sweet."
+  },
+  {
+   "slug": "dry-fruit-halwa",
+   "name": "Dry Fruit Halwa",
+   "hi": "ड्राई फ्रूट हलवा",
+   "alias": [
+    "mewa halwa",
+    "dry fruits halwa",
+    "dry fruit halva",
+    "मेवा हलवा"
+   ],
+   "cat": "sweet",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍮",
+   "unit": "g",
+   "kcal": 418,
+   "p": 7,
+   "c": 48,
+   "f": 22,
+   "fib": 4,
+   "na": 25,
+   "portions": [
+    {
+     "n": "1 small katori (80 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 80
+    },
+    {
+     "n": "1 katori (120 g)",
+     "hi": "1 कटोरी",
+     "g": 120
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 ingredients + ghee + sugar; cross-checked INDB halwa rows and NIN",
+   "conf": "low",
+   "note": "Almonds, cashew, pista, dates and raisins cooked with ghee and sugar. INDB OSR020 (371) is a lotus seed version."
+  },
+  {
+   "slug": "sweet-corn-halwa",
+   "name": "Sweet Corn Halwa",
+   "hi": "स्वीट कॉर्न हलवा",
+   "alias": [
+    "corn halwa",
+    "makki ka halwa",
+    "sweetcorn halwa",
+    "भुट्टे का हलवा",
+    "कॉर्न हलवा"
+   ],
+   "cat": "sweet",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🍮",
+   "unit": "g",
+   "kcal": 236,
+   "p": 3,
+   "c": 38,
+   "f": 8,
+   "fib": 1.5,
+   "na": 25,
+   "portions": [
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 ingredients + ghee + sugar; cross-checked INDB halwa rows and NIN",
+   "conf": "low",
+   "note": "Ground tender corn cooked with milk, ghee and sugar."
+  },
+  {
+   "slug": "bread-halwa",
+   "name": "Bread Halwa",
+   "hi": "ब्रेड का हलवा",
+   "alias": [
+    "bread ka halwa",
+    "bread halva",
+    "bread sheera",
+    "ब्रेड हलवा"
+   ],
+   "cat": "sweet",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍮",
+   "unit": "g",
+   "kcal": 354,
+   "p": 5,
+   "c": 52,
+   "f": 14,
+   "fib": 1,
+   "na": 130,
+   "portions": [
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 ingredients + ghee + sugar; cross-checked INDB halwa rows and NIN",
+   "conf": "medium",
+   "note": "Bread fried or crumbled in ghee, cooked in milk and sugar."
+  },
+  {
+   "slug": "besan-halwa",
+   "name": "Besan Halwa",
+   "hi": "बेसन का हलवा",
+   "alias": [
+    "besan ka halwa",
+    "besan sheera",
+    "gram flour halwa",
+    "बेसन हलवा",
+    "बेसन का शीरा"
+   ],
+   "cat": "sweet",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍮",
+   "unit": "g",
+   "kcal": 406,
+   "p": 7,
+   "c": 45,
+   "f": 22,
+   "fib": 3,
+   "na": 25,
+   "portions": [
+    {
+     "n": "1 small katori (80 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 80
+    },
+    {
+     "n": "1 katori (120 g)",
+     "hi": "1 कटोरी",
+     "g": 120
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 ingredients + ghee + sugar; cross-checked INDB halwa rows and NIN",
+   "conf": "medium",
+   "note": "Besan roasted in ghee, cooked with sugar syrup/milk; INDB OSR026 (277) is the light version, halwai ghee-rich ~400."
+  },
+  {
+   "slug": "shakarkandi-halwa",
+   "name": "Shakarkandi Halwa (Sweet Potato Halwa)",
+   "hi": "शकरकंद का हलवा",
+   "alias": [
+    "sweet potato halwa",
+    "shakarkand halwa",
+    "ratalu halwa",
+    "शकरकंदी हलवा"
+   ],
+   "cat": "sweet",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🍮",
+   "unit": "g",
+   "kcal": 221,
+   "p": 1.5,
+   "c": 38,
+   "f": 7,
+   "fib": 2.5,
+   "na": 30,
+   "portions": [
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 ingredients + ghee + sugar; cross-checked INDB halwa rows and NIN",
+   "conf": "low",
+   "note": "Boiled mashed sweet potato cooked in ghee with sugar (also a fasting dish). INDB ASC297 (152, aloo halwa) is lower."
+  },
+  {
+   "slug": "singhare-ka-halwa",
+   "name": "Singhare Ka Halwa (Water Chestnut Halwa)",
+   "hi": "सिंघाड़े का हलवा",
+   "alias": [
+    "singhara halwa",
+    "water chestnut flour halwa",
+    "singhare atta halwa",
+    "vrat halwa",
+    "सिंघाड़ा हलवा",
+    "व्रत का हलवा"
+   ],
+   "cat": "sweet",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🍮",
+   "unit": "g",
+   "kcal": 350,
+   "p": 4,
+   "c": 52,
+   "f": 14,
+   "fib": 3,
+   "na": 20,
+   "portions": [
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 ingredients + ghee + sugar; cross-checked INDB halwa rows and NIN",
+   "conf": "medium",
+   "note": "Singhara flour roasted in ghee and cooked with sugar syrup (Navratri/vrat)."
+  },
+  {
+   "slug": "ashoka-halwa",
+   "name": "Ashoka Halwa",
+   "hi": "अशोका हलवा",
+   "alias": [
+    "thiruvaiyaru ashoka halwa",
+    "asoka halwa",
+    "ashoka halva",
+    "अशोका हलवा"
+   ],
+   "cat": "sweet",
+   "region": "Tamil Nadu",
+   "diet": "veg",
+   "emoji": "🍮",
+   "unit": "g",
+   "kcal": 390,
+   "p": 5,
+   "c": 52,
+   "f": 18,
+   "fib": 2,
+   "na": 15,
+   "portions": [
+    {
+     "n": "1 small katori (80 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 80
+    },
+    {
+     "n": "1 piece (40 g)",
+     "hi": "1 पीस",
+     "g": 40
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 ingredients + ghee + sugar; cross-checked INDB halwa rows and NIN",
+   "conf": "low",
+   "note": "Moong dal and wheat flour roasted in ghee and cooked with sugar (Thiruvaiyaru style)."
+  },
+  {
+   "slug": "hayagreeva",
+   "name": "Hayagreeva",
+   "hi": "हयग्रीव",
+   "alias": [
+    "hayagriva",
+    "hayagreeva maddi",
+    "hayagreeva sweet"
+   ],
+   "cat": "sweet",
+   "region": "Karnataka",
+   "diet": "veg",
+   "emoji": "🍮",
+   "unit": "g",
+   "kcal": 297,
+   "p": 7,
+   "c": 38,
+   "f": 13,
+   "fib": 3,
+   "na": 20,
+   "portions": [
+    {
+     "n": "1 small katori (80 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 80
+    },
+    {
+     "n": "1 katori (120 g)",
+     "hi": "1 कटोरी",
+     "g": 120
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 ingredients + ghee + sugar; cross-checked INDB halwa rows and NIN",
+   "conf": "low",
+   "note": "Chana dal, coconut and jaggery cooked in ghee into a halwa; offered at Udupi/Karnataka temples."
+  },
+  {
+   "slug": "mohanthal",
+   "name": "Mohanthal",
+   "hi": "मोहनथाल",
+   "alias": [
+    "mohan thal",
+    "mohanthaal",
+    "besan mohanthal",
+    "gujarati mohanthal",
+    "मोहन थाल"
+   ],
+   "cat": "sweet",
+   "region": "Gujarat",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 484,
+   "p": 8,
+   "c": 50,
+   "f": 28,
+   "fib": 3,
+   "na": 25,
+   "portions": [
+    {
+     "n": "1 piece (30 g)",
+     "hi": "1 पीस",
+     "g": 30
+    },
+    {
+     "n": "2 pieces (60 g)",
+     "hi": "2 पीस",
+     "g": 60
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 ingredients + ghee + sugar; cross-checked INDB halwa rows and NIN",
+   "conf": "medium",
+   "note": "Coarse besan with plenty of ghee, sugar syrup and nuts set into squares (Gujarat/Rajasthan)."
+  },
+  {
+   "slug": "jalebi",
+   "name": "Jalebi",
+   "hi": "जलेबी",
+   "alias": [
+    "jilebi",
+    "jilapi",
+    "jalebee",
+    "zulbia",
+    "jilipi",
+    "जिलेबी"
+   ],
+   "cat": "sweet",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍩",
+   "unit": "g",
+   "kcal": 436,
+   "p": 2.5,
+   "c": 75,
+   "f": 14,
+   "fib": 0.8,
+   "na": 10,
+   "portions": [
+    {
+     "n": "1 piece (30 g)",
+     "hi": "1 पीस",
+     "g": 30
+    },
+    {
+     "n": "2 pieces (60 g)",
+     "hi": "2 पीस",
+     "g": 60
+    },
+    {
+     "n": "1 plate, 100 g",
+     "hi": "1 प्लेट",
+     "g": 100
+    }
+   ],
+   "core": true,
+   "src": "Anchor figure 420-450 kcal/100 g; recipe check (fried batter + sugar syrup)",
+   "conf": "high",
+   "note": "Fermented maida batter deep-fried in oil/ghee and soaked in 1:1 sugar syrup; thin 30 g coil is about 130 kcal. Very high glycaemic load."
+  },
+  {
+   "slug": "imarti",
+   "name": "Imarti (Amriti)",
+   "hi": "इमरती",
+   "alias": [
+    "amriti",
+    "jangiri",
+    "jhangri",
+    "jaangiri",
+    "imarthi",
+    "जांगिरी",
+    "अमृती"
+   ],
+   "cat": "sweet",
+   "region": "Uttar Pradesh",
+   "diet": "veg",
+   "emoji": "🍩",
+   "unit": "g",
+   "kcal": 404,
+   "p": 4,
+   "c": 70,
+   "f": 12,
+   "fib": 1,
+   "na": 15,
+   "portions": [
+    {
+     "n": "1 piece (40 g)",
+     "hi": "1 पीस",
+     "g": 40
+    },
+    {
+     "n": "2 pieces (80 g)",
+     "hi": "2 पीस",
+     "g": 80
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 flours/sugar + realistic fry-oil uptake; cross-checked NIN and packaged-sweet labels",
+   "conf": "medium",
+   "note": "Urad dal batter flower coils fried in ghee/oil and soaked in sugar syrup (also Tamil jangiri)."
+  },
+  {
+   "slug": "malpua",
+   "name": "Malpua",
+   "hi": "मालपुआ",
+   "alias": [
+    "malpoa",
+    "malpuwa",
+    "maal pua",
+    "pua",
+    "amalu",
+    "मालपूआ",
+    "मालपुए"
+   ],
+   "cat": "sweet",
+   "region": "Rajasthan",
+   "diet": "veg",
+   "emoji": "🥞",
+   "unit": "g",
+   "kcal": 381,
+   "p": 5,
+   "c": 52,
+   "f": 17,
+   "fib": 1,
+   "na": 30,
+   "portions": [
+    {
+     "n": "1 piece (50 g)",
+     "hi": "1 पीस",
+     "g": 50
+    },
+    {
+     "n": "2 pieces (100 g)",
+     "hi": "2 पीस",
+     "g": 100
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 flours/sugar + realistic fry-oil uptake; cross-checked NIN and packaged-sweet labels",
+   "conf": "medium",
+   "note": "Maida-milk-khoya pancake fried in ghee and dipped in sugar syrup; served with rabri extra. INDB OSR016 (mango malpua 335) is lower."
+  },
+  {
+   "slug": "gujiya",
+   "name": "Gujiya (Karanji with Khoya)",
+   "hi": "गुजिया",
+   "alias": [
+    "gujhia",
+    "gujia",
+    "ghughra",
+    "kajjikaya khoya",
+    "gujiya sweet",
+    "घुघरा",
+    "गुझिया"
+   ],
+   "cat": "sweet",
+   "region": "Uttar Pradesh",
+   "diet": "veg",
+   "emoji": "🥟",
+   "unit": "g",
+   "kcal": 417,
+   "p": 7,
+   "c": 50,
+   "f": 21,
+   "fib": 1.5,
+   "na": 25,
+   "portions": [
+    {
+     "n": "1 piece (60 g)",
+     "hi": "1 पीस",
+     "g": 60
+    },
+    {
+     "n": "2 pieces (120 g)",
+     "hi": "2 पीस",
+     "g": 120
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 flours/sugar + realistic fry-oil uptake; cross-checked NIN and packaged-sweet labels",
+   "conf": "medium",
+   "note": "Holi sweet: maida shell stuffed with khoya, nuts and sugar, deep fried (about 250 kcal each)."
+  },
+  {
+   "slug": "karanji",
+   "name": "Karanji (Coconut)",
+   "hi": "करंजी",
+   "alias": [
+    "karanji sweet",
+    "kobbari karanji",
+    "coconut gujiya",
+    "kanole",
+    "करंज्या",
+    "कानोले"
+   ],
+   "cat": "sweet",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🥟",
+   "unit": "g",
+   "kcal": 390,
+   "p": 5,
+   "c": 52,
+   "f": 18,
+   "fib": 3,
+   "na": 15,
+   "portions": [
+    {
+     "n": "1 piece (45 g)",
+     "hi": "1 पीस",
+     "g": 45
+    },
+    {
+     "n": "2 pieces (90 g)",
+     "hi": "2 पीस",
+     "g": 90
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 flours/sugar + realistic fry-oil uptake; cross-checked NIN and packaged-sweet labels",
+   "conf": "medium",
+   "note": "Diwali karanji: fried maida shell stuffed with coconut-sugar-cardamom filling."
+  },
+  {
+   "slug": "balushahi",
+   "name": "Balushahi",
+   "hi": "बालूशाही",
+   "alias": [
+    "balu shahi",
+    "badusha",
+    "badusha sweet",
+    "balushai",
+    "बादुशा",
+    "बालूशाई"
+   ],
+   "cat": "sweet",
+   "region": "Uttar Pradesh",
+   "diet": "veg",
+   "emoji": "🍩",
+   "unit": "g",
+   "kcal": 449,
+   "p": 4.5,
+   "c": 56,
+   "f": 23,
+   "fib": 1,
+   "na": 25,
+   "portions": [
+    {
+     "n": "1 piece (60 g)",
+     "hi": "1 पीस",
+     "g": 60
+    },
+    {
+     "n": "2 pieces (120 g)",
+     "hi": "2 पीस",
+     "g": 120
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 flours/sugar + realistic fry-oil uptake; cross-checked NIN and packaged-sweet labels",
+   "conf": "medium",
+   "note": "Flaky ghee-rich maida dough disc deep fried and dipped in sugar syrup (about 270 kcal each)."
+  },
+  {
+   "slug": "ghevar",
+   "name": "Ghevar (Plain)",
+   "hi": "घेवर",
+   "alias": [
+    "ghewar",
+    "ghevar sweet",
+    "rajasthani ghevar",
+    "plain ghevar",
+    "घीवर"
+   ],
+   "cat": "sweet",
+   "region": "Rajasthan",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 476,
+   "p": 5,
+   "c": 60,
+   "f": 24,
+   "fib": 1,
+   "na": 15,
+   "portions": [
+    {
+     "n": "1 small piece, 1/4 disc (50 g)",
+     "hi": "1 टुकड़ा",
+     "g": 50
+    },
+    {
+     "n": "1 disc (150 g)",
+     "hi": "1 घेवर",
+     "g": 150
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 flours/sugar + realistic fry-oil uptake; cross-checked NIN and packaged-sweet labels",
+   "conf": "medium",
+   "note": "Teej/Raksha Bandhan lattice disc of maida fried in ghee and dipped in syrup."
+  },
+  {
+   "slug": "malai-ghevar",
+   "name": "Malai Ghevar",
+   "hi": "मलाई घेवर",
+   "alias": [
+    "ghevar with rabri",
+    "rabri ghevar",
+    "malai ghewar",
+    "मलाई घीवर"
+   ],
+   "cat": "sweet",
+   "region": "Rajasthan",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 412,
+   "p": 6,
+   "c": 52,
+   "f": 20,
+   "fib": 0.8,
+   "na": 30,
+   "portions": [
+    {
+     "n": "1 piece (120 g)",
+     "hi": "1 पीस",
+     "g": 120
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 flours/sugar + realistic fry-oil uptake; cross-checked NIN and packaged-sweet labels",
+   "conf": "low",
+   "note": "Ghevar topped with thick rabri/malai, saffron and pistachio."
+  },
+  {
+   "slug": "khaja",
+   "name": "Khaja",
+   "hi": "खाजा",
+   "alias": [
+    "silao khaja",
+    "khaja sweet",
+    "khaja mithai",
+    "bihari khaja",
+    "खाजे",
+    "सिलाव खाजा"
+   ],
+   "cat": "sweet",
+   "region": "Bihar",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 451,
+   "p": 5,
+   "c": 65,
+   "f": 19,
+   "fib": 1,
+   "na": 10,
+   "portions": [
+    {
+     "n": "1 piece (40 g)",
+     "hi": "1 पीस",
+     "g": 40
+    },
+    {
+     "n": "2 pieces (80 g)",
+     "hi": "2 पीस",
+     "g": 80
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 flours/sugar + realistic fry-oil uptake; cross-checked NIN and packaged-sweet labels",
+   "conf": "medium",
+   "note": "Layered flaky maida pastry deep fried and dipped in syrup (Silao, Bihar; Puri khaja in Odisha)."
+  },
+  {
+   "slug": "soan-papdi",
+   "name": "Soan Papdi",
+   "hi": "सोन पापड़ी",
+   "alias": [
+    "son papdi",
+    "sohan papdi",
+    "soan papri",
+    "patisa",
+    "sonpapdi",
+    "सोनपापड़ी",
+    "पतीसा"
+   ],
+   "cat": "sweet",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 489,
+   "p": 6,
+   "c": 60,
+   "f": 25,
+   "fib": 1,
+   "na": 20,
+   "portions": [
+    {
+     "n": "1 cube (25 g)",
+     "hi": "1 टुकड़ा",
+     "g": 25
+    },
+    {
+     "n": "2 cubes (50 g)",
+     "hi": "2 टुकड़े",
+     "g": 50
+    }
+   ],
+   "src": "Packaged-sweet labels ~480-500 kcal/100 g; recipe check besan+maida+ghee+sugar",
+   "conf": "high",
+   "note": "Flaky threads of besan, maida, ghee and sugar; packaged soan papdi labels read about 490 kcal/100 g."
+  },
+  {
+   "slug": "mysore-pak",
+   "name": "Mysore Pak",
+   "hi": "मैसूर पाक",
+   "alias": [
+    "mysorepak",
+    "mysore paak",
+    "ghee mysore pak",
+    "मैसूरपाक"
+   ],
+   "cat": "sweet",
+   "region": "Karnataka",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 536,
+   "p": 5,
+   "c": 48,
+   "f": 36,
+   "fib": 2,
+   "na": 10,
+   "portions": [
+    {
+     "n": "1 piece (30 g)",
+     "hi": "1 पीस",
+     "g": 30
+    },
+    {
+     "n": "2 pieces (60 g)",
+     "hi": "2 पीस",
+     "g": 60
+    }
+   ],
+   "src": "Recipe computed (1 besan : 2 sugar : 2 ghee by weight) and checked against shop labels ~520-570 kcal/100 g",
+   "conf": "medium",
+   "note": "Besan, sugar and about 35% ghee cooked into a rich fudge; one of the highest-fat mithai. Soft porous halwai version."
+  },
+  {
+   "slug": "mawa-kachori",
+   "name": "Mawa Kachori",
+   "hi": "मावा कचौरी",
+   "alias": [
+    "mawa kachori jodhpur",
+    "khoya kachori",
+    "sweet kachori",
+    "meethi kachori",
+    "मावा कचोरी",
+    "मीठी कचौरी"
+   ],
+   "cat": "sweet",
+   "region": "Rajasthan",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 482,
+   "p": 7,
+   "c": 55,
+   "f": 26,
+   "fib": 1.5,
+   "na": 20,
+   "portions": [
+    {
+     "n": "1 piece (70 g)",
+     "hi": "1 पीस",
+     "g": 70
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 flours/sugar + realistic fry-oil uptake; cross-checked NIN and packaged-sweet labels",
+   "conf": "low",
+   "note": "Jodhpur sweet: maida shell stuffed with khoya and nuts, fried and dipped in syrup."
+  },
+  {
+   "slug": "anarsa",
+   "name": "Anarsa",
+   "hi": "अनरसा",
+   "alias": [
+    "anarsa sweet",
+    "anarase",
+    "anarsa poppy seed",
+    "arisa",
+    "अनारसे"
+   ],
+   "cat": "sweet",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🍘",
+   "unit": "g",
+   "kcal": 421,
+   "p": 5,
+   "c": 62,
+   "f": 17,
+   "fib": 1.5,
+   "na": 10,
+   "portions": [
+    {
+     "n": "1 piece (30 g)",
+     "hi": "1 पीस",
+     "g": 30
+    },
+    {
+     "n": "2 pieces (60 g)",
+     "hi": "2 पीस",
+     "g": 60
+    }
+   ],
+   "src": "Standard regional recipe computed from IFCT 2017 ingredients (flour, jaggery/sugar, coconut, ghee); estimate, cross-checked NIN where available",
+   "conf": "medium",
+   "note": "Soaked rice flour dough with jaggery/sugar, rolled in poppy seeds and fried."
+  },
+  {
+   "slug": "shankarpali-sweet",
+   "name": "Shankarpali (Sweet)",
+   "hi": "शंकरपाळी",
+   "alias": [
+    "shakkar para",
+    "shakarpara",
+    "shankarpale",
+    "sweet shakarpara",
+    "शकरपारा",
+    "शक्करपारे"
+   ],
+   "cat": "sweet",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🍘",
+   "unit": "g",
+   "kcal": 470,
+   "p": 6,
+   "c": 62,
+   "f": 22,
+   "fib": 1.5,
+   "na": 15,
+   "portions": [
+    {
+     "n": "5 pieces (40 g)",
+     "hi": "5 पीस",
+     "g": 40
+    },
+    {
+     "n": "1 handful (25 g)",
+     "hi": "1 मुट्ठी",
+     "g": 25
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 flours/sugar + realistic fry-oil uptake; cross-checked NIN and packaged-sweet labels",
+   "conf": "medium",
+   "note": "Diamond cut maida-ghee-sugar crisps, deep fried (Diwali)."
+  },
+  {
+   "slug": "kajjikayalu",
+   "name": "Kajjikayalu",
+   "hi": "कज्जिकायलु",
+   "alias": [
+    "kajjikaya",
+    "kajjikayalu sweet",
+    "kajjikai",
+    "कज्जिकाया"
+   ],
+   "cat": "sweet",
+   "region": "Andhra Pradesh",
+   "diet": "veg",
+   "emoji": "🥟",
+   "unit": "g",
+   "kcal": 408,
+   "p": 5,
+   "c": 52,
+   "f": 20,
+   "fib": 3,
+   "na": 15,
+   "portions": [
+    {
+     "n": "1 piece (40 g)",
+     "hi": "1 पीस",
+     "g": 40
+    },
+    {
+     "n": "2 pieces (80 g)",
+     "hi": "2 पीस",
+     "g": 80
+    }
+   ],
+   "src": "Standard regional recipe computed from IFCT 2017 ingredients (flour, jaggery/sugar, coconut, ghee); estimate, cross-checked NIN where available",
+   "conf": "medium",
+   "note": "Andhra karanji: fried shell with coconut/dalia-jaggery filling."
+  },
+  {
+   "slug": "boorelu",
+   "name": "Boorelu (Poornalu)",
+   "hi": "बूरेलु",
+   "alias": [
+    "poornalu",
+    "purnalu",
+    "burelu",
+    "bhakshalu balls",
+    "poornam boorelu",
+    "पूर्णालु"
+   ],
+   "cat": "sweet",
+   "region": "Andhra Pradesh",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 370,
+   "p": 6,
+   "c": 55,
+   "f": 14,
+   "fib": 3,
+   "na": 15,
+   "portions": [
+    {
+     "n": "1 piece (40 g)",
+     "hi": "1 पीस",
+     "g": 40
+    },
+    {
+     "n": "2 pieces (80 g)",
+     "hi": "2 पीस",
+     "g": 80
+    }
+   ],
+   "src": "Standard regional recipe computed from IFCT 2017 ingredients (flour, jaggery/sugar, coconut, ghee); estimate, cross-checked NIN where available",
+   "conf": "medium",
+   "note": "Fried rice-urad batter balls with chana dal and jaggery filling."
+  },
+  {
+   "slug": "neyyappam",
+   "name": "Neyyappam",
+   "hi": "नेय्यप्पम",
+   "alias": [
+    "nei appam",
+    "neyyappam kerala",
+    "ney appam",
+    "nei appam sweet",
+    "नेई अप्पम"
+   ],
+   "cat": "sweet",
+   "region": "Kerala",
+   "diet": "veg",
+   "emoji": "🍩",
+   "unit": "g",
+   "kcal": 359,
+   "p": 3,
+   "c": 62,
+   "f": 11,
+   "fib": 1.5,
+   "na": 15,
+   "portions": [
+    {
+     "n": "1 piece (40 g)",
+     "hi": "1 पीस",
+     "g": 40
+    },
+    {
+     "n": "2 pieces (80 g)",
+     "hi": "2 पीस",
+     "g": 80
+    }
+   ],
+   "src": "Standard regional recipe computed from IFCT 2017 ingredients (flour, jaggery/sugar, coconut, ghee); estimate, cross-checked NIN where available",
+   "conf": "medium",
+   "note": "Rice flour, jaggery, coconut bits and banana fried in ghee/coconut oil (temple offering)."
+  },
+  {
+   "slug": "unniyappam",
+   "name": "Unniyappam",
+   "hi": "उन्नियप्पम",
+   "alias": [
+    "unni appam",
+    "unniappam",
+    "karthika appam",
+    "kuzhi appam sweet",
+    "उन्नी अप्पम"
+   ],
+   "cat": "sweet",
+   "region": "Kerala",
+   "diet": "veg",
+   "emoji": "🍘",
+   "unit": "g",
+   "kcal": 375,
+   "p": 4,
+   "c": 56,
+   "f": 15,
+   "fib": 2,
+   "na": 20,
+   "portions": [
+    {
+     "n": "1 piece (25 g)",
+     "hi": "1 पीस",
+     "g": 25
+    },
+    {
+     "n": "3 pieces (75 g)",
+     "hi": "3 पीस",
+     "g": 75
+    }
+   ],
+   "src": "Standard regional recipe computed from IFCT 2017 ingredients (flour, jaggery/sugar, coconut, ghee); estimate, cross-checked NIN where available",
+   "conf": "medium",
+   "note": "Fried rice-jaggery-banana batter balls with coconut bits and cardamom; about 95 kcal each."
+  },
+  {
+   "slug": "adhirasam",
+   "name": "Adhirasam",
+   "hi": "अधिरसम",
+   "alias": [
+    "athirasam",
+    "adhirasam sweet",
+    "adirasam",
+    "anarasalu",
+    "अतिरसम"
+   ],
+   "cat": "sweet",
+   "region": "Tamil Nadu",
+   "diet": "veg",
+   "emoji": "🍘",
+   "unit": "g",
+   "kcal": 398,
+   "p": 3,
+   "c": 65,
+   "f": 14,
+   "fib": 1.5,
+   "na": 10,
+   "portions": [
+    {
+     "n": "1 piece (50 g)",
+     "hi": "1 पीस",
+     "g": 50
+    },
+    {
+     "n": "2 pieces (100 g)",
+     "hi": "2 पीस",
+     "g": 100
+    }
+   ],
+   "src": "Standard regional recipe computed from IFCT 2017 ingredients (flour, jaggery/sugar, coconut, ghee); estimate, cross-checked NIN where available",
+   "conf": "medium",
+   "note": "Rice flour and jaggery dough fried into discs (Diwali)."
+  },
+  {
+   "slug": "ariselu",
+   "name": "Ariselu",
+   "hi": "अरिसेलु",
+   "alias": [
+    "ariselu sweet",
+    "arisalu",
+    "kajjayam",
+    "arsa",
+    "अरसा",
+    "अरिसालू"
+   ],
+   "cat": "sweet",
+   "region": "Andhra Pradesh",
+   "diet": "veg",
+   "emoji": "🍘",
+   "unit": "g",
+   "kcal": 433,
+   "p": 4,
+   "c": 66,
+   "f": 17,
+   "fib": 1.5,
+   "na": 10,
+   "portions": [
+    {
+     "n": "1 piece (40 g)",
+     "hi": "1 पीस",
+     "g": 40
+    },
+    {
+     "n": "2 pieces (80 g)",
+     "hi": "2 पीस",
+     "g": 80
+    }
+   ],
+   "src": "Standard regional recipe computed from IFCT 2017 ingredients (flour, jaggery/sugar, coconut, ghee); estimate, cross-checked NIN where available",
+   "conf": "medium",
+   "note": "Rice flour and jaggery dough with sesame, deep fried (Sankranti)."
+  },
+  {
+   "slug": "pootharekulu",
+   "name": "Pootharekulu",
+   "hi": "पूतरेकुलु",
+   "alias": [
+    "putharekulu",
+    "paper sweet",
+    "atreyapuram pootharekulu",
+    "rice paper sweet",
+    "पुथरेकुलु"
+   ],
+   "cat": "sweet",
+   "region": "Andhra Pradesh",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 436,
+   "p": 3,
+   "c": 70,
+   "f": 16,
+   "fib": 0.5,
+   "na": 10,
+   "portions": [
+    {
+     "n": "1 roll (25 g)",
+     "hi": "1 रोल",
+     "g": 25
+    },
+    {
+     "n": "2 rolls (50 g)",
+     "hi": "2 रोल",
+     "g": 50
+    }
+   ],
+   "src": "Standard regional recipe computed from IFCT 2017 ingredients (flour, jaggery/sugar, coconut, ghee); estimate, cross-checked NIN where available",
+   "conf": "medium",
+   "note": "Paper-thin rice wafers layered with ghee and powdered sugar/jaggery and dry fruit (Atreyapuram)."
+  },
+  {
+   "slug": "manda-pitha",
+   "name": "Manda Pitha",
+   "hi": "मंडा पिठा",
+   "alias": [
+    "manda pitha odisha",
+    "mandha pitha",
+    "steamed pitha odisha",
+    "मांडा पीठा"
+   ],
+   "cat": "sweet",
+   "region": "Odisha",
+   "diet": "veg",
+   "emoji": "🥟",
+   "unit": "g",
+   "kcal": 191,
+   "p": 3,
+   "c": 38,
+   "f": 3,
+   "fib": 1.5,
+   "na": 10,
+   "portions": [
+    {
+     "n": "1 piece (40 g)",
+     "hi": "1 पीस",
+     "g": 40
+    },
+    {
+     "n": "2 pieces (80 g)",
+     "hi": "2 पीस",
+     "g": 80
+    }
+   ],
+   "src": "Standard regional recipe computed from IFCT 2017 ingredients (flour, jaggery/sugar, coconut, ghee); estimate, cross-checked NIN where available",
+   "conf": "medium",
+   "note": "Steamed rice flour dumpling stuffed with coconut-jaggery filling (Raja festival)."
+  },
+  {
+   "slug": "dodol",
+   "name": "Dodol (Goan)",
+   "hi": "दोदोल",
+   "alias": [
+    "dodol goa",
+    "goan dodol",
+    "coconut jaggery dodol",
+    "dodol sweet",
+    "डोडोल"
+   ],
+   "cat": "sweet",
+   "region": "Goa",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 328,
+   "p": 2,
+   "c": 62,
+   "f": 8,
+   "fib": 2,
+   "na": 10,
+   "portions": [
+    {
+     "n": "1 piece (30 g)",
+     "hi": "1 पीस",
+     "g": 30
+    },
+    {
+     "n": "2 pieces (60 g)",
+     "hi": "2 पीस",
+     "g": 60
+    }
+   ],
+   "src": "Standard regional recipe computed from IFCT 2017 ingredients (flour, jaggery/sugar, coconut, ghee); estimate, cross-checked NIN where available",
+   "conf": "medium",
+   "note": "Jaggery, rice flour and thick coconut milk cooked down to a chewy toffee (Christmas sweet)."
+  },
+  {
+   "slug": "bebinca",
+   "name": "Bebinca",
+   "hi": "बेबिंका",
+   "alias": [
+    "bebinka",
+    "goan bebinca",
+    "bibik",
+    "seven layer goan cake",
+    "बेबिंक"
+   ],
+   "cat": "sweet",
+   "region": "Goa",
+   "diet": "egg",
+   "emoji": "🎂",
+   "unit": "g",
+   "kcal": 405,
+   "p": 4,
+   "c": 50,
+   "f": 21,
+   "fib": 1,
+   "na": 35,
+   "portions": [
+    {
+     "n": "1 slice (60 g)",
+     "hi": "1 टुकड़ा",
+     "g": 60
+    },
+    {
+     "n": "1 thin slice (40 g)",
+     "hi": "1 पतला टुकड़ा",
+     "g": 40
+    }
+   ],
+   "src": "Standard regional recipe computed from IFCT 2017 ingredients (flour, jaggery/sugar, coconut, ghee); estimate, cross-checked NIN where available",
+   "conf": "medium",
+   "note": "Layered baked coconut milk, egg yolk, sugar and ghee cake; traditionally has egg yolk."
+  },
+  {
+   "slug": "neureos",
+   "name": "Neureos (Goan Karanji)",
+   "hi": "नेवऱ्या",
+   "alias": [
+    "neuri",
+    "newri",
+    "goan neureos",
+    "nevri",
+    "नेउरिओ"
+   ],
+   "cat": "sweet",
+   "region": "Goa",
+   "diet": "veg",
+   "emoji": "🥟",
+   "unit": "g",
+   "kcal": 399,
+   "p": 5,
+   "c": 52,
+   "f": 19,
+   "fib": 3,
+   "na": 15,
+   "portions": [
+    {
+     "n": "1 piece (40 g)",
+     "hi": "1 पीस",
+     "g": 40
+    }
+   ],
+   "src": "Standard regional recipe computed from IFCT 2017 ingredients (flour, jaggery/sugar, coconut, ghee); estimate, cross-checked NIN where available",
+   "conf": "low",
+   "note": "Goan Christmas turnover filled with coconut, jaggery and nuts, deep fried."
+  },
+  {
+   "slug": "patoleo",
+   "name": "Patoleo (Patholi)",
+   "hi": "पातोळ्यो",
+   "alias": [
+    "patholi",
+    "pathoyo",
+    "patoli",
+    "haldi leaf sweet",
+    "पातोळी"
+   ],
+   "cat": "sweet",
+   "region": "Goa",
+   "diet": "veg",
+   "emoji": "🥟",
+   "unit": "g",
+   "kcal": 194,
+   "p": 2.5,
+   "c": 38,
+   "f": 3.5,
+   "fib": 2.5,
+   "na": 10,
+   "portions": [
+    {
+     "n": "1 piece (60 g)",
+     "hi": "1 पीस",
+     "g": 60
+    }
+   ],
+   "src": "Standard regional recipe computed from IFCT 2017 ingredients (flour, jaggery/sugar, coconut, ghee); estimate, cross-checked NIN where available",
+   "conf": "medium",
+   "note": "Rice batter steamed in turmeric leaf with coconut-jaggery filling."
+  },
+  {
+   "slug": "modak-steamed",
+   "name": "Modak (Ukadiche, Steamed)",
+   "hi": "उकडीचे मोदक",
+   "alias": [
+    "modak",
+    "ukdiche modak",
+    "steamed modak",
+    "ganesh modak",
+    "मोदक",
+    "उकडीचा मोदक"
+   ],
+   "cat": "sweet",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🥟",
+   "unit": "g",
+   "kcal": 202,
+   "p": 2.5,
+   "c": 39,
+   "f": 4,
+   "fib": 2,
+   "na": 10,
+   "portions": [
+    {
+     "n": "1 modak (45 g)",
+     "hi": "1 मोदक",
+     "g": 45
+    },
+    {
+     "n": "3 modak (135 g)",
+     "hi": "3 मोदक",
+     "g": 135
+    },
+    {
+     "n": "1 modak with ghee (50 g)",
+     "hi": "1 मोदक घी के साथ",
+     "g": 50
+    }
+   ],
+   "src": "Standard regional recipe computed from IFCT 2017 ingredients (flour, jaggery/sugar, coconut, ghee); estimate, cross-checked NIN where available",
+   "conf": "medium",
+   "note": "Rice-flour shell stuffed with coconut-jaggery, steamed; ghee drizzled on top adds about 35 kcal per modak."
+  },
+  {
+   "slug": "modak-fried",
+   "name": "Modak (Fried)",
+   "hi": "तले हुए मोदक",
+   "alias": [
+    "fried modak",
+    "talniche modak",
+    "maida modak"
+   ],
+   "cat": "sweet",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🥟",
+   "unit": "g",
+   "kcal": 333,
+   "p": 4,
+   "c": 50,
+   "f": 13,
+   "fib": 2.5,
+   "na": 15,
+   "portions": [
+    {
+     "n": "1 modak (45 g)",
+     "hi": "1 मोदक",
+     "g": 45
+    },
+    {
+     "n": "2 modak (90 g)",
+     "hi": "2 मोदक",
+     "g": 90
+    }
+   ],
+   "src": "Standard regional recipe computed from IFCT 2017 ingredients (flour, jaggery/sugar, coconut, ghee); estimate, cross-checked NIN where available",
+   "conf": "low",
+   "note": "Wheat-flour shell with coconut-jaggery filling, deep fried."
+  },
+  {
+   "slug": "kozhukattai-sweet",
+   "name": "Kozhukattai (Sweet)",
+   "hi": "कोझुकट्टै (मीठी)",
+   "alias": [
+    "kozhukattai",
+    "poorna kozhukattai",
+    "modhakam",
+    "kudumu",
+    "kolukattai"
+   ],
+   "cat": "sweet",
+   "region": "Tamil Nadu",
+   "diet": "veg",
+   "emoji": "🥟",
+   "unit": "g",
+   "kcal": 194,
+   "p": 2.5,
+   "c": 38,
+   "f": 3.5,
+   "fib": 2,
+   "na": 10,
+   "portions": [
+    {
+     "n": "1 piece (35 g)",
+     "hi": "1 पीस",
+     "g": 35
+    },
+    {
+     "n": "3 pieces (105 g)",
+     "hi": "3 पीस",
+     "g": 105
+    }
+   ],
+   "src": "Standard regional recipe computed from IFCT 2017 ingredients (flour, jaggery/sugar, coconut, ghee); estimate, cross-checked NIN where available",
+   "conf": "medium",
+   "note": "Steamed rice-flour dumpling stuffed with coconut-jaggery (Vinayagar Chaturthi)."
+  },
+  {
+   "slug": "bobbatlu",
+   "name": "Bobbatlu (Bakshalu)",
+   "hi": "बोब्बट्लु",
+   "alias": [
+    "bobbattu",
+    "bakshalu",
+    "boorelu poli",
+    "bobbatlu poli",
+    "boli",
+    "पूर्णम पोली"
+   ],
+   "cat": "sweet",
+   "region": "Andhra Pradesh",
+   "diet": "veg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 318,
+   "p": 5,
+   "c": 52,
+   "f": 10,
+   "fib": 3,
+   "na": 15,
+   "portions": [
+    {
+     "n": "1 piece (70 g)",
+     "hi": "1 पीस",
+     "g": 70
+    },
+    {
+     "n": "2 pieces (140 g)",
+     "hi": "2 पीस",
+     "g": 140
+    }
+   ],
+   "src": "Standard regional recipe computed from IFCT 2017 ingredients (flour, jaggery/sugar, coconut, ghee); estimate, cross-checked NIN where available",
+   "conf": "medium",
+   "note": "Maida flatbread stuffed with chana dal-jaggery filling, roasted with ghee. INDB ASC467 (367) is higher."
+  },
+  {
+   "slug": "holige",
+   "name": "Holige (Obbattu)",
+   "hi": "होलिगे (ओब्बट्टु)",
+   "alias": [
+    "obbattu",
+    "obbattu holige",
+    "kayi holige",
+    "hollige"
+   ],
+   "cat": "sweet",
+   "region": "Karnataka",
+   "diet": "veg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 310,
+   "p": 5,
+   "c": 50,
+   "f": 10,
+   "fib": 3,
+   "na": 15,
+   "portions": [
+    {
+     "n": "1 piece (70 g)",
+     "hi": "1 पीस",
+     "g": 70
+    },
+    {
+     "n": "2 pieces (140 g)",
+     "hi": "2 पीस",
+     "g": 140
+    }
+   ],
+   "src": "Standard regional recipe computed from IFCT 2017 ingredients (flour, jaggery/sugar, coconut, ghee); estimate, cross-checked NIN where available",
+   "conf": "medium",
+   "note": "Karnataka version: maida shell with chana dal-jaggery (or coconut) stuffing, toasted with ghee."
+  },
+  {
+   "slug": "puran-poli",
+   "name": "Puran Poli",
+   "hi": "पूरन पोली",
+   "alias": [
+    "puranpoli",
+    "puran poli with ghee",
+    "holige maharashtra",
+    "obbattu maharashtra",
+    "पुरण पोळी",
+    "पूरनपोळी"
+   ],
+   "cat": "sweet",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 313,
+   "p": 6,
+   "c": 52,
+   "f": 9,
+   "fib": 3,
+   "na": 15,
+   "portions": [
+    {
+     "n": "1 piece (80 g)",
+     "hi": "1 पीस",
+     "g": 80
+    },
+    {
+     "n": "2 pieces (160 g)",
+     "hi": "2 पीस",
+     "g": 160
+    }
+   ],
+   "src": "Standard regional recipe computed from IFCT 2017 ingredients (flour, jaggery/sugar, coconut, ghee); estimate, cross-checked NIN where available",
+   "conf": "medium",
+   "note": "Wheat/maida flatbread with chana dal-jaggery filling, brushed with ghee (about 250 kcal each, ghee on top extra). INDB ASC467 (367, dry roti) is higher."
+  },
+  {
+   "slug": "gul-poli",
+   "name": "Gul Poli (Gulachi Poli)",
+   "hi": "गुळाची पोळी",
+   "alias": [
+    "gulachi poli",
+    "gud poli",
+    "jaggery paratha",
+    "gur ki roti",
+    "गुड़ की रोटी",
+    "गूळ पोळी"
+   ],
+   "cat": "sweet",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 356,
+   "p": 6,
+   "c": 56,
+   "f": 12,
+   "fib": 3.5,
+   "na": 20,
+   "portions": [
+    {
+     "n": "1 piece (70 g)",
+     "hi": "1 पीस",
+     "g": 70
+    }
+   ],
+   "src": "Standard regional recipe computed from IFCT 2017 ingredients (flour, jaggery/sugar, coconut, ghee); estimate, cross-checked NIN where available",
+   "conf": "medium",
+   "note": "Wheat flatbread stuffed with jaggery, sesame and ghee (Makar Sankranti)."
+  },
+  {
+   "slug": "thekua",
+   "name": "Thekua",
+   "hi": "ठेकुआ",
+   "alias": [
+    "thekua chhath",
+    "khajoor thekua",
+    "tikri",
+    "thokwa",
+    "ठोकवा",
+    "ठेकुए"
+   ],
+   "cat": "sweet",
+   "region": "Bihar",
+   "diet": "veg",
+   "emoji": "🍪",
+   "unit": "g",
+   "kcal": 443,
+   "p": 6,
+   "c": 62,
+   "f": 19,
+   "fib": 3,
+   "na": 10,
+   "portions": [
+    {
+     "n": "1 piece (40 g)",
+     "hi": "1 पीस",
+     "g": 40
+    },
+    {
+     "n": "2 pieces (80 g)",
+     "hi": "2 पीस",
+     "g": 80
+    }
+   ],
+   "src": "Standard regional recipe computed from IFCT 2017 ingredients (flour, jaggery/sugar, coconut, ghee); estimate, cross-checked NIN where available",
+   "conf": "medium",
+   "note": "Wheat flour, jaggery, ghee and coconut pressed in a mould and deep fried (Chhath prasad)."
+  },
+  {
+   "slug": "tilkut",
+   "name": "Tilkut",
+   "hi": "तिलकुट",
+   "alias": [
+    "til kut",
+    "tilkut gaya",
+    "sesame jaggery sweet bihar",
+    "तिल कूट"
+   ],
+   "cat": "sweet",
+   "region": "Bihar",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 495,
+   "p": 11,
+   "c": 52,
+   "f": 27,
+   "fib": 4,
+   "na": 10,
+   "portions": [
+    {
+     "n": "1 piece (25 g)",
+     "hi": "1 पीस",
+     "g": 25
+    },
+    {
+     "n": "1 handful (40 g)",
+     "hi": "1 मुट्ठी",
+     "g": 40
+    }
+   ],
+   "src": "Standard regional recipe computed from IFCT 2017 ingredients (flour, jaggery/sugar, coconut, ghee); estimate, cross-checked NIN where available",
+   "conf": "medium",
+   "note": "Pounded sesame and sugar/jaggery (Gaya, Bihar)."
+  },
+  {
+   "slug": "gajak",
+   "name": "Gajak",
+   "hi": "गजक",
+   "alias": [
+    "gajjak",
+    "til gajak",
+    "gajak sweet",
+    "sesame jaggery gajak",
+    "गज्जक"
+   ],
+   "cat": "sweet",
+   "region": "Madhya Pradesh",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 492,
+   "p": 12,
+   "c": 48,
+   "f": 28,
+   "fib": 5,
+   "na": 10,
+   "portions": [
+    {
+     "n": "1 piece (25 g)",
+     "hi": "1 पीस",
+     "g": 25
+    },
+    {
+     "n": "1 handful (40 g)",
+     "hi": "1 मुट्ठी",
+     "g": 40
+    }
+   ],
+   "src": "Standard regional recipe computed from IFCT 2017 ingredients (flour, jaggery/sugar, coconut, ghee); estimate, cross-checked NIN where available",
+   "conf": "medium",
+   "note": "Pounded sesame and jaggery, winter sweet (Morena/Gwalior style)."
+  },
+  {
+   "slug": "peanut-chikki",
+   "name": "Peanut Chikki (Moongfali Chikki)",
+   "hi": "मूंगफली चिक्की",
+   "alias": [
+    "groundnut chikki",
+    "moongphali chikki",
+    "peanut brittle",
+    "shengdana chikki",
+    "kadalai mittai",
+    "मूंगफली की चिक्की",
+    "पीनट चिक्की"
+   ],
+   "cat": "sweet",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🥜",
+   "unit": "g",
+   "kcal": 497,
+   "p": 13,
+   "c": 55,
+   "f": 25,
+   "fib": 4,
+   "na": 15,
+   "portions": [
+    {
+     "n": "1 piece (25 g)",
+     "hi": "1 पीस",
+     "g": 25
+    },
+    {
+     "n": "1 bar (50 g)",
+     "hi": "1 बार",
+     "g": 50
+    }
+   ],
+   "core": true,
+   "src": "Standard regional recipe computed from IFCT 2017 ingredients (flour, jaggery/sugar, coconut, ghee); estimate, cross-checked NIN where available; peanuts IFCT 567 kcal",
+   "conf": "medium",
+   "note": "Roasted peanuts set in jaggery/sugar syrup (about 60% peanuts); INDB ASC382 (321) is lower."
+  },
+  {
+   "slug": "til-chikki",
+   "name": "Til Chikki (Sesame Chikki)",
+   "hi": "तिल चिक्की",
+   "alias": [
+    "sesame chikki",
+    "til patti",
+    "til papdi",
+    "ellu urundai",
+    "तिल की चिक्की",
+    "तिल पट्टी"
+   ],
+   "cat": "sweet",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 482,
+   "p": 10,
+   "c": 52,
+   "f": 26,
+   "fib": 5,
+   "na": 15,
+   "portions": [
+    {
+     "n": "1 piece (25 g)",
+     "hi": "1 पीस",
+     "g": 25
+    },
+    {
+     "n": "1 bar (50 g)",
+     "hi": "1 बार",
+     "g": 50
+    }
+   ],
+   "src": "Standard regional recipe computed from IFCT 2017 ingredients (flour, jaggery/sugar, coconut, ghee); estimate, cross-checked NIN where available",
+   "conf": "medium",
+   "note": "Sesame seeds set in jaggery/sugar syrup."
+  },
+  {
+   "slug": "dry-fruit-chikki",
+   "name": "Dry Fruit Chikki",
+   "hi": "ड्राई फ्रूट चिक्की",
+   "alias": [
+    "dry fruit brittle",
+    "mixed nuts chikki",
+    "kaju badam chikki",
+    "ड्राई फ्रूट की चिक्की"
+   ],
+   "cat": "sweet",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 472,
+   "p": 12,
+   "c": 52,
+   "f": 24,
+   "fib": 3,
+   "na": 15,
+   "portions": [
+    {
+     "n": "1 piece (25 g)",
+     "hi": "1 पीस",
+     "g": 25
+    },
+    {
+     "n": "1 bar (50 g)",
+     "hi": "1 बार",
+     "g": 50
+    }
+   ],
+   "src": "Standard regional recipe computed from IFCT 2017 ingredients (flour, jaggery/sugar, coconut, ghee); estimate, cross-checked NIN where available",
+   "conf": "medium",
+   "note": "Almond, cashew and pista set in jaggery/sugar syrup."
+  },
+  {
+   "slug": "murmura-chikki",
+   "name": "Murmura Chikki (Puffed Rice Bar)",
+   "hi": "मुरमुरा चिक्की",
+   "alias": [
+    "puffed rice chikki",
+    "lai chikki",
+    "pori urundai bar",
+    "murmure ki chikki",
+    "मुरमुरे की चिक्की"
+   ],
+   "cat": "sweet",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 361,
+   "p": 3,
+   "c": 85,
+   "f": 1,
+   "fib": 1,
+   "na": 10,
+   "portions": [
+    {
+     "n": "1 piece (25 g)",
+     "hi": "1 पीस",
+     "g": 25
+    },
+    {
+     "n": "1 bar (50 g)",
+     "hi": "1 बार",
+     "g": 50
+    }
+   ],
+   "src": "Standard regional recipe computed from IFCT 2017 ingredients (flour, jaggery/sugar, coconut, ghee); estimate, cross-checked NIN where available; INDB BFP413 too low",
+   "conf": "medium",
+   "note": "Puffed rice set in jaggery syrup, very little fat; INDB BFP413 (254) is too low for a jaggery-bound bar."
+  },
+  {
+   "slug": "revdi",
+   "name": "Revdi (Rewri)",
+   "hi": "रेवड़ी",
+   "alias": [
+    "rewri",
+    "rewdi",
+    "revri",
+    "til revdi",
+    "gajak revdi",
+    "रेवरी"
+   ],
+   "cat": "sweet",
+   "region": "Punjab",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 496,
+   "p": 8,
+   "c": 62,
+   "f": 24,
+   "fib": 3,
+   "na": 10,
+   "portions": [
+    {
+     "n": "1 tbsp (15 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 15
+    },
+    {
+     "n": "1 handful (30 g)",
+     "hi": "1 मुट्ठी",
+     "g": 30
+    },
+    {
+     "n": "1 piece (8 g)",
+     "hi": "1 पीस",
+     "g": 8
+    }
+   ],
+   "src": "Standard regional recipe computed from IFCT 2017 ingredients (flour, jaggery/sugar, coconut, ghee); estimate, cross-checked NIN where available",
+   "conf": "medium",
+   "note": "Sesame-studded sugar discs; about 75 kcal per tablespoon."
+  },
+  {
+   "slug": "sukhdi",
+   "name": "Sukhdi (Gol Papdi)",
+   "hi": "सुखड़ी",
+   "alias": [
+    "gol papdi",
+    "gur papdi",
+    "gud papdi",
+    "gujarati sukhdi",
+    "गोल पापड़ी",
+    "गुड़पापड़ी"
+   ],
+   "cat": "sweet",
+   "region": "Gujarat",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 454,
+   "p": 6,
+   "c": 58,
+   "f": 22,
+   "fib": 3,
+   "na": 15,
+   "portions": [
+    {
+     "n": "1 piece (30 g)",
+     "hi": "1 पीस",
+     "g": 30
+    },
+    {
+     "n": "2 pieces (60 g)",
+     "hi": "2 पीस",
+     "g": 60
+    }
+   ],
+   "src": "Standard regional recipe computed from IFCT 2017 ingredients (flour, jaggery/sugar, coconut, ghee); estimate, cross-checked NIN where available",
+   "conf": "medium",
+   "note": "Whole wheat flour roasted in ghee and set with jaggery (Gujarati winter sweet)."
+  },
+  {
+   "slug": "petha-agra",
+   "name": "Petha (Agra, Dry)",
+   "hi": "पेठा (आगरा)",
+   "alias": [
+    "agra petha",
+    "sukha petha",
+    "dry petha",
+    "plain petha",
+    "pethe ki mithai",
+    "आगरा का पेठा"
+   ],
+   "cat": "sweet",
+   "region": "Uttar Pradesh",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 322,
+   "p": 0.3,
+   "c": 80,
+   "f": 0.1,
+   "fib": 0.5,
+   "na": 10,
+   "portions": [
+    {
+     "n": "1 piece (30 g)",
+     "hi": "1 पीस",
+     "g": 30
+    },
+    {
+     "n": "3 pieces (90 g)",
+     "hi": "3 पीस",
+     "g": 90
+    }
+   ],
+   "src": "Estimated from ash gourd candied with sugar; dry petha is ~80% sugar",
+   "conf": "low",
+   "note": "Ash gourd candied in sugar syrup and dried: essentially sugar. Estimate from sugar content (~80%)."
+  },
+  {
+   "slug": "angoori-petha",
+   "name": "Petha (Angoori, in Syrup)",
+   "hi": "पेठा (अंगूरी)",
+   "alias": [
+    "angoori petha",
+    "wet petha",
+    "kesar petha",
+    "petha in syrup",
+    "अंगूरी पेठा"
+   ],
+   "cat": "sweet",
+   "region": "Uttar Pradesh",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 209,
+   "p": 0.3,
+   "c": 52,
+   "f": 0,
+   "fib": 0.5,
+   "na": 10,
+   "portions": [
+    {
+     "n": "1 piece (30 g)",
+     "hi": "1 पीस",
+     "g": 30
+    },
+    {
+     "n": "3 pieces (90 g)",
+     "hi": "3 पीस",
+     "g": 90
+    }
+   ],
+   "src": "Estimated; ash gourd cooked in sugar syrup",
+   "conf": "low",
+   "note": "Soft petha pieces in sugar syrup; weight includes syrup."
+  },
+  {
+   "slug": "shahi-tukda",
+   "name": "Shahi Tukda",
+   "hi": "शाही टुकड़ा",
+   "alias": [
+    "shahi tukra",
+    "shahi tukde",
+    "double ka meetha shahi",
+    "royal bread pudding india",
+    "शाही टुकड़े"
+   ],
+   "cat": "sweet",
+   "region": "Uttar Pradesh",
+   "diet": "veg",
+   "emoji": "🍮",
+   "unit": "g",
+   "kcal": 302,
+   "p": 6,
+   "c": 38,
+   "f": 14,
+   "fib": 0.8,
+   "na": 120,
+   "portions": [
+    {
+     "n": "1 piece (80 g)",
+     "hi": "1 पीस",
+     "g": 80
+    },
+    {
+     "n": "2 pieces (160 g)",
+     "hi": "2 पीस",
+     "g": 160
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 flours/sugar + realistic fry-oil uptake; cross-checked NIN and packaged-sweet labels; INDB ASC350 too low",
+   "conf": "medium",
+   "note": "Ghee-fried bread triangles soaked in sugar syrup and topped with rabri. INDB ASC350 (190) is too low."
+  },
+  {
+   "slug": "double-ka-meetha",
+   "name": "Double Ka Meetha",
+   "hi": "डबल का मीठा",
+   "alias": [
+    "double ka mitha",
+    "dubel ka meetha",
+    "hyderabadi bread pudding",
+    "shahi tukda hyderabad"
+   ],
+   "cat": "sweet",
+   "region": "Telangana",
+   "diet": "veg",
+   "emoji": "🍮",
+   "unit": "g",
+   "kcal": 290,
+   "p": 5,
+   "c": 36,
+   "f": 14,
+   "fib": 0.8,
+   "na": 110,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 piece (80 g)",
+     "hi": "1 पीस",
+     "g": 80
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 flours/sugar + realistic fry-oil uptake; cross-checked NIN and packaged-sweet labels",
+   "conf": "medium",
+   "note": "Hyderabadi fried bread soaked in sugar syrup and saffron milk, topped with nuts."
+  },
+  {
+   "slug": "qubani-ka-meetha",
+   "name": "Qubani Ka Meetha",
+   "hi": "ख़ुबानी का मीठा",
+   "alias": [
+    "khubani ka meetha",
+    "qubani",
+    "khubani meetha",
+    "apricot dessert hyderabad",
+    "hyderabadi apricot dessert"
+   ],
+   "cat": "sweet",
+   "region": "Telangana",
+   "diet": "veg",
+   "emoji": "🍮",
+   "unit": "g",
+   "kcal": 180,
+   "p": 1.8,
+   "c": 33,
+   "f": 4.5,
+   "fib": 3.5,
+   "na": 10,
+   "portions": [
+    {
+     "n": "1 katori (120 g)",
+     "hi": "1 कटोरी",
+     "g": 120
+    },
+    {
+     "n": "1 small katori (80 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 80
+    }
+   ],
+   "src": "Estimated from dried apricot (IFCT) + sugar + cream",
+   "conf": "low",
+   "note": "Stewed dried apricots in sugar, served with cream or ice cream (about 215 kcal per katori with a spoon of cream)."
+  },
+  {
+   "slug": "meethi-boondi",
+   "name": "Meethi Boondi",
+   "hi": "मीठी बूंदी",
+   "alias": [
+    "sweet boondi",
+    "boondi prasad",
+    "meetha boondi",
+    "boondi sweet",
+    "बूंदी प्रसाद"
+   ],
+   "cat": "sweet",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 453,
+   "p": 5,
+   "c": 70,
+   "f": 17,
+   "fib": 1.5,
+   "na": 10,
+   "portions": [
+    {
+     "n": "1 tbsp (15 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 15
+    },
+    {
+     "n": "1 small katori (50 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 50
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 flours/sugar + realistic fry-oil uptake; cross-checked NIN and packaged-sweet labels",
+   "conf": "medium",
+   "note": "Tiny fried besan pearls in sugar syrup (loose boondi, prasad and raita base)."
+  },
+  {
+   "slug": "lapsi",
+   "name": "Lapsi (Sweet Broken Wheat)",
+   "hi": "लापसी",
+   "alias": [
+    "lapsi sweet",
+    "kansar",
+    "gujarati lapsi",
+    "dalia ghee sweet",
+    "fada lapsi",
+    "कंसार",
+    "लपसी"
+   ],
+   "cat": "sweet",
+   "region": "Gujarat",
+   "diet": "veg",
+   "emoji": "🍮",
+   "unit": "g",
+   "kcal": 260,
+   "p": 5,
+   "c": 42,
+   "f": 8,
+   "fib": 4,
+   "na": 15,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    }
+   ],
+   "src": "Standard regional recipe computed from IFCT 2017 ingredients (flour, jaggery/sugar, coconut, ghee); estimate, cross-checked NIN where available",
+   "conf": "medium",
+   "note": "Cracked wheat roasted in ghee and cooked in jaggery water (Gujarat/Rajasthan good-luck sweet)."
+  },
+  {
+   "slug": "mawa-bati",
+   "name": "Mawa Bati",
+   "hi": "मावा बाटी",
+   "alias": [
+    "mawa baati",
+    "khoya bati",
+    "mawa bati rajasthan",
+    "मावा बाटी"
+   ],
+   "cat": "sweet",
+   "region": "Rajasthan",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 404,
+   "p": 8,
+   "c": 48,
+   "f": 20,
+   "fib": 1.5,
+   "na": 40,
+   "portions": [
+    {
+     "n": "1 piece (60 g)",
+     "hi": "1 पीस",
+     "g": 60
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 flours/sugar + realistic fry-oil uptake; cross-checked NIN and packaged-sweet labels",
+   "conf": "low",
+   "note": "Khoya-and-flour ball stuffed with dry fruit, ghee-fried and dipped in sugar syrup (Rajasthan/MP)."
+  },
+  {
+   "slug": "kozhikodan-halwa",
+   "name": "Kozhikode Halwa",
+   "hi": "कोझिकोड हलवा",
+   "alias": [
+    "calicut halwa",
+    "kozhikodan halwa",
+    "sweet meat street halwa",
+    "black halwa kerala"
+   ],
+   "cat": "sweet",
+   "region": "Kerala",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 369,
+   "p": 2,
+   "c": 70,
+   "f": 9,
+   "fib": 1,
+   "na": 10,
+   "portions": [
+    {
+     "n": "1 piece (30 g)",
+     "hi": "1 पीस",
+     "g": 30
+    },
+    {
+     "n": "2 pieces (60 g)",
+     "hi": "2 पीस",
+     "g": 60
+    }
+   ],
+   "src": "Standard regional recipe computed from IFCT 2017 ingredients (flour, jaggery/sugar, coconut, ghee); estimate, cross-checked NIN where available",
+   "conf": "low",
+   "note": "Chewy halwa of maida/rice flour, jaggery or sugar, coconut oil (Kozhikode Mithai Theruvu)."
+  },
+  {
+   "slug": "vattayappam",
+   "name": "Vattayappam",
+   "hi": "वट्टयप्पम",
+   "alias": [
+    "vattayappam kerala",
+    "vatayappam",
+    "steamed rice cake sweet kerala",
+    "वट्टायप्पम"
+   ],
+   "cat": "sweet",
+   "region": "Kerala",
+   "diet": "veg",
+   "emoji": "🍥",
+   "unit": "g",
+   "kcal": 198,
+   "p": 3,
+   "c": 42,
+   "f": 2,
+   "fib": 1,
+   "na": 20,
+   "portions": [
+    {
+     "n": "1 piece (60 g)",
+     "hi": "1 पीस",
+     "g": 60
+    },
+    {
+     "n": "2 pieces (120 g)",
+     "hi": "2 पीस",
+     "g": 120
+    }
+   ],
+   "src": "Standard regional recipe computed from IFCT 2017 ingredients (flour, jaggery/sugar, coconut, ghee); estimate, cross-checked NIN where available",
+   "conf": "low",
+   "note": "Steamed fermented rice-coconut cake with sugar and cardamom, little fat."
+  },
+  {
+   "slug": "lavang-latika",
+   "name": "Lavang Latika",
+   "hi": "लवंग लतिका",
+   "alias": [
+    "lavang latica",
+    "laung lata",
+    "lavanga latika",
+    "लौंग लता",
+    "लवंग लता"
+   ],
+   "cat": "sweet",
+   "region": "Uttar Pradesh",
+   "diet": "veg",
+   "emoji": "🥟",
+   "unit": "g",
+   "kcal": 420,
+   "p": 5,
+   "c": 55,
+   "f": 20,
+   "fib": 1,
+   "na": 20,
+   "portions": [
+    {
+     "n": "1 piece (35 g)",
+     "hi": "1 पीस",
+     "g": 35
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 flours/sugar + realistic fry-oil uptake; cross-checked NIN and packaged-sweet labels",
+   "conf": "low",
+   "note": "Khoya-stuffed maida parcel closed with a clove, fried and dipped in syrup (Mathura/Banaras)."
+  },
+  {
+   "slug": "bal-mithai",
+   "name": "Bal Mithai",
+   "hi": "बाल मिठाई",
+   "alias": [
+    "bal mithai almora",
+    "almora bal mithai",
+    "brown chocolate mithai",
+    "बाल मिठाई अल्मोड़ा"
+   ],
+   "cat": "sweet",
+   "region": "Uttarakhand",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 446,
+   "p": 7,
+   "c": 55,
+   "f": 22,
+   "fib": 0.5,
+   "na": 55,
+   "portions": [
+    {
+     "n": "1 piece (30 g)",
+     "hi": "1 पीस",
+     "g": 30
+    },
+    {
+     "n": "2 pieces (60 g)",
+     "hi": "2 पीस",
+     "g": 60
+    }
+   ],
+   "src": "Standard halwai/home recipe computed from IFCT 2017 milk/khoya/chhena + sugar + ghee; cross-checked NIN Nutritive Value of Indian Foods and packaged-mithai labels",
+   "conf": "medium",
+   "note": "Almora brown fudge of roasted khoya and sugar, coated in sugar balls."
+  },
+  {
+   "slug": "churma",
+   "name": "Churma (Sweet)",
+   "hi": "चूरमा",
+   "alias": [
+    "churma rajasthani",
+    "choorma",
+    "baati churma sweet",
+    "dal baati churma churma",
+    "चूरमा मीठा"
+   ],
+   "cat": "sweet",
+   "region": "Rajasthan",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 449,
+   "p": 7,
+   "c": 58,
+   "f": 21,
+   "fib": 3,
+   "na": 15,
+   "portions": [
+    {
+     "n": "1 katori (100 g)",
+     "hi": "1 कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 tbsp (20 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 20
+    }
+   ],
+   "src": "Standard regional recipe computed from IFCT 2017 ingredients (flour, jaggery/sugar, coconut, ghee); estimate, cross-checked NIN where available",
+   "conf": "medium",
+   "note": "Crushed wheat baati/roti tossed with ghee and jaggery/sugar and nuts."
+  },
+  {
+   "slug": "shrikhand",
+   "name": "Shrikhand",
+   "hi": "श्रीखंड",
+   "alias": [
+    "srikhand",
+    "shrikhand elaichi",
+    "kesar elaichi shrikhand",
+    "shrikhand dessert",
+    "श्रीखण्ड"
+   ],
+   "cat": "sweet",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 205,
+   "p": 5.5,
+   "c": 31,
+   "f": 6.5,
+   "fib": 0,
+   "na": 35,
+   "portions": [
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    }
+   ],
+   "src": "Recipe computed: chakka (curd 2.5:1 hung) + sugar; packaged shrikhand ~190-230 kcal/100 g; INDB OSR024 too low",
+   "conf": "medium",
+   "note": "Hung full-cream curd (chakka) whipped with about 25% sugar, saffron and cardamom. INDB OSR024 (107) is too low."
+  },
+  {
+   "slug": "amrakhand",
+   "name": "Amrakhand",
+   "hi": "आम्रखंड",
+   "alias": [
+    "mango shrikhand",
+    "aamrakhand",
+    "amrakhand mango",
+    "आम श्रीखंड"
+   ],
+   "cat": "sweet",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 188,
+   "p": 4.5,
+   "c": 30,
+   "f": 5.5,
+   "fib": 0.5,
+   "na": 30,
+   "portions": [
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    }
+   ],
+   "src": "Computed from shrikhand row + mango pulp (IFCT)",
+   "conf": "medium",
+   "note": "Shrikhand blended with Alphonso mango pulp."
+  },
+  {
+   "slug": "sakkarai-pongal",
+   "name": "Sakkarai Pongal (Sweet Pongal)",
+   "hi": "शक्कराई पोंगल",
+   "alias": [
+    "sweet pongal",
+    "chakkara pongal",
+    "sarkarai pongal",
+    "sakkara pongal",
+    "gur pongal",
+    "सरकरै पोंगल",
+    "सीठा पोंगल"
+   ],
+   "cat": "sweet",
+   "region": "Tamil Nadu",
+   "diet": "veg",
+   "emoji": "🍚",
+   "unit": "g",
+   "kcal": 223,
+   "p": 3,
+   "c": 38,
+   "f": 6.5,
+   "fib": 1,
+   "na": 30,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    }
+   ],
+   "src": "Standard regional recipe computed from IFCT 2017 ingredients (flour, jaggery/sugar, coconut, ghee); estimate, cross-checked NIN where available",
+   "conf": "medium",
+   "note": "Rice and moong dal cooked soft with jaggery, ghee, cashew and raisins (temple/Pongal prasadam). Estimate."
+  },
+  {
+   "slug": "zarda",
+   "name": "Zarda (Meethe Chawal)",
+   "hi": "ज़र्दा",
+   "alias": [
+    "zarda pulao",
+    "meethe chawal",
+    "mitha pulao",
+    "mitha bhat",
+    "sweet rice",
+    "zarda rice",
+    "मीठे चावल",
+    "जर्दा"
+   ],
+   "cat": "sweet",
+   "region": "Uttar Pradesh",
+   "diet": "veg",
+   "emoji": "🍚",
+   "unit": "g",
+   "kcal": 223,
+   "p": 2.5,
+   "c": 42,
+   "f": 5,
+   "fib": 0.8,
+   "na": 20,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 plate (200 g)",
+     "hi": "1 प्लेट",
+     "g": 200
+    }
+   ],
+   "src": "Standard regional recipe computed from IFCT 2017 ingredients (flour, jaggery/sugar, coconut, ghee); estimate, cross-checked NIN where available; INDB ASC125 agrees",
+   "conf": "medium",
+   "note": "Saffron-yellow basmati cooked with sugar, ghee, nuts and raisins; INDB ASC125 (215) agrees."
+  },
+  {
+   "slug": "gur-ke-chawal",
+   "name": "Gur Ke Chawal (Jaggery Sweet Rice)",
+   "hi": "गुड़ के चावल",
+   "alias": [
+    "gud ke chawal",
+    "jaggery rice",
+    "gur wale chawal",
+    "bella anna",
+    "gur bhat",
+    "गुड़ वाले चावल"
+   ],
+   "cat": "sweet",
+   "region": "Haryana",
+   "diet": "veg",
+   "emoji": "🍚",
+   "unit": "g",
+   "kcal": 185,
+   "p": 2.5,
+   "c": 38,
+   "f": 2.5,
+   "fib": 0.7,
+   "na": 15,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    }
+   ],
+   "src": "Standard regional recipe computed from IFCT 2017 ingredients (flour, jaggery/sugar, coconut, ghee); estimate, cross-checked NIN where available",
+   "conf": "low",
+   "note": "Rice cooked with jaggery, a little ghee and coconut; lighter than zarda."
+  },
+  {
+   "slug": "narali-bhat",
+   "name": "Narali Bhat (Sweet Coconut Rice)",
+   "hi": "नारळी भात",
+   "alias": [
+    "nariyal bhat",
+    "coconut jaggery rice",
+    "narali bhath",
+    "sweet coconut rice",
+    "नारियल भात"
+   ],
+   "cat": "sweet",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🍚",
+   "unit": "g",
+   "kcal": 215,
+   "p": 2.5,
+   "c": 40,
+   "f": 5,
+   "fib": 1.5,
+   "na": 15,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    }
+   ],
+   "src": "Standard regional recipe computed from IFCT 2017 ingredients (flour, jaggery/sugar, coconut, ghee); estimate, cross-checked NIN where available",
+   "conf": "low",
+   "note": "Rice cooked with jaggery, fresh coconut, ghee and clove (Narali Purnima)."
+  },
+  {
+   "slug": "meethi-seviyan",
+   "name": "Meethi Seviyan (Dry Sweet Vermicelli)",
+   "hi": "मीठी सेवइयां",
+   "alias": [
+    "seviyan sweet",
+    "sewai sukhi",
+    "sweet seviyan dry",
+    "sukhi meethi sewai",
+    "सूखी सेवइयां",
+    "मीठी सेवई"
+   ],
+   "cat": "sweet",
+   "region": "Uttar Pradesh",
+   "diet": "veg",
+   "emoji": "🍝",
+   "unit": "g",
+   "kcal": 271,
+   "p": 3.5,
+   "c": 44,
+   "f": 9,
+   "fib": 1,
+   "na": 20,
+   "portions": [
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    }
+   ],
+   "src": "Standard regional recipe computed from IFCT 2017 ingredients (flour, jaggery/sugar, coconut, ghee); estimate, cross-checked NIN where available",
+   "conf": "medium",
+   "note": "Ghee-roasted vermicelli cooked dry with sugar syrup, nuts and cardamom (Eid, UP/Hyderabad)."
+  },
+  {
+   "slug": "sweet-dalia",
+   "name": "Sweet Dalia (Meetha Daliya)",
+   "hi": "मीठा दलिया",
+   "alias": [
+    "meetha dalia",
+    "sweet porridge broken wheat",
+    "dalia sweet",
+    "gur dalia",
+    "दलिया मीठा",
+    "गुड़ का दलिया"
+   ],
+   "cat": "sweet",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 143,
+   "p": 4,
+   "c": 25,
+   "f": 3,
+   "fib": 2.5,
+   "na": 20,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 बड़ा कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 milk (toned/whole), rice/vermicelli, sugar, nuts; cross-checked INDB kheer rows; INDB ASC486 agrees",
+   "conf": "medium",
+   "note": "Broken wheat cooked in milk with sugar/jaggery, little ghee. INDB ASC486 (141) agrees."
+  },
+  {
+   "slug": "aamras",
+   "name": "Aamras (Mango Pulp)",
+   "hi": "आमरस",
+   "alias": [
+    "amras",
+    "mango pulp dessert",
+    "aam ras",
+    "amras puri",
+    "आम रस",
+    "आमरस"
+   ],
+   "cat": "sweet",
+   "region": "Gujarat",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 85,
+   "p": 0.8,
+   "c": 20,
+   "f": 0.2,
+   "fib": 1.5,
+   "na": 5,
+   "portions": [
+    {
+     "n": "1 katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    }
+   ],
+   "src": "IFCT 2017 mango pulp (~70 kcal) + added sugar; INDB not applicable",
+   "conf": "medium",
+   "note": "Kesar/alphonso mango pulp with 1-2 tsp sugar per katori and a splash of milk; mostly mango. See Mango for the raw fruit."
+  },
+  {
+   "slug": "custard-milk",
+   "name": "Custard (Milk, Stirred)",
+   "hi": "कस्टर्ड",
+   "alias": [
+    "vanilla custard",
+    "custard powder dessert",
+    "milk custard",
+    "custard sauce",
+    "कस्टर्ड मिल्क"
+   ],
+   "cat": "sweet",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 115,
+   "p": 3.2,
+   "c": 17,
+   "f": 3.8,
+   "fib": 0,
+   "na": 45,
+   "portions": [
+    {
+     "n": "1 katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    }
+   ],
+   "src": "Typical Indian commercial ice-cream/dessert labels and standard recipe; cross-checked USDA and INDB; INDB ASC302 matches",
+   "conf": "medium",
+   "note": "Custard-powder (cornflour) cooked in whole milk with 2 tsp sugar per 100 ml; vegetarian. INDB ASC302 (109) agrees."
+  },
+  {
+   "slug": "fruit-custard",
+   "name": "Fruit Custard",
+   "hi": "फ्रूट कस्टर्ड",
+   "alias": [
+    "fruit custard bowl",
+    "custard with fruits",
+    "फ्रूट वाला कस्टर्ड"
+   ],
+   "cat": "sweet",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 105,
+   "p": 2.5,
+   "c": 17,
+   "f": 3,
+   "fib": 0.8,
+   "na": 35,
+   "portions": [
+    {
+     "n": "1 katori (120 g)",
+     "hi": "1 कटोरी",
+     "g": 120
+    },
+    {
+     "n": "1 bowl (200 g)",
+     "hi": "1 बड़ा कटोरा",
+     "g": 200
+    }
+   ],
+   "src": "Computed from custard row + fruit (IFCT)",
+   "conf": "medium",
+   "note": "Chilled custard (about 65%) with banana, apple, grapes, pomegranate and mango pieces."
+  },
+  {
+   "slug": "caramel-pudding",
+   "name": "Caramel Pudding (Caramel Custard)",
+   "hi": "कैरामेल पुडिंग",
+   "alias": [
+    "caramel custard",
+    "creme caramel",
+    "flan",
+    "caramel flan",
+    "कैरेमल कस्टर्ड"
+   ],
+   "cat": "sweet",
+   "region": "International",
+   "diet": "egg",
+   "emoji": "🍮",
+   "unit": "g",
+   "kcal": 130,
+   "p": 4.5,
+   "c": 19,
+   "f": 4,
+   "fib": 0,
+   "na": 55,
+   "portions": [
+    {
+     "n": "1 cup (100 g)",
+     "hi": "1 कप",
+     "g": 100
+    },
+    {
+     "n": "1 slice (80 g)",
+     "hi": "1 टुकड़ा",
+     "g": 80
+    }
+   ],
+   "src": "Typical Indian commercial ice-cream/dessert labels and standard recipe; cross-checked USDA and INDB; INDB ASC300 matches",
+   "conf": "medium",
+   "note": "Egg-milk custard baked or steamed with caramel sugar topping. INDB ASC300/BFP345 (122) agree."
+  },
+  {
+   "slug": "bread-pudding",
+   "name": "Bread Pudding",
+   "hi": "ब्रेड पुडिंग",
+   "alias": [
+    "bread and butter pudding",
+    "bread pudding with custard",
+    "ब्रेड और बटर पुडिंग"
+   ],
+   "cat": "sweet",
+   "region": "International",
+   "diet": "egg",
+   "emoji": "🍮",
+   "unit": "g",
+   "kcal": 186,
+   "p": 6,
+   "c": 28,
+   "f": 5.5,
+   "fib": 0.8,
+   "na": 140,
+   "portions": [
+    {
+     "n": "1 slice (100 g)",
+     "hi": "1 टुकड़ा",
+     "g": 100
+    },
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    }
+   ],
+   "src": "Typical Indian commercial ice-cream/dessert labels and standard recipe; cross-checked USDA and INDB; INDB ASC326 matches",
+   "conf": "medium",
+   "note": "Baked bread, egg, milk, sugar and raisins. INDB ASC326 (168) agrees."
+  },
+  {
+   "slug": "jelly-dessert",
+   "name": "Jelly (Fruit Jelly, Set)",
+   "hi": "जेली",
+   "alias": [
+    "fruit jelly",
+    "jelly dessert",
+    "agar jelly",
+    "gelatin jelly",
+    "जेली डेसर्ट"
+   ],
+   "cat": "sweet",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🍮",
+   "unit": "g",
+   "kcal": 64,
+   "p": 1.5,
+   "c": 14.5,
+   "f": 0,
+   "fib": 0,
+   "na": 25,
+   "portions": [
+    {
+     "n": "1 cup (100 g)",
+     "hi": "1 कप",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    }
+   ],
+   "src": "Prepared jelly dessert label ~60-70 kcal/100 g",
+   "conf": "medium",
+   "note": "Prepared jelly crystals with water, about 14 g sugar per 100 g; marked vegetarian if set with agar, gelatin versions are not vegetarian."
+  },
+  {
+   "slug": "fruit-salad-with-cream",
+   "name": "Fruit Salad with Cream",
+   "hi": "फ्रूट सलाद विद क्रीम",
+   "alias": [
+    "fruit cream",
+    "fruit salad cream",
+    "cream fruit bowl",
+    "फ्रूट क्रीम"
+   ],
+   "cat": "sweet",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 124,
+   "p": 1.4,
+   "c": 15,
+   "f": 6.5,
+   "fib": 1.2,
+   "na": 15,
+   "portions": [
+    {
+     "n": "1 bowl (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small bowl (100 g)",
+     "hi": "1 छोटा कटोरा",
+     "g": 100
+    }
+   ],
+   "src": "Computed from IFCT fruit + 25% cream; estimate",
+   "conf": "low",
+   "note": "Mixed chopped fruit folded in sweetened fresh cream (about 20% fat) with 1 tsp sugar."
+  },
+  {
+   "slug": "fruit-salad-with-ice-cream",
+   "name": "Fruit Salad with Ice Cream",
+   "hi": "फ्रूट सलाद विद आइसक्रीम",
+   "alias": [
+    "fruit salad ice cream",
+    "fruit bowl with ice cream",
+    "फ्रूट सलाद आइसक्रीम"
+   ],
+   "cat": "sweet",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🍨",
+   "unit": "g",
+   "kcal": 130,
+   "p": 2,
+   "c": 18,
+   "f": 5.5,
+   "fib": 1,
+   "na": 20,
+   "portions": [
+    {
+     "n": "1 bowl (200 g)",
+     "hi": "1 कटोरा",
+     "g": 200
+    }
+   ],
+   "src": "Computed from IFCT fruit + vanilla ice-cream row",
+   "conf": "low",
+   "note": "Chopped fruit with a scoop of vanilla ice cream (about 30% ice cream)."
+  },
+  {
+   "slug": "milk-chocolate-bar",
+   "name": "Milk Chocolate (Bar)",
+   "hi": "मिल्क चॉकलेट",
+   "alias": [
+    "chocolate",
+    "dairy milk chocolate",
+    "cadbury type chocolate",
+    "milk choco",
+    "चॉकलेट",
+    "दूध की चॉकलेट"
+   ],
+   "cat": "sweet",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🍫",
+   "unit": "g",
+   "kcal": 528,
+   "p": 7.5,
+   "c": 57,
+   "f": 30,
+   "fib": 1.5,
+   "na": 80,
+   "portions": [
+    {
+     "n": "1 small bar (13 g)",
+     "hi": "1 छोटा बार",
+     "g": 13
+    },
+    {
+     "n": "1 square (6 g)",
+     "hi": "1 टुकड़ा",
+     "g": 6
+    },
+    {
+     "n": "1 bar (40 g)",
+     "hi": "1 बार",
+     "g": 40
+    },
+    {
+     "n": "1 large bar (52 g)",
+     "hi": "1 बड़ा बार",
+     "g": 52
+    }
+   ],
+   "core": true,
+   "src": "Packaged milk chocolate labels ~525 kcal/100 g; USDA milk chocolate",
+   "conf": "high",
+   "note": "Commercial milk chocolate label values are about 520-535 kcal/100 g."
+  },
+  {
+   "slug": "dark-chocolate",
+   "name": "Dark Chocolate (70% Cocoa)",
+   "hi": "डार्क चॉकलेट",
+   "alias": [
+    "dark choco",
+    "bitter chocolate",
+    "70 percent chocolate",
+    "cocoa chocolate",
+    "डार्क चॉक्लेट"
+   ],
+   "cat": "sweet",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🍫",
+   "unit": "g",
+   "kcal": 555,
+   "p": 8,
+   "c": 34,
+   "f": 43,
+   "fib": 11,
+   "na": 15,
+   "portions": [
+    {
+     "n": "1 square (10 g)",
+     "hi": "1 टुकड़ा",
+     "g": 10
+    },
+    {
+     "n": "2 squares (20 g)",
+     "hi": "2 टुकड़े",
+     "g": 20
+    },
+    {
+     "n": "1 bar (40 g)",
+     "hi": "1 बार",
+     "g": 40
+    }
+   ],
+   "src": "USDA 70-85% dark chocolate; label values 550-600 kcal/100 g",
+   "conf": "high",
+   "note": "70% cocoa; USDA lists about 600 kcal/100 g counting total fibre as energy, 555 here with available carbohydrate."
+  },
+  {
+   "slug": "chocolate-brownie",
+   "name": "Chocolate Brownie",
+   "hi": "चॉकलेट ब्राउनी",
+   "alias": [
+    "brownie",
+    "fudge brownie",
+    "walnut brownie",
+    "ब्राउनी"
+   ],
+   "cat": "sweet",
+   "region": "International",
+   "diet": "egg",
+   "emoji": "🍫",
+   "unit": "g",
+   "kcal": 408,
+   "p": 5,
+   "c": 52,
+   "f": 20,
+   "fib": 2.5,
+   "na": 140,
+   "portions": [
+    {
+     "n": "1 piece (60 g)",
+     "hi": "1 पीस",
+     "g": 60
+    },
+    {
+     "n": "1 large piece (90 g)",
+     "hi": "1 बड़ा पीस",
+     "g": 90
+    }
+   ],
+   "src": "USDA brownie, commercial; bakery labels ~400-430 kcal/100 g",
+   "conf": "medium",
+   "note": "Cafe/bakery brownie with egg, butter, sugar and cocoa (about 245 kcal per 60 g piece)."
+  },
+  {
+   "slug": "brownie-with-ice-cream",
+   "name": "Brownie with Ice Cream (Sizzler)",
+   "hi": "ब्राउनी विद आइसक्रीम",
+   "alias": [
+    "sizzling brownie",
+    "brownie ice cream",
+    "hot brownie sundae",
+    "brownie sizzler",
+    "साइज़लिंग ब्राउनी"
+   ],
+   "cat": "sweet",
+   "region": "International",
+   "diet": "egg",
+   "emoji": "🍨",
+   "unit": "g",
+   "kcal": 283,
+   "p": 4.2,
+   "c": 35,
+   "f": 14,
+   "fib": 1.2,
+   "na": 95,
+   "portions": [
+    {
+     "n": "1 plate (180 g)",
+     "hi": "1 प्लेट",
+     "g": 180
+    }
+   ],
+   "src": "Computed from brownie and vanilla ice-cream rows + chocolate sauce",
+   "conf": "medium",
+   "note": "Restaurant dessert: warm brownie (60 g) + 2 scoops vanilla (100 g) + chocolate sauce (20 g), about 505 kcal."
+  },
+  {
+   "slug": "ice-cream-vanilla",
+   "name": "Ice Cream (Vanilla)",
+   "hi": "आइसक्रीम (वनीला)",
+   "alias": [
+    "vanilla ice cream",
+    "ice cream",
+    "icecream",
+    "vanilla icecream",
+    "आइसक्रीम",
+    "वेनिला आइसक्रीम"
+   ],
+   "cat": "sweet",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🍨",
+   "unit": "g",
+   "kcal": 201,
+   "p": 3.5,
+   "c": 22,
+   "f": 11,
+   "fib": 0,
+   "na": 65,
+   "portions": [
+    {
+     "n": "1 scoop (60 g)",
+     "hi": "1 स्कूप",
+     "g": 60
+    },
+    {
+     "n": "1 cup (100 g)",
+     "hi": "1 कप",
+     "g": 100
+    },
+    {
+     "n": "2 scoops (120 g)",
+     "hi": "2 स्कूप",
+     "g": 120
+    }
+   ],
+   "core": true,
+   "src": "Indian ice-cream labels ~190-210 kcal/100 g; USDA vanilla ice cream 207",
+   "conf": "high",
+   "note": "Commercial Indian vanilla ice cream (about 10-12% fat); egg-free. INDB BFP346 (229) is slightly high."
+  },
+  {
+   "slug": "ice-cream-chocolate",
+   "name": "Ice Cream (Chocolate)",
+   "hi": "आइसक्रीम (चॉकलेट)",
+   "alias": [
+    "chocolate ice cream",
+    "choco ice cream",
+    "icecream chocolate",
+    "चॉकलेट आइसक्रीम"
+   ],
+   "cat": "sweet",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🍨",
+   "unit": "g",
+   "kcal": 215,
+   "p": 4,
+   "c": 26,
+   "f": 10.5,
+   "fib": 0.8,
+   "na": 70,
+   "portions": [
+    {
+     "n": "1 scoop (60 g)",
+     "hi": "1 स्कूप",
+     "g": 60
+    },
+    {
+     "n": "1 cup (100 g)",
+     "hi": "1 कप",
+     "g": 100
+    },
+    {
+     "n": "2 scoops (120 g)",
+     "hi": "2 स्कूप",
+     "g": 120
+    }
+   ],
+   "src": "Indian ice-cream labels ~200-225 kcal/100 g; USDA chocolate ice cream 216",
+   "conf": "high",
+   "note": "Commercial chocolate ice cream; INDB ASC304 (178) is slightly low."
+  },
+  {
+   "slug": "ice-cream-butterscotch",
+   "name": "Ice Cream (Butterscotch)",
+   "hi": "आइसक्रीम (बटरस्कॉच)",
+   "alias": [
+    "butterscotch ice cream",
+    "butter scotch ice cream",
+    "butterscotch icecream",
+    "बटरस्कॉच आइसक्रीम"
+   ],
+   "cat": "sweet",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🍨",
+   "unit": "g",
+   "kcal": 212,
+   "p": 3.5,
+   "c": 27,
+   "f": 10,
+   "fib": 0,
+   "na": 65,
+   "portions": [
+    {
+     "n": "1 scoop (60 g)",
+     "hi": "1 स्कूप",
+     "g": 60
+    },
+    {
+     "n": "1 cup (100 g)",
+     "hi": "1 कप",
+     "g": 100
+    }
+   ],
+   "src": "Typical Indian commercial ice-cream/dessert labels and standard recipe; cross-checked USDA and INDB",
+   "conf": "medium",
+   "note": "Vanilla base with caramel and butterscotch crunch."
+  },
+  {
+   "slug": "ice-cream-mango",
+   "name": "Ice Cream (Mango)",
+   "hi": "आइसक्रीम (आम)",
+   "alias": [
+    "mango ice cream",
+    "aam ice cream",
+    "mango icecream",
+    "आम आइसक्रीम"
+   ],
+   "cat": "sweet",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🍨",
+   "unit": "g",
+   "kcal": 185,
+   "p": 3,
+   "c": 24,
+   "f": 8.5,
+   "fib": 0.5,
+   "na": 55,
+   "portions": [
+    {
+     "n": "1 scoop (60 g)",
+     "hi": "1 स्कूप",
+     "g": 60
+    },
+    {
+     "n": "1 cup (100 g)",
+     "hi": "1 कप",
+     "g": 100
+    }
+   ],
+   "src": "Typical Indian commercial ice-cream/dessert labels and standard recipe; cross-checked USDA and INDB; INDB ASC305 too low",
+   "conf": "medium",
+   "note": "Milk-fat ice cream with mango pulp; INDB ASC305 (126) is too low."
+  },
+  {
+   "slug": "ice-cream-strawberry",
+   "name": "Ice Cream (Strawberry)",
+   "hi": "आइसक्रीम (स्ट्रॉबेरी)",
+   "alias": [
+    "strawberry ice cream",
+    "strawberry icecream",
+    "स्ट्रॉबेरी आइसक्रीम"
+   ],
+   "cat": "sweet",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🍨",
+   "unit": "g",
+   "kcal": 194,
+   "p": 3.2,
+   "c": 24,
+   "f": 9.5,
+   "fib": 0.3,
+   "na": 55,
+   "portions": [
+    {
+     "n": "1 scoop (60 g)",
+     "hi": "1 स्कूप",
+     "g": 60
+    },
+    {
+     "n": "1 cup (100 g)",
+     "hi": "1 कप",
+     "g": 100
+    }
+   ],
+   "src": "Typical Indian commercial ice-cream/dessert labels and standard recipe; cross-checked USDA and INDB",
+   "conf": "medium",
+   "note": "Vanilla base with strawberry pulp."
+  },
+  {
+   "slug": "ice-cream-kesar-pista",
+   "name": "Ice Cream (Kesar Pista)",
+   "hi": "आइसक्रीम (केसर पिस्ता)",
+   "alias": [
+    "kesar pista ice cream",
+    "saffron pistachio ice cream",
+    "kesar pista icecream",
+    "केसर पिस्ता आइसक्रीम"
+   ],
+   "cat": "sweet",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🍨",
+   "unit": "g",
+   "kcal": 207,
+   "p": 4,
+   "c": 23,
+   "f": 11,
+   "fib": 0.3,
+   "na": 60,
+   "portions": [
+    {
+     "n": "1 scoop (60 g)",
+     "hi": "1 स्कूप",
+     "g": 60
+    },
+    {
+     "n": "1 cup (100 g)",
+     "hi": "1 कप",
+     "g": 100
+    }
+   ],
+   "src": "Typical Indian commercial ice-cream/dessert labels and standard recipe; cross-checked USDA and INDB",
+   "conf": "medium",
+   "note": "Vanilla base with saffron and pistachio pieces."
+  },
+  {
+   "slug": "cassata-ice-cream",
+   "name": "Cassata Ice Cream",
+   "hi": "कसाटा आइसक्रीम",
+   "alias": [
+    "cassata",
+    "tricolour ice cream",
+    "tutti frutti ice cream",
+    "कसाटा"
+   ],
+   "cat": "sweet",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🍨",
+   "unit": "g",
+   "kcal": 210,
+   "p": 4,
+   "c": 26,
+   "f": 10,
+   "fib": 0.5,
+   "na": 60,
+   "portions": [
+    {
+     "n": "1 slice (80 g)",
+     "hi": "1 स्लाइस",
+     "g": 80
+    },
+    {
+     "n": "1 scoop (60 g)",
+     "hi": "1 स्कूप",
+     "g": 60
+    }
+   ],
+   "src": "Typical Indian commercial ice-cream/dessert labels and standard recipe; cross-checked USDA and INDB",
+   "conf": "medium",
+   "note": "Layered ice cream with tutti-frutti and nuts."
+  },
+  {
+   "slug": "choco-bar-ice-cream",
+   "name": "Choco Bar (Chocolate-Coated Ice Cream Stick)",
+   "hi": "चोको बार आइसक्रीम",
+   "alias": [
+    "chocobar",
+    "choco bar",
+    "ice cream stick",
+    "vanilla chocolate bar",
+    "चॉकबार"
+   ],
+   "cat": "sweet",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🍨",
+   "unit": "g",
+   "kcal": 234,
+   "p": 3,
+   "c": 24,
+   "f": 14,
+   "fib": 0.5,
+   "na": 45,
+   "portions": [
+    {
+     "n": "1 bar (55 g)",
+     "hi": "1 बार",
+     "g": 55
+    },
+    {
+     "n": "1 small bar (40 g)",
+     "hi": "1 छोटा बार",
+     "g": 40
+    }
+   ],
+   "src": "Packaged stick ice-cream labels ~220-250 kcal/100 g",
+   "conf": "medium",
+   "note": "Vanilla ice cream stick in a chocolate coating; about 130 kcal per 55 g bar."
+  },
+  {
+   "slug": "ice-cream-sundae",
+   "name": "Ice Cream Sundae (Hot Fudge)",
+   "hi": "आइसक्रीम संडे",
+   "alias": [
+    "sundae",
+    "hot fudge sundae",
+    "chocolate sundae",
+    "ice cream sundae",
+    "संडे"
+   ],
+   "cat": "sweet",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🍨",
+   "unit": "g",
+   "kcal": 224,
+   "p": 3.5,
+   "c": 30,
+   "f": 10,
+   "fib": 0.5,
+   "na": 70,
+   "portions": [
+    {
+     "n": "1 sundae (180 g)",
+     "hi": "1 संडे",
+     "g": 180
+    }
+   ],
+   "src": "Computed from vanilla ice-cream row + fudge sauce; restaurant estimate",
+   "conf": "low",
+   "note": "2 scoops vanilla, chocolate fudge sauce, nuts and a little whipped cream; about 400 kcal."
+  },
+  {
+   "slug": "ice-gola",
+   "name": "Ice Gola (Barf Ka Gola)",
+   "hi": "बर्फ का गोला",
+   "alias": [
+    "gola",
+    "chuski",
+    "ice candy gola",
+    "kala khatta gola",
+    "ice lolly gola",
+    "बर्फ गोला",
+    "चुस्की"
+   ],
+   "cat": "sweet",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍧",
+   "unit": "g",
+   "kcal": 74,
+   "p": 0,
+   "c": 18.5,
+   "f": 0,
+   "fib": 0,
+   "na": 20,
+   "portions": [
+    {
+     "n": "1 gola (80 g)",
+     "hi": "1 गोला",
+     "g": 80
+    },
+    {
+     "n": "1 large gola (120 g)",
+     "hi": "1 बड़ा गोला",
+     "g": 120
+    }
+   ],
+   "src": "Computed from syrup concentration; shaved ice with 20-25 g syrup sugar per 100 g",
+   "conf": "low",
+   "note": "Shaved ice with flavoured sugar syrup (about 18% sugar); contains only water and sugar. Hygiene of the ice matters."
+  },
+  {
+   "slug": "chocolate-mousse",
+   "name": "Chocolate Mousse",
+   "hi": "चॉकलेट मूस",
+   "alias": [
+    "mousse",
+    "choco mousse",
+    "chocolate mousse cup",
+    "चॉकलेट मूस"
+   ],
+   "cat": "sweet",
+   "region": "International",
+   "diet": "egg",
+   "emoji": "🍮",
+   "unit": "g",
+   "kcal": 200,
+   "p": 4,
+   "c": 20,
+   "f": 11.5,
+   "fib": 1,
+   "na": 50,
+   "portions": [
+    {
+     "n": "1 cup (100 g)",
+     "hi": "1 कप",
+     "g": 100
+    }
+   ],
+   "src": "USDA chocolate mousse ~200 kcal/100 g",
+   "conf": "medium",
+   "note": "Whipped cream, eggs and chocolate; restaurant dessert cup."
+  },
+  {
+   "slug": "tiramisu",
+   "name": "Tiramisu",
+   "hi": "तिरामिसु",
+   "alias": [
+    "tiramisu cake",
+    "coffee mascarpone dessert",
+    "तिरामीसू"
+   ],
+   "cat": "sweet",
+   "region": "International",
+   "diet": "egg",
+   "emoji": "🍰",
+   "unit": "g",
+   "kcal": 276,
+   "p": 5,
+   "c": 28,
+   "f": 16,
+   "fib": 0.5,
+   "na": 70,
+   "portions": [
+    {
+     "n": "1 slice (100 g)",
+     "hi": "1 टुकड़ा",
+     "g": 100
+    }
+   ],
+   "src": "USDA tiramisu ~240-280 kcal/100 g",
+   "conf": "medium",
+   "note": "Coffee-soaked sponge fingers with mascarpone-egg cream; cafe slice."
+  },
+  {
+   "slug": "rasmalai-tres-leches",
+   "name": "Rasmalai Tres Leches Cake",
+   "hi": "रसमलाई ट्रेस लेचे केक",
+   "alias": [
+    "rasmalai cake",
+    "tres leches rasmalai",
+    "rasmalai milk cake",
+    "रसमलाई केक"
+   ],
+   "cat": "sweet",
+   "region": "International",
+   "diet": "egg",
+   "emoji": "🎂",
+   "unit": "g",
+   "kcal": 241,
+   "p": 5.5,
+   "c": 30,
+   "f": 11,
+   "fib": 0.3,
+   "na": 110,
+   "portions": [
+    {
+     "n": "1 slice (120 g)",
+     "hi": "1 टुकड़ा",
+     "g": 120
+    }
+   ],
+   "src": "Computed from sponge + three-milk soak; USDA tres leches ~250 kcal/100 g",
+   "conf": "low",
+   "note": "Sponge soaked in three milks (rasmalai-flavoured) with cream topping; bakery sponge normally contains eggs."
+  },
+  {
+   "slug": "toffee-milk",
+   "name": "Toffee (Milk, Chewy)",
+   "hi": "टॉफी",
+   "alias": [
+    "milk toffee",
+    "eclairs",
+    "chewy toffee",
+    "caramel toffee",
+    "ऐक्लेयर्स",
+    "टॉफ़ी"
+   ],
+   "cat": "sweet",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 433,
+   "p": 2.5,
+   "c": 72,
+   "f": 15,
+   "fib": 0,
+   "na": 90,
+   "portions": [
+    {
+     "n": "1 piece (6 g)",
+     "hi": "1 पीस",
+     "g": 6
+    },
+    {
+     "n": "3 pieces (18 g)",
+     "hi": "3 पीस",
+     "g": 18
+    }
+   ],
+   "src": "Packaged toffee labels ~430-450 kcal/100 g",
+   "conf": "high",
+   "note": "Packaged chewy milk toffee labels read 420-450 kcal/100 g (sugar, glucose syrup, milk, hydrogenated fat)."
+  },
+  {
+   "slug": "hard-candy",
+   "name": "Hard Candy (Boiled Sweet)",
+   "hi": "कैंडी (टॉफी वाली गोली)",
+   "alias": [
+    "boiled sweet",
+    "candy",
+    "orange candy",
+    "toffee goli",
+    "गोली टॉफी"
+   ],
+   "cat": "sweet",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 388,
+   "p": 0,
+   "c": 97,
+   "f": 0,
+   "fib": 0,
+   "na": 10,
+   "portions": [
+    {
+     "n": "1 candy (4 g)",
+     "hi": "1 कैंडी",
+     "g": 4
+    },
+    {
+     "n": "3 candies (12 g)",
+     "hi": "3 कैंडी",
+     "g": 12
+    }
+   ],
+   "src": "Packaged hard-candy labels ~385-395 kcal/100 g",
+   "conf": "high",
+   "note": "Sugar and glucose syrup only; about 390 kcal/100 g, 16 kcal per candy."
+  }
+ ]
+}

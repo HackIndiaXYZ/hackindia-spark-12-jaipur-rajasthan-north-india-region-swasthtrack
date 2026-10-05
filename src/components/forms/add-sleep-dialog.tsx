@@ -1,16 +1,17 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useId, useState, type FormEvent } from "react";
 import { Moon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useConfirm } from "@/components/ui/confirm-dialog";
 import { Field, NumberInput, TextInput } from "@/components/ui/form-field";
 import { Modal } from "@/components/ui/modal";
 import { useToast } from "@/components/ui/toast";
+import { fmtNum, parseDecimalInput } from "@/components/health/format";
 import { useAuth } from "@/context/auth-context";
 import { todayIST } from "@/lib/health-rules";
 import { cn } from "@/lib/utils";
-import { logSleep } from "@/services/patient-service";
+import { logSleep, type SleepLogEntry } from "@/services/patient-service";
 
 type AddSleepDialogProps = {
   isOpen: boolean;
@@ -18,8 +19,6 @@ type AddSleepDialogProps = {
   patientId: string;
   onSuccess?: () => void;
 };
-
-const FORM_ID = "sleep-form";
 
 // Shortcuts that type a number for you; nothing is selected until it is tapped.
 const SLEEP_PRESETS = ["5", "6", "6.5", "7", "7.5", "8", "9"];
@@ -42,17 +41,32 @@ function hoursBetween(bed: string, wake: string): number | null {
   return Math.round((minutes / 60) * 10) / 10;
 }
 
-function SleepDialogBody({ isOpen, onClose, patientId, onSuccess }: AddSleepDialogProps) {
+type SleepEntryProps = {
+  patientId: string;
+  /** "dialog" wraps the form in a Modal; "inline" is the form alone, for a panel. */
+  presentation: "dialog" | "inline";
+  /** Dialog: close the sheet. Inline: saved, start a fresh form. */
+  onDone: () => void;
+  onSuccess?: () => void;
+  /** Correct a night that is already recorded. Its date stays fixed: one record per night. */
+  initial?: SleepLogEntry;
+  isOpen?: boolean;
+};
+
+function SleepEntry({ patientId, presentation, onDone, onSuccess, initial, isOpen = true }: SleepEntryProps) {
   const { canWrite } = useAuth();
   const toast = useToast();
   const confirm = useConfirm();
+  const formId = useId();
+  const inline = presentation === "inline";
+  const editing = Boolean(initial);
 
-  const [date, setDate] = useState(todayIST);
-  const [sleepHours, setSleepHours] = useState("");
+  const [date, setDate] = useState(() => initial?.date ?? todayIST());
+  const [sleepHours, setSleepHours] = useState(() => (initial ? fmtNum(initial.sleep_hours, 2) : ""));
   const [quality, setQuality] = useState<string | null>(null);
-  const [bedtime, setBedtime] = useState("");
-  const [wakeTime, setWakeTime] = useState("");
-  const [notes, setNotes] = useState("");
+  const [bedtime, setBedtime] = useState(() => (initial?.bedtime ?? "").slice(0, 5));
+  const [wakeTime, setWakeTime] = useState(() => (initial?.wake_time ?? "").slice(0, 5));
+  const [notes, setNotes] = useState(() => initial?.notes ?? "");
   const [errors, setErrors] = useState<Partial<Record<"hours" | "date", string>>>({});
   const [formError, setFormError] = useState("");
   const [saving, setSaving] = useState(false);
@@ -65,7 +79,7 @@ function SleepDialogBody({ isOpen, onClose, patientId, onSuccess }: AddSleepDial
     setFormError("");
 
     const next: typeof errors = {};
-    const hours = /^\d+(\.\d+)?$/.test(sleepHours.trim()) ? parseFloat(sleepHours) : NaN;
+    const hours = parseDecimalInput(sleepHours);
     if (Number.isNaN(hours)) next.hours = "नींद के घंटे लिखें (Enter hours slept)";
     else if (hours <= 0 || hours > 24) next.hours = "घंटे 0 से 24 के बीच होने चाहिए";
     if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) next.date = "तारीख़ चुनें (Choose a date)";
@@ -94,9 +108,9 @@ function SleepDialogBody({ isOpen, onClose, patientId, onSuccess }: AddSleepDial
         wake_time: wakeTime || null,
         notes: combinedNotes || null,
       });
-      toast.success(`नींद ${hours} घंटे दर्ज हो गई`, "Sleep saved");
+      toast.success(editing ? `नींद ${hours} घंटे अपडेट हो गई` : `नींद ${hours} घंटे दर्ज हो गई`, "Sleep saved");
       onSuccess?.();
-      onClose();
+      onDone();
     } catch (err) {
       setFormError(
         err instanceof Error && err.message ? err.message : "नींद सेव नहीं हो पाई। इंटरनेट जाँचकर दोबारा कोशिश करें।",
@@ -106,128 +120,181 @@ function SleepDialogBody({ isOpen, onClose, patientId, onSuccess }: AddSleepDial
     }
   }
 
-  return (
-    <Modal
-      isOpen={isOpen}
-      onClose={onClose}
-      title="Record Sleep"
-      hindiTitle="नींद दर्ज करें"
-      description="कितने घंटे सोए, वही लिखें। नीचे के बटन सिर्फ़ अंक भरने में मदद करते हैं।"
-      footer={
-        <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
-          <Button variant="secondary" onClick={onClose} disabled={saving}>
-            <span lang="hi">रद्द करें</span>
-          </Button>
-          <Button variant="primary" type="submit" form={FORM_ID} loading={saving} disabled={!canWrite}>
-            <Moon aria-hidden className="h-4 w-4" />
-            <span lang="hi">नींद सेव करें</span>
-          </Button>
-        </div>
-      }
+  const submitButton = (
+    <Button
+      variant="primary"
+      type="submit"
+      form={formId}
+      loading={saving}
+      disabled={!canWrite}
+      className={inline ? "w-full sm:w-auto" : undefined}
     >
-      <form id={FORM_ID} onSubmit={handleSubmit} noValidate className="space-y-5">
-        {!canWrite ? (
-          <p role="status" lang="hi" className="rounded-card border border-info-line bg-info-soft p-3 text-sm text-info">
-            आपके पास केवल देखने का एक्सेस है, इसलिए नींद दर्ज नहीं हो सकती।
+      <Moon aria-hidden className="h-4 w-4" />
+      <span lang="hi">नींद सेव करें</span>
+    </Button>
+  );
+
+  const form = (
+    <form id={formId} onSubmit={handleSubmit} noValidate className={inline ? "space-y-4" : "space-y-5"}>
+      {!canWrite ? (
+        <p role="status" lang="hi" className="rounded-card border border-info-line bg-info-soft p-3 text-sm text-info">
+          आपके पास केवल देखने का एक्सेस है, इसलिए नींद दर्ज नहीं हो सकती।
+        </p>
+      ) : null}
+      <div aria-live="polite">
+        {formError ? (
+          <p className="rounded-card border border-critical-line bg-critical-soft p-3 text-sm font-medium text-critical">
+            {formError}
           </p>
         ) : null}
-        <div aria-live="polite">
-          {formError ? (
-            <p className="rounded-card border border-critical-line bg-critical-soft p-3 text-sm font-medium text-critical">
-              {formError}
-            </p>
-          ) : null}
-        </div>
+      </div>
 
-        <Field label="कुल नींद के घंटे (Hours slept)" required error={errors.hours}>
-          <NumberInput
-            allowDecimal
-            placeholder="जैसे 7.5"
-            value={sleepHours}
-            maxLength={5}
-            onChange={(e) => setSleepHours(e.target.value)}
-            className="text-center text-3xl font-semibold"
-          />
+      <Field label="कुल नींद के घंटे (Hours slept)" required error={errors.hours}>
+        <NumberInput
+          allowDecimal
+          placeholder="जैसे 7.5"
+          value={sleepHours}
+          maxLength={5}
+          onChange={(e) => setSleepHours(e.target.value)}
+          className="text-center text-3xl font-semibold"
+        />
+      </Field>
+
+      <div role="group" aria-label="घंटे जल्दी भरें (Quick hours)" className="flex flex-wrap gap-2">
+        {SLEEP_PRESETS.map((hours) => (
+          <button
+            key={hours}
+            type="button"
+            onClick={() => setSleepHours(hours)}
+            aria-pressed={parseDecimalInput(sleepHours) === Number(hours)}
+            className={cn(
+              "pressable min-h-control min-w-16 cursor-pointer rounded-field border px-3 text-sm font-semibold",
+              parseDecimalInput(sleepHours) === Number(hours)
+                ? "border-sleep bg-sleep-soft text-sleep"
+                : "border-line bg-surface text-ink-muted hover:border-sleep-line",
+            )}
+          >
+            <span className="tabular">{hours}</span> <span lang="hi">घंटे</span>
+          </button>
+        ))}
+      </div>
+
+      <Field
+        label="रात की तारीख़ (Date)"
+        required
+        error={errors.date}
+        hint={editing ? "एक रात का एक ही रिकॉर्ड होता है, इसलिए तारीख़ बदली नहीं जा सकती" : undefined}
+      >
+        <TextInput type="date" value={date} max={todayIST()} readOnly={editing} onChange={(e) => setDate(e.target.value)} />
+      </Field>
+
+      <div className="grid grid-cols-2 gap-3">
+        <Field label="सोने का समय (Bedtime) — ऐच्छिक">
+          <TextInput type="time" value={bedtime} onChange={(e) => setBedtime(e.target.value)} />
         </Field>
+        <Field label="जागने का समय (Wake time) — ऐच्छिक">
+          <TextInput type="time" value={wakeTime} onChange={(e) => setWakeTime(e.target.value)} />
+        </Field>
+      </div>
 
-        <div role="group" aria-label="घंटे जल्दी भरें (Quick hours)" className="flex flex-wrap gap-2">
-          {SLEEP_PRESETS.map((hours) => (
+      {fromTimes !== null && sleepHours.trim() === "" ? (
+        <p lang="hi" className="flex flex-wrap items-center gap-2 text-sm text-ink-muted">
+          सोने–जागने के समय से लगभग {fromTimes} घंटे बनते हैं।
+          <Button size="sm" variant="secondary" onClick={() => setSleepHours(String(fromTimes))}>
+            <span lang="hi">यह भरें</span>
+          </Button>
+        </p>
+      ) : null}
+
+      <div role="group" aria-labelledby={`${formId}-quality`} className="space-y-2">
+        <p id={`${formId}-quality`} className="text-sm font-medium text-ink">
+          नींद कैसी रही? (Quality) — ऐच्छिक
+        </p>
+        <div className="flex flex-wrap gap-2">
+          {SLEEP_QUALITIES.map((q) => (
             <button
-              key={hours}
+              key={q.value}
               type="button"
-              onClick={() => setSleepHours(hours)}
-              aria-pressed={sleepHours === hours}
+              onClick={() => setQuality((cur) => (cur === q.value ? null : q.value))}
+              aria-pressed={quality === q.value}
               className={cn(
-                "pressable min-h-control min-w-16 cursor-pointer rounded-field border px-3 text-sm font-semibold",
-                sleepHours === hours
-                  ? "border-sleep bg-sleep-soft text-sleep"
-                  : "border-line bg-surface text-ink-muted hover:border-sleep-line",
+                "pressable min-h-control cursor-pointer rounded-field border px-3 text-sm font-semibold",
+                quality === q.value
+                  ? "border-brand bg-brand-soft text-brand-ink"
+                  : "border-line bg-surface text-ink-muted hover:border-brand-line",
               )}
             >
-              <span className="tabular">{hours}</span> <span lang="hi">घंटे</span>
+              <span lang="hi">{q.label}</span>
             </button>
           ))}
         </div>
+      </div>
 
-        <Field label="रात की तारीख़ (Date)" required error={errors.date}>
-          <TextInput type="date" value={date} max={todayIST()} onChange={(e) => setDate(e.target.value)} />
-        </Field>
+      <Field label="टिप्पणी (Notes) — ऐच्छिक">
+        <TextInput
+          placeholder="जैसे रात को एक बार नींद खुली"
+          value={notes}
+          maxLength={200}
+          onChange={(e) => setNotes(e.target.value)}
+        />
+      </Field>
 
-        <div className="grid grid-cols-2 gap-3">
-          <Field label="सोने का समय (Bedtime) — ऐच्छिक">
-            <TextInput type="time" value={bedtime} onChange={(e) => setBedtime(e.target.value)} />
-          </Field>
-          <Field label="जागने का समय (Wake time) — ऐच्छिक">
-            <TextInput type="time" value={wakeTime} onChange={(e) => setWakeTime(e.target.value)} />
-          </Field>
+      {inline ? <div className="pt-1">{submitButton}</div> : null}
+    </form>
+  );
+
+  if (inline) return form;
+
+  return (
+    <Modal
+      isOpen={isOpen}
+      onClose={onDone}
+      title={editing ? "Edit Sleep" : "Record Sleep"}
+      hindiTitle={editing ? "नींद बदलें" : "नींद दर्ज करें"}
+      description="कितने घंटे सोए, वही लिखें। नीचे के बटन सिर्फ़ अंक भरने में मदद करते हैं।"
+      footer={
+        <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+          <Button variant="secondary" onClick={onDone} disabled={saving}>
+            <span lang="hi">रद्द करें</span>
+          </Button>
+          {submitButton}
         </div>
-
-        {fromTimes !== null && sleepHours.trim() === "" ? (
-          <p lang="hi" className="flex flex-wrap items-center gap-2 text-sm text-ink-muted">
-            सोने–जागने के समय से लगभग {fromTimes} घंटे बनते हैं।
-            <Button size="sm" variant="secondary" onClick={() => setSleepHours(String(fromTimes))}>
-              <span lang="hi">यह भरें</span>
-            </Button>
-          </p>
-        ) : null}
-
-        <div role="group" aria-labelledby="sleep-quality-label" className="space-y-2">
-          <p id="sleep-quality-label" className="text-sm font-medium text-ink">
-            नींद कैसी रही? (Quality) — ऐच्छिक
-          </p>
-          <div className="flex flex-wrap gap-2">
-            {SLEEP_QUALITIES.map((q) => (
-              <button
-                key={q.value}
-                type="button"
-                onClick={() => setQuality((cur) => (cur === q.value ? null : q.value))}
-                aria-pressed={quality === q.value}
-                className={cn(
-                  "pressable min-h-control cursor-pointer rounded-field border px-3 text-sm font-semibold",
-                  quality === q.value
-                    ? "border-brand bg-brand-soft text-brand-ink"
-                    : "border-line bg-surface text-ink-muted hover:border-brand-line",
-                )}
-              >
-                <span lang="hi">{q.label}</span>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <Field label="टिप्पणी (Notes) — ऐच्छिक">
-          <TextInput
-            placeholder="जैसे रात को एक बार नींद खुली"
-            value={notes}
-            maxLength={200}
-            onChange={(e) => setNotes(e.target.value)}
-          />
-        </Field>
-      </form>
+      }
+    >
+      {form}
     </Modal>
   );
 }
 
-export function AddSleepDialog(props: AddSleepDialogProps) {
-  return props.isOpen ? <SleepDialogBody {...props} /> : null;
+/** The sleep entry form on its own, for a panel. Starts blank again each time a night is saved. */
+export function SleepEntryForm({ patientId, onSuccess }: { patientId: string; onSuccess?: () => void }) {
+  const [fresh, setFresh] = useState(0);
+  return (
+    <SleepEntry
+      key={fresh}
+      presentation="inline"
+      patientId={patientId}
+      onSuccess={onSuccess}
+      onDone={() => setFresh((n) => n + 1)}
+    />
+  );
+}
+
+/** Correct one recorded night, in a sheet. Mount it only while editing. */
+export function EditSleepDialog({
+  log,
+  patientId,
+  onClose,
+  onSuccess,
+}: {
+  log: SleepLogEntry;
+  patientId: string;
+  onClose: () => void;
+  onSuccess?: () => void;
+}) {
+  return <SleepEntry key={log.id} presentation="dialog" patientId={patientId} initial={log} onDone={onClose} onSuccess={onSuccess} />;
+}
+
+export function AddSleepDialog({ isOpen, onClose, patientId, onSuccess }: AddSleepDialogProps) {
+  return isOpen ? <SleepEntry presentation="dialog" patientId={patientId} onDone={onClose} onSuccess={onSuccess} /> : null;
 }

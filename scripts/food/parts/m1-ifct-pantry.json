@@ -1,0 +1,6799 @@
+{
+ "items": [
+  {
+   "slug": "besan-gram-flour",
+   "name": "Besan (Gram Flour), Raw",
+   "hi": "बेसन",
+   "alias": [
+    "besan flour",
+    "gram flour",
+    "chickpea flour",
+    "chana flour",
+    "kadalai maavu",
+    "senaga pindi",
+    "harbara peeth",
+    "बेसन आटा"
+   ],
+   "cat": "pulse",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🫘",
+   "unit": "g",
+   "kcal": 360,
+   "p": 22,
+   "c": 47,
+   "f": 6.5,
+   "fib": 11,
+   "na": 64,
+   "portions": [
+    {
+     "n": "1 cup (95 g)",
+     "hi": "1 कप",
+     "g": 95
+    },
+    {
+     "n": "1 tbsp (8 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 8
+    }
+   ],
+   "src": "NIN Nutritive Value of Indian Foods / USDA chickpea flour (387) and IFCT B001 chana dal; fibre energy counted at 2 kcal/g",
+   "conf": "medium",
+   "note": "raw flour; kcal for fried or cooked besan dishes is much higher or lower, log those separately"
+  },
+  {
+   "slug": "sattu-roasted-gram-flour",
+   "name": "Sattu (Roasted Gram Flour)",
+   "hi": "सत्तू",
+   "alias": [
+    "sattu atta",
+    "sattu powder",
+    "chana sattu",
+    "roasted gram flour",
+    "sattu mavu",
+    "pottukadalai maavu",
+    "सत्तू का आटा"
+   ],
+   "cat": "pulse",
+   "region": "Bihar",
+   "diet": "veg",
+   "emoji": "🫘",
+   "unit": "g",
+   "kcal": 355,
+   "p": 22,
+   "c": 48,
+   "f": 5.8,
+   "fib": 15.5,
+   "na": 25,
+   "portions": [
+    {
+     "n": "1 tbsp (10 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 10
+    },
+    {
+     "n": "2 tbsp for 1 glass drink (20 g)",
+     "hi": "2 बड़े चम्मच",
+     "g": 20
+    },
+    {
+     "n": "1 glass sattu drink flour (30 g)",
+     "hi": "1 गिलास सत्तू",
+     "g": 30
+    }
+   ],
+   "src": "IFCT 2017 B001 chana dal, dry-roasted (about 4% moisture loss); sattu packs list 350-390",
+   "conf": "medium",
+   "note": "roasted chana flour (not barley); barley sattu is listed separately"
+  },
+  {
+   "slug": "barley-sattu-jau",
+   "name": "Sattu, Barley (Jau Sattu)",
+   "hi": "जौ का सत्तू",
+   "alias": [
+    "jau sattu",
+    "barley sattu flour",
+    "jau ka sattu",
+    "roasted barley flour",
+    "yava sattu",
+    "जौ सत्तू"
+   ],
+   "cat": "pulse",
+   "region": "Bihar",
+   "diet": "veg",
+   "emoji": "🌾",
+   "unit": "g",
+   "kcal": 330,
+   "p": 11.5,
+   "c": 64,
+   "f": 1.4,
+   "fib": 14,
+   "na": 6,
+   "portions": [
+    {
+     "n": "1 tbsp (10 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 10
+    },
+    {
+     "n": "1 glass drink flour (30 g)",
+     "hi": "1 गिलास सत्तू",
+     "g": 30
+    }
+   ],
+   "src": "IFCT 2017 A004 barley, roasting adjusts moisture; estimate",
+   "conf": "low",
+   "note": "roasted barley flour used for cooling sattu drink; brand values vary 320-350"
+  },
+  {
+   "slug": "bhuna-chana-roasted-chickpea",
+   "name": "Roasted Chana (Bhuna Chana, With Skin)",
+   "hi": "भुना चना",
+   "alias": [
+    "bhuna chana",
+    "roasted chickpea",
+    "roasted chana whole",
+    "kala bhuna chana",
+    "bhoona chana",
+    "fried gram with skin",
+    "भुने चने"
+   ],
+   "cat": "pulse",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🫘",
+   "unit": "g",
+   "kcal": 345,
+   "p": 20,
+   "c": 42,
+   "f": 5.5,
+   "fib": 26,
+   "na": 30,
+   "portions": [
+    {
+     "n": "1 handful (30 g)",
+     "hi": "1 मुट्ठी",
+     "g": 30
+    },
+    {
+     "n": "1 katori (50 g)",
+     "hi": "1 कटोरी",
+     "g": 50
+    },
+    {
+     "n": "1 tbsp (10 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 10
+    }
+   ],
+   "src": "IFCT 2017 B002 kala chana scaled for dry roasting (~7% moisture loss); labels list 360-380 as they count fibre fully",
+   "conf": "medium",
+   "note": "dry roasted, unsalted, with skin; salted or masala varieties are higher in sodium"
+  },
+  {
+   "slug": "roasted-chana-dal-phutana",
+   "name": "Roasted Chana Dal (Phutana / Pottukadalai)",
+   "hi": "भुनी चना दाल (फुटाना)",
+   "alias": [
+    "phutana",
+    "dalia chana",
+    "pottukadalai",
+    "hurigadale",
+    "putnalu",
+    "roasted gram dal",
+    "bhuna chana dal",
+    "फुटाना",
+    "दलिया चना"
+   ],
+   "cat": "pulse",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🫘",
+   "unit": "g",
+   "kcal": 350,
+   "p": 22.5,
+   "c": 48.5,
+   "f": 5.5,
+   "fib": 15.5,
+   "na": 25,
+   "portions": [
+    {
+     "n": "1 handful (30 g)",
+     "hi": "1 मुट्ठी",
+     "g": 30
+    },
+    {
+     "n": "1 tbsp (10 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 10
+    },
+    {
+     "n": "1 katori (40 g)",
+     "hi": "1 कटोरी",
+     "g": 40
+    }
+   ],
+   "src": "IFCT 2017 B001 chana dal scaled for dry roasting; labels 360-380",
+   "conf": "medium",
+   "note": "skinless roasted split chickpea, unsalted"
+  },
+  {
+   "slug": "kabuli-chana-dry",
+   "name": "Kabuli Chana (White Chickpea), Dry (raw)",
+   "hi": "काबुली चना",
+   "alias": [
+    "kabuli channa",
+    "white chickpea",
+    "chole chana",
+    "safed chana",
+    "chickpeas",
+    "garbanzo",
+    "chole",
+    "काबुली छोले",
+    "सफेद चना"
+   ],
+   "cat": "pulse",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🫘",
+   "unit": "g",
+   "kcal": 360,
+   "p": 20.5,
+   "c": 50.5,
+   "f": 6,
+   "fib": 12.2,
+   "na": 24,
+   "portions": [
+    {
+     "n": "1 cup raw (190 g)",
+     "hi": "1 कप कच्चा",
+     "g": 190
+    },
+    {
+     "n": "1 serving raw (40 g)",
+     "hi": "1 कटोरी",
+     "g": 40
+    }
+   ],
+   "src": "USDA chickpea mature raw (378) adjusted to available carbohydrate; NIN 'Bengal gram' 360",
+   "conf": "medium",
+   "note": "dry raw; soaked and boiled chole is about 130 kcal per 100 g"
+  },
+  {
+   "slug": "soya-chunks-dry",
+   "name": "Soya Chunks, Dry (Nutrela type)",
+   "hi": "सोया चंक्स (सूखे)",
+   "alias": [
+    "soya nuggets",
+    "soya badi",
+    "meal maker",
+    "soy chunks",
+    "tvp",
+    "textured soy protein",
+    "soya granules",
+    "सोया बड़ी",
+    "मील मेकर"
+   ],
+   "cat": "pulse",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🫘",
+   "unit": "g",
+   "kcal": 345,
+   "p": 52,
+   "c": 22,
+   "f": 0.7,
+   "fib": 13,
+   "na": 20,
+   "portions": [
+    {
+     "n": "1 handful dry (30 g)",
+     "hi": "1 मुट्ठी सूखे",
+     "g": 30
+    },
+    {
+     "n": "1 cup (60 g)",
+     "hi": "1 कप",
+     "g": 60
+    },
+    {
+     "n": "1 serving dry (50 g)",
+     "hi": "1 सर्विंग",
+     "g": 50
+    }
+   ],
+   "src": "defatted soya chunk pack labels (345 kcal, P 52); IFCT soybean checked",
+   "conf": "medium",
+   "note": "dry weight; soaked chunks are about 3x heavier (about 115 kcal per 100 g)"
+  },
+  {
+   "slug": "soya-flour-defatted",
+   "name": "Soya Flour (Defatted)",
+   "hi": "सोया आटा",
+   "alias": [
+    "soy flour",
+    "soybean flour",
+    "soyabean atta",
+    "soya atta",
+    "soy atta",
+    "सोयाबीन आटा"
+   ],
+   "cat": "pulse",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🫘",
+   "unit": "g",
+   "kcal": 330,
+   "p": 47,
+   "c": 21,
+   "f": 1.2,
+   "fib": 17.5,
+   "na": 20,
+   "portions": [
+    {
+     "n": "1 tbsp (8 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 8
+    },
+    {
+     "n": "1 cup (95 g)",
+     "hi": "1 कप",
+     "g": 95
+    }
+   ],
+   "src": "USDA defatted soy flour (330); IFCT soya bean B024/B025 for fibre",
+   "conf": "medium",
+   "note": "defatted; full-fat soy flour is about 430 kcal with 20 g fat"
+  },
+  {
+   "slug": "tofu-firm",
+   "name": "Tofu (Soya Paneer), Firm",
+   "hi": "टोफू (सोया पनीर)",
+   "alias": [
+    "tofu",
+    "soya paneer",
+    "soy paneer",
+    "bean curd",
+    "soybean curd",
+    "tofu paneer",
+    "टोफु"
+   ],
+   "cat": "pulse",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🫘",
+   "unit": "g",
+   "kcal": 125,
+   "p": 13.5,
+   "c": 2,
+   "f": 7.2,
+   "fib": 1,
+   "na": 12,
+   "portions": [
+    {
+     "n": "1 slice (50 g)",
+     "hi": "1 स्लाइस",
+     "g": 50
+    },
+    {
+     "n": "1 katori diced (100 g)",
+     "hi": "1 कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 block (200 g)",
+     "hi": "1 पैकेट",
+     "g": 200
+    }
+   ],
+   "src": "USDA tofu firm (calcium sulfate) 144 and regular firm Indian packs 110-130",
+   "conf": "medium",
+   "note": "firm tofu; soft or silken tofu is 55-80 kcal"
+  },
+  {
+   "slug": "moong-dal-chilka-dry",
+   "name": "Moong Dal Chilka (Split Green Gram With Skin), Dry (raw)",
+   "hi": "मूंग दाल छिलका",
+   "alias": [
+    "moong chilka",
+    "chilka moong dal",
+    "green moong dal split",
+    "moong dal with skin",
+    "chhilka moong",
+    "hari moong dal",
+    "छिलके वाली मूंग दाल"
+   ],
+   "cat": "pulse",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🫘",
+   "unit": "g",
+   "kcal": 310,
+   "p": 23.5,
+   "c": 50,
+   "f": 1.2,
+   "fib": 13.5,
+   "na": 12,
+   "portions": [
+    {
+     "n": "1 cup raw (200 g)",
+     "hi": "1 कप कच्चा",
+     "g": 200
+    },
+    {
+     "n": "1 serving raw (30 g)",
+     "hi": "1 कटोरी",
+     "g": 30
+    }
+   ],
+   "src": "interpolated between IFCT 2017 B010 (dal) and B011 (whole green gram)",
+   "conf": "medium"
+  },
+  {
+   "slug": "matar-dal-yellow-split-peas",
+   "name": "Matar Dal (Yellow Split Peas), Dry (raw)",
+   "hi": "मटर दाल (पीली)",
+   "alias": [
+    "yellow split peas",
+    "split yellow peas",
+    "pili matar dal",
+    "matar daal",
+    "split peas",
+    "vatana dal",
+    "pattani paruppu",
+    "पीली मटर दाल"
+   ],
+   "cat": "pulse",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🫛",
+   "unit": "g",
+   "kcal": 325,
+   "p": 22,
+   "c": 53,
+   "f": 1.4,
+   "fib": 11,
+   "na": 15,
+   "portions": [
+    {
+     "n": "1 cup raw (200 g)",
+     "hi": "1 कप कच्चा",
+     "g": 200
+    },
+    {
+     "n": "1 serving raw (30 g)",
+     "hi": "1 कटोरी",
+     "g": 30
+    }
+   ],
+   "src": "USDA split peas raw (341) and IFCT 2017 B017 dry peas; dehusked so lower fibre than whole peas",
+   "conf": "medium"
+  },
+  {
+   "slug": "ragi-flour-nachni-atta",
+   "name": "Ragi Flour (Nachni Atta)",
+   "hi": "रागी का आटा",
+   "alias": [
+    "ragi atta",
+    "nachni atta",
+    "finger millet flour",
+    "mandua atta",
+    "marua flour",
+    "ragi mavu",
+    "ragulu pindi",
+    "नाचनी आटा",
+    "रागी आटा"
+   ],
+   "cat": "grain",
+   "region": "Karnataka",
+   "diet": "veg",
+   "emoji": "🌾",
+   "unit": "g",
+   "kcal": 321,
+   "p": 7.2,
+   "c": 66.8,
+   "f": 1.9,
+   "fib": 11.2,
+   "na": 5,
+   "portions": [
+    {
+     "n": "1 cup (120 g)",
+     "hi": "1 कप",
+     "g": 120
+    },
+    {
+     "n": "1 tbsp (8 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 8
+    }
+   ],
+   "src": "IFCT 2017 A010 (whole-grain flour has the same composition)",
+   "conf": "high",
+   "note": "raw flour; ragi roti or ragi mudde is much lower per 100 g"
+  },
+  {
+   "slug": "jowar-flour-atta",
+   "name": "Jowar Flour (Jowar Atta)",
+   "hi": "ज्वार का आटा",
+   "alias": [
+    "jowar atta",
+    "sorghum flour",
+    "jwar atta",
+    "jolada hittu",
+    "jonna pindi",
+    "jowari peeth",
+    "ज्वार आटा"
+   ],
+   "cat": "grain",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🌾",
+   "unit": "g",
+   "kcal": 334,
+   "p": 10,
+   "c": 67.7,
+   "f": 1.7,
+   "fib": 10.2,
+   "na": 5,
+   "portions": [
+    {
+     "n": "1 cup (120 g)",
+     "hi": "1 कप",
+     "g": 120
+    },
+    {
+     "n": "1 tbsp (8 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 8
+    }
+   ],
+   "src": "IFCT 2017 A005 (whole-grain flour has the same composition)",
+   "conf": "high",
+   "note": "raw flour; jowar bhakri is lower per 100 g"
+  },
+  {
+   "slug": "bajra-flour-atta",
+   "name": "Bajra Flour (Bajra Atta)",
+   "hi": "बाजरे का आटा",
+   "alias": [
+    "bajra atta",
+    "pearl millet flour",
+    "bajri atta",
+    "bajri no lot",
+    "sajje hittu",
+    "kambu maavu",
+    "बाजरा आटा"
+   ],
+   "cat": "grain",
+   "region": "Rajasthan",
+   "diet": "veg",
+   "emoji": "🌾",
+   "unit": "g",
+   "kcal": 348,
+   "p": 11,
+   "c": 61.8,
+   "f": 5.4,
+   "fib": 11.5,
+   "na": 4,
+   "portions": [
+    {
+     "n": "1 cup (120 g)",
+     "hi": "1 कप",
+     "g": 120
+    },
+    {
+     "n": "1 tbsp (8 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 8
+    }
+   ],
+   "src": "IFCT 2017 A003 (whole-grain flour has the same composition)",
+   "conf": "high",
+   "note": "raw flour; bajra roti is lower per 100 g"
+  },
+  {
+   "slug": "makki-atta-maize-flour",
+   "name": "Makki Ka Atta (Maize Flour)",
+   "hi": "मक्के का आटा",
+   "alias": [
+    "makki atta",
+    "makka atta",
+    "corn flour makki",
+    "maize atta",
+    "makai ka atta",
+    "makki ka aata",
+    "मक्की का आटा"
+   ],
+   "cat": "grain",
+   "region": "Punjab",
+   "diet": "veg",
+   "emoji": "🌽",
+   "unit": "g",
+   "kcal": 334,
+   "p": 8.8,
+   "c": 64.8,
+   "f": 3.8,
+   "fib": 12.2,
+   "na": 4,
+   "portions": [
+    {
+     "n": "1 cup (120 g)",
+     "hi": "1 कप",
+     "g": 120
+    },
+    {
+     "n": "1 tbsp (8 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 8
+    }
+   ],
+   "src": "IFCT 2017 A006 maize dry",
+   "conf": "high",
+   "note": "stone-ground whole maize; degermed packaged makki atta has less fibre and fat (about 350 kcal)"
+  },
+  {
+   "slug": "rice-flour-chawal-atta",
+   "name": "Rice Flour (Chawal Ka Atta)",
+   "hi": "चावल का आटा",
+   "alias": [
+    "chawal atta",
+    "rice atta",
+    "arisi maavu",
+    "akki hittu",
+    "biyyam pindi",
+    "tandulache pith",
+    "चावल आटा",
+    "चावल का पीठ"
+   ],
+   "cat": "grain",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🌾",
+   "unit": "g",
+   "kcal": 355,
+   "p": 6.9,
+   "c": 78,
+   "f": 1,
+   "fib": 2.4,
+   "na": 5,
+   "portions": [
+    {
+     "n": "1 cup (130 g)",
+     "hi": "1 कप",
+     "g": 130
+    },
+    {
+     "n": "1 tbsp (9 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 9
+    }
+   ],
+   "src": "IFCT 2017 A015 rice raw milled, ground; USDA rice flour 366",
+   "conf": "medium",
+   "note": "raw flour"
+  },
+  {
+   "slug": "cornflour-corn-starch",
+   "name": "Cornflour (Corn Starch)",
+   "hi": "कॉर्नफ्लोर (मकई का स्टार्च)",
+   "alias": [
+    "corn starch",
+    "cornstarch",
+    "corn flour thickener",
+    "makai ka starch",
+    "makke ka maida",
+    "कॉर्न स्टार्च",
+    "कॉर्न फ्लोर"
+   ],
+   "cat": "grain",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🌾",
+   "unit": "g",
+   "kcal": 368,
+   "p": 0.3,
+   "c": 90.8,
+   "f": 0.1,
+   "fib": 0.9,
+   "na": 9,
+   "portions": [
+    {
+     "n": "1 tsp (3 g)",
+     "hi": "1 चम्मच",
+     "g": 3
+    },
+    {
+     "n": "1 tbsp (8 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 8
+    }
+   ],
+   "src": "USDA corn starch (381) / Indian pack labels 360-380",
+   "conf": "medium",
+   "note": "thickener powder, not makki atta"
+  },
+  {
+   "slug": "arrowroot-powder",
+   "name": "Arrowroot Powder (Araroot)",
+   "hi": "अरारोट",
+   "alias": [
+    "araroot",
+    "ararot",
+    "arrowroot flour",
+    "tikhur",
+    "tikhur powder",
+    "koova podi",
+    "arrowroot starch",
+    "तीखुर"
+   ],
+   "cat": "grain",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🌾",
+   "unit": "g",
+   "kcal": 350,
+   "p": 0.3,
+   "c": 85.5,
+   "f": 0.1,
+   "fib": 3.4,
+   "na": 2,
+   "portions": [
+    {
+     "n": "1 tsp (3 g)",
+     "hi": "1 चम्मच",
+     "g": 3
+    },
+    {
+     "n": "1 tbsp (8 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 8
+    }
+   ],
+   "src": "USDA arrowroot flour (357) / pack labels 340-360",
+   "conf": "medium"
+  },
+  {
+   "slug": "sabudana-sago-dry",
+   "name": "Sabudana (Sago / Tapioca Pearls), Dry (raw)",
+   "hi": "साबूदाना",
+   "alias": [
+    "sabudana",
+    "sago",
+    "sago pearls",
+    "tapioca pearls",
+    "javvarisi",
+    "saggubiyyam",
+    "sabakki",
+    "sabudane",
+    "साबुदाना"
+   ],
+   "cat": "grain",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🌾",
+   "unit": "g",
+   "kcal": 351,
+   "p": 0.2,
+   "c": 87,
+   "f": 0.2,
+   "fib": 0.5,
+   "na": 4,
+   "portions": [
+    {
+     "n": "1 tbsp (10 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 10
+    },
+    {
+     "n": "1 cup (150 g)",
+     "hi": "1 कप",
+     "g": 150
+    },
+    {
+     "n": "1 serving dry for khichdi (50 g)",
+     "hi": "1 सर्विंग",
+     "g": 50
+    }
+   ],
+   "src": "NIN Nutritive Value of Indian Foods (sago 351 kcal) / IFCT tapioca F015 dry-matter check",
+   "conf": "high",
+   "note": "dry pearls; soaked sabudana is about 3x heavier"
+  },
+  {
+   "slug": "oats-rolled-dry",
+   "name": "Oats, Rolled (Dry)",
+   "hi": "ओट्स",
+   "alias": [
+    "rolled oats",
+    "oatmeal",
+    "quick oats",
+    "instant oats",
+    "plain oats",
+    "jaee",
+    "oat flakes",
+    "जई",
+    "ओटमील"
+   ],
+   "cat": "grain",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 375,
+   "p": 12.5,
+   "c": 58,
+   "f": 7,
+   "fib": 10.5,
+   "na": 4,
+   "portions": [
+    {
+     "n": "1 katori dry (30 g)",
+     "hi": "1 कटोरी",
+     "g": 30
+    },
+    {
+     "n": "1/2 cup (40 g)",
+     "hi": "आधा कप",
+     "g": 40
+    },
+    {
+     "n": "1 cup (80 g)",
+     "hi": "1 कप",
+     "g": 80
+    }
+   ],
+   "src": "Indian pack labels (Quaker, Saffola oats 370-390) and USDA rolled oats 379",
+   "conf": "medium",
+   "note": "plain unflavoured oats, dry; cooked oats porridge is about 70 kcal per 100 g"
+  },
+  {
+   "slug": "cornflakes-plain-dry",
+   "name": "Cornflakes, Plain (Dry)",
+   "hi": "कॉर्नफ्लेक्स",
+   "alias": [
+    "corn flakes",
+    "cornflake cereal",
+    "kellogg's cornflakes style",
+    "makka flakes",
+    "plain cornflakes",
+    "कॉर्न फ्लेक्स"
+   ],
+   "cat": "grain",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 365,
+   "p": 7.5,
+   "c": 82,
+   "f": 0.7,
+   "fib": 3,
+   "na": 600,
+   "portions": [
+    {
+     "n": "1 bowl (30 g)",
+     "hi": "1 कटोरा",
+     "g": 30
+    },
+    {
+     "n": "1 katori (25 g)",
+     "hi": "1 कटोरी",
+     "g": 25
+    },
+    {
+     "n": "1 cup (28 g)",
+     "hi": "1 कप",
+     "g": 28
+    }
+   ],
+   "src": "USDA corn flakes (357) and Indian pack labels (Kellogg's 360-380, Na about 600-700)",
+   "conf": "medium",
+   "note": "dry cereal without milk; chocolate or frosted varieties are 380-400"
+  },
+  {
+   "slug": "basmati-rice-raw",
+   "name": "Basmati Rice, Raw",
+   "hi": "बासमती चावल (कच्चा)",
+   "alias": [
+    "basmati",
+    "basmati chawal",
+    "basmati rice uncooked",
+    "long grain rice raw",
+    "dehradun basmati",
+    "बासमती"
+   ],
+   "cat": "grain",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🌾",
+   "unit": "g",
+   "kcal": 350,
+   "p": 8,
+   "c": 77.5,
+   "f": 0.6,
+   "fib": 1.5,
+   "na": 5,
+   "portions": [
+    {
+     "n": "1 cup (185 g)",
+     "hi": "1 कप",
+     "g": 185
+    },
+    {
+     "n": "1 katori raw (100 g)",
+     "hi": "1 कटोरी कच्चा",
+     "g": 100
+    }
+   ],
+   "src": "Indian pack labels (India Gate, Daawat 345-355) and IFCT 2017 A015",
+   "conf": "medium",
+   "note": "raw; cooked basmati is about 130 kcal per 100 g"
+  },
+  {
+   "slug": "red-rice-matta-raw",
+   "name": "Red Rice (Matta / Rosematta), Raw",
+   "hi": "लाल चावल (मट्टा)",
+   "alias": [
+    "matta rice",
+    "kerala red rice",
+    "rosematta rice",
+    "red rice raw",
+    "unakkalari",
+    "lal chawal",
+    "palakkadan matta",
+    "केरल लाल चावल"
+   ],
+   "cat": "grain",
+   "region": "Kerala",
+   "diet": "veg",
+   "emoji": "🌾",
+   "unit": "g",
+   "kcal": 352,
+   "p": 7.8,
+   "c": 75,
+   "f": 1.8,
+   "fib": 4,
+   "na": 4,
+   "portions": [
+    {
+     "n": "1 cup (190 g)",
+     "hi": "1 कप",
+     "g": 190
+    },
+    {
+     "n": "1 katori raw (100 g)",
+     "hi": "1 कटोरी कच्चा",
+     "g": 100
+    }
+   ],
+   "src": "IFCT 2017 A013 brown rice and A014 parboiled rice, red bran retained; Indian pack labels 345-360",
+   "conf": "medium",
+   "note": "raw; cooked is about 125 kcal per 100 g"
+  },
+  {
+   "slug": "black-rice-chak-hao",
+   "name": "Black Rice (Chak-Hao), Raw",
+   "hi": "काला चावल (चाक-हाओ)",
+   "alias": [
+    "black rice raw",
+    "forbidden rice",
+    "chak hao",
+    "chakhao",
+    "kala chawal",
+    "manipuri black rice",
+    "emperor rice",
+    "काला चावल"
+   ],
+   "cat": "grain",
+   "region": "Manipur",
+   "diet": "veg",
+   "emoji": "🌾",
+   "unit": "g",
+   "kcal": 355,
+   "p": 8.5,
+   "c": 72,
+   "f": 3.5,
+   "fib": 4.5,
+   "na": 5,
+   "portions": [
+    {
+     "n": "1 cup (190 g)",
+     "hi": "1 कप",
+     "g": 190
+    },
+    {
+     "n": "1 katori raw (100 g)",
+     "hi": "1 कटोरी कच्चा",
+     "g": 100
+    }
+   ],
+   "src": "Indian pack labels (Chak-Hao 350-365) and published black rice analyses",
+   "conf": "medium",
+   "note": "raw; cooked is about 130 kcal per 100 g"
+  },
+  {
+   "slug": "sticky-rice-bora-saul",
+   "name": "Sticky Rice (Bora Saul), Raw",
+   "hi": "चिपचिपा चावल (बोरा साऊल)",
+   "alias": [
+    "bora saul",
+    "glutinous rice",
+    "sticky rice raw",
+    "komal saul",
+    "sweet rice",
+    "chipchipa chawal",
+    "bora rice",
+    "बोरा चावल"
+   ],
+   "cat": "grain",
+   "region": "Assam",
+   "diet": "veg",
+   "emoji": "🌾",
+   "unit": "g",
+   "kcal": 355,
+   "p": 7,
+   "c": 78,
+   "f": 0.6,
+   "fib": 1.5,
+   "na": 5,
+   "portions": [
+    {
+     "n": "1 cup (190 g)",
+     "hi": "1 कप",
+     "g": 190
+    }
+   ],
+   "src": "USDA glutinous rice (370) and IFCT 2017 A015; Assam bora saul 350-360",
+   "conf": "medium",
+   "note": "raw; cooked sticky rice is about 135 kcal per 100 g"
+  },
+  {
+   "slug": "sona-masoori-rice-raw",
+   "name": "Sona Masoori Rice, Raw",
+   "hi": "सोना मसूरी चावल (कच्चा)",
+   "alias": [
+    "sona masuri",
+    "sona masoori",
+    "sonamasuri rice",
+    "bangaru theegalu",
+    "sona mahsuri",
+    "sona masoori chawal",
+    "सोना मसूरी"
+   ],
+   "cat": "grain",
+   "region": "Andhra Pradesh",
+   "diet": "veg",
+   "emoji": "🌾",
+   "unit": "g",
+   "kcal": 356,
+   "p": 7.9,
+   "c": 78.2,
+   "f": 0.5,
+   "fib": 2.8,
+   "na": 2,
+   "portions": [
+    {
+     "n": "1 cup (190 g)",
+     "hi": "1 कप",
+     "g": 190
+    }
+   ],
+   "src": "IFCT 2017 A015 (milled raw rice); varietal differences are small",
+   "conf": "medium",
+   "note": "raw; cooked is about 130 kcal per 100 g"
+  },
+  {
+   "slug": "ponni-rice-raw",
+   "name": "Ponni Rice, Raw",
+   "hi": "पोन्नी चावल (कच्चा)",
+   "alias": [
+    "ponni arisi",
+    "ponni boiled rice",
+    "ponni raw rice",
+    "ponni chawal",
+    "samba ponni",
+    "kaveri ponni",
+    "पोन्नी"
+   ],
+   "cat": "grain",
+   "region": "Tamil Nadu",
+   "diet": "veg",
+   "emoji": "🌾",
+   "unit": "g",
+   "kcal": 356,
+   "p": 7.9,
+   "c": 78.2,
+   "f": 0.5,
+   "fib": 2.8,
+   "na": 2,
+   "portions": [
+    {
+     "n": "1 cup (190 g)",
+     "hi": "1 कप",
+     "g": 190
+    }
+   ],
+   "src": "IFCT 2017 A015 (milled raw rice); varietal differences are small",
+   "conf": "medium",
+   "note": "raw; cooked is about 130 kcal per 100 g"
+  },
+  {
+   "slug": "gobindobhog-rice-raw",
+   "name": "Gobindobhog Rice, Raw",
+   "hi": "गोबिंदभोग चावल (कच्चा)",
+   "alias": [
+    "gobindobhog",
+    "govindbhog rice",
+    "gobindo bhog",
+    "bengali aromatic rice",
+    "gobindobhog chal",
+    "gobindobhog chawal",
+    "गोविंदभोग"
+   ],
+   "cat": "grain",
+   "region": "West Bengal",
+   "diet": "veg",
+   "emoji": "🌾",
+   "unit": "g",
+   "kcal": 356,
+   "p": 7.9,
+   "c": 78.2,
+   "f": 0.5,
+   "fib": 2.8,
+   "na": 2,
+   "portions": [
+    {
+     "n": "1 cup (190 g)",
+     "hi": "1 कप",
+     "g": 190
+    }
+   ],
+   "src": "IFCT 2017 A015 (milled raw rice); varietal differences are small",
+   "conf": "medium",
+   "note": "raw short-grain aromatic rice; cooked is about 130 kcal per 100 g"
+  },
+  {
+   "slug": "joha-rice-raw",
+   "name": "Joha Rice, Raw",
+   "hi": "जोहा चावल (कच्चा)",
+   "alias": [
+    "joha saul",
+    "assam joha rice",
+    "joha chawal",
+    "joha aromatic rice",
+    "joha",
+    "जोहा"
+   ],
+   "cat": "grain",
+   "region": "Assam",
+   "diet": "veg",
+   "emoji": "🌾",
+   "unit": "g",
+   "kcal": 356,
+   "p": 7.9,
+   "c": 78.2,
+   "f": 0.5,
+   "fib": 2.8,
+   "na": 2,
+   "portions": [
+    {
+     "n": "1 cup (190 g)",
+     "hi": "1 कप",
+     "g": 190
+    }
+   ],
+   "src": "IFCT 2017 A015 (milled raw rice); varietal differences are small",
+   "conf": "medium",
+   "note": "raw aromatic rice; cooked is about 130 kcal per 100 g"
+  },
+  {
+   "slug": "kolam-rice-raw",
+   "name": "Kolam Rice, Raw",
+   "hi": "कोलम चावल (कच्चा)",
+   "alias": [
+    "surti kolam",
+    "kolam chawal",
+    "kolam rice uncooked",
+    "kolam tandool",
+    "kolam akki",
+    "कोलम"
+   ],
+   "cat": "grain",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🌾",
+   "unit": "g",
+   "kcal": 356,
+   "p": 7.9,
+   "c": 78.2,
+   "f": 0.5,
+   "fib": 2.8,
+   "na": 2,
+   "portions": [
+    {
+     "n": "1 cup (190 g)",
+     "hi": "1 कप",
+     "g": 190
+    }
+   ],
+   "src": "IFCT 2017 A015 (milled raw rice); varietal differences are small",
+   "conf": "medium",
+   "note": "raw; cooked is about 130 kcal per 100 g"
+  },
+  {
+   "slug": "kuttu-atta-buckwheat-flour",
+   "name": "Kuttu Atta (Buckwheat Flour)",
+   "hi": "कुट्टू का आटा",
+   "alias": [
+    "kuttu ka atta",
+    "kuttu flour",
+    "buckwheat flour",
+    "kuttu atta vrat",
+    "kootu",
+    "phaphra atta",
+    "ogal atta",
+    "कुट्टू आटा",
+    "व्रत का आटा"
+   ],
+   "cat": "grain",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🌾",
+   "unit": "g",
+   "kcal": 335,
+   "p": 12.6,
+   "c": 60.5,
+   "f": 3.1,
+   "fib": 10,
+   "na": 10,
+   "portions": [
+    {
+     "n": "1 cup (120 g)",
+     "hi": "1 कप",
+     "g": 120
+    },
+    {
+     "n": "1 tbsp (8 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 8
+    }
+   ],
+   "src": "USDA buckwheat flour whole groat (335) with available carbohydrate; Indian pack labels 340-360",
+   "conf": "medium",
+   "note": "raw flour for Navratri / vrat rotis and pakoras"
+  },
+  {
+   "slug": "singhare-atta-water-chestnut-flour",
+   "name": "Singhare Ka Atta (Water Chestnut Flour)",
+   "hi": "सिंघाड़े का आटा",
+   "alias": [
+    "singhara atta",
+    "singhade ka atta",
+    "water chestnut flour",
+    "singhara flour",
+    "singhare atta vrat",
+    "shingada pith",
+    "सिंघाड़ा आटा"
+   ],
+   "cat": "grain",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🌾",
+   "unit": "g",
+   "kcal": 350,
+   "p": 6,
+   "c": 77,
+   "f": 1,
+   "fib": 6,
+   "na": 15,
+   "portions": [
+    {
+     "n": "1 cup (120 g)",
+     "hi": "1 कप",
+     "g": 120
+    },
+    {
+     "n": "1 tbsp (8 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 8
+    }
+   ],
+   "src": "Indian pack labels (330-370 kcal) and USDA water chestnut dehydrated check",
+   "conf": "low",
+   "note": "label values vary by brand; raw flour for vrat food"
+  },
+  {
+   "slug": "rajgira-atta-amaranth-flour",
+   "name": "Rajgira Atta (Amaranth Flour)",
+   "hi": "राजगिरा का आटा",
+   "alias": [
+    "rajgira flour",
+    "ramdana atta",
+    "amaranth flour",
+    "chaulai atta",
+    "rajgira ka atta",
+    "rajgira atta vrat",
+    "राजगिरा आटा"
+   ],
+   "cat": "grain",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🌾",
+   "unit": "g",
+   "kcal": 356,
+   "p": 13.5,
+   "c": 60,
+   "f": 5.7,
+   "fib": 7.2,
+   "na": 3,
+   "portions": [
+    {
+     "n": "1 cup (110 g)",
+     "hi": "1 कप",
+     "g": 110
+    },
+    {
+     "n": "1 tbsp (8 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 8
+    }
+   ],
+   "src": "IFCT 2017 A001/A002 amaranth seed (flour from the same grain)",
+   "conf": "medium",
+   "note": "raw flour for vrat parathas and ladoos"
+  },
+  {
+   "slug": "multigrain-atta",
+   "name": "Multigrain Atta",
+   "hi": "मल्टीग्रेन आटा",
+   "alias": [
+    "multi grain atta",
+    "multigrain flour",
+    "7 grain atta",
+    "mixed grain flour",
+    "multi grain flour",
+    "मल्टी ग्रेन आटा"
+   ],
+   "cat": "grain",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🌾",
+   "unit": "g",
+   "kcal": 340,
+   "p": 12.5,
+   "c": 62,
+   "f": 3.5,
+   "fib": 9,
+   "na": 10,
+   "portions": [
+    {
+     "n": "1 cup (120 g)",
+     "hi": "1 कप",
+     "g": 120
+    },
+    {
+     "n": "1 tbsp (8 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 8
+    }
+   ],
+   "src": "Indian pack labels (Aashirvaad, Pillsbury multigrain 335-350) and IFCT atta/ragi/oats/soya blend",
+   "conf": "medium",
+   "note": "brand blends of wheat, soya, oats, ragi, maize, chana vary 330-355"
+  },
+  {
+   "slug": "idli-rava-rice-rava",
+   "name": "Idli Rava (Rice Rava), Raw",
+   "hi": "इडली रवा",
+   "alias": [
+    "rice rava",
+    "idli rawa",
+    "idli sooji",
+    "parboiled rice rava",
+    "rice semolina",
+    "arisi rava",
+    "biyyam rava",
+    "इडली सूजी"
+   ],
+   "cat": "grain",
+   "region": "South India",
+   "diet": "veg",
+   "emoji": "🌾",
+   "unit": "g",
+   "kcal": 352,
+   "p": 7.8,
+   "c": 77,
+   "f": 0.6,
+   "fib": 3.7,
+   "na": 3,
+   "portions": [
+    {
+     "n": "1 cup (165 g)",
+     "hi": "1 कप",
+     "g": 165
+    },
+    {
+     "n": "1 tbsp (11 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 11
+    }
+   ],
+   "src": "IFCT 2017 A014 parboiled rice milled",
+   "conf": "medium",
+   "note": "raw coarse parboiled rice grits for idli, upma"
+  },
+  {
+   "slug": "pasta-macaroni-dry",
+   "name": "Pasta (Macaroni / Penne), Dry (raw)",
+   "hi": "पास्ता (सूखा)",
+   "alias": [
+    "macaroni dry",
+    "penne dry",
+    "spaghetti dry",
+    "durum wheat pasta",
+    "pasta raw",
+    "uncooked pasta",
+    "मैकरोनी",
+    "पास्ता कच्चा"
+   ],
+   "cat": "grain",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🍝",
+   "unit": "g",
+   "kcal": 358,
+   "p": 12,
+   "c": 72,
+   "f": 1.5,
+   "fib": 3,
+   "na": 8,
+   "portions": [
+    {
+     "n": "1 cup (100 g)",
+     "hi": "1 कप",
+     "g": 100
+    },
+    {
+     "n": "1 serving dry (80 g)",
+     "hi": "1 सर्विंग",
+     "g": 80
+    }
+   ],
+   "src": "USDA pasta dry enriched (371) and Indian pack labels 350-365",
+   "conf": "medium",
+   "note": "dry; boiled pasta is about 150 kcal per 100 g"
+  },
+  {
+   "slug": "wheat-bran-chokar",
+   "name": "Wheat Bran (Chokar)",
+   "hi": "गेहूं का चोकर",
+   "alias": [
+    "chokar",
+    "choker",
+    "wheat chokar",
+    "gehun ka chokar",
+    "atta bran",
+    "bran",
+    "wheat bran flakes",
+    "चोकर"
+   ],
+   "cat": "grain",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🌾",
+   "unit": "g",
+   "kcal": 216,
+   "p": 15.6,
+   "c": 21.7,
+   "f": 4.3,
+   "fib": 42.8,
+   "na": 2,
+   "portions": [
+    {
+     "n": "1 tbsp (7 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 7
+    },
+    {
+     "n": "2 tbsp (14 g)",
+     "hi": "2 बड़े चम्मच",
+     "g": 14
+    }
+   ],
+   "src": "USDA wheat bran crude (216 kcal)",
+   "conf": "medium",
+   "note": "fibre-rich; kcal figure follows USDA, which is about 15% above 4P+4C+9F from the available carbohydrate"
+  },
+  {
+   "slug": "makhana-fox-nut-dry",
+   "name": "Makhana (Fox Nut / Lotus Seeds), Dry",
+   "hi": "मखाना",
+   "alias": [
+    "phool makhana",
+    "fox nut",
+    "foxnut",
+    "lotus seeds",
+    "makhane",
+    "gorgon nut",
+    "thamara vithu",
+    "मखाने",
+    "फूल मखाना"
+   ],
+   "cat": "nuts",
+   "region": "Bihar",
+   "diet": "veg",
+   "emoji": "🍿",
+   "unit": "g",
+   "kcal": 347,
+   "p": 9.7,
+   "c": 62.4,
+   "f": 0.1,
+   "fib": 14.5,
+   "na": 5,
+   "portions": [
+    {
+     "n": "1 cup (30 g)",
+     "hi": "1 कप",
+     "g": 30
+    },
+    {
+     "n": "1 handful (20 g)",
+     "hi": "1 मुट्ठी",
+     "g": 20
+    },
+    {
+     "n": "1 bowl (50 g)",
+     "hi": "1 कटोरा",
+     "g": 50
+    }
+   ],
+   "src": "NIN Nutritive Value of Indian Foods (makhana 347 kcal); Indian pack labels 340-360",
+   "conf": "medium",
+   "note": "plain dry or dry-roasted; roasted in ghee or oil it is 400+ kcal"
+  },
+  {
+   "slug": "dates-medjool-soft",
+   "name": "Dates, Medjool (Soft / Fresh Khajoor)",
+   "hi": "खजूर (मेडजूल, नरम)",
+   "alias": [
+    "medjool dates",
+    "fresh dates",
+    "fresh khajoor",
+    "khajur fresh",
+    "soft khajoor",
+    "khurma",
+    "kharjuram",
+    "रुतब खजूर",
+    "ताज़ा खजूर"
+   ],
+   "cat": "nuts",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🥜",
+   "unit": "g",
+   "kcal": 277,
+   "p": 1.8,
+   "c": 68.2,
+   "f": 0.2,
+   "fib": 6.7,
+   "na": 1,
+   "portions": [
+    {
+     "n": "1 date (24 g)",
+     "hi": "1 टुकड़ा",
+     "g": 24
+    },
+    {
+     "n": "3 dates (72 g)",
+     "hi": "3 खजूर",
+     "g": 72
+    }
+   ],
+   "src": "USDA dates medjool (277)",
+   "conf": "high",
+   "note": "soft fresh / semi-dry dates; IFCT dry dates (khajur) are separate"
+  },
+  {
+   "slug": "anjeer-dried-fig",
+   "name": "Anjeer, Dried Fig",
+   "hi": "अंजीर (सूखा)",
+   "alias": [
+    "dried fig",
+    "dry anjeer",
+    "dried figs",
+    "sukha anjeer",
+    "anjir",
+    "athi pazham",
+    "atti pandu",
+    "सूखा अंजीर"
+   ],
+   "cat": "nuts",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥜",
+   "unit": "g",
+   "kcal": 249,
+   "p": 3.3,
+   "c": 54.1,
+   "f": 0.9,
+   "fib": 9.8,
+   "na": 10,
+   "portions": [
+    {
+     "n": "1 dried fig (8 g)",
+     "hi": "1 टुकड़ा",
+     "g": 8
+    },
+    {
+     "n": "3 figs (25 g)",
+     "hi": "3 अंजीर",
+     "g": 25
+    }
+   ],
+   "src": "USDA figs dried uncooked (249)",
+   "conf": "high",
+   "note": "IFCT fig E020 is the fresh fruit (82 kcal)"
+  },
+  {
+   "slug": "prunes-dried-plums",
+   "name": "Prunes (Dried Plums)",
+   "hi": "सूखे आलूबुखारे (प्रून)",
+   "alias": [
+    "prune",
+    "dried plum",
+    "dried plums",
+    "sukha aloobukhara",
+    "dried aloo bukhara",
+    "prunes dry",
+    "प्रून"
+   ],
+   "cat": "nuts",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🥜",
+   "unit": "g",
+   "kcal": 240,
+   "p": 2.2,
+   "c": 56.8,
+   "f": 0.4,
+   "fib": 7.1,
+   "na": 2,
+   "portions": [
+    {
+     "n": "1 prune (9 g)",
+     "hi": "1 टुकड़ा",
+     "g": 9
+    },
+    {
+     "n": "5 prunes (45 g)",
+     "hi": "5 प्रून",
+     "g": 45
+    }
+   ],
+   "src": "USDA plums dried (prunes) uncooked (240)",
+   "conf": "high"
+  },
+  {
+   "slug": "dried-cranberries-sweetened",
+   "name": "Dried Cranberries (Sweetened)",
+   "hi": "सूखे क्रैनबेरी",
+   "alias": [
+    "cranberry dried",
+    "dry cranberries",
+    "craisins",
+    "cranberries",
+    "sukhe cranberry",
+    "क्रैनबेरी"
+   ],
+   "cat": "nuts",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🥜",
+   "unit": "g",
+   "kcal": 308,
+   "p": 0.2,
+   "c": 77.1,
+   "f": 1.4,
+   "fib": 5.3,
+   "na": 5,
+   "portions": [
+    {
+     "n": "1 tbsp (10 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 10
+    },
+    {
+     "n": "1 handful (30 g)",
+     "hi": "1 मुट्ठी",
+     "g": 30
+    }
+   ],
+   "src": "USDA cranberries dried sweetened (308)",
+   "conf": "medium",
+   "note": "sweetened with added sugar"
+  },
+  {
+   "slug": "charoli-chironji",
+   "name": "Charoli (Chironji)",
+   "hi": "चिरौंजी (चारोली)",
+   "alias": [
+    "chironji",
+    "chiraunji",
+    "charoli nuts",
+    "charoli seeds",
+    "chirongi",
+    "buchanania",
+    "chara pappu",
+    "piyal seeds",
+    "चारोली"
+   ],
+   "cat": "nuts",
+   "region": "Central India",
+   "diet": "veg",
+   "emoji": "🥜",
+   "unit": "g",
+   "kcal": 645,
+   "p": 19,
+   "c": 8.3,
+   "f": 59.1,
+   "fib": 3.8,
+   "na": 20,
+   "portions": [
+    {
+     "n": "1 tsp (3 g)",
+     "hi": "1 चम्मच",
+     "g": 3
+    },
+    {
+     "n": "1 tbsp (10 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 10
+    }
+   ],
+   "src": "NIN Nutritive Value of Indian Foods (chironji 656 kcal; P 19, F 59.1)",
+   "conf": "medium",
+   "note": "carbohydrate shown as available carbohydrate (NIN total 12.1 g includes fibre)"
+  },
+  {
+   "slug": "peanuts-roasted-unsalted",
+   "name": "Peanuts, Roasted (Bhuna Moongphali), Unsalted",
+   "hi": "भुनी मूंगफली",
+   "alias": [
+    "roasted peanuts",
+    "bhuna moongphali",
+    "roasted groundnuts",
+    "bhoona singdana",
+    "dry roasted peanuts",
+    "peanuts roasted",
+    "sekela shengdana",
+    "भुने मूंगफली दाने"
+   ],
+   "cat": "nuts",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥜",
+   "unit": "g",
+   "kcal": 555,
+   "p": 25,
+   "c": 18,
+   "f": 42.5,
+   "fib": 10.5,
+   "na": 10,
+   "portions": [
+    {
+     "n": "1 handful (30 g)",
+     "hi": "1 मुट्ठी",
+     "g": 30
+    },
+    {
+     "n": "1 katori (50 g)",
+     "hi": "1 कटोरी",
+     "g": 50
+    },
+    {
+     "n": "1 tbsp (10 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 10
+    }
+   ],
+   "core": true,
+   "src": "IFCT 2017 H012 groundnut scaled for dry roasting (~5% moisture loss); USDA dry roasted peanuts 585",
+   "conf": "medium",
+   "note": "dry roasted, no oil, no salt; salted roasted peanuts add about 400 mg sodium per 100 g"
+  },
+  {
+   "slug": "peanuts-boiled",
+   "name": "Peanuts, Boiled (Ubli Moongphali)",
+   "hi": "उबली मूंगफली",
+   "alias": [
+    "boiled peanuts",
+    "boiled groundnut",
+    "ubli moongphali",
+    "uble shengdane",
+    "ubaleli shengdana",
+    "boiled singdana",
+    "उबली हुई मूंगफली"
+   ],
+   "cat": "nuts",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥜",
+   "unit": "g",
+   "kcal": 315,
+   "p": 13.5,
+   "c": 9.5,
+   "f": 25,
+   "fib": 5.5,
+   "na": 400,
+   "portions": [
+    {
+     "n": "1 handful (40 g)",
+     "hi": "1 मुट्ठी",
+     "g": 40
+    },
+    {
+     "n": "1 katori (80 g)",
+     "hi": "1 कटोरी",
+     "g": 80
+    }
+   ],
+   "src": "USDA peanuts boiled with salt (318 kcal)",
+   "conf": "medium",
+   "note": "lightly salted; edible kernels weight, shells removed"
+  },
+  {
+   "slug": "chia-seeds-dry",
+   "name": "Chia Seeds, Dry",
+   "hi": "चिया सीड्स",
+   "alias": [
+    "chia",
+    "chia seed",
+    "chia beej",
+    "sabja style chia",
+    "salvia hispanica",
+    "चिया बीज"
+   ],
+   "cat": "nuts",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🥜",
+   "unit": "g",
+   "kcal": 480,
+   "p": 16.5,
+   "c": 7.7,
+   "f": 30.7,
+   "fib": 34.4,
+   "na": 16,
+   "portions": [
+    {
+     "n": "1 tsp (5 g)",
+     "hi": "1 चम्मच",
+     "g": 5
+    },
+    {
+     "n": "1 tbsp (12 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 12
+    }
+   ],
+   "src": "USDA chia seeds dried (486) and Indian pack labels 480-490",
+   "conf": "high",
+   "note": "kcal follows labels, which count fibre fully"
+  },
+  {
+   "slug": "pumpkin-seeds-kernels",
+   "name": "Pumpkin Seeds, Kernels (Kaddu Ke Beej)",
+   "hi": "कद्दू के बीज",
+   "alias": [
+    "pumpkin seeds",
+    "kaddu ke beej",
+    "pepitas",
+    "kaddu beej",
+    "kaddu magaz",
+    "pumpkin kernels",
+    "कद्दू बीज"
+   ],
+   "cat": "nuts",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🥜",
+   "unit": "g",
+   "kcal": 559,
+   "p": 30.2,
+   "c": 4.7,
+   "f": 49.1,
+   "fib": 6,
+   "na": 7,
+   "portions": [
+    {
+     "n": "1 tbsp (9 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 9
+    },
+    {
+     "n": "1 handful (25 g)",
+     "hi": "1 मुट्ठी",
+     "g": 25
+    }
+   ],
+   "src": "USDA pumpkin seed kernels dried (559)",
+   "conf": "high"
+  },
+  {
+   "slug": "magaz-watermelon-seed-kernels",
+   "name": "Magaz (Watermelon Seed Kernels / Char Magaz)",
+   "hi": "मगज (तरबूज़ के बीज)",
+   "alias": [
+    "char magaz",
+    "charmagaz",
+    "magaj",
+    "magaz",
+    "melon seeds",
+    "watermelon seeds",
+    "tarbooz ke beej",
+    "kharbooje ke beej",
+    "चार मगज"
+   ],
+   "cat": "nuts",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥜",
+   "unit": "g",
+   "kcal": 557,
+   "p": 28.3,
+   "c": 15.3,
+   "f": 47.4,
+   "fib": 0,
+   "na": 99,
+   "portions": [
+    {
+     "n": "1 tbsp (9 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 9
+    },
+    {
+     "n": "1 handful (25 g)",
+     "hi": "1 मुट्ठी",
+     "g": 25
+    }
+   ],
+   "src": "USDA watermelon seed kernels dried (557)",
+   "conf": "medium",
+   "note": "kernels only, shells removed; USDA lists no fibre"
+  },
+  {
+   "slug": "peanut-butter-salted",
+   "name": "Peanut Butter (Salted)",
+   "hi": "पीनट बटर",
+   "alias": [
+    "peanut butter",
+    "moongphali makhan",
+    "groundnut butter",
+    "pb crunchy",
+    "pb smooth",
+    "पीनट बटर नमकीन"
+   ],
+   "cat": "nuts",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🥜",
+   "unit": "g",
+   "kcal": 595,
+   "p": 24,
+   "c": 15.5,
+   "f": 50.5,
+   "fib": 6.5,
+   "na": 380,
+   "portions": [
+    {
+     "n": "1 tbsp (16 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 16
+    },
+    {
+     "n": "1 tsp (5 g)",
+     "hi": "1 चम्मच",
+     "g": 5
+    },
+    {
+     "n": "2 tbsp (32 g)",
+     "hi": "2 बड़े चम्मच",
+     "g": 32
+    }
+   ],
+   "src": "USDA peanut butter (588) and Indian pack labels (590-620)",
+   "conf": "medium",
+   "note": "salted with a little added sugar and oil; unsweetened natural spread is about 590 kcal with low sodium"
+  },
+  {
+   "slug": "olive-oil",
+   "name": "Olive Oil",
+   "hi": "ऑलिव ऑयल (जैतून का तेल)",
+   "alias": [
+    "olive tel",
+    "extra virgin olive oil",
+    "evoo",
+    "jaitun ka tel",
+    "pomace olive oil",
+    "ऑलिव तेल",
+    "जैतून तेल"
+   ],
+   "cat": "oil_sugar",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🫒",
+   "unit": "g",
+   "kcal": 900,
+   "p": 0,
+   "c": 0,
+   "f": 100,
+   "fib": 0,
+   "na": 0,
+   "portions": [
+    {
+     "n": "1 tsp (5 g)",
+     "hi": "1 चम्मच",
+     "g": 5
+    },
+    {
+     "n": "1 tbsp (14 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 14
+    }
+   ],
+   "src": "pure fat, 9 kcal/g (USDA 884)",
+   "conf": "high",
+   "note": "all cooking oils are about 900 kcal per 100 g; 1 tsp is 45 kcal"
+  },
+  {
+   "slug": "sugar-white-cheeni",
+   "name": "Sugar, White (Cheeni)",
+   "hi": "चीनी",
+   "alias": [
+    "cheeni",
+    "chini",
+    "sugar",
+    "shakkar",
+    "sakkare",
+    "panchadara",
+    "white sugar",
+    "sucrose",
+    "शक्कर",
+    "चीनी सफेद"
+   ],
+   "cat": "oil_sugar",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 398,
+   "p": 0,
+   "c": 99.5,
+   "f": 0,
+   "fib": 0,
+   "na": 1,
+   "portions": [
+    {
+     "n": "1 tsp (5 g)",
+     "hi": "1 चम्मच",
+     "g": 5
+    },
+    {
+     "n": "1 tbsp (15 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 15
+    },
+    {
+     "n": "1 sugar cube (4 g)",
+     "hi": "1 क्यूब",
+     "g": 4
+    }
+   ],
+   "core": true,
+   "src": "NIN Nutritive Value of Indian Foods (398 kcal); USDA 387",
+   "conf": "high",
+   "note": "1 tsp = 5 g = 20 kcal"
+  },
+  {
+   "slug": "sugar-brown",
+   "name": "Sugar, Brown",
+   "hi": "ब्राउन शुगर",
+   "alias": [
+    "brown sugar",
+    "demerara sugar",
+    "raw sugar",
+    "muscovado",
+    "cane sugar brown",
+    "bhuri cheeni",
+    "ब्राउन चीनी"
+   ],
+   "cat": "oil_sugar",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 380,
+   "p": 0.1,
+   "c": 98,
+   "f": 0,
+   "fib": 0,
+   "na": 28,
+   "portions": [
+    {
+     "n": "1 tsp (5 g)",
+     "hi": "1 चम्मच",
+     "g": 5
+    },
+    {
+     "n": "1 tbsp (15 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 15
+    }
+   ],
+   "src": "USDA sugars brown (380)",
+   "conf": "high"
+  },
+  {
+   "slug": "khandsari-sugar",
+   "name": "Khandsari Sugar (Unrefined)",
+   "hi": "खांडसारी चीनी",
+   "alias": [
+    "khandsari",
+    "khand",
+    "desi khand",
+    "khaand",
+    "unrefined sugar",
+    "sulphurless sugar",
+    "खांड"
+   ],
+   "cat": "oil_sugar",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 396,
+   "p": 0.1,
+   "c": 98.5,
+   "f": 0,
+   "fib": 0,
+   "na": 5,
+   "portions": [
+    {
+     "n": "1 tsp (5 g)",
+     "hi": "1 चम्मच",
+     "g": 5
+    },
+    {
+     "n": "1 tbsp (15 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 15
+    }
+   ],
+   "src": "NIN sugar 398 minus about 1% moisture and molasses; pack labels 385-398",
+   "conf": "medium"
+  },
+  {
+   "slug": "sugar-powdered-boora",
+   "name": "Sugar, Powdered (Boora)",
+   "hi": "बूरा चीनी",
+   "alias": [
+    "boora",
+    "bura",
+    "powdered sugar",
+    "icing sugar",
+    "castor sugar",
+    "pisi cheeni",
+    "confectioners sugar",
+    "पिसी चीनी"
+   ],
+   "cat": "oil_sugar",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 394,
+   "p": 0,
+   "c": 98.5,
+   "f": 0,
+   "fib": 0,
+   "na": 2,
+   "portions": [
+    {
+     "n": "1 tsp (4 g)",
+     "hi": "1 चम्मच",
+     "g": 4
+    },
+    {
+     "n": "1 tbsp (10 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 10
+    }
+   ],
+   "src": "sugar with about 3% anti-caking starch; pack labels 390-398",
+   "conf": "medium"
+  },
+  {
+   "slug": "mishri-rock-sugar",
+   "name": "Mishri (Rock Sugar / Crystal Sugar)",
+   "hi": "मिश्री",
+   "alias": [
+    "misri",
+    "rock sugar",
+    "crystal sugar",
+    "kalkandu",
+    "kalkand",
+    "patika bellam",
+    "khadi sakar",
+    "मिसरी"
+   ],
+   "cat": "oil_sugar",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 398,
+   "p": 0,
+   "c": 99.5,
+   "f": 0,
+   "fib": 0,
+   "na": 1,
+   "portions": [
+    {
+     "n": "1 small piece (5 g)",
+     "hi": "1 छोटा टुकड़ा",
+     "g": 5
+    },
+    {
+     "n": "1 tsp (5 g)",
+     "hi": "1 चम्मच",
+     "g": 5
+    }
+   ],
+   "src": "crystallised sucrose, same as white sugar (NIN 398)",
+   "conf": "high"
+  },
+  {
+   "slug": "palm-jaggery-karupatti-nolen-gur",
+   "name": "Palm Jaggery (Karupatti / Nolen Gur)",
+   "hi": "ताड़ का गुड़ (करुपट्टी)",
+   "alias": [
+    "karupatti",
+    "palm jaggery",
+    "nolen gur",
+    "date palm jaggery",
+    "palmyra jaggery",
+    "taad gud",
+    "panai vellam",
+    "khejur gur",
+    "खजूर गुड़"
+   ],
+   "cat": "oil_sugar",
+   "region": "South India",
+   "diet": "veg",
+   "emoji": "🍯",
+   "unit": "g",
+   "kcal": 360,
+   "p": 0.5,
+   "c": 88,
+   "f": 0.1,
+   "fib": 0,
+   "na": 30,
+   "portions": [
+    {
+     "n": "1 tsp (5 g)",
+     "hi": "1 चम्मच",
+     "g": 5
+    },
+    {
+     "n": "1 small piece (15 g)",
+     "hi": "1 छोटा टुकड़ा",
+     "g": 15
+    }
+   ],
+   "src": "estimate from IFCT 2017 I001 cane jaggery (354) and published palm jaggery analyses",
+   "conf": "low",
+   "note": "date-palm or palmyra jaggery; moisture varies"
+  },
+  {
+   "slug": "honey-shahad",
+   "name": "Honey (Shahad)",
+   "hi": "शहद",
+   "alias": [
+    "shahad",
+    "madhu",
+    "honey pure",
+    "tene",
+    "then",
+    "theni",
+    "tella",
+    "शहद शुद्ध",
+    "मधु"
+   ],
+   "cat": "oil_sugar",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍯",
+   "unit": "g",
+   "kcal": 315,
+   "p": 0.3,
+   "c": 80,
+   "f": 0,
+   "fib": 0.2,
+   "na": 4,
+   "portions": [
+    {
+     "n": "1 tsp (7 g)",
+     "hi": "1 चम्मच",
+     "g": 7
+    },
+    {
+     "n": "1 tbsp (21 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 21
+    }
+   ],
+   "core": true,
+   "src": "NIN honey (319) and USDA honey (304); Indian pack labels 310-330",
+   "conf": "high",
+   "note": "1 tsp = 7 g = about 22 kcal"
+  },
+  {
+   "slug": "glucose-powder-dextrose",
+   "name": "Glucose Powder (Dextrose)",
+   "hi": "ग्लूकोज़ पाउडर",
+   "alias": [
+    "glucose d",
+    "glucose powder",
+    "dextrose",
+    "dextrose powder",
+    "glucon d style",
+    "ग्लूकोज",
+    "ग्लूकोज़"
+   ],
+   "cat": "oil_sugar",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 375,
+   "p": 0,
+   "c": 94,
+   "f": 0,
+   "fib": 0,
+   "na": 5,
+   "portions": [
+    {
+     "n": "1 tsp (5 g)",
+     "hi": "1 चम्मच",
+     "g": 5
+    },
+    {
+     "n": "1 tbsp (15 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 15
+    },
+    {
+     "n": "2 tbsp in a glass (30 g)",
+     "hi": "2 बड़े चम्मच",
+     "g": 30
+    }
+   ],
+   "src": "dextrose monohydrate 3.75 kcal/g; branded glucose-D mixes list 375-385",
+   "conf": "medium",
+   "note": "pure glucose, fast sugar for low blood sugar; flavoured mixes add vitamins and salts"
+  },
+  {
+   "slug": "ghee-cow",
+   "name": "Ghee, Cow (Gaay Ka Ghee)",
+   "hi": "गाय का घी",
+   "alias": [
+    "cow ghee",
+    "gaay ka ghee",
+    "desi cow ghee",
+    "a2 ghee",
+    "gir cow ghee",
+    "pure cow ghee",
+    "गाय घी",
+    "गौ घृत"
+   ],
+   "cat": "dairy",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🧈",
+   "unit": "g",
+   "kcal": 897,
+   "p": 0,
+   "c": 0,
+   "f": 99.5,
+   "fib": 0,
+   "na": 2,
+   "portions": [
+    {
+     "n": "1 tsp (5 g)",
+     "hi": "1 चम्मच",
+     "g": 5
+    },
+    {
+     "n": "1 tbsp (14 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 14
+    }
+   ],
+   "src": "IFCT 2017 T013 ghee (fat 100 g, IFCT energy blank) and USDA butter oil 876; fat 99.5 g x 9",
+   "conf": "high",
+   "note": "1 tsp = 45 kcal; A2 or desi cow ghee has the same energy as other ghee"
+  },
+  {
+   "slug": "ghee-buffalo",
+   "name": "Ghee, Buffalo (Bhains Ka Ghee)",
+   "hi": "भैंस का घी",
+   "alias": [
+    "buffalo ghee",
+    "bhains ka ghee",
+    "bhains ghee",
+    "murrah ghee",
+    "white ghee",
+    "mojhi ghee",
+    "भैंस घी"
+   ],
+   "cat": "dairy",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🧈",
+   "unit": "g",
+   "kcal": 897,
+   "p": 0,
+   "c": 0,
+   "f": 99.5,
+   "fib": 0,
+   "na": 2,
+   "portions": [
+    {
+     "n": "1 tsp (5 g)",
+     "hi": "1 चम्मच",
+     "g": 5
+    },
+    {
+     "n": "1 tbsp (14 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 14
+    }
+   ],
+   "src": "IFCT 2017 T013 ghee; fat 99.5 g x 9",
+   "conf": "high",
+   "note": "white, less carotene than cow ghee, same energy"
+  },
+  {
+   "slug": "butter-salted",
+   "name": "Butter, Salted",
+   "hi": "मक्खन (नमकीन)",
+   "alias": [
+    "butter",
+    "table butter",
+    "amul butter style",
+    "salted butter",
+    "makhan salted",
+    "pav bhaji butter",
+    "नमकीन मक्खन",
+    "बटर"
+   ],
+   "cat": "dairy",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🧈",
+   "unit": "g",
+   "kcal": 720,
+   "p": 0.5,
+   "c": 0.5,
+   "f": 80.5,
+   "fib": 0,
+   "na": 650,
+   "portions": [
+    {
+     "n": "1 tsp (5 g)",
+     "hi": "1 चम्मच",
+     "g": 5
+    },
+    {
+     "n": "1 tbsp (14 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 14
+    },
+    {
+     "n": "1 cube (10 g)",
+     "hi": "1 क्यूब",
+     "g": 10
+    }
+   ],
+   "core": true,
+   "src": "Indian pack labels (Amul butter 722 kcal, fat 80+) and USDA butter salted (717)",
+   "conf": "high",
+   "note": "1 tsp = 36 kcal; unsalted butter has about 10 mg sodium"
+  },
+  {
+   "slug": "makhan-white-butter",
+   "name": "Makhan (Homemade White Butter)",
+   "hi": "सफेद मक्खन (घर का)",
+   "alias": [
+    "white butter",
+    "desi butter",
+    "homemade butter",
+    "ghar ka makkhan",
+    "loni",
+    "loni butter",
+    "venna",
+    "benne",
+    "मक्खन",
+    "लोनी"
+   ],
+   "cat": "dairy",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🧈",
+   "unit": "g",
+   "kcal": 717,
+   "p": 0.9,
+   "c": 0.1,
+   "f": 81,
+   "fib": 0,
+   "na": 11,
+   "portions": [
+    {
+     "n": "1 tsp (5 g)",
+     "hi": "1 चम्मच",
+     "g": 5
+    },
+    {
+     "n": "1 tbsp (14 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 14
+    }
+   ],
+   "src": "USDA butter unsalted (717); home-churned from malai or dahi is 78-82% fat",
+   "conf": "medium",
+   "note": "unsalted, churned from malai or dahi; fresh makhan carries more water so 700-720"
+  },
+  {
+   "slug": "garam-masala-powder",
+   "name": "Garam Masala (Salt-Free Powder)",
+   "hi": "गरम मसाला",
+   "alias": [
+    "garam masala powder",
+    "garam masala",
+    "kitchen king style masala",
+    "punjabi garam masala",
+    "mixed masala powder",
+    "गर्म मसाला"
+   ],
+   "cat": "condiment",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🧂",
+   "unit": "g",
+   "kcal": 280,
+   "p": 10,
+   "c": 22,
+   "f": 12,
+   "fib": 33,
+   "na": 40,
+   "portions": [
+    {
+     "n": "1 tsp (2.5 g)",
+     "hi": "1 चम्मच",
+     "g": 2.5
+    },
+    {
+     "n": "1/2 tsp (1.2 g)",
+     "hi": "आधा चम्मच",
+     "g": 1.2
+    }
+   ],
+   "src": "estimated from IFCT 2017 coriander G024, cumin G025, pepper G031, cardamom G020, cloves G023; pack labels 270-330",
+   "conf": "low",
+   "note": "salt-free blend; some brands add salt; 1 tsp is only about 7 kcal"
+  },
+  {
+   "slug": "kasuri-methi-dried-fenugreek-leaves",
+   "name": "Kasuri Methi (Dried Fenugreek Leaves)",
+   "hi": "कसूरी मेथी",
+   "alias": [
+    "kasoori methi",
+    "dried methi leaves",
+    "dry fenugreek leaves",
+    "sukhi methi",
+    "kasturi methi",
+    "methi leaves dried",
+    "सूखी मेथी"
+   ],
+   "cat": "condiment",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🌿",
+   "unit": "g",
+   "kcal": 270,
+   "p": 24,
+   "c": 15,
+   "f": 5.5,
+   "fib": 30,
+   "na": 300,
+   "portions": [
+    {
+     "n": "1 tsp (1 g)",
+     "hi": "1 चम्मच",
+     "g": 1
+    },
+    {
+     "n": "1 tbsp (3 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 3
+    }
+   ],
+   "src": "IFCT 2017 C020 fenugreek leaves (34 kcal) concentrated about 6.5x for ~6% moisture; pack labels 270-330",
+   "conf": "low",
+   "note": "dried herb, used in pinches"
+  },
+  {
+   "slug": "saunf-fennel-seeds",
+   "name": "Saunf (Fennel Seeds)",
+   "hi": "सौंफ",
+   "alias": [
+    "saunf",
+    "sounf",
+    "fennel",
+    "badi saunf",
+    "sompu",
+    "perunjeeragam",
+    "variyali",
+    "mouri",
+    "mukhwas saunf",
+    "सौंफ के बीज"
+   ],
+   "cat": "condiment",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🧂",
+   "unit": "g",
+   "kcal": 330,
+   "p": 15.8,
+   "c": 12.5,
+   "f": 14.9,
+   "fib": 39.8,
+   "na": 88,
+   "portions": [
+    {
+     "n": "1 tsp (2 g)",
+     "hi": "1 चम्मच",
+     "g": 2
+    },
+    {
+     "n": "1 tbsp (6 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 6
+    }
+   ],
+   "src": "USDA fennel seed (345)",
+   "conf": "medium"
+  },
+  {
+   "slug": "dalchini-cinnamon",
+   "name": "Dalchini (Cinnamon)",
+   "hi": "दालचीनी",
+   "alias": [
+    "cinnamon",
+    "dalchini stick",
+    "cinnamon powder",
+    "darchini",
+    "dalcheeni",
+    "pattai",
+    "lavangapatta",
+    "dalchini powder",
+    "दारचीनी"
+   ],
+   "cat": "condiment",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🧂",
+   "unit": "g",
+   "kcal": 245,
+   "p": 4,
+   "c": 27.5,
+   "f": 1.2,
+   "fib": 53.1,
+   "na": 10,
+   "portions": [
+    {
+     "n": "1 inch stick (2 g)",
+     "hi": "1 इंच टुकड़ा",
+     "g": 2
+    },
+    {
+     "n": "1 tsp (2.6 g)",
+     "hi": "1 चम्मच",
+     "g": 2.6
+    }
+   ],
+   "src": "USDA cinnamon ground (247)",
+   "conf": "medium",
+   "note": "cassia and Ceylon cinnamon differ little in energy"
+  },
+  {
+   "slug": "sonth-dry-ginger-powder",
+   "name": "Sonth (Dry Ginger Powder)",
+   "hi": "सौंठ (सूखी अदरक)",
+   "alias": [
+    "dry ginger",
+    "sonth powder",
+    "saunth",
+    "sukha adrak",
+    "ginger powder",
+    "sukku",
+    "sunti",
+    "dry ginger powder",
+    "सोंठ"
+   ],
+   "cat": "condiment",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🫚",
+   "unit": "g",
+   "kcal": 335,
+   "p": 9,
+   "c": 57.5,
+   "f": 4.2,
+   "fib": 14.1,
+   "na": 27,
+   "portions": [
+    {
+     "n": "1 tsp (2 g)",
+     "hi": "1 चम्मच",
+     "g": 2
+    },
+    {
+     "n": "1 tbsp (6 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 6
+    }
+   ],
+   "src": "USDA ginger ground (335)",
+   "conf": "medium"
+  },
+  {
+   "slug": "tej-patta-bay-leaf-dry",
+   "name": "Tej Patta (Indian Bay Leaf), Dry",
+   "hi": "तेज पत्ता",
+   "alias": [
+    "bay leaf",
+    "tejpatta",
+    "tej pat",
+    "tamalpatra",
+    "tejpata",
+    "malabar leaf",
+    "brinji ilai",
+    "तेजपात"
+   ],
+   "cat": "condiment",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🌿",
+   "unit": "g",
+   "kcal": 313,
+   "p": 7.6,
+   "c": 48.7,
+   "f": 8.4,
+   "fib": 26.3,
+   "na": 23,
+   "portions": [
+    {
+     "n": "1 leaf (0.5 g)",
+     "hi": "1 पत्ता",
+     "g": 0.5
+    },
+    {
+     "n": "2 leaves (1 g)",
+     "hi": "2 पत्ते",
+     "g": 1
+    }
+   ],
+   "src": "USDA bay leaf dried (313); Indian bay leaf (Cinnamomum tamala) is similar",
+   "conf": "low",
+   "note": "flavouring leaf, removed before eating"
+  },
+  {
+   "slug": "salt-table-iodised",
+   "name": "Salt, Table (Namak, Iodised)",
+   "hi": "नमक (आयोडीन युक्त)",
+   "alias": [
+    "namak",
+    "salt",
+    "table salt",
+    "iodised salt",
+    "common salt",
+    "noon",
+    "uppu",
+    "mithu",
+    "nimak",
+    "सादा नमक"
+   ],
+   "cat": "condiment",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🧂",
+   "unit": "g",
+   "kcal": 0,
+   "p": 0,
+   "c": 0,
+   "f": 0,
+   "fib": 0,
+   "na": 38758,
+   "portions": [
+    {
+     "n": "1 pinch (0.4 g)",
+     "hi": "1 चुटकी",
+     "g": 0.4
+    },
+    {
+     "n": "1/2 tsp (3 g)",
+     "hi": "आधा चम्मच",
+     "g": 3
+    },
+    {
+     "n": "1 tsp (6 g)",
+     "hi": "1 चम्मच",
+     "g": 6
+    }
+   ],
+   "core": true,
+   "src": "NaCl 97-99% (USDA table salt 38,758 mg sodium per 100 g)",
+   "conf": "high",
+   "note": "1 tsp (6 g) = about 2,300 mg sodium; WHO daily limit is under 2,000 mg sodium (5 g salt)"
+  },
+  {
+   "slug": "salt-rock-sendha-namak",
+   "name": "Rock Salt (Sendha Namak)",
+   "hi": "सेंधा नमक",
+   "alias": [
+    "sendha namak",
+    "rock salt",
+    "himalayan pink salt",
+    "pink salt",
+    "saindhava lavana",
+    "sendhav",
+    "halite salt",
+    "सेन्धा नमक",
+    "व्रत का नमक"
+   ],
+   "cat": "condiment",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🧂",
+   "unit": "g",
+   "kcal": 0,
+   "p": 0,
+   "c": 0,
+   "f": 0,
+   "fib": 0,
+   "na": 37500,
+   "portions": [
+    {
+     "n": "1 pinch (0.4 g)",
+     "hi": "1 चुटकी",
+     "g": 0.4
+    },
+    {
+     "n": "1/2 tsp (3 g)",
+     "hi": "आधा चम्मच",
+     "g": 3
+    },
+    {
+     "n": "1 tsp (6 g)",
+     "hi": "1 चम्मच",
+     "g": 6
+    }
+   ],
+   "src": "NaCl about 96-98%; sodium about 37,000-38,500 mg per 100 g",
+   "conf": "medium",
+   "note": "used for fasting; sodium content is practically the same as table salt"
+  },
+  {
+   "slug": "salt-low-sodium-potassium",
+   "name": "Salt, Low Sodium (Potassium Blend)",
+   "hi": "कम सोडियम नमक",
+   "alias": [
+    "low sodium salt",
+    "lite salt",
+    "light salt",
+    "salt substitute",
+    "potassium salt",
+    "losalt style",
+    "कम नमक",
+    "लो सोडियम नमक"
+   ],
+   "cat": "condiment",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🧂",
+   "unit": "g",
+   "kcal": 0,
+   "p": 0,
+   "c": 0,
+   "f": 0,
+   "fib": 0,
+   "na": 19500,
+   "portions": [
+    {
+     "n": "1/2 tsp (3 g)",
+     "hi": "आधा चम्मच",
+     "g": 3
+    },
+    {
+     "n": "1 tsp (6 g)",
+     "hi": "1 चम्मच",
+     "g": 6
+    }
+   ],
+   "src": "50:50 NaCl and KCl blends (about 19,500 mg sodium and 17,000 mg potassium per 100 g)",
+   "conf": "medium",
+   "note": "about half the sodium of table salt; contains potassium, ask the doctor first if on ACE-inhibitor, ARB or kidney disease"
+  }
+ ],
+ "ifct": [
+  {
+   "code": "A001",
+   "slug": "amaranth-seed-black",
+   "name": "Amaranth Seed, Black (Rajgira / Ramdana)",
+   "hi": "राजगिरा (काला)",
+   "alias": [
+    "rajgira black",
+    "ramdana",
+    "amaranth seeds",
+    "chaulai seeds",
+    "cheera vithu",
+    "thotakoora ginjalu",
+    "राजगिरा",
+    "रामदाना"
+   ],
+   "cat": "grain",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🌾",
+   "portions": [
+    {
+     "n": "1 cup raw (190 g)",
+     "hi": "1 कप कच्चा",
+     "g": 190
+    },
+    {
+     "n": "1 tbsp (12 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 12
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "A002",
+   "slug": "amaranth-seed-pale-brown",
+   "name": "Amaranth Seed, Pale Brown (Rajgira / Ramdana)",
+   "hi": "राजगिरा (हल्का भूरा)",
+   "alias": [
+    "rajgira",
+    "ramdana seeds",
+    "rajgira seeds",
+    "chaulai ke beej",
+    "keerai vidai",
+    "rajagaro",
+    "राजगिरा बीज",
+    "चौलाई के बीज"
+   ],
+   "cat": "grain",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🌾",
+   "portions": [
+    {
+     "n": "1 cup raw (190 g)",
+     "hi": "1 कप कच्चा",
+     "g": 190
+    },
+    {
+     "n": "1 tbsp (12 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 12
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "A003",
+   "slug": "bajra-raw-grain",
+   "name": "Bajra (Pearl Millet), Raw Grain",
+   "hi": "बाजरा",
+   "alias": [
+    "bajri",
+    "pearl millet",
+    "kambu",
+    "sajjalu",
+    "sajje",
+    "bajra millet",
+    "बाजरी"
+   ],
+   "cat": "grain",
+   "region": "Rajasthan",
+   "diet": "veg",
+   "emoji": "🌾",
+   "portions": [
+    {
+     "n": "1 cup raw (200 g)",
+     "hi": "1 कप कच्चा",
+     "g": 200
+    },
+    {
+     "n": "1 tbsp (13 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 13
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "A004",
+   "slug": "barley-raw-grain",
+   "name": "Barley (Jau), Raw Grain",
+   "hi": "जौ",
+   "alias": [
+    "jau",
+    "jav",
+    "barli",
+    "pearl barley",
+    "barley grain",
+    "yava",
+    "जव"
+   ],
+   "cat": "grain",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🌾",
+   "portions": [
+    {
+     "n": "1 cup raw (200 g)",
+     "hi": "1 कप कच्चा",
+     "g": 200
+    },
+    {
+     "n": "1 tbsp (13 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 13
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "A005",
+   "slug": "jowar-raw-grain",
+   "name": "Jowar (Sorghum), Raw Grain",
+   "hi": "ज्वार",
+   "alias": [
+    "jwar",
+    "sorghum",
+    "jonna",
+    "cholam",
+    "jolada",
+    "jondhala",
+    "great millet",
+    "jowari"
+   ],
+   "cat": "grain",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🌾",
+   "portions": [
+    {
+     "n": "1 cup raw (190 g)",
+     "hi": "1 कप कच्चा",
+     "g": 190
+    },
+    {
+     "n": "1 tbsp (12 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 12
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "A006",
+   "slug": "maize-dry-grain",
+   "name": "Maize, Dry Grain (Makka)",
+   "hi": "मक्का (सूखी)",
+   "alias": [
+    "makka",
+    "makai",
+    "dry corn",
+    "dry maize",
+    "mokkajonna",
+    "makka dana",
+    "makka cholam",
+    "मक्का दाना"
+   ],
+   "cat": "grain",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🌽",
+   "portions": [
+    {
+     "n": "1 cup raw (160 g)",
+     "hi": "1 कप कच्चा",
+     "g": 160
+    },
+    {
+     "n": "1 tbsp (10 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 10
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "A007",
+   "slug": "maize-tender-local",
+   "name": "Maize, Tender, Local (Bhutta)",
+   "hi": "भुट्टा (देसी मक्का)",
+   "alias": [
+    "bhutta",
+    "bhuta",
+    "corn on the cob",
+    "desi makka",
+    "tender corn",
+    "makai bhutta",
+    "lili makai",
+    "मक्का भुट्टा"
+   ],
+   "cat": "vegetable",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🌽",
+   "portions": [
+    {
+     "n": "1 medium cob, kernels (90 g)",
+     "hi": "1 भुट्टा",
+     "g": 90
+    },
+    {
+     "n": "1 katori (100 g)",
+     "hi": "1 कटोरी",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "A008",
+   "slug": "maize-tender-sweet",
+   "name": "Sweet Corn, Tender Kernels",
+   "hi": "स्वीट कॉर्न (मीठी मक्का)",
+   "alias": [
+    "sweetcorn",
+    "sweet corn kernels",
+    "american corn",
+    "baby corn kernels",
+    "makka sweet",
+    "meethi makai",
+    "मीठी मक्का",
+    "स्वीट कॉर्न दाने"
+   ],
+   "cat": "vegetable",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🌽",
+   "portions": [
+    {
+     "n": "1 katori (100 g)",
+     "hi": "1 कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 cup kernels (150 g)",
+     "hi": "1 कप",
+     "g": 150
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "A009",
+   "slug": "quinoa-raw",
+   "name": "Quinoa, Dry (raw)",
+   "hi": "क्विनोआ",
+   "alias": [
+    "kinwa",
+    "quinua",
+    "quinoa seeds",
+    "keen-wah",
+    "किनोवा",
+    "किनवा"
+   ],
+   "cat": "grain",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🌾",
+   "portions": [
+    {
+     "n": "1 cup raw (170 g)",
+     "hi": "1 कप कच्चा",
+     "g": 170
+    },
+    {
+     "n": "1 tbsp (11 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 11
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "A010",
+   "slug": "ragi-raw-grain",
+   "name": "Ragi (Finger Millet), Raw Grain",
+   "hi": "रागी",
+   "alias": [
+    "nachni",
+    "mandua",
+    "marua",
+    "finger millet",
+    "kelvaragu",
+    "ragulu",
+    "mandia",
+    "नाचनी",
+    "मंडुआ"
+   ],
+   "cat": "grain",
+   "region": "Karnataka",
+   "diet": "veg",
+   "emoji": "🌾",
+   "portions": [
+    {
+     "n": "1 cup raw (190 g)",
+     "hi": "1 कप कच्चा",
+     "g": 190
+    },
+    {
+     "n": "1 tbsp (12 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 12
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "A011",
+   "slug": "poha-raw",
+   "name": "Poha (Flattened Rice), Raw",
+   "hi": "पोहा",
+   "alias": [
+    "rice flakes",
+    "flattened rice",
+    "beaten rice",
+    "chira",
+    "chiura",
+    "avalakki",
+    "aval",
+    "atukulu",
+    "पोहे",
+    "चिवड़ा"
+   ],
+   "cat": "grain",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🌾",
+   "portions": [
+    {
+     "n": "1 cup raw (60 g)",
+     "hi": "1 कप कच्चा",
+     "g": 60
+    },
+    {
+     "n": "1 serving raw (50 g)",
+     "hi": "1 कटोरी",
+     "g": 50
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "A012",
+   "slug": "murmura-puffed-rice",
+   "name": "Murmura (Puffed Rice), Raw",
+   "hi": "मुरमुरा",
+   "alias": [
+    "puffed rice",
+    "muri",
+    "mamra",
+    "kurmura",
+    "pori",
+    "maramaralu",
+    "kallepuri",
+    "चिरमुरे",
+    "लाई"
+   ],
+   "cat": "grain",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍘",
+   "portions": [
+    {
+     "n": "1 cup (15 g)",
+     "hi": "1 कप",
+     "g": 15
+    },
+    {
+     "n": "1 big bowl (30 g)",
+     "hi": "1 कटोरा",
+     "g": 30
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "A013",
+   "slug": "rice-brown-raw",
+   "name": "Rice, Brown (Raw)",
+   "hi": "ब्राउन राइस",
+   "alias": [
+    "brown rice",
+    "whole grain rice",
+    "unpolished rice",
+    "bhura chawal",
+    "kuthari",
+    "dampudu biyyam",
+    "red brown rice",
+    "भूरा चावल"
+   ],
+   "cat": "grain",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🌾",
+   "portions": [
+    {
+     "n": "1 cup raw (190 g)",
+     "hi": "1 कप कच्चा",
+     "g": 190
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "A014",
+   "slug": "rice-parboiled-milled-raw",
+   "name": "Rice, Parboiled Milled (Raw)",
+   "hi": "उसना चावल",
+   "alias": [
+    "parboiled rice",
+    "usna chawal",
+    "idli rice",
+    "sela rice",
+    "puzhungal arisi",
+    "kusubalakki",
+    "ukda tandool",
+    "boiled rice raw",
+    "उबला चावल"
+   ],
+   "cat": "grain",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🌾",
+   "portions": [
+    {
+     "n": "1 cup raw (190 g)",
+     "hi": "1 कप कच्चा",
+     "g": 190
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "A015",
+   "slug": "rice-raw-milled",
+   "name": "Rice, Raw Milled",
+   "hi": "कच्चा चावल (सफ़ेद)",
+   "alias": [
+    "chawal",
+    "chaval",
+    "white rice raw",
+    "uncooked rice",
+    "akki",
+    "arisi",
+    "biyyam",
+    "tandool",
+    "चावल"
+   ],
+   "cat": "grain",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🌾",
+   "portions": [
+    {
+     "n": "1 cup raw (190 g)",
+     "hi": "1 कप कच्चा",
+     "g": 190
+    },
+    {
+     "n": "1 katori raw (100 g)",
+     "hi": "1 कटोरी कच्चा",
+     "g": 100
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "A016",
+   "slug": "little-millet-raw",
+   "name": "Little Millet (Samai / Sama), Raw Grain",
+   "hi": "समा (कुटकी)",
+   "alias": [
+    "samai",
+    "sama",
+    "kutki",
+    "shavan",
+    "sawan",
+    "samak",
+    "kuri",
+    "saamai",
+    "samak rice",
+    "समा के चावल"
+   ],
+   "cat": "grain",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🌾",
+   "portions": [
+    {
+     "n": "1 cup raw (190 g)",
+     "hi": "1 कप कच्चा",
+     "g": 190
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "A017",
+   "slug": "foxtail-millet-raw",
+   "name": "Foxtail Millet (Kangni / Varagu), Raw Grain",
+   "hi": "कंगनी (वरगु)",
+   "alias": [
+    "kangni",
+    "kakum",
+    "thinai",
+    "korra",
+    "korralu",
+    "navane",
+    "varagu",
+    "kodo millet",
+    "kodra"
+   ],
+   "cat": "grain",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🌾",
+   "portions": [
+    {
+     "n": "1 cup raw (190 g)",
+     "hi": "1 कप कच्चा",
+     "g": 190
+    }
+   ],
+   "core": false,
+   "note": "IFCT row 'Varagu' (Setaria italica = foxtail millet; kodo millet is a different grain)"
+  },
+  {
+   "code": "A018",
+   "slug": "maida-refined-wheat-flour",
+   "name": "Maida (Refined Wheat Flour), Raw",
+   "hi": "मैदा",
+   "alias": [
+    "maida flour",
+    "all purpose flour",
+    "refined flour",
+    "plain flour",
+    "white flour",
+    "maido",
+    "maida mavu",
+    "मैदा आटा"
+   ],
+   "cat": "grain",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🌾",
+   "portions": [
+    {
+     "n": "1 cup (125 g)",
+     "hi": "1 कप",
+     "g": 125
+    },
+    {
+     "n": "1 tbsp (8 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 8
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "A019",
+   "slug": "wheat-flour-atta-whole",
+   "name": "Wheat Flour, Atta (Whole)",
+   "hi": "गेहूं का आटा",
+   "alias": [
+    "atta",
+    "chakki atta",
+    "whole wheat flour",
+    "wheat atta",
+    "gehu ka atta",
+    "godhumai maavu",
+    "ghau no lot",
+    "आटा"
+   ],
+   "cat": "grain",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🌾",
+   "portions": [
+    {
+     "n": "1 cup (120 g)",
+     "hi": "1 कप",
+     "g": 120
+    },
+    {
+     "n": "1 tbsp (8 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 8
+    },
+    {
+     "n": "1 roti dough (35 g)",
+     "hi": "1 रोटी का आटा",
+     "g": 35
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "A020",
+   "slug": "wheat-whole-grain-raw",
+   "name": "Wheat, Whole Grain (Raw)",
+   "hi": "गेहूं",
+   "alias": [
+    "gehun",
+    "gehu",
+    "wheat grain",
+    "godhuma",
+    "godumai",
+    "ghau",
+    "wheat berries",
+    "गेहूँ"
+   ],
+   "cat": "grain",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🌾",
+   "portions": [
+    {
+     "n": "1 cup raw (180 g)",
+     "hi": "1 कप कच्चा",
+     "g": 180
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "A021",
+   "slug": "dalia-broken-wheat-raw",
+   "name": "Dalia (Broken Wheat / Bulgur), Raw",
+   "hi": "दलिया",
+   "alias": [
+    "daliya",
+    "broken wheat",
+    "cracked wheat",
+    "bulgur",
+    "burghul",
+    "lapsi",
+    "gehun dalia",
+    "godhi nuchhu",
+    "दलिया गेहूं"
+   ],
+   "cat": "grain",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🌾",
+   "portions": [
+    {
+     "n": "1 cup raw (160 g)",
+     "hi": "1 कप कच्चा",
+     "g": 160
+    },
+    {
+     "n": "1 serving raw (40 g)",
+     "hi": "1 कटोरी",
+     "g": 40
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "A022",
+   "slug": "suji-wheat-semolina-raw",
+   "name": "Suji (Wheat Semolina / Rava), Raw",
+   "hi": "सूजी (रवा)",
+   "alias": [
+    "suji",
+    "sooji",
+    "rava",
+    "rawa",
+    "semolina",
+    "bombay rava",
+    "upma rava",
+    "godhi rave",
+    "godumai ravai",
+    "सूजी",
+    "रवा"
+   ],
+   "cat": "grain",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🌾",
+   "portions": [
+    {
+     "n": "1 cup (170 g)",
+     "hi": "1 कप",
+     "g": 170
+    },
+    {
+     "n": "1 tbsp (11 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 11
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "A023",
+   "slug": "vermicelli-sewai-raw",
+   "name": "Vermicelli (Sewai), Raw",
+   "hi": "सेवई",
+   "alias": [
+    "seviyan",
+    "sevai",
+    "semiya",
+    "shavige",
+    "shevige",
+    "siwain",
+    "sewiyan",
+    "vermicelli",
+    "सिवईं",
+    "सेवइयां"
+   ],
+   "cat": "grain",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🌾",
+   "portions": [
+    {
+     "n": "1 cup (70 g)",
+     "hi": "1 कप",
+     "g": 70
+    },
+    {
+     "n": "1 serving raw (40 g)",
+     "hi": "1 सर्विंग",
+     "g": 40
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "A024",
+   "slug": "vermicelli-sewai-roasted",
+   "name": "Vermicelli (Sewai), Roasted",
+   "hi": "भुनी हुई सेवई",
+   "alias": [
+    "roasted seviyan",
+    "bhuni sewai",
+    "roasted semiya",
+    "roasted vermicelli",
+    "bhooni sevian",
+    "ghaun ni sev roasted",
+    "भुनी सेवइयां"
+   ],
+   "cat": "grain",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🌾",
+   "portions": [
+    {
+     "n": "1 cup (70 g)",
+     "hi": "1 कप",
+     "g": 70
+    },
+    {
+     "n": "1 serving raw (40 g)",
+     "hi": "1 सर्विंग",
+     "g": 40
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "B001",
+   "slug": "chana-dal-dry",
+   "name": "Chana Dal, Dry (raw)",
+   "hi": "चना दाल",
+   "alias": [
+    "chana daal",
+    "channa dal",
+    "bengal gram dal",
+    "split chickpea",
+    "chane ki dal",
+    "kadale bele",
+    "senaga pappu",
+    "kadala parippu",
+    "चने की दाल"
+   ],
+   "cat": "pulse",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🫘",
+   "portions": [
+    {
+     "n": "1 cup raw (200 g)",
+     "hi": "1 कप कच्चा",
+     "g": 200
+    },
+    {
+     "n": "1 serving raw (30 g)",
+     "hi": "1 कटोरी",
+     "g": 30
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "B002",
+   "slug": "kala-chana-dry",
+   "name": "Kala Chana (Black Chickpea), Whole, Dry (raw)",
+   "hi": "काला चना",
+   "alias": [
+    "kala channa",
+    "desi chana",
+    "bengal gram whole",
+    "brown chickpea",
+    "sabut chana",
+    "kondakadalai",
+    "shanagalu",
+    "harbhara",
+    "काले चने"
+   ],
+   "cat": "pulse",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🫘",
+   "portions": [
+    {
+     "n": "1 cup raw (180 g)",
+     "hi": "1 कप कच्चा",
+     "g": 180
+    },
+    {
+     "n": "1 serving raw (40 g)",
+     "hi": "1 कटोरी",
+     "g": 40
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "B003",
+   "slug": "urad-dal-dry",
+   "name": "Urad Dal (Split Black Gram, Skinless), Dry (raw)",
+   "hi": "उड़द दाल",
+   "alias": [
+    "urad daal",
+    "black gram dal",
+    "black lentil dal",
+    "dhuli urad dal",
+    "uddina bele",
+    "minappappu",
+    "ulundu paruppu",
+    "उड़द की दाल"
+   ],
+   "cat": "pulse",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🫘",
+   "portions": [
+    {
+     "n": "1 cup raw (200 g)",
+     "hi": "1 कप कच्चा",
+     "g": 200
+    },
+    {
+     "n": "1 serving raw (30 g)",
+     "hi": "1 कटोरी",
+     "g": 30
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "B004",
+   "slug": "sabut-urad-dry",
+   "name": "Sabut Urad (Whole Black Gram with Skin), Dry (raw)",
+   "hi": "साबुत उड़द",
+   "alias": [
+    "black gram whole",
+    "kali urad",
+    "urad chilka",
+    "chilke wali urad dal",
+    "maa ki dal raw",
+    "urad sabut",
+    "minumulu",
+    "काली उड़द"
+   ],
+   "cat": "pulse",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🫘",
+   "portions": [
+    {
+     "n": "1 cup raw (190 g)",
+     "hi": "1 कप कच्चा",
+     "g": 190
+    },
+    {
+     "n": "1 serving raw (40 g)",
+     "hi": "1 कटोरी",
+     "g": 40
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "B005",
+   "slug": "lobia-brown-dry",
+   "name": "Lobia (Black-Eyed Pea, Brown), Dry (raw)",
+   "hi": "लोबिया (भूरा)",
+   "alias": [
+    "cowpea brown",
+    "brown lobia",
+    "chawli",
+    "chori",
+    "karamani",
+    "alasande",
+    "bobbarlu",
+    "rongi",
+    "लोबिया"
+   ],
+   "cat": "pulse",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🫘",
+   "portions": [
+    {
+     "n": "1 cup raw (190 g)",
+     "hi": "1 कप कच्चा",
+     "g": 190
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "B006",
+   "slug": "lobia-white-dry",
+   "name": "Lobia (Black-Eyed Pea, White), Dry (raw)",
+   "hi": "लोबिया (सफेद)",
+   "alias": [
+    "cowpea white",
+    "white lobia",
+    "black eyed peas",
+    "black eyed beans",
+    "safed lobia",
+    "chavli",
+    "barbati",
+    "सफेद लोबिया"
+   ],
+   "cat": "pulse",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🫘",
+   "portions": [
+    {
+     "n": "1 cup raw (190 g)",
+     "hi": "1 कप कच्चा",
+     "g": 190
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "B007",
+   "slug": "sem-field-bean-black-dry",
+   "name": "Sem (Field Bean, Black), Dry (raw)",
+   "hi": "सेम (काली, सूखी)",
+   "alias": [
+    "field bean black",
+    "avare kalu",
+    "val dry",
+    "papdi dry",
+    "mochai",
+    "chikkudu ginjalu",
+    "valor",
+    "सेम के दाने"
+   ],
+   "cat": "pulse",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🫘",
+   "portions": [
+    {
+     "n": "1 cup raw (180 g)",
+     "hi": "1 कप कच्चा",
+     "g": 180
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "B008",
+   "slug": "sem-field-bean-brown-dry",
+   "name": "Sem (Field Bean, Brown), Dry (raw)",
+   "hi": "सेम (भूरी, सूखी)",
+   "alias": [
+    "field bean brown",
+    "brown sem",
+    "avare",
+    "val dry brown",
+    "mochai brown",
+    "chikkudu",
+    "papta",
+    "भूरी सेम"
+   ],
+   "cat": "pulse",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🫘",
+   "portions": [
+    {
+     "n": "1 cup raw (180 g)",
+     "hi": "1 कप कच्चा",
+     "g": 180
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "B009",
+   "slug": "sem-field-bean-white-dry",
+   "name": "Sem (Field Bean, White), Dry (raw)",
+   "hi": "सेम (सफेद, सूखी)",
+   "alias": [
+    "field bean white",
+    "white sem",
+    "safed val",
+    "dried broad bean",
+    "avarekalu dry",
+    "white mochai",
+    "papdi white",
+    "सफेद सेम"
+   ],
+   "cat": "pulse",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🫘",
+   "portions": [
+    {
+     "n": "1 cup raw (180 g)",
+     "hi": "1 कप कच्चा",
+     "g": 180
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "B010",
+   "slug": "moong-dal-dry",
+   "name": "Moong Dal (Split Green Gram, Skinless), Dry (raw)",
+   "hi": "मूंग दाल",
+   "alias": [
+    "moong daal",
+    "mung dal",
+    "green gram dal",
+    "yellow moong dal",
+    "dhuli moong dal",
+    "pasi paruppu",
+    "hesaru bele",
+    "pesara pappu",
+    "मूँग की दाल"
+   ],
+   "cat": "pulse",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🫘",
+   "portions": [
+    {
+     "n": "1 cup raw (200 g)",
+     "hi": "1 कप कच्चा",
+     "g": 200
+    },
+    {
+     "n": "1 serving raw (30 g)",
+     "hi": "1 कटोरी",
+     "g": 30
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "B011",
+   "slug": "moong-whole-dry",
+   "name": "Moong Whole (Green Gram), Dry (raw)",
+   "hi": "साबुत मूंग",
+   "alias": [
+    "sabut moong",
+    "green moong",
+    "mung bean",
+    "mung beans",
+    "hari moong",
+    "pachha pesalu",
+    "pasi payaru",
+    "hesaru kalu",
+    "मूंग"
+   ],
+   "cat": "pulse",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🫘",
+   "portions": [
+    {
+     "n": "1 cup raw (190 g)",
+     "hi": "1 कप कच्चा",
+     "g": 190
+    },
+    {
+     "n": "1 serving raw (40 g)",
+     "hi": "1 कटोरी",
+     "g": 40
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "B012",
+   "slug": "horse-gram-dry",
+   "name": "Horse Gram, Whole, Dry (raw)",
+   "hi": "कुलथी",
+   "alias": [
+    "kulthi",
+    "kulith",
+    "kulthi dal",
+    "kollu",
+    "ulavalu",
+    "hurali",
+    "muthira",
+    "kulattha",
+    "कुल्थी"
+   ],
+   "cat": "pulse",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🫘",
+   "portions": [
+    {
+     "n": "1 cup raw (190 g)",
+     "hi": "1 कप कच्चा",
+     "g": 190
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "B013",
+   "slug": "masoor-dal-dry",
+   "name": "Masoor Dal (Red Lentil, Split), Dry (raw)",
+   "hi": "मसूर दाल",
+   "alias": [
+    "masur dal",
+    "masoor daal",
+    "red lentil",
+    "red lentils",
+    "lal masoor",
+    "split red lentil",
+    "mysore paruppu",
+    "मसूर की दाल"
+   ],
+   "cat": "pulse",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🫘",
+   "portions": [
+    {
+     "n": "1 cup raw (200 g)",
+     "hi": "1 कप कच्चा",
+     "g": 200
+    },
+    {
+     "n": "1 serving raw (30 g)",
+     "hi": "1 कटोरी",
+     "g": 30
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "B014",
+   "slug": "sabut-masoor-brown-dry",
+   "name": "Sabut Masoor (Whole Brown Lentil), Dry (raw)",
+   "hi": "साबुत मसूर",
+   "alias": [
+    "masoor whole",
+    "brown masoor",
+    "kali masoor",
+    "whole lentil",
+    "brown lentils",
+    "sabut masur",
+    "masur bele",
+    "malka masoor",
+    "काली मसूर"
+   ],
+   "cat": "pulse",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🫘",
+   "portions": [
+    {
+     "n": "1 cup raw (190 g)",
+     "hi": "1 कप कच्चा",
+     "g": 190
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "B015",
+   "slug": "sabut-masoor-yellow-dry",
+   "name": "Sabut Masoor (Whole Yellowish Lentil), Dry (raw)",
+   "hi": "साबुत मसूर (पीली)",
+   "alias": [
+    "yellow masoor whole",
+    "masoor sabut yellow",
+    "whole masoor yellowish",
+    "pili masoor",
+    "masoor rakhoda",
+    "misur pappu",
+    "पीली मसूर"
+   ],
+   "cat": "pulse",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🫘",
+   "portions": [
+    {
+     "n": "1 cup raw (190 g)",
+     "hi": "1 कप कच्चा",
+     "g": 190
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "B016",
+   "slug": "moth-bean-dry",
+   "name": "Moth Bean (Matki), Dry (raw)",
+   "hi": "मोठ",
+   "alias": [
+    "moth",
+    "matki",
+    "math",
+    "mat bean",
+    "turkish gram",
+    "dew bean",
+    "narippayir",
+    "moth dal",
+    "मटकी"
+   ],
+   "cat": "pulse",
+   "region": "Rajasthan",
+   "diet": "veg",
+   "emoji": "🫘",
+   "portions": [
+    {
+     "n": "1 cup raw (190 g)",
+     "hi": "1 कप कच्चा",
+     "g": 190
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "B017",
+   "slug": "dry-peas-sukha-matar",
+   "name": "Dry Peas (Sukha Matar), Dry (raw)",
+   "hi": "सूखे मटर",
+   "alias": [
+    "sukhi matar",
+    "dried green peas",
+    "safed matar",
+    "white peas",
+    "vatana",
+    "sukha vatana",
+    "batani",
+    "pattani",
+    "सूखी मटर"
+   ],
+   "cat": "pulse",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🫛",
+   "portions": [
+    {
+     "n": "1 cup raw (200 g)",
+     "hi": "1 कप कच्चा",
+     "g": 200
+    },
+    {
+     "n": "1 serving raw (40 g)",
+     "hi": "1 कटोरी",
+     "g": 40
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "B018",
+   "slug": "rajma-black-dry",
+   "name": "Rajma, Black (Kala Rajma), Dry (raw)",
+   "hi": "राजमा (काला)",
+   "alias": [
+    "black rajma",
+    "kala rajma",
+    "black kidney beans",
+    "kidney beans black",
+    "kale rajmah",
+    "razma black",
+    "karamani payir",
+    "काला राजमा"
+   ],
+   "cat": "pulse",
+   "region": "Himachal Pradesh",
+   "diet": "veg",
+   "emoji": "🫘",
+   "portions": [
+    {
+     "n": "1 cup raw (180 g)",
+     "hi": "1 कप कच्चा",
+     "g": 180
+    },
+    {
+     "n": "1 serving raw (40 g)",
+     "hi": "1 कटोरी",
+     "g": 40
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "B019",
+   "slug": "rajma-brown-dry",
+   "name": "Rajma, Brown (Chitra), Dry (raw)",
+   "hi": "राजमा (भूरा / चित्रा)",
+   "alias": [
+    "brown rajma",
+    "chitra rajma",
+    "jammu rajma",
+    "kidney beans brown",
+    "bhoore rajmah",
+    "razma",
+    "phansi gulabi",
+    "चित्रा राजमा"
+   ],
+   "cat": "pulse",
+   "region": "Jammu & Kashmir",
+   "diet": "veg",
+   "emoji": "🫘",
+   "portions": [
+    {
+     "n": "1 cup raw (180 g)",
+     "hi": "1 कप कच्चा",
+     "g": 180
+    },
+    {
+     "n": "1 serving raw (40 g)",
+     "hi": "1 कटोरी",
+     "g": 40
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "B020",
+   "slug": "rajma-red-dry",
+   "name": "Rajma, Red (Lal Rajma), Dry (raw)",
+   "hi": "राजमा (लाल)",
+   "alias": [
+    "red rajma",
+    "lal rajma",
+    "red kidney beans",
+    "kidney beans",
+    "lal rajmah",
+    "razma red",
+    "phansi lal",
+    "लाल राजमा"
+   ],
+   "cat": "pulse",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🫘",
+   "portions": [
+    {
+     "n": "1 cup raw (180 g)",
+     "hi": "1 कप कच्चा",
+     "g": 180
+    },
+    {
+     "n": "1 serving raw (40 g)",
+     "hi": "1 कटोरी",
+     "g": 40
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "B021",
+   "slug": "toor-dal-dry",
+   "name": "Toor Dal, Dry (raw)",
+   "hi": "तूर दाल (अरहर)",
+   "alias": [
+    "arhar dal",
+    "tur dal",
+    "tuvar",
+    "tuvar dal",
+    "toor daal",
+    "pigeon pea",
+    "daal",
+    "thuvaram paruppu",
+    "kandi pappu",
+    "togari bele",
+    "अरहर की दाल",
+    "तुअर दाल"
+   ],
+   "cat": "pulse",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🫘",
+   "portions": [
+    {
+     "n": "1 cup raw (200 g)",
+     "hi": "1 कप कच्चा",
+     "g": 200
+    },
+    {
+     "n": "1 serving raw (30 g)",
+     "hi": "1 कटोरी",
+     "g": 30
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "B022",
+   "slug": "sabut-arhar-dry",
+   "name": "Sabut Arhar (Whole Pigeon Pea), Dry (raw)",
+   "hi": "साबुत अरहर",
+   "alias": [
+    "arhar sabut",
+    "whole toor",
+    "whole pigeon peas",
+    "toor whole",
+    "tuvar whole",
+    "red gram whole",
+    "kandulu",
+    "tuvarai",
+    "तुअर साबुत"
+   ],
+   "cat": "pulse",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🫘",
+   "portions": [
+    {
+     "n": "1 cup raw (190 g)",
+     "hi": "1 कप कच्चा",
+     "g": 190
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "B023",
+   "slug": "ricebean-meth-dry",
+   "name": "Rice Bean (Meth), Dry (raw)",
+   "hi": "राइस बीन (मेथ)",
+   "alias": [
+    "ricebean",
+    "meth bean",
+    "galmoong",
+    "shiltong",
+    "kattuzhunnu",
+    "chakwai",
+    "rice beans",
+    "राइसबीन"
+   ],
+   "cat": "pulse",
+   "region": "North-East India",
+   "diet": "veg",
+   "emoji": "🫘",
+   "portions": [
+    {
+     "n": "1 cup raw (190 g)",
+     "hi": "1 कप कच्चा",
+     "g": 190
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "B024",
+   "slug": "soya-bean-brown-dry",
+   "name": "Soya Bean, Brown, Dry (raw)",
+   "hi": "सोयाबीन (भूरा)",
+   "alias": [
+    "soybean brown",
+    "soyabean",
+    "brown soya",
+    "bhatmas",
+    "bhat",
+    "garikalai",
+    "bhatman",
+    "सोया"
+   ],
+   "cat": "pulse",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🫘",
+   "portions": [
+    {
+     "n": "1 cup raw (190 g)",
+     "hi": "1 कप कच्चा",
+     "g": 190
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "B025",
+   "slug": "soya-bean-white-dry",
+   "name": "Soya Bean, White, Dry (raw)",
+   "hi": "सोयाबीन (सफेद)",
+   "alias": [
+    "soybean white",
+    "white soya",
+    "safed soya",
+    "white soyabean",
+    "bhatmas white",
+    "yellow soybean",
+    "soya beans",
+    "सफेद सोया"
+   ],
+   "cat": "pulse",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🫘",
+   "portions": [
+    {
+     "n": "1 cup raw (190 g)",
+     "hi": "1 कप कच्चा",
+     "g": 190
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "G001",
+   "slug": "green-chilli-v1",
+   "name": "Green Chilli, Variety 1",
+   "hi": "हरी मिर्च (किस्म 1)",
+   "alias": [],
+   "cat": "vegetable",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🌶️",
+   "portions": [
+    {
+     "n": "1 chilli (5 g)",
+     "hi": "1 मिर्च",
+     "g": 5
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "G002",
+   "slug": "green-chilli-v2",
+   "name": "Green Chilli, Variety 2",
+   "hi": "हरी मिर्च (किस्म 2)",
+   "alias": [],
+   "cat": "vegetable",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🌶️",
+   "portions": [
+    {
+     "n": "1 chilli (5 g)",
+     "hi": "1 मिर्च",
+     "g": 5
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "G003",
+   "slug": "green-chilli-v3",
+   "name": "Green Chilli, Variety 3",
+   "hi": "हरी मिर्च (किस्म 3)",
+   "alias": [],
+   "cat": "vegetable",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🌶️",
+   "portions": [
+    {
+     "n": "1 chilli (5 g)",
+     "hi": "1 मिर्च",
+     "g": 5
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "G004",
+   "slug": "green-chilli-v4",
+   "name": "Green Chilli, Variety 4",
+   "hi": "हरी मिर्च (किस्म 4)",
+   "alias": [],
+   "cat": "vegetable",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🌶️",
+   "portions": [
+    {
+     "n": "1 chilli (5 g)",
+     "hi": "1 मिर्च",
+     "g": 5
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "G005",
+   "slug": "green-chilli-v5",
+   "name": "Green Chilli, Variety 5",
+   "hi": "हरी मिर्च (किस्म 5)",
+   "alias": [],
+   "cat": "vegetable",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🌶️",
+   "portions": [
+    {
+     "n": "1 chilli (5 g)",
+     "hi": "1 मिर्च",
+     "g": 5
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "G006",
+   "slug": "green-chilli-v6",
+   "name": "Green Chilli, Variety 6",
+   "hi": "हरी मिर्च (किस्म 6)",
+   "alias": [],
+   "cat": "vegetable",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🌶️",
+   "portions": [
+    {
+     "n": "1 chilli (5 g)",
+     "hi": "1 मिर्च",
+     "g": 5
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "G007",
+   "slug": "green-chilli-v7",
+   "name": "Green Chilli, Variety 7 (Round)",
+   "hi": "हरी मिर्च (गोल)",
+   "alias": [
+    "gola marcha",
+    "round green chilli"
+   ],
+   "cat": "vegetable",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🌶️",
+   "portions": [
+    {
+     "n": "1 chilli (6 g)",
+     "hi": "1 मिर्च",
+     "g": 6
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "G008",
+   "slug": "green-chilli",
+   "name": "Green Chilli, All Varieties (Hari Mirch)",
+   "hi": "हरी मिर्च",
+   "alias": [
+    "hari mirch",
+    "hari mirchi",
+    "hara mirchi",
+    "green chili",
+    "green chillies",
+    "mirapakaya",
+    "pachai milagai",
+    "hasi menasinakayi",
+    "lila marcha",
+    "हरी मिर्ची"
+   ],
+   "cat": "vegetable",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🌶️",
+   "portions": [
+    {
+     "n": "1 chilli (5 g)",
+     "hi": "1 मिर्च",
+     "g": 5
+    },
+    {
+     "n": "2 chillies (10 g)",
+     "hi": "2 मिर्च",
+     "g": 10
+    }
+   ],
+   "core": true
+  },
+  {
+   "code": "G009",
+   "slug": "coriander-leaves",
+   "name": "Coriander Leaves (Hara Dhania)",
+   "hi": "हरा धनिया",
+   "alias": [
+    "dhania patta",
+    "dhaniya patti",
+    "cilantro",
+    "kothimbir",
+    "kothamalli",
+    "kothambari",
+    "dhone pata",
+    "धनिया पत्ती"
+   ],
+   "cat": "condiment",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🌿",
+   "portions": [
+    {
+     "n": "1 tbsp (4 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 4
+    },
+    {
+     "n": "1 small bunch (50 g)",
+     "hi": "1 छोटा गुच्छा",
+     "g": 50
+    }
+   ],
+   "core": true
+  },
+  {
+   "code": "G010",
+   "slug": "curry-leaves",
+   "name": "Curry Leaves (Kadi Patta)",
+   "hi": "कड़ी पत्ता",
+   "alias": [
+    "kadi patta",
+    "kari patta",
+    "curry patta",
+    "meetha neem",
+    "kariveppilai",
+    "karibevu",
+    "karivepaku",
+    "कढ़ी पत्ता",
+    "करी पत्ता"
+   ],
+   "cat": "condiment",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🌿",
+   "portions": [
+    {
+     "n": "10 leaves (2 g)",
+     "hi": "10 पत्ते",
+     "g": 2
+    },
+    {
+     "n": "1 tbsp (5 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 5
+    }
+   ],
+   "core": true
+  },
+  {
+   "code": "G011",
+   "slug": "garlic-big-clove",
+   "name": "Garlic, Big Clove (Lehsun)",
+   "hi": "लहसुन (बड़ी कली)",
+   "alias": [
+    "lahsun",
+    "lasan",
+    "lasun",
+    "garlic",
+    "poondu",
+    "vellulli",
+    "bellulli",
+    "rashun",
+    "लसुन"
+   ],
+   "cat": "vegetable",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🧄",
+   "portions": [
+    {
+     "n": "1 clove (4 g)",
+     "hi": "1 कली",
+     "g": 4
+    },
+    {
+     "n": "1 tsp (5 g)",
+     "hi": "1 चम्मच",
+     "g": 5
+    }
+   ],
+   "core": true
+  },
+  {
+   "code": "G012",
+   "slug": "garlic-small-clove",
+   "name": "Garlic, Small Clove (Lehsun)",
+   "hi": "लहसुन (छोटी कली)",
+   "alias": [
+    "small garlic",
+    "lahsun choti",
+    "desi lahsun",
+    "lasoon",
+    "poondu small",
+    "lasan small",
+    "छोटा लहसुन"
+   ],
+   "cat": "vegetable",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🧄",
+   "portions": [
+    {
+     "n": "1 clove (2 g)",
+     "hi": "1 कली",
+     "g": 2
+    },
+    {
+     "n": "1 tsp (5 g)",
+     "hi": "1 चम्मच",
+     "g": 5
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "G013",
+   "slug": "garlic-single-clove-kashmir",
+   "name": "Garlic, Single Clove, Kashmiri (Ek Pothi Lehsun)",
+   "hi": "कश्मीरी एक पोथी लहसुन",
+   "alias": [
+    "kashmiri garlic",
+    "ek pothi garlic",
+    "single clove garlic",
+    "ottrai poondu",
+    "ruhan",
+    "snow mountain garlic",
+    "एक कली लहसुन"
+   ],
+   "cat": "vegetable",
+   "region": "Jammu & Kashmir",
+   "diet": "veg",
+   "emoji": "🧄",
+   "portions": [
+    {
+     "n": "1 bulb (15 g)",
+     "hi": "1 गांठ",
+     "g": 15
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "G014",
+   "slug": "ginger-fresh",
+   "name": "Ginger, Fresh (Adrak)",
+   "hi": "अदरक",
+   "alias": [
+    "adrak",
+    "adrakh",
+    "ale",
+    "allam",
+    "inji",
+    "shunti",
+    "ginger root",
+    "aadu",
+    "अदरख"
+   ],
+   "cat": "vegetable",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🫚",
+   "portions": [
+    {
+     "n": "1 inch piece (10 g)",
+     "hi": "1 इंच टुकड़ा",
+     "g": 10
+    },
+    {
+     "n": "1 tsp (5 g)",
+     "hi": "1 चम्मच",
+     "g": 5
+    }
+   ],
+   "core": true
+  },
+  {
+   "code": "G015",
+   "slug": "mango-ginger",
+   "name": "Mango Ginger (Aam Haldi)",
+   "hi": "आम हल्दी",
+   "alias": [
+    "aam adrak",
+    "amba haldi",
+    "mangainji",
+    "mamidi allam",
+    "amada",
+    "mavina hasi shunti",
+    "आम अदरक"
+   ],
+   "cat": "vegetable",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🫚",
+   "portions": [
+    {
+     "n": "1 inch piece (10 g)",
+     "hi": "1 इंच टुकड़ा",
+     "g": 10
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "G016",
+   "slug": "mint-leaves",
+   "name": "Mint Leaves (Pudina)",
+   "hi": "पुदीना",
+   "alias": [
+    "pudina",
+    "pudhina",
+    "podina",
+    "mint",
+    "mentha",
+    "pudinth",
+    "phudino",
+    "पुदिना"
+   ],
+   "cat": "condiment",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🌿",
+   "portions": [
+    {
+     "n": "1 tbsp (4 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 4
+    },
+    {
+     "n": "1 small bunch (30 g)",
+     "hi": "1 छोटा गुच्छा",
+     "g": 30
+    }
+   ],
+   "core": true
+  },
+  {
+   "code": "G017",
+   "slug": "onion-big",
+   "name": "Onion, Big (Pyaz)",
+   "hi": "प्याज़ (बड़ा)",
+   "alias": [
+    "pyaz",
+    "pyaj",
+    "pyaaj",
+    "onion",
+    "kanda",
+    "ullipaya",
+    "vengayam",
+    "eerulli",
+    "red onion",
+    "प्याज"
+   ],
+   "cat": "vegetable",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🧅",
+   "portions": [
+    {
+     "n": "1 medium onion (100 g)",
+     "hi": "1 मध्यम प्याज़",
+     "g": 100
+    },
+    {
+     "n": "1 tbsp (10 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 10
+    }
+   ],
+   "core": true
+  },
+  {
+   "code": "G018",
+   "slug": "onion-small",
+   "name": "Onion, Small (Sambar Onion / Shallot)",
+   "hi": "छोटा प्याज़ (सांभर प्याज़)",
+   "alias": [
+    "shallot",
+    "sambar onion",
+    "chinna vengayam",
+    "chikk eerulli",
+    "pyaaz kali",
+    "gundhun",
+    "small onion",
+    "pearl onion",
+    "छोटी प्याज"
+   ],
+   "cat": "vegetable",
+   "region": "South India",
+   "diet": "veg",
+   "emoji": "🧅",
+   "portions": [
+    {
+     "n": "5 small (50 g)",
+     "hi": "5 छोटे",
+     "g": 50
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "G019",
+   "slug": "hing-asafoetida",
+   "name": "Hing (Asafoetida)",
+   "hi": "हींग",
+   "alias": [
+    "heeng",
+    "hingu",
+    "perungayam",
+    "inguva",
+    "asafetida",
+    "kayam",
+    "hing powder",
+    "हिंग"
+   ],
+   "cat": "condiment",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🧂",
+   "portions": [
+    {
+     "n": "1 pinch (0.3 g)",
+     "hi": "1 चुटकी",
+     "g": 0.3
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "G020",
+   "slug": "cardamom-green",
+   "name": "Cardamom, Green (Elaichi)",
+   "hi": "हरी इलायची",
+   "alias": [
+    "elaichi",
+    "elachi",
+    "illaichi",
+    "ilaichi",
+    "choti elaichi",
+    "elakkai",
+    "yelakki",
+    "cardamon",
+    "इलायची"
+   ],
+   "cat": "condiment",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🧂",
+   "portions": [
+    {
+     "n": "1 pod (0.5 g)",
+     "hi": "1 दाना",
+     "g": 0.5
+    },
+    {
+     "n": "1 tsp (2 g)",
+     "hi": "1 चम्मच",
+     "g": 2
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "G021",
+   "slug": "cardamom-black",
+   "name": "Cardamom, Black (Badi Elaichi)",
+   "hi": "बड़ी इलायची",
+   "alias": [
+    "badi elachi",
+    "moti elaichi",
+    "kali elaichi",
+    "black cardamon",
+    "brown cardamom",
+    "big cardamom",
+    "boro elach",
+    "बड़ी इलाइची"
+   ],
+   "cat": "condiment",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🧂",
+   "portions": [
+    {
+     "n": "1 pod (1.5 g)",
+     "hi": "1 दाना",
+     "g": 1.5
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "G022",
+   "slug": "red-chilli-dry",
+   "name": "Red Chilli, Dry (Whole / Powder)",
+   "hi": "लाल मिर्च",
+   "alias": [
+    "lal mirch",
+    "lal mirchi",
+    "red chilli powder",
+    "chilli powder",
+    "mirchi powder",
+    "dry red chilli",
+    "sukhi lal mirch",
+    "mulaku",
+    "लाल मिर्च पाउडर"
+   ],
+   "cat": "condiment",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🌶️",
+   "portions": [
+    {
+     "n": "1 tsp (3 g)",
+     "hi": "1 चम्मच",
+     "g": 3
+    },
+    {
+     "n": "1 dry chilli (1.5 g)",
+     "hi": "1 सूखी मिर्च",
+     "g": 1.5
+    }
+   ],
+   "core": true,
+   "note": "IFCT value is for dried whole red chilli; ground powder is the same food"
+  },
+  {
+   "code": "G023",
+   "slug": "cloves-laung",
+   "name": "Cloves (Laung)",
+   "hi": "लौंग",
+   "alias": [
+    "laung",
+    "lavang",
+    "long",
+    "clove",
+    "krambu",
+    "lavangu",
+    "labang",
+    "लवंग"
+   ],
+   "cat": "condiment",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🧂",
+   "portions": [
+    {
+     "n": "1 clove (0.2 g)",
+     "hi": "1 लौंग",
+     "g": 0.2
+    },
+    {
+     "n": "1 tsp (2 g)",
+     "hi": "1 चम्मच",
+     "g": 2
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "G024",
+   "slug": "coriander-seeds-dry",
+   "name": "Coriander Seeds, Dry (Dhania)",
+   "hi": "धनिया (सूखा)",
+   "alias": [
+    "dhania",
+    "dhaniya",
+    "sabut dhania",
+    "dhania powder",
+    "coriander powder",
+    "dhane",
+    "kottamalli vittulu",
+    "धनिया पाउडर"
+   ],
+   "cat": "condiment",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🧂",
+   "portions": [
+    {
+     "n": "1 tsp (2 g)",
+     "hi": "1 चम्मच",
+     "g": 2
+    },
+    {
+     "n": "1 tbsp (6 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 6
+    }
+   ],
+   "core": true
+  },
+  {
+   "code": "G025",
+   "slug": "cumin-seeds-jeera",
+   "name": "Cumin Seeds (Jeera)",
+   "hi": "जीरा",
+   "alias": [
+    "jeera",
+    "jira",
+    "zeera",
+    "jeerakam",
+    "jeelakarra",
+    "jeerage",
+    "cumin",
+    "jeera powder",
+    "जीरा पाउडर"
+   ],
+   "cat": "condiment",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🧂",
+   "portions": [
+    {
+     "n": "1 tsp (2 g)",
+     "hi": "1 चम्मच",
+     "g": 2
+    },
+    {
+     "n": "1 tbsp (6 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 6
+    }
+   ],
+   "core": true
+  },
+  {
+   "code": "G026",
+   "slug": "fenugreek-seeds-methi-dana",
+   "name": "Fenugreek Seeds (Methi Dana)",
+   "hi": "मेथी दाना",
+   "alias": [
+    "methi",
+    "methi seeds",
+    "methi dana",
+    "menthulu",
+    "venthayam",
+    "uluva",
+    "menthe",
+    "fenugreek",
+    "मेथी के बीज"
+   ],
+   "cat": "condiment",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🧂",
+   "portions": [
+    {
+     "n": "1 tsp (4 g)",
+     "hi": "1 चम्मच",
+     "g": 4
+    },
+    {
+     "n": "1 tbsp (12 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 12
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "G027",
+   "slug": "mace-javitri",
+   "name": "Mace (Javitri)",
+   "hi": "जावित्री",
+   "alias": [
+    "javitri",
+    "javantri",
+    "jaypatri",
+    "jathipatri",
+    "avithri",
+    "jalwatur",
+    "japathri",
+    "जावंत्री"
+   ],
+   "cat": "condiment",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🧂",
+   "portions": [
+    {
+     "n": "1 pinch (0.3 g)",
+     "hi": "1 चुटकी",
+     "g": 0.3
+    },
+    {
+     "n": "1 tsp (1.5 g)",
+     "hi": "1 चम्मच",
+     "g": 1.5
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "G028",
+   "slug": "nutmeg-jaiphal",
+   "name": "Nutmeg (Jaiphal)",
+   "hi": "जायफल",
+   "alias": [
+    "jaiphal",
+    "jayphal",
+    "jathikai",
+    "jajikaya",
+    "jathikka",
+    "jayikayi",
+    "zaaphal",
+    "जैफल"
+   ],
+   "cat": "condiment",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🧂",
+   "portions": [
+    {
+     "n": "1 pinch (0.3 g)",
+     "hi": "1 चुटकी",
+     "g": 0.3
+    },
+    {
+     "n": "1 whole nutmeg (7 g)",
+     "hi": "1 जायफल",
+     "g": 7
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "G029",
+   "slug": "ajwain-carom-seeds",
+   "name": "Ajwain (Carom Seeds)",
+   "hi": "अजवाइन",
+   "alias": [
+    "ajwayan",
+    "ajowan",
+    "ajmo",
+    "omum",
+    "oma",
+    "vamu",
+    "onva",
+    "bishop's weed",
+    "carom",
+    "अजवायन"
+   ],
+   "cat": "condiment",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🧂",
+   "portions": [
+    {
+     "n": "1 tsp (2 g)",
+     "hi": "1 चम्मच",
+     "g": 2
+    },
+    {
+     "n": "1 tbsp (6 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 6
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "G030",
+   "slug": "pippali-long-pepper",
+   "name": "Pippali (Long Pepper)",
+   "hi": "पिप्पली",
+   "alias": [
+    "pipli",
+    "pipul",
+    "tippali",
+    "pippallu",
+    "tippili",
+    "pimpli",
+    "long pepper",
+    "indian long pepper",
+    "पीपली"
+   ],
+   "cat": "condiment",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🧂",
+   "portions": [
+    {
+     "n": "1 piece (0.5 g)",
+     "hi": "1 पिप्पली",
+     "g": 0.5
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "G031",
+   "slug": "black-pepper-kali-mirch",
+   "name": "Black Pepper (Kali Mirch)",
+   "hi": "काली मिर्च",
+   "alias": [
+    "kali mirch",
+    "kalimirch",
+    "kalimirchi",
+    "golmorich",
+    "miriyalu",
+    "milagu",
+    "kurumulaku",
+    "peppercorn",
+    "black pepper powder",
+    "काली मिर्च पाउडर"
+   ],
+   "cat": "condiment",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🧂",
+   "portions": [
+    {
+     "n": "1 tsp (2.5 g)",
+     "hi": "1 चम्मच",
+     "g": 2.5
+    },
+    {
+     "n": "1 tbsp (7 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 7
+    }
+   ],
+   "core": true
+  },
+  {
+   "code": "G032",
+   "slug": "poppy-seeds-khus-khus",
+   "name": "Poppy Seeds (Khus Khus)",
+   "hi": "खसखस",
+   "alias": [
+    "khas khas",
+    "postdana",
+    "posto",
+    "gasagasalu",
+    "khashkhash",
+    "afim",
+    "poppy",
+    "post dana",
+    "पोस्त दाना",
+    "पोस्ता"
+   ],
+   "cat": "condiment",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🧂",
+   "portions": [
+    {
+     "n": "1 tsp (3 g)",
+     "hi": "1 चम्मच",
+     "g": 3
+    },
+    {
+     "n": "1 tbsp (9 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 9
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "G033",
+   "slug": "turmeric-powder-haldi",
+   "name": "Turmeric Powder (Haldi)",
+   "hi": "हल्दी पाउडर",
+   "alias": [
+    "haldi",
+    "haldi powder",
+    "haldee",
+    "manjal",
+    "pasupu",
+    "arishina",
+    "halad",
+    "holud",
+    "turmeric",
+    "हल्दी"
+   ],
+   "cat": "condiment",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🧂",
+   "portions": [
+    {
+     "n": "1 tsp (3 g)",
+     "hi": "1 चम्मच",
+     "g": 3
+    },
+    {
+     "n": "1 tbsp (9 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 9
+    }
+   ],
+   "core": true
+  },
+  {
+   "code": "H001",
+   "slug": "almond-badam",
+   "name": "Almond (Badam)",
+   "hi": "बादाम",
+   "alias": [
+    "badam",
+    "badaam",
+    "vatam",
+    "almonds",
+    "almond nuts",
+    "badam pappu",
+    "kagji badam",
+    "बादाम गिरी"
+   ],
+   "cat": "nuts",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥜",
+   "portions": [
+    {
+     "n": "1 almond (1.2 g)",
+     "hi": "1 बादाम",
+     "g": 1.2
+    },
+    {
+     "n": "5 almonds (6 g)",
+     "hi": "5 बादाम",
+     "g": 6
+    },
+    {
+     "n": "10 almonds (12 g)",
+     "hi": "10 बादाम",
+     "g": 12
+    },
+    {
+     "n": "1 handful (25 g)",
+     "hi": "1 मुट्ठी",
+     "g": 25
+    }
+   ],
+   "core": true
+  },
+  {
+   "code": "H002",
+   "slug": "arecanut-dried-brown",
+   "name": "Areca Nut (Supari), Dried Brown",
+   "hi": "सुपारी (सूखी, भूरी)",
+   "alias": [
+    "supari",
+    "sopari",
+    "betel nut",
+    "areca nut",
+    "adike",
+    "adakka",
+    "vakka",
+    "puuga",
+    "कसैली सुपारी"
+   ],
+   "cat": "nuts",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🌰",
+   "portions": [
+    {
+     "n": "1 piece (3 g)",
+     "hi": "1 सुपारी",
+     "g": 3
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "H003",
+   "slug": "arecanut-dried-red",
+   "name": "Areca Nut (Supari), Dried Red",
+   "hi": "सुपारी (सूखी, लाल)",
+   "alias": [
+    "red supari",
+    "supari red",
+    "betel nut red",
+    "kottai paakku",
+    "paakku",
+    "gua",
+    "kwa",
+    "लाल सुपारी"
+   ],
+   "cat": "nuts",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🌰",
+   "portions": [
+    {
+     "n": "1 piece (3 g)",
+     "hi": "1 सुपारी",
+     "g": 3
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "H004",
+   "slug": "arecanut-fresh",
+   "name": "Areca Nut (Supari), Fresh",
+   "hi": "ताज़ी सुपारी",
+   "alias": [
+    "fresh supari",
+    "kacchi supari",
+    "green supari",
+    "fresh betel nut",
+    "kesa tamul",
+    "kwai im",
+    "हरी सुपारी"
+   ],
+   "cat": "nuts",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🌰",
+   "portions": [
+    {
+     "n": "1 piece (6 g)",
+     "hi": "1 सुपारी",
+     "g": 6
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "H005",
+   "slug": "cashew-kaju",
+   "name": "Cashew Nut (Kaju)",
+   "hi": "काजू",
+   "alias": [
+    "kaju",
+    "kaju nuts",
+    "cashew",
+    "cashews",
+    "mundiri",
+    "geru beeja",
+    "jeedi pappu",
+    "kasu andi",
+    "काजू गिरी"
+   ],
+   "cat": "nuts",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥜",
+   "portions": [
+    {
+     "n": "1 cashew (1.5 g)",
+     "hi": "1 काजू",
+     "g": 1.5
+    },
+    {
+     "n": "10 cashews (15 g)",
+     "hi": "10 काजू",
+     "g": 15
+    },
+    {
+     "n": "1 handful (25 g)",
+     "hi": "1 मुट्ठी",
+     "g": 25
+    }
+   ],
+   "core": true
+  },
+  {
+   "code": "H006",
+   "slug": "coconut-dry-copra",
+   "name": "Coconut, Dry (Copra / Sukha Nariyal)",
+   "hi": "सूखा नारियल (खोपरा)",
+   "alias": [
+    "copra",
+    "khopra",
+    "kopra",
+    "sukha nariyal",
+    "dry coconut",
+    "desiccated coconut",
+    "kopparai",
+    "endu kobbari",
+    "सूखा खोपरा"
+   ],
+   "cat": "nuts",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥥",
+   "portions": [
+    {
+     "n": "1 tbsp (6 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 6
+    },
+    {
+     "n": "1 piece (25 g)",
+     "hi": "1 टुकड़ा",
+     "g": 25
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "H007",
+   "slug": "coconut-fresh-nariyal",
+   "name": "Coconut, Fresh Kernel (Nariyal)",
+   "hi": "ताज़ा नारियल",
+   "alias": [
+    "nariyal",
+    "nariyel",
+    "narkel",
+    "naral",
+    "thenga",
+    "thengai",
+    "kobbari",
+    "fresh coconut",
+    "coconut kernel",
+    "कच्चा नारियल"
+   ],
+   "cat": "nuts",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥥",
+   "portions": [
+    {
+     "n": "1 tbsp (7 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 7
+    },
+    {
+     "n": "1 piece (30 g)",
+     "hi": "1 टुकड़ा",
+     "g": 30
+    },
+    {
+     "n": "1 cup (80 g)",
+     "hi": "1 कप",
+     "g": 80
+    }
+   ],
+   "core": true
+  },
+  {
+   "code": "H008",
+   "slug": "garden-cress-seeds-halim",
+   "name": "Garden Cress Seeds (Halim)",
+   "hi": "हलीम (चंद्रशूर)",
+   "alias": [
+    "halim",
+    "haleem seeds",
+    "aliv",
+    "asaliya",
+    "adityalu",
+    "alivirai",
+    "chandrashoor",
+    "garden cress",
+    "असालिया"
+   ],
+   "cat": "nuts",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥜",
+   "portions": [
+    {
+     "n": "1 tsp (4 g)",
+     "hi": "1 चम्मच",
+     "g": 4
+    },
+    {
+     "n": "1 tbsp (12 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 12
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "H009",
+   "slug": "sesame-seeds-black",
+   "name": "Sesame Seeds, Black (Kala Til)",
+   "hi": "काले तिल",
+   "alias": [
+    "kala til",
+    "black til",
+    "black sesame",
+    "gingelly black",
+    "ellu",
+    "nuvvulu",
+    "acchellu",
+    "til",
+    "तिल"
+   ],
+   "cat": "nuts",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥜",
+   "portions": [
+    {
+     "n": "1 tsp (4 g)",
+     "hi": "1 चम्मच",
+     "g": 4
+    },
+    {
+     "n": "1 tbsp (12 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 12
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "H010",
+   "slug": "sesame-seeds-brown",
+   "name": "Sesame Seeds, Brown (Til)",
+   "hi": "भूरे तिल",
+   "alias": [
+    "brown til",
+    "brown sesame",
+    "gingelly brown",
+    "til seeds",
+    "tal",
+    "teel",
+    "ellu brown",
+    "भूरा तिल"
+   ],
+   "cat": "nuts",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥜",
+   "portions": [
+    {
+     "n": "1 tsp (4 g)",
+     "hi": "1 चम्मच",
+     "g": 4
+    },
+    {
+     "n": "1 tbsp (12 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 12
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "H011",
+   "slug": "sesame-seeds-white",
+   "name": "Sesame Seeds, White (Safed Til)",
+   "hi": "सफेद तिल",
+   "alias": [
+    "safed til",
+    "white til",
+    "white sesame",
+    "sesame",
+    "gingelly seeds",
+    "safed tal",
+    "ellu white",
+    "तिल सफेद"
+   ],
+   "cat": "nuts",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥜",
+   "portions": [
+    {
+     "n": "1 tsp (4 g)",
+     "hi": "1 चम्मच",
+     "g": 4
+    },
+    {
+     "n": "1 tbsp (12 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 12
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "H012",
+   "slug": "groundnut-peanut-raw",
+   "name": "Groundnut (Peanut), Raw (Moongphali)",
+   "hi": "मूंगफली (कच्ची)",
+   "alias": [
+    "moongphali",
+    "mungfali",
+    "peanuts",
+    "peanut",
+    "singdana",
+    "shengdana",
+    "verkadalai",
+    "verusenaga",
+    "groundnuts",
+    "मूंगफली दाना"
+   ],
+   "cat": "nuts",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥜",
+   "portions": [
+    {
+     "n": "1 tbsp (10 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 10
+    },
+    {
+     "n": "1 handful (30 g)",
+     "hi": "1 मुट्ठी",
+     "g": 30
+    },
+    {
+     "n": "1 katori (50 g)",
+     "hi": "1 कटोरी",
+     "g": 50
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "H013",
+   "slug": "mustard-seeds-rai",
+   "name": "Mustard Seeds (Rai)",
+   "hi": "राई (सरसों)",
+   "alias": [
+    "rai",
+    "sarson",
+    "sarso",
+    "sorse",
+    "kadugu",
+    "avalu",
+    "sasuve",
+    "mohri",
+    "rai dana",
+    "राई दाना"
+   ],
+   "cat": "condiment",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🧂",
+   "portions": [
+    {
+     "n": "1 tsp (3 g)",
+     "hi": "1 चम्मच",
+     "g": 3
+    },
+    {
+     "n": "1 tbsp (9 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 9
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "H014",
+   "slug": "flaxseed-alsi",
+   "name": "Flaxseed (Linseed / Alsi)",
+   "hi": "अलसी",
+   "alias": [
+    "alsi",
+    "flax seeds",
+    "linseeds",
+    "flax",
+    "jawas",
+    "agase",
+    "agasi",
+    "avise ginjalu",
+    "ali vidai",
+    "अलसी के बीज"
+   ],
+   "cat": "nuts",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥜",
+   "portions": [
+    {
+     "n": "1 tsp (3.5 g)",
+     "hi": "1 चम्मच",
+     "g": 3.5
+    },
+    {
+     "n": "1 tbsp (10 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 10
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "H015",
+   "slug": "niger-seeds-black",
+   "name": "Niger Seeds, Black (Ramtil)",
+   "hi": "रामतिल (काला)",
+   "alias": [
+    "ramtil",
+    "ram til",
+    "niger",
+    "guizotia",
+    "karale",
+    "gurellu",
+    "valasulu",
+    "kala ramtil",
+    "जगनी"
+   ],
+   "cat": "nuts",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥜",
+   "portions": [
+    {
+     "n": "1 tsp (4 g)",
+     "hi": "1 चम्मच",
+     "g": 4
+    },
+    {
+     "n": "1 tbsp (12 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 12
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "H016",
+   "slug": "niger-seeds-gray",
+   "name": "Niger Seeds, Gray (Ramtil)",
+   "hi": "रामतिल (भूरा)",
+   "alias": [
+    "gray ramtil",
+    "grey ramtil",
+    "niger gray",
+    "ram til gray",
+    "karale grey",
+    "gurellu gray",
+    "kattelu",
+    "भूरा रामतिल"
+   ],
+   "cat": "nuts",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥜",
+   "portions": [
+    {
+     "n": "1 tsp (4 g)",
+     "hi": "1 चम्मच",
+     "g": 4
+    },
+    {
+     "n": "1 tbsp (12 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 12
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "H017",
+   "slug": "pine-nut-chilgoza",
+   "name": "Pine Nut (Chilgoza)",
+   "hi": "चिलगोजा",
+   "alias": [
+    "chilgoza",
+    "chilgoje",
+    "pine seeds",
+    "pine nuts",
+    "pine seed",
+    "jhurane biya",
+    "rhi",
+    "चिलगोजे"
+   ],
+   "cat": "nuts",
+   "region": "Himachal Pradesh",
+   "diet": "veg",
+   "emoji": "🥜",
+   "portions": [
+    {
+     "n": "1 tbsp (10 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 10
+    },
+    {
+     "n": "1 handful (20 g)",
+     "hi": "1 मुट्ठी",
+     "g": 20
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "H018",
+   "slug": "pistachio-pista",
+   "name": "Pistachio (Pista)",
+   "hi": "पिस्ता",
+   "alias": [
+    "pista",
+    "pesta",
+    "pistachios",
+    "pistachio nuts",
+    "pistha",
+    "pista nuts",
+    "पिस्ता गिरी"
+   ],
+   "cat": "nuts",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥜",
+   "portions": [
+    {
+     "n": "10 pistachios (8 g)",
+     "hi": "10 पिस्ता",
+     "g": 8
+    },
+    {
+     "n": "1 handful (25 g)",
+     "hi": "1 मुट्ठी",
+     "g": 25
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "H019",
+   "slug": "safflower-seeds-kardi",
+   "name": "Safflower Seeds (Kardi / Kusum)",
+   "hi": "कुसुम के बीज (करडी)",
+   "alias": [
+    "kardi",
+    "kusum",
+    "kusumbo",
+    "karadi",
+    "kusambe",
+    "kusuma ginjalu",
+    "safflower",
+    "kardai",
+    "करडी"
+   ],
+   "cat": "nuts",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥜",
+   "portions": [
+    {
+     "n": "1 tsp (4 g)",
+     "hi": "1 चम्मच",
+     "g": 4
+    },
+    {
+     "n": "1 tbsp (12 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 12
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "H020",
+   "slug": "sunflower-seeds-surajmukhi",
+   "name": "Sunflower Seeds (Surajmukhi)",
+   "hi": "सूरजमुखी के बीज",
+   "alias": [
+    "suraj mukhi",
+    "surajmukhi ke beej",
+    "sunflower kernels",
+    "sunflower seed",
+    "suryakanthi",
+    "surya mukhi",
+    "सूरजमुखी बीज"
+   ],
+   "cat": "nuts",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🌻",
+   "portions": [
+    {
+     "n": "1 tbsp (9 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 9
+    },
+    {
+     "n": "1 handful (25 g)",
+     "hi": "1 मुट्ठी",
+     "g": 25
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "H021",
+   "slug": "walnut-akhrot",
+   "name": "Walnut (Akhrot)",
+   "hi": "अखरोट",
+   "alias": [
+    "akhrot",
+    "akhrod",
+    "akrot",
+    "okhar",
+    "walnuts",
+    "akrottandi",
+    "dhoon",
+    "akrodu",
+    "walnut kernels",
+    "अख़रोट"
+   ],
+   "cat": "nuts",
+   "region": "Jammu & Kashmir",
+   "diet": "veg",
+   "emoji": "🌰",
+   "portions": [
+    {
+     "n": "1 walnut half (4 g)",
+     "hi": "आधा अखरोट",
+     "g": 4
+    },
+    {
+     "n": "2 walnuts (10 g)",
+     "hi": "2 अखरोट",
+     "g": 10
+    },
+    {
+     "n": "1 handful (30 g)",
+     "hi": "1 मुट्ठी",
+     "g": 30
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "I001",
+   "slug": "jaggery-cane-gud",
+   "name": "Jaggery, Cane (Gud)",
+   "hi": "गुड़",
+   "alias": [
+    "gur",
+    "gud",
+    "gul",
+    "jaggery",
+    "bellam",
+    "bella",
+    "vellam",
+    "goda",
+    "gurh",
+    "desi gud",
+    "गुड"
+   ],
+   "cat": "oil_sugar",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍯",
+   "portions": [
+    {
+     "n": "1 tsp (5 g)",
+     "hi": "1 चम्मच",
+     "g": 5
+    },
+    {
+     "n": "1 small piece (20 g)",
+     "hi": "1 छोटा टुकड़ा",
+     "g": 20
+    }
+   ],
+   "core": true
+  },
+  {
+   "code": "I002",
+   "slug": "sugarcane-juice",
+   "name": "Sugarcane Juice (Ganne Ka Ras)",
+   "hi": "गन्ने का रस",
+   "alias": [
+    "ganne ka juice",
+    "usacha rasa",
+    "karumbu charu",
+    "cheruku rasam",
+    "kabbina halu",
+    "akher ros",
+    "ganna ras",
+    "गन्ना रस"
+   ],
+   "cat": "beverage",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🧃",
+   "portions": [
+    {
+     "n": "1 glass (200 ml)",
+     "hi": "1 गिलास",
+     "g": 200
+    }
+   ],
+   "core": false
+  },
+  {
+   "code": "K001",
+   "slug": "toddy-palm-wine",
+   "name": "Toddy (Palm Wine / Tari)",
+   "hi": "ताड़ी",
+   "alias": [
+    "tari",
+    "tadi",
+    "kallu",
+    "palm wine",
+    "todhi",
+    "henda",
+    "kiad lieh",
+    "ताड़ी का रस"
+   ],
+   "cat": "beverage",
+   "region": "South India",
+   "diet": "veg",
+   "emoji": "🥤",
+   "portions": [
+    {
+     "n": "1 glass (200 ml)",
+     "hi": "1 गिलास",
+     "g": 200
+    }
+   ],
+   "core": false,
+   "note": "fermented palm sap, mildly alcoholic"
+  },
+  {
+   "code": "K002",
+   "slug": "coconut-water",
+   "name": "Coconut Water (Nariyal Pani)",
+   "hi": "नारियल पानी",
+   "alias": [
+    "nariyal ka pani",
+    "nariyal pani",
+    "tender coconut water",
+    "ilaneer",
+    "elaneer",
+    "thenga vellam",
+    "daber jal",
+    "naral pani",
+    "डाभ का पानी"
+   ],
+   "cat": "beverage",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥥",
+   "portions": [
+    {
+     "n": "1 glass (200 ml)",
+     "hi": "1 गिलास",
+     "g": 200
+    },
+    {
+     "n": "1 tender coconut (250 ml)",
+     "hi": "1 डाब",
+     "g": 250
+    }
+   ],
+   "core": true
+  },
+  {
+   "code": "T001",
+   "slug": "coconut-oil",
+   "name": "Coconut Oil (Nariyal Tel)",
+   "hi": "नारियल तेल",
+   "alias": [
+    "nariyal tel",
+    "nariyal ka tel",
+    "khobrel",
+    "velichenna",
+    "kobbari nune",
+    "thengai ennai",
+    "खोपरेल तेल"
+   ],
+   "cat": "oil_sugar",
+   "region": "Kerala",
+   "diet": "veg",
+   "emoji": "🫙",
+   "portions": [
+    {
+     "n": "1 tsp (5 g)",
+     "hi": "1 चम्मच",
+     "g": 5
+    },
+    {
+     "n": "1 tbsp (14 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 14
+    }
+   ],
+   "core": true,
+   "note": "IFCT energy listed as 0; kcal derived as 9 x fat 100 g",
+   "kcal": 900
+  },
+  {
+   "code": "T002",
+   "slug": "corn-oil",
+   "name": "Corn Oil (Makka Tel)",
+   "hi": "मक्का का तेल",
+   "alias": [
+    "makka tel",
+    "maize oil",
+    "makai ka tel",
+    "corn tel",
+    "makka oil",
+    "मक्के का तेल"
+   ],
+   "cat": "oil_sugar",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🫙",
+   "portions": [
+    {
+     "n": "1 tsp (5 g)",
+     "hi": "1 चम्मच",
+     "g": 5
+    },
+    {
+     "n": "1 tbsp (14 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 14
+    }
+   ],
+   "core": false,
+   "note": "IFCT energy listed as 0; kcal derived as 9 x fat 100 g",
+   "kcal": 900
+  },
+  {
+   "code": "T003",
+   "slug": "cottonseed-oil",
+   "name": "Cottonseed Oil (Binola Tel)",
+   "hi": "बिनौले का तेल",
+   "alias": [
+    "binola oil",
+    "binaula tel",
+    "cotton seed oil",
+    "kapas tel",
+    "banola tel",
+    "बिनौला तेल"
+   ],
+   "cat": "oil_sugar",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🫙",
+   "portions": [
+    {
+     "n": "1 tsp (5 g)",
+     "hi": "1 चम्मच",
+     "g": 5
+    },
+    {
+     "n": "1 tbsp (14 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 14
+    }
+   ],
+   "core": false,
+   "note": "IFCT energy listed as 0; kcal derived as 9 x fat 100 g",
+   "kcal": 900
+  },
+  {
+   "code": "T004",
+   "slug": "gingelly-oil-sesame",
+   "name": "Gingelly Oil (Sesame / Til Oil)",
+   "hi": "तिल का तेल",
+   "alias": [
+    "til oil",
+    "til ka tel",
+    "nallennai",
+    "nuvvula nune",
+    "ellenna",
+    "teel tel",
+    "sesame oil",
+    "gingelly tel",
+    "तिल तेल"
+   ],
+   "cat": "oil_sugar",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🫙",
+   "portions": [
+    {
+     "n": "1 tsp (5 g)",
+     "hi": "1 चम्मच",
+     "g": 5
+    },
+    {
+     "n": "1 tbsp (14 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 14
+    }
+   ],
+   "core": false,
+   "note": "IFCT energy listed as 0; kcal derived as 9 x fat 100 g",
+   "kcal": 900
+  },
+  {
+   "code": "T005",
+   "slug": "groundnut-oil",
+   "name": "Groundnut Oil (Peanut Oil)",
+   "hi": "मूंगफली का तेल",
+   "alias": [
+    "peanut oil",
+    "moongphali tel",
+    "shengdana tel",
+    "verkadalai ennai",
+    "palli nune",
+    "kadale ennai",
+    "singdana tel",
+    "मूंगफली तेल"
+   ],
+   "cat": "oil_sugar",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🫙",
+   "portions": [
+    {
+     "n": "1 tsp (5 g)",
+     "hi": "1 चम्मच",
+     "g": 5
+    },
+    {
+     "n": "1 tbsp (14 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 14
+    }
+   ],
+   "core": true,
+   "note": "IFCT energy listed as 0; kcal derived as 9 x fat 100 g",
+   "kcal": 900
+  },
+  {
+   "code": "T006",
+   "slug": "mustard-oil",
+   "name": "Mustard Oil (Sarson Ka Tel)",
+   "hi": "सरसों का तेल",
+   "alias": [
+    "sarson tel",
+    "sarso ka tel",
+    "kachi ghani oil",
+    "kachchi ghani",
+    "shorshe tel",
+    "sorser tel",
+    "kadugu ennai",
+    "सरसों तेल"
+   ],
+   "cat": "oil_sugar",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🫙",
+   "portions": [
+    {
+     "n": "1 tsp (5 g)",
+     "hi": "1 चम्मच",
+     "g": 5
+    },
+    {
+     "n": "1 tbsp (14 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 14
+    }
+   ],
+   "core": true,
+   "note": "IFCT energy listed as 0; kcal derived as 9 x fat 100 g",
+   "kcal": 900
+  },
+  {
+   "code": "T007",
+   "slug": "palm-oil-palmolein",
+   "name": "Palm Oil (Palmolein)",
+   "hi": "पाम ऑयल (पामोलिन)",
+   "alias": [
+    "palmolein",
+    "palm tel",
+    "palm olein",
+    "pam oil",
+    "पाम तेल"
+   ],
+   "cat": "oil_sugar",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🫙",
+   "portions": [
+    {
+     "n": "1 tsp (5 g)",
+     "hi": "1 चम्मच",
+     "g": 5
+    },
+    {
+     "n": "1 tbsp (14 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 14
+    }
+   ],
+   "core": false,
+   "note": "IFCT energy listed as 0; kcal derived as 9 x fat 100 g",
+   "kcal": 900
+  },
+  {
+   "code": "T008",
+   "slug": "rice-bran-oil",
+   "name": "Rice Bran Oil",
+   "hi": "राइस ब्रान का तेल",
+   "alias": [
+    "rice bran tel",
+    "ricebran oil",
+    "chawal ki bhusi ka tel",
+    "rice bran",
+    "राइस ब्रान तेल"
+   ],
+   "cat": "oil_sugar",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🫙",
+   "portions": [
+    {
+     "n": "1 tsp (5 g)",
+     "hi": "1 चम्मच",
+     "g": 5
+    },
+    {
+     "n": "1 tbsp (14 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 14
+    }
+   ],
+   "core": false,
+   "note": "IFCT energy listed as 0; kcal derived as 9 x fat 100 g",
+   "kcal": 900
+  },
+  {
+   "code": "T009",
+   "slug": "safflower-oil-kardi",
+   "name": "Safflower Oil (Kardi / Kusum Oil)",
+   "hi": "कुसुम का तेल (करडी)",
+   "alias": [
+    "kusum oil",
+    "kardi oil",
+    "kardai oil",
+    "safflower tel",
+    "kusumbo tel",
+    "कुसुम तेल"
+   ],
+   "cat": "oil_sugar",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🫙",
+   "portions": [
+    {
+     "n": "1 tsp (5 g)",
+     "hi": "1 चम्मच",
+     "g": 5
+    },
+    {
+     "n": "1 tbsp (14 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 14
+    }
+   ],
+   "core": false,
+   "note": "IFCT energy listed as 0; kcal derived as 9 x fat 100 g",
+   "kcal": 900
+  },
+  {
+   "code": "T010",
+   "slug": "safflower-oil-blended",
+   "name": "Safflower Oil, Blended",
+   "hi": "कुसुम तेल (मिश्रित)",
+   "alias": [
+    "blended safflower oil",
+    "blended oil",
+    "mixed oil",
+    "kardi blended oil",
+    "मिश्रित तेल"
+   ],
+   "cat": "oil_sugar",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🫙",
+   "portions": [
+    {
+     "n": "1 tsp (5 g)",
+     "hi": "1 चम्मच",
+     "g": 5
+    },
+    {
+     "n": "1 tbsp (14 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 14
+    }
+   ],
+   "core": false,
+   "note": "IFCT energy listed as 0; kcal derived as 9 x fat 100 g",
+   "kcal": 900
+  },
+  {
+   "code": "T011",
+   "slug": "soyabean-oil",
+   "name": "Soyabean Oil (Soya Tel)",
+   "hi": "सोयाबीन का तेल",
+   "alias": [
+    "soybean oil",
+    "soya oil",
+    "soya tel",
+    "soyabean tel",
+    "soyabin oil",
+    "सोया तेल"
+   ],
+   "cat": "oil_sugar",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🫙",
+   "portions": [
+    {
+     "n": "1 tsp (5 g)",
+     "hi": "1 चम्मच",
+     "g": 5
+    },
+    {
+     "n": "1 tbsp (14 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 14
+    }
+   ],
+   "core": false,
+   "note": "IFCT energy listed as 0; kcal derived as 9 x fat 100 g",
+   "kcal": 900
+  },
+  {
+   "code": "T012",
+   "slug": "sunflower-oil",
+   "name": "Sunflower Oil (Surajmukhi Tel)",
+   "hi": "सूरजमुखी का तेल",
+   "alias": [
+    "sunflower tel",
+    "suraj mukhi oil",
+    "surajmukhi ka tel",
+    "refined sunflower oil",
+    "suryakanthi nune",
+    "सूरजमुखी तेल"
+   ],
+   "cat": "oil_sugar",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🫙",
+   "portions": [
+    {
+     "n": "1 tsp (5 g)",
+     "hi": "1 चम्मच",
+     "g": 5
+    },
+    {
+     "n": "1 tbsp (14 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 14
+    }
+   ],
+   "core": true,
+   "note": "IFCT energy listed as 0; kcal derived as 9 x fat 100 g",
+   "kcal": 900
+  },
+  {
+   "code": "T013",
+   "slug": "ghee-generic",
+   "name": "Ghee (Desi), Generic",
+   "hi": "घी",
+   "alias": [
+    "ghi",
+    "desi ghee",
+    "pure ghee",
+    "clarified butter",
+    "tup",
+    "neyyi",
+    "nei",
+    "tuppa",
+    "देसी घी"
+   ],
+   "cat": "dairy",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🧈",
+   "portions": [
+    {
+     "n": "1 tsp (5 g)",
+     "hi": "1 चम्मच",
+     "g": 5
+    },
+    {
+     "n": "1 tbsp (14 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 14
+    }
+   ],
+   "core": true,
+   "note": "IFCT energy listed as 0; kcal derived as 9 x fat 100 g (real ghee ~ 897)",
+   "kcal": 900
+  },
+  {
+   "code": "T014",
+   "slug": "vanaspati-hydrogenated-fat",
+   "name": "Vanaspati (Hydrogenated Vegetable Fat)",
+   "hi": "वनस्पति घी",
+   "alias": [
+    "vanaspati ghee",
+    "dalda",
+    "banaspati",
+    "vegetable ghee",
+    "hydrogenated fat",
+    "वनस्पति"
+   ],
+   "cat": "oil_sugar",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🧈",
+   "portions": [
+    {
+     "n": "1 tsp (5 g)",
+     "hi": "1 चम्मच",
+     "g": 5
+    },
+    {
+     "n": "1 tbsp (14 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 14
+    }
+   ],
+   "core": false,
+   "note": "IFCT energy listed as 0; kcal derived as 9 x fat 100 g",
+   "kcal": 900
+  }
+ ]
+}

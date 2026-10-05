@@ -7,6 +7,9 @@
     "build": "next build --webpack",
     "start": "next start",
     "lint": "eslint",
+    "food:build": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/food/build-catalogue.mjs --parts scripts/food/parts --ifct scripts/food/ifct-2017.json",
+    "food:validate": "node scripts/food/validate-catalogue.mjs src/data/food-catalogue.json",
+    "food:check": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/food/check-catalogue.mjs",
     "soie:eval": "node scripts/soie-eval.mjs",
     "soie:wire": "node scripts/soie-wire-check.mjs"
   },

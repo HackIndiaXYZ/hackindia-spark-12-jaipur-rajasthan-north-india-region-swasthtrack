@@ -23,6 +23,7 @@ const GROUPS = [
   { key: "alert", label: "Alerts" },
   { key: "report", label: "Reports" },
   { key: "account", label: "Account & caregivers" },
+  { key: "auth", label: "Login emails (sent by Supabase Auth)" },
 ] as const;
 
 /**
@@ -34,11 +35,19 @@ export async function GET(request: Request) {
 
   const url = new URL(request.url);
   const type = url.searchParams.get("type");
+  // Logo and links need an absolute base. In dev that is this server; ?base=https://… overrides it.
+  const requested = url.searchParams.get("base");
+  const base =
+    requested && /^https?:\/\//.test(requested)
+      ? requested.replace(/\/$/, "")
+      : process.env.NODE_ENV !== "production"
+        ? url.origin
+        : undefined;
 
   if (type) {
     const def = getEmailTemplate(type);
     if (!def) return Response.json({ error: `Unknown template "${type}"` }, { status: 404 });
-    const mail = def.sample();
+    const mail = def.sample({ base });
     if (url.searchParams.get("format") === "text") {
       return new Response(`Subject: ${mail.subject}\n\n${mail.text}`, {
         headers: { "content-type": "text/plain; charset=utf-8" },
@@ -50,7 +59,7 @@ export async function GET(request: Request) {
   const cards = GROUPS.map((g) => {
     const items = EMAIL_TEMPLATES.filter((t) => t.category === g.key)
       .map((t) => {
-        const mail = t.sample();
+        const mail = t.sample({ base });
         return `<article class="card">
   <a class="frame" href="?type=${esc(t.key)}" target="_blank" rel="noopener"><iframe srcdoc="${esc(mail.html)}" sandbox title="${esc(t.label)}" tabindex="-1" scrolling="no"></iframe></a>
   <h3>${esc(t.label)}</h3>

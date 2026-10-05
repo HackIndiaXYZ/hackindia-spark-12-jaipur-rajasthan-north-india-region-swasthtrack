@@ -1,10 +1,13 @@
 "use client";
 
-import { Fragment, useEffect, type ReactNode } from "react";
+import { Fragment, useEffect, useSyncExternalStore, type ReactNode } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { HeartPulse, RefreshCw, ServerCrash, Settings2 } from "lucide-react";
+import { RefreshCw, ServerCrash, Settings2 } from "lucide-react";
+import { LogoMark } from "@/components/brand/logo-mark";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { useAuth } from "@/context/auth-context";
+import { isAuthFlowHeld, subscribeAuthFlowHold } from "@/services/auth-service";
 
 /**
  * Pages anyone may open without an account. The legal pages must stay reachable
@@ -32,7 +35,7 @@ function safeNextPath(raw: string | null): string {
 
 function FullScreen({ children }: { children: ReactNode }) {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-canvas px-6 py-10">
+    <div className="flex min-h-dvh flex-col items-center justify-center px-6 py-10">
       {children}
     </div>
   );
@@ -41,11 +44,11 @@ function FullScreen({ children }: { children: ReactNode }) {
 function Splash({ label = "SwasthTrack सुरक्षित लोड हो रहा है..." }: { label?: string }) {
   return (
     <FullScreen>
-      <div role="status" aria-live="polite" className="flex flex-col items-center gap-3">
-        <div className="flex h-12 w-12 items-center justify-center rounded-card bg-brand text-ink-inverse shadow-e2 animate-pulse">
-          <HeartPulse className="h-6 w-6" aria-hidden />
-        </div>
-        <p className="text-sm font-semibold text-ink-muted">{label}</p>
+      <div role="status" aria-live="polite" className="flex flex-col items-center gap-4">
+        <LogoMark sizes="96px" priority className="h-24 w-24 animate-pulse" />
+        <p lang="hi" className="text-sm font-semibold text-ink-muted">
+          {label}
+        </p>
       </div>
     </FullScreen>
   );
@@ -54,8 +57,8 @@ function Splash({ label = "SwasthTrack सुरक्षित लोड हो
 function SetupRequired() {
   return (
     <FullScreen>
-      <div role="alert" className="gold-edge w-full max-w-md rounded-panel bg-surface p-6 text-center sm:p-8">
-        <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-card bg-attention-soft text-attention">
+      <Card role="alert" tone="premium" className="w-full max-w-md rounded-panel text-center sm:p-8">
+        <div className="mx-auto mb-4 grid h-12 w-12 place-items-center rounded-control bg-surface text-attention shadow-e1 ring-1 ring-gold-line">
           <Settings2 className="h-6 w-6" aria-hidden />
         </div>
         <h1 className="text-xl font-bold text-ink">Setup required</h1>
@@ -64,36 +67,38 @@ function SetupRequired() {
         </p>
         <p className="mt-4 text-sm text-ink-muted">
           SwasthTrack cannot reach its database because these environment variables are missing in{" "}
-          <code className="rounded bg-surface-sunken px-1.5 py-0.5 text-xs text-ink">.env.local</code>:
+          <code className="tile rounded px-1.5 py-0.5 text-xs text-ink">.env.local</code>:
         </p>
         <ul className="mt-3 space-y-1.5 text-left">
-          <li className="rounded-field border border-line bg-surface-sunken px-3 py-2 font-mono text-xs text-ink">
-            NEXT_PUBLIC_SUPABASE_URL
-          </li>
-          <li className="rounded-field border border-line bg-surface-sunken px-3 py-2 font-mono text-xs text-ink">
-            NEXT_PUBLIC_SUPABASE_ANON_KEY
-          </li>
+          <li className="tile rounded-field px-3 py-2 font-mono text-xs text-ink">NEXT_PUBLIC_SUPABASE_URL</li>
+          <li className="tile rounded-field px-3 py-2 font-mono text-xs text-ink">NEXT_PUBLIC_SUPABASE_ANON_KEY</li>
         </ul>
-        <p lang="hi" className="mt-4 text-xs text-ink-subtle">
+        <p lang="hi" className="mt-4 text-xs text-ink-muted">
           ऊपर के दोनों मान .env.local में भरें, फिर ऐप दोबारा शुरू करें। विवरण: docs/auth-setup.md
         </p>
-      </div>
+      </Card>
     </FullScreen>
   );
 }
 
 function LoadFailed({ message, onRetry, onSignOut }: { message: string; onRetry: () => void; onSignOut: () => void }) {
+  // Our own errors are already bilingual and readable (they carry Devanagari);
+  // anything else is a raw server / network string that must not reach the reader
+  // (it is still logged to the console by the auth context).
+  const readable = /[\u0900-\u097F]/.test(message)
+    ? message
+    : "सर्वर से जवाब नहीं मिला। इंटरनेट जांचें और फिर कोशिश करें। (We could not reach the server. Check your connection and try again.)";
   return (
     <FullScreen>
-      <div role="alert" className="gold-edge w-full max-w-md rounded-panel bg-surface p-6 text-center sm:p-8">
-        <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-card bg-critical-soft text-critical">
+      <Card role="alert" tone="premium" className="w-full max-w-md rounded-panel text-center sm:p-8">
+        <div className="mx-auto mb-4 grid h-12 w-12 place-items-center rounded-control bg-surface text-critical shadow-e1 ring-1 ring-gold-line">
           <ServerCrash className="h-6 w-6" aria-hidden />
         </div>
         <h1 className="text-xl font-bold text-ink">Could not load your account</h1>
         <p lang="hi" className="mt-1 text-sm font-semibold text-ink-muted">
           आपका खाता लोड नहीं हो सका
         </p>
-        <p className="mt-3 text-sm text-ink-muted">{message}</p>
+        <p className="mt-3 text-sm text-ink-muted">{readable}</p>
         <div className="mt-5 flex flex-col gap-2.5 sm:flex-row sm:justify-center">
           <Button variant="primary" onClick={onRetry}>
             <RefreshCw className="h-4 w-4" aria-hidden />
@@ -103,7 +108,7 @@ function LoadFailed({ message, onRetry, onSignOut }: { message: string; onRetry:
             लॉग आउट (Sign out)
           </Button>
         </div>
-      </div>
+      </Card>
     </FullScreen>
   );
 }
@@ -128,6 +133,9 @@ export function AuthGuard({ children }: { children: ReactNode }) {
   } = useAuth();
   const pathname = usePathname();
   const router = useRouter();
+  // A password reset signs the user in before the new password is saved; the
+  // login screen has to stay put until that finishes (see auth-service).
+  const flowHeld = useSyncExternalStore(subscribeAuthFlowHold, isAuthFlowHeld, () => false);
 
   const isPublic = matchesRoute(pathname, PUBLIC_ROUTES);
   const isStaticPublic = matchesRoute(pathname, STATIC_PUBLIC_ROUTES);
@@ -138,6 +146,8 @@ export function AuthGuard({ children }: { children: ReactNode }) {
   if (!supabaseConfigured) {
     // No backend means no accounts: never pretend otherwise. Static legal pages still read fine.
     decision = isStaticPublic ? { kind: "render" } : { kind: "setup" };
+  } else if (isLogin && flowHeld) {
+    decision = { kind: "render" };
   } else if (loading) {
     decision = { kind: "splash" };
   } else if (!user) {
@@ -181,7 +191,9 @@ export function AuthGuard({ children }: { children: ReactNode }) {
     case "redirect":
       return <Splash />;
     default:
-      // Re-mounting on a patient switch makes every page refetch for the new patient.
-      return <Fragment key={activePatientId ?? "no-patient"}>{children}</Fragment>;
+      // Re-mounting on a patient switch makes every page refetch for the new
+      // patient. The login screen holds no patient data and must keep its state
+      // (an error, a half-typed code) while the session settles underneath it.
+      return <Fragment key={isLogin ? "login" : (activePatientId ?? "no-patient")}>{children}</Fragment>;
   }
 }

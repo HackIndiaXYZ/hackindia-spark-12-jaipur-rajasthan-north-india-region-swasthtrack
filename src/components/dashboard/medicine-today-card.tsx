@@ -1,15 +1,17 @@
 "use client";
 
-import { CheckCheck, Clock, Pill, Plus, Settings } from "lucide-react";
+import { useState } from "react";
+import { CheckCheck, ChevronDown, Clock, Pill, Plus, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { EmptyState, ErrorState } from "@/components/ui/page";
 import { ProgressBar } from "@/components/ui/progress-bar";
-import { VitalTag } from "@/components/dashboard/vital-tag";
+import { RecordHeader } from "@/components/dashboard/record-header";
 import { DoseActions, DoseRecordedAt, DoseStatusChip } from "@/components/medicines/dose-actions";
 import { useMedicineMarking } from "@/hooks/use-medicine-marking";
 import { mealRelationLabel } from "@/lib/medicine-format";
 import { todayIST } from "@/lib/health-rules";
+import { cn } from "@/lib/utils";
 
 type MedicineTodayCardProps = {
   patientId: string;
@@ -25,37 +27,33 @@ export function MedicineTodayCard({ patientId, onOpenTracker, onManage, onChange
   const today = todayIST();
   const marking = useMedicineMarking(patientId, today, { onChange });
   const { doses, summary, loading, error, canWrite } = marking;
+  // A dose that is already taken has nothing urgent left to do: its correction
+  // buttons (mark missed / undo) sit behind a "बदलें" toggle instead of stacking
+  // two more buttons under every row.
+  const [editing, setEditing] = useState<ReadonlySet<string>>(() => new Set());
+  const toggleEditing = (id: string) =>
+    setEditing((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
 
   return (
-    <Card>
-      <CardHeader>
-        <div>
-          <div className="flex flex-wrap items-center gap-2">
-            <CardTitle>Medicines</CardTitle>
-            <VitalTag tone="meds">
-              <Pill aria-hidden className="h-3.5 w-3.5" />
-              <span lang="hi">दवाइयाँ</span>
-            </VitalTag>
-          </div>
-          <CardDescription>
-            {loading
-              ? "लोड हो रहा है…"
-              : summary.total > 0
-                ? `आज ${summary.total} में से ${summary.done} खुराक ली गई`
-                : "कोई सक्रिय दवाई नहीं है"}
-          </CardDescription>
-        </div>
-        <div className="flex w-full items-center gap-2 sm:w-auto">
-          <Button variant="secondary" onClick={onManage} className="flex-1 sm:flex-none">
-            <Settings aria-hidden className="h-4 w-4" />
-            <span lang="hi">दवाइयाँ बदलें</span>
-          </Button>
-          <Button variant="secondary" onClick={onOpenTracker} className="flex-1 sm:flex-none">
-            <Plus aria-hidden className="h-4 w-4" />
-            <span lang="hi">ट्रैकर खोलें</span>
-          </Button>
-        </div>
-      </CardHeader>
+    <Card aria-label="Medicines — दवाइयाँ">
+      <RecordHeader
+        icon={Pill}
+        tone="meds"
+        title="Medicines"
+        hindiTitle="दवाइयाँ"
+        subtitle={
+          loading
+            ? "लोड हो रहा है…"
+            : summary.total > 0
+              ? `आज ${summary.total} में से ${summary.done} खुराक ली गई`
+              : "कोई सक्रिय दवाई नहीं है"
+        }
+      />
 
       {loading ? (
         <div className="space-y-2.5" aria-busy="true" aria-label="दवाइयाँ लोड हो रही हैं">
@@ -86,7 +84,7 @@ export function MedicineTodayCard({ patientId, onOpenTracker, onManage, onChange
           }
         />
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-3.5">
           <ProgressBar label="आज की ली गई खुराकें" max={summary.total} value={summary.done} />
 
           {canWrite && marking.markAllCandidates.length > 0 ? (
@@ -99,8 +97,11 @@ export function MedicineTodayCard({ patientId, onOpenTracker, onManage, onChange
           <ul className="space-y-2.5">
             {doses.map((dose) => {
               const meal = mealRelationLabel(dose.medicine.meal_relation);
+              const id = dose.medicine.id;
+              const done = canWrite && (dose.state === "taken" || dose.state === "late");
+              const open = !done || editing.has(id);
               return (
-                <li key={dose.medicine.id} className="rounded-card border border-line bg-surface p-3.5">
+                <li key={id} className="tile rounded-card p-3.5">
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
                       <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-base font-semibold text-ink">
@@ -119,22 +120,51 @@ export function MedicineTodayCard({ patientId, onOpenTracker, onManage, onChange
                           </>
                         ) : null}
                       </p>
-                      <DoseRecordedAt dose={dose} className="mt-1" />
                     </div>
                     <DoseStatusChip state={dose.state} />
                   </div>
-                  <DoseActions
-                    dose={dose}
-                    canWrite={canWrite}
-                    onTaken={() => void marking.markTaken(dose.medicine.id)}
-                    onMissed={() => void marking.markMissed(dose.medicine.id)}
-                    onUndo={() => void marking.undo(dose.medicine.id)}
-                    className="mt-3"
-                  />
+
+                  <div className="mt-1 flex items-center justify-between gap-2">
+                    <DoseRecordedAt dose={dose} />
+                    {done ? (
+                      <Button
+                        variant="ghost"
+                        onClick={() => toggleEditing(id)}
+                        aria-expanded={open}
+                        aria-controls={`dose-actions-${id}`}
+                        className="-mr-2 ml-auto"
+                      >
+                        <span lang="hi">बदलें</span>
+                        <ChevronDown aria-hidden className={cn("h-4 w-4 transition-transform", open && "rotate-180")} />
+                      </Button>
+                    ) : null}
+                  </div>
+
+                  <div id={`dose-actions-${id}`} hidden={!open}>
+                    <DoseActions
+                      dose={dose}
+                      canWrite={canWrite}
+                      onTaken={() => void marking.markTaken(id)}
+                      onMissed={() => void marking.markMissed(id)}
+                      onUndo={() => void marking.undo(id)}
+                      className="mt-2.5"
+                    />
+                  </div>
                 </li>
               );
             })}
           </ul>
+
+          <div className="flex flex-wrap items-center justify-end gap-2 border-t border-gold-line pt-3">
+            <Button variant="secondary" onClick={onManage} className="flex-1 sm:flex-none">
+              <Settings aria-hidden className="h-4 w-4" />
+              <span lang="hi">दवाइयाँ बदलें</span>
+            </Button>
+            <Button variant="secondary" onClick={onOpenTracker} className="flex-1 sm:flex-none">
+              <Plus aria-hidden className="h-4 w-4" />
+              <span lang="hi">ट्रैकर खोलें</span>
+            </Button>
+          </div>
         </div>
       )}
     </Card>

@@ -1,35 +1,40 @@
 "use client";
 
-import { useId, useState, type FormEvent } from "react";
+import { useState } from "react";
 import dynamic from "next/dynamic";
-import { HeartPulse, Info, Plus } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { HeartPulse, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Field, NumberInput, Select, TextInput } from "@/components/ui/form-field";
 import { Modal } from "@/components/ui/modal";
-import { EmptyState, ErrorState } from "@/components/ui/page";
-import { Segmented, segmentedPanelId, segmentedTabId } from "@/components/ui/segmented";
+import { EmptyState } from "@/components/ui/page";
 import { useConfirm } from "@/components/ui/confirm-dialog";
 import { useToast } from "@/components/ui/toast";
-import { BPChip, bpSafetyNote, classifyReading, statusTextClass } from "@/components/health/bp-chip";
-import { fmtTime, istDateAndTime, relativeDayLabel } from "@/components/health/format";
+import { BPEntryForm } from "@/components/forms/add-bp-dialog";
+import { BPChip } from "@/components/health/bp-chip";
+import { fmtTime, istDateAndTime, parseIntegerInput, relativeDayLabel } from "@/components/health/format";
 import {
   ChartSkeleton,
-  RangeSelector,
+  HISTORY_PAGE,
+  HeroNumber,
+  HeroTile,
+  HistoryDay,
+  HistoryHeading,
+  HistoryRow,
+  LoadMoreButton,
+  PanelFrame,
   RowActions,
   SmallNote,
   StatTile,
-  panelTabOptions,
-  rangeWindow,
+  TrendShell,
+  groupByDate,
+  useHistoryPager,
+  useRangeData,
   type ChartRange,
   type PanelTab,
 } from "@/components/health/panel-parts";
-import { loadErrorMessage, useAsyncData } from "@/components/health/use-async-data";
 import {
   classifyBP,
   isPlausibleBP,
-  istHour,
   istInstant,
   mean,
   toISTDate,
@@ -38,8 +43,8 @@ import {
 } from "@/lib/health-rules";
 import {
   deleteBloodPressure,
+  getBloodPressureLogs,
   getBloodPressureLogsInRange,
-  logBloodPressure,
   updateBloodPressure,
   type BPLogEntry,
 } from "@/services/patient-service";
@@ -58,38 +63,52 @@ type BloodPressurePanelProps = {
   thresholds: BPThresholds;
   /** False for viewers: the panel is read-only. */
   canWrite: boolean;
+  /** False while another tracker is showing. */
+  active?: boolean;
+  /** The open New / History / Trend tab (kept by the page, so the overview can ask for "form"). */
+  tab: PanelTab;
+  onTabChange: (tab: PanelTab) => void;
   onSuccess?: () => void;
 };
 
 type FieldErrors = { systolic?: string; diastolic?: string; pulse?: string };
 
+const PERIODS: Array<{ value: string; label: string }> = [
+  { value: "Morning", label: "सुबह (Morning)" },
+  { value: "Afternoon", label: "दोपहर (Afternoon)" },
+  { value: "Evening", label: "शाम (Evening)" },
+  { value: "Night", label: "रात (Night)" },
+  { value: "Special", label: "चेकअप (Special)" },
+];
+
 const PERIOD_LABEL: Record<string, string> = {
-  Morning: "सुबह",
-  Afternoon: "दोपहर",
-  Evening: "शाम",
-  Night: "रात",
-  Special: "चेकअप",
+  morning: "सुबह",
+  afternoon: "दोपहर",
+  evening: "शाम",
+  night: "रात",
+  special: "चेकअप",
 };
 
 function periodLabel(type: string | null): string {
-  return (type && PERIOD_LABEL[type]) || type || "दर्ज";
+  const key = (type ?? "").trim().toLowerCase();
+  return PERIOD_LABEL[key] || type || "दर्ज";
 }
 
-/** Checks one entry. Returns field errors, or the parsed numbers. */
+/** Checks an edited entry. Returns field errors, or the parsed numbers. */
 function parseBP(
   sysStr: string,
   diaStr: string,
   pulseStr: string,
 ): { errors: FieldErrors; values: { systolic: number; diastolic: number; pulse: number | null } | null } {
   const errors: FieldErrors = {};
-  const systolic = parseInt(sysStr, 10);
-  const diastolic = parseInt(diaStr, 10);
-  const pulse = pulseStr.trim() ? parseInt(pulseStr, 10) : null;
+  const systolic = parseIntegerInput(sysStr);
+  const diastolic = parseIntegerInput(diaStr);
+  const pulse = pulseStr.trim() ? parseIntegerInput(pulseStr) : null;
 
-  if (!sysStr.trim() || Number.isNaN(systolic)) errors.systolic = "ऊपर का नंबर लिखें";
+  if (Number.isNaN(systolic)) errors.systolic = "ऊपर का नंबर लिखें";
   else if (systolic < 50 || systolic > 280) errors.systolic = "50 से 280 के बीच लिखें";
 
-  if (!diaStr.trim() || Number.isNaN(diastolic)) errors.diastolic = "नीचे का नंबर लिखें";
+  if (Number.isNaN(diastolic)) errors.diastolic = "नीचे का नंबर लिखें";
   else if (diastolic < 30 || diastolic > 180) errors.diastolic = "30 से 180 के बीच लिखें";
 
   if (!errors.systolic && !errors.diastolic && systolic <= diastolic) {
@@ -107,7 +126,7 @@ function parseBP(
 
 /* ---- Latest morning / evening ------------------------------------------------- */
 
-function LatestCard({
+function LatestTile({
   title,
   log,
   thresholds,
@@ -118,31 +137,39 @@ function LatestCard({
 }) {
   const today = todayIST();
   const day = log ? toISTDate(log.measured_at) : null;
-  const { tone } = log ? classifyReading(log.systolic, log.diastolic, thresholds) : { tone: "info" as const };
 
   return (
-    <div className="rounded-card border border-line bg-surface-sunken p-4">
-      <p className="text-xs font-semibold text-ink-muted">{title}</p>
+    <HeroTile label={title}>
       {log && day ? (
         <>
-          <p className={`tabular mt-1 text-3xl font-semibold ${statusTextClass[tone]}`}>
-            {log.systolic}/{log.diastolic}
-            <span className="ml-1 text-xs font-medium text-ink-subtle">mmHg</span>
-          </p>
-          <p className="mt-0.5 text-xs text-ink-subtle">
-            {relativeDayLabel(day, today)}, {fmtTime(log.measured_at)}
-            {log.pulse ? ` · नब्ज़ ${log.pulse}` : ""}
+          <HeroNumber value={`${log.systolic}/${log.diastolic}`} unit="mmHg" stacked className="text-3xl" />
+          <p className="mt-2 text-xs text-ink-muted">
+            <span lang="hi">{relativeDayLabel(day, today)}</span>, {fmtTime(log.measured_at)}
+            {log.pulse ? (
+              <>
+                {" · "}
+                <span className="whitespace-nowrap">
+                  <span lang="hi">नब्ज़</span> {log.pulse}
+                </span>
+              </>
+            ) : null}
           </p>
           <BPChip systolic={log.systolic} diastolic={log.diastolic} thresholds={thresholds} className="mt-2" />
-          {day !== today ? <p className="mt-1.5 text-xs text-ink-subtle">आज अभी दर्ज नहीं हुआ</p> : null}
+          {day !== today ? (
+            <p lang="hi" className="mt-1.5 text-xs text-ink-muted">
+              आज अभी दर्ज नहीं हुआ
+            </p>
+          ) : null}
         </>
       ) : (
         <>
-          <p className="mt-1 text-3xl font-semibold text-ink-subtle">—</p>
-          <p className="mt-1 text-xs text-ink-subtle">अभी तक कोई रीडिंग दर्ज नहीं</p>
+          <HeroNumber value="—" className="text-3xl text-ink-subtle" />
+          <p lang="hi" className="mt-2 text-xs text-ink-muted">
+            अभी तक कोई रीडिंग दर्ज नहीं
+          </p>
         </>
       )}
-    </div>
+    </HeroTile>
   );
 }
 
@@ -165,7 +192,9 @@ function EditBPModal({
   const [systolic, setSystolic] = useState(String(log.systolic));
   const [diastolic, setDiastolic] = useState(String(log.diastolic));
   const [pulse, setPulse] = useState(log.pulse ? String(log.pulse) : "");
-  const [period, setPeriod] = useState(log.reading_type || "Morning");
+  const [period, setPeriod] = useState(
+    () => PERIODS.find((p) => p.value.toLowerCase() === (log.reading_type ?? "").trim().toLowerCase())?.value ?? "Morning",
+  );
   const [date, setDate] = useState(initial.date);
   const [time, setTime] = useState(initial.time);
   const [notes, setNotes] = useState(log.notes || "");
@@ -181,6 +210,10 @@ function EditBPModal({
       return;
     }
     const measuredAt = istInstant(date, time);
+    if (Number.isNaN(measuredAt.getTime())) {
+      toast.error("तारीख़ या समय सही नहीं है", "Invalid date or time.");
+      return;
+    }
     if (measuredAt.getTime() > Date.now() + 5 * 60_000) {
       toast.error("यह समय अभी से आगे का है", "Time is in the future.");
       return;
@@ -249,11 +282,11 @@ function EditBPModal({
           </Field>
           <Field label="समय का हिस्सा (Period)">
             <Select value={period} onChange={(e) => setPeriod(e.target.value)}>
-              <option value="Morning">सुबह (Morning)</option>
-              <option value="Afternoon">दोपहर (Afternoon)</option>
-              <option value="Evening">शाम (Evening)</option>
-              <option value="Night">रात (Night)</option>
-              <option value="Special">चेकअप (Special)</option>
+              {PERIODS.map((p) => (
+                <option key={p.value} value={p.value}>
+                  {p.label}
+                </option>
+              ))}
             </Select>
           </Field>
         </div>
@@ -275,12 +308,21 @@ function EditBPModal({
 
 /* ---- Trend tab ---------------------------------------------------------------- */
 
-function BPTrend({ patientId, thresholds }: { patientId: string; thresholds: BPThresholds }) {
-  const [range, setRange] = useState<ChartRange>("30d");
-  const win = rangeWindow(range);
-  const { data, error, loading, reload } = useAsyncData(
-    () => getBloodPressureLogsInRange(patientId, win.startDate, win.endDate),
-    [patientId, range, win.endDate],
+function BPTrend({
+  patientId,
+  thresholds,
+  range,
+  onRangeChange,
+}: {
+  patientId: string;
+  thresholds: BPThresholds;
+  range: ChartRange;
+  onRangeChange: (range: ChartRange) => void;
+}) {
+  const { data, win, error, loading, stale, reload } = useRangeData(
+    (start, end) => getBloodPressureLogsInRange(patientId, start, end),
+    patientId,
+    range,
   );
 
   const stats = (() => {
@@ -289,7 +331,7 @@ function BPTrend({ patientId, thresholds }: { patientId: string; thresholds: BPT
     const dia = data.map((l) => l.diastolic);
     const classes = data.map((l) => classifyBP(l.systolic, l.diastolic, thresholds));
     const avgOf = (type: string) => {
-      const part = data.filter((l) => l.reading_type === type);
+      const part = data.filter((l) => (l.reading_type ?? "").trim().toLowerCase() === type);
       return part.length > 0
         ? { n: part.length, sys: Math.round(mean(part.map((l) => l.systolic))!), dia: Math.round(mean(part.map((l) => l.diastolic))!) }
         : null;
@@ -304,161 +346,120 @@ function BPTrend({ patientId, thresholds }: { patientId: string; thresholds: BPT
       maxDia: Math.max(...dia),
       aboveTarget: classes.filter((c) => c.aboveTarget).length,
       aboveAlert: classes.filter((c) => c.exceedsAlert).length,
-      morning: avgOf("Morning"),
-      evening: avgOf("Evening"),
+      morning: avgOf("morning"),
+      evening: avgOf("evening"),
     };
   })();
 
   return (
-    <div className="space-y-4">
-      <RangeSelector value={range} onChange={setRange} ariaLabel="BP trend range — अवधि चुनें" />
-
-      {error ? (
-        <ErrorState
-          title="ट्रेंड लोड नहीं हो पाया"
-          englishTitle="Could not load the trend"
-          description={loadErrorMessage(error)}
-          onRetry={reload}
-        />
-      ) : loading ? (
-        <ChartSkeleton />
-      ) : (
+    <TrendShell
+      range={range}
+      onRangeChange={onRangeChange}
+      ariaLabel="BP trend range — अवधि चुनें"
+      loading={loading}
+      stale={stale}
+      error={error}
+      onRetry={reload}
+    >
+      {stats ? (
         <>
-          <BPTrendChart logs={data ?? []} thresholds={thresholds} startDate={win.startDate} endDate={win.endDate} />
+          <div className="tile rounded-card p-3 sm:p-4">
+            <BPTrendChart
+              logs={data ?? []}
+              thresholds={thresholds}
+              startDate={win.fixed ? win.startDate : undefined}
+              endDate={win.endDate}
+            />
+          </div>
 
-          {stats ? (
-            <div className="space-y-3" aria-live="polite">
-              <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4">
-                <StatTile label="औसत (Average)" value={`${stats.avgSys}/${stats.avgDia}`} unit="mmHg" />
+          <div className="space-y-3" aria-live="polite">
+            <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4">
+              <StatTile label="औसत (Average)" value={`${stats.avgSys}/${stats.avgDia}`} unit="mmHg" />
+              <StatTile
+                label="ऊपर का: कम–ज़्यादा"
+                value={`${stats.minSys}–${stats.maxSys}`}
+                helper={`नीचे का ${stats.minDia}–${stats.maxDia}`}
+              />
+              <StatTile
+                label="लक्ष्य से ऊपर"
+                value={`${stats.aboveTarget}/${stats.count}`}
+                unit="रीडिंग"
+                tone={stats.aboveTarget > 0 ? "attention" : "positive"}
+                helper={`लक्ष्य ${thresholds.target_systolic}/${thresholds.target_diastolic}`}
+              />
+              <StatTile
+                label="अलर्ट सीमा से ऊपर"
+                value={stats.aboveAlert}
+                unit="रीडिंग"
+                tone={stats.aboveAlert > 0 ? "critical" : "positive"}
+                helper={`अलर्ट ${thresholds.alert_systolic}/${thresholds.alert_diastolic}`}
+              />
+            </div>
+            {stats.morning || stats.evening ? (
+              <div className="grid grid-cols-2 gap-2.5">
                 <StatTile
-                  label="ऊपर का: कम–ज़्यादा"
-                  value={`${stats.minSys}–${stats.maxSys}`}
-                  helper={`नीचे का ${stats.minDia}–${stats.maxDia}`}
+                  label="सुबह का औसत"
+                  value={stats.morning ? `${stats.morning.sys}/${stats.morning.dia}` : null}
+                  unit="mmHg"
+                  helper={stats.morning ? `${stats.morning.n} रीडिंग` : "इस अवधि में नहीं"}
                 />
                 <StatTile
-                  label="लक्ष्य से ऊपर"
-                  value={`${stats.aboveTarget}/${stats.count}`}
-                  unit="रीडिंग"
-                  tone={stats.aboveTarget > 0 ? "attention" : "positive"}
-                  helper={`लक्ष्य ${thresholds.target_systolic}/${thresholds.target_diastolic}`}
-                />
-                <StatTile
-                  label="अलर्ट सीमा से ऊपर"
-                  value={stats.aboveAlert}
-                  unit="रीडिंग"
-                  tone={stats.aboveAlert > 0 ? "critical" : "positive"}
-                  helper={`अलर्ट ${thresholds.alert_systolic}/${thresholds.alert_diastolic}`}
+                  label="शाम का औसत"
+                  value={stats.evening ? `${stats.evening.sys}/${stats.evening.dia}` : null}
+                  unit="mmHg"
+                  helper={stats.evening ? `${stats.evening.n} रीडिंग` : "इस अवधि में नहीं"}
                 />
               </div>
-              {stats.morning || stats.evening ? (
-                <div className="grid grid-cols-2 gap-2.5">
-                  <StatTile
-                    label="सुबह का औसत"
-                    value={stats.morning ? `${stats.morning.sys}/${stats.morning.dia}` : null}
-                    unit="mmHg"
-                    helper={stats.morning ? `${stats.morning.n} रीडिंग` : "इस अवधि में नहीं"}
-                  />
-                  <StatTile
-                    label="शाम का औसत"
-                    value={stats.evening ? `${stats.evening.sys}/${stats.evening.dia}` : null}
-                    unit="mmHg"
-                    helper={stats.evening ? `${stats.evening.n} रीडिंग` : "इस अवधि में नहीं"}
-                  />
-                </div>
-              ) : null}
-              {stats.count < 5 ? (
-                <SmallNote>
-                  इस अवधि में सिर्फ़ {stats.count} रीडिंग हैं, इसलिए औसत पर ज़्यादा भरोसा न करें। (Small sample — treat averages as rough.)
-                </SmallNote>
-              ) : null}
-            </div>
-          ) : (
-            <EmptyState
-              icon={HeartPulse}
-              title="इस अवधि में कोई रीडिंग नहीं"
-              description="No readings in this period. A longer range may show earlier readings."
-            />
-          )}
+            ) : null}
+            {stats.count < 5 ? (
+              <SmallNote>
+                इस अवधि में सिर्फ़ {stats.count} रीडिंग हैं, इसलिए औसत पर ज़्यादा भरोसा न करें। (Small sample — treat averages as rough.)
+              </SmallNote>
+            ) : null}
+          </div>
         </>
+      ) : (
+        <EmptyState
+          icon={HeartPulse}
+          title="इस अवधि में कोई रीडिंग नहीं"
+          description="No readings in this period. A longer range may show earlier readings."
+        />
       )}
-    </div>
+    </TrendShell>
   );
 }
 
 /* ---- Panel -------------------------------------------------------------------- */
 
-export function BloodPressurePanel({ patientId, logs, thresholds, canWrite, onSuccess }: BloodPressurePanelProps) {
+export function BloodPressurePanel({
+  patientId,
+  logs,
+  thresholds,
+  canWrite,
+  active = true,
+  tab,
+  onTabChange,
+  onSuccess,
+}: BloodPressurePanelProps) {
   const toast = useToast();
   const confirm = useConfirm();
-  const tabsId = useId();
 
-  const [tab, setTab] = useState<PanelTab>(canWrite ? "form" : "history");
-  const [systolic, setSystolic] = useState("");
-  const [diastolic, setDiastolic] = useState("");
-  const [pulse, setPulse] = useState("");
-  // A convenience default for the slot, from India time; the reader can change it.
-  const [period, setPeriod] = useState(() => (istHour(new Date()) < 14 ? "Morning" : "Evening"));
-  const [notes, setNotes] = useState("");
-  const [errors, setErrors] = useState<FieldErrors>({});
-  const [saving, setSaving] = useState(false);
+  const [range, setRange] = useState<ChartRange>("30d");
   const [editing, setEditing] = useState<BPLogEntry | null>(null);
 
-  const latestMorning = logs.find((l) => l.reading_type === "Morning");
-  const latestEvening = logs.find((l) => l.reading_type === "Evening");
+  const pager = useHistoryPager({
+    base: logs,
+    pageSize: HISTORY_PAGE,
+    fetchRows: (limit) => getBloodPressureLogs(patientId, limit),
+  });
 
-  const typedSys = parseInt(systolic, 10);
-  const typedDia = parseInt(diastolic, 10);
-  const preview =
-    Number.isFinite(typedSys) && Number.isFinite(typedDia) && isPlausibleBP(typedSys, typedDia)
-      ? classifyReading(typedSys, typedDia, thresholds)
-      : null;
+  const slot = (type: string) => logs.find((l) => (l.reading_type ?? "").trim().toLowerCase() === type);
+  const latestMorning = slot("morning");
+  const latestEvening = slot("evening");
 
-  async function handleSubmit(e: FormEvent) {
-    e.preventDefault();
-    const { errors: found, values } = parseBP(systolic, diastolic, pulse);
-    setErrors(found);
-    if (!values) return;
-
-    const cls = classifyBP(values.systolic, values.diastolic, thresholds);
-    const note = bpSafetyNote(cls);
-    if (cls.category === "crisis" || cls.needsUrgentAttention) {
-      const ok = await confirm({
-        title: "क्या यह रीडिंग सही है?",
-        message: `${values.systolic}/${values.diastolic} mmHg सामान्य से काफ़ी अलग है। ${note ?? ""} सही है तो सहेजें; टाइप की गलती हो तो रद्द करके जाँचें।`,
-        confirmLabel: "हाँ, सही है — सहेजें",
-        cancelLabel: "रद्द करें",
-      });
-      if (!ok) return;
-    }
-
-    setSaving(true);
-    try {
-      await logBloodPressure({
-        patient_id: patientId,
-        systolic: values.systolic,
-        diastolic: values.diastolic,
-        pulse: values.pulse,
-        reading_type: period,
-        measured_at: new Date().toISOString(),
-        notes: notes.trim() || null,
-      });
-      setSystolic("");
-      setDiastolic("");
-      setPulse("");
-      setNotes("");
-      setErrors({});
-      toast({
-        title: `रीडिंग दर्ज हो गई: ${values.systolic}/${values.diastolic}`,
-        description: note ?? "BP reading saved.",
-        tone: "success",
-        durationMs: note ? 12000 : undefined,
-      });
-      onSuccess?.();
-    } catch (err) {
-      toast.error("रीडिंग दर्ज नहीं हो पाई", err instanceof Error ? err.message : undefined);
-    } finally {
-      setSaving(false);
-    }
+  function changed() {
+    pager.refresh();
+    onSuccess?.();
   }
 
   async function handleDelete(log: BPLogEntry) {
@@ -471,188 +472,116 @@ export function BloodPressurePanel({ patientId, logs, thresholds, canWrite, onSu
     try {
       await deleteBloodPressure(log.id);
       toast.success("रीडिंग मिटा दी गई", "BP reading deleted.");
-      onSuccess?.();
+      changed();
     } catch (err) {
       toast.error("मिटाया नहीं जा सका", err instanceof Error ? err.message : undefined);
     }
   }
 
+  const groups = groupByDate(pager.rows, (l) => toISTDate(l.measured_at));
+
   return (
-    <Card>
-      <CardHeader>
-        <div className="flex min-w-0 items-center gap-3">
-          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-control bg-bp-soft text-bp">
-            <HeartPulse aria-hidden className="h-5 w-5" />
-          </span>
-          <div className="min-w-0">
-            <div className="flex flex-wrap items-center gap-2">
-              <CardTitle>Blood Pressure</CardTitle>
-              <Badge variant="critical" lang="hi">
-                रक्तचाप
-              </Badge>
-            </div>
-            <CardDescription>
-              लक्ष्य {thresholds.target_systolic}/{thresholds.target_diastolic} · अलर्ट {thresholds.alert_systolic}/{thresholds.alert_diastolic} mmHg
-            </CardDescription>
-          </div>
-        </div>
-      </CardHeader>
-
-      <div className="mb-5 grid gap-3 sm:grid-cols-2">
-        <LatestCard title="सुबह · Morning (ताज़ा)" log={latestMorning} thresholds={thresholds} />
-        <LatestCard title="शाम · Evening (ताज़ा)" log={latestEvening} thresholds={thresholds} />
-      </div>
-
-      <Segmented
-        mode="tabs"
-        idPrefix={tabsId}
-        options={panelTabOptions(canWrite)}
-        value={tab}
-        onChange={setTab}
-        ariaLabel="BP panel — नया, इतिहास या ट्रेंड"
-        size="sm"
-        className="mb-3"
-      />
-
-      {tab === "form" && canWrite ? (
-        <form
-          role="tabpanel"
-          id={segmentedPanelId(tabsId, "form")}
-          aria-labelledby={segmentedTabId(tabsId, "form")}
-          onSubmit={(e) => void handleSubmit(e)}
-          noValidate
-          className="space-y-3 rounded-card border border-line bg-surface p-4"
-        >
+    <>
+      <PanelFrame
+        icon={HeartPulse}
+        tone="bp"
+        title="Blood Pressure"
+        hindiTitle="रक्तचाप"
+        subtitle={
+          <>
+            <span lang="hi">लक्ष्य</span> {thresholds.target_systolic}/{thresholds.target_diastolic} · <span lang="hi">अलर्ट</span>{" "}
+            {thresholds.alert_systolic}/{thresholds.alert_diastolic} mmHg
+          </>
+        }
+        hero={
           <div className="grid grid-cols-2 gap-3">
-            {/* Read and entered as a pair, so they stay side by side on a phone. */}
-            <Field label="Systolic (ऊपर वाला)" hint="mmHg" error={errors.systolic} required>
-              <NumberInput
-                placeholder="जैसे 128"
-                maxLength={3}
-                value={systolic}
-                onChange={(e) => setSystolic(e.target.value)}
-                className="text-xl font-semibold"
-              />
-            </Field>
-            <Field label="Diastolic (नीचे वाला)" hint="mmHg" error={errors.diastolic} required>
-              <NumberInput
-                placeholder="जैसे 82"
-                maxLength={3}
-                value={diastolic}
-                onChange={(e) => setDiastolic(e.target.value)}
-                className="text-xl font-semibold"
-              />
-            </Field>
+            <LatestTile title="सुबह · Morning (ताज़ा)" log={latestMorning} thresholds={thresholds} />
+            <LatestTile title="शाम · Evening (ताज़ा)" log={latestEvening} thresholds={thresholds} />
           </div>
-
-          {preview ? (
-            <p aria-live="polite" className="flex flex-wrap items-center gap-2 text-xs text-ink-muted">
-              <BPChip systolic={typedSys} diastolic={typedDia} thresholds={thresholds} />
-              <span>इस मरीज़ के लक्ष्य के हिसाब से</span>
-            </p>
-          ) : null}
-
-          <div className="grid gap-3 sm:grid-cols-2">
-            <Field label="Pulse (नब्ज़)" hint="bpm · वैकल्पिक" error={errors.pulse}>
-              <NumberInput placeholder="जैसे 74" maxLength={3} value={pulse} onChange={(e) => setPulse(e.target.value)} />
-            </Field>
-            <Field label="कब नापा (Time of day)">
-              <Select value={period} onChange={(e) => setPeriod(e.target.value)}>
-                <option value="Morning">सुबह (Morning)</option>
-                <option value="Evening">शाम (Evening)</option>
-                <option value="Special">चेकअप (Special)</option>
-              </Select>
-            </Field>
+        }
+        tab={tab}
+        onTabChange={onTabChange}
+        canWrite={canWrite}
+        active={active}
+        ariaLabel="BP panel — नया, इतिहास या ट्रेंड"
+        form={
+          <div className="tile rounded-card p-4 lg:max-w-xl">
+            <BPEntryForm patientId={patientId} thresholds={thresholds} onSuccess={changed} />
           </div>
-          <Field label="टिप्पणी (Notes)" hint="वैकल्पिक · optional">
-            <TextInput
-              placeholder="जैसे: दवाई के बाद, 10 मिनट आराम के बाद"
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-            />
-          </Field>
-
-          <Button type="submit" variant="primary" loading={saving} className="w-full sm:w-auto">
-            <Plus aria-hidden className="h-4 w-4" />
-            रीडिंग दर्ज करें (Save BP)
-          </Button>
-        </form>
-      ) : null}
-
-      {tab === "history" ? (
-        <div
-          role="tabpanel"
-          id={segmentedPanelId(tabsId, "history")}
-          aria-labelledby={segmentedTabId(tabsId, "history")}
-          className="rounded-card border border-line bg-surface p-4"
-        >
-          <h3 className="mb-1 text-sm font-semibold text-ink">हाल की रीडिंग · Recent readings</h3>
-          <p className="mb-3 text-xs text-ink-subtle">
-            पिछली {logs.length} रीडिंग। पुरानी रीडिंग देखने के लिए ट्रेंड टैब में अवधि बदलें।
-          </p>
-          {logs.length > 0 ? (
-            <ul className="divide-y divide-line">
-              {logs.map((log) => (
-                <li key={log.id} className="flex items-center justify-between gap-2 py-2.5">
-                  <div className="min-w-0 flex-1">
-                    <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-                      <p className="tabular text-base font-semibold text-ink">
-                        {log.systolic}/{log.diastolic}
-                        <span className="ml-1 text-xs font-normal text-ink-subtle">mmHg</span>
-                      </p>
-                      <BPChip systolic={log.systolic} diastolic={log.diastolic} thresholds={thresholds} />
-                    </div>
-                    <p className="mt-0.5 text-xs text-ink-subtle">
-                      {periodLabel(log.reading_type)} · {relativeDayLabel(toISTDate(log.measured_at))}, {fmtTime(log.measured_at)}
-                      {log.pulse ? ` · नब्ज़ ${log.pulse}` : ""}
-                    </p>
-                    {log.notes ? <p className="truncate text-xs italic text-ink-subtle">{log.notes}</p> : null}
-                  </div>
-                  {canWrite ? (
-                    <RowActions
-                      what={`BP ${log.systolic}/${log.diastolic}`}
-                      onEdit={() => setEditing(log)}
-                      onDelete={() => void handleDelete(log)}
-                    />
-                  ) : null}
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <EmptyState
-              icon={HeartPulse}
-              title="अभी कोई BP रीडिंग नहीं"
-              description="No readings yet."
-              action={
-                canWrite ? (
-                  <Button variant="primary" onClick={() => setTab("form")}>
-                    <Plus aria-hidden className="h-4 w-4" />
-                    पहली रीडिंग दर्ज करें
-                  </Button>
-                ) : undefined
-              }
-            />
-          )}
-        </div>
-      ) : null}
-
-      {tab === "chart" ? (
-        <div
-          role="tabpanel"
-          id={segmentedPanelId(tabsId, "chart")}
-          aria-labelledby={segmentedTabId(tabsId, "chart")}
-          className="rounded-card border border-line bg-surface p-4"
-        >
-          <BPTrend patientId={patientId} thresholds={thresholds} />
-        </div>
-      ) : null}
-
-      <p className="mt-4 flex items-start gap-2 rounded-card border border-info-line bg-info-soft p-3 text-xs text-ink-muted">
-        <Info aria-hidden className="mt-0.5 h-4 w-4 shrink-0 text-info" />
-        <span lang="hi">
-          यह स्क्रीन सिर्फ़ रीडिंग दर्ज करती है। यह निदान नहीं करती और दवाई नहीं बदलती। चिंता हो तो डॉक्टर से बात करें; आपात स्थिति में 112 / 108।
-        </span>
-      </p>
+        }
+        history={
+          <div className="space-y-3">
+            <HistoryHeading title="हाल की रीडिंग · Recent readings (mmHg)" count={pager.rows.length} unit="रीडिंग" />
+            {groups.length > 0 ? (
+              <div className="space-y-4 lg:max-w-3xl">
+                {groups.map((group) => (
+                  <HistoryDay key={group.date} date={group.date}>
+                    {group.rows.map((log) => (
+                      <HistoryRow
+                        key={log.id}
+                        lead={
+                          <div className="w-14 shrink-0 text-xs">
+                            <p className="font-semibold text-ink">{fmtTime(log.measured_at)}</p>
+                            <p lang="hi" className="text-ink-subtle">
+                              {periodLabel(log.reading_type)}
+                            </p>
+                          </div>
+                        }
+                        actions={
+                          canWrite ? (
+                            <RowActions
+                              what={`BP ${log.systolic}/${log.diastolic}`}
+                              onEdit={() => setEditing(log)}
+                              onDelete={() => void handleDelete(log)}
+                            />
+                          ) : null
+                        }
+                      >
+                        <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                          <p className="tabular text-base font-semibold text-ink">
+                            {log.systolic}/{log.diastolic}
+                          </p>
+                          <BPChip systolic={log.systolic} diastolic={log.diastolic} thresholds={thresholds} />
+                        </div>
+                        {log.pulse || log.notes ? (
+                          <p className="truncate text-xs text-ink-subtle">
+                            {log.pulse ? (
+                              <>
+                                <span lang="hi">नब्ज़</span> {log.pulse}
+                              </>
+                            ) : null}
+                            {log.pulse && log.notes ? " · " : ""}
+                            {log.notes ? <span className="italic">{log.notes}</span> : null}
+                          </p>
+                        ) : null}
+                      </HistoryRow>
+                    ))}
+                  </HistoryDay>
+                ))}
+                {pager.hasMore ? (
+                  <LoadMoreButton loading={pager.loading} failed={pager.failed} onClick={pager.loadMore} what="रीडिंग" />
+                ) : null}
+              </div>
+            ) : (
+              <EmptyState
+                icon={HeartPulse}
+                title="अभी कोई BP रीडिंग नहीं"
+                description="No readings yet."
+                action={
+                  canWrite ? (
+                    <Button variant="primary" onClick={() => onTabChange("form")}>
+                      <Plus aria-hidden className="h-4 w-4" />
+                      पहली रीडिंग दर्ज करें
+                    </Button>
+                  ) : undefined
+                }
+              />
+            )}
+          </div>
+        }
+        chart={<BPTrend patientId={patientId} thresholds={thresholds} range={range} onRangeChange={setRange} />}
+        footnote="यह स्क्रीन सिर्फ़ रीडिंग दर्ज करती है। यह निदान नहीं करती और दवाई नहीं बदलती। चिंता हो तो डॉक्टर से बात करें; आपात स्थिति में 112 / 108।"
+      />
 
       {editing ? (
         <EditBPModal
@@ -660,9 +589,9 @@ export function BloodPressurePanel({ patientId, logs, thresholds, canWrite, onSu
           log={editing}
           thresholds={thresholds}
           onClose={() => setEditing(null)}
-          onSaved={() => onSuccess?.()}
+          onSaved={changed}
         />
       ) : null}
-    </Card>
+    </>
   );
 }

@@ -3,24 +3,30 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#0d7b55">
+  <meta name="theme-color" content="#faf6ea">
   <meta name="robots" content="noindex">
   <title>ऑफ़लाइन — SwasthTrack</title>
   <!--
     Static fallback served by public/sw.js when a page cannot be fetched. No data,
-    no scripts beyond reload. Colours mirror the tokens in src/app/globals.css.
+    no scripts beyond reload. Colours mirror the tokens in src/app/globals.css
+    (the gilded-glass palette): keep them in step if the tokens change.
   -->
   <style>
     :root {
-      --canvas: #f5f7f6;
-      --surface: #ffffff;
-      --line: #e3e8e6;
-      --ink: #14201d;
-      --ink-muted: #4a5a55;
-      --brand: #0d7b55;
-      --gold-1: #f6dfa0;
-      --gold-line: #e6c976;
-      --gold-ink: #6b4a0c;
+      --canvas: #faf6ea;
+      --ink: #1d1a12;
+      --ink-muted: #4e4733;
+      --brand: #0a6a4a;
+      --gilt-1: #fffdf6;
+      --gilt-2: #fdf3d3;
+      --gilt-3: #f7e5ae;
+      --rim-1: #f5dc90;
+      --rim-2: #d9ae48;
+      --rim-3: #a97a22;
+      --foil-1: #f8e4a6;
+      --foil-2: #efcd72;
+      --foil-3: #e4bb52;
+      --gold-ink: #5c3f08;
     }
     * { box-sizing: border-box; }
     html, body { margin: 0; min-height: 100%; }
@@ -31,22 +37,35 @@
       align-items: center;
       justify-content: center;
       padding: 1.5rem 1rem max(1.5rem, env(safe-area-inset-bottom));
-      background: var(--canvas);
       color: var(--ink);
+      background:
+        radial-gradient(60rem 36rem at 8% -10%, rgba(216, 169, 54, 0.16), transparent 60%),
+        radial-gradient(52rem 34rem at 100% 4%, rgba(246, 223, 160, 0.34), transparent 62%),
+        var(--canvas);
       font: 15px/1.6 system-ui, -apple-system, "Segoe UI", "Noto Sans Devanagari", sans-serif;
       -webkit-text-size-adjust: 100%;
     }
+    /* Champagne-gold card with a lit top reflection and a bronze metal rim,
+       the same construction as .gilt in globals.css. */
     main {
       width: 100%;
       max-width: 26rem;
       padding: 2rem 1.5rem;
       text-align: center;
-      background: var(--surface);
-      border: 1px solid var(--line);
-      border-radius: 1rem;
-      box-shadow: 0 8px 16px -4px rgba(16, 32, 28, 0.07), 0 20px 40px -10px rgba(16, 32, 28, 0.1);
+      border: 1px solid transparent;
+      border-radius: 1.25rem;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.78) 0%, rgba(255, 255, 255, 0.24) 34%, rgba(255, 255, 255, 0) 52%) padding-box,
+        linear-gradient(162deg, var(--gilt-1) 0%, var(--gilt-2) 58%, var(--gilt-3) 100%) padding-box,
+        linear-gradient(140deg, var(--rim-1), var(--rim-2) 48%, var(--rim-3)) border-box;
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.95),
+        0 1px 2px rgba(74, 52, 8, 0.1),
+        0 8px 18px -8px rgba(156, 109, 30, 0.32),
+        0 18px 36px -18px rgba(74, 52, 8, 0.2);
     }
-    img { width: 4rem; height: 4rem; border-radius: 0.75rem; border: 1px solid var(--line); object-fit: cover; }
+    .logo { display: block; width: 6rem; height: 6rem; margin: 0 auto; }
+    .wordmark { display: block; width: 11rem; height: auto; margin: 0.5rem auto 0; }
     h1 { margin: 1rem 0 0; font-size: 1.375rem; line-height: 1.35; }
     h2 { margin: 0.125rem 0 0; font-size: 0.8125rem; font-weight: 500; color: var(--ink-muted); }
     p { margin: 0.875rem 0 0; color: var(--ink-muted); }
@@ -54,22 +73,31 @@
     button {
       margin-top: 1.5rem;
       min-height: 2.75rem;
-      padding: 0 1.25rem;
+      padding: 0 1.5rem;
       font: inherit;
       font-weight: 600;
       color: var(--gold-ink);
-      background: linear-gradient(115deg, var(--gold-1), var(--gold-line));
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.14) 48%, rgba(255, 255, 255, 0) 50%),
+        linear-gradient(115deg, var(--foil-1), var(--foil-2) 58%, var(--foil-3));
       border: 0;
       border-radius: 0.75rem;
-      box-shadow: 0 1px 2px rgba(16, 32, 28, 0.12), 0 6px 16px -6px rgba(156, 109, 30, 0.5);
+      box-shadow:
+        0 0 0 1px rgba(156, 109, 30, 0.32),
+        0 1px 2px rgba(74, 52, 8, 0.14),
+        0 6px 16px -6px rgba(156, 109, 30, 0.55),
+        inset 0 1px 0 rgba(255, 255, 255, 0.7),
+        inset 0 -1px 0 rgba(156, 109, 30, 0.28);
       cursor: pointer;
     }
+    button:active { transform: translateY(1px); }
     button:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
   </style>
 </head>
 <body>
   <main role="main">
-    <img src="/logo.jpg" alt="" width="64" height="64">
+    <img class="logo" src="/brand/logo-mark.png" alt="" width="96" height="96">
+    <img class="wordmark" src="/brand/wordmark.svg" alt="SwasthTrack" width="220" height="56">
     <h1>इंटरनेट नहीं है</h1>
     <h2>You are offline</h2>
     <p>

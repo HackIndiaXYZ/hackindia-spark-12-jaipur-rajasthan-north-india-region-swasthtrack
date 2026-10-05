@@ -51,10 +51,10 @@ export function FoodDataQuality() {
         <div className="space-y-5">
           <div className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-5">
             {metrics.map((m) => (
-              <div key={m.label} className="rounded-card border border-line bg-surface p-3.5 shadow-e1">
+              <div key={m.label} className="tile rounded-card p-3.5">
                 <p className="text-xs font-medium text-ink-muted">{m.label}</p>
                 <p className="tabular mt-1 text-2xl font-semibold text-ink">{m.value}</p>
-                <p lang="hi" className="mt-0.5 text-2xs text-ink-subtle">
+                <p lang="hi" className="mt-0.5 text-2xs text-ink-muted">
                   {m.hindi}
                 </p>
               </div>

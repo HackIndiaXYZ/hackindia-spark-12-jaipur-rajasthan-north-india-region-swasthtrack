@@ -47,6 +47,8 @@ export function Segmented<T extends string>({
   size = "md",
   mode = "radio",
   idPrefix,
+  fill = false,
+  stacked = false,
   className,
 }: {
   options: SegmentedOption<T>[];
@@ -56,6 +58,16 @@ export function Segmented<T extends string>({
   size?: "sm" | "md";
   mode?: "radio" | "tabs";
   idPrefix?: string;
+  /**
+   * Equal-width options that share the whole row (a two- or three-way switch
+   * such as Sign in / Create account) instead of a scrolling strip.
+   */
+  fill?: boolean;
+  /**
+   * Hindi label on top, English label beneath, each option two deliberate lines
+   * tall — for narrow screens where "Hindi (English)" would wrap unpredictably.
+   */
+  stacked?: boolean;
   className?: string;
 }) {
   const generatedId = useId();
@@ -105,7 +117,11 @@ export function Segmented<T extends string>({
       role={isTabs ? "tablist" : "radiogroup"}
       aria-label={ariaLabel}
       className={cn(
-        "scroll-x -mx-1 flex items-center gap-1.5 px-1 py-1",
+        fill
+          ? "grid auto-cols-fr grid-flow-col gap-1.5 p-1"
+          : // Room around the pills for the gold button shadow, which an
+            // `overflow` container would otherwise clip into a visible box.
+            "scroll-x -mx-2 -mb-2 flex items-center gap-1.5 px-2 pb-3 pt-1",
         className,
       )}
     >
@@ -132,24 +148,41 @@ export function Segmented<T extends string>({
             onClick={() => onChange(option.value)}
             onKeyDown={(event) => move(event, index)}
             className={cn(
-              "pressable flex shrink-0 cursor-pointer items-center gap-1.5 rounded-control",
-              "whitespace-nowrap border font-semibold snap-start",
-              size === "sm"
-                ? "min-h-control-sm px-3 text-xs pointer-coarse:min-h-control"
-                : "min-h-control px-3.5 text-sm",
+              "pressable flex cursor-pointer items-center rounded-control",
+              "snap-start whitespace-nowrap border font-semibold",
+              fill ? "justify-center" : "shrink-0",
+              // `cn` does not de-duplicate conflicting utilities, so each
+              // geometry is spelled out whole.
+              stacked
+                ? "min-h-12 flex-col justify-center px-2 py-1.5"
+                : size === "sm"
+                  ? "min-h-control-sm gap-1.5 px-3 text-xs pointer-coarse:min-h-control"
+                  : "min-h-control gap-1.5 px-3.5 text-sm",
               active
-                ? "border-brand bg-brand text-ink-inverse shadow-e1"
-                : "border-line bg-surface text-ink-muted hover:border-brand-line hover:text-ink",
+                ? "grad-gold-button border-gold-line text-gold-ink shadow-gold-button"
+                : "border-line bg-surface/80 text-ink-muted shadow-e1 hover:border-gold-line hover:bg-surface hover:text-ink",
             )}
           >
+            {stacked && option.hindiLabel ? (
+              <span lang="hi" className="text-sm leading-tight">
+                {option.hindiLabel}
+              </span>
+            ) : null}
             {Icon ? <Icon aria-hidden className="h-4 w-4 shrink-0" /> : null}
-            <span>{option.label}</span>
-            {option.hindiLabel ? (
+            <span
+              className={cn(
+                stacked && "text-xs font-medium leading-tight",
+                stacked && (active ? "text-gold-ink" : "text-ink-subtle"),
+              )}
+            >
+              {option.label}
+            </span>
+            {option.hindiLabel && !stacked ? (
               <span
                 lang="hi"
                 className={cn(
                   "text-xs font-normal",
-                  active ? "text-ink-inverse" : "text-ink-subtle",
+                  active ? "text-gold-ink" : "text-ink-subtle",
                 )}
               >
                 {option.hindiLabel}
@@ -160,7 +193,7 @@ export function Segmented<T extends string>({
                 className={cn(
                   "tabular ml-0.5 rounded-full px-1.5 text-2xs font-semibold",
                   active
-                    ? "bg-brand-strong text-ink-inverse"
+                    ? "bg-gold-ink text-ink-inverse"
                     : "bg-surface-sunken text-ink-subtle",
                 )}
               >

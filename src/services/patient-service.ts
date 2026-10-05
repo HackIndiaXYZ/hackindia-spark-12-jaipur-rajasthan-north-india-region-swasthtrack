@@ -2,6 +2,7 @@ import { getActivePatientId } from "@/lib/active-patient";
 import {
   MEDICINE_LATE_AFTER_MIN,
   MEDICINE_MISSED_AFTER_MIN,
+  bpSlotOf,
   eachIST,
   isPlausibleBP,
   istDayBounds,
@@ -12,6 +13,8 @@ import {
   todayIST,
   addDaysIST,
 } from "@/lib/health-rules";
+import { getCataloguePortions, loadCatalogue } from "@/lib/food/catalogue";
+import { buildIndex, searchIndex, type FoodIndex } from "@/lib/food/search";
 import { isSupabaseConfigured, supabase } from "@/lib/supabase/client";
 import type { Database } from "@/lib/supabase/database.types";
 import { notifyAbnormalBp, notifyWeightLogged } from "./alert-email-client";
@@ -52,6 +55,18 @@ export interface FoodItem {
   created_by?: string | null;
   created_at: string;
   updated_at: string;
+  /** Present on bundled catalogue foods (src/lib/food/catalogue.ts), absent on custom foods. */
+  slug?: string;
+  aliases?: string[];
+  /** Home state, region, "Pan-India" or "International". */
+  region?: string;
+  diet?: "veg" | "egg" | "nonveg";
+  emoji?: string;
+  /** Everyday staple, ranked first in search. */
+  core?: boolean;
+  /** "ml" when the per-100 values are per 100 ml (drinks, soups). */
+  amount_unit?: "g" | "ml";
+  data_confidence?: "high" | "medium" | "low";
 }
 
 export interface FoodPortion {
@@ -542,528 +557,39 @@ export async function deleteMedicine(id: string): Promise<boolean> {
 }
 
 // ----------------------------------------------------
-// TYPO TOLERANCE & FUZZY SEARCH DEFINITIONS
+// SHARED FOOD CATALOGUE
 // ----------------------------------------------------
 
-const MANUAL_TYPOS: Record<string, string> = {
-  "piza": "pizza",
-  "pizaa": "pizza",
-  "bhindi sbji": "bhindi sabzi",
-  "bhindi sabji": "bhindi sabzi",
-  "rotiii": "roti",
-  "roty": "roti",
-  "dhal": "dal",
-  "aple": "apple",
-  "guvava": "guava",
-  "papeeta": "papaya",
-};
-
-function getLevenshteinDistance(a: string, b: string): number {
-  const tmp = [];
-  for (let i = 0; i <= a.length; i++) tmp[i] = [i];
-  for (let j = 0; j <= b.length; j++) tmp[0][j] = j;
-  for (let i = 1; i <= a.length; i++) {
-    for (let j = 1; j <= b.length; j++) {
-      tmp[i][j] = Math.min(
-        tmp[i - 1][j] + 1,
-        tmp[i][j - 1] + 1,
-        tmp[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)
-      );
-    }
-  }
-  return tmp[a.length][b.length];
-}
-
-// Fallback items in memory in case seed script hasn't run yet or we are offline
-const MOCK_FOODS: FoodItem[] = [
-  {
-    id: "f-01",
-    name: "Apple",
-    name_hi: "सेब",
-    category: "fruit",
-    subcategory: "breakfast,snack",
-    reference_weight_g: 100,
-    reference_unit: "g",
-    calories_per_100g: 52,
-    protein_g_100g: 0.3,
-    carbs_g_100g: 14,
-    fat_g_100g: 0.2,
-    fibre_g_100g: 2.4,
-    sodium_mg_100g: 1,
-    source_type: "papa_priority",
-    source_name: "Papa Food Master",
-    source_note: "Source row/category: Fruits",
-    is_verified: true,
-    is_custom: false,
-    is_active: true,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString()
-  },
-  {
-    id: "f-02",
-    name: "Wheat Roti",
-    name_hi: "गेहूं की रोटी",
-    category: "indian_preparation",
-    subcategory: "breakfast,lunch,dinner",
-    reference_weight_g: 100,
-    reference_unit: "g",
-    calories_per_100g: 300,
-    protein_g_100g: 10,
-    carbs_g_100g: 60,
-    fat_g_100g: 1.5,
-    fibre_g_100g: 9,
-    sodium_mg_100g: 2,
-    source_type: "papa_priority",
-    source_name: "Papa Food Master",
-    source_note: "Standard wheat preparation",
-    is_verified: true,
-    is_custom: false,
-    is_active: true,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString()
-  },
-  {
-    id: "f-03",
-    name: "Moong Dal (cooked)",
-    name_hi: "मूंग दाल",
-    category: "indian_preparation",
-    subcategory: "lunch,dinner",
-    reference_weight_g: 100,
-    reference_unit: "g",
-    calories_per_100g: 100,
-    protein_g_100g: 7,
-    carbs_g_100g: 15,
-    fat_g_100g: 2,
-    fibre_g_100g: 4,
-    sodium_mg_100g: 150,
-    source_type: "papa_priority",
-    source_name: "Papa Food Master",
-    source_note: "Standard Moong Dal cooked recipe",
-    is_verified: true,
-    is_custom: false,
-    is_active: true,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString()
-  },
-  {
-    id: "f-04",
-    name: "Dal Tadka",
-    name_hi: "दाल तड़का",
-    category: "indian_preparation",
-    subcategory: "lunch,dinner",
-    reference_weight_g: 100,
-    reference_unit: "g",
-    calories_per_100g: 110,
-    protein_g_100g: 6,
-    carbs_g_100g: 16,
-    fat_g_100g: 3,
-    fibre_g_100g: 5,
-    sodium_mg_100g: 250,
-    source_type: "base_dataset",
-    source_name: "Kaggle Base Dataset",
-    source_note: "Cooked pulses",
-    is_verified: true,
-    is_custom: false,
-    is_active: true,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString()
-  },
-  {
-    id: "f-05",
-    name: "Almonds",
-    name_hi: "बादाम",
-    category: "nuts",
-    subcategory: "breakfast,snack",
-    reference_weight_g: 100,
-    reference_unit: "g",
-    calories_per_100g: 575,
-    protein_g_100g: 21,
-    carbs_g_100g: 22,
-    fat_g_100g: 49,
-    fibre_g_100g: 12,
-    sodium_mg_100g: 1,
-    source_type: "papa_priority",
-    source_name: "Papa Food Master",
-    source_note: "Almond raw reference",
-    is_verified: true,
-    is_custom: false,
-    is_active: true,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString()
-  },
-  {
-    id: "f-06",
-    name: "Mung Beans",
-    name_hi: "मूंग",
-    category: "legume",
-    subcategory: "breakfast,lunch,dinner",
-    reference_weight_g: 100,
-    reference_unit: "g",
-    calories_per_100g: 347,
-    protein_g_100g: 24,
-    carbs_g_100g: 63,
-    fat_g_100g: 1.2,
-    fibre_g_100g: 16,
-    sodium_mg_100g: 15,
-    source_type: "papa_priority",
-    source_name: "Papa Food Master",
-    source_note: "Mung seeds raw",
-    is_verified: true,
-    is_custom: false,
-    is_active: true,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString()
-  },
-  {
-    id: "f-07",
-    name: "Chickpeas",
-    name_hi: "काबुली चना",
-    category: "legume",
-    subcategory: "breakfast,lunch,dinner",
-    reference_weight_g: 100,
-    reference_unit: "g",
-    calories_per_100g: 364,
-    protein_g_100g: 19,
-    carbs_g_100g: 61,
-    fat_g_100g: 6,
-    fibre_g_100g: 17,
-    sodium_mg_100g: 24,
-    source_type: "papa_priority",
-    source_name: "Papa Food Master",
-    source_note: "Chickpeas raw reference",
-    is_verified: true,
-    is_custom: false,
-    is_active: true,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString()
-  },
-  {
-    id: "f-08",
-    name: "Plain Yogurt",
-    name_hi: "सादा दही",
-    category: "dairy",
-    subcategory: "breakfast,lunch,dinner",
-    reference_weight_g: 100,
-    reference_unit: "g",
-    calories_per_100g: 61,
-    protein_g_100g: 3.5,
-    carbs_g_100g: 4.7,
-    fat_g_100g: 3.3,
-    fibre_g_100g: 0,
-    sodium_mg_100g: 46,
-    source_type: "papa_priority",
-    source_name: "Papa Food Master",
-    source_note: "Standard curd",
-    is_verified: true,
-    is_custom: false,
-    is_active: true,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString()
-  },
-  {
-    id: "f-09",
-    name: "Tea with Milk, No Added Sugar",
-    name_hi: "दूध वाली चाय, बिना चीनी",
-    category: "beverage",
-    subcategory: "morning,evening",
-    reference_weight_g: 100,
-    reference_unit: "ml",
-    calories_per_100g: 68,
-    protein_g_100g: 2.2,
-    carbs_g_100g: 6.5,
-    fat_g_100g: 3.2,
-    fibre_g_100g: 0,
-    sodium_mg_100g: 25,
-    source_type: "papa_priority",
-    source_name: "Papa Food Master",
-    source_note: "Standard milk tea prepared (68 kcal/100ml)",
-    is_verified: true,
-    is_custom: false,
-    is_active: true,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString()
-  },
-  {
-    id: "f-09b",
-    name: "Masala Chai",
-    name_hi: "मसाला चाय",
-    category: "beverage",
-    subcategory: "morning,evening",
-    reference_weight_g: 100,
-    reference_unit: "ml",
-    calories_per_100g: 76,
-    protein_g_100g: 2.5,
-    carbs_g_100g: 8.0,
-    fat_g_100g: 3.5,
-    fibre_g_100g: 0,
-    sodium_mg_100g: 30,
-    source_type: "papa_priority",
-    source_name: "Papa Food Master",
-    source_note: "Spiced Indian milk tea (76 kcal/100ml)",
-    is_verified: true,
-    is_custom: false,
-    is_active: true,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString()
-  },
-  {
-    id: "f-09c",
-    name: "Ginger Milk Tea",
-    name_hi: "अदरक वाली दूध चाय",
-    category: "beverage",
-    subcategory: "morning,evening",
-    reference_weight_g: 100,
-    reference_unit: "ml",
-    calories_per_100g: 72,
-    protein_g_100g: 2.3,
-    carbs_g_100g: 7.2,
-    fat_g_100g: 3.4,
-    fibre_g_100g: 0,
-    sodium_mg_100g: 25,
-    source_type: "papa_priority",
-    source_name: "Papa Food Master",
-    source_note: "Ginger infused milk tea (72 kcal/100ml)",
-    is_verified: true,
-    is_custom: false,
-    is_active: true,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString()
-  },
-  {
-    id: "f-09d",
-    name: "Elachi Chai (Cardamom Tea)",
-    name_hi: "इलायची चाय",
-    category: "beverage",
-    subcategory: "morning,evening",
-    reference_weight_g: 100,
-    reference_unit: "ml",
-    calories_per_100g: 64,
-    protein_g_100g: 2.0,
-    carbs_g_100g: 6.0,
-    fat_g_100g: 3.0,
-    fibre_g_100g: 0,
-    sodium_mg_100g: 22,
-    source_type: "papa_priority",
-    source_name: "Papa Food Master",
-    source_note: "Cardamom milk tea (64 kcal/100ml)",
-    is_verified: true,
-    is_custom: false,
-    is_active: true,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString()
-  },
-  {
-    id: "f-09e",
-    name: "Special Milk Tea with Sugar",
-    name_hi: "दूध और चीनी वाली स्पेशल चाय",
-    category: "beverage",
-    subcategory: "morning,evening",
-    reference_weight_g: 100,
-    reference_unit: "ml",
-    calories_per_100g: 85,
-    protein_g_100g: 2.8,
-    carbs_g_100g: 11.5,
-    fat_g_100g: 3.8,
-    fibre_g_100g: 0,
-    sodium_mg_100g: 35,
-    source_type: "papa_priority",
-    source_name: "Papa Food Master",
-    source_note: "Full cream milk tea with sugar (85 kcal/100ml)",
-    is_verified: true,
-    is_custom: false,
-    is_active: true,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString()
-  },
-  {
-    id: "f-10",
-    name: "Makhana (roasted)",
-    name_hi: "भुना मखाना",
-    category: "snack",
-    subcategory: "evening",
-    reference_weight_g: 100,
-    reference_unit: "g",
-    calories_per_100g: 350,
-    protein_g_100g: 9,
-    carbs_g_100g: 77,
-    fat_g_100g: 0.5,
-    fibre_g_100g: 7,
-    sodium_mg_100g: 1,
-    source_type: "papa_priority",
-    source_name: "Papa Food Master",
-    source_note: "Roasted Lotus seeds",
-    is_verified: true,
-    is_custom: false,
-    is_active: true,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString()
-  },
-  {
-    id: "f-11",
-    name: "Pizza",
-    name_hi: "पिज्जा",
-    category: "junk_food",
-    subcategory: "snack,other",
-    reference_weight_g: 100,
-    reference_unit: "g",
-    calories_per_100g: 266,
-    protein_g_100g: 11,
-    carbs_g_100g: 33,
-    fat_g_100g: 10,
-    fibre_g_100g: 2.3,
-    sodium_mg_100g: 598,
-    source_type: "base_dataset",
-    source_name: "Kaggle Base Dataset",
-    source_note: "Fast food variants",
-    is_verified: true,
-    is_custom: false,
-    is_active: true,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString()
-  },
-  {
-    id: "f-12",
-    name: "Bhindi Sabzi (low oil)",
-    name_hi: "भिंडी की सब्जी",
-    category: "indian_preparation",
-    subcategory: "lunch,dinner",
-    reference_weight_g: 100,
-    reference_unit: "g",
-    calories_per_100g: 65,
-    protein_g_100g: 2,
-    carbs_g_100g: 7,
-    fat_g_100g: 3,
-    fibre_g_100g: 3.2,
-    sodium_mg_100g: 120,
-    source_type: "papa_priority",
-    source_name: "Papa Food Master",
-    source_note: "Bhindi sabzi preparation with low oil",
-    is_verified: true,
-    is_custom: false,
-    is_active: true,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString()
-  },
-  {
-    id: "f-13",
-    name: "Lauki Sabzi (low oil)",
-    name_hi: "लौकी की सब्जी",
-    category: "indian_preparation",
-    subcategory: "lunch,dinner",
-    reference_weight_g: 100,
-    reference_unit: "g",
-    calories_per_100g: 45,
-    protein_g_100g: 1,
-    carbs_g_100g: 5,
-    fat_g_100g: 2,
-    fibre_g_100g: 2.5,
-    sodium_mg_100g: 90,
-    source_type: "papa_priority",
-    source_name: "Papa Food Master",
-    source_note: "Lauki cooked preparation with low oil",
-    is_verified: true,
-    is_custom: false,
-    is_active: true,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString()
-  },
-  {
-    id: "f-14",
-    name: "Cucumber",
-    name_hi: "खीरा",
-    category: "salad_vegetable",
-    subcategory: "all_meals",
-    reference_weight_g: 100,
-    reference_unit: "g",
-    calories_per_100g: 16,
-    protein_g_100g: 0.6,
-    carbs_g_100g: 3.6,
-    fat_g_100g: 0.1,
-    fibre_g_100g: 0.5,
-    sodium_mg_100g: 2,
-    source_type: "papa_priority",
-    source_name: "Papa Food Master",
-    source_note: "Raw salad",
-    is_verified: true,
-    is_custom: false,
-    is_active: true,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString()
-  },
-  {
-    id: "f-15",
-    name: "Tomato",
-    name_hi: "टमाटर",
-    category: "salad_vegetable",
-    subcategory: "all_meals",
-    reference_weight_g: 100,
-    reference_unit: "g",
-    calories_per_100g: 18,
-    protein_g_100g: 0.9,
-    carbs_g_100g: 3.9,
-    fat_g_100g: 0.2,
-    fibre_g_100g: 1.2,
-    sodium_mg_100g: 5,
-    source_type: "papa_priority",
-    source_name: "Papa Food Master",
-    source_note: "Raw salad",
-    is_verified: true,
-    is_custom: false,
-    is_active: true,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString()
-  },
-  {
-    id: "f-16",
-    name: "Carrot",
-    name_hi: "गाजर",
-    category: "salad_vegetable",
-    subcategory: "all_meals",
-    reference_weight_g: 100,
-    reference_unit: "g",
-    calories_per_100g: 41,
-    protein_g_100g: 0.9,
-    carbs_g_100g: 9.6,
-    fat_g_100g: 0.2,
-    fibre_g_100g: 2.8,
-    sodium_mg_100g: 69,
-    source_type: "papa_priority",
-    source_name: "Papa Food Master",
-    source_note: "Raw salad",
-    is_verified: true,
-    is_custom: false,
-    is_active: true,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString()
-  }
-];
-
-const MOCK_PORTIONS: FoodPortion[] = [
-  // Wheat Roti portions
-  { id: "p-01", food_item_id: "f-02", portion_name: "छोटी रोटी", portion_name_hi: "छोटी रोटी", standardized_grams: 25, notes: "Small roti size", created_at: new Date().toISOString() },
-  { id: "p-02", food_item_id: "f-02", portion_name: "सामान्य रोटी", portion_name_hi: "सामान्य रोटी", standardized_grams: 30, notes: "Standard roti size", created_at: new Date().toISOString() },
-  { id: "p-03", food_item_id: "f-02", portion_name: "बड़ी रोटी", portion_name_hi: "बड़ी रोटी", standardized_grams: 40, notes: "Large roti size", created_at: new Date().toISOString() },
-  // Moong Dal portions
-  { id: "p-04", food_item_id: "f-03", portion_name: "½ कटोरी", portion_name_hi: "½ कटोरी", standardized_grams: 75, notes: "Half bowl", created_at: new Date().toISOString() },
-  { id: "p-05", food_item_id: "f-03", portion_name: "1 कटोरी", portion_name_hi: "1 कटोरी", standardized_grams: 150, notes: "One bowl", created_at: new Date().toISOString() },
-  { id: "p-06", food_item_id: "f-03", portion_name: "1.5 कटोरी", portion_name_hi: "1.5 कटोरी", standardized_grams: 225, notes: "One and a half bowls", created_at: new Date().toISOString() },
-  { id: "p-07", food_item_id: "f-03", portion_name: "2 कटोरी", portion_name_hi: "2 कटोरी", standardized_grams: 300, notes: "Two bowls", created_at: new Date().toISOString() },
-  // Salad portions (Cucumber)
-  { id: "p-08", food_item_id: "f-14", portion_name: "1 medium", portion_name_hi: "1 मध्यम खीरा", standardized_grams: 100, notes: "Medium cucumber", created_at: new Date().toISOString() },
-  // Almonds portions
-  { id: "p-09", food_item_id: "f-05", portion_name: "1 piece", portion_name_hi: "1 बादाम", standardized_grams: 1.2, notes: "One almond", created_at: new Date().toISOString() },
-  { id: "p-10", food_item_id: "f-05", portion_name: "5 pieces", portion_name_hi: "5 बादाम", standardized_grams: 6, notes: "Five almonds", created_at: new Date().toISOString() },
-  { id: "p-11", food_item_id: "f-05", portion_name: "10 pieces", portion_name_hi: "10 बादाम", standardized_grams: 12, notes: "Ten almonds", created_at: new Date().toISOString() }
-];
-
-// ----------------------------------------------------
-// SHARED FOOD CATALOGUE (not patient data; readable by every signed-in user)
-// ----------------------------------------------------
-
+/**
+ * The catalogue is the bundled Indian food table (src/lib/food/catalogue.ts) plus the
+ * signed-in user's own custom foods from the database. Rows an older seed left in
+ * food_items are ignored on purpose: they carried wrong calories (tea at 1 kcal), no
+ * regional dishes and no spelling variants.
+ */
 let _foodsCache: FoodItem[] | null = null;
+let _foodsIndex: FoodIndex<FoodItem> | null = null;
 let _foodsCacheTime = 0;
 let _foodsInflight: Promise<FoodItem[]> | null = null;
-const FOODS_CACHE_TTL = 300000; // 5 minutes
+const FOODS_CACHE_TTL = 300000; // 5 minutes; only custom foods added on another device can change
+
+async function loadCustomFoods(): Promise<FoodItem[]> {
+  try {
+    return await fetchAllPages<FoodItem>("getCustomFoods", (from, to) =>
+      db()
+        .from("food_items")
+        .select("*")
+        .eq("is_custom", true)
+        .eq("is_active", true)
+        .order("name", { ascending: true })
+        .order("id", { ascending: true })
+        .range(from, to),
+    );
+  } catch (err) {
+    // Search keeps working from the bundled catalogue; custom foods return with the connection.
+    console.warn("Custom foods unavailable, using the bundled catalogue only:", err);
+    return [];
+  }
+}
 
 export async function getAllActiveFoods(): Promise<FoodItem[]> {
   const now = Date.now();
@@ -1072,19 +598,12 @@ export async function getAllActiveFoods(): Promise<FoodItem[]> {
 
   const request: Promise<FoodItem[]> = (async () => {
     try {
-      const rows = await fetchAllPages<FoodItem>("getAllActiveFoods", (from, to) =>
-        db()
-          .from("food_items")
-          .select("*")
-          .eq("is_active", true)
-          .order("name", { ascending: true })
-          .order("id", { ascending: true })
-          .range(from, to),
-      );
-      // Last resort only when the shared catalogue has not been seeded yet.
-      _foodsCache = rows.length > 0 ? rows : MOCK_FOODS;
+      const [catalogue, custom] = await Promise.all([loadCatalogue(), loadCustomFoods()]);
+      const foods = [...catalogue.foods, ...custom];
+      _foodsCache = foods;
+      _foodsIndex = buildIndex(foods);
       _foodsCacheTime = Date.now();
-      return _foodsCache;
+      return foods;
     } catch (err) {
       if (_foodsCache) return _foodsCache; // stale beats nothing
       throw err;
@@ -1098,92 +617,33 @@ export async function getAllActiveFoods(): Promise<FoodItem[]> {
 
 export function invalidateFoodsCache(): void {
   _foodsCache = null;
+  _foodsIndex = null;
   _foodsCacheTime = 0;
   _foodsInflight = null;
-}
-
-// Helper to check spelling corrections & fuzzy match
-export async function getFuzzyMatches(input: string): Promise<FoodItem[]> {
-  const cleanInput = input.trim().toLowerCase();
-  if (!cleanInput) return [];
-
-  // 1. Check exact manual corrections
-  const correctedInput = MANUAL_TYPOS[cleanInput] || cleanInput;
-
-  // 2. Fetch all food items from cached helper
-  const allFoods = await getAllActiveFoods();
-
-  // 3. Exact & Partial contains matches
-  const exactAndPartial = allFoods.filter((f) => {
-    const enName = f.name.toLowerCase();
-    const hiName = (f.name_hi || "").toLowerCase();
-    return enName.includes(correctedInput) || hiName.includes(correctedInput) || correctedInput.includes(enName);
-  });
-
-  if (exactAndPartial.length > 0) {
-    return exactAndPartial.slice(0, 10);
-  }
-
-  // 4. Levenshtein fuzzy distance matching (distance <= 2 for typo tolerance)
-  const fuzzy = allFoods.filter((f) => {
-    const enName = f.name.toLowerCase();
-    const words = enName.split(/\s+/);
-    // check distance for each word or whole name
-    return (
-      getLevenshteinDistance(correctedInput, enName) <= 2 ||
-      words.some((w) => getLevenshteinDistance(correctedInput, w) <= 1)
-    );
-  });
-
-  return fuzzy.slice(0, 10);
 }
 
 // ----------------------------------------------------
 // SEARCH INTERNAL FOOD DATABASE
 // ----------------------------------------------------
 
-export async function searchFoodItems(query: string): Promise<{
+/**
+ * Finds foods by English or Hindi name, spelling variant ("dal", "daal", "dhal"), state
+ * name or small typo. `exactMatches` are foods whose name or alias equals the query;
+ * `suggestions` are the rest, best first. `correctedQuery` is set when nothing matched
+ * as typed and the list comes from a sound or typo match.
+ */
+export async function searchFoodItems(query: string, limit = 30): Promise<{
   exactMatches: FoodItem[];
   suggestions: FoodItem[];
   correctedQuery?: string;
 }> {
-  const cleaned = query.trim().toLowerCase();
-  if (!cleaned) return { exactMatches: [], suggestions: [] };
-
-  const corrected = MANUAL_TYPOS[cleaned] || cleaned;
-
-  // Cached foods list
-  const allFoods = await getAllActiveFoods();
-
-  // Exact Match
-  const exact = allFoods.filter(
-    (f) => f.name.toLowerCase() === corrected || (f.name_hi || "").toLowerCase() === corrected,
-  );
-
-  if (exact.length > 0) {
-    return { exactMatches: exact, suggestions: [], correctedQuery: corrected !== cleaned ? corrected : undefined };
-  }
-
-  // Partial Match
-  const partial = allFoods.filter(
-    (f) => f.name.toLowerCase().includes(corrected) || (f.name_hi || "").toLowerCase().includes(corrected),
-  );
-
-  if (partial.length > 0) {
-    return { exactMatches: [], suggestions: partial.slice(0, 8), correctedQuery: corrected !== cleaned ? corrected : undefined };
-  }
-
-  // Levenshtein Matches
-  const fuzzy = allFoods.filter(
-    (f) =>
-      getLevenshteinDistance(corrected, f.name.toLowerCase()) <= 2 ||
-      f.name.toLowerCase().split(/\s+/).some((w) => getLevenshteinDistance(corrected, w) <= 1),
-  );
-
+  if (!query.trim()) return { exactMatches: [], suggestions: [] };
+  await getAllActiveFoods();
+  const { hits, corrected } = searchIndex(_foodsIndex ?? [], query, limit);
   return {
-    exactMatches: [],
-    suggestions: fuzzy.slice(0, 8),
-    correctedQuery: corrected !== cleaned ? corrected : undefined,
+    exactMatches: hits.filter((h) => h.exact).map((h) => h.item),
+    suggestions: hits.filter((h) => !h.exact).map((h) => h.item),
+    correctedQuery: corrected,
   };
 }
 
@@ -1194,8 +654,10 @@ export async function searchFoodItems(query: string): Promise<{
 const _portionsCache = new Map<string, { at: number; rows: FoodPortion[] }>();
 
 export async function getFoodPortions(foodItemId: string): Promise<FoodPortion[]> {
-  // Fallback catalogue entries have no database id, so they only have fallback portions.
-  if (!isUuid(foodItemId)) return MOCK_PORTIONS.filter((p) => p.food_item_id === foodItemId);
+  // Catalogue foods carry their household portions with them; no database round trip.
+  const bundled = await getCataloguePortions(foodItemId).catch(() => null);
+  if (bundled) return bundled;
+  if (!isUuid(foodItemId)) return [];
 
   const hit = _portionsCache.get(foodItemId);
   if (hit && Date.now() - hit.at < FOODS_CACHE_TTL) return hit.rows.slice();
@@ -1239,6 +701,10 @@ export async function toggleFavorite(patientId: string, foodItemId: string, isFa
     const { error } = await db()
       .from("patient_food_favorites")
       .upsert({ patient_id: pid, food_item_id: foodItemId }, { onConflict: "patient_id,food_item_id", ignoreDuplicates: true });
+    if (error?.code === "23503") {
+      // Bundled catalogue foods only become favourites once their row exists in this database.
+      throw new Error("यह खाना पसंदीदा में तभी जुड़ेगा जब फ़ूड कैटलॉग डेटाबेस में लोड हो (run the food catalogue import).");
+    }
     if (error) throw dbError("toggleFavorite", error);
   } else {
     const { error } = await db()
@@ -1296,37 +762,43 @@ export async function addCustomFood(
 // ----------------------------------------------------
 
 export async function logFood(log: Omit<FoodLogEntry, "id" | "created_at">): Promise<FoodLogEntry> {
-  const { data, error } = await db()
-    .from("food_logs")
-    .insert({
-      patient_id: log.patient_id,
-      // Fallback-catalogue ids ("f-01") are not database ids.
-      food_item_id: isUuid(log.food_item_id) ? log.food_item_id : null,
-      meal_type: log.meal_type,
-      food_name: log.food_name,
-      quantity: log.quantity,
-      unit: log.unit,
-      standardized_grams: log.standardized_grams,
-      calories: log.calories,
-      protein_g: log.protein_g,
-      carbs_g: log.carbs_g,
-      fat_g: log.fat_g,
-      fibre_g: log.fibre_g,
-      sodium_mg: log.sodium_mg,
-      oil_quantity: log.oil_quantity,
-      oil_calories: log.oil_calories,
-      calorie_confidence: log.calorie_confidence,
-      source_type: log.source_type,
-      source_note: log.source_note,
-      consumed_at: log.consumed_at,
-      notes: log.notes,
-    })
-    .select()
-    .single();
+  const row = {
+    patient_id: log.patient_id,
+    // Only a real catalogue id can be linked; custom-food and saved-food ids are not database ids.
+    food_item_id: isUuid(log.food_item_id) ? log.food_item_id : null,
+    meal_type: log.meal_type,
+    food_name: log.food_name,
+    quantity: log.quantity,
+    unit: log.unit,
+    standardized_grams: log.standardized_grams,
+    calories: log.calories,
+    protein_g: log.protein_g,
+    carbs_g: log.carbs_g,
+    fat_g: log.fat_g,
+    fibre_g: log.fibre_g,
+    sodium_mg: log.sodium_mg,
+    oil_quantity: log.oil_quantity,
+    oil_calories: log.oil_calories,
+    calorie_confidence: log.calorie_confidence,
+    source_type: log.source_type,
+    source_note: log.source_note,
+    consumed_at: log.consumed_at,
+    notes: log.notes,
+  };
 
-  if (error) throw dbError("logFood", error);
+  const insertLog = (foodItemId: string | null) =>
+    db().from("food_logs").insert({ ...row, food_item_id: foodItemId }).select().single();
+
+  let result = await insertLog(row.food_item_id);
+  if (result.error?.code === "23503" && row.food_item_id) {
+    // The bundled catalogue row has not been copied into this database yet (scripts/import-food-dataset.js).
+    // The meal still matters more than its link, so keep it without the food_item_id.
+    result = await insertLog(null);
+  }
+
+  if (result.error) throw dbError("logFood", result.error);
   invalidatePatientCache(log.patient_id);
-  return data;
+  return result.data;
 }
 
 export async function getFoodLogs(patientId?: string, limit = 30): Promise<FoodLogEntry[]> {
@@ -1707,6 +1179,15 @@ export async function getActivityLogsInRange(
   );
 }
 
+/** Remove one day's activity record. Throws PermissionDeniedError when nothing was deleted (viewer, or already gone). */
+export async function deleteActivityLog(id: string): Promise<boolean> {
+  const { data, error } = await db().from("activity_logs").delete().eq("id", id).select("patient_id");
+  if (error) throw dbError("deleteActivityLog", error);
+  if (!data || data.length === 0) throw new PermissionDeniedError();
+  data.forEach((row) => invalidatePatientCache(row.patient_id));
+  return true;
+}
+
 // ----------------------------------------------------
 // SLEEP LOGS (one row per patient per date)
 // ----------------------------------------------------
@@ -1760,6 +1241,15 @@ export async function getSleepLogsInRange(
         .range(from, to),
     ),
   );
+}
+
+/** Remove one night's sleep record. Throws PermissionDeniedError when nothing was deleted (viewer, or already gone). */
+export async function deleteSleepLog(id: string): Promise<boolean> {
+  const { data, error } = await db().from("sleep_logs").delete().eq("id", id).select("patient_id");
+  if (error) throw dbError("deleteSleepLog", error);
+  if (!data || data.length === 0) throw new PermissionDeniedError();
+  data.forEach((row) => invalidatePatientCache(row.patient_id));
+  return true;
 }
 
 // ----------------------------------------------------
@@ -2155,6 +1645,7 @@ export interface DashboardOverview {
     weight: number[];
     steps: number[];
     calories: number[];
+    sleep: number[];
   };
   checklist: DailyChecklistEntry[];
   isRealDatabaseConnected: boolean;
@@ -2181,8 +1672,12 @@ export async function getDashboardOverview(patientId?: string): Promise<Dashboar
 
   // Services return newest-first; sparklines read left to right in time.
   const todayBPs = bpList.filter((b) => isSameLocalDay(b.measured_at, today));
-  const todayMorningBP = todayBPs.find((b) => b.reading_type === "Morning") || null;
-  const todayEveningBP = todayBPs.find((b) => b.reading_type === "Evening") || null;
+  // Slot by the stored type, else by time of day (the same rule the wellness score and the
+  // smart summary use): a reading saved without a type, or as "morning", must not vanish here
+  // while the score counts it.
+  const bpSlot = (b: BPLogEntry) => bpSlotOf(b.reading_type, istMinutesOfDay(b.measured_at));
+  const todayMorningBP = todayBPs.find((b) => bpSlot(b) === "morning") || null;
+  const todayEveningBP = todayBPs.find((b) => bpSlot(b) === "evening") || null;
   const todayWeight = weightList.find((w) => isSameLocalDay(w.measured_at, today)) || null;
 
   const todayFoods = foodRange.filter((f) => isSameLocalDay(f.consumed_at, today));
@@ -2214,6 +1709,11 @@ export async function getDashboardOverview(patientId?: string): Promise<Dashboar
     steps: actList
       .slice(0, 8)
       .map((a) => Number(a.steps))
+      .filter((n) => Number.isFinite(n) && n > 0)
+      .reverse(),
+    sleep: sleepList
+      .slice(0, 8)
+      .map((sl) => Number(sl.sleep_hours))
       .filter((n) => Number.isFinite(n) && n > 0)
       .reverse(),
     calories: Array.from(caloriesByDay.entries())
@@ -2283,17 +1783,10 @@ export interface DataQualityReport {
 }
 
 export async function getFoodDataQualityReport(): Promise<DataQualityReport> {
-  let allFoods = await fetchAllPages<FoodItem>("getFoodDataQualityReport(foods)", (from, to) =>
-    db().from("food_items").select("*").order("id", { ascending: true }).range(from, to),
-  );
-  let allPortions = await fetchAllPages<FoodPortion>("getFoodDataQualityReport(portions)", (from, to) =>
-    db().from("food_portions").select("*").order("id", { ascending: true }).range(from, to),
-  );
-
-  if (allFoods.length === 0) {
-    allFoods = MOCK_FOODS;
-    allPortions = MOCK_PORTIONS;
-  }
+  // The report covers what search actually serves: the bundled catalogue plus the user's custom foods.
+  const catalogue = await loadCatalogue();
+  const allFoods = [...catalogue.foods, ...(await loadCustomFoods())];
+  const allPortions = [...catalogue.portions.values()].flat();
 
   const nameCounts = new Map<string, number>();
   const variantMap = new Map<string, Set<number>>();
@@ -2340,8 +1833,8 @@ export async function getFoodDataQualityReport(): Promise<DataQualityReport> {
     }
   }
 
-  // Count high priority foods missing portions
-  const priorityFoods = allFoods.filter((f) => f.source_type === "papa_priority");
+  // Everyday staples (core) are the ones people log most, so each needs a household portion.
+  const priorityFoods = allFoods.filter((f) => f.core);
   let missingPortionsCount = 0;
   priorityFoods.forEach((f) => {
     if (!foodIdsWithPortions.has(f.id)) {

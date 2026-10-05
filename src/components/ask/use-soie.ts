@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { authFetch } from "@/lib/supabase/auth-fetch";
 import { supabase } from "@/lib/supabase/client";
 import type { Notice, SoieAnswer, Stage } from "@/services/soie/types";
@@ -34,7 +34,7 @@ export interface AssistantMsg {
 export interface ErrorMsg {
   id: string;
   role: "error";
-  kind: "rate_limited" | "auth" | "forbidden" | "server" | "network";
+  kind: "rate_limited" | "auth" | "forbidden" | "server" | "network" | "cancelled";
   text: string;
 }
 
@@ -92,22 +92,29 @@ export function useSoie(patientId: string | null) {
   const counter = useRef(0);
   const abortRef = useRef<AbortController | null>(null);
   const sessionRef = useRef<string | null>(null);
+  // Set only by the Stop button, so a deliberate stop is told apart from a reset / page change.
+  const stoppedRef = useRef(false);
 
   const nextId = (p: string) => `${p}-${++counter.current}`;
 
   const push = useCallback((m: ChatMsg) => setMessages((prev) => [...prev, m]), []);
 
+  /**
+   * Asks a question. `resend` re-asks the previous question after a failure
+   * without adding a second copy of it to the conversation.
+   */
   const send = useCallback(
-    async (text: string): Promise<void> => {
+    async (text: string, opts?: { resend?: boolean }): Promise<void> => {
       const message = text.trim();
       if (!message || !patientId || sending) return;
-      push({ id: nextId("u"), role: "user", text: message });
+      if (!opts?.resend) push({ id: nextId("u"), role: "user", text: message });
       setSending(true);
       setLive({ stage: "reading", hi: "डेटा पढ़ रहा हूँ" });
       setLiveTools([]);
       setLiveNotices([]);
       const ctl = new AbortController();
       abortRef.current = ctl;
+      stoppedRef.current = false;
       try {
         const res = await authFetch("/api/soie", {
           method: "POST",
@@ -129,6 +136,7 @@ export function useSoie(patientId: string | null) {
             forbidden: "इस मरीज़ का डेटा देखने की अनुमति नहीं है।",
             server: "सर्वर पर कुछ गड़बड़ हुई। थोड़ी देर में फिर कोशिश करें।",
             network: "",
+            cancelled: "",
           };
           push({ id: nextId("e"), role: "error", kind, text: kind === "rate_limited" || kind === "server" ? msg || fallback[kind] : fallback[kind] });
           return;
@@ -161,7 +169,10 @@ export function useSoie(patientId: string | null) {
         }
         if (!answered) push({ id: nextId("e"), role: "error", kind: "network", text: "कनेक्शन बीच में टूट गया। कृपया फिर कोशिश करें।" });
       } catch (err) {
-        if ((err as { name?: string }).name === "AbortError") return;
+        if ((err as { name?: string }).name === "AbortError") {
+          if (stoppedRef.current) push({ id: nextId("e"), role: "error", kind: "cancelled", text: "आपने जवाब रोक दिया।" });
+          return;
+        }
         push({ id: nextId("e"), role: "error", kind: "network", text: "इंटरनेट कनेक्शन में दिक्कत है। कृपया फिर कोशिश करें।" });
       } finally {
         abortRef.current = null;
@@ -172,9 +183,25 @@ export function useSoie(patientId: string | null) {
     [patientId, push, sending],
   );
 
-  const cancel = useCallback(() => abortRef.current?.abort(), []);
+  const cancel = useCallback(() => {
+    stoppedRef.current = true;
+    abortRef.current?.abort();
+  }, []);
+
+  // Leaving the page must not leave a request streaming into nothing.
+  useEffect(() => () => abortRef.current?.abort(), []);
+
+  /** Re-asks the last question after an error banner, replacing that banner. */
+  const retry = useCallback(() => {
+    if (sending) return;
+    const last = [...messages].reverse().find((m): m is UserMsg => m.role === "user");
+    if (!last) return;
+    setMessages((prev) => (prev[prev.length - 1]?.role === "error" ? prev.slice(0, -1) : prev));
+    void send(last.text, { resend: true });
+  }, [messages, send, sending]);
 
   const reset = useCallback(() => {
+    stoppedRef.current = false;
     abortRef.current?.abort();
     sessionRef.current = null;
     setSessionId(null);
@@ -184,6 +211,9 @@ export function useSoie(patientId: string | null) {
   /** Opens a stored conversation (RLS: only the user's own sessions are readable). */
   const loadSession = useCallback(
     async (id: string): Promise<boolean> => {
+      // A stored conversation replaces the screen: stop whatever is still streaming into the old one.
+      stoppedRef.current = false;
+      abortRef.current?.abort();
       const { data, error } = await supabase.from("soie_messages").select("id,role,content,answer,created_at").eq("session_id", id).order("created_at", { ascending: true });
       if (error || !data) return false;
       sessionRef.current = id;
@@ -203,7 +233,7 @@ export function useSoie(patientId: string | null) {
     setMessages((prev) => prev.map((m) => (m.id === id && m.role === "assistant" ? { ...m, feedback } : m)));
   }, []);
 
-  return { messages, sending, live, liveTools, liveNotices, sessionId, send, cancel, reset, loadSession, setFeedback };
+  return { messages, sending, live, liveTools, liveNotices, sessionId, send, retry, cancel, reset, loadSession, setFeedback };
 }
 
 /** Saves thumbs up/down (+ optional comment) for an assistant message; one row per user and message. */

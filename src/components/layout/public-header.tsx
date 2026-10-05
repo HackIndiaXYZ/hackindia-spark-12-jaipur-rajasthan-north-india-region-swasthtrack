@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
+import { LogoMark } from "@/components/brand/logo-mark";
+import { Wordmark } from "@/components/brand/wordmark";
 import { buttonClasses } from "@/components/ui/button";
 import { OfflineBanner } from "@/components/layout/offline-banner";
 
@@ -12,23 +13,13 @@ import { OfflineBanner } from "@/components/layout/offline-banner";
  */
 export function PublicHeader() {
   return (
-    <header className="frost sticky top-0 z-30 border-b border-line pt-safe">
+    <header className="frost sticky top-0 z-30 pt-safe">
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
         <Link href="/login" className="flex min-w-0 items-center gap-2.5 rounded-control">
-          <Image
-            src="/logo.jpg"
-            alt=""
-            width={72}
-            height={72}
-            sizes="36px"
-            priority
-            className="h-9 w-9 shrink-0 rounded-control border border-line object-cover"
-          />
+          <LogoMark sizes="40px" priority className="h-10 w-10" />
           <span className="min-w-0">
-            <span className="block truncate text-sm font-semibold leading-tight text-ink">
-              SwasthTrack
-            </span>
-            <span lang="hi" className="block truncate text-2xs leading-tight text-ink-muted">
+            <Wordmark variant="compact" className="block h-6 w-auto" />
+            <span lang="hi" className="mt-0.5 block truncate text-2xs leading-tight text-ink-muted">
               स्वस्थ आदतें, खुशहाल जीवन
             </span>
           </span>

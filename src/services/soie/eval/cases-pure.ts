@@ -148,7 +148,7 @@ const QAS: QA[] = [
   { title: "7-day average BP, English", arch: "steady", q: "average blood pressure last 7 days", intent: "average:bp", en: [(c) => `Mean ${oracleMeanSys(c, "2026-09-28", T)}/`] },
   { title: "7-day average BP, Devanagari", arch: "steady", q: "पिछले 7 दिन का औसत बीपी", intent: "average:bp", en: [(c) => `Mean ${oracleMeanSys(c, "2026-09-28", T)}/`] },
   { title: "'papa' is not 'medicine' (old normaliser bug)", arch: "steady", q: "papa ka bp", intent: "latest:bp", notEn: ["Medicines on"] },
-  { title: "'blood' alone is not 'food' (old normaliser bug)", arch: "steady", q: "blood sugar kitna hai", intent: "unrecognised", notEn: ["Food on"] },
+  { title: "'blood' alone is not 'food' (old normaliser bug); blood sugar is simply not tracked", arch: "steady", q: "blood sugar kitna hai", intent: "untracked:blood_sugar", en: ["not recorded"], notEn: ["Food on"] },
   { title: "typo gets a suggestion, never a rewrite", arch: "steady", q: "presure kya hai", intent: "unrecognised", en: ["pressure"] },
   { title: "date with no weight data says so", arch: "steady", q: "10 June ko weight kya tha", intent: "value:weight", en: ["No weight data is logged for Wed 10 Jun 2026"], confidence: "low" },
   { title: "weight vs target", arch: "steady", q: "weight target se kitna door hai", intent: "goal_gap", en: ["above the 72 kg target"] },

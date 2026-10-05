@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { Heart } from "lucide-react";
+import { Wordmark } from "@/components/brand/wordmark";
+import { cn } from "@/lib/utils";
 
 const footerLinks = [
   { href: "/about", label: "About" },
@@ -9,19 +11,27 @@ const footerLinks = [
   { href: "/medical-disclaimer", label: "Medical Disclaimer" },
 ];
 
-export function Footer() {
+/**
+ * `reserveBottomNav` pads the foot of the footer by the fixed phone navigation,
+ * so the gold panel runs on behind the frosted bar instead of stopping short
+ * and leaving an ivory strip underneath it. Public pages have no bottom nav.
+ */
+export function Footer({ reserveBottomNav = false }: { reserveBottomNav?: boolean }) {
   return (
     <footer
       lang="en"
-      className="mt-10 border-t border-line bg-surface px-4 py-8 text-sm text-ink-muted sm:px-6 lg:px-8"
+      className={cn(
+        "gilt-chrome mt-10 border-t border-gold-line/70 px-4 pt-8 text-sm text-ink-muted sm:px-6 lg:px-8",
+        reserveBottomNav ? "pb-[calc(var(--bottom-nav-h)+1.5rem)] lg:pb-8" : "pb-8",
+      )}
     >
       <div className="mx-auto max-w-6xl">
         <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
           {/* Brand & Subtitle */}
           <div className="space-y-1">
             <div className="flex items-center gap-2">
-              <span className="text-sm font-semibold text-ink">SwasthTrack</span>
-              <span className="rounded-full bg-brand-soft px-2 py-0.5 text-2xs font-medium text-brand-ink">
+              <Wordmark variant="compact" className="block h-5 w-auto" />
+              <span className="rounded-full border border-gold-line bg-gold-soft px-2 py-0.5 text-2xs font-medium text-gold-ink">
                 Family Companion
               </span>
             </div>
@@ -40,7 +50,7 @@ export function Footer() {
                 key={item.href}
                 href={item.href}
                 /* 44px tall so these are reachable on a phone (§44) */
-                className="flex min-h-11 items-center rounded-control px-2.5 text-sm font-medium text-ink-muted hover:bg-surface-sunken hover:text-brand"
+                className="flex min-h-11 items-center rounded-control px-2.5 text-sm font-medium text-ink-muted hover:bg-surface/70 hover:text-gold-ink"
               >
                 {item.label}
               </Link>

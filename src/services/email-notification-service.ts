@@ -26,10 +26,12 @@ import {
   type BPClassification,
   type BPThresholds,
 } from "@/lib/health-rules";
+import { clock12, clockBi, dateBi, mealBi, todayAtBi, type Bi } from "@/lib/email/format";
 import {
-  renderAlertEmail,
+  renderBpAlertEmail,
   renderDailyReport,
   renderMonthlyReport,
+  renderReminderEmail,
   renderWeeklyReport,
   renderWeightAlertEmail,
   type BpTone,
@@ -60,8 +62,6 @@ import {
   type PatientSettings,
 } from "./settings-service";
 import { generateSmartInsightsAndAlerts } from "./smart-insights-service";
-
-const IST = "Asia/Kolkata";
 
 /** A BP alert is only sent for a reading saved this recently. */
 const FRESH_READING_MS = 30 * 60 * 1000;
@@ -100,14 +100,7 @@ export async function runEmailJob<T>(
 // Small helpers
 // ----------------------------------------------------
 
-function istTime(value: string): string {
-  return new Date(value).toLocaleTimeString("en-IN", {
-    timeZone: IST,
-    hour: "numeric",
-    minute: "2-digit",
-    hour12: true,
-  });
-}
+const istTime = (value: string): string => clock12(value);
 
 function minutesOf(time: string | null | undefined): number {
   const [h, m] = (time || "08:00").split(":");
@@ -116,6 +109,12 @@ function minutesOf(time: string | null | undefined): number {
 
 function medicineLabel(m: MedicineItem): string {
   return `${m.medicine_name} ${m.dose}`.trim();
+}
+
+/** Name and "dose · सुबह 8 बजे · 8 AM" for the reminder's medicine rows. */
+function medicineRow(m: MedicineItem): { name: string; sub: string } {
+  const at = clockBi(minutesOf(m.scheduled_time));
+  return { name: m.medicine_name, sub: `${m.dose} · ${at.hi} · ${at.en}`.trim() };
 }
 
 /** How a reading is coloured / worded in e-mails, relative to this patient's own lines. */
@@ -141,6 +140,7 @@ interface DaySnapshot {
   bpToday: BPLogEntry[];
   foodToday: FoodLogEntry[];
   medicines: { total: number; taken: number; missed: string[]; pending: string[] };
+  missedRows: { name: string; sub: string }[];
   steps: number | null;
   sleepHours: number | null;
   weightKg: number | null;
@@ -169,6 +169,7 @@ async function loadDaySnapshot(patientId: string, now: Date): Promise<DaySnapsho
   const realMedLogs: MedicineLogEntry[] = medLogs.filter((l) => !l.id.startsWith("auto-missed-"));
   const activeMeds = meds.filter((m) => m.active);
   const missed: string[] = [];
+  const missedRows: { name: string; sub: string }[] = [];
   const pending: string[] = [];
   let taken = 0;
   for (const m of activeMeds) {
@@ -180,6 +181,7 @@ async function loadDaySnapshot(patientId: string, now: Date): Promise<DaySnapsho
       nowMin >= minutesOf(m.scheduled_time) + MEDICINE_MISSED_AFTER_MIN
     ) {
       missed.push(medicineLabel(m));
+      missedRows.push(medicineRow(m));
     } else {
       pending.push(medicineLabel(m));
     }
@@ -209,6 +211,7 @@ async function loadDaySnapshot(patientId: string, now: Date): Promise<DaySnapsho
     bpToday,
     foodToday,
     medicines: { total: activeMeds.length, taken, missed, pending },
+    missedRows,
     steps: activity && activity.steps > 0 ? activity.steps : null,
     sleepHours: sleep && Number(sleep.sleep_hours) > 0 ? Number(sleep.sleep_hours) : null,
     weightKg: weight ? Number(weight.weight_kg) : null,
@@ -221,19 +224,19 @@ async function loadDaySnapshot(patientId: string, now: Date): Promise<DaySnapsho
 // ----------------------------------------------------
 
 /** Tracking items that should already exist at `nowMin` (IST) but do not, honouring alert toggles. */
-function dueGaps(s: DaySnapshot, nowMin: number): string[] {
-  const gaps: string[] = [];
+function dueGaps(s: DaySnapshot, nowMin: number): Bi[] {
+  const gaps: Bi[] = [];
   const types = new Set(s.foodToday.map((f) => f.meal_type.toLowerCase()));
 
   if (isAlertEnabled(s.settings, "missingData")) {
     if (nowMin >= DUE_AT_MIN.breakfast && !types.has("breakfast") && !types.has("mid-morning")) {
-      gaps.push("नाश्ता दर्ज नहीं (Breakfast)");
+      gaps.push(mealBi("breakfast"));
     }
     if (nowMin >= DUE_AT_MIN.lunch && !types.has("lunch")) {
-      gaps.push("दोपहर का खाना दर्ज नहीं (Lunch)");
+      gaps.push(mealBi("lunch"));
     }
     if (nowMin >= DUE_AT_MIN.dinner && !types.has("dinner") && !types.has("evening snack")) {
-      gaps.push("रात का खाना दर्ज नहीं (Dinner)");
+      gaps.push(mealBi("dinner"));
     }
 
     const schedule = evaluateBPSchedule(
@@ -243,30 +246,28 @@ function dueGaps(s: DaySnapshot, nowMin: number): string[] {
     );
     for (const slot of schedule.slots) {
       if (slot.due && !slot.logged) {
-        gaps.push(slot.slot === "morning" ? "सुबह का BP दर्ज नहीं (Morning BP)" : "शाम का BP दर्ज नहीं (Evening BP)");
+        gaps.push(
+          slot.slot === "morning"
+            ? { hi: "सुबह का बीपी", en: "Morning BP" }
+            : { hi: "शाम का बीपी", en: "Evening BP" },
+        );
       }
     }
   }
   if (isAlertEnabled(s.settings, "sleep") && nowMin >= DUE_AT_MIN.sleep && s.sleepHours === null) {
-    gaps.push("नींद दर्ज नहीं (Sleep)");
+    gaps.push({ hi: "नींद", en: "Sleep" });
   }
   if (isAlertEnabled(s.settings, "activity") && nowMin >= DUE_AT_MIN.steps && s.steps === null) {
-    gaps.push("कदम दर्ज नहीं (Steps)");
+    gaps.push({ hi: "कदम", en: "Steps" });
   }
   return gaps;
 }
 
-function missedMedicineAlert(s: DaySnapshot): EmailAlert | null {
-  if (!isAlertEnabled(s.settings, "medicine") || s.medicines.missed.length === 0) return null;
-  const names = s.medicines.missed.join(", ");
-  return {
-    severity: "ATTENTION",
-    titleHi: "दवाई छूट गई",
-    titleEn: "Medicine dose missed",
-    messageHi: `आज ये दवाइयाँ अभी तक नहीं ली गईं: ${names}।`,
-    messageEn: `Not confirmed as taken today: ${names}.`,
-    path: "/medicines",
-  };
+/** Whole days with nothing logged, when that is long enough to worry about (and the alert is on). */
+function daysWithoutData(s: DaySnapshot): number | null {
+  if (!isAlertEnabled(s.settings, "missingData")) return null;
+  const n = s.daysSinceLastLog;
+  return n !== null && n >= LOGGING_GAP_DAYS ? n : null;
 }
 
 function noDataAlert(s: DaySnapshot): EmailAlert | null {
@@ -313,31 +314,18 @@ export async function buildMissedAlertsEmail(
 ): Promise<RenderedEmail | null> {
   const s = await loadDaySnapshot(patientId, now);
 
-  const alerts: EmailAlert[] = [];
-  const med = missedMedicineAlert(s);
-  if (med) alerts.push(med);
+  const missedMedicines = isAlertEnabled(s.settings, "medicine") ? s.missedRows : [];
+  const missingRecords = dueGaps(s, istMinutesOfDay(now));
+  const noData = daysWithoutData(s);
+  if (missedMedicines.length === 0 && missingRecords.length === 0 && noData === null) return null;
 
-  const gaps = dueGaps(s, istMinutesOfDay(now));
-  if (gaps.length > 0) {
-    alerts.push({
-      severity: "ATTENTION",
-      titleHi: "आज के रिकॉर्ड बाकी हैं",
-      titleEn: "Today's records are still missing",
-      messageHi: gaps.join(" · "),
-      messageEn: "Please log these when you can.",
-      path: "/",
-    });
-  }
-  const noData = noDataAlert(s);
-  if (noData) alerts.push(noData);
-
-  if (alerts.length === 0) return null;
-  const flag = alerts.some((a) => a.severity === "IMPORTANT") ? "⚠️ " : "";
-  return renderAlertEmail(
-    s.patientName,
-    alerts,
-    `${flag}SwasthTrack reminder · ${s.patientName} · ${alerts.length} item${alerts.length > 1 ? "s" : ""} need attention`,
-  );
+  return renderReminderEmail({
+    patientName: s.patientName,
+    when: todayAtBi(now),
+    missedMedicines,
+    missingRecords,
+    daysWithoutData: noData,
+  });
 }
 
 export async function buildDailyReportEmail(
@@ -347,7 +335,7 @@ export async function buildDailyReportEmail(
   const s = await loadDaySnapshot(patientId, now);
 
   const alerts: EmailAlert[] = [];
-  for (const a of [bpTodayAlert(s), missedMedicineAlert(s), noDataAlert(s)]) {
+  for (const a of [bpTodayAlert(s), noDataAlert(s)]) {
     if (a) alerts.push(a);
   }
 
@@ -373,31 +361,25 @@ export async function buildDailyReportEmail(
 
   return renderDailyReport({
     patientName: s.patientName,
-    dateLabel: now.toLocaleDateString("en-IN", {
-      timeZone: IST,
-      weekday: "short",
-      day: "numeric",
-      month: "short",
-      year: "numeric",
-    }),
+    date: dateBi(now),
+    alerts,
     bpReadings: s.bpToday.map((b) => ({
-      time: istTime(b.measured_at),
-      value: `${b.systolic}/${b.diastolic}`,
+      slot: b.reading_type === "Morning" ? "morning" : b.reading_type === "Evening" ? "evening" : null,
+      timeLabel: istTime(b.measured_at),
       pulse: b.pulse,
-      label: b.reading_type === "Evening" ? "शाम" : b.reading_type === "Morning" ? "सुबह" : "BP",
+      value: `${b.systolic}/${b.diastolic}`,
       tone: bpTone(classifyBP(b.systolic, b.diastolic, s.settings.bp_targets)),
     })),
     medicines: s.medicines,
     calories: {
       eaten: Math.round(s.foodToday.reduce((sum, f) => sum + Number(f.calories || 0), 0)),
       target: s.settings.daily_calorie_target,
-      meals: [...new Set(s.foodToday.map((f) => f.meal_type))],
+      meals: [...new Set(s.foodToday.map((f) => f.meal_type))].map(mealBi),
     },
     steps: s.steps,
     sleepHours: s.sleepHours,
     weightKg: s.weightKg,
-    missing: dueGaps(s, istMinutesOfDay(now)),
-    alerts,
+    notLogged: dueGaps(s, istMinutesOfDay(now)),
   });
 }
 
@@ -450,31 +432,6 @@ export type BpAlertOutcome =
   | { email: RenderedEmail; tone: BpTone }
   | { email: null; reason: string };
 
-function bpAlertText(
-  c: BPClassification,
-  t: BPThresholds,
-  reading: string,
-  detail: string,
-  repeat: { hi: string; en: string },
-): { hi: string; en: string } {
-  if (c.category === "crisis") {
-    return {
-      hi: `अभी की reading ${reading} mmHg${detail} है। कृपया आराम से बैठकर कुछ मिनट बाद दोबारा नापें। reading ऐसी ही रहे, या चक्कर, सीने में दर्द या सांस फूलने जैसा कुछ लगे तो तुरंत डॉक्टर से संपर्क करें।${repeat.hi}`,
-      en: `Latest reading is ${reading} mmHg${detail}. Please rest and re-measure after a few minutes. If it stays this high, or there is dizziness, chest pain or breathlessness, contact a doctor right away.${repeat.en}`,
-    };
-  }
-  if (c.category === "low") {
-    return {
-      hi: `अभी की reading ${reading} mmHg${detail} है, जो सामान्य से कम है। बैठे रहें, पानी पिएं और दोबारा नापें; चक्कर या कमज़ोरी लगे तो डॉक्टर से संपर्क करें।${repeat.hi}`,
-      en: `Latest reading is ${reading} mmHg${detail}, below the usual range. Sit down, drink some water and re-measure; if there is dizziness or weakness, contact a doctor.${repeat.en}`,
-    };
-  }
-  return {
-    hi: `अभी की reading ${reading} mmHg${detail} है, जो अलर्ट सीमा (${t.alert_systolic}/${t.alert_diastolic}) से ऊपर है। 5 मिनट आराम करके दोबारा नापें; बार-बार ऊँची आए तो डॉक्टर से बात करें।${repeat.hi}`,
-    en: `Latest reading is ${reading} mmHg${detail}, above the alert line (${t.alert_systolic}/${t.alert_diastolic}). Rest for 5 minutes and re-measure; if it keeps coming up high, talk to the doctor.${repeat.en}`,
-  };
-}
-
 /**
  * Immediate alert for one saved BP reading. The caller only supplies ids; the
  * reading itself is re-read from the database so a request cannot make the server
@@ -510,40 +467,23 @@ export async function buildBpAlertEmail(
   if (!isAlertWorthy(c)) return { email: null, reason: "reading is within the alert range" };
 
   const weekAgo = now.getTime() - 7 * 86_400_000;
-  const alertsThisWeek = recent.filter(
+  const outOfRange7d = recent.filter(
     (b) =>
       new Date(b.measured_at).getTime() >= weekAgo &&
       isAlertWorthy(classifyBP(b.systolic, b.diastolic, t)),
   ).length;
-  const repeat =
-    alertsThisWeek >= 2
-      ? {
-          hi: ` पिछले 7 दिनों में ऐसी ${alertsThisWeek} readings दर्ज हुई हैं।`,
-          en: ` ${alertsThisWeek} readings outside the alert range in the last 7 days.`,
-        }
-      : { hi: "", en: "" };
-
-  const reading = `${data.systolic}/${data.diastolic}`;
-  const detail = `${data.pulse ? ` · pulse ${data.pulse}` : ""} (${istTime(data.measured_at)}${data.reading_type ? ` · ${data.reading_type}` : ""})`;
-  const text = bpAlertText(c, t, reading, detail, repeat);
-  const tone = bpTone(c);
-
-  const alert: EmailAlert = {
-    severity: c.category === "crisis" || c.needsUrgentAttention ? "IMPORTANT" : "ATTENTION",
-    titleHi: `रक्तचाप ${c.labelHi}: ${reading}`,
-    titleEn: `${c.labelEn} blood pressure: ${reading}`,
-    messageHi: text.hi,
-    messageEn: text.en,
-    path: "/health",
-  };
 
   return {
-    tone,
-    email: renderAlertEmail(
-      profile.name,
-      [alert],
-      `${alert.severity === "IMPORTANT" ? "🚨" : "⚠️"} SwasthTrack · ${profile.name} · BP ${reading} (${c.labelEn})`,
-    ),
+    tone: bpTone(c),
+    email: renderBpAlertEmail({
+      patientName: profile.name,
+      level: c.category === "crisis" ? "critical" : c.category === "low" ? "low" : "high",
+      value: `${data.systolic}/${data.diastolic}`,
+      pulse: data.pulse,
+      slot: data.reading_type === "Morning" ? "morning" : data.reading_type === "Evening" ? "evening" : null,
+      timeLabel: istTime(data.measured_at),
+      outOfRange7d,
+    }),
   };
 }
 
@@ -586,18 +526,21 @@ export async function buildWeightAlertEmail(
   const month = earliestWithin(30);
 
   let from: typeof week | undefined;
-  let ruleHi = "";
-  let ruleEn = "";
+  let rule: Bi = { hi: "", en: "" };
   if (week && Math.abs(current - Number(week.weight_kg)) >= WEIGHT_RAPID_KG_7D) {
     from = week;
-    ruleHi = `7 दिन में ${WEIGHT_RAPID_KG_7D} kg या उससे ज़्यादा का बदलाव।`;
-    ruleEn = `a change of ${WEIGHT_RAPID_KG_7D} kg or more within 7 days`;
+    rule = {
+      hi: `7 दिनों के अंदर ${WEIGHT_RAPID_KG_7D} kg या उससे ज़्यादा बदलाव`,
+      en: `A change of ${WEIGHT_RAPID_KG_7D} kg or more within 7 days`,
+    };
   } else if (month) {
     const pct = (Math.abs(current - Number(month.weight_kg)) / Number(month.weight_kg)) * 100;
     if (pct >= WEIGHT_RAPID_PCT_30D) {
       from = month;
-      ruleHi = `30 दिन में ${WEIGHT_RAPID_PCT_30D}% या उससे ज़्यादा का बदलाव।`;
-      ruleEn = `a change of ${WEIGHT_RAPID_PCT_30D}% or more within 30 days`;
+      rule = {
+        hi: `30 दिनों के अंदर ${WEIGHT_RAPID_PCT_30D}% या उससे ज़्यादा बदलाव`,
+        en: `A change of ${WEIGHT_RAPID_PCT_30D}% or more within 30 days`,
+      };
     }
   }
   if (!from) return { email: null, reason: "weight change is within the normal range" };
@@ -610,8 +553,7 @@ export async function buildWeightAlertEmail(
       previousKg: previous,
       changeKg: Math.round((current - previous) * 10) / 10,
       days: Math.max(1, daysBetweenIST(toISTDate(from.measured_at), toISTDate(data.measured_at))),
-      ruleHi,
-      ruleEn,
+      rule,
     }),
   };
 }

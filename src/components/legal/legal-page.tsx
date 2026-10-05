@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import { Card } from "@/components/ui/card";
 import { PageBody, PageHeader } from "@/components/ui/page";
 import { cn } from "@/lib/utils";
 
@@ -29,7 +30,7 @@ export function LegalPage({
       <PageBody>
         <Link
           href="/"
-          className="inline-flex min-h-control items-center gap-1.5 text-sm font-semibold text-ink-muted hover:text-ink"
+          className="inline-flex min-h-control items-center gap-1.5 rounded-control text-sm font-semibold text-ink-muted hover:text-ink"
         >
           <ArrowLeft aria-hidden className="h-4 w-4" />
           वापस जाएँ (Back)
@@ -41,12 +42,12 @@ export function LegalPage({
   );
 }
 
-/** A white reading surface for long text. */
+/** A frosted-white reading surface for long text: gold rim, no tint behind the words. */
 export function LegalBody({ children }: { children: ReactNode }) {
   return (
-    <div className="space-y-6 rounded-card border border-line bg-surface p-5 text-sm leading-relaxed text-ink-muted shadow-e1 sm:p-8">
+    <Card tone="raised" flush className="space-y-6 p-5 text-sm leading-relaxed text-ink-muted sm:p-8">
       {children}
-    </div>
+    </Card>
   );
 }
 
@@ -62,7 +63,7 @@ export function LegalSection({
   divider?: boolean;
 }) {
   return (
-    <section className={cn("space-y-2", divider && "border-t border-line pt-4")}>
+    <section className={cn("space-y-2", divider && "border-t border-line-strong/50 pt-4")}>
       <h2 className="flex items-center gap-2 text-base font-semibold text-ink">
         {icon}
         {title}
@@ -73,7 +74,7 @@ export function LegalSection({
 }
 
 export function LegalList({ children }: { children: ReactNode }) {
-  return <ul className="list-disc space-y-1.5 pl-5 marker:text-ink-subtle">{children}</ul>;
+  return <ul className="list-disc space-y-1.5 pl-5 marker:text-gold-ink">{children}</ul>;
 }
 
 export function ContactCard({ children }: { children: ReactNode }) {

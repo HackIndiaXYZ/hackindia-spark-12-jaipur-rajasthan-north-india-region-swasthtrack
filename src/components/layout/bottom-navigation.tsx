@@ -19,7 +19,7 @@ export function BottomNavigation() {
   return (
     <nav
       aria-label="Mobile navigation"
-      className="frost fixed inset-x-0 bottom-0 z-40 border-t border-line lg:hidden"
+      className="frost frost-up fixed inset-x-0 bottom-0 z-40 lg:hidden"
     >
       <div className="mx-auto grid max-w-md grid-cols-5 gap-1 px-2 pt-1.5 pb-[max(0.5rem,env(safe-area-inset-bottom))]">
         {primaryNavigation.map((item) => {
@@ -34,8 +34,8 @@ export function BottomNavigation() {
                 // minimum tap target (§44).
                 "pressable flex min-h-15 flex-col items-center justify-center gap-0.5 rounded-control px-1",
                 active
-                  ? "bg-brand-soft text-brand-ink shadow-e1"
-                  : "text-ink-muted hover:bg-surface-sunken hover:text-ink",
+                  ? "grad-gold-button border border-gold-line text-gold-ink shadow-gold-button"
+                  : "border border-transparent text-ink-muted hover:bg-surface/60 hover:text-ink",
               )}
               href={item.href}
               key={item.href}
@@ -58,7 +58,10 @@ export function BottomNavigation() {
               <span
                 aria-hidden
                 lang="en"
-                className="w-full truncate text-center text-2xs leading-none text-ink-muted"
+                className={cn(
+                  "w-full truncate text-center text-2xs leading-none",
+                  active ? "text-gold-ink" : "text-ink-muted",
+                )}
               >
                 {item.label}
               </span>

@@ -33,17 +33,17 @@ const timeFmt = new Intl.DateTimeFormat("en-IN", {
 });
 
 /** "4 Oct" for an instant. */
-export function fmtDay(value: string | Date): string {
+export function fmtDay(value: string | Date | number): string {
   return dayFmt.format(new Date(value));
 }
 
 /** "4 Oct 2026" for an instant. */
-export function fmtDayYear(value: string | Date): string {
+export function fmtDayYear(value: string | Date | number): string {
   return dayYearFmt.format(new Date(value));
 }
 
 /** "8:30 am" for an instant. */
-export function fmtTime(value: string | Date): string {
+export function fmtTime(value: string | Date | number): string {
   return timeFmt.format(new Date(value)).toLowerCase();
 }
 
@@ -65,6 +65,13 @@ export function fmtDateStrYear(dateStr: string): string {
 /** "Sat, 4 Oct" for a date string. */
 export function fmtDateStrWeekday(dateStr: string): string {
   return weekdayDayFmt.format(noonIST(dateStr));
+}
+
+const weekdayFmt = new Intl.DateTimeFormat("en-IN", { timeZone: IST_TZ, weekday: "short" });
+
+/** "Sat" for a date string. */
+export function fmtWeekdayShort(dateStr: string): string {
+  return weekdayFmt.format(noonIST(dateStr));
 }
 
 /** "Saturday, 4 October 2026" for a date string. */
@@ -91,4 +98,49 @@ export function istDateAndTime(value: string | Date): { date: string; time: stri
 export function fmtKg(value: number | string | null | undefined): string {
   const n = Number(value);
   return Number.isFinite(n) ? String(Math.round(n * 100) / 100) : "—";
+}
+
+const monthYearFmt = new Intl.DateTimeFormat("en-IN", { timeZone: IST_TZ, month: "short", year: "2-digit" });
+
+/** "Oct 26" for an instant: the x-axis label once a chart spans more than a few months. */
+export function fmtMonthYear(value: string | Date | number): string {
+  return monthYearFmt.format(new Date(value));
+}
+
+const yearShortFmt = new Intl.DateTimeFormat("en-IN", { timeZone: IST_TZ, year: "2-digit" });
+
+/** "4 Oct ’25": an axis label once a chart reaches across a new year. */
+export function fmtDayYY(value: string | Date | number): string {
+  const d = new Date(value);
+  return `${dayFmt.format(d)} ’${yearShortFmt.format(d)}`;
+}
+
+/** "22:30" or "22:30:00" (a Postgres `time`) as "10:30 pm". Anything unparseable comes back unchanged. */
+export function fmtClock(value: string | null | undefined): string {
+  if (!value) return "";
+  const m = /^(\d{1,2}):(\d{2})/.exec(value);
+  if (!m) return value;
+  const h = Number(m[1]);
+  const suffix = h >= 12 ? "pm" : "am";
+  return `${h % 12 || 12}:${m[2]} ${suffix}`;
+}
+
+/** A stored number for display with at most `digits` decimals and no float noise (7.5, not 7.500000001). */
+export function fmtNum(value: number | string | null | undefined, digits = 1): string {
+  const n = Number(value);
+  if (!Number.isFinite(n)) return "—";
+  const f = 10 ** digits;
+  return String(Math.round(n * f) / f);
+}
+
+/** A typed decimal ("78.4", "78." or ".5"); NaN for anything else, including an empty box. */
+export function parseDecimalInput(raw: string): number {
+  const s = raw.trim();
+  return /^(\d+\.?\d*|\.\d+)$/.test(s) ? parseFloat(s) : NaN;
+}
+
+/** A typed whole number; NaN for anything else, including an empty box. */
+export function parseIntegerInput(raw: string): number {
+  const s = raw.trim();
+  return /^\d+$/.test(s) ? parseInt(s, 10) : NaN;
 }

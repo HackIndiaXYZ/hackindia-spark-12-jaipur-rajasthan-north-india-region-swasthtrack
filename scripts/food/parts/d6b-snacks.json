@@ -1,0 +1,6854 @@
+{
+ "items": [
+  {
+   "slug": "samosa-potato",
+   "name": "Samosa (Potato)",
+   "hi": "आलू समोसा",
+   "alias": [
+    "samosa",
+    "aloo samosa",
+    "alu samosa",
+    "aloo ka samosa",
+    "singada",
+    "समोसा",
+    "आलू का समोसा"
+   ],
+   "cat": "snack",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥟",
+   "unit": "g",
+   "kcal": 300,
+   "p": 5.2,
+   "c": 30.4,
+   "f": 17.5,
+   "fib": 2.8,
+   "na": 520,
+   "portions": [
+    {
+     "n": "1 samosa (80 g)",
+     "hi": "1 समोसा",
+     "g": 80
+    },
+    {
+     "n": "2 samosas (160 g)",
+     "hi": "2 समोसा",
+     "g": 160
+    },
+    {
+     "n": "1 small samosa (50 g)",
+     "hi": "1 समोसा",
+     "g": 50
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "medium",
+   "note": "halwai-style deep-fried maida shell, potato-pea masala; 1 samosa (80 g) ~240 kcal; INDB 577 rejected (over-absorbed oil)",
+   "core": true
+  },
+  {
+   "slug": "samosa-matar",
+   "name": "Samosa (Green Peas, Matar)",
+   "hi": "मटर समोसा",
+   "alias": [
+    "matar samosa",
+    "peas samosa",
+    "green pea samosa",
+    "matar ka samosa",
+    "मटर का समोसा"
+   ],
+   "cat": "snack",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🥟",
+   "unit": "g",
+   "kcal": 285,
+   "p": 6,
+   "c": 28.1,
+   "f": 16.5,
+   "fib": 3.2,
+   "na": 500,
+   "portions": [
+    {
+     "n": "1 samosa (80 g)",
+     "hi": "1 समोसा",
+     "g": 80
+    },
+    {
+     "n": "2 samosas (160 g)",
+     "hi": "2 समोसा",
+     "g": 160
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "medium",
+   "note": "peas-forward filling, slightly less starchy than aloo samosa; deep fried"
+  },
+  {
+   "slug": "samosa-onion",
+   "name": "Onion Samosa (Pyaaz Samosa)",
+   "hi": "प्याज़ समोसा",
+   "alias": [
+    "pyaz samosa",
+    "pyaaz ka samosa",
+    "kanda samosa",
+    "onion samosa",
+    "प्याज का समोसा"
+   ],
+   "cat": "snack",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🥟",
+   "unit": "g",
+   "kcal": 310,
+   "p": 5,
+   "c": 30.9,
+   "f": 18.5,
+   "fib": 2.5,
+   "na": 500,
+   "portions": [
+    {
+     "n": "1 samosa (70 g)",
+     "hi": "1 समोसा",
+     "g": 70
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "medium",
+   "note": "maida shell with spiced onion filling, deep fried"
+  },
+  {
+   "slug": "samosa-keema",
+   "name": "Keema Samosa (Mutton Mince)",
+   "hi": "कीमा समोसा",
+   "alias": [
+    "keema samosa",
+    "qeema samosa",
+    "mutton samosa",
+    "meat samosa",
+    "कीमा का समोसा"
+   ],
+   "cat": "snack",
+   "region": "North India",
+   "diet": "nonveg",
+   "emoji": "🥟",
+   "unit": "g",
+   "kcal": 315,
+   "p": 9.5,
+   "c": 24.3,
+   "f": 20,
+   "fib": 1.5,
+   "na": 560,
+   "portions": [
+    {
+     "n": "1 samosa (70 g)",
+     "hi": "1 समोसा",
+     "g": 70
+    },
+    {
+     "n": "2 samosas (140 g)",
+     "hi": "2 समोसा",
+     "g": 140
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "medium",
+   "note": "mutton mince filling, deep fried; INDB 621 rejected (over-absorbed oil)"
+  },
+  {
+   "slug": "samosa-paneer",
+   "name": "Paneer Samosa",
+   "hi": "पनीर समोसा",
+   "alias": [
+    "paneer matar samosa",
+    "panir samosa",
+    "paneer ka samosa",
+    "पनीर का समोसा"
+   ],
+   "cat": "snack",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🥟",
+   "unit": "g",
+   "kcal": 320,
+   "p": 8,
+   "c": 27,
+   "f": 20,
+   "fib": 2.2,
+   "na": 470,
+   "portions": [
+    {
+     "n": "1 samosa (80 g)",
+     "hi": "1 समोसा",
+     "g": 80
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "medium",
+   "note": "crumbled paneer and peas filling, deep fried; INDB 624 rejected"
+  },
+  {
+   "slug": "samosa-chicken",
+   "name": "Chicken Samosa",
+   "hi": "चिकन समोसा",
+   "alias": [
+    "chicken keema samosa",
+    "murg samosa",
+    "chicken ka samosa",
+    "चिकन का समोसा"
+   ],
+   "cat": "snack",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🥟",
+   "unit": "g",
+   "kcal": 300,
+   "p": 9,
+   "c": 25.5,
+   "f": 18,
+   "fib": 1.2,
+   "na": 520,
+   "portions": [
+    {
+     "n": "1 samosa (70 g)",
+     "hi": "1 समोसा",
+     "g": 70
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "medium",
+   "note": "chicken mince filling, deep fried"
+  },
+  {
+   "slug": "samosa-mini",
+   "name": "Mini Samosa (Cocktail Samosa)",
+   "hi": "मिनी समोसा",
+   "alias": [
+    "cocktail samosa",
+    "small samosa",
+    "party samosa",
+    "mini samosas",
+    "chhota samosa"
+   ],
+   "cat": "snack",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥟",
+   "unit": "g",
+   "kcal": 330,
+   "p": 5.5,
+   "c": 32,
+   "f": 20,
+   "fib": 2.2,
+   "na": 480,
+   "portions": [
+    {
+     "n": "1 piece (25 g)",
+     "hi": "1 पीस",
+     "g": 25
+    },
+    {
+     "n": "4 pieces (100 g)",
+     "hi": "4 पीस",
+     "g": 100
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "medium",
+   "note": "more crust per gram than a full samosa, so slightly higher per 100 g; deep fried"
+  },
+  {
+   "slug": "samosa-baked",
+   "name": "Baked Samosa",
+   "hi": "बेक्ड समोसा",
+   "alias": [
+    "oven samosa",
+    "air fried samosa",
+    "healthy samosa",
+    "baked aloo samosa",
+    "बेक समोसा"
+   ],
+   "cat": "snack",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥟",
+   "unit": "g",
+   "kcal": 215,
+   "p": 5,
+   "c": 29.6,
+   "f": 8.5,
+   "fib": 2.8,
+   "na": 430,
+   "portions": [
+    {
+     "n": "1 samosa (70 g)",
+     "hi": "1 समोसा",
+     "g": 70
+    }
+   ],
+   "src": "Standard home recipe build-up from IFCT 2017 raw values",
+   "conf": "medium",
+   "note": "oven-baked with ~1 tsp oil brushed on, no deep-frying; roughly 30 % less energy than fried"
+  },
+  {
+   "slug": "samosa-punjabi",
+   "name": "Punjabi Samosa (Large)",
+   "hi": "पंजाबी समोसा",
+   "alias": [
+    "punjabi aloo samosa",
+    "big samosa",
+    "bada samosa",
+    "dhaba samosa",
+    "पंजाबी आलू समोसा"
+   ],
+   "cat": "snack",
+   "region": "Punjab",
+   "diet": "veg",
+   "emoji": "🥟",
+   "unit": "g",
+   "kcal": 295,
+   "p": 5,
+   "c": 30.5,
+   "f": 17,
+   "fib": 3,
+   "na": 520,
+   "portions": [
+    {
+     "n": "1 large samosa (110 g)",
+     "hi": "1 समोसा",
+     "g": 110
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "medium",
+   "note": "large thick-crust samosa, potato and peas; ~325 kcal each"
+  },
+  {
+   "slug": "samosa-cheese-corn",
+   "name": "Cheese Corn Samosa",
+   "hi": "चीज़ कॉर्न समोसा",
+   "alias": [
+    "corn cheese samosa",
+    "cheese samosa",
+    "sweet corn samosa",
+    "चीज़ समोसा"
+   ],
+   "cat": "snack",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥟",
+   "unit": "g",
+   "kcal": 310,
+   "p": 7.5,
+   "c": 29.5,
+   "f": 18,
+   "fib": 2,
+   "na": 520,
+   "portions": [
+    {
+     "n": "1 samosa (70 g)",
+     "hi": "1 समोसा",
+     "g": 70
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "low",
+   "note": "processed cheese + sweet corn filling, deep fried"
+  },
+  {
+   "slug": "samosa-chaat",
+   "name": "Samosa Chaat",
+   "hi": "समोसा चाट",
+   "alias": [
+    "samosa chat",
+    "samosa chole chaat",
+    "crushed samosa chaat",
+    "samosa chaat plate",
+    "समोसे की चाट"
+   ],
+   "cat": "snack",
+   "region": "Delhi",
+   "diet": "veg",
+   "emoji": "🥗",
+   "unit": "g",
+   "kcal": 190,
+   "p": 5,
+   "c": 23.4,
+   "f": 8.5,
+   "fib": 3,
+   "na": 420,
+   "portions": [
+    {
+     "n": "1 plate (200 g)",
+     "hi": "1 प्लेट",
+     "g": 200
+    }
+   ],
+   "src": "Component build-up from IFCT 2017 raw values + typical street-vendor recipe",
+   "conf": "medium",
+   "note": "1 crushed samosa (80 g) + chole + curd + chutneys + sev, so far lower per 100 g than the bare samosa"
+  },
+  {
+   "slug": "samosa-pav",
+   "name": "Samosa Pav",
+   "hi": "समोसा पाव",
+   "alias": [
+    "samosa pao",
+    "mumbai samosa pav",
+    "samose pav",
+    "समोसा पाओ"
+   ],
+   "cat": "snack",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🥟",
+   "unit": "g",
+   "kcal": 270,
+   "p": 6,
+   "c": 33.4,
+   "f": 12.5,
+   "fib": 2.8,
+   "na": 520,
+   "portions": [
+    {
+     "n": "1 samosa pav (130 g)",
+     "hi": "1 समोसा",
+     "g": 130
+    }
+   ],
+   "src": "Component build-up from IFCT 2017 raw values + typical street-vendor recipe",
+   "conf": "medium",
+   "note": "1 samosa (80 g) + 1 pav (45 g) with chutney; ~350 kcal each"
+  },
+  {
+   "slug": "kachori-khasta",
+   "name": "Khasta Kachori",
+   "hi": "खस्ता कचौड़ी",
+   "alias": [
+    "khasta kachauri",
+    "kachauri",
+    "kachodi",
+    "khasta kachodi",
+    "खस्ता कचोरी",
+    "कचौरी"
+   ],
+   "cat": "snack",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🧆",
+   "unit": "g",
+   "kcal": 400,
+   "p": 6.5,
+   "c": 36.1,
+   "f": 25.5,
+   "fib": 3,
+   "na": 480,
+   "portions": [
+    {
+     "n": "1 kachori (60 g)",
+     "hi": "1 कचौड़ी",
+     "g": 60
+    },
+    {
+     "n": "2 kachori (120 g)",
+     "hi": "2 कचौड़ी",
+     "g": 120
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "medium",
+   "note": "flaky maida shell, spiced moong filling, deep fried; ~240 kcal each; INDB 713 rejected (over-absorbed oil)"
+  },
+  {
+   "slug": "kachori-moong-dal",
+   "name": "Moong Dal Kachori",
+   "hi": "मूंग दाल कचौड़ी",
+   "alias": [
+    "moong dal kachauri",
+    "dal kachori",
+    "dal ki kachori",
+    "jaipur kachori",
+    "मूँग दाल की कचौड़ी"
+   ],
+   "cat": "snack",
+   "region": "Rajasthan",
+   "diet": "veg",
+   "emoji": "🧆",
+   "unit": "g",
+   "kcal": 380,
+   "p": 8,
+   "c": 35.3,
+   "f": 23,
+   "fib": 3.5,
+   "na": 460,
+   "portions": [
+    {
+     "n": "1 kachori (60 g)",
+     "hi": "1 कचौड़ी",
+     "g": 60
+    },
+    {
+     "n": "2 kachori (120 g)",
+     "hi": "2 कचौड़ी",
+     "g": 120
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "medium",
+   "note": "yellow moong filling in atta-maida shell, deep fried; ~230 kcal each"
+  },
+  {
+   "slug": "kachori-pyaaz",
+   "name": "Pyaaz Kachori (Jodhpur)",
+   "hi": "प्याज़ कचौड़ी",
+   "alias": [
+    "onion kachori",
+    "pyaz kachori",
+    "jodhpuri kachori",
+    "kanda kachori",
+    "प्याज की कचौड़ी"
+   ],
+   "cat": "snack",
+   "region": "Rajasthan",
+   "diet": "veg",
+   "emoji": "🧆",
+   "unit": "g",
+   "kcal": 345,
+   "p": 5.5,
+   "c": 33.5,
+   "f": 21,
+   "fib": 3,
+   "na": 480,
+   "portions": [
+    {
+     "n": "1 kachori (70 g)",
+     "hi": "1 कचौड़ी",
+     "g": 70
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "medium",
+   "note": "spiced onion filling, deep fried; ~240 kcal each"
+  },
+  {
+   "slug": "kachori-matar",
+   "name": "Matar Kachori",
+   "hi": "मटर कचौड़ी",
+   "alias": [
+    "peas kachori",
+    "matar kachauri",
+    "hari matar kachori",
+    "मटर की कचौड़ी"
+   ],
+   "cat": "snack",
+   "region": "Uttar Pradesh",
+   "diet": "veg",
+   "emoji": "🧆",
+   "unit": "g",
+   "kcal": 350,
+   "p": 6.5,
+   "c": 33.8,
+   "f": 21,
+   "fib": 3.5,
+   "na": 450,
+   "portions": [
+    {
+     "n": "1 kachori (65 g)",
+     "hi": "1 कचौड़ी",
+     "g": 65
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "medium",
+   "note": "green peas filling, deep fried; INDB 585 rejected (over-absorbed oil)"
+  },
+  {
+   "slug": "kachori-aloo",
+   "name": "Aloo Kachori",
+   "hi": "आलू कचौड़ी",
+   "alias": [
+    "potato kachori",
+    "alu kachori",
+    "aloo ki kachori",
+    "आलू की कचौड़ी"
+   ],
+   "cat": "snack",
+   "region": "Uttar Pradesh",
+   "diet": "veg",
+   "emoji": "🧆",
+   "unit": "g",
+   "kcal": 340,
+   "p": 5,
+   "c": 35,
+   "f": 20,
+   "fib": 2.8,
+   "na": 470,
+   "portions": [
+    {
+     "n": "1 kachori (65 g)",
+     "hi": "1 कचौड़ी",
+     "g": 65
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "medium",
+   "note": "spiced potato filling, deep fried"
+  },
+  {
+   "slug": "kachori-lilva",
+   "name": "Lilva Kachori (Surti)",
+   "hi": "लीलवा कचौड़ी",
+   "alias": [
+    "surti lilva kachori",
+    "tuver kachori",
+    "turiya lilva kachori",
+    "तुवर कचौड़ी"
+   ],
+   "cat": "snack",
+   "region": "Gujarat",
+   "diet": "veg",
+   "emoji": "🧆",
+   "unit": "g",
+   "kcal": 335,
+   "p": 6,
+   "c": 32.8,
+   "f": 20,
+   "fib": 5,
+   "na": 450,
+   "portions": [
+    {
+     "n": "1 kachori (50 g)",
+     "hi": "1 कचौड़ी",
+     "g": 50
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "low",
+   "note": "fresh pigeon-pea (lilva) and coconut filling, deep fried; small round kachori"
+  },
+  {
+   "slug": "raj-kachori-chaat",
+   "name": "Raj Kachori Chaat",
+   "hi": "राज कचौड़ी चाट",
+   "alias": [
+    "raj kachori",
+    "raj kachauri",
+    "raaj kachori",
+    "राज कचौरी"
+   ],
+   "cat": "snack",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🧆",
+   "unit": "g",
+   "kcal": 215,
+   "p": 4.5,
+   "c": 27.9,
+   "f": 9.5,
+   "fib": 2.5,
+   "na": 430,
+   "portions": [
+    {
+     "n": "1 raj kachori (180 g)",
+     "hi": "1 पीस",
+     "g": 180
+    }
+   ],
+   "src": "Component build-up from IFCT 2017 raw values + typical street-vendor recipe",
+   "conf": "medium",
+   "note": "1 big hollow shell stuffed with potato, moong, curd, chutneys and sev; ~385 kcal per plate"
+  },
+  {
+   "slug": "dahi-kachori-chaat",
+   "name": "Dahi Kachori Chaat",
+   "hi": "दही कचौड़ी चाट",
+   "alias": [
+    "dahi kachori",
+    "kachori chaat",
+    "dahi kachauri chaat",
+    "कचौड़ी चाट"
+   ],
+   "cat": "snack",
+   "region": "Uttar Pradesh",
+   "diet": "veg",
+   "emoji": "🧆",
+   "unit": "g",
+   "kcal": 205,
+   "p": 5,
+   "c": 23.8,
+   "f": 10,
+   "fib": 2.5,
+   "na": 410,
+   "portions": [
+    {
+     "n": "1 plate, 2 kachori (200 g)",
+     "hi": "1 प्लेट",
+     "g": 200
+    }
+   ],
+   "src": "Component build-up from IFCT 2017 raw values + typical street-vendor recipe",
+   "conf": "medium",
+   "note": "2 small kachori broken and topped with curd, tamarind and mint chutney, sev"
+  },
+  {
+   "slug": "pakora-onion",
+   "name": "Onion Pakora (Pyaaz Pakoda)",
+   "hi": "प्याज़ पकौड़ा",
+   "alias": [
+    "onion pakoda",
+    "onion bhaji",
+    "onion fritters",
+    "pyaz pakora",
+    "pyaaz ke pakode",
+    "प्याज के पकोड़े",
+    "प्याज़ भजिया"
+   ],
+   "cat": "snack",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🧆",
+   "unit": "g",
+   "kcal": 310,
+   "p": 6,
+   "c": 27.6,
+   "f": 19.5,
+   "fib": 3.5,
+   "na": 520,
+   "portions": [
+    {
+     "n": "1 pakora (15 g)",
+     "hi": "1 पकौड़ा",
+     "g": 15
+    },
+    {
+     "n": "1 serving, 6 pieces (90 g)",
+     "hi": "1 सर्विंग",
+     "g": 90
+    },
+    {
+     "n": "1 plate (150 g)",
+     "hi": "1 प्लेट",
+     "g": 150
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "medium",
+   "note": "besan batter, sliced onion, deep fried; ~47 kcal per 15 g piece; INDB 551-675 rejected (over-absorbed oil)",
+   "core": true
+  },
+  {
+   "slug": "pakora-aloo",
+   "name": "Aloo Pakora (Potato Pakoda)",
+   "hi": "आलू पकौड़ा",
+   "alias": [
+    "aloo pakoda",
+    "potato pakora",
+    "alu pakora",
+    "potato fritters",
+    "aloo bhajiya",
+    "आलू के पकोड़े"
+   ],
+   "cat": "snack",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🧆",
+   "unit": "g",
+   "kcal": 290,
+   "p": 4.5,
+   "c": 28.6,
+   "f": 17.5,
+   "fib": 2.5,
+   "na": 480,
+   "portions": [
+    {
+     "n": "1 pakora (20 g)",
+     "hi": "1 पकौड़ा",
+     "g": 20
+    },
+    {
+     "n": "1 plate (100 g)",
+     "hi": "1 प्लेट",
+     "g": 100
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "medium",
+   "note": "potato slices or cubes in besan batter, deep fried; INDB 677 rejected"
+  },
+  {
+   "slug": "pakora-paneer",
+   "name": "Paneer Pakora",
+   "hi": "पनीर पकौड़ा",
+   "alias": [
+    "paneer pakoda",
+    "panir pakora",
+    "paneer bhajiya",
+    "paneer fritters",
+    "पनीर के पकोड़े"
+   ],
+   "cat": "snack",
+   "region": "Punjab",
+   "diet": "veg",
+   "emoji": "🧆",
+   "unit": "g",
+   "kcal": 345,
+   "p": 10.5,
+   "c": 20.6,
+   "f": 24.5,
+   "fib": 1.8,
+   "na": 480,
+   "portions": [
+    {
+     "n": "1 piece (30 g)",
+     "hi": "1 पीस",
+     "g": 30
+    },
+    {
+     "n": "1 plate, 5 pieces (150 g)",
+     "hi": "1 प्लेट",
+     "g": 150
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "medium",
+   "note": "paneer slices in besan batter, deep fried; INDB 718 rejected"
+  },
+  {
+   "slug": "pakora-palak",
+   "name": "Palak Pakora (Spinach Pakoda)",
+   "hi": "पालक पकौड़ा",
+   "alias": [
+    "spinach pakora",
+    "palak pakoda",
+    "palak bhajiya",
+    "spinach fritters",
+    "palak ke pakode",
+    "पालक के पकोड़े"
+   ],
+   "cat": "snack",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🧆",
+   "unit": "g",
+   "kcal": 300,
+   "p": 6.5,
+   "c": 25.8,
+   "f": 19,
+   "fib": 4,
+   "na": 520,
+   "portions": [
+    {
+     "n": "1 pakora (15 g)",
+     "hi": "1 पकौड़ा",
+     "g": 15
+    },
+    {
+     "n": "1 plate (100 g)",
+     "hi": "1 प्लेट",
+     "g": 100
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "medium",
+   "note": "chopped spinach in besan batter, deep fried; INDB 713 rejected"
+  },
+  {
+   "slug": "pakora-gobi",
+   "name": "Gobi Pakora (Cauliflower Pakoda)",
+   "hi": "गोभी पकौड़ा",
+   "alias": [
+    "gobhi pakora",
+    "cauliflower pakora",
+    "phool gobi pakoda",
+    "gobi bhajiya",
+    "गोभी के पकोड़े"
+   ],
+   "cat": "snack",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🧆",
+   "unit": "g",
+   "kcal": 285,
+   "p": 5.5,
+   "c": 26.4,
+   "f": 17.5,
+   "fib": 3,
+   "na": 500,
+   "portions": [
+    {
+     "n": "1 piece (20 g)",
+     "hi": "1 पीस",
+     "g": 20
+    },
+    {
+     "n": "1 plate (100 g)",
+     "hi": "1 प्लेट",
+     "g": 100
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "medium",
+   "note": "cauliflower florets in besan batter, deep fried; INDB 672 rejected"
+  },
+  {
+   "slug": "pakora-mixed-veg",
+   "name": "Mixed Vegetable Pakora",
+   "hi": "मिक्स वेज पकौड़ा",
+   "alias": [
+    "mixed veg pakoda",
+    "veg pakora",
+    "vegetable fritters",
+    "mix veg bhajiya",
+    "वेज पकोड़ा"
+   ],
+   "cat": "snack",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🧆",
+   "unit": "g",
+   "kcal": 300,
+   "p": 5.5,
+   "c": 27.9,
+   "f": 18.5,
+   "fib": 3.5,
+   "na": 510,
+   "portions": [
+    {
+     "n": "1 pakora (15 g)",
+     "hi": "1 पकौड़ा",
+     "g": 15
+    },
+    {
+     "n": "1 plate (100 g)",
+     "hi": "1 प्लेट",
+     "g": 100
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "medium",
+   "note": "onion, potato, spinach, cauliflower in besan batter, deep fried; INDB 674 rejected"
+  },
+  {
+   "slug": "pakora-bread",
+   "name": "Bread Pakora (Stuffed)",
+   "hi": "ब्रेड पकौड़ा",
+   "alias": [
+    "bread pakoda",
+    "bread bhajiya",
+    "aloo bread pakora",
+    "stuffed bread pakora",
+    "ब्रेड के पकोड़े"
+   ],
+   "cat": "snack",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🧆",
+   "unit": "g",
+   "kcal": 275,
+   "p": 6,
+   "c": 27.9,
+   "f": 15.5,
+   "fib": 2.5,
+   "na": 500,
+   "portions": [
+    {
+     "n": "1 piece (80 g)",
+     "hi": "1 पीस",
+     "g": 80
+    },
+    {
+     "n": "2 pieces (160 g)",
+     "hi": "2 पीस",
+     "g": 160
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "medium",
+   "note": "bread triangle with potato filling dipped in besan batter, deep fried; ~220 kcal per piece; INDB 711 rejected"
+  },
+  {
+   "slug": "mirchi-bajji",
+   "name": "Mirchi Bajji (Chilli Bajji)",
+   "hi": "मिर्ची भज्जी",
+   "alias": [
+    "milagai bajji",
+    "chilli bajji",
+    "mirapakaya bajji",
+    "mirchi pakoda",
+    "hari mirch ke pakode",
+    "मिर्ची पकौड़ा"
+   ],
+   "cat": "snack",
+   "region": "Andhra Pradesh",
+   "diet": "veg",
+   "emoji": "🌶️",
+   "unit": "g",
+   "kcal": 285,
+   "p": 5.5,
+   "c": 25.3,
+   "f": 18,
+   "fib": 3.5,
+   "na": 480,
+   "portions": [
+    {
+     "n": "1 bajji (40 g)",
+     "hi": "1 भज्जी",
+     "g": 40
+    },
+    {
+     "n": "3 bajji (120 g)",
+     "hi": "3 भज्जी",
+     "g": 120
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "medium",
+   "note": "large mild chilli in besan-rice flour batter, deep fried; INDB 669 rejected"
+  },
+  {
+   "slug": "mirchi-vada",
+   "name": "Mirchi Vada (Jodhpur Stuffed Chilli Fritter)",
+   "hi": "मिर्ची वड़ा",
+   "alias": [
+    "mirch vada",
+    "mirchi bada",
+    "jodhpuri mirchi vada",
+    "stuffed mirchi bhajiya",
+    "मिर्ची बड़ा"
+   ],
+   "cat": "snack",
+   "region": "Rajasthan",
+   "diet": "veg",
+   "emoji": "🌶️",
+   "unit": "g",
+   "kcal": 260,
+   "p": 4.5,
+   "c": 26.8,
+   "f": 15,
+   "fib": 3,
+   "na": 460,
+   "portions": [
+    {
+     "n": "1 vada (90 g)",
+     "hi": "1 वड़ा",
+     "g": 90
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "medium",
+   "note": "bhavnagri chilli stuffed with spiced potato, besan coat, deep fried; ~235 kcal each"
+  },
+  {
+   "slug": "bajji-aloo",
+   "name": "Aloo Bajji (Potato Slice Bajji)",
+   "hi": "आलू भज्जी",
+   "alias": [
+    "potato bajji",
+    "aloo bhajji",
+    "urulai kizhangu bajji",
+    "aloo slice pakoda",
+    "आलू भजिया"
+   ],
+   "cat": "snack",
+   "region": "Tamil Nadu",
+   "diet": "veg",
+   "emoji": "🧆",
+   "unit": "g",
+   "kcal": 280,
+   "p": 4,
+   "c": 27.8,
+   "f": 17,
+   "fib": 2.5,
+   "na": 470,
+   "portions": [
+    {
+     "n": "1 bajji (25 g)",
+     "hi": "1 भज्जी",
+     "g": 25
+    },
+    {
+     "n": "1 plate, 4 pieces (100 g)",
+     "hi": "1 प्लेट",
+     "g": 100
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "medium",
+   "note": "thin potato slices in besan-rice flour batter, deep fried"
+  },
+  {
+   "slug": "bajji-raw-banana",
+   "name": "Vazhakkai Bajji (Raw Banana Bajji)",
+   "hi": "कच्चा केला भज्जी",
+   "alias": [
+    "raw banana bajji",
+    "kele ki bajji",
+    "vazhakkai bhajji",
+    "kachche kele ke pakode",
+    "banana bajji"
+   ],
+   "cat": "snack",
+   "region": "Tamil Nadu",
+   "diet": "veg",
+   "emoji": "🧆",
+   "unit": "g",
+   "kcal": 285,
+   "p": 4,
+   "c": 27.9,
+   "f": 17.5,
+   "fib": 3,
+   "na": 470,
+   "portions": [
+    {
+     "n": "1 bajji (30 g)",
+     "hi": "1 भज्जी",
+     "g": 30
+    },
+    {
+     "n": "1 plate, 4 pieces (120 g)",
+     "hi": "1 प्लेट",
+     "g": 120
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "medium",
+   "note": "raw banana slices in besan batter, deep fried"
+  },
+  {
+   "slug": "kanda-bhaji",
+   "name": "Kanda Bhaji (Maharashtrian Onion Bhaji)",
+   "hi": "कांदा भजी",
+   "alias": [
+    "kanda bhajji",
+    "kanda bhajiya",
+    "khekda bhaji",
+    "onion bhajiya",
+    "kande bhaji",
+    "कांदा भजिया"
+   ],
+   "cat": "snack",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🧆",
+   "unit": "g",
+   "kcal": 325,
+   "p": 6,
+   "c": 29.1,
+   "f": 20.5,
+   "fib": 3.5,
+   "na": 520,
+   "portions": [
+    {
+     "n": "1 piece (15 g)",
+     "hi": "1 पीस",
+     "g": 15
+    },
+    {
+     "n": "1 plate (100 g)",
+     "hi": "1 प्लेट",
+     "g": 100
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "medium",
+   "note": "thin-sliced onion in besan-rice flour batter, crisp deep fried; INDB 552-675 rejected"
+  },
+  {
+   "slug": "methi-gota",
+   "name": "Methi Na Gota (Gujarati Fenugreek Fritters)",
+   "hi": "मेथी ना गोटा",
+   "alias": [
+    "methi gota",
+    "methi na bhajiya",
+    "methi pakora",
+    "fenugreek fritters",
+    "मेथी के गोटे"
+   ],
+   "cat": "snack",
+   "region": "Gujarat",
+   "diet": "veg",
+   "emoji": "🧆",
+   "unit": "g",
+   "kcal": 320,
+   "p": 6.5,
+   "c": 27.4,
+   "f": 20.5,
+   "fib": 4,
+   "na": 480,
+   "portions": [
+    {
+     "n": "1 gota (20 g)",
+     "hi": "1 पीस",
+     "g": 20
+    },
+    {
+     "n": "1 plate, 5 pieces (100 g)",
+     "hi": "1 प्लेट",
+     "g": 100
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "medium",
+   "note": "fresh methi in besan-flour batter, deep fried, puffy balls; INDB methi pakora 713 rejected"
+  },
+  {
+   "slug": "pakora-egg",
+   "name": "Egg Pakora (Anda Pakoda)",
+   "hi": "अंडा पकौड़ा",
+   "alias": [
+    "egg bhajiya",
+    "anda pakoda",
+    "egg fritters",
+    "egg pakoda",
+    "अंडे के पकोड़े"
+   ],
+   "cat": "snack",
+   "region": "Pan-India",
+   "diet": "egg",
+   "emoji": "🧆",
+   "unit": "g",
+   "kcal": 255,
+   "p": 9.5,
+   "c": 16,
+   "f": 17,
+   "fib": 1.5,
+   "na": 420,
+   "portions": [
+    {
+     "n": "1 piece, half egg (60 g)",
+     "hi": "1 पीस",
+     "g": 60
+    },
+    {
+     "n": "2 pieces (120 g)",
+     "hi": "2 पीस",
+     "g": 120
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw meat/fish/egg + batter and fry oil)",
+   "conf": "medium",
+   "note": "boiled egg halves coated in besan batter, deep fried; INDB 710 rejected"
+  },
+  {
+   "slug": "pakora-chicken",
+   "name": "Chicken Pakora (Kozhi Pakoda)",
+   "hi": "चिकन पकौड़ा",
+   "alias": [
+    "chicken pakoda",
+    "chicken bhajiya",
+    "murgh pakora",
+    "kozhi pakoda",
+    "chicken fritters",
+    "चिकन पकोड़ा"
+   ],
+   "cat": "snack",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🧆",
+   "unit": "g",
+   "kcal": 270,
+   "p": 16.5,
+   "c": 15,
+   "f": 16,
+   "fib": 1.5,
+   "na": 560,
+   "portions": [
+    {
+     "n": "1 piece (25 g)",
+     "hi": "1 पीस",
+     "g": 25
+    },
+    {
+     "n": "1 plate, 6 pieces (150 g)",
+     "hi": "1 प्लेट",
+     "g": 150
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw meat/fish/egg + batter and fry oil)",
+   "conf": "medium",
+   "note": "boneless chicken in besan batter, deep fried; INDB 590 rejected"
+  },
+  {
+   "slug": "pakora-fish",
+   "name": "Fish Pakora",
+   "hi": "फिश पकौड़ा",
+   "alias": [
+    "fish pakoda",
+    "machhi pakora",
+    "fish fritters",
+    "machli ke pakode",
+    "मछली के पकोड़े"
+   ],
+   "cat": "snack",
+   "region": "Punjab",
+   "diet": "nonveg",
+   "emoji": "🧆",
+   "unit": "g",
+   "kcal": 255,
+   "p": 15.5,
+   "c": 13.4,
+   "f": 15.5,
+   "fib": 1.2,
+   "na": 520,
+   "portions": [
+    {
+     "n": "1 piece (30 g)",
+     "hi": "1 पीस",
+     "g": 30
+    },
+    {
+     "n": "1 plate, 5 pieces (150 g)",
+     "hi": "1 प्लेट",
+     "g": 150
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw meat/fish/egg + batter and fry oil)",
+   "conf": "medium",
+   "note": "fish chunks in spiced besan batter, deep fried; INDB 577 rejected"
+  },
+  {
+   "slug": "pakora-prawn",
+   "name": "Prawn Pakora (Jhinga Pakoda)",
+   "hi": "झींगा पकौड़ा",
+   "alias": [
+    "prawn fritters",
+    "jhinga pakora",
+    "shrimp pakora",
+    "chingri pakora",
+    "झींगा पकोड़ा"
+   ],
+   "cat": "snack",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍤",
+   "unit": "g",
+   "kcal": 260,
+   "p": 14,
+   "c": 15,
+   "f": 16,
+   "fib": 1,
+   "na": 560,
+   "portions": [
+    {
+     "n": "1 piece (25 g)",
+     "hi": "1 पीस",
+     "g": 25
+    },
+    {
+     "n": "1 plate, 6 pieces (150 g)",
+     "hi": "1 प्लेट",
+     "g": 150
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw meat/fish/egg + batter and fry oil)",
+   "conf": "medium",
+   "note": "prawns in besan batter, deep fried"
+  },
+  {
+   "slug": "pakora-moong-dal",
+   "name": "Moong Dal Pakora (Moong Dal Bhajiya)",
+   "hi": "मूंग दाल पकौड़ा",
+   "alias": [
+    "moong dal bhajiya",
+    "moong dal pakoda",
+    "moong ke pakode",
+    "mung dal pakora",
+    "मूंग दाल के पकोड़े"
+   ],
+   "cat": "snack",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🧆",
+   "unit": "g",
+   "kcal": 310,
+   "p": 11,
+   "c": 27.1,
+   "f": 17.5,
+   "fib": 4.5,
+   "na": 440,
+   "portions": [
+    {
+     "n": "1 pakora (20 g)",
+     "hi": "1 पकौड़ा",
+     "g": 20
+    },
+    {
+     "n": "1 plate (100 g)",
+     "hi": "1 प्लेट",
+     "g": 100
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "medium",
+   "note": "coarse soaked moong dal fritters, deep fried"
+  },
+  {
+   "slug": "piyaji",
+   "name": "Piyaji (Odisha Onion Fritter)",
+   "hi": "पियाजी",
+   "alias": [
+    "piaji",
+    "pyaji",
+    "pakudi",
+    "onion pakudi",
+    "odia onion fritters"
+   ],
+   "cat": "snack",
+   "region": "Odisha",
+   "diet": "veg",
+   "emoji": "🧆",
+   "unit": "g",
+   "kcal": 320,
+   "p": 6,
+   "c": 29,
+   "f": 20,
+   "fib": 3.5,
+   "na": 500,
+   "portions": [
+    {
+     "n": "1 piece (15 g)",
+     "hi": "1 पीस",
+     "g": 15
+    },
+    {
+     "n": "1 plate (100 g)",
+     "hi": "1 प्लेट",
+     "g": 100
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "low",
+   "note": "onion, besan and rice flour fritter, deep fried"
+  },
+  {
+   "slug": "nadru-monji",
+   "name": "Nadru Monji (Kashmiri Lotus Stem Fritters)",
+   "hi": "नदरू मोंजी",
+   "alias": [
+    "nadru pakora",
+    "lotus stem pakora",
+    "kamal kakdi pakora",
+    "nadir monji",
+    "lotus root fritters",
+    "कमल ककड़ी पकौड़ा"
+   ],
+   "cat": "snack",
+   "region": "Jammu & Kashmir",
+   "diet": "veg",
+   "emoji": "🧆",
+   "unit": "g",
+   "kcal": 275,
+   "p": 5,
+   "c": 25.5,
+   "f": 17,
+   "fib": 3.5,
+   "na": 450,
+   "portions": [
+    {
+     "n": "1 piece (25 g)",
+     "hi": "1 पीस",
+     "g": 25
+    },
+    {
+     "n": "1 plate (100 g)",
+     "hi": "1 प्लेट",
+     "g": 100
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "medium",
+   "note": "lotus-stem slices in rice flour and besan batter, deep fried; IFCT lotus root 79 kcal raw"
+  },
+  {
+   "slug": "kuttu-pakora",
+   "name": "Kuttu Pakora (Buckwheat Fritters, Vrat)",
+   "hi": "कुट्टू पकौड़ा",
+   "alias": [
+    "kuttu ke pakode",
+    "kuttu pakoda",
+    "buckwheat pakora",
+    "vrat pakora",
+    "navratri pakora",
+    "कुट्टू के पकोड़े"
+   ],
+   "cat": "snack",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🧆",
+   "unit": "g",
+   "kcal": 320,
+   "p": 4.5,
+   "c": 31.6,
+   "f": 19.5,
+   "fib": 3,
+   "na": 380,
+   "portions": [
+    {
+     "n": "1 pakora (20 g)",
+     "hi": "1 पकौड़ा",
+     "g": 20
+    },
+    {
+     "n": "1 plate (100 g)",
+     "hi": "1 प्लेट",
+     "g": 100
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "medium",
+   "note": "kuttu flour, potato, sendha namak, deep fried; eaten in fasts"
+  },
+  {
+   "slug": "singhara-pakora",
+   "name": "Singhare Ke Pakode (Water Chestnut Flour Fritters)",
+   "hi": "सिंघाड़े के पकौड़े",
+   "alias": [
+    "singhara pakora",
+    "water chestnut pakora",
+    "singhada pakoda",
+    "vrat pakoda",
+    "सिंघाड़ा पकौड़ा"
+   ],
+   "cat": "snack",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🧆",
+   "unit": "g",
+   "kcal": 315,
+   "p": 3.5,
+   "c": 32.5,
+   "f": 19,
+   "fib": 3,
+   "na": 380,
+   "portions": [
+    {
+     "n": "1 pakora (20 g)",
+     "hi": "1 पकौड़ा",
+     "g": 20
+    },
+    {
+     "n": "1 plate (100 g)",
+     "hi": "1 प्लेट",
+     "g": 100
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "medium",
+   "note": "singhara atta with potato, sendha namak, deep fried; eaten in fasts"
+  },
+  {
+   "slug": "pakora-corn",
+   "name": "Corn Pakoda (Makai Pakora)",
+   "hi": "मक्का पकौड़ा",
+   "alias": [
+    "makai pakora",
+    "sweet corn fritters",
+    "corn fritters",
+    "corn bhajiya",
+    "भुट्टा पकौड़ा"
+   ],
+   "cat": "snack",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🧆",
+   "unit": "g",
+   "kcal": 280,
+   "p": 5.5,
+   "c": 27.4,
+   "f": 16.5,
+   "fib": 3,
+   "na": 430,
+   "portions": [
+    {
+     "n": "1 pakora (20 g)",
+     "hi": "1 पकौड़ा",
+     "g": 20
+    },
+    {
+     "n": "1 plate (100 g)",
+     "hi": "1 प्लेट",
+     "g": 100
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "medium",
+   "note": "crushed corn kernels in besan batter, deep fried"
+  },
+  {
+   "slug": "palak-patta-chaat",
+   "name": "Palak Patta Chaat (Crispy Spinach Leaf Chaat)",
+   "hi": "पालक पत्ता चाट",
+   "alias": [
+    "palak patta chat",
+    "crispy palak chaat",
+    "spinach leaf chaat",
+    "palak chaat",
+    "पालक चाट"
+   ],
+   "cat": "snack",
+   "region": "Delhi",
+   "diet": "veg",
+   "emoji": "🥗",
+   "unit": "g",
+   "kcal": 205,
+   "p": 5.5,
+   "c": 18.8,
+   "f": 12,
+   "fib": 2.5,
+   "na": 420,
+   "portions": [
+    {
+     "n": "1 plate (150 g)",
+     "hi": "1 प्लेट",
+     "g": 150
+    }
+   ],
+   "src": "Component build-up from IFCT 2017 raw values + typical street-vendor recipe",
+   "conf": "medium",
+   "note": "besan-coated spinach leaves fried crisp, topped with curd and chutneys"
+  },
+  {
+   "slug": "tamatar-chaat",
+   "name": "Tamatar Chaat (Banarasi)",
+   "hi": "टमाटर चाट",
+   "alias": [
+    "banarasi tamatar chaat",
+    "tomato chaat",
+    "tamatar ki chaat",
+    "varanasi tomato chaat",
+    "बनारसी टमाटर चाट"
+   ],
+   "cat": "snack",
+   "region": "Uttar Pradesh",
+   "diet": "veg",
+   "emoji": "🥗",
+   "unit": "g",
+   "kcal": 150,
+   "p": 2.5,
+   "c": 19.3,
+   "f": 7,
+   "fib": 2.5,
+   "na": 380,
+   "portions": [
+    {
+     "n": "1 plate (120 g)",
+     "hi": "1 प्लेट",
+     "g": 120
+    }
+   ],
+   "src": "Component build-up from IFCT 2017 raw values + typical street-vendor recipe",
+   "conf": "low",
+   "note": "mashed tomato and potato fried in ghee/oil with spices, topped with sev; estimate"
+  },
+  {
+   "slug": "parippu-vada",
+   "name": "Parippu Vada (Kerala Dal Vada)",
+   "hi": "परिप्पु वड़ा",
+   "alias": [
+    "paruppu vada",
+    "kerala dal vada",
+    "toor dal vada",
+    "parippuvada",
+    "paripu vada",
+    "परिप्पू वडा"
+   ],
+   "cat": "snack",
+   "region": "Kerala",
+   "diet": "veg",
+   "emoji": "🧆",
+   "unit": "g",
+   "kcal": 320,
+   "p": 11,
+   "c": 26.3,
+   "f": 19,
+   "fib": 6,
+   "na": 440,
+   "portions": [
+    {
+     "n": "1 vada (45 g)",
+     "hi": "1 वड़ा",
+     "g": 45
+    },
+    {
+     "n": "2 vadas (90 g)",
+     "hi": "2 वड़ा",
+     "g": 90
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "medium",
+   "note": "split chana/toor dal vada with ginger, curry leaf, coconut oil fried"
+  },
+  {
+   "slug": "ulli-vada",
+   "name": "Ulli Vada (Kerala Onion Vada)",
+   "hi": "उल्ली वड़ा",
+   "alias": [
+    "onion vada",
+    "ulli vadai",
+    "savala vada",
+    "ullivada",
+    "प्याज वड़ा"
+   ],
+   "cat": "snack",
+   "region": "Kerala",
+   "diet": "veg",
+   "emoji": "🧆",
+   "unit": "g",
+   "kcal": 310,
+   "p": 6.5,
+   "c": 28.3,
+   "f": 19,
+   "fib": 3,
+   "na": 440,
+   "portions": [
+    {
+     "n": "1 vada (40 g)",
+     "hi": "1 वड़ा",
+     "g": 40
+    },
+    {
+     "n": "2 vadas (80 g)",
+     "hi": "2 वड़ा",
+     "g": 80
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "low",
+   "note": "onion and flour vada, deep fried"
+  },
+  {
+   "slug": "rasam-vada",
+   "name": "Rasam Vada",
+   "hi": "रसम वड़ा",
+   "alias": [
+    "rasa vadai",
+    "vada rasam",
+    "rasam vadai",
+    "रसम वडा"
+   ],
+   "cat": "snack",
+   "region": "Tamil Nadu",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 85,
+   "p": 3.5,
+   "c": 8.8,
+   "f": 4,
+   "fib": 1.5,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 bowl, 1 vada in rasam (200 g)",
+     "hi": "1 कटोरी",
+     "g": 200
+    }
+   ],
+   "src": "Component build-up from IFCT 2017 raw values + typical street-vendor recipe",
+   "conf": "low",
+   "note": "1 medu vada (50 g) in 150 ml rasam; per 100 g of the combined bowl"
+  },
+  {
+   "slug": "dahi-vada",
+   "name": "Dahi Vada (Perugu Vada)",
+   "hi": "दही वड़ा",
+   "alias": [
+    "dahi bara",
+    "dahi vade",
+    "perugu vada",
+    "thayir vadai",
+    "curd vada",
+    "दही बड़ा"
+   ],
+   "cat": "snack",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 145,
+   "p": 5.5,
+   "c": 16.1,
+   "f": 6.5,
+   "fib": 1.2,
+   "na": 230,
+   "portions": [
+    {
+     "n": "1 plate, 2 vadas (200 g)",
+     "hi": "1 प्लेट",
+     "g": 200
+    },
+    {
+     "n": "1 vada with dahi (100 g)",
+     "hi": "1 वड़ा",
+     "g": 100
+    }
+   ],
+   "src": "Component build-up from IFCT 2017 raw values + typical street-vendor recipe",
+   "conf": "medium",
+   "note": "fried urad vadas soaked in water, in plain curd with chutneys; ~290 kcal per plate; INDB 668 rejected",
+   "core": true
+  },
+  {
+   "slug": "dahi-bhalla",
+   "name": "Dahi Bhalla (North Indian)",
+   "hi": "दही भल्ला",
+   "alias": [
+    "dahi bhalle",
+    "bhalla",
+    "dahi bhalla chaat",
+    "dahi bhale",
+    "दही भल्ले"
+   ],
+   "cat": "snack",
+   "region": "Delhi",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 155,
+   "p": 5.5,
+   "c": 18.6,
+   "f": 6.5,
+   "fib": 1.3,
+   "na": 260,
+   "portions": [
+    {
+     "n": "1 plate, 2 bhalla (200 g)",
+     "hi": "1 प्लेट",
+     "g": 200
+    },
+    {
+     "n": "1 bhalla with dahi (100 g)",
+     "hi": "1 पीस",
+     "g": 100
+    }
+   ],
+   "src": "Component build-up from IFCT 2017 raw values + typical street-vendor recipe",
+   "conf": "medium",
+   "note": "soft urad-moong bhalle in sweetened curd, tamarind and mint chutney, roasted jeera"
+  },
+  {
+   "slug": "pesara-garelu",
+   "name": "Pesara Garelu (Moong Dal Vada)",
+   "hi": "पेसरा गारेलु",
+   "alias": [
+    "pesara garelu",
+    "moong dal vada",
+    "green gram vada",
+    "mung vada",
+    "moong ke vade",
+    "मूंग दाल वड़ा"
+   ],
+   "cat": "snack",
+   "region": "Andhra Pradesh",
+   "diet": "veg",
+   "emoji": "🧆",
+   "unit": "g",
+   "kcal": 300,
+   "p": 11,
+   "c": 25.8,
+   "f": 17,
+   "fib": 4,
+   "na": 420,
+   "portions": [
+    {
+     "n": "1 vada (40 g)",
+     "hi": "1 वड़ा",
+     "g": 40
+    },
+    {
+     "n": "3 vadas (120 g)",
+     "hi": "3 वड़ा",
+     "g": 120
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "medium",
+   "note": "skinned green gram batter with green chilli and ginger, deep fried"
+  },
+  {
+   "slug": "vada-pav",
+   "name": "Vada Pav",
+   "hi": "वड़ा पाव",
+   "alias": [
+    "wada pav",
+    "vada pao",
+    "batata vada pav",
+    "mumbai vada pav",
+    "bombay burger",
+    "वडा पाव"
+   ],
+   "cat": "snack",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🍔",
+   "unit": "g",
+   "kcal": 245,
+   "p": 6,
+   "c": 32.8,
+   "f": 10,
+   "fib": 3,
+   "na": 520,
+   "portions": [
+    {
+     "n": "1 vada pav (130 g)",
+     "hi": "1 वड़ा",
+     "g": 130
+    },
+    {
+     "n": "2 vada pav (260 g)",
+     "hi": "2 वड़ा",
+     "g": 260
+    }
+   ],
+   "src": "Component build-up from IFCT 2017 raw values + typical street-vendor recipe",
+   "conf": "medium",
+   "note": "vada 60 g + pav 45 g + dry garlic chutney and green chutney, ~320 kcal each",
+   "core": true
+  },
+  {
+   "slug": "batata-vada",
+   "name": "Batata Vada (Maharashtrian Potato Vada)",
+   "hi": "बटाटा वड़ा",
+   "alias": [
+    "batata wada",
+    "aloo vada",
+    "potato vada",
+    "batata vade",
+    "आलू वड़ा"
+   ],
+   "cat": "snack",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🧆",
+   "unit": "g",
+   "kcal": 265,
+   "p": 4.5,
+   "c": 28,
+   "f": 15,
+   "fib": 3,
+   "na": 450,
+   "portions": [
+    {
+     "n": "1 vada (60 g)",
+     "hi": "1 वड़ा",
+     "g": 60
+    },
+    {
+     "n": "2 vadas (120 g)",
+     "hi": "2 वड़ा",
+     "g": 120
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "medium",
+   "note": "spiced mashed potato ball in besan batter, deep fried; ~160 kcal each"
+  },
+  {
+   "slug": "aloo-bonda",
+   "name": "Aloo Bonda (Potato Bonda)",
+   "hi": "आलू बोंडा",
+   "alias": [
+    "batata bonda",
+    "potato bonda",
+    "urulai kizhangu bonda",
+    "alu bonda",
+    "आलू बोंडे"
+   ],
+   "cat": "snack",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🧆",
+   "unit": "g",
+   "kcal": 270,
+   "p": 4.5,
+   "c": 28.1,
+   "f": 15.5,
+   "fib": 3,
+   "na": 450,
+   "portions": [
+    {
+     "n": "1 bonda (60 g)",
+     "hi": "1 बोंडा",
+     "g": 60
+    },
+    {
+     "n": "2 bondas (120 g)",
+     "hi": "2 बोंडा",
+     "g": 120
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "medium",
+   "note": "spiced potato ball in besan batter, deep fried; INDB 633 rejected (over-absorbed oil)"
+  },
+  {
+   "slug": "egg-bonda",
+   "name": "Egg Bonda",
+   "hi": "अंडा बोंडा",
+   "alias": [
+    "muttai bonda",
+    "egg bajji",
+    "anda bonda",
+    "egg bhajji",
+    "muttai bajji",
+    "अंडे का बोंडा"
+   ],
+   "cat": "snack",
+   "region": "South India",
+   "diet": "egg",
+   "emoji": "🧆",
+   "unit": "g",
+   "kcal": 245,
+   "p": 10,
+   "c": 16.4,
+   "f": 15.5,
+   "fib": 1.5,
+   "na": 430,
+   "portions": [
+    {
+     "n": "1 bonda, 1 egg (80 g)",
+     "hi": "1 बोंडा",
+     "g": 80
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw meat/fish/egg + batter and fry oil)",
+   "conf": "medium",
+   "note": "boiled egg coated in besan batter, deep fried"
+  },
+  {
+   "slug": "kanji-vada",
+   "name": "Kanji Vada",
+   "hi": "कांजी वड़ा",
+   "alias": [
+    "kanji bara",
+    "kanji vade",
+    "moong dal kanji vada",
+    "rajasthani kanji vada",
+    "कांजी बड़ा"
+   ],
+   "cat": "snack",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 75,
+   "p": 2.5,
+   "c": 8.4,
+   "f": 3.5,
+   "fib": 1,
+   "na": 230,
+   "portions": [
+    {
+     "n": "1 glass, 6 vadas in kanji (200 g)",
+     "hi": "1 गिलास",
+     "g": 200
+    },
+    {
+     "n": "1 small bowl (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    }
+   ],
+   "src": "Component build-up from IFCT 2017 raw values + typical street-vendor recipe",
+   "conf": "low",
+   "note": "6 small fried moong vadas soaked in spiced mustard-water kanji; mostly water"
+  },
+  {
+   "slug": "pani-puri",
+   "name": "Pani Puri (Golgappa)",
+   "hi": "पानी पूरी",
+   "alias": [
+    "golgappa",
+    "gol gappa",
+    "puchka",
+    "gupchup",
+    "pani ke patashe",
+    "phuchka",
+    "पानीपूरी",
+    "गोलगप्पे"
+   ],
+   "cat": "snack",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🧆",
+   "unit": "g",
+   "kcal": 130,
+   "p": 2.5,
+   "c": 18.8,
+   "f": 5,
+   "fib": 1.5,
+   "na": 380,
+   "portions": [
+    {
+     "n": "1 piece with filling and pani (30 g)",
+     "hi": "1 पीस",
+     "g": 30
+    },
+    {
+     "n": "1 plate, 6 pieces (180 g)",
+     "hi": "1 प्लेट",
+     "g": 180
+    }
+   ],
+   "src": "Component build-up from IFCT 2017 raw values + typical street-vendor recipe",
+   "conf": "medium",
+   "note": "6 puris with potato-chana filling and spiced tamarind-mint water; ~235 kcal per plate; mostly water",
+   "core": true
+  },
+  {
+   "slug": "golgappa-puri-shells",
+   "name": "Golgappa Puri (Empty Shells)",
+   "hi": "गोलगप्पा पूरी",
+   "alias": [
+    "pani puri shells",
+    "golgappe ki puri",
+    "puchka shells",
+    "suji puri hollow",
+    "पानी पूरी की पूरी"
+   ],
+   "cat": "snack",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🧆",
+   "unit": "g",
+   "kcal": 470,
+   "p": 7,
+   "c": 54,
+   "f": 25,
+   "fib": 2.5,
+   "na": 300,
+   "portions": [
+    {
+     "n": "1 puri (6 g)",
+     "hi": "1 पूरी",
+     "g": 6
+    },
+    {
+     "n": "6 puris (36 g)",
+     "hi": "6 पूरी",
+     "g": 36
+    },
+    {
+     "n": "1 handful, 10 puris (60 g)",
+     "hi": "1 मुट्ठी",
+     "g": 60
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "medium",
+   "note": "hollow deep-fried suji-atta puffs, plain; 6 puris ~170 kcal"
+  },
+  {
+   "slug": "gupchup-odisha",
+   "name": "Gupchup (Odisha Pani Puri)",
+   "hi": "गुपचुप",
+   "alias": [
+    "gup chup",
+    "odisha pani puri",
+    "gupchup puri",
+    "cuttack gupchup",
+    "गुपचुप पानी पूरी"
+   ],
+   "cat": "snack",
+   "region": "Odisha",
+   "diet": "veg",
+   "emoji": "🧆",
+   "unit": "g",
+   "kcal": 125,
+   "p": 2.8,
+   "c": 18.3,
+   "f": 4.5,
+   "fib": 2,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 plate, 6 pieces (170 g)",
+     "hi": "1 प्लेट",
+     "g": 170
+    }
+   ],
+   "src": "Component build-up from IFCT 2017 raw values + typical street-vendor recipe",
+   "conf": "low",
+   "note": "puri with potato-peas-chana filling and hing-jeera water"
+  },
+  {
+   "slug": "dahi-puri",
+   "name": "Dahi Puri",
+   "hi": "दही पूरी",
+   "alias": [
+    "dahi batata puri",
+    "dahi puri chaat",
+    "dahi puri plate",
+    "दही बटाटा पूरी"
+   ],
+   "cat": "snack",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🧆",
+   "unit": "g",
+   "kcal": 150,
+   "p": 3.5,
+   "c": 21.6,
+   "f": 5.5,
+   "fib": 1.5,
+   "na": 310,
+   "portions": [
+    {
+     "n": "1 plate, 6 pieces (150 g)",
+     "hi": "1 प्लेट",
+     "g": 150
+    }
+   ],
+   "src": "Component build-up from IFCT 2017 raw values + typical street-vendor recipe",
+   "conf": "medium",
+   "note": "puris with potato, curd, chutneys and sev"
+  },
+  {
+   "slug": "sev-puri",
+   "name": "Sev Puri",
+   "hi": "सेव पूरी",
+   "alias": [
+    "sev poori",
+    "sev puri chaat",
+    "sevpuri",
+    "सेवपूरी"
+   ],
+   "cat": "snack",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🍘",
+   "unit": "g",
+   "kcal": 225,
+   "p": 4.5,
+   "c": 23.6,
+   "f": 12.5,
+   "fib": 2.5,
+   "na": 430,
+   "portions": [
+    {
+     "n": "1 plate, 6 pieces (140 g)",
+     "hi": "1 प्लेट",
+     "g": 140
+    },
+    {
+     "n": "1 piece (23 g)",
+     "hi": "1 पीस",
+     "g": 23
+    }
+   ],
+   "src": "Component build-up from IFCT 2017 raw values + typical street-vendor recipe",
+   "conf": "medium",
+   "note": "papdi with potato, onion, chutneys and thick sev; ~315 kcal per plate"
+  },
+  {
+   "slug": "bhel-puri",
+   "name": "Bhel Puri",
+   "hi": "भेल पूरी",
+   "alias": [
+    "bhel",
+    "bhelpuri",
+    "mumbai bhel",
+    "chaat bhel",
+    "भेलपूरी"
+   ],
+   "cat": "snack",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 185,
+   "p": 3.5,
+   "c": 27,
+   "f": 7,
+   "fib": 2.5,
+   "na": 420,
+   "portions": [
+    {
+     "n": "1 plate (150 g)",
+     "hi": "1 प्लेट",
+     "g": 150
+    },
+    {
+     "n": "1 small bowl (100 g)",
+     "hi": "1 कटोरी",
+     "g": 100
+    }
+   ],
+   "src": "Component build-up from IFCT 2017 raw values + typical street-vendor recipe",
+   "conf": "medium",
+   "note": "murmura, sev, crushed puri, potato, onion, tamarind and green chutney; ~280 kcal per plate; INDB 510 rejected",
+   "core": true
+  },
+  {
+   "slug": "sukha-bhel",
+   "name": "Sukha Bhel (Dry Bhel)",
+   "hi": "सूखा भेल",
+   "alias": [
+    "dry bhel",
+    "sukhi bhel",
+    "sukha bhelpuri",
+    "dry bhel puri",
+    "सूखी भेल"
+   ],
+   "cat": "snack",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🍘",
+   "unit": "g",
+   "kcal": 340,
+   "p": 7,
+   "c": 42,
+   "f": 16,
+   "fib": 3.5,
+   "na": 550,
+   "portions": [
+    {
+     "n": "1 plate (80 g)",
+     "hi": "1 प्लेट",
+     "g": 80
+    },
+    {
+     "n": "1 handful (30 g)",
+     "hi": "1 मुट्ठी",
+     "g": 30
+    }
+   ],
+   "src": "Component build-up from IFCT 2017 raw values + typical street-vendor recipe",
+   "conf": "medium",
+   "note": "murmura, sev, peanuts, papdi, spices, little chutney, so denser than wet bhel"
+  },
+  {
+   "slug": "papdi-chaat",
+   "name": "Papdi Chaat",
+   "hi": "पापड़ी चाट",
+   "alias": [
+    "papri chaat",
+    "papdi chat",
+    "papri chat",
+    "dahi papdi",
+    "पापड़ी चाट"
+   ],
+   "cat": "snack",
+   "region": "Delhi",
+   "diet": "veg",
+   "emoji": "🍘",
+   "unit": "g",
+   "kcal": 195,
+   "p": 4.5,
+   "c": 25.1,
+   "f": 8.5,
+   "fib": 2.5,
+   "na": 420,
+   "portions": [
+    {
+     "n": "1 plate (150 g)",
+     "hi": "1 प्लेट",
+     "g": 150
+    }
+   ],
+   "src": "Component build-up from IFCT 2017 raw values + typical street-vendor recipe",
+   "conf": "medium",
+   "note": "fried papdi, boiled potato and chana, curd, tamarind and mint chutney, sev"
+  },
+  {
+   "slug": "dahi-papdi-chaat",
+   "name": "Dahi Papdi Chaat",
+   "hi": "दही पापड़ी चाट",
+   "alias": [
+    "dahi papri chaat",
+    "dahi papdi chat",
+    "curd papdi chaat",
+    "दही पापड़ी"
+   ],
+   "cat": "snack",
+   "region": "Delhi",
+   "diet": "veg",
+   "emoji": "🍘",
+   "unit": "g",
+   "kcal": 175,
+   "p": 4.5,
+   "c": 21.3,
+   "f": 8,
+   "fib": 1.5,
+   "na": 380,
+   "portions": [
+    {
+     "n": "1 plate (180 g)",
+     "hi": "1 प्लेट",
+     "g": 180
+    }
+   ],
+   "src": "Component build-up from IFCT 2017 raw values + typical street-vendor recipe",
+   "conf": "medium",
+   "note": "papdi with extra sweetened curd, potato, chutneys"
+  },
+  {
+   "slug": "papdi-plain",
+   "name": "Papdi (Fried Chaat Papdi)",
+   "hi": "पापड़ी",
+   "alias": [
+    "chaat papdi",
+    "papri",
+    "fried papdi",
+    "crispy papdi",
+    "चाट पापड़ी"
+   ],
+   "cat": "snack",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🍘",
+   "unit": "g",
+   "kcal": 480,
+   "p": 7,
+   "c": 54,
+   "f": 26,
+   "fib": 2.5,
+   "na": 420,
+   "portions": [
+    {
+     "n": "5 pieces (20 g)",
+     "hi": "5 पीस",
+     "g": 20
+    },
+    {
+     "n": "1 handful (30 g)",
+     "hi": "1 मुट्ठी",
+     "g": 30
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "medium",
+   "note": "maida-suji flat discs, deep fried; ~96 kcal per 20 g; INDB 709 rejected"
+  },
+  {
+   "slug": "aloo-tikki-chaat",
+   "name": "Aloo Tikki Chaat",
+   "hi": "आलू टिक्की चाट",
+   "alias": [
+    "aloo tikki chat",
+    "aloo tikiya chaat",
+    "potato tikki chaat",
+    "tikki chaat",
+    "आलू टिक्की चाट"
+   ],
+   "cat": "snack",
+   "region": "Delhi",
+   "diet": "veg",
+   "emoji": "🥔",
+   "unit": "g",
+   "kcal": 190,
+   "p": 4,
+   "c": 24.4,
+   "f": 8.5,
+   "fib": 3,
+   "na": 430,
+   "portions": [
+    {
+     "n": "1 plate, 2 tikki (200 g)",
+     "hi": "1 प्लेट",
+     "g": 200
+    }
+   ],
+   "src": "Component build-up from IFCT 2017 raw values + typical street-vendor recipe",
+   "conf": "medium",
+   "note": "2 shallow-fried tikki with curd, chutneys, chole and sev; ~380 kcal per plate"
+  },
+  {
+   "slug": "aloo-tikki",
+   "name": "Aloo Tikki (Shallow Fried Potato Patty)",
+   "hi": "आलू टिक्की",
+   "alias": [
+    "aloo tikiya",
+    "potato tikki",
+    "alu tikki",
+    "aloo patty",
+    "आलू की टिक्की"
+   ],
+   "cat": "snack",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🥔",
+   "unit": "g",
+   "kcal": 195,
+   "p": 3,
+   "c": 26.6,
+   "f": 8.5,
+   "fib": 3,
+   "na": 400,
+   "portions": [
+    {
+     "n": "1 tikki (60 g)",
+     "hi": "1 टिक्की",
+     "g": 60
+    },
+    {
+     "n": "2 tikki (120 g)",
+     "hi": "2 टिक्की",
+     "g": 120
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + shallow-fry oil uptake)",
+   "conf": "medium",
+   "note": "boiled potato and bread-crumb patty shallow fried on tawa with ~1 tsp oil per tikki"
+  },
+  {
+   "slug": "ragda-pattice",
+   "name": "Ragda Pattice",
+   "hi": "रगड़ा पैटीस",
+   "alias": [
+    "ragda patties",
+    "ragda pattis",
+    "ragda patty",
+    "ragda pattice chaat",
+    "रगडा पॅटीस"
+   ],
+   "cat": "snack",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 145,
+   "p": 5,
+   "c": 18.9,
+   "f": 5.5,
+   "fib": 4.5,
+   "na": 380,
+   "portions": [
+    {
+     "n": "1 plate, 2 pattice (280 g)",
+     "hi": "1 प्लेट",
+     "g": 280
+    }
+   ],
+   "src": "Component build-up from IFCT 2017 raw values + typical street-vendor recipe",
+   "conf": "medium",
+   "note": "2 potato pattice with white-pea ragda, chutneys, onion, sev; ~405 kcal per plate"
+  },
+  {
+   "slug": "ragda-puri",
+   "name": "Ragda Puri",
+   "hi": "रगड़ा पूरी",
+   "alias": [
+    "ragda poori",
+    "ragda puri chaat",
+    "रगडा पूरी"
+   ],
+   "cat": "snack",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 130,
+   "p": 4.5,
+   "c": 16.8,
+   "f": 5,
+   "fib": 3.5,
+   "na": 360,
+   "portions": [
+    {
+     "n": "1 plate, 6 pieces (220 g)",
+     "hi": "1 प्लेट",
+     "g": 220
+    }
+   ],
+   "src": "Component build-up from IFCT 2017 raw values + typical street-vendor recipe",
+   "conf": "medium",
+   "note": "puris filled with white-pea ragda, chutneys, onion and sev"
+  },
+  {
+   "slug": "tikki-chole",
+   "name": "Tikki Chole (Chole Tikki)",
+   "hi": "टिक्की छोले",
+   "alias": [
+    "chole tikki",
+    "aloo tikki chole",
+    "tikki chana",
+    "छोले टिक्की"
+   ],
+   "cat": "snack",
+   "region": "Punjab",
+   "diet": "veg",
+   "emoji": "🥔",
+   "unit": "g",
+   "kcal": 165,
+   "p": 6,
+   "c": 19.5,
+   "f": 7,
+   "fib": 5.5,
+   "na": 420,
+   "portions": [
+    {
+     "n": "1 plate, 2 tikki with chole (250 g)",
+     "hi": "1 प्लेट",
+     "g": 250
+    }
+   ],
+   "src": "Component build-up from IFCT 2017 raw values + typical street-vendor recipe",
+   "conf": "medium",
+   "note": "2 shallow-fried aloo tikki over chole with chutneys and onion; ~410 kcal per plate"
+  },
+  {
+   "slug": "chana-chaat",
+   "name": "Chana Chaat (Boiled Chickpea Chaat)",
+   "hi": "चना चाट",
+   "alias": [
+    "chickpea chaat",
+    "chole chaat",
+    "kabuli chana chaat",
+    "boiled chana chaat",
+    "छोले चाट"
+   ],
+   "cat": "snack",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥗",
+   "unit": "g",
+   "kcal": 130,
+   "p": 6.5,
+   "c": 20.4,
+   "f": 2.5,
+   "fib": 6,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 bowl (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small bowl (100 g)",
+     "hi": "1 कटोरी",
+     "g": 100
+    }
+   ],
+   "src": "Component build-up from IFCT 2017 raw values + typical street-vendor recipe",
+   "conf": "medium",
+   "note": "boiled kabuli chana with onion, tomato, lemon, chaat masala; no oil"
+  },
+  {
+   "slug": "kala-chana-chaat",
+   "name": "Kala Chana Chaat",
+   "hi": "काला चना चाट",
+   "alias": [
+    "black chana chaat",
+    "kala chana salad chaat",
+    "boiled black chickpea chaat",
+    "काले चने की चाट"
+   ],
+   "cat": "snack",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥗",
+   "unit": "g",
+   "kcal": 130,
+   "p": 7,
+   "c": 19.9,
+   "f": 2.5,
+   "fib": 7,
+   "na": 320,
+   "portions": [
+    {
+     "n": "1 bowl (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small bowl (100 g)",
+     "hi": "1 कटोरी",
+     "g": 100
+    }
+   ],
+   "src": "Component build-up from IFCT 2017 raw values + typical street-vendor recipe",
+   "conf": "medium",
+   "note": "boiled black chana with onion, tomato, green chilli, lemon, chaat masala; no oil"
+  },
+  {
+   "slug": "sprouts-chaat",
+   "name": "Sprouts Chaat (Moong)",
+   "hi": "स्प्राउट्स चाट",
+   "alias": [
+    "sprout chaat",
+    "moong sprouts chaat",
+    "sprouted moong chaat",
+    "ankurit chaat",
+    "अंकुरित चाट"
+   ],
+   "cat": "snack",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥗",
+   "unit": "g",
+   "kcal": 95,
+   "p": 6,
+   "c": 15.1,
+   "f": 1.2,
+   "fib": 3,
+   "na": 260,
+   "portions": [
+    {
+     "n": "1 bowl (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small bowl (100 g)",
+     "hi": "1 कटोरी",
+     "g": 100
+    }
+   ],
+   "src": "Component build-up from IFCT 2017 raw values + typical street-vendor recipe",
+   "conf": "medium",
+   "note": "lightly steamed moong sprouts with onion, tomato, cucumber, lemon; no oil"
+  },
+  {
+   "slug": "peanut-chaat",
+   "name": "Peanut Chaat (Moongfali Chaat)",
+   "hi": "मूंगफली चाट",
+   "alias": [
+    "moongfali chaat",
+    "groundnut chaat",
+    "masala peanut chaat",
+    "peanut masala",
+    "मूंगफली मसाला"
+   ],
+   "cat": "snack",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥗",
+   "unit": "g",
+   "kcal": 250,
+   "p": 11,
+   "c": 8.8,
+   "f": 19,
+   "fib": 3.5,
+   "na": 260,
+   "portions": [
+    {
+     "n": "1 plate (80 g)",
+     "hi": "1 प्लेट",
+     "g": 80
+    }
+   ],
+   "src": "Component build-up from IFCT 2017 raw values + typical street-vendor recipe",
+   "conf": "medium",
+   "note": "roasted peanuts about 40 % with onion, tomato, lemon, masala"
+  },
+  {
+   "slug": "corn-chaat",
+   "name": "Corn Chaat (Masala Sweet Corn Cup)",
+   "hi": "कॉर्न चाट",
+   "alias": [
+    "sweet corn chaat",
+    "masala corn",
+    "corn cup",
+    "masala sweet corn",
+    "भुट्टा चाट",
+    "स्वीट कॉर्न चाट"
+   ],
+   "cat": "snack",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🌽",
+   "unit": "g",
+   "kcal": 125,
+   "p": 3.5,
+   "c": 19.9,
+   "f": 3.5,
+   "fib": 2.5,
+   "na": 220,
+   "portions": [
+    {
+     "n": "1 cup (150 g)",
+     "hi": "1 कप",
+     "g": 150
+    }
+   ],
+   "src": "Component build-up from IFCT 2017 raw values + typical street-vendor recipe",
+   "conf": "medium",
+   "note": "boiled sweet corn kernels with a little butter, lemon, chaat masala (IFCT sweet corn 97 kcal raw)"
+  },
+  {
+   "slug": "butter-masala-corn",
+   "name": "Butter Masala Corn (Mall Style)",
+   "hi": "बटर मसाला कॉर्न",
+   "alias": [
+    "butter corn",
+    "american corn",
+    "cheese butter corn",
+    "buttered sweet corn",
+    "बटर कॉर्न"
+   ],
+   "cat": "snack",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🌽",
+   "unit": "g",
+   "kcal": 145,
+   "p": 3.5,
+   "c": 20.4,
+   "f": 5.5,
+   "fib": 2.5,
+   "na": 260,
+   "portions": [
+    {
+     "n": "1 cup (150 g)",
+     "hi": "1 कप",
+     "g": 150
+    },
+    {
+     "n": "1 small cup (100 g)",
+     "hi": "1 कप",
+     "g": 100
+    }
+   ],
+   "src": "Component build-up from IFCT 2017 raw values + typical street-vendor recipe",
+   "conf": "medium",
+   "note": "boiled sweet corn with 1-2 tsp butter and seasoning per cup"
+  },
+  {
+   "slug": "fruit-chaat",
+   "name": "Fruit Chaat",
+   "hi": "फ्रूट चाट",
+   "alias": [
+    "fruit chat",
+    "mixed fruit chaat",
+    "phal chaat",
+    "fal chaat",
+    "फल चाट"
+   ],
+   "cat": "snack",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥗",
+   "unit": "g",
+   "kcal": 65,
+   "p": 0.8,
+   "c": 14.8,
+   "f": 0.3,
+   "fib": 2,
+   "na": 90,
+   "portions": [
+    {
+     "n": "1 bowl (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small bowl (100 g)",
+     "hi": "1 कटोरी",
+     "g": 100
+    }
+   ],
+   "src": "Component build-up from IFCT 2017 raw values + typical street-vendor recipe",
+   "conf": "medium",
+   "note": "apple, banana, papaya, pomegranate, guava with chaat masala and lemon; no sugar or chutney added"
+  },
+  {
+   "slug": "shakarkandi-chaat",
+   "name": "Shakarkandi Chaat (Sweet Potato Chaat)",
+   "hi": "शकरकंदी चाट",
+   "alias": [
+    "sweet potato chaat",
+    "shakarkand chaat",
+    "shakkarkandi chaat",
+    "roasted sweet potato chaat",
+    "शकरकंद चाट"
+   ],
+   "cat": "snack",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🍠",
+   "unit": "g",
+   "kcal": 112,
+   "p": 1.5,
+   "c": 24.7,
+   "f": 0.8,
+   "fib": 3.8,
+   "na": 180,
+   "portions": [
+    {
+     "n": "1 plate (150 g)",
+     "hi": "1 प्लेट",
+     "g": 150
+    },
+    {
+     "n": "1 small bowl (100 g)",
+     "hi": "1 कटोरी",
+     "g": 100
+    }
+   ],
+   "src": "Component build-up from IFCT 2017 raw values + typical street-vendor recipe",
+   "conf": "medium",
+   "note": "roasted/boiled sweet potato with lemon, rock salt, chaat masala (IFCT sweet potato 108 kcal); fasting favourite"
+  },
+  {
+   "slug": "aloo-chaat-fried",
+   "name": "Aloo Chaat (Fried, Delhi Style)",
+   "hi": "आलू चाट (तली हुई)",
+   "alias": [
+    "fried aloo chaat",
+    "delhi aloo chaat",
+    "alu chaat",
+    "aloo ki chaat",
+    "आलू की चाट"
+   ],
+   "cat": "snack",
+   "region": "Delhi",
+   "diet": "veg",
+   "emoji": "🥔",
+   "unit": "g",
+   "kcal": 190,
+   "p": 2.5,
+   "c": 23.6,
+   "f": 9.5,
+   "fib": 2,
+   "na": 430,
+   "portions": [
+    {
+     "n": "1 plate (120 g)",
+     "hi": "1 प्लेट",
+     "g": 120
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + shallow-fry oil uptake)",
+   "conf": "medium",
+   "note": "fried potato cubes with tamarind chutney, chaat masala, lemon; ~230 kcal per plate"
+  },
+  {
+   "slug": "aloo-chaat-boiled",
+   "name": "Aloo Chaat (Boiled)",
+   "hi": "आलू चाट (उबले)",
+   "alias": [
+    "boiled potato chaat",
+    "aloo chaat boiled",
+    "healthy aloo chaat",
+    "उबले आलू की चाट"
+   ],
+   "cat": "snack",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥔",
+   "unit": "g",
+   "kcal": 100,
+   "p": 2,
+   "c": 19.6,
+   "f": 1.5,
+   "fib": 2,
+   "na": 320,
+   "portions": [
+    {
+     "n": "1 plate (150 g)",
+     "hi": "1 प्लेट",
+     "g": 150
+    },
+    {
+     "n": "1 small bowl (100 g)",
+     "hi": "1 कटोरी",
+     "g": 100
+    }
+   ],
+   "src": "Component build-up from IFCT 2017 raw values + typical street-vendor recipe",
+   "conf": "medium",
+   "note": "boiled potato cubes with tamarind-date chutney, lemon, chaat masala, no oil"
+  },
+  {
+   "slug": "churmur-kolkata",
+   "name": "Churmur (Kolkata Crushed Puchka Chaat)",
+   "hi": "चुरमुर",
+   "alias": [
+    "churmur",
+    "crushed puchka",
+    "puchka churmur",
+    "kolkata churmur"
+   ],
+   "cat": "snack",
+   "region": "West Bengal",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 150,
+   "p": 3,
+   "c": 22.1,
+   "f": 5.5,
+   "fib": 2.5,
+   "na": 380,
+   "portions": [
+    {
+     "n": "1 plate (120 g)",
+     "hi": "1 प्लेट",
+     "g": 120
+    }
+   ],
+   "src": "Component build-up from IFCT 2017 raw values + typical street-vendor recipe",
+   "conf": "low",
+   "note": "crushed puchka shells with ghugni, potato, tamarind water, onion, chutney"
+  },
+  {
+   "slug": "alu-kabli",
+   "name": "Alu Kabli (Kolkata Street Chaat)",
+   "hi": "आलू काबुली",
+   "alias": [
+    "alu kabli chaat",
+    "aloo kabli",
+    "kabli chaat",
+    "alukabli",
+    "आलू काबली"
+   ],
+   "cat": "snack",
+   "region": "West Bengal",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 125,
+   "p": 4,
+   "c": 19.4,
+   "f": 3.5,
+   "fib": 4,
+   "na": 340,
+   "portions": [
+    {
+     "n": "1 plate (150 g)",
+     "hi": "1 प्लेट",
+     "g": 150
+    }
+   ],
+   "src": "Component build-up from IFCT 2017 raw values + typical street-vendor recipe",
+   "conf": "low",
+   "note": "boiled potato and kabuli chana with chutneys and spices"
+  },
+  {
+   "slug": "matar-chaat-kanpur",
+   "name": "Matar Chaat (Kanpur Dried Pea Chaat)",
+   "hi": "मटर चाट",
+   "alias": [
+    "matar chaat",
+    "dried peas chaat",
+    "kanpuri matar chaat",
+    "safed matar chaat",
+    "सफेद मटर की चाट"
+   ],
+   "cat": "snack",
+   "region": "Uttar Pradesh",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 140,
+   "p": 6,
+   "c": 17.8,
+   "f": 5,
+   "fib": 5,
+   "na": 380,
+   "portions": [
+    {
+     "n": "1 plate (150 g)",
+     "hi": "1 प्लेट",
+     "g": 150
+    }
+   ],
+   "src": "Component build-up from IFCT 2017 raw values + typical street-vendor recipe",
+   "conf": "low",
+   "note": "dried white peas with ghee tempering, chutneys, onion, lemon"
+  },
+  {
+   "slug": "tokri-chaat",
+   "name": "Tokri Chaat (Basket Chaat)",
+   "hi": "टोकरी चाट",
+   "alias": [
+    "basket chaat",
+    "aloo tokri chaat",
+    "tokri chat",
+    "potato basket chaat",
+    "आलू टोकरी चाट"
+   ],
+   "cat": "snack",
+   "region": "Uttar Pradesh",
+   "diet": "veg",
+   "emoji": "🥗",
+   "unit": "g",
+   "kcal": 230,
+   "p": 3.5,
+   "c": 24.8,
+   "f": 13,
+   "fib": 2.5,
+   "na": 400,
+   "portions": [
+    {
+     "n": "1 basket (150 g)",
+     "hi": "1 पीस",
+     "g": 150
+    }
+   ],
+   "src": "Component build-up from IFCT 2017 raw values + typical street-vendor recipe",
+   "conf": "medium",
+   "note": "fried grated-potato basket filled with chole, curd, chutneys, sev; ~345 kcal each"
+  },
+  {
+   "slug": "kachalu-chaat",
+   "name": "Kachalu Chaat (Colocasia Chaat)",
+   "hi": "कचालू चाट",
+   "alias": [
+    "kachalu",
+    "arbi chaat",
+    "colocasia chaat",
+    "kachaloo chaat",
+    "अरबी चाट"
+   ],
+   "cat": "snack",
+   "region": "Delhi",
+   "diet": "veg",
+   "emoji": "🥗",
+   "unit": "g",
+   "kcal": 120,
+   "p": 2.5,
+   "c": 21.9,
+   "f": 2.5,
+   "fib": 3.2,
+   "na": 350,
+   "portions": [
+    {
+     "n": "1 plate (120 g)",
+     "hi": "1 प्लेट",
+     "g": 120
+    }
+   ],
+   "src": "Component build-up from IFCT 2017 raw values + typical street-vendor recipe",
+   "conf": "low",
+   "note": "boiled colocasia cubes with tamarind, lemon, chaat masala (IFCT colocasia 89 kcal)"
+  },
+  {
+   "slug": "garadu-chaat",
+   "name": "Garadu Chaat (Indori Fried Yam)",
+   "hi": "गराडू चाट",
+   "alias": [
+    "garadu",
+    "garadu indori",
+    "indore garadu",
+    "fried yam chaat",
+    "गराडू"
+   ],
+   "cat": "snack",
+   "region": "Madhya Pradesh",
+   "diet": "veg",
+   "emoji": "🥗",
+   "unit": "g",
+   "kcal": 245,
+   "p": 2.5,
+   "c": 27.3,
+   "f": 14,
+   "fib": 3.5,
+   "na": 420,
+   "portions": [
+    {
+     "n": "1 plate (100 g)",
+     "hi": "1 प्लेट",
+     "g": 100
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + shallow-fry oil uptake)",
+   "conf": "low",
+   "note": "deep-fried purple yam cubes tossed in lemon and spice mix; high fat from frying"
+  },
+  {
+   "slug": "masala-puri-bangalore",
+   "name": "Masala Puri (Bangalore Chaat)",
+   "hi": "मसाला पूरी",
+   "alias": [
+    "masala poori",
+    "bangalore masala puri",
+    "masale puri",
+    "crushed puri chaat"
+   ],
+   "cat": "snack",
+   "region": "Karnataka",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 165,
+   "p": 4.5,
+   "c": 21,
+   "f": 7,
+   "fib": 3,
+   "na": 400,
+   "portions": [
+    {
+     "n": "1 plate (200 g)",
+     "hi": "1 प्लेट",
+     "g": 200
+    }
+   ],
+   "src": "Component build-up from IFCT 2017 raw values + typical street-vendor recipe",
+   "conf": "low",
+   "note": "crushed puris with spiced white peas curry, onion, tomato, sev, coriander"
+  },
+  {
+   "slug": "pav-bhaji-plate",
+   "name": "Pav Bhaji (Bhaji with Pav)",
+   "hi": "पाव भाजी",
+   "alias": [
+    "pav bhaji",
+    "pao bhaji",
+    "pau bhaji",
+    "mumbai pav bhaji",
+    "bhaji pav",
+    "पाव-भाजी"
+   ],
+   "cat": "snack",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🍛",
+   "unit": "g",
+   "kcal": 165,
+   "p": 4,
+   "c": 22.6,
+   "f": 6.5,
+   "fib": 3,
+   "na": 420,
+   "portions": [
+    {
+     "n": "1 plate, bhaji + 2 pav (270 g)",
+     "hi": "1 प्लेट",
+     "g": 270
+    },
+    {
+     "n": "1 plate, bhaji + 1 pav (230 g)",
+     "hi": "1 प्लेट",
+     "g": 230
+    }
+   ],
+   "src": "Component build-up from IFCT 2017 raw values + typical street-vendor recipe",
+   "conf": "medium",
+   "note": "200 g bhaji with 1-2 tsp butter + 2 buttered pav (70 g); ~445 kcal per plate",
+   "core": true
+  },
+  {
+   "slug": "pav-bhaji-bhaji-only",
+   "name": "Pav Bhaji (Bhaji Only)",
+   "hi": "पाव भाजी की भाजी",
+   "alias": [
+    "bhaji for pav bhaji",
+    "pav bhaji sabzi",
+    "mashed vegetable bhaji",
+    "mumbai bhaji"
+   ],
+   "cat": "snack",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🍛",
+   "unit": "g",
+   "kcal": 125,
+   "p": 2.5,
+   "c": 14.1,
+   "f": 6.5,
+   "fib": 3,
+   "na": 360,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 plate (200 g)",
+     "hi": "1 प्लेट",
+     "g": 200
+    }
+   ],
+   "src": "Component build-up from IFCT 2017 raw values + typical street-vendor recipe",
+   "conf": "medium",
+   "note": "mashed potato, cauliflower, peas, tomato, capsicum with butter and pav bhaji masala; INDB 96 is low, restaurant butter-heavy versions reach 150"
+  },
+  {
+   "slug": "pav-bhaji-restaurant",
+   "name": "Pav Bhaji, Restaurant Style (Extra Butter)",
+   "hi": "रेस्टोरेंट पाव भाजी",
+   "alias": [
+    "butter pav bhaji",
+    "cheese pav bhaji",
+    "jain pav bhaji",
+    "extra butter pav bhaji",
+    "बटर पाव भाजी"
+   ],
+   "cat": "snack",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🍛",
+   "unit": "g",
+   "kcal": 190,
+   "p": 4,
+   "c": 21,
+   "f": 10,
+   "fib": 3,
+   "na": 480,
+   "portions": [
+    {
+     "n": "1 plate, bhaji + 2 pav (300 g)",
+     "hi": "1 प्लेट",
+     "g": 300
+    }
+   ],
+   "src": "Component build-up from IFCT 2017 raw values + typical street-vendor recipe",
+   "conf": "low",
+   "note": "extra butter on bhaji and pav; ~570 kcal per plate"
+  },
+  {
+   "slug": "misal-pav",
+   "name": "Misal Pav",
+   "hi": "मिसळ पाव",
+   "alias": [
+    "misal",
+    "pune misal",
+    "mumbai misal pav",
+    "misal pao",
+    "मिसल पाव"
+   ],
+   "cat": "snack",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 135,
+   "p": 5.5,
+   "c": 17,
+   "f": 5,
+   "fib": 4,
+   "na": 420,
+   "portions": [
+    {
+     "n": "1 plate, misal + 2 pav (330 g)",
+     "hi": "1 प्लेट",
+     "g": 330
+    }
+   ],
+   "src": "Component build-up from IFCT 2017 raw values + typical street-vendor recipe",
+   "conf": "medium",
+   "note": "moth usal, spicy kat (rassa), farsan, onion, 2 pav; ~445 kcal per plate"
+  },
+  {
+   "slug": "misal-kolhapuri",
+   "name": "Kolhapuri Misal Pav",
+   "hi": "कोल्हापुरी मिसळ पाव",
+   "alias": [
+    "kolhapuri misal",
+    "kolhapuri misal pao",
+    "tarri misal",
+    "कोल्हापुरी मिसल"
+   ],
+   "cat": "snack",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 150,
+   "p": 5.5,
+   "c": 17.4,
+   "f": 6.5,
+   "fib": 4,
+   "na": 480,
+   "portions": [
+    {
+     "n": "1 plate, misal + 2 pav (350 g)",
+     "hi": "1 प्लेट",
+     "g": 350
+    }
+   ],
+   "src": "Component build-up from IFCT 2017 raw values + typical street-vendor recipe",
+   "conf": "low",
+   "note": "extra tarri (oil-based red gravy), farsan and pav"
+  },
+  {
+   "slug": "usal-pav",
+   "name": "Usal Pav",
+   "hi": "उसळ पाव",
+   "alias": [
+    "usal pao",
+    "matki usal pav",
+    "sprouted moth usal pav",
+    "उसल पाव"
+   ],
+   "cat": "snack",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 140,
+   "p": 5.5,
+   "c": 19.4,
+   "f": 4.5,
+   "fib": 4.5,
+   "na": 380,
+   "portions": [
+    {
+     "n": "1 plate, usal + 2 pav (280 g)",
+     "hi": "1 प्लेट",
+     "g": 280
+    }
+   ],
+   "src": "Component build-up from IFCT 2017 raw values + typical street-vendor recipe",
+   "conf": "medium",
+   "note": "sprouted moth bean usal 180 g with 2 pav and onion"
+  },
+  {
+   "slug": "sev-usal",
+   "name": "Sev Usal (Pune)",
+   "hi": "सेव उसळ",
+   "alias": [
+    "sev usal pav",
+    "pune sev usal",
+    "sev usal plate",
+    "सेव उसल"
+   ],
+   "cat": "snack",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 155,
+   "p": 5,
+   "c": 19.1,
+   "f": 6.5,
+   "fib": 4,
+   "na": 440,
+   "portions": [
+    {
+     "n": "1 plate (250 g)",
+     "hi": "1 प्लेट",
+     "g": 250
+    }
+   ],
+   "src": "Component build-up from IFCT 2017 raw values + typical street-vendor recipe",
+   "conf": "low",
+   "note": "white-pea or matki usal in thin gravy topped with farsan, sev, onion"
+  },
+  {
+   "slug": "dabeli",
+   "name": "Dabeli (Kutchi Dabeli)",
+   "hi": "दाबेली",
+   "alias": [
+    "kutchi dabeli",
+    "dabeli pav",
+    "dabeli bun",
+    "double roti",
+    "दबेली"
+   ],
+   "cat": "snack",
+   "region": "Gujarat",
+   "diet": "veg",
+   "emoji": "🍔",
+   "unit": "g",
+   "kcal": 255,
+   "p": 5.5,
+   "c": 34,
+   "f": 10.5,
+   "fib": 3,
+   "na": 540,
+   "portions": [
+    {
+     "n": "1 dabeli (100 g)",
+     "hi": "1 दाबेली",
+     "g": 100
+    }
+   ],
+   "src": "Component build-up from IFCT 2017 raw values + typical street-vendor recipe",
+   "conf": "medium",
+   "note": "spiced potato in a pav with pomegranate, peanuts, sev, chutneys; ~255 kcal each"
+  },
+  {
+   "slug": "bhutta-roasted",
+   "name": "Bhutta (Roasted Corn on the Cob)",
+   "hi": "भुट्टा",
+   "alias": [
+    "roasted corn",
+    "bhutta",
+    "roasted bhutta",
+    "makai bhutta",
+    "corn on cob",
+    "भुट्टा भुना हुआ"
+   ],
+   "cat": "snack",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🌽",
+   "unit": "g",
+   "kcal": 120,
+   "p": 3.5,
+   "c": 22.5,
+   "f": 1.8,
+   "fib": 3.7,
+   "na": 170,
+   "portions": [
+    {
+     "n": "1 cob, edible kernels (100 g)",
+     "hi": "1 भुट्टा",
+     "g": 100
+    },
+    {
+     "n": "1 small cob (70 g)",
+     "hi": "1 भुट्टा",
+     "g": 70
+    }
+   ],
+   "src": "Standard home recipe build-up from IFCT 2017 raw values",
+   "conf": "medium",
+   "note": "desi corn roasted on coal and rubbed with lemon, salt, red chilli; IFCT tender maize 120 kcal"
+  },
+  {
+   "slug": "bhutte-ka-kees",
+   "name": "Bhutte Ka Kees (Indori Grated Corn)",
+   "hi": "भुट्टे का कीस",
+   "alias": [
+    "bhutte ka kis",
+    "corn kees",
+    "indori kees",
+    "kees",
+    "भुट्टे का किस"
+   ],
+   "cat": "snack",
+   "region": "Madhya Pradesh",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 140,
+   "p": 3.5,
+   "c": 19.1,
+   "f": 5.5,
+   "fib": 2.5,
+   "na": 300,
+   "portions": [
+    {
+     "n": "1 plate (150 g)",
+     "hi": "1 प्लेट",
+     "g": 150
+    }
+   ],
+   "src": "Component build-up from IFCT 2017 raw values + typical street-vendor recipe",
+   "conf": "low",
+   "note": "grated corn cooked with milk, ghee, green chilli, lemon, sev"
+  },
+  {
+   "slug": "khopra-patties",
+   "name": "Khopra Patties (Indori Coconut Patties)",
+   "hi": "खोपरा पैटीज़",
+   "alias": [
+    "khopra pattice",
+    "indori khopra patties",
+    "coconut patties",
+    "खोपरा पेटीस"
+   ],
+   "cat": "snack",
+   "region": "Madhya Pradesh",
+   "diet": "veg",
+   "emoji": "🥔",
+   "unit": "g",
+   "kcal": 270,
+   "p": 3.5,
+   "c": 28,
+   "f": 16,
+   "fib": 4,
+   "na": 430,
+   "portions": [
+    {
+     "n": "1 patty (60 g)",
+     "hi": "1 पैटी",
+     "g": 60
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "low",
+   "note": "potato shell with fresh coconut-nuts filling, deep fried"
+  },
+  {
+   "slug": "sabudana-tikki",
+   "name": "Sabudana Tikki",
+   "hi": "साबूदाना टिक्की",
+   "alias": [
+    "sabudana patty",
+    "sago tikki",
+    "sabudana cutlet",
+    "javvarisi tikki",
+    "साबुदाना कटलेट"
+   ],
+   "cat": "snack",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🥔",
+   "unit": "g",
+   "kcal": 230,
+   "p": 2.5,
+   "c": 34.8,
+   "f": 9,
+   "fib": 1.5,
+   "na": 350,
+   "portions": [
+    {
+     "n": "1 tikki (50 g)",
+     "hi": "1 टिक्की",
+     "g": 50
+    },
+    {
+     "n": "2 tikki (100 g)",
+     "hi": "2 टिक्की",
+     "g": 100
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + shallow-fry oil uptake)",
+   "conf": "medium",
+   "note": "sago, boiled potato and peanut, shallow fried; fasting snack; INDB sago cutlet 559 rejected"
+  },
+  {
+   "slug": "samak-rice-tikki",
+   "name": "Samak Rice Tikki (Vrat)",
+   "hi": "समा चावल टिक्की",
+   "alias": [
+    "samak chawal tikki",
+    "vrat tikki",
+    "barnyard millet tikki",
+    "sama ke chawal ki tikki",
+    "vrat ke tikki"
+   ],
+   "cat": "snack",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🥔",
+   "unit": "g",
+   "kcal": 225,
+   "p": 3,
+   "c": 33,
+   "f": 9,
+   "fib": 2.5,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 tikki (50 g)",
+     "hi": "1 टिक्की",
+     "g": 50
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + shallow-fry oil uptake)",
+   "conf": "low",
+   "note": "samak (barnyard millet) with potato, sendha namak, shallow fried; fasting snack"
+  },
+  {
+   "slug": "kothimbir-vadi",
+   "name": "Kothimbir Vadi (Fried)",
+   "hi": "कोथिंबीर वडी",
+   "alias": [
+    "kothimbir wadi",
+    "coriander vadi",
+    "kothimbir vadi fry",
+    "कोथिंबीर वड़ी"
+   ],
+   "cat": "snack",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🧆",
+   "unit": "g",
+   "kcal": 275,
+   "p": 8,
+   "c": 29.3,
+   "f": 14,
+   "fib": 4,
+   "na": 420,
+   "portions": [
+    {
+     "n": "1 piece (25 g)",
+     "hi": "1 पीस",
+     "g": 25
+    },
+    {
+     "n": "1 plate, 4 pieces (100 g)",
+     "hi": "1 प्लेट",
+     "g": 100
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + shallow-fry oil uptake)",
+   "conf": "medium",
+   "note": "steamed besan-coriander slab sliced and shallow fried; steamed unfried version is ~150 kcal"
+  },
+  {
+   "slug": "patra-fried",
+   "name": "Patra (Fried, Alu Vadi)",
+   "hi": "पत्रा (तला हुआ)",
+   "alias": [
+    "fried patra",
+    "alu vadi",
+    "aloo vadi",
+    "patra fry",
+    "colocasia leaf rolls fried",
+    "अळू वडी"
+   ],
+   "cat": "snack",
+   "region": "Gujarat",
+   "diet": "veg",
+   "emoji": "🧆",
+   "unit": "g",
+   "kcal": 270,
+   "p": 5,
+   "c": 28.8,
+   "f": 15,
+   "fib": 5,
+   "na": 380,
+   "portions": [
+    {
+     "n": "1 piece (25 g)",
+     "hi": "1 पीस",
+     "g": 25
+    },
+    {
+     "n": "1 plate, 4 pieces (100 g)",
+     "hi": "1 प्लेट",
+     "g": 100
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + shallow-fry oil uptake)",
+   "conf": "medium",
+   "note": "colocasia leaves rolled with besan paste, steamed, sliced and shallow fried; steamed version ~140 kcal"
+  },
+  {
+   "slug": "egg-chaat",
+   "name": "Egg Chaat",
+   "hi": "अंडा चाट",
+   "alias": [
+    "anda chaat",
+    "boiled egg chaat",
+    "egg chat",
+    "egg masala chaat",
+    "अंडे की चाट"
+   ],
+   "cat": "snack",
+   "region": "Pan-India",
+   "diet": "egg",
+   "emoji": "🥚",
+   "unit": "g",
+   "kcal": 130,
+   "p": 8.5,
+   "c": 5.6,
+   "f": 8.2,
+   "fib": 0.8,
+   "na": 420,
+   "portions": [
+    {
+     "n": "1 plate, 2 eggs (130 g)",
+     "hi": "1 प्लेट",
+     "g": 130
+    }
+   ],
+   "src": "Component build-up from IFCT 2017 raw values + typical street-vendor recipe",
+   "conf": "medium",
+   "note": "2 boiled eggs with onion, tomato, chutneys and sev"
+  },
+  {
+   "slug": "anda-bhurji-street",
+   "name": "Egg Bhurji, Street Style (Anda Bhurji)",
+   "hi": "अंडा भुर्जी (स्ट्रीट स्टाइल)",
+   "alias": [
+    "street egg bhurji",
+    "anda bhurji pav",
+    "egg bhurji pav",
+    "anda bhurji",
+    "अंडे की भुर्जी"
+   ],
+   "cat": "snack",
+   "region": "Pan-India",
+   "diet": "egg",
+   "emoji": "🥚",
+   "unit": "g",
+   "kcal": 185,
+   "p": 11.5,
+   "c": 2.1,
+   "f": 14.5,
+   "fib": 1,
+   "na": 380,
+   "portions": [
+    {
+     "n": "1 plate, 2 eggs (120 g)",
+     "hi": "1 प्लेट",
+     "g": 120
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw meat/fish/egg + batter and fry oil)",
+   "conf": "medium",
+   "note": "scrambled eggs with onion, tomato, chilli in about 1 tbsp oil per 2 eggs"
+  },
+  {
+   "slug": "chana-roasted",
+   "name": "Roasted Chana (Bhuna Chana, With Husk)",
+   "hi": "भुना चना",
+   "alias": [
+    "bhuna chana",
+    "roasted chickpeas",
+    "roasted gram",
+    "bhune chane",
+    "dry roasted chana",
+    "भुने चने"
+   ],
+   "cat": "snack",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🫛",
+   "unit": "g",
+   "kcal": 345,
+   "p": 20,
+   "c": 47,
+   "f": 5.2,
+   "fib": 14,
+   "na": 30,
+   "portions": [
+    {
+     "n": "1 handful (30 g)",
+     "hi": "1 मुट्ठी",
+     "g": 30
+    },
+    {
+     "n": "1 small bowl (50 g)",
+     "hi": "1 कटोरी",
+     "g": 50
+    },
+    {
+     "n": "1 tbsp (10 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 10
+    }
+   ],
+   "src": "Dry-snack composition from IFCT 2017 / USDA ingredient values, rounded",
+   "conf": "high",
+   "note": "dry-roasted whole desi chana, unsalted; roasting removes water so ~345 kcal vs 287 raw (IFCT); salted/masala packs carry 400-600 mg sodium per 100 g",
+   "core": true
+  },
+  {
+   "slug": "chana-dal-roasted",
+   "name": "Roasted Chana Dal (Phutana, Salted)",
+   "hi": "भुनी चना दाल",
+   "alias": [
+    "phutana",
+    "putnalu",
+    "bhuni chana dal",
+    "roasted split chickpeas",
+    "roasted dalia chana",
+    "भुनी हुई चने की दाल"
+   ],
+   "cat": "snack",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🫛",
+   "unit": "g",
+   "kcal": 360,
+   "p": 21,
+   "c": 52,
+   "f": 5.5,
+   "fib": 12,
+   "na": 450,
+   "portions": [
+    {
+     "n": "1 handful (30 g)",
+     "hi": "1 मुट्ठी",
+     "g": 30
+    },
+    {
+     "n": "1 small bowl (50 g)",
+     "hi": "1 कटोरी",
+     "g": 50
+    }
+   ],
+   "src": "Dry-snack composition from IFCT 2017 / USDA ingredient values, rounded",
+   "conf": "medium",
+   "note": "dry-roasted split Bengal gram, salted; skinless so less fibre than whole roasted chana"
+  },
+  {
+   "slug": "chana-jor-garam",
+   "name": "Chana Jor Garam (Spiced Flattened Roasted Chana)",
+   "hi": "चना जोर गरम",
+   "alias": [
+    "chana jor garam",
+    "chana zor garam",
+    "chanajor",
+    "jor garam chana",
+    "चनाजोर"
+   ],
+   "cat": "snack",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🫛",
+   "unit": "g",
+   "kcal": 370,
+   "p": 19,
+   "c": 50,
+   "f": 6.5,
+   "fib": 12,
+   "na": 650,
+   "portions": [
+    {
+     "n": "1 handful (30 g)",
+     "hi": "1 मुट्ठी",
+     "g": 30
+    },
+    {
+     "n": "1 paper cone (50 g)",
+     "hi": "1 पीस",
+     "g": 50
+    }
+   ],
+   "src": "Dry-snack composition from IFCT 2017 / USDA ingredient values, rounded",
+   "conf": "medium",
+   "note": "flattened roasted chana with lemon-masala dusting and a little oil"
+  },
+  {
+   "slug": "peanuts-roasted",
+   "name": "Roasted Peanuts (Bhuni Moongfali, Salted)",
+   "hi": "भुनी मूंगफली",
+   "alias": [
+    "roasted groundnut",
+    "bhuni moongfali",
+    "salted peanuts",
+    "roasted mungfali",
+    "moongphali",
+    "मूंगफली भुनी",
+    "verkadalai"
+   ],
+   "cat": "snack",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥜",
+   "unit": "g",
+   "kcal": 570,
+   "p": 24,
+   "c": 12,
+   "f": 46,
+   "fib": 8.5,
+   "na": 350,
+   "portions": [
+    {
+     "n": "1 handful (30 g)",
+     "hi": "1 मुट्ठी",
+     "g": 30
+    },
+    {
+     "n": "1 small bowl (50 g)",
+     "hi": "1 कटोरी",
+     "g": 50
+    },
+    {
+     "n": "1 tbsp (10 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 10
+    }
+   ],
+   "src": "Dry-snack composition from IFCT 2017 / USDA ingredient values, rounded",
+   "conf": "high",
+   "note": "dry-roasted shelled peanuts; IFCT raw groundnut 520, roasting drops moisture so 560-585; not a fried snack so above the 520 fried cap"
+  },
+  {
+   "slug": "peanuts-masala",
+   "name": "Masala Peanuts (Besan-Coated, Fried)",
+   "hi": "मसाला मूंगफली",
+   "alias": [
+    "masala moongfali",
+    "besan peanuts",
+    "coated peanuts",
+    "masala groundnut",
+    "spicy peanuts",
+    "मसाला मूँगफली"
+   ],
+   "cat": "snack",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥜",
+   "unit": "g",
+   "kcal": 515,
+   "p": 20,
+   "c": 22,
+   "f": 35,
+   "fib": 6,
+   "na": 520,
+   "portions": [
+    {
+     "n": "1 handful (30 g)",
+     "hi": "1 मुट्ठी",
+     "g": 30
+    },
+    {
+     "n": "1 small bowl (50 g)",
+     "hi": "1 कटोरी",
+     "g": 50
+    }
+   ],
+   "src": "Typical packaged-snack label range (not brand specific), rounded; capped at 520 kcal per 100 g",
+   "conf": "medium",
+   "note": "peanuts in spiced besan coating, fried; packaged labels run 520-560, capped at 515 per catalogue rule"
+  },
+  {
+   "slug": "peanuts-boiled",
+   "name": "Boiled Peanuts (Shelled Kernels)",
+   "hi": "उबली मूंगफली",
+   "alias": [
+    "boiled groundnut",
+    "ubli moongfali",
+    "steamed peanuts",
+    "boiled mungfali",
+    "ubale shengdane",
+    "उबली हुई मूंगफली"
+   ],
+   "cat": "snack",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥜",
+   "unit": "g",
+   "kcal": 320,
+   "p": 13.5,
+   "c": 9,
+   "f": 24.5,
+   "fib": 5.5,
+   "na": 250,
+   "portions": [
+    {
+     "n": "1 handful (30 g)",
+     "hi": "1 मुट्ठी",
+     "g": 30
+    },
+    {
+     "n": "1 small bowl (50 g)",
+     "hi": "1 कटोरी",
+     "g": 50
+    }
+   ],
+   "src": "Dry-snack composition from IFCT 2017 / USDA ingredient values, rounded",
+   "conf": "medium",
+   "note": "boiled in shell with salt, weight is of shelled kernels; water uptake lowers energy vs raw 520-570 (USDA boiled peanuts ~318)"
+  },
+  {
+   "slug": "makhana-roasted",
+   "name": "Makhana, Dry Roasted (Phool Makhana, Plain)",
+   "hi": "भुना मखाना",
+   "alias": [
+    "phool makhana",
+    "roasted makhana",
+    "foxnut",
+    "fox nut",
+    "lotus seeds",
+    "makhane",
+    "मखाने",
+    "मखाना"
+   ],
+   "cat": "snack",
+   "region": "Bihar",
+   "diet": "veg",
+   "emoji": "🍿",
+   "unit": "g",
+   "kcal": 340,
+   "p": 9.7,
+   "c": 66,
+   "f": 0.5,
+   "fib": 12.5,
+   "na": 5,
+   "portions": [
+    {
+     "n": "1 handful (15 g)",
+     "hi": "1 मुट्ठी",
+     "g": 15
+    },
+    {
+     "n": "1 small bowl (30 g)",
+     "hi": "1 कटोरी",
+     "g": 30
+    },
+    {
+     "n": "1 cup puffed (10 g)",
+     "hi": "1 कप",
+     "g": 10
+    }
+   ],
+   "src": "Dry-snack composition from IFCT 2017 / USDA ingredient values, rounded",
+   "conf": "high",
+   "note": "dry-roasted, no oil or salt; label energy ~347 kcal per 100 g (fox nut p 9.7, carb 77 incl fibre); light, so a bowl is only ~100 kcal",
+   "core": true
+  },
+  {
+   "slug": "makhana-ghee-roasted",
+   "name": "Makhana, Roasted in Ghee (Salted)",
+   "hi": "घी में भुना मखाना",
+   "alias": [
+    "ghee makhana",
+    "salted makhana",
+    "home roasted makhana",
+    "namkeen makhana",
+    "नमकीन मखाना"
+   ],
+   "cat": "snack",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🍿",
+   "unit": "g",
+   "kcal": 390,
+   "p": 9,
+   "c": 61,
+   "f": 8,
+   "fib": 11.5,
+   "na": 280,
+   "portions": [
+    {
+     "n": "1 handful (15 g)",
+     "hi": "1 मुट्ठी",
+     "g": 15
+    },
+    {
+     "n": "1 small bowl (30 g)",
+     "hi": "1 कटोरी",
+     "g": 30
+    }
+   ],
+   "src": "Dry-snack composition from IFCT 2017 / USDA ingredient values, rounded",
+   "conf": "medium",
+   "note": "100 g makhana roasted in ~8 g ghee, salt and pepper"
+  },
+  {
+   "slug": "popcorn-plain",
+   "name": "Popcorn, Air-Popped (Plain)",
+   "hi": "पॉपकॉर्न (सादा)",
+   "alias": [
+    "plain popcorn",
+    "air popped popcorn",
+    "makai ke dane popcorn",
+    "unsalted popcorn",
+    "पॉप कॉर्न",
+    "मक्का लावा"
+   ],
+   "cat": "snack",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍿",
+   "unit": "g",
+   "kcal": 375,
+   "p": 12,
+   "c": 63,
+   "f": 4.5,
+   "fib": 14.5,
+   "na": 8,
+   "portions": [
+    {
+     "n": "1 cup popped (8 g)",
+     "hi": "1 कप",
+     "g": 8
+    },
+    {
+     "n": "1 small bowl, 3 cups (24 g)",
+     "hi": "1 कटोरी",
+     "g": 24
+    },
+    {
+     "n": "1 handful (15 g)",
+     "hi": "1 मुट्ठी",
+     "g": 15
+    }
+   ],
+   "src": "Dry-snack composition from IFCT 2017 / USDA ingredient values, rounded",
+   "conf": "high",
+   "note": "USDA air-popped popcorn ~387 kcal per 100 g; very light, a bowl is only ~90 kcal"
+  },
+  {
+   "slug": "popcorn-oil-salted",
+   "name": "Popcorn, Oil-Popped (Salted)",
+   "hi": "नमकीन पॉपकॉर्न",
+   "alias": [
+    "salted popcorn",
+    "stovetop popcorn",
+    "home popcorn",
+    "masala popcorn",
+    "तेल वाला पॉपकॉर्न"
+   ],
+   "cat": "snack",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍿",
+   "unit": "g",
+   "kcal": 480,
+   "p": 9,
+   "c": 49,
+   "f": 27,
+   "fib": 10,
+   "na": 650,
+   "portions": [
+    {
+     "n": "1 small bowl (30 g)",
+     "hi": "1 कटोरी",
+     "g": 30
+    },
+    {
+     "n": "1 handful (15 g)",
+     "hi": "1 मुट्ठी",
+     "g": 15
+    }
+   ],
+   "src": "Dry-snack composition from IFCT 2017 / USDA ingredient values, rounded",
+   "conf": "medium",
+   "note": "popped in ~1 tbsp oil per 30 g kernels, salted; roughly 1.3x air-popped"
+  },
+  {
+   "slug": "popcorn-butter",
+   "name": "Butter Popcorn (Cinema Style)",
+   "hi": "बटर पॉपकॉर्न",
+   "alias": [
+    "cinema popcorn",
+    "movie popcorn",
+    "buttered popcorn",
+    "salted butter popcorn",
+    "मूवी पॉपकॉर्न"
+   ],
+   "cat": "snack",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🍿",
+   "unit": "g",
+   "kcal": 490,
+   "p": 7.5,
+   "c": 48,
+   "f": 30,
+   "fib": 8,
+   "na": 700,
+   "portions": [
+    {
+     "n": "1 small tub (40 g)",
+     "hi": "1 टब",
+     "g": 40
+    },
+    {
+     "n": "1 regular tub (80 g)",
+     "hi": "1 टब",
+     "g": 80
+    }
+   ],
+   "src": "Typical packaged-snack label range (not brand specific), rounded; capped at 520 kcal per 100 g",
+   "conf": "medium",
+   "note": "oil-popped with butter or butter-flavoured oil and salt; ~390 kcal per regular tub"
+  },
+  {
+   "slug": "popcorn-caramel",
+   "name": "Caramel Popcorn",
+   "hi": "कैरामल पॉपकॉर्न",
+   "alias": [
+    "caramel corn",
+    "sweet popcorn",
+    "gur popcorn",
+    "caramel popcorn tub",
+    "कैरेमल पॉपकॉर्न"
+   ],
+   "cat": "snack",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🍿",
+   "unit": "g",
+   "kcal": 410,
+   "p": 3.5,
+   "c": 75,
+   "f": 9.5,
+   "fib": 5,
+   "na": 220,
+   "portions": [
+    {
+     "n": "1 handful (30 g)",
+     "hi": "1 मुट्ठी",
+     "g": 30
+    },
+    {
+     "n": "1 small tub (50 g)",
+     "hi": "1 टब",
+     "g": 50
+    }
+   ],
+   "src": "Typical packaged-snack label range (not brand specific), rounded; capped at 520 kcal per 100 g",
+   "conf": "medium",
+   "note": "popcorn with sugar-butter caramel coating (USDA caramel corn ~400)"
+  },
+  {
+   "slug": "popcorn-cheese",
+   "name": "Cheese Popcorn",
+   "hi": "चीज़ पॉपकॉर्न",
+   "alias": [
+    "cheddar popcorn",
+    "cheesy popcorn",
+    "cheese flavoured popcorn",
+    "चीज पॉपकॉर्न"
+   ],
+   "cat": "snack",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🍿",
+   "unit": "g",
+   "kcal": 510,
+   "p": 9,
+   "c": 42,
+   "f": 33,
+   "fib": 6,
+   "na": 900,
+   "portions": [
+    {
+     "n": "1 handful (30 g)",
+     "hi": "1 मुट्ठी",
+     "g": 30
+    },
+    {
+     "n": "1 small tub (50 g)",
+     "hi": "1 टब",
+     "g": 50
+    }
+   ],
+   "src": "Typical packaged-snack label range (not brand specific), rounded; capped at 520 kcal per 100 g",
+   "conf": "low",
+   "note": "oil-popped with cheese powder; label ranges 480-540"
+  },
+  {
+   "slug": "murmura-chivda",
+   "name": "Murmura Chivda (Puffed Rice Namkeen)",
+   "hi": "मुरमुरा चिवड़ा",
+   "alias": [
+    "kurmura chivda",
+    "puffed rice mixture",
+    "murmura namkeen",
+    "churmuri chivda",
+    "मुरमुरे का चिवड़ा"
+   ],
+   "cat": "snack",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍘",
+   "unit": "g",
+   "kcal": 410,
+   "p": 8,
+   "c": 63,
+   "f": 14,
+   "fib": 3.5,
+   "na": 480,
+   "portions": [
+    {
+     "n": "1 handful (30 g)",
+     "hi": "1 मुट्ठी",
+     "g": 30
+    },
+    {
+     "n": "1 small bowl (50 g)",
+     "hi": "1 कटोरी",
+     "g": 50
+    }
+   ],
+   "src": "Dry-snack composition from IFCT 2017 / USDA ingredient values, rounded",
+   "conf": "medium",
+   "note": "puffed rice (IFCT 362 kcal) roasted with peanuts, gram, curry leaves and ~1 tbsp oil per 100 g; home style"
+  },
+  {
+   "slug": "poha-chivda-fried",
+   "name": "Poha Chivda (Maharashtrian, Fried)",
+   "hi": "पोहा चिवड़ा",
+   "alias": [
+    "patla poha chivda",
+    "poha mixture",
+    "chiwda",
+    "poha chivda namkeen",
+    "पोहे का चिवड़ा",
+    "diwali chivda"
+   ],
+   "cat": "snack",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🍘",
+   "unit": "g",
+   "kcal": 450,
+   "p": 8,
+   "c": 57,
+   "f": 21,
+   "fib": 3.5,
+   "na": 520,
+   "portions": [
+    {
+     "n": "1 handful (30 g)",
+     "hi": "1 मुट्ठी",
+     "g": 30
+    },
+    {
+     "n": "1 small bowl (50 g)",
+     "hi": "1 कटोरी",
+     "g": 50
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "medium",
+   "note": "thin flaked rice deep fried with peanuts, coconut, curry leaves; Diwali chivda; packaged versions ~450-480"
+  },
+  {
+   "slug": "poha-chivda-roasted",
+   "name": "Poha Chivda, Roasted (Low Oil)",
+   "hi": "भुना पोहा चिवड़ा",
+   "alias": [
+    "roasted poha chivda",
+    "baked poha chivda",
+    "low oil chivda",
+    "dry roasted poha mixture",
+    "भुने पोहे का चिवड़ा"
+   ],
+   "cat": "snack",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🍘",
+   "unit": "g",
+   "kcal": 390,
+   "p": 7.5,
+   "c": 63,
+   "f": 12,
+   "fib": 3.5,
+   "na": 450,
+   "portions": [
+    {
+     "n": "1 handful (30 g)",
+     "hi": "1 मुट्ठी",
+     "g": 30
+    },
+    {
+     "n": "1 small bowl (50 g)",
+     "hi": "1 कटोरी",
+     "g": 50
+    }
+   ],
+   "src": "Dry-snack composition from IFCT 2017 / USDA ingredient values, rounded",
+   "conf": "medium",
+   "note": "poha dry-roasted then tossed with ~2 tsp oil, peanuts and spices per 100 g"
+  },
+  {
+   "slug": "bhadang",
+   "name": "Bhadang (Kolhapuri Puffed Rice Mix)",
+   "hi": "भडंग",
+   "alias": [
+    "bhadang bhel",
+    "kolhapuri bhadang",
+    "bhadang chivda",
+    "spicy murmura bhadang",
+    "भडंग भेल"
+   ],
+   "cat": "snack",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🍘",
+   "unit": "g",
+   "kcal": 400,
+   "p": 8,
+   "c": 59,
+   "f": 14.5,
+   "fib": 3,
+   "na": 500,
+   "portions": [
+    {
+     "n": "1 handful (30 g)",
+     "hi": "1 मुट्ठी",
+     "g": 30
+    },
+    {
+     "n": "1 small bowl (50 g)",
+     "hi": "1 कटोरी",
+     "g": 50
+    }
+   ],
+   "src": "Dry-snack composition from IFCT 2017 / USDA ingredient values, rounded",
+   "conf": "low",
+   "note": "puffed rice tossed in spicy oil with peanuts, gram and spices"
+  },
+  {
+   "slug": "avalakki-mixture",
+   "name": "Avalakki Mixture (Karnataka Poha Mixture)",
+   "hi": "अवलक्की मिक्सचर",
+   "alias": [
+    "avalakki chivda",
+    "poha mixture karnataka",
+    "mandakki mixture",
+    "aval mixture",
+    "अवलक्की चिवड़ा"
+   ],
+   "cat": "snack",
+   "region": "Karnataka",
+   "diet": "veg",
+   "emoji": "🍘",
+   "unit": "g",
+   "kcal": 470,
+   "p": 8,
+   "c": 53,
+   "f": 25,
+   "fib": 3.5,
+   "na": 520,
+   "portions": [
+    {
+     "n": "1 handful (30 g)",
+     "hi": "1 मुट्ठी",
+     "g": 30
+    },
+    {
+     "n": "1 small bowl (50 g)",
+     "hi": "1 कटोरी",
+     "g": 50
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "medium",
+   "note": "fried flattened rice with peanuts, roasted gram, curry leaves"
+  },
+  {
+   "slug": "bombay-mix",
+   "name": "Bombay Mix (Mumbai Mixture)",
+   "hi": "बॉम्बे मिक्स",
+   "alias": [
+    "mumbai mixture",
+    "bombay mixture",
+    "namkeen mixture",
+    "mixture namkeen",
+    "मुंबई मिक्सचर",
+    "मिक्सचर नमकीन"
+   ],
+   "cat": "snack",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🍘",
+   "unit": "g",
+   "kcal": 500,
+   "p": 12,
+   "c": 41,
+   "f": 32,
+   "fib": 5,
+   "na": 800,
+   "portions": [
+    {
+     "n": "1 handful (30 g)",
+     "hi": "1 मुट्ठी",
+     "g": 30
+    },
+    {
+     "n": "1 small bowl (50 g)",
+     "hi": "1 कटोरी",
+     "g": 50
+    }
+   ],
+   "src": "Typical packaged-snack label range (not brand specific), rounded; capped at 520 kcal per 100 g",
+   "conf": "medium",
+   "note": "sev, boondi, peanuts, poha, gram dal and curry leaves fried; packaged labels run 500-560, capped at 500"
+  },
+  {
+   "slug": "navratan-mixture",
+   "name": "Navratan Mixture (Khatta Meetha)",
+   "hi": "नवरत्न मिक्सचर",
+   "alias": [
+    "navratan mix",
+    "khatta meetha mixture",
+    "navrattan namkeen",
+    "nav ratan mixture",
+    "नवरतन मिक्स"
+   ],
+   "cat": "snack",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍘",
+   "unit": "g",
+   "kcal": 490,
+   "p": 12,
+   "c": 43,
+   "f": 30,
+   "fib": 5,
+   "na": 700,
+   "portions": [
+    {
+     "n": "1 handful (30 g)",
+     "hi": "1 मुट्ठी",
+     "g": 30
+    },
+    {
+     "n": "1 small bowl (50 g)",
+     "hi": "1 कटोरी",
+     "g": 50
+    }
+   ],
+   "src": "Typical packaged-snack label range (not brand specific), rounded; capped at 520 kcal per 100 g",
+   "conf": "medium",
+   "note": "mixture with nuts, raisins, peas and sev; packaged label range 480-520"
+  },
+  {
+   "slug": "kerala-mixture",
+   "name": "Kerala Mixture",
+   "hi": "केरल मिक्सचर",
+   "alias": [
+    "kerala namkeen",
+    "madras mixture",
+    "south indian mixture",
+    "mixture murukku",
+    "केरला मिक्सचर"
+   ],
+   "cat": "snack",
+   "region": "Kerala",
+   "diet": "veg",
+   "emoji": "🍘",
+   "unit": "g",
+   "kcal": 500,
+   "p": 11,
+   "c": 44,
+   "f": 31,
+   "fib": 5,
+   "na": 650,
+   "portions": [
+    {
+     "n": "1 handful (30 g)",
+     "hi": "1 मुट्ठी",
+     "g": 30
+    },
+    {
+     "n": "1 small bowl (50 g)",
+     "hi": "1 कटोरी",
+     "g": 50
+    }
+   ],
+   "src": "Typical packaged-snack label range (not brand specific), rounded; capped at 520 kcal per 100 g",
+   "conf": "medium",
+   "note": "besan sev, ribbon pakoda, peanuts and curry leaves fried in coconut oil"
+  },
+  {
+   "slug": "moong-dal-namkeen",
+   "name": "Moong Dal Namkeen (Fried Moong Dal)",
+   "hi": "मूंग दाल नमकीन",
+   "alias": [
+    "fried moong dal",
+    "moong dal fry namkeen",
+    "salted moong dal",
+    "crispy moong dal",
+    "मूंग दाल नमकीन"
+   ],
+   "cat": "snack",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍘",
+   "unit": "g",
+   "kcal": 500,
+   "p": 23,
+   "c": 44,
+   "f": 24,
+   "fib": 6,
+   "na": 700,
+   "portions": [
+    {
+     "n": "1 handful (30 g)",
+     "hi": "1 मुट्ठी",
+     "g": 30
+    },
+    {
+     "n": "1 small bowl (50 g)",
+     "hi": "1 कटोरी",
+     "g": 50
+    }
+   ],
+   "src": "Typical packaged-snack label range (not brand specific), rounded; capped at 520 kcal per 100 g",
+   "conf": "medium",
+   "note": "skinned moong soaked and deep fried, salted; labels ~500-540"
+  },
+  {
+   "slug": "boondi-kara",
+   "name": "Kara Boondi (Salted Besan Boondi)",
+   "hi": "करा बूंदी",
+   "alias": [
+    "khara boondi",
+    "salted boondi",
+    "plain boondi",
+    "namkeen boondi",
+    "बूंदी नमकीन"
+   ],
+   "cat": "snack",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍘",
+   "unit": "g",
+   "kcal": 500,
+   "p": 10,
+   "c": 45.3,
+   "f": 31,
+   "fib": 5,
+   "na": 650,
+   "portions": [
+    {
+     "n": "1 handful (30 g)",
+     "hi": "1 मुट्ठी",
+     "g": 30
+    },
+    {
+     "n": "1 small bowl (50 g)",
+     "hi": "1 कटोरी",
+     "g": 50
+    }
+   ],
+   "src": "Typical packaged-snack label range (not brand specific), rounded; capped at 520 kcal per 100 g",
+   "conf": "medium",
+   "note": "tiny besan droplets deep fried and salted; labels 500-540, capped at 500"
+  },
+  {
+   "slug": "fried-peas-namkeen",
+   "name": "Fried Green Peas (Matar Namkeen)",
+   "hi": "तली हरी मटर",
+   "alias": [
+    "green peas namkeen",
+    "crispy matar",
+    "fried matar",
+    "spiced green peas",
+    "हरी मटर नमकीन"
+   ],
+   "cat": "snack",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍘",
+   "unit": "g",
+   "kcal": 455,
+   "p": 20,
+   "c": 46,
+   "f": 21,
+   "fib": 8,
+   "na": 600,
+   "portions": [
+    {
+     "n": "1 handful (30 g)",
+     "hi": "1 मुट्ठी",
+     "g": 30
+    },
+    {
+     "n": "1 small bowl (50 g)",
+     "hi": "1 कटोरी",
+     "g": 50
+    }
+   ],
+   "src": "Typical packaged-snack label range (not brand specific), rounded; capped at 520 kcal per 100 g",
+   "conf": "medium",
+   "note": "dried green peas fried and salted, packaged label range 440-480"
+  },
+  {
+   "slug": "khakhra-plain",
+   "name": "Khakhra (Plain Wheat, Roasted)",
+   "hi": "खाखरा",
+   "alias": [
+    "gujarati khakhra",
+    "wheat khakhra",
+    "plain khakhra",
+    "khakra",
+    "खाखडा"
+   ],
+   "cat": "snack",
+   "region": "Gujarat",
+   "diet": "veg",
+   "emoji": "🍘",
+   "unit": "g",
+   "kcal": 385,
+   "p": 11.5,
+   "c": 65.6,
+   "f": 8.5,
+   "fib": 6.5,
+   "na": 450,
+   "portions": [
+    {
+     "n": "1 khakhra (20 g)",
+     "hi": "1 खाखरा",
+     "g": 20
+    },
+    {
+     "n": "2 khakhra (40 g)",
+     "hi": "2 खाखरा",
+     "g": 40
+    }
+   ],
+   "src": "Dry-snack composition from IFCT 2017 / USDA ingredient values, rounded",
+   "conf": "medium",
+   "note": "thin wheat rotis roasted crisp with ~1 tsp oil per 100 g; ~77 kcal each"
+  },
+  {
+   "slug": "khakhra-masala",
+   "name": "Masala Khakhra",
+   "hi": "मसाला खाखरा",
+   "alias": [
+    "masala khakra",
+    "jeera khakhra",
+    "spicy khakhra",
+    "मसाला खाखडा"
+   ],
+   "cat": "snack",
+   "region": "Gujarat",
+   "diet": "veg",
+   "emoji": "🍘",
+   "unit": "g",
+   "kcal": 395,
+   "p": 11.5,
+   "c": 64.8,
+   "f": 10,
+   "fib": 6.5,
+   "na": 600,
+   "portions": [
+    {
+     "n": "1 khakhra (20 g)",
+     "hi": "1 खाखरा",
+     "g": 20
+    },
+    {
+     "n": "2 khakhra (40 g)",
+     "hi": "2 खाखरा",
+     "g": 40
+    }
+   ],
+   "src": "Dry-snack composition from IFCT 2017 / USDA ingredient values, rounded",
+   "conf": "medium",
+   "note": "wheat khakhra with masala and a little more oil; INDB khakhra chaat 359 is a different dish"
+  },
+  {
+   "slug": "sev-plain",
+   "name": "Sev (Plain Besan Sev)",
+   "hi": "सेव",
+   "alias": [
+    "besan sev",
+    "plain sev",
+    "nylon sev",
+    "tikha sev",
+    "namkeen sev",
+    "सेव नमकीन"
+   ],
+   "cat": "snack",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍘",
+   "unit": "g",
+   "kcal": 505,
+   "p": 15,
+   "c": 39.3,
+   "f": 32,
+   "fib": 4.5,
+   "na": 650,
+   "portions": [
+    {
+     "n": "1 handful (30 g)",
+     "hi": "1 मुट्ठी",
+     "g": 30
+    },
+    {
+     "n": "1 tbsp (8 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 8
+    },
+    {
+     "n": "1 small bowl (50 g)",
+     "hi": "1 कटोरी",
+     "g": 50
+    }
+   ],
+   "src": "Typical packaged-snack label range (not brand specific), rounded; capped at 520 kcal per 100 g",
+   "conf": "medium",
+   "note": "besan strands deep fried; commercial labels 520-560, capped at 505 here"
+  },
+  {
+   "slug": "sev-ratlami",
+   "name": "Ratlami Sev",
+   "hi": "रतलामी सेव",
+   "alias": [
+    "ratlam sev",
+    "ratlami sev namkeen",
+    "laung sev",
+    "spicy sev",
+    "रतलाम सेव"
+   ],
+   "cat": "snack",
+   "region": "Madhya Pradesh",
+   "diet": "veg",
+   "emoji": "🍘",
+   "unit": "g",
+   "kcal": 510,
+   "p": 14,
+   "c": 39.3,
+   "f": 33,
+   "fib": 4,
+   "na": 750,
+   "portions": [
+    {
+     "n": "1 handful (30 g)",
+     "hi": "1 मुट्ठी",
+     "g": 30
+    },
+    {
+     "n": "1 small bowl (50 g)",
+     "hi": "1 कटोरी",
+     "g": 50
+    }
+   ],
+   "src": "Typical packaged-snack label range (not brand specific), rounded; capped at 520 kcal per 100 g",
+   "conf": "medium",
+   "note": "besan sev with clove and black pepper, fried in oil; labels 520-550, capped at 510"
+  },
+  {
+   "slug": "bhujia-bikaneri",
+   "name": "Bikaneri Bhujia",
+   "hi": "बीकानेरी भुजिया",
+   "alias": [
+    "bikaneri bhujiya",
+    "bikaner bhujia",
+    "moth bhujia",
+    "bhujiya",
+    "भुजिया"
+   ],
+   "cat": "snack",
+   "region": "Rajasthan",
+   "diet": "veg",
+   "emoji": "🍘",
+   "unit": "g",
+   "kcal": 520,
+   "p": 14,
+   "c": 35,
+   "f": 36,
+   "fib": 5,
+   "na": 800,
+   "portions": [
+    {
+     "n": "1 handful (30 g)",
+     "hi": "1 मुट्ठी",
+     "g": 30
+    },
+    {
+     "n": "1 small bowl (50 g)",
+     "hi": "1 कटोरी",
+     "g": 50
+    }
+   ],
+   "src": "Typical packaged-snack label range (not brand specific), rounded; capped at 520 kcal per 100 g",
+   "conf": "medium",
+   "note": "moth bean and besan strands deep fried; labels 530-580 kcal, capped at 520"
+  },
+  {
+   "slug": "gathiya",
+   "name": "Gathiya (Besan Ganthia)",
+   "hi": "गाठिया",
+   "alias": [
+    "ganthia",
+    "gathia",
+    "bhavnagari gathiya",
+    "bhavnagri ganthiya",
+    "ganthiya",
+    "गांठिया"
+   ],
+   "cat": "snack",
+   "region": "Gujarat",
+   "diet": "veg",
+   "emoji": "🍘",
+   "unit": "g",
+   "kcal": 480,
+   "p": 14,
+   "c": 40.8,
+   "f": 29,
+   "fib": 5,
+   "na": 700,
+   "portions": [
+    {
+     "n": "1 handful (30 g)",
+     "hi": "1 मुट्ठी",
+     "g": 30
+    },
+    {
+     "n": "1 small bowl (50 g)",
+     "hi": "1 कटोरी",
+     "g": 50
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "medium",
+   "note": "thick fried besan sticks, soft-crisp, with carom and pepper; ~145 kcal per 30 g"
+  },
+  {
+   "slug": "papdi-gathiya",
+   "name": "Papdi Gathiya (Vanela)",
+   "hi": "पापड़ी गाठिया",
+   "alias": [
+    "vanela gathiya",
+    "papdi ganthia",
+    "gujarati papdi gathia",
+    "पापड़ी गांठिया"
+   ],
+   "cat": "snack",
+   "region": "Gujarat",
+   "diet": "veg",
+   "emoji": "🍘",
+   "unit": "g",
+   "kcal": 470,
+   "p": 12,
+   "c": 42.5,
+   "f": 28,
+   "fib": 4,
+   "na": 650,
+   "portions": [
+    {
+     "n": "1 handful (30 g)",
+     "hi": "1 मुट्ठी",
+     "g": 30
+    },
+    {
+     "n": "1 plate (80 g)",
+     "hi": "1 प्लेट",
+     "g": 80
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "medium",
+   "note": "flat besan strips deep fried, served with chutney and raw papaya sambharo"
+  },
+  {
+   "slug": "fafda",
+   "name": "Fafda (Gujarati Besan Strips)",
+   "hi": "फाफड़ा",
+   "alias": [
+    "fafda gathiya",
+    "gujarati fafda",
+    "fafra",
+    "dussehra fafda",
+    "फाफडा"
+   ],
+   "cat": "snack",
+   "region": "Gujarat",
+   "diet": "veg",
+   "emoji": "🍘",
+   "unit": "g",
+   "kcal": 465,
+   "p": 13,
+   "c": 40.3,
+   "f": 28,
+   "fib": 4,
+   "na": 600,
+   "portions": [
+    {
+     "n": "1 piece (15 g)",
+     "hi": "1 पीस",
+     "g": 15
+    },
+    {
+     "n": "1 plate, 6 pieces (90 g)",
+     "hi": "1 प्लेट",
+     "g": 90
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "medium",
+   "note": "besan strips with carom and papad khar, deep fried; eaten with chutney (and jalebi on Dussehra)"
+  },
+  {
+   "slug": "chorafali",
+   "name": "Chorafali (Gujarati Besan-Urad Crisps)",
+   "hi": "चोराफळी",
+   "alias": [
+    "chorafali crisps",
+    "chorafali namkeen",
+    "diwali chorafali",
+    "चोरफली"
+   ],
+   "cat": "snack",
+   "region": "Gujarat",
+   "diet": "veg",
+   "emoji": "🍘",
+   "unit": "g",
+   "kcal": 480,
+   "p": 12,
+   "c": 46,
+   "f": 28,
+   "fib": 4,
+   "na": 550,
+   "portions": [
+    {
+     "n": "1 piece (10 g)",
+     "hi": "1 पीस",
+     "g": 10
+    },
+    {
+     "n": "1 handful (30 g)",
+     "hi": "1 मुट्ठी",
+     "g": 30
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "low",
+   "note": "thin crisp fried discs of besan and urad flour"
+  },
+  {
+   "slug": "chakli-bhajani",
+   "name": "Chakli (Bhajani Chakli, Maharashtrian)",
+   "hi": "चकली",
+   "alias": [
+    "bhajani chakli",
+    "chakli namkeen",
+    "chakri",
+    "chakali",
+    "diwali chakli",
+    "चकरी"
+   ],
+   "cat": "snack",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🥨",
+   "unit": "g",
+   "kcal": 490,
+   "p": 9,
+   "c": 48.3,
+   "f": 29,
+   "fib": 5,
+   "na": 500,
+   "portions": [
+    {
+     "n": "1 chakli (15 g)",
+     "hi": "1 चकली",
+     "g": 15
+    },
+    {
+     "n": "3 chakli (45 g)",
+     "hi": "3 चकली",
+     "g": 45
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "medium",
+   "note": "multigrain flour spiral deep fried; ~74 kcal per chakli; packaged versions 480-530"
+  },
+  {
+   "slug": "murukku",
+   "name": "Murukku (Thenkuzhal, Rice-Urad)",
+   "hi": "मुरुक्कू",
+   "alias": [
+    "muruku",
+    "thenkuzhal",
+    "chakli south",
+    "rice murukku",
+    "murkku",
+    "मुरक्कू"
+   ],
+   "cat": "snack",
+   "region": "Tamil Nadu",
+   "diet": "veg",
+   "emoji": "🥨",
+   "unit": "g",
+   "kcal": 490,
+   "p": 7,
+   "c": 52.5,
+   "f": 28,
+   "fib": 3,
+   "na": 420,
+   "portions": [
+    {
+     "n": "1 murukku (15 g)",
+     "hi": "1 मुरुक्कू",
+     "g": 15
+    },
+    {
+     "n": "3 murukku (45 g)",
+     "hi": "3 मुरुक्कू",
+     "g": 45
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "medium",
+   "note": "rice and urad flour spiral deep fried; INDB rice murukku 594 rejected"
+  },
+  {
+   "slug": "ribbon-pakoda",
+   "name": "Ribbon Pakoda (Ola Pakoda)",
+   "hi": "रिबन पकौड़ा",
+   "alias": [
+    "ola pakoda",
+    "ribbon pakora",
+    "ribbon murukku",
+    "kara sev flat",
+    "रिबन पकोड़ा"
+   ],
+   "cat": "snack",
+   "region": "Tamil Nadu",
+   "diet": "veg",
+   "emoji": "🍘",
+   "unit": "g",
+   "kcal": 495,
+   "p": 12,
+   "c": 44.3,
+   "f": 30,
+   "fib": 4,
+   "na": 550,
+   "portions": [
+    {
+     "n": "1 handful (30 g)",
+     "hi": "1 मुट्ठी",
+     "g": 30
+    },
+    {
+     "n": "1 small bowl (50 g)",
+     "hi": "1 कटोरी",
+     "g": 50
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "medium",
+   "note": "besan and rice flour flat ribbons deep fried"
+  },
+  {
+   "slug": "thattai",
+   "name": "Thattai (Tamil Rice Crackers)",
+   "hi": "थट्टई",
+   "alias": [
+    "thattai murukku",
+    "thatta vadai",
+    "rice thattai",
+    "thatai",
+    "थट्टै"
+   ],
+   "cat": "snack",
+   "region": "Tamil Nadu",
+   "diet": "veg",
+   "emoji": "🍘",
+   "unit": "g",
+   "kcal": 490,
+   "p": 6.5,
+   "c": 53,
+   "f": 28,
+   "fib": 3,
+   "na": 480,
+   "portions": [
+    {
+     "n": "1 thattai (15 g)",
+     "hi": "1 पीस",
+     "g": 15
+    },
+    {
+     "n": "3 thattai (45 g)",
+     "hi": "3 पीस",
+     "g": 45
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "medium",
+   "note": "rice flour and urad discs with chana dal, deep fried"
+  },
+  {
+   "slug": "seedai",
+   "name": "Seedai (Uppu Seedai)",
+   "hi": "सीडई",
+   "alias": [
+    "uppu seedai",
+    "seedai balls",
+    "rice seedai",
+    "krishna jayanthi seedai",
+    "सीदै"
+   ],
+   "cat": "snack",
+   "region": "Tamil Nadu",
+   "diet": "veg",
+   "emoji": "🍘",
+   "unit": "g",
+   "kcal": 480,
+   "p": 7,
+   "c": 52.3,
+   "f": 27,
+   "fib": 3,
+   "na": 380,
+   "portions": [
+    {
+     "n": "1 handful, 8 pieces (30 g)",
+     "hi": "1 मुट्ठी",
+     "g": 30
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "medium",
+   "note": "small rice-urad balls deep fried; made for Krishna Jayanthi"
+  },
+  {
+   "slug": "chekkalu",
+   "name": "Chekkalu (Andhra Rice Crackers)",
+   "hi": "चेक्कलू",
+   "alias": [
+    "chekkalu rice crackers",
+    "thapala chekkalu",
+    "pappu chekkalu",
+    "chekka vadalu",
+    "चेक्कालु"
+   ],
+   "cat": "snack",
+   "region": "Andhra Pradesh",
+   "diet": "veg",
+   "emoji": "🍘",
+   "unit": "g",
+   "kcal": 485,
+   "p": 7,
+   "c": 49,
+   "f": 29,
+   "fib": 3,
+   "na": 520,
+   "portions": [
+    {
+     "n": "1 piece (15 g)",
+     "hi": "1 पीस",
+     "g": 15
+    },
+    {
+     "n": "3 pieces (45 g)",
+     "hi": "3 पीस",
+     "g": 45
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "medium",
+   "note": "rice flour discs with chana dal and peanut, deep fried"
+  },
+  {
+   "slug": "chegodilu",
+   "name": "Chegodilu (Ring Murukku)",
+   "hi": "चेगोडिलू",
+   "alias": [
+    "chegodi",
+    "chekodi",
+    "chegodilu rings",
+    "ring murukku",
+    "चेगोडी"
+   ],
+   "cat": "snack",
+   "region": "Telangana",
+   "diet": "veg",
+   "emoji": "🥨",
+   "unit": "g",
+   "kcal": 490,
+   "p": 6.5,
+   "c": 53,
+   "f": 28,
+   "fib": 3,
+   "na": 430,
+   "portions": [
+    {
+     "n": "1 ring (20 g)",
+     "hi": "1 छल्ला",
+     "g": 20
+    },
+    {
+     "n": "2 rings (40 g)",
+     "hi": "2 छल्ला",
+     "g": 40
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "low",
+   "note": "rice flour rings with sesame, deep fried"
+  },
+  {
+   "slug": "mathri-plain",
+   "name": "Mathri (Plain, Maida)",
+   "hi": "मठरी",
+   "alias": [
+    "mathi",
+    "matthi",
+    "matri",
+    "salted mathri",
+    "namkeen mathri",
+    "मट्ठी"
+   ],
+   "cat": "snack",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🍘",
+   "unit": "g",
+   "kcal": 470,
+   "p": 7,
+   "c": 49.8,
+   "f": 27,
+   "fib": 2.5,
+   "na": 480,
+   "portions": [
+    {
+     "n": "1 mathri (20 g)",
+     "hi": "1 मठरी",
+     "g": 20
+    },
+    {
+     "n": "3 mathri (60 g)",
+     "hi": "3 मठरी",
+     "g": 60
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "medium",
+   "note": "maida-semolina flaky discs with carom, deep fried; ~94 kcal each; INDB 805 rejected"
+  },
+  {
+   "slug": "mathri-methi",
+   "name": "Methi Mathri",
+   "hi": "मेथी मठरी",
+   "alias": [
+    "methi matthi",
+    "fenugreek mathri",
+    "methi mathi",
+    "मेथी मट्ठी"
+   ],
+   "cat": "snack",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🍘",
+   "unit": "g",
+   "kcal": 465,
+   "p": 8,
+   "c": 49.8,
+   "f": 26,
+   "fib": 3,
+   "na": 500,
+   "portions": [
+    {
+     "n": "1 mathri (20 g)",
+     "hi": "1 मठरी",
+     "g": 20
+    },
+    {
+     "n": "3 mathri (60 g)",
+     "hi": "3 मठरी",
+     "g": 60
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "medium",
+   "note": "maida and atta mathri with dried methi, deep fried"
+  },
+  {
+   "slug": "mathri-bajra",
+   "name": "Bajra Mathri",
+   "hi": "बाजरा मठरी",
+   "alias": [
+    "pearl millet mathri",
+    "bajre ki mathri",
+    "bajra matthi",
+    "बाजरे की मठरी"
+   ],
+   "cat": "snack",
+   "region": "Rajasthan",
+   "diet": "veg",
+   "emoji": "🍘",
+   "unit": "g",
+   "kcal": 480,
+   "p": 7,
+   "c": 50,
+   "f": 28,
+   "fib": 4,
+   "na": 420,
+   "portions": [
+    {
+     "n": "1 mathri (20 g)",
+     "hi": "1 मठरी",
+     "g": 20
+    },
+    {
+     "n": "3 mathri (60 g)",
+     "hi": "3 मठरी",
+     "g": 60
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "low",
+   "note": "bajra and wheat flour mathri, deep fried; INDB 785 rejected"
+  },
+  {
+   "slug": "namak-para",
+   "name": "Namak Para (Nimki, Salted Maida Diamonds)",
+   "hi": "नमक पारे",
+   "alias": [
+    "namak pare",
+    "namkeen para",
+    "namakpara",
+    "nimki namkeen",
+    "नमकपारा"
+   ],
+   "cat": "snack",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🍘",
+   "unit": "g",
+   "kcal": 495,
+   "p": 7,
+   "c": 51.5,
+   "f": 29,
+   "fib": 2.5,
+   "na": 550,
+   "portions": [
+    {
+     "n": "1 handful (30 g)",
+     "hi": "1 मुट्ठी",
+     "g": 30
+    },
+    {
+     "n": "1 small bowl (50 g)",
+     "hi": "1 कटोरी",
+     "g": 50
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "medium",
+   "note": "maida diamonds with ajwain and kalonji, deep fried; ~150 kcal per handful"
+  },
+  {
+   "slug": "khara-shakarpara",
+   "name": "Khara Shakarpara (Savoury Shankarpali)",
+   "hi": "खारा शक्करपारा",
+   "alias": [
+    "khara shankarpali",
+    "khara shakarpare",
+    "salted shakarpara",
+    "namkeen shakarpara",
+    "खारी शंकरपाली"
+   ],
+   "cat": "snack",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🍘",
+   "unit": "g",
+   "kcal": 480,
+   "p": 7.5,
+   "c": 49.5,
+   "f": 28,
+   "fib": 2.5,
+   "na": 500,
+   "portions": [
+    {
+     "n": "1 handful (30 g)",
+     "hi": "1 मुट्ठी",
+     "g": 30
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "medium",
+   "note": "salted maida squares deep fried (the sweet shankarpali belongs under mithai)"
+  },
+  {
+   "slug": "bhakarwadi",
+   "name": "Bhakarwadi (Pune)",
+   "hi": "भाकरवडी",
+   "alias": [
+    "bhakarwadi",
+    "bhakar wadi",
+    "bakarwadi",
+    "pune bhakarwadi",
+    "भाखरवडी"
+   ],
+   "cat": "snack",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🍘",
+   "unit": "g",
+   "kcal": 490,
+   "p": 7,
+   "c": 52.5,
+   "f": 28,
+   "fib": 3,
+   "na": 540,
+   "portions": [
+    {
+     "n": "1 piece (10 g)",
+     "hi": "1 पीस",
+     "g": 10
+    },
+    {
+     "n": "1 handful, 3 pieces (30 g)",
+     "hi": "1 मुट्ठी",
+     "g": 30
+    }
+   ],
+   "src": "Typical packaged-snack label range (not brand specific), rounded; capped at 520 kcal per 100 g",
+   "conf": "medium",
+   "note": "spiral roll of besan dough with coconut-sesame-spice filling, deep fried; packaged labels 480-520"
+  },
+  {
+   "slug": "banana-chips",
+   "name": "Banana Chips (Kerala, Coconut Oil)",
+   "hi": "केले के चिप्स",
+   "alias": [
+    "kele ke chips",
+    "nendran chips",
+    "kerala banana chips",
+    "raw banana chips",
+    "ethakka upperi",
+    "banana wafers",
+    "केला वेफर्स"
+   ],
+   "cat": "snack",
+   "region": "Kerala",
+   "diet": "veg",
+   "emoji": "🍟",
+   "unit": "g",
+   "kcal": 520,
+   "p": 2,
+   "c": 53.8,
+   "f": 33,
+   "fib": 5,
+   "na": 400,
+   "portions": [
+    {
+     "n": "1 handful (25 g)",
+     "hi": "1 मुट्ठी",
+     "g": 25
+    },
+    {
+     "n": "1 small pack (50 g)",
+     "hi": "1 पैकेट",
+     "g": 50
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "medium",
+   "note": "raw nendran banana slices fried in coconut oil; USDA banana chips 519; INDB 666 rejected"
+  },
+  {
+   "slug": "sarkara-varatti",
+   "name": "Sarkara Varatti (Jaggery-Coated Banana Chips)",
+   "hi": "सरकारा वरट्टी",
+   "alias": [
+    "sharkara upperi",
+    "sarkara upperi",
+    "jaggery banana chips",
+    "sweet banana chips",
+    "गुड़ वाले केले के चिप्स"
+   ],
+   "cat": "snack",
+   "region": "Kerala",
+   "diet": "veg",
+   "emoji": "🍟",
+   "unit": "g",
+   "kcal": 480,
+   "p": 1.5,
+   "c": 66,
+   "f": 24,
+   "fib": 4,
+   "na": 60,
+   "portions": [
+    {
+     "n": "1 handful (25 g)",
+     "hi": "1 मुट्ठी",
+     "g": 25
+    },
+    {
+     "n": "5 pieces (30 g)",
+     "hi": "5 पीस",
+     "g": 30
+    }
+   ],
+   "src": "Typical packaged-snack label range (not brand specific), rounded; capped at 520 kcal per 100 g",
+   "conf": "low",
+   "note": "fried banana pieces coated in jaggery-ginger syrup"
+  },
+  {
+   "slug": "jackfruit-chips",
+   "name": "Jackfruit Chips (Chakka Varattiyathu)",
+   "hi": "कटहल चिप्स",
+   "alias": [
+    "chakka varuthathu",
+    "chakka chips",
+    "kathal chips",
+    "panasa chips",
+    "phanas wafers",
+    "कटहल वेफर्स"
+   ],
+   "cat": "snack",
+   "region": "Kerala",
+   "diet": "veg",
+   "emoji": "🍟",
+   "unit": "g",
+   "kcal": 480,
+   "p": 3,
+   "c": 54,
+   "f": 28,
+   "fib": 6,
+   "na": 350,
+   "portions": [
+    {
+     "n": "1 handful (25 g)",
+     "hi": "1 मुट्ठी",
+     "g": 25
+    },
+    {
+     "n": "1 small pack (50 g)",
+     "hi": "1 पैकेट",
+     "g": 50
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "medium",
+   "note": "raw-ripe jackfruit bulb slices fried in coconut oil; INDB jackfruit fritter 598 rejected"
+  },
+  {
+   "slug": "tapioca-chips",
+   "name": "Tapioca Chips (Kappa Varuthathu)",
+   "hi": "टैपिओका चिप्स",
+   "alias": [
+    "kappa chips",
+    "cassava chips",
+    "kappa varuthathu",
+    "maravalli chips",
+    "कसावा चिप्स"
+   ],
+   "cat": "snack",
+   "region": "Kerala",
+   "diet": "veg",
+   "emoji": "🍟",
+   "unit": "g",
+   "kcal": 500,
+   "p": 1.2,
+   "c": 54.1,
+   "f": 31,
+   "fib": 3,
+   "na": 350,
+   "portions": [
+    {
+     "n": "1 handful (25 g)",
+     "hi": "1 मुट्ठी",
+     "g": 25
+    },
+    {
+     "n": "1 small pack (50 g)",
+     "hi": "1 पैकेट",
+     "g": 50
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "medium",
+   "note": "tapioca slices (IFCT 80 kcal raw) fried in coconut oil"
+  },
+  {
+   "slug": "sweet-potato-fries",
+   "name": "Sweet Potato Fries (Shakarkandi Fries)",
+   "hi": "शकरकंदी फ्राइज़",
+   "alias": [
+    "shakarkand fries",
+    "sweet potato chips fries",
+    "shakarkandi fingers",
+    "शकरकंद फ्राई"
+   ],
+   "cat": "snack",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🍟",
+   "unit": "g",
+   "kcal": 280,
+   "p": 2,
+   "c": 36.5,
+   "f": 14,
+   "fib": 3.5,
+   "na": 260,
+   "portions": [
+    {
+     "n": "1 small (80 g)",
+     "hi": "1 पीस",
+     "g": 80
+    },
+    {
+     "n": "1 medium (115 g)",
+     "hi": "1 पीस",
+     "g": 115
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "low",
+   "note": "deep fried sweet potato sticks (IFCT raw 108 kcal)"
+  },
+  {
+   "slug": "cutlet-veg",
+   "name": "Veg Cutlet",
+   "hi": "वेज कटलेट",
+   "alias": [
+    "vegetable cutlet",
+    "veg cutlets",
+    "mixed veg cutlet",
+    "veggie cutlet",
+    "वेजिटेबल कटलेट"
+   ],
+   "cat": "snack",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🧆",
+   "unit": "g",
+   "kcal": 235,
+   "p": 4,
+   "c": 27.8,
+   "f": 12,
+   "fib": 3,
+   "na": 420,
+   "portions": [
+    {
+     "n": "1 cutlet (60 g)",
+     "hi": "1 कटलेट",
+     "g": 60
+    },
+    {
+     "n": "2 cutlets (120 g)",
+     "hi": "2 कटलेट",
+     "g": 120
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + shallow-fry oil uptake)",
+   "conf": "medium",
+   "note": "potato, carrot, beans, peas patty crumb-coated and shallow fried; INDB 666 rejected"
+  },
+  {
+   "slug": "cutlet-aloo",
+   "name": "Aloo Cutlet",
+   "hi": "आलू कटलेट",
+   "alias": [
+    "potato cutlet",
+    "alu cutlet",
+    "aloo cutlets",
+    "aloo patty fried",
+    "आलू के कटलेट"
+   ],
+   "cat": "snack",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🧆",
+   "unit": "g",
+   "kcal": 230,
+   "p": 3.5,
+   "c": 28.1,
+   "f": 11.5,
+   "fib": 3,
+   "na": 400,
+   "portions": [
+    {
+     "n": "1 cutlet (60 g)",
+     "hi": "1 कटलेट",
+     "g": 60
+    },
+    {
+     "n": "2 cutlets (120 g)",
+     "hi": "2 कटलेट",
+     "g": 120
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + shallow-fry oil uptake)",
+   "conf": "medium",
+   "note": "potato patty with bread crumb coat, shallow fried"
+  },
+  {
+   "slug": "cutlet-paneer",
+   "name": "Paneer Cutlet",
+   "hi": "पनीर कटलेट",
+   "alias": [
+    "paneer potato cutlet",
+    "paneer aloo cutlet",
+    "paneer patty",
+    "पनीर के कटलेट"
+   ],
+   "cat": "snack",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🧆",
+   "unit": "g",
+   "kcal": 270,
+   "p": 8,
+   "c": 21.3,
+   "f": 17,
+   "fib": 2,
+   "na": 420,
+   "portions": [
+    {
+     "n": "1 cutlet (60 g)",
+     "hi": "1 कटलेट",
+     "g": 60
+    },
+    {
+     "n": "2 cutlets (120 g)",
+     "hi": "2 कटलेट",
+     "g": 120
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + shallow-fry oil uptake)",
+   "conf": "medium",
+   "note": "paneer and potato patty, crumb coated, shallow fried; INDB 672 rejected"
+  },
+  {
+   "slug": "poha-cutlet",
+   "name": "Poha Cutlet",
+   "hi": "पोहा कटलेट",
+   "alias": [
+    "chirwa cutlet",
+    "chivda cutlet",
+    "flattened rice cutlet",
+    "poha tikki",
+    "पोहे के कटलेट"
+   ],
+   "cat": "snack",
+   "region": "Madhya Pradesh",
+   "diet": "veg",
+   "emoji": "🧆",
+   "unit": "g",
+   "kcal": 225,
+   "p": 4,
+   "c": 27.5,
+   "f": 11,
+   "fib": 2.5,
+   "na": 380,
+   "portions": [
+    {
+     "n": "1 cutlet (60 g)",
+     "hi": "1 कटलेट",
+     "g": 60
+    },
+    {
+     "n": "2 cutlets (120 g)",
+     "hi": "2 कटलेट",
+     "g": 120
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + shallow-fry oil uptake)",
+   "conf": "medium",
+   "note": "soaked poha and potato patty, shallow fried; INDB 702 rejected"
+  },
+  {
+   "slug": "hara-bhara-kebab",
+   "name": "Hara Bhara Kebab",
+   "hi": "हरा भरा कबाब",
+   "alias": [
+    "hara bhara kabab",
+    "hara bhara kebab veg",
+    "spinach pea kebab",
+    "palak matar kebab",
+    "हरियाली कबाब"
+   ],
+   "cat": "snack",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🍢",
+   "unit": "g",
+   "kcal": 205,
+   "p": 6,
+   "c": 21.6,
+   "f": 10.5,
+   "fib": 4,
+   "na": 400,
+   "portions": [
+    {
+     "n": "1 kebab (35 g)",
+     "hi": "1 कबाब",
+     "g": 35
+    },
+    {
+     "n": "1 plate, 4 pieces (140 g)",
+     "hi": "1 प्लेट",
+     "g": 140
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + shallow-fry oil uptake)",
+   "conf": "medium",
+   "note": "spinach, green peas, potato and paneer kebab, shallow fried"
+  },
+  {
+   "slug": "veg-seekh-kebab",
+   "name": "Veg Seekh Kebab",
+   "hi": "वेज सीख कबाब",
+   "alias": [
+    "vegetable seekh kebab",
+    "veg seekh kabab",
+    "veg seekh",
+    "वेज सीख"
+   ],
+   "cat": "snack",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🍢",
+   "unit": "g",
+   "kcal": 195,
+   "p": 6.5,
+   "c": 17.5,
+   "f": 11,
+   "fib": 3.5,
+   "na": 430,
+   "portions": [
+    {
+     "n": "1 seekh (45 g)",
+     "hi": "1 पीस",
+     "g": 45
+    },
+    {
+     "n": "1 plate, 4 pieces (180 g)",
+     "hi": "1 प्लेट",
+     "g": 180
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + tandoor/grill marinade oil)",
+   "conf": "medium",
+   "note": "mixed veg, paneer and gram flour seekh, grilled with a little oil; INDB 691 rejected"
+  },
+  {
+   "slug": "dahi-kebab",
+   "name": "Dahi Ke Kebab (Hung Curd Kebab)",
+   "hi": "दही के कबाब",
+   "alias": [
+    "dahi kabab",
+    "dahi kebab",
+    "curd kebab",
+    "dahi ke kabab",
+    "दही कबाब"
+   ],
+   "cat": "snack",
+   "region": "Uttar Pradesh",
+   "diet": "veg",
+   "emoji": "🍢",
+   "unit": "g",
+   "kcal": 215,
+   "p": 8,
+   "c": 14.3,
+   "f": 14,
+   "fib": 1,
+   "na": 380,
+   "portions": [
+    {
+     "n": "1 kebab (35 g)",
+     "hi": "1 कबाब",
+     "g": 35
+    },
+    {
+     "n": "1 plate, 4 pieces (140 g)",
+     "hi": "1 प्लेट",
+     "g": 140
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + shallow-fry oil uptake)",
+   "conf": "medium",
+   "note": "hung curd, besan, paneer and spices, shallow fried"
+  },
+  {
+   "slug": "paneer-tikka-dry",
+   "name": "Paneer Tikka (Dry, Tandoor)",
+   "hi": "पनीर टिक्का",
+   "alias": [
+    "paneer tikka",
+    "paneer tikka dry",
+    "tandoori paneer",
+    "paneer shashlik",
+    "panir tikka",
+    "पनीर टिक्का ड्राई"
+   ],
+   "cat": "snack",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🍢",
+   "unit": "g",
+   "kcal": 250,
+   "p": 15,
+   "c": 7,
+   "f": 18,
+   "fib": 1,
+   "na": 420,
+   "portions": [
+    {
+     "n": "1 piece (25 g)",
+     "hi": "1 पीस",
+     "g": 25
+    },
+    {
+     "n": "1 plate, 6 pieces (150 g)",
+     "hi": "1 प्लेट",
+     "g": 150
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + tandoor/grill marinade oil)",
+   "conf": "medium",
+   "note": "paneer cubes (IFCT 258 kcal) marinated in curd and spices with a little oil, tandoor-grilled, with capsicum and onion; INDB shaslik 94 rejected"
+  },
+  {
+   "slug": "paneer-tikka-malai",
+   "name": "Malai Paneer Tikka",
+   "hi": "मलाई पनीर टिक्का",
+   "alias": [
+    "malai paneer tikka",
+    "creamy paneer tikka",
+    "paneer malai tikka",
+    "मलाई टिक्का"
+   ],
+   "cat": "snack",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🍢",
+   "unit": "g",
+   "kcal": 285,
+   "p": 14,
+   "c": 5.5,
+   "f": 23,
+   "fib": 0.5,
+   "na": 400,
+   "portions": [
+    {
+     "n": "1 piece (30 g)",
+     "hi": "1 पीस",
+     "g": 30
+    },
+    {
+     "n": "1 plate, 5 pieces (150 g)",
+     "hi": "1 प्लेट",
+     "g": 150
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + tandoor/grill marinade oil)",
+   "conf": "medium",
+   "note": "paneer marinated in cream, cashew paste and cheese, tandoor-grilled"
+  },
+  {
+   "slug": "paneer-tikka-hariyali",
+   "name": "Hariyali Paneer Tikka",
+   "hi": "हरियाली पनीर टिक्का",
+   "alias": [
+    "green paneer tikka",
+    "hariyali tikka",
+    "pudina paneer tikka",
+    "हरा पनीर टिक्का"
+   ],
+   "cat": "snack",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🍢",
+   "unit": "g",
+   "kcal": 240,
+   "p": 14,
+   "c": 7.8,
+   "f": 17,
+   "fib": 1.5,
+   "na": 420,
+   "portions": [
+    {
+     "n": "1 piece (25 g)",
+     "hi": "1 पीस",
+     "g": 25
+    },
+    {
+     "n": "1 plate, 6 pieces (150 g)",
+     "hi": "1 प्लेट",
+     "g": 150
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + tandoor/grill marinade oil)",
+   "conf": "medium",
+   "note": "paneer in mint-coriander-curd marinade, tandoor-grilled"
+  },
+  {
+   "slug": "tandoori-aloo",
+   "name": "Tandoori Aloo (Bharwan Aloo Tikka)",
+   "hi": "तंदूरी आलू",
+   "alias": [
+    "aloo tikka",
+    "tandoori alu",
+    "bharwan aloo",
+    "stuffed tandoori aloo",
+    "आलू टिक्का"
+   ],
+   "cat": "snack",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🥔",
+   "unit": "g",
+   "kcal": 135,
+   "p": 3,
+   "c": 17.3,
+   "f": 6,
+   "fib": 2.5,
+   "na": 380,
+   "portions": [
+    {
+     "n": "1 piece (50 g)",
+     "hi": "1 पीस",
+     "g": 50
+    },
+    {
+     "n": "1 plate, 4 pieces (200 g)",
+     "hi": "1 प्लेट",
+     "g": 200
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + tandoor/grill marinade oil)",
+   "conf": "medium",
+   "note": "parboiled potato (stuffed or plain) marinated in curd and spices, tandoor-grilled"
+  },
+  {
+   "slug": "tandoori-mushroom",
+   "name": "Tandoori Mushroom (Mushroom Tikka)",
+   "hi": "तंदूरी मशरूम",
+   "alias": [
+    "mushroom tikka",
+    "tandoori khumb",
+    "achari mushroom tikka",
+    "मशरूम टिक्का"
+   ],
+   "cat": "snack",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🍄",
+   "unit": "g",
+   "kcal": 105,
+   "p": 4.5,
+   "c": 6,
+   "f": 7,
+   "fib": 1.5,
+   "na": 350,
+   "portions": [
+    {
+     "n": "1 piece (25 g)",
+     "hi": "1 पीस",
+     "g": 25
+    },
+    {
+     "n": "1 plate, 6 pieces (150 g)",
+     "hi": "1 प्लेट",
+     "g": 150
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + tandoor/grill marinade oil)",
+   "conf": "medium",
+   "note": "button mushrooms in curd marinade with oil, tandoor-grilled"
+  },
+  {
+   "slug": "tandoori-gobi",
+   "name": "Tandoori Gobi (Cauliflower Tikka)",
+   "hi": "तंदूरी गोभी",
+   "alias": [
+    "gobi tikka",
+    "tandoori cauliflower",
+    "achari gobi tikka",
+    "tandoori gobhi",
+    "गोभी टिक्का"
+   ],
+   "cat": "snack",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🥦",
+   "unit": "g",
+   "kcal": 105,
+   "p": 4,
+   "c": 8.8,
+   "f": 6,
+   "fib": 3,
+   "na": 360,
+   "portions": [
+    {
+     "n": "1 plate, 6 florets (150 g)",
+     "hi": "1 प्लेट",
+     "g": 150
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + tandoor/grill marinade oil)",
+   "conf": "medium",
+   "note": "cauliflower florets in curd and besan marinade with oil, tandoor-roasted"
+  },
+  {
+   "slug": "tandoori-soya-chaap",
+   "name": "Tandoori Soya Chaap",
+   "hi": "तंदूरी सोया चाप",
+   "alias": [
+    "soya chaap tikka",
+    "soya chaap tandoori",
+    "soy chaap",
+    "chaap tikka",
+    "सोया चाप टिक्का"
+   ],
+   "cat": "snack",
+   "region": "Punjab",
+   "diet": "veg",
+   "emoji": "🍢",
+   "unit": "g",
+   "kcal": 175,
+   "p": 14,
+   "c": 11.8,
+   "f": 8,
+   "fib": 2,
+   "na": 480,
+   "portions": [
+    {
+     "n": "1 stick (100 g)",
+     "hi": "1 स्टिक",
+     "g": 100
+    },
+    {
+     "n": "1 plate, 2 sticks (200 g)",
+     "hi": "1 प्लेट",
+     "g": 200
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + tandoor/grill marinade oil)",
+   "conf": "medium",
+   "note": "soya-wheat gluten sticks marinated in curd and spices, tandoor-grilled"
+  },
+  {
+   "slug": "corn-cheese-balls",
+   "name": "Corn Cheese Balls (Fried)",
+   "hi": "कॉर्न चीज़ बॉल्स",
+   "alias": [
+    "cheese corn balls",
+    "cheese balls",
+    "corn cheese nuggets",
+    "veg cheese balls",
+    "कॉर्न चीज बॉल"
+   ],
+   "cat": "snack",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🧆",
+   "unit": "g",
+   "kcal": 285,
+   "p": 9,
+   "c": 22.9,
+   "f": 17.5,
+   "fib": 2,
+   "na": 450,
+   "portions": [
+    {
+     "n": "1 ball (25 g)",
+     "hi": "1 गोला",
+     "g": 25
+    },
+    {
+     "n": "1 plate, 5 pieces (125 g)",
+     "hi": "1 प्लेट",
+     "g": 125
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "medium",
+   "note": "potato, sweet corn and processed cheese balls, crumb coated, deep fried"
+  },
+  {
+   "slug": "paneer-fingers",
+   "name": "Paneer Fingers (Crumb Fried)",
+   "hi": "पनीर फिंगर्स",
+   "alias": [
+    "paneer fingers fried",
+    "paneer nuggets",
+    "crispy paneer sticks",
+    "पनीर स्टिक"
+   ],
+   "cat": "snack",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🧆",
+   "unit": "g",
+   "kcal": 290,
+   "p": 12,
+   "c": 15.5,
+   "f": 20,
+   "fib": 1,
+   "na": 430,
+   "portions": [
+    {
+     "n": "1 finger (30 g)",
+     "hi": "1 फिंगर",
+     "g": 30
+    },
+    {
+     "n": "1 plate, 5 pieces (150 g)",
+     "hi": "1 प्लेट",
+     "g": 150
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "medium",
+   "note": "paneer sticks in breadcrumb batter, deep fried"
+  },
+  {
+   "slug": "bread-roll",
+   "name": "Bread Roll (Stuffed Potato, Fried)",
+   "hi": "ब्रेड रोल",
+   "alias": [
+    "bread rolls",
+    "potato bread roll",
+    "aloo bread roll",
+    "fried bread roll",
+    "ब्रेड रोल्स"
+   ],
+   "cat": "snack",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🧆",
+   "unit": "g",
+   "kcal": 270,
+   "p": 5.5,
+   "c": 28.3,
+   "f": 15,
+   "fib": 2.5,
+   "na": 480,
+   "portions": [
+    {
+     "n": "1 roll (80 g)",
+     "hi": "1 रोल",
+     "g": 80
+    },
+    {
+     "n": "2 rolls (160 g)",
+     "hi": "2 पीस",
+     "g": 160
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "medium",
+   "note": "bread slice wrapped around spiced potato, wet and deep fried; ~215 kcal each; INDB 436 is from a lower oil recipe"
+  },
+  {
+   "slug": "chicken-65",
+   "name": "Chicken 65",
+   "hi": "चिकन 65",
+   "alias": [
+    "chicken sixty five",
+    "chicken 65 dry",
+    "hyderabadi chicken 65",
+    "chicken65",
+    "चिकन सिक्सटी फाइव"
+   ],
+   "cat": "snack",
+   "region": "Tamil Nadu",
+   "diet": "nonveg",
+   "emoji": "🍗",
+   "unit": "g",
+   "kcal": 270,
+   "p": 21,
+   "c": 12.8,
+   "f": 15,
+   "fib": 0.5,
+   "na": 560,
+   "portions": [
+    {
+     "n": "1 piece (30 g)",
+     "hi": "1 पीस",
+     "g": 30
+    },
+    {
+     "n": "1 plate (150 g)",
+     "hi": "1 प्लेट",
+     "g": 150
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw meat/fish/egg + batter and fry oil)",
+   "conf": "medium",
+   "note": "boneless chicken marinated, light batter, deep fried with curry leaves; restaurant dry starter"
+  },
+  {
+   "slug": "fish-fingers",
+   "name": "Fish Fingers (Crumb Fried)",
+   "hi": "फिश फिंगर्स",
+   "alias": [
+    "fish finger",
+    "crumb fried fish fingers",
+    "fish sticks",
+    "fish nuggets",
+    "फिश स्टिक"
+   ],
+   "cat": "snack",
+   "region": "International",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "unit": "g",
+   "kcal": 250,
+   "p": 14,
+   "c": 17,
+   "f": 14,
+   "fib": 0.5,
+   "na": 480,
+   "portions": [
+    {
+     "n": "1 finger (35 g)",
+     "hi": "1 फिंगर",
+     "g": 35
+    },
+    {
+     "n": "1 plate, 5 pieces (175 g)",
+     "hi": "1 प्लेट",
+     "g": 175
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw meat/fish/egg + batter and fry oil)",
+   "conf": "medium",
+   "note": "fish strips in breadcrumb coat, deep fried; INDB 543 rejected (over-absorbed oil)"
+  },
+  {
+   "slug": "amritsari-fish",
+   "name": "Amritsari Fish Fry",
+   "hi": "अमृतसरी फिश फ्राई",
+   "alias": [
+    "amritsari machhi",
+    "amritsari fish pakora",
+    "amritsari fish tikka fried",
+    "अमृतसरी मछली"
+   ],
+   "cat": "snack",
+   "region": "Punjab",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "unit": "g",
+   "kcal": 265,
+   "p": 17,
+   "c": 11,
+   "f": 17,
+   "fib": 1,
+   "na": 600,
+   "portions": [
+    {
+     "n": "1 piece (50 g)",
+     "hi": "1 पीस",
+     "g": 50
+    },
+    {
+     "n": "1 plate, 4 pieces (200 g)",
+     "hi": "1 प्लेट",
+     "g": 200
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw meat/fish/egg + batter and fry oil)",
+   "conf": "medium",
+   "note": "fish fillets in ajwain-besan batter, deep fried"
+  },
+  {
+   "slug": "fish-fry-bengali",
+   "name": "Fish Fry (Kolkata Style)",
+   "hi": "फिश फ्राई (कोलकाता)",
+   "alias": [
+    "kolkata fish fry",
+    "bhetki fish fry",
+    "bengali fish fry",
+    "machher fry",
+    "bhetki fry",
+    "बंगाली फिश फ्राई"
+   ],
+   "cat": "snack",
+   "region": "West Bengal",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "unit": "g",
+   "kcal": 245,
+   "p": 17,
+   "c": 10.5,
+   "f": 15,
+   "fib": 0.5,
+   "na": 520,
+   "portions": [
+    {
+     "n": "1 piece (80 g)",
+     "hi": "1 पीस",
+     "g": 80
+    },
+    {
+     "n": "2 pieces (160 g)",
+     "hi": "2 पीस",
+     "g": 160
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw meat/fish/egg + batter and fry oil)",
+   "conf": "medium",
+   "note": "bhetki fillet in egg-crumb coat, deep fried; INDB fried fish 658 rejected"
+  },
+  {
+   "slug": "luqmi",
+   "name": "Luqmi (Hyderabadi Keema Pastry)",
+   "hi": "लुकमी",
+   "alias": [
+    "lukmi",
+    "hyderabadi luqmi",
+    "keema luqmi",
+    "keema samosa hyderabad",
+    "लुक्मी"
+   ],
+   "cat": "snack",
+   "region": "Telangana",
+   "diet": "nonveg",
+   "emoji": "🥟",
+   "unit": "g",
+   "kcal": 330,
+   "p": 11,
+   "c": 24.3,
+   "f": 21,
+   "fib": 1,
+   "na": 480,
+   "portions": [
+    {
+     "n": "1 piece (35 g)",
+     "hi": "1 पीस",
+     "g": 35
+    },
+    {
+     "n": "3 pieces (105 g)",
+     "hi": "3 पीस",
+     "g": 105
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "low",
+   "note": "square pastry with spiced mutton mince, deep fried"
+  },
+  {
+   "slug": "apollo-fish",
+   "name": "Apollo Fish (Hyderabad)",
+   "hi": "अपोलो फिश",
+   "alias": [
+    "apollo fish fry",
+    "apollo machi",
+    "hyderabad apollo fish",
+    "अपोलो मछली"
+   ],
+   "cat": "snack",
+   "region": "Telangana",
+   "diet": "nonveg",
+   "emoji": "🐟",
+   "unit": "g",
+   "kcal": 245,
+   "p": 17,
+   "c": 12.8,
+   "f": 14,
+   "fib": 0.5,
+   "na": 560,
+   "portions": [
+    {
+     "n": "1 plate (150 g)",
+     "hi": "1 प्लेट",
+     "g": 150
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw meat/fish/egg + batter and fry oil)",
+   "conf": "low",
+   "note": "boneless fish pieces batter-fried and tossed with curry leaf, chilli and curd sauce"
+  },
+  {
+   "slug": "punugulu",
+   "name": "Punugulu (Andhra Idli-Batter Fritters)",
+   "hi": "पुनुगुलु",
+   "alias": [
+    "punukulu",
+    "punugulu fritters",
+    "idli batter bonda",
+    "punugulu snack",
+    "पुनुगुल्लू"
+   ],
+   "cat": "snack",
+   "region": "Andhra Pradesh",
+   "diet": "veg",
+   "emoji": "🧆",
+   "unit": "g",
+   "kcal": 270,
+   "p": 6,
+   "c": 30,
+   "f": 14,
+   "fib": 2,
+   "na": 400,
+   "portions": [
+    {
+     "n": "1 piece (20 g)",
+     "hi": "1 पीस",
+     "g": 20
+    },
+    {
+     "n": "1 plate, 5 pieces (100 g)",
+     "hi": "1 प्लेट",
+     "g": 100
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "medium",
+   "note": "fermented rice-urad batter balls with onion and chilli, deep fried"
+  },
+  {
+   "slug": "pazham-pori",
+   "name": "Pazham Pori (Kerala Banana Fritter)",
+   "hi": "पळम पोरी",
+   "alias": [
+    "ethakka appam",
+    "banana fritters",
+    "pazhampori",
+    "nendrapazham fry",
+    "केले के पकोड़े"
+   ],
+   "cat": "snack",
+   "region": "Kerala",
+   "diet": "veg",
+   "emoji": "🧆",
+   "unit": "g",
+   "kcal": 270,
+   "p": 2.5,
+   "c": 36.9,
+   "f": 12.5,
+   "fib": 1.5,
+   "na": 80,
+   "portions": [
+    {
+     "n": "1 piece (70 g)",
+     "hi": "1 पीस",
+     "g": 70
+    },
+    {
+     "n": "2 pieces (140 g)",
+     "hi": "2 पीस",
+     "g": 140
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "medium",
+   "note": "ripe nendran banana slices in maida batter, deep fried; ~190 kcal per piece"
+  },
+  {
+   "slug": "sundal-peanut",
+   "name": "Peanut Sundal (Verkadalai Sundal)",
+   "hi": "मूंगफली सुंदल",
+   "alias": [
+    "verkadalai sundal",
+    "boiled peanut sundal",
+    "groundnut sundal",
+    "मूंगफली का सुंदल"
+   ],
+   "cat": "snack",
+   "region": "Tamil Nadu",
+   "diet": "veg",
+   "emoji": "🥜",
+   "unit": "g",
+   "kcal": 210,
+   "p": 10,
+   "c": 15.5,
+   "f": 12,
+   "fib": 5,
+   "na": 200,
+   "portions": [
+    {
+     "n": "1 katori (100 g)",
+     "hi": "1 कटोरी",
+     "g": 100
+    }
+   ],
+   "src": "Component build-up from IFCT 2017 raw values + typical street-vendor recipe",
+   "conf": "medium",
+   "note": "boiled peanuts tempered with mustard, curry leaf, coconut"
+  },
+  {
+   "slug": "sundal-corn",
+   "name": "Sweet Corn Sundal",
+   "hi": "स्वीट कॉर्न सुंदल",
+   "alias": [
+    "corn sundal",
+    "sweet corn salad tamil",
+    "makkachola sundal",
+    "मक्का सुंदल"
+   ],
+   "cat": "snack",
+   "region": "Tamil Nadu",
+   "diet": "veg",
+   "emoji": "🌽",
+   "unit": "g",
+   "kcal": 120,
+   "p": 3.5,
+   "c": 19.8,
+   "f": 3,
+   "fib": 3,
+   "na": 200,
+   "portions": [
+    {
+     "n": "1 katori (100 g)",
+     "hi": "1 कटोरी",
+     "g": 100
+    }
+   ],
+   "src": "Component build-up from IFCT 2017 raw values + typical street-vendor recipe",
+   "conf": "medium",
+   "note": "boiled sweet corn tempered with mustard, curry leaf, coconut"
+  },
+  {
+   "slug": "sel-roti",
+   "name": "Sel Roti (Sikkim Rice-Flour Ring)",
+   "hi": "सेल रोटी",
+   "alias": [
+    "sel roti nepali",
+    "sael roti",
+    "selroti",
+    "nepali rice ring bread",
+    "सेलरोटी"
+   ],
+   "cat": "snack",
+   "region": "Sikkim",
+   "diet": "veg",
+   "emoji": "🍩",
+   "unit": "g",
+   "kcal": 330,
+   "p": 4,
+   "c": 47,
+   "f": 14,
+   "fib": 1.5,
+   "na": 40,
+   "portions": [
+    {
+     "n": "1 ring (50 g)",
+     "hi": "1 छल्ला",
+     "g": 50
+    },
+    {
+     "n": "2 rings (100 g)",
+     "hi": "2 छल्ला",
+     "g": 100
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "low",
+   "note": "rice flour, sugar, ghee batter deep fried in a ring; mildly sweet"
+  },
+  {
+   "slug": "babru",
+   "name": "Babru (Himachali Stuffed Fried Bread)",
+   "hi": "बबरू",
+   "alias": [
+    "babroo",
+    "himachali babru",
+    "babru black gram",
+    "bhabru",
+    "बब्रू"
+   ],
+   "cat": "snack",
+   "region": "Himachal Pradesh",
+   "diet": "veg",
+   "emoji": "🧆",
+   "unit": "g",
+   "kcal": 330,
+   "p": 8,
+   "c": 38.5,
+   "f": 16,
+   "fib": 3,
+   "na": 420,
+   "portions": [
+    {
+     "n": "1 babru (50 g)",
+     "hi": "1 पीस",
+     "g": 50
+    },
+    {
+     "n": "2 babru (100 g)",
+     "hi": "2 पीस",
+     "g": 100
+    }
+   ],
+   "src": "Recipe mass-balance (IFCT 2017 raw ingredients + normal deep-fry oil uptake); INDB over-absorbed fried row rejected",
+   "conf": "low",
+   "note": "wheat dough stuffed with spiced black gram paste, deep fried"
+  },
+  {
+   "slug": "masala-papad",
+   "name": "Masala Papad",
+   "hi": "मसाला पापड़",
+   "alias": [
+    "masala papad roasted",
+    "papad masala",
+    "onion tomato papad",
+    "papad chaat",
+    "मसाला पापड"
+   ],
+   "cat": "snack",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍘",
+   "unit": "g",
+   "kcal": 230,
+   "p": 6.5,
+   "c": 26.3,
+   "f": 11,
+   "fib": 3.5,
+   "na": 800,
+   "portions": [
+    {
+     "n": "1 piece (35 g)",
+     "hi": "1 पीस",
+     "g": 35
+    },
+    {
+     "n": "2 pieces (70 g)",
+     "hi": "2 पीस",
+     "g": 70
+    }
+   ],
+   "src": "Component build-up from IFCT 2017 raw values + typical street-vendor recipe",
+   "conf": "medium",
+   "note": "roasted urad papad (12 g) topped with onion, tomato, sev, coriander, little oil; papad itself is high in sodium"
+  }
+ ]
+}

@@ -94,9 +94,11 @@ table: [`docs/deployment.md`](docs/deployment.md).
    [`docs/auth-setup.md`](docs/auth-setup.md).
 3. Sign up in the app. If you already had patient data, link it to your account
    with `supabase/scripts/link_existing_patient.sql`.
-4. Optional: seed the food catalogue with `node scripts/import-food-dataset.js`
-   (needs `SUPABASE_SERVICE_ROLE_KEY` in `.env.local`; run it on your own
-   computer only).
+4. Optional: copy the food catalogue into the database (needed only for food
+   favourites) with `node scripts/import-food-dataset.js --dry-run`, then without
+   `--dry-run` (needs `SUPABASE_SERVICE_ROLE_KEY` in `.env.local`; run it on your
+   own computer only). Search and calories do not need it: the catalogue is bundled
+   in the app, see [`docs/food-catalogue.md`](docs/food-catalogue.md).
 
 Deploying: see [`docs/deployment.md`](docs/deployment.md).
 
@@ -125,8 +127,8 @@ src/types/               shared TypeScript types
 supabase/migrations/     the database schema, in order
 supabase/email-templates/ bilingual email-code templates to paste into Supabase
 supabase/scripts/        one-off SQL (link an existing patient to an account)
-supabase/seed_data/      food dataset CSVs used by the import script
-scripts/                 import-food-dataset.js
+supabase/seed_data/      old food CSVs (superseded by src/data/food-catalogue.json, kept for history)
+scripts/                 import-food-dataset.js, food/ (catalogue build + checks)
 public/                  icons, logo and sw.js (service worker for the PWA shell)
 docs/                    auth-setup.md, deployment.md
 ```

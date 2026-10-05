@@ -10,12 +10,31 @@ import { getActivePatientId } from "@/lib/active-patient";
 import { addDaysIST, eachIST, todayIST } from "@/lib/health-rules";
 import { buildDoseRecords, summarizeAdherence } from "@/lib/analytics/adherence";
 import { buildWeeklyCsv } from "@/lib/analytics/report-csv";
-import { formatDayLabel, formatRangeLabel, periodInsights, summarizePeriod, type PeriodInput } from "@/lib/analytics/report-calc";
+import {
+  buildDayTrend,
+  formatDayLabel,
+  formatRangeLabel,
+  periodInsights,
+  summarizePeriod,
+  type DayTrendPoint,
+  type PeriodInput,
+} from "@/lib/analytics/report-calc";
+import type { BPThresholds } from "@/lib/health-rules";
 import { bpDay, foodDay, loadSeries, weightDay } from "./analytics-data";
 import { filterValidActivityLogs, filterValidBPLogs, filterValidSleepLogs, filterValidWeightLogs } from "./data-quality-service";
 import { NoActivePatientError } from "./patient-service";
 import { getPatientSettingsOrDefault } from "./settings-service";
 import { calculateWellnessScoresForRange, type DailyWellnessScoreResult } from "./wellness-score-service";
+
+export type { DayTrendPoint };
+
+/** The patient's own goals and lines, so charts can draw them without re-reading settings. */
+export interface ReportTargets {
+  bp: BPThresholds;
+  stepGoal: number;
+  sleepTargetHours: number;
+  calorieTarget: number;
+}
 
 export interface DayScorePoint {
   date: string;
@@ -66,6 +85,13 @@ export interface WeeklyReportSummary {
   personalizedInsights: string[];
 }
 
+/** The weekly summary plus what the report page charts (the email templates only need the summary). */
+export interface WeeklyReportData extends WeeklyReportSummary {
+  /** One point per day of the window (oldest first), for the trend charts. */
+  trend: DayTrendPoint[];
+  targets: ReportTargets;
+}
+
 export interface MonthlyReportSummary {
   monthLabel: string;
   startDate: string;
@@ -88,6 +114,16 @@ export interface MonthlyReportSummary {
   endWeightKg: number | null;
   weightChangeKg: number | null;
   personalizedInsights: string[];
+}
+
+/** The monthly summary plus what the report page charts. */
+export interface MonthlyReportData extends MonthlyReportSummary {
+  /** Length of the window in days (30 for the monthly report). */
+  periodDays: number;
+  /** One point per day of the window (oldest first), for the trend charts. */
+  trend: DayTrendPoint[];
+  targets: ReportTargets;
+  averageSleepHours: number | null;
 }
 
 export interface YearlyMonthSummary {
@@ -114,6 +150,15 @@ function resolvePatient(patientId?: string): string {
   const pid = patientId || getActivePatientId();
   if (!pid) throw new NoActivePatientError();
   return pid;
+}
+
+function targetsOf(settings: Awaited<ReturnType<typeof getPatientSettingsOrDefault>>): ReportTargets {
+  return {
+    bp: settings.bp_targets,
+    stepGoal: settings.daily_step_goal,
+    sleepTargetHours: settings.sleep_target_hours,
+    calorieTarget: settings.daily_calorie_target,
+  };
 }
 
 /** Everything a report needs for [start, end], read once; the scores use the same reads. */
@@ -158,7 +203,7 @@ function periodInput(
 // Weekly
 // ---------------------------------------------------------------------------
 
-export async function getWeeklyReportData(patientId?: string, endDate?: string): Promise<WeeklyReportSummary> {
+export async function getWeeklyReportData(patientId?: string, endDate?: string): Promise<WeeklyReportData> {
   const pid = resolvePatient(patientId);
   const end = endDate || todayIST();
   const start = addDaysIST(end, -6);
@@ -216,25 +261,26 @@ export async function getWeeklyReportData(patientId?: string, endDate?: string):
     startWeightKg: stats.start?.kg ?? null,
     endWeightKg: stats.end?.kg ?? null,
     dailyScores,
+    trend: buildDayTrend(input),
+    targets: targetsOf(d.settings),
     personalizedInsights: periodInsights(input, stats, "हफ्ते"),
   };
 }
 
 // ---------------------------------------------------------------------------
-// Monthly (the last 30 IST days)
+// Monthly (a rolling window of `days` IST days ending on `endDate`; 30 by default)
 // ---------------------------------------------------------------------------
 
-export async function getMonthlyReportData(patientId?: string): Promise<MonthlyReportSummary> {
+export async function getMonthlyReportData(patientId?: string, endDate?: string, days = 30): Promise<MonthlyReportData> {
   const pid = resolvePatient(patientId);
-  const end = todayIST();
-  const start = addDaysIST(end, -29);
+  const end = endDate || todayIST();
+  const start = addDaysIST(end, -(days - 1));
   const dates = eachIST(start, end);
 
   const d = await loadReportData(pid, start, end);
   const input = periodInput(dates, d);
   const stats = summarizePeriod(input);
   const pct = (n: number) => Math.round((n / dates.length) * 100);
-
   return {
     monthLabel: formatRangeLabel(start, end),
     startDate: start,
@@ -252,13 +298,17 @@ export async function getMonthlyReportData(patientId?: string): Promise<MonthlyR
     weightLoggingPercent: pct(stats.weightDays),
     averageCalories: stats.averageCalories,
     averageSteps: stats.averageSteps,
+    averageSleepHours: stats.averageSleepHours,
     totalBpReadings: stats.bpCount,
     startWeightKg: stats.start?.kg ?? null,
     endWeightKg: stats.end?.kg ?? null,
     weightChangeKg: stats.weightChangeKg,
+    periodDays: dates.length,
+    trend: buildDayTrend(input),
+    targets: targetsOf(d.settings),
     personalizedInsights: [
-      `पिछले ${dates.length} दिनों में ${stats.scoredDays} दिन कुछ न कुछ दर्ज हुआ।`,
-      ...periodInsights(input, stats, "महीने"),
+      `इन ${dates.length} दिनों में से ${stats.scoredDays} दिन कुछ न कुछ दर्ज हुआ।`,
+      ...periodInsights(input, stats, days <= 31 ? "महीने" : "अवधि"),
     ],
   };
 }

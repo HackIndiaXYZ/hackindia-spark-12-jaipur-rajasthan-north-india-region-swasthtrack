@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { BRAND_COLOR, CANVAS_COLOR } from "@/lib/brand";
+import { CANVAS_COLOR, THEME_COLOR } from "@/lib/brand";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
@@ -16,9 +16,9 @@ export default function manifest(): MetadataRoute.Manifest {
     dir: "ltr",
     display: "standalone",
     categories: ["health", "medical"],
-    // Same values as the --color-canvas / --color-brand tokens (src/lib/brand.ts).
+    // Same values as the --color-canvas token and the ivory header (src/lib/brand.ts).
     background_color: CANVAS_COLOR,
-    theme_color: BRAND_COLOR,
+    theme_color: THEME_COLOR,
     icons: [
       // The base artwork runs almost to the edge of the canvas, so it is only
       // honest to declare it as "any". The maskable files are the same art

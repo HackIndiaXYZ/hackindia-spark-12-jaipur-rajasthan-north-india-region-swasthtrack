@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { AlertTriangle, ArrowDown, Check, TrendingUp } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 import {
   DEFAULT_BP_THRESHOLDS,
   classifyBP,
@@ -43,7 +42,20 @@ function BPIcon({ category }: { category: BPClassification["category"] }) {
   return <TrendingUp aria-hidden className={className} />;
 }
 
-/** Icon + Hindi label (English in the accessible name): never colour alone. */
+/** Literal strings so Tailwind sees them; same look as `Badge`, but allowed to wrap. */
+const chipTone: Record<BadgeTone, string> = {
+  positive: "border-positive-line bg-positive-soft text-positive",
+  attention: "border-attention-line bg-attention-soft text-attention",
+  critical: "border-critical-line bg-critical-soft text-critical",
+};
+
+/**
+ * Icon + Hindi label (English in the accessible name): never colour alone.
+ *
+ * Not a `Badge`: a Badge truncates to one line, and "थोड़ा ज़्यादा (स्टेज 1)" in a
+ * half-width tile on a 320px phone was being cut to "थोड़ा ज़्यादा (स्…". The
+ * classification is the point of the chip, so it wraps instead.
+ */
 export function BPStatusChip({
   systolic,
   diastolic,
@@ -58,11 +70,19 @@ export function BPStatusChip({
   if (!isPlausibleBP(systolic, diastolic)) return null;
   const c = classifyBP(systolic, diastolic, thresholds);
   return (
-    <Badge variant={bpTone(c)} className={className}>
-      <BPIcon category={c.category} />
+    <span
+      className={cn(
+        "inline-flex max-w-full items-start gap-1 rounded-2xl border px-2.5 py-0.5 text-xs font-medium",
+        chipTone[bpTone(c)],
+        className,
+      )}
+    >
+      <span className="mt-0.5 shrink-0">
+        <BPIcon category={c.category} />
+      </span>
       <span lang="hi">{c.labelHi}</span>
       <span className="sr-only"> ({c.labelEn})</span>
-    </Badge>
+    </span>
   );
 }
 

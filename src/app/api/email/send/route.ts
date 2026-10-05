@@ -1,4 +1,5 @@
 import type { SupabaseClient, User } from "@supabase/supabase-js";
+import { clock12, dateTimeBi } from "@/lib/email/format";
 import { sendMail } from "@/lib/email/mailer";
 import {
   renderAccessChangedEmail,
@@ -18,7 +19,6 @@ import {
 
 export const runtime = "nodejs";
 
-const IST = "Asia/Kolkata";
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 /** Per-user, per-type send limits (per server instance; stops a loop or a stuck button). */
@@ -42,17 +42,6 @@ function throttle(userId: string, type: string): void {
   recent.push(now);
   sendLog.set(key, recent);
 }
-
-const istLabel = (d: Date, withYear = false) =>
-  d.toLocaleString("en-IN", {
-    timeZone: IST,
-    day: "numeric",
-    month: "short",
-    ...(withYear ? { year: "numeric" } : {}),
-    hour: "numeric",
-    minute: "2-digit",
-    hour12: true,
-  });
 
 async function displayName(supabase: SupabaseClient<Database>, user: User): Promise<string> {
   const { data } = await supabase.from("profiles").select("display_name").eq("id", user.id).maybeSingle();
@@ -91,7 +80,7 @@ async function build(
       if (!userEmail) throw new HttpError(400, "Your account has no e-mail address");
       return {
         to: userEmail,
-        mail: renderTestEmail({ to: userEmail, sentAtLabel: `${istLabel(new Date(), true)} IST` }),
+        mail: renderTestEmail({ to: userEmail, sentAt: dateTimeBi(new Date()) }),
       };
     }
 
@@ -134,7 +123,7 @@ async function build(
           patientName: await patientName(supabase, patientId),
           code: invite.code,
           role: invite.role,
-          expiresAtLabel: istLabel(expires),
+          validUntil: `${clock12(expires)} IST`,
           minutesValid: Math.max(1, Math.ceil((expires.getTime() - Date.now()) / 60_000)),
         }),
       };
@@ -168,7 +157,7 @@ async function build(
           caregiverName: await displayName(supabase, user),
           caregiverEmail: user.email ?? null,
           role: role === "editor" ? "editor" : "viewer",
-          joinedAtLabel: istLabel(new Date(), true),
+          joinedAt: dateTimeBi(new Date()),
         }),
       };
     }

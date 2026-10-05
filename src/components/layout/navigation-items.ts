@@ -22,6 +22,8 @@ export type NavigationItem = {
   label: string;
   hindiLabel: string;
   icon: LucideIcon;
+  /** Tighter label for the 17rem sidebar, where the full one would truncate. */
+  shortLabel?: string;
 };
 
 /**
@@ -54,7 +56,13 @@ export const developerNavigation: NavigationItem[] = [
 export const informationNavigation: NavigationItem[] = [
   { href: "/about", label: "About", hindiLabel: "परिचय", icon: Info },
   { href: "/contact", label: "Contact", hindiLabel: "संपर्क", icon: Mail },
-  { href: "/medical-disclaimer", label: "Medical disclaimer", hindiLabel: "चिकित्सा अस्वीकरण", icon: ShieldCheck },
+  {
+    href: "/medical-disclaimer",
+    label: "Medical disclaimer",
+    shortLabel: "Disclaimer",
+    hindiLabel: "चिकित्सा अस्वीकरण",
+    icon: ShieldCheck,
+  },
 ];
 
 /**

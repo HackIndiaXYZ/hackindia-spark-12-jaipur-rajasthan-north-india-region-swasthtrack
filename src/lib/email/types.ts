@@ -1,9 +1,12 @@
 import type { MonthlyReportSummary, WeeklyReportSummary } from "@/services/reports-analytics-service";
+import type { Bi, CaregiverRoleKey } from "./format";
 
 export type EmailSeverity = "INFO" | "ATTENTION" | "IMPORTANT";
 
 /** Colour/wording bucket for a BP reading, decided by the caller from the patient's own lines. */
 export type BpTone = "critical" | "high" | "low" | "normal";
+
+export type CaregiverRole = CaregiverRoleKey;
 
 export interface EmailAlert {
   severity: EmailSeverity;
@@ -22,13 +25,40 @@ export interface RenderedEmail {
 }
 
 export interface RenderOptions {
-  /** Adds a "sample preview" banner; used by the preview route and test sends. */
+  /** Adds a "sample preview" strip; used by the preview route and sample sends. */
   sample?: boolean;
+  /** Base URL for the logo and links. Defaults to NEXT_PUBLIC_APP_URL; null leaves links out. */
+  base?: string | null;
+  /** What goes in "Sent to …". Defaults to a placeholder that `sendMail` fills in per recipient. */
+  recipient?: string;
 }
 
-export type CaregiverRole = "editor" | "viewer";
-
 // ---- alerts -----------------------------------------------------------------
+
+export interface BpAlertData {
+  patientName: string;
+  /** critical = very high / crisis range; high = above the alert line; low = below the low line. */
+  level: "critical" | "high" | "low";
+  /** "186/122" */
+  value: string;
+  pulse: number | null;
+  slot: "morning" | "evening" | null;
+  /** "7:42 AM" */
+  timeLabel: string;
+  /** Readings outside the range in the last 7 days, this one included. */
+  outOfRange7d: number;
+}
+
+export interface ReminderData {
+  patientName: string;
+  /** "आज, दोपहर 2 बजे" / "Today, 2 PM" */
+  when: Bi;
+  /** `sub` is the line under the name, e.g. "5 mg · सुबह 8 बजे · 8 AM". */
+  missedMedicines: { name: string; sub: string }[];
+  missingRecords: Bi[];
+  /** Whole days since anything was logged; null when not a concern. */
+  daysWithoutData: number | null;
+}
 
 export interface WeightAlertData {
   patientName: string;
@@ -38,24 +68,29 @@ export interface WeightAlertData {
   changeKg: number;
   /** Days between the two weigh-ins. */
   days: number;
-  /** Why it was flagged, e.g. "≥ 2 kg in 7 days". */
-  ruleHi: string;
-  ruleEn: string;
+  /** Why it was flagged, e.g. "a change of 2 kg or more within 7 days". */
+  rule: Bi;
 }
 
 // ---- reports ----------------------------------------------------------------
 
 export interface DailyReportData {
   patientName: string;
-  dateLabel: string;
-  bpReadings: { time: string; value: string; pulse: number | null; label: string; tone: BpTone }[];
+  date: Bi;
+  alerts: EmailAlert[];
+  bpReadings: {
+    slot: "morning" | "evening" | null;
+    timeLabel: string;
+    pulse: number | null;
+    value: string;
+    tone: BpTone;
+  }[];
   medicines: { total: number; taken: number; missed: string[]; pending: string[] };
-  calories: { eaten: number; target: number; meals: string[] };
+  calories: { eaten: number; target: number; meals: Bi[] };
   steps: number | null;
   sleepHours: number | null;
   weightKg: number | null;
-  missing: string[];
-  alerts: EmailAlert[];
+  notLogged: Bi[];
 }
 
 export interface WeeklyReportData {
@@ -81,7 +116,7 @@ export interface WelcomeData {
 
 export interface TestEmailData {
   to: string;
-  sentAtLabel: string;
+  sentAt: Bi;
 }
 
 export interface CaregiverInviteData {
@@ -90,8 +125,8 @@ export interface CaregiverInviteData {
   /** The 8-character code the caregiver types into the app. */
   code: string;
   role: CaregiverRole;
-  /** Human label, e.g. "4 Oct, 3:45 PM". */
-  expiresAtLabel: string;
+  /** "11:39 AM IST" */
+  validUntil: string;
   minutesValid: number;
 }
 
@@ -100,7 +135,7 @@ export interface CaregiverJoinedData {
   caregiverName: string;
   caregiverEmail?: string | null;
   role: CaregiverRole;
-  joinedAtLabel: string;
+  joinedAt: Bi;
 }
 
 export interface AccessChangedData {
@@ -109,4 +144,10 @@ export interface AccessChangedData {
   change: "removed" | "role-changed";
   /** Set when change === "role-changed". */
   newRole?: CaregiverRole;
+}
+
+// ---- Supabase Auth mails (code is a literal or a Go-template variable) -------
+
+export interface AuthCodeData {
+  code: string;
 }

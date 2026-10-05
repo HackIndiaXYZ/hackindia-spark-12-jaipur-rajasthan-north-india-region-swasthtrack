@@ -147,10 +147,26 @@ function BPForm({ patientId, patientName, saved }: FormProps) {
     <form onSubmit={(e) => void submit(e)} noValidate className="space-y-3">
       <div className="grid grid-cols-2 gap-3">
         <Field label="Systolic (ऊपर वाला)" hint="mmHg" error={errors.systolic} required>
-          <NumberInput maxLength={3} placeholder="जैसे 130" value={systolic} onChange={(e) => setSystolic(e.target.value)} />
+          <NumberInput
+            maxLength={3}
+            placeholder="जैसे 130"
+            value={systolic}
+            onChange={(e) => {
+              setSystolic(e.target.value);
+              setErrors((prev) => ({ ...prev, systolic: undefined, diastolic: undefined }));
+            }}
+          />
         </Field>
         <Field label="Diastolic (नीचे वाला)" hint="mmHg" error={errors.diastolic} required>
-          <NumberInput maxLength={3} placeholder="जैसे 85" value={diastolic} onChange={(e) => setDiastolic(e.target.value)} />
+          <NumberInput
+            maxLength={3}
+            placeholder="जैसे 85"
+            value={diastolic}
+            onChange={(e) => {
+              setDiastolic(e.target.value);
+              setErrors((prev) => ({ ...prev, systolic: undefined, diastolic: undefined }));
+            }}
+          />
         </Field>
       </div>
       {preview ? (
@@ -162,7 +178,15 @@ function BPForm({ patientId, patientName, saved }: FormProps) {
       ) : null}
       <div className="grid grid-cols-2 gap-3">
         <Field label="Pulse (नब्ज़)" hint="वैकल्पिक" error={errors.pulse}>
-          <NumberInput maxLength={3} placeholder="जैसे 72" value={pulse} onChange={(e) => setPulse(e.target.value)} />
+          <NumberInput
+            maxLength={3}
+            placeholder="जैसे 72"
+            value={pulse}
+            onChange={(e) => {
+              setPulse(e.target.value);
+              setErrors((prev) => ({ ...prev, pulse: undefined }));
+            }}
+          />
         </Field>
         <Field label="कब नापा">
           <Select value={period} onChange={(e) => setPeriod(e.target.value)}>

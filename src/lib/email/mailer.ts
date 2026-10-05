@@ -1,4 +1,5 @@
 import nodemailer, { type Transporter } from "nodemailer";
+import { fillRecipient } from "./layout";
 
 export interface ReportConfig {
   patientId: string;
@@ -42,22 +43,34 @@ function getTransporter(): Transporter | null {
   return transporter;
 }
 
+/**
+ * Sends one message per recipient, so each person sees only their own address (the
+ * "Sent to" line in the footer is filled in per recipient). Reports failure if any
+ * recipient failed, with the first error.
+ */
 export async function sendMail(
   to: string[],
   mail: { subject: string; html: string; text: string },
 ): Promise<SendResult> {
   const t = getTransporter();
   if (!t) return { ok: false, error: "SMTP password / RESEND_API_KEY is not configured" };
-  try {
-    const info = await t.sendMail({
-      from: process.env.EMAIL_FROM || "SwasthTrack <onboarding@resend.dev>",
-      to,
-      subject: mail.subject,
-      html: mail.html,
-      text: mail.text,
-    });
-    return { ok: true, messageId: info.messageId };
-  } catch (err) {
-    return { ok: false, error: err instanceof Error ? err.message : String(err) };
+
+  const ids: string[] = [];
+  let firstError: string | undefined;
+  for (const address of to) {
+    const personal = fillRecipient(mail, address);
+    try {
+      const info = await t.sendMail({
+        from: process.env.EMAIL_FROM || "SwasthTrack <onboarding@resend.dev>",
+        to: address,
+        subject: personal.subject,
+        html: personal.html,
+        text: personal.text,
+      });
+      ids.push(info.messageId);
+    } catch (err) {
+      firstError ??= err instanceof Error ? err.message : String(err);
+    }
   }
+  return firstError ? { ok: false, error: firstError, messageId: ids[0] } : { ok: true, messageId: ids[0] };
 }

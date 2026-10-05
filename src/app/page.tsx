@@ -1,13 +1,20 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import Link from "next/link";
 import { RefreshCw, UserRound } from "lucide-react";
-import { SkeletonDashboard } from "@/components/ui/skeleton-loaders";
+import { DashboardSkeleton } from "@/components/dashboard/dashboard-skeleton";
 import { Button, buttonClasses } from "@/components/ui/button";
 import { EmptyState, ErrorState, PageBody, Section } from "@/components/ui/page";
 import { useToast } from "@/components/ui/toast";
-import { DashboardSections } from "@/components/dashboard/dashboard-sections";
+import {
+  ActivityCard,
+  BloodPressureCard,
+  ChecklistCard,
+  MealsCard,
+  MedicinesSection,
+  WeightCard,
+} from "@/components/dashboard/dashboard-sections";
 import { PatientOverviewCard } from "@/components/dashboard/patient-overview-card";
 import { HeroHealthCard, type WellnessView } from "@/components/dashboard/hero-health-card";
 import { DailyStoryCard } from "@/components/dashboard/daily-story-card";
@@ -24,7 +31,7 @@ import { generateSmartInsightsAndAlerts, type SmartInsightsData } from "@/servic
 import { detectHealthAnomaliesAndTrends, type ComprehensiveIntelligence } from "@/services/anomaly-detection-service";
 import { generateHealthPredictions, type HealthPrediction } from "@/services/health-ml-service";
 import { calculateDailyWellnessScore } from "@/services/wellness-score-service";
-import { getBPThresholds } from "@/services/settings-service";
+import { getBPThresholds, getPatientSettingsOrDefault, updatePatientSettings } from "@/services/settings-service";
 import { AddActivityDialog } from "@/components/forms/add-activity-dialog";
 import { AddBPDialog } from "@/components/forms/add-bp-dialog";
 import { AddFoodDialog } from "@/components/forms/add-food-dialog";
@@ -37,11 +44,13 @@ import {
   SupabaseNotConfiguredError,
   getBloodPressureLogs,
   getDashboardOverview,
+  getPatientProfile,
   type BPLogEntry,
   type DashboardOverview,
 } from "@/services/patient-service";
 import { DEFAULT_BP_THRESHOLDS, todayIST, type BPThresholds } from "@/lib/health-rules";
 import { useAuth } from "@/context/auth-context";
+import { cn } from "@/lib/utils";
 
 type DialogName = "bp" | "weight" | "food" | "activity" | "sleep" | "medicine" | "profile";
 
@@ -60,6 +69,27 @@ const ANALYTICS_DEBOUNCE_MS = 1500;
 
 function keepOrFail<T>(prev: Slice<T>): Slice<T> {
   return prev.status === "ready" ? prev : { status: "error" };
+}
+
+/*
+ * Dashboard layout.
+ *
+ * On a phone the cards are ONE column in priority order: what needs attention,
+ * what to log, today's medicines, the day's story, insights, then the detailed
+ * records. From `lg` the same cards sit in two columns (a wide "log and track"
+ * column and a narrower "medicines and insights" column). The column wrappers are
+ * `display: contents` below `lg`, so every card is a direct flex item of one
+ * container and `order` can interleave the two columns for the phone order, while
+ * from `lg` each wrapper becomes a real column in DOM order.
+ */
+const PHONE_ORDER = [
+  "order-1", "order-2", "order-3", "order-4", "order-5", "order-6", "order-7",
+  "order-8", "order-9", "order-10", "order-11", "order-12", "order-13", "order-14",
+] as const;
+
+function Slot({ at, children }: { at: number; children: ReactNode }) {
+  // `empty:hidden`: a card that renders nothing (all alerts dismissed) must not leave a gap.
+  return <div className={cn(PHONE_ORDER[at - 1], "lg:order-none empty:hidden")}>{children}</div>;
 }
 
 export default function DashboardPage() {
@@ -83,6 +113,10 @@ export default function DashboardPage() {
 
   const analyticsTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const overviewRun = useRef(0);
+  /** The IST day the data on screen was loaded for (null until the first load lands). */
+  const [loadedDay, setLoadedDay] = useState<string | null>(null);
+  /** Bumped once a minute so time-of-day UI (day story, dose states) never goes stale. */
+  const [, setClock] = useState(0);
 
   useEffect(
     () => () => {
@@ -147,6 +181,7 @@ export default function DashboardPage() {
         setBpThresholds(result.thresholds);
         setLatestBP(result.latestBP);
         setLoading(false);
+        setLoadedDay(todayIST());
         return result.overview;
       }
       if (isRefresh) {
@@ -179,6 +214,33 @@ export default function DashboardPage() {
     };
   }, [activePatientId, fetchOverview, applyOverview, loadAnalytics]);
 
+  /**
+   * A phone leaves the app open overnight. Once the IST date rolls over, "today" on screen
+   * would still be yesterday's records, so on the next tick (or when the tab becomes visible
+   * again) everything is reloaded for the new day. The minute tick also re-renders the
+   * time-of-day UI.
+   */
+  useEffect(() => {
+    if (!activePatientId) return;
+    const check = () => {
+      if (document.visibilityState !== "visible") return;
+      setClock((n) => n + 1);
+      if (loadedDay && todayIST() !== loadedDay) {
+        setLoadedDay(todayIST());
+        void fetchOverview().then((result) => {
+          const overview = applyOverview(result, true);
+          if (overview) loadAnalytics(overview.patient.id);
+        });
+      }
+    };
+    const id = window.setInterval(check, 60_000);
+    document.addEventListener("visibilitychange", check);
+    return () => {
+      window.clearInterval(id);
+      document.removeEventListener("visibilitychange", check);
+    };
+  }, [activePatientId, loadedDay, fetchOverview, applyOverview, loadAnalytics]);
+
   /** After any save: the overview now, the slower analytics once the dust settles. */
   const afterSave = useCallback(() => {
     void fetchOverview().then((result) => applyOverview(result, true));
@@ -187,6 +249,30 @@ export default function DashboardPage() {
       if (activePatientId) loadAnalytics(activePatientId);
     }, ANALYTICS_DEBOUNCE_MS);
   }, [activePatientId, applyOverview, fetchOverview, loadAnalytics]);
+
+  /**
+   * The calorie target lives in two places: the patient profile (edited here) and the
+   * patient settings (read by the wellness score, the Food page and reports). Settings
+   * keeps the two in step when it saves; the profile dialog does not, so after a profile
+   * edit the settings row is brought in line, otherwise the dashboard and the score would
+   * quietly measure against different targets.
+   */
+  const afterProfileSave = useCallback(async () => {
+    if (activePatientId) {
+      try {
+        const [profile, settings] = await Promise.all([
+          getPatientProfile(activePatientId),
+          getPatientSettingsOrDefault(activePatientId),
+        ]);
+        if (profile.daily_calorie_target !== settings.daily_calorie_target) {
+          await updatePatientSettings(activePatientId, { daily_calorie_target: profile.daily_calorie_target });
+        }
+      } catch {
+        // The profile itself saved; a failed sync only leaves the old settings target in place.
+      }
+    }
+    afterSave();
+  }, [activePatientId, afterSave]);
 
   const retryAnalytics = useCallback(() => {
     if (!activePatientId) return;
@@ -257,18 +343,31 @@ export default function DashboardPage() {
   }
 
   if (loading || !data) {
-    return <SkeletonDashboard />;
+    return <DashboardSkeleton />;
   }
 
   const analyticsFailed = [smart, intel, forecast].some((s) => s.status === "error") || wellness.status === "error";
   const analyticsLoading = [smart, intel, forecast].some((s) => s.status === "loading");
+  const hasAlerts = smart.status === "ready" && smart.data.alerts.length > 0;
+
+  // What "दर्ज करें" does in the tracking summary: open the form here, for every vital.
+  const summaryActions = canWrite
+    ? {
+        Pill: open("medicine"),
+        Utensils: open("food"),
+        HeartPulse: open("bp"),
+        Footprints: open("activity"),
+        Moon: open("sleep"),
+        Scale: open("weight"),
+      }
+    : null;
 
   return (
     <PageBody>
       {/* Safety first: a crisis-range or low reading from the last day */}
       <BPSafetyBanner reading={latestBP} thresholds={bpThresholds} />
 
-      {/* 1–3. Greeting, daily message, score and the six-vital snapshot */}
+      {/* Greeting, daily message, the score and the six-vital snapshot: the one hero surface */}
       <HeroHealthCard
         data={data}
         wellness={wellness}
@@ -282,85 +381,112 @@ export default function DashboardPage() {
         onOpenSleep={canWrite ? open("sleep") : undefined}
       />
 
-      {/* 4. Needs attention */}
-      {smart.status === "ready" && smart.data.alerts.length > 0 ? (
-        <AlertCenterCard alerts={smart.data.alerts} patientId={data.patient.id} />
-      ) : null}
+      <div className="flex flex-col gap-5 sm:gap-6 lg:grid lg:grid-cols-2 lg:items-start xl:grid-cols-12">
+        {/* Left column from `lg`: log and track */}
+        <div className="contents lg:col-span-1 lg:flex lg:flex-col lg:gap-6 xl:col-span-7">
+          {/* Quick Log: the easiest thing to reach (§18) */}
+          {canWrite ? (
+            <Slot at={2}>
+              <QuickActionsBar
+                onOpenBP={open("bp")}
+                onOpenWeight={open("weight")}
+                onOpenFood={open("food")}
+                onOpenActivity={open("activity")}
+                onOpenSleep={open("sleep")}
+                onOpenMedicine={open("medicine")}
+              />
+            </Slot>
+          ) : null}
 
-      {analyticsFailed ? (
-        <div
-          role="status"
-          className="flex flex-wrap items-center justify-between gap-3 rounded-card border border-attention-line bg-attention-soft p-3.5"
-        >
-          <p lang="hi" className="text-sm text-attention">
-            कुछ विश्लेषण अभी लोड नहीं हो पाए। आपके रिकॉर्ड सुरक्षित हैं।
-          </p>
-          <Button size="sm" variant="secondary" onClick={retryAnalytics}>
-            <RefreshCw aria-hidden className="h-3.5 w-3.5" />
-            <span lang="hi">फिर कोशिश करें</span>
-          </Button>
+          <Slot at={4}>
+            <DailyStoryCard data={data} />
+          </Slot>
+
+          <Slot at={8}>
+            <WellnessScoreCard wellness={wellness} onRetry={retryWellness} />
+          </Slot>
+
+          <Slot at={9}>
+            <Section title="Today's records" hindiTitle="आज के रिकॉर्ड">
+              <MealsCard data={data} onOpenFood={open("food")} />
+            </Section>
+          </Slot>
+          <Slot at={10}>
+            <BloodPressureCard data={data} bpThresholds={bpThresholds} onOpenBP={open("bp")} />
+          </Slot>
+          <Slot at={11}>
+            <WeightCard data={data} onOpenWeight={open("weight")} />
+          </Slot>
+          <Slot at={12}>
+            <ActivityCard data={data} onOpenActivity={open("activity")} />
+          </Slot>
+          <Slot at={13}>
+            <ChecklistCard checklist={data.checklist} />
+          </Slot>
         </div>
-      ) : null}
 
-      {/* 5. Quick Log — the easiest thing to reach (§18) */}
-      {canWrite ? (
-        <QuickActionsBar
-          onOpenBP={open("bp")}
-          onOpenWeight={open("weight")}
-          onOpenFood={open("food")}
-          onOpenActivity={open("activity")}
-          onOpenSleep={open("sleep")}
-          onOpenMedicine={open("medicine")}
-        />
-      ) : null}
+        {/* Right column from `lg`: medicines and insights */}
+        <div className="contents lg:col-span-1 lg:flex lg:flex-col lg:gap-6 xl:col-span-5">
+          {/* Needs attention, and the state of the slower analytics */}
+          <Slot at={1}>
+            {smart.status === "ready" && hasAlerts ? (
+              <AlertCenterCard alerts={smart.data.alerts} patientId={data.patient.id} />
+            ) : analyticsFailed ? (
+              <div
+                role="status"
+                className="flex flex-wrap items-center justify-between gap-3 rounded-card border border-attention-line bg-attention-soft p-3.5"
+              >
+                <p lang="hi" className="text-sm text-attention">
+                  कुछ विश्लेषण अभी लोड नहीं हो पाए। आपके रिकॉर्ड सुरक्षित हैं।
+                </p>
+                <Button size="sm" variant="secondary" onClick={retryAnalytics}>
+                  <RefreshCw aria-hidden className="h-3.5 w-3.5" />
+                  <span lang="hi">फिर कोशिश करें</span>
+                </Button>
+              </div>
+            ) : analyticsLoading ? (
+              <div aria-busy="true" aria-label="विश्लेषण तैयार हो रहे हैं" className="skeleton h-20 w-full rounded-card" />
+            ) : null}
+          </Slot>
 
-      {/* 6. Today's narrative */}
-      <DailyStoryCard data={data} />
+          <Slot at={3}>
+            <MedicinesSection patientId={data.patient.id} onOpenTracker={open("medicine")} onChange={afterSave} />
+          </Slot>
 
-      {/* 7. Personal insights and what changed */}
-      <WhatChangedCard patientId={data.patient.id} />
+          <Slot at={5}>
+            <WhatChangedCard key={loadedDay ?? "day"} patientId={data.patient.id} />
+          </Slot>
 
-      {smart.status === "ready" ? <SmartDailySummaryCard summary={smart.data.dailySummary} /> : null}
+          <Slot at={6}>
+            {smart.status === "ready" ? (
+              <SmartDailySummaryCard summary={smart.data.dailySummary} actions={summaryActions} />
+            ) : null}
+          </Slot>
 
-      {intel.status === "ready" &&
-      (intel.data.healthPatternBullets.length > 0 || intel.data.multiFactorInsights.length > 0) ? (
-        <PersonalHealthPatternCard
-          patientId={data.patient.id}
-          bullets={intel.data.healthPatternBullets}
-          multiFactorObservations={intel.data.multiFactorInsights}
-        />
-      ) : null}
+          <Slot at={7}>
+            {intel.status === "ready" &&
+            (intel.data.healthPatternBullets.length > 0 || intel.data.multiFactorInsights.length > 0) ? (
+              <PersonalHealthPatternCard
+                patientId={data.patient.id}
+                bullets={intel.data.healthPatternBullets}
+                multiFactorObservations={intel.data.multiFactorInsights}
+              />
+            ) : null}
+          </Slot>
 
-      {analyticsLoading && !analyticsFailed ? (
-        <div aria-busy="true" aria-label="विश्लेषण तैयार हो रहे हैं" className="skeleton h-24 w-full rounded-card" />
-      ) : null}
+          <Slot at={14}>
+            {forecast.status === "ready" && forecast.data.predictions.length > 0 ? (
+              <HealthForecastCard
+                predictions={forecast.data.predictions}
+                modelVersion={forecast.data.modelVersion}
+                onOpenDiagnostics={isAdmin ? () => setIsDiagnosticsOpen(true) : undefined}
+              />
+            ) : null}
+          </Slot>
+        </div>
+      </div>
 
-      {/* 8. Score breakdown */}
-      <WellnessScoreCard wellness={wellness} onRetry={retryWellness} />
-
-      {/* 9. Per-vital detail sections */}
-      <Section title="Today's records" hindiTitle="आज के रिकॉर्ड">
-        <DashboardSections
-          data={data}
-          bpThresholds={bpThresholds}
-          onMedicineChange={afterSave}
-          onOpenBP={open("bp")}
-          onOpenWeight={open("weight")}
-          onOpenFood={open("food")}
-          onOpenActivity={open("activity")}
-          onOpenMedicine={open("medicine")}
-        />
-      </Section>
-
-      {forecast.status === "ready" && forecast.data.predictions.length > 0 ? (
-        <HealthForecastCard
-          predictions={forecast.data.predictions}
-          modelVersion={forecast.data.modelVersion}
-          onOpenDiagnostics={isAdmin ? () => setIsDiagnosticsOpen(true) : undefined}
-        />
-      ) : null}
-
-      {/* 10. Profile summary */}
+      {/* Profile summary */}
       <PatientOverviewCard patient={data.patient} conditions={data.conditions} onEditProfile={open("profile")} />
 
       {/* Dialogs render in a portal, so they never sit inside the page body's entrance animation. */}
@@ -399,7 +525,7 @@ export default function DashboardPage() {
         isOpen={dialog === "profile"}
         onClose={close}
         patient={data.patient}
-        onSuccess={afterSave}
+        onSuccess={() => void afterProfileSave()}
       />
 
       {isAdmin ? (

@@ -5,14 +5,19 @@ import { CountUp } from "@/components/motion/primitives";
 import { cn } from "@/lib/utils";
 
 /**
- * The product's signature graphic: today's wellness score as a glowing arc.
+ * The product's signature graphic: today's wellness score as a gold-foil arc
+ * on a frosted dial.
  *
- * Built as two stacked strokes — a heavily blurred copy underneath supplies the
- * glow, the sharp copy on top supplies the reading. The arc sweeps from zero on
- * mount and the number counts with it, so the score reads as something that was
- * measured rather than printed.
+ * Built to sit on the deeper `.gilt-rich` hero surface, where a plain gold
+ * stroke would vanish into the gold behind it. Three things keep it readable:
+ *   - a frosted-white dial behind the arc, so the arc has a light ground,
+ *   - the arc is a small metal tube — a bronze rim, a gold body and a thin
+ *     champagne highlight — so its edge holds >= 3:1 against the dial,
+ *   - a blurred gold copy underneath supplies the glow.
+ * The arc sweeps from zero on mount and the number counts with it, so the score
+ * reads as something that was measured rather than printed.
  *
- * The whole thing is one SVG with no library, so it costs nothing on a phone.
+ * One SVG, no library, so it costs nothing on a phone.
  */
 export function WellnessRing({
   score,
@@ -32,7 +37,7 @@ export function WellnessRing({
   className?: string;
   loading?: boolean;
 }) {
-  const gradientId = useId();
+  const bodyId = useId();
   const glowId = useId();
 
   const radius = (size - stroke) / 2;
@@ -49,6 +54,15 @@ export function WellnessRing({
     "--arc-to": `${progress} ${circumference}`,
   } as CSSProperties;
 
+  const center = size / 2;
+  const bodyStroke = Math.max(stroke - 5, 4);
+  const highlightStroke = Math.max(Math.round(stroke * 0.12), 1.5);
+  const showArc = score !== null && !loading;
+
+  // Type scales with the dial so a smaller ring never overflows its face.
+  const scoreFont = Math.round(size * 0.27);
+  const subFont = Math.max(Math.round(size * 0.07), 12);
+
   return (
     <div
       className={cn("relative shrink-0", className)}
@@ -57,67 +71,99 @@ export function WellnessRing({
       aria-label={
         score === null
           ? "Daily wellness score, still calculating"
-          : `Daily wellness score ${score} out of 100`
+          : `Daily wellness score ${score} out of 100${label ? `, ${label}` : ""}`
       }
     >
+      {/* Frosted dial: the arc's light ground, and the ring's ambient glow. */}
+      <span
+        aria-hidden
+        className="absolute inset-0 rounded-full bg-surface/55 shadow-glow-gold ring-1 ring-inset ring-surface/70"
+      />
+
       <svg
         width={size}
         height={size}
         viewBox={`0 0 ${size} ${size}`}
         // Rotated so the gap sits centred at the bottom.
         style={{ transform: "rotate(125deg)" }}
+        className="relative"
         aria-hidden
       >
         <defs>
-          <linearGradient id={gradientId} x1="0" y1="0" x2="1" y2="1">
+          <linearGradient id={bodyId} x1="0" y1="0" x2="1" y2="1">
             <stop offset="0%" stopColor="var(--color-spring-1)" />
             <stop offset="55%" stopColor="var(--color-spring-2)" />
-            <stop offset="100%" stopColor="var(--color-spring-3)" />
+            <stop offset="100%" stopColor="var(--color-spring-2)" />
           </linearGradient>
           <filter id={glowId} x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur stdDeviation={stroke * 0.55} result="blur" />
-            <feComposite in="blur" operator="over" />
+            <feGaussianBlur stdDeviation={stroke * 0.5} />
           </filter>
         </defs>
 
-        {/* Track */}
+        {/* Track: a recessed champagne groove. */}
         <circle
-          cx={size / 2}
-          cy={size / 2}
+          cx={center}
+          cy={center}
           r={radius}
           fill="none"
-          stroke="var(--color-surface-sunken)"
+          stroke="var(--color-line-strong)"
+          strokeOpacity={0.5}
           strokeWidth={stroke}
           strokeLinecap="round"
           strokeDasharray={`${trackLength} ${circumference}`}
         />
 
-        {/* Glow copy, then the sharp copy on top. Both sweep via CSS so the
-            arc always settles at its measured length. */}
-        {score !== null ? (
+        {showArc ? (
           <>
+            {/* Glow */}
             <circle
               className="arc-sweep"
               style={arcStyle}
-              cx={size / 2}
-              cy={size / 2}
+              cx={center}
+              cy={center}
               r={radius}
               fill="none"
-              stroke={`url(#${gradientId})`}
+              stroke="var(--color-spring-2)"
               strokeWidth={stroke}
               strokeLinecap="round"
               filter={`url(#${glowId})`}
-              opacity={0.5}
+              opacity={0.65}
             />
+            {/* Bronze rim */}
             <circle
               className="arc-sweep"
               style={arcStyle}
-              cx={size / 2}
-              cy={size / 2}
+              cx={center}
+              cy={center}
               r={radius}
               fill="none"
-              stroke={`url(#${gradientId})`}
+              stroke="var(--color-spring-3)"
               strokeWidth={stroke}
+              strokeLinecap="round"
+            />
+            {/* Gold body */}
+            <circle
+              className="arc-sweep"
+              style={arcStyle}
+              cx={center}
+              cy={center}
+              r={radius}
+              fill="none"
+              stroke={`url(#${bodyId})`}
+              strokeWidth={bodyStroke}
+              strokeLinecap="round"
+            />
+            {/* Champagne highlight on the outer shoulder of the tube */}
+            <circle
+              className="arc-sweep"
+              style={arcStyle}
+              cx={center}
+              cy={center}
+              r={radius + bodyStroke * 0.22}
+              fill="none"
+              stroke="var(--color-gilt-1)"
+              strokeOpacity={0.75}
+              strokeWidth={highlightStroke}
               strokeLinecap="round"
             />
           </>
@@ -132,27 +178,31 @@ export function WellnessRing({
               className="skeleton block rounded-md"
               style={{ width: size * 0.28, height: size * 0.22 }}
             />
-            <span lang="hi" className="mt-2 text-2xs text-ink-subtle">
+            <span lang="hi" className="mt-2 text-2xs text-ink-muted">
               गणना हो रही है…
             </span>
           </>
         ) : (
           <>
-            <CountUp
-              value={score}
-              className="text-5xl font-semibold leading-none tracking-tight text-ink"
-              format={(n) => String(Math.round(n))}
-            />
-            <span className="tabular mt-1 text-sm font-medium text-ink-subtle">
+            <span
+              className="font-semibold leading-none tracking-tight text-ink"
+              style={{ fontSize: scoreFont }}
+            >
+              <CountUp value={score} format={(n) => String(Math.round(n))} />
+            </span>
+            <span
+              className="tabular mt-1 font-medium text-ink-muted"
+              style={{ fontSize: subFont }}
+            >
               / 100
             </span>
             {label ? (
-              <span className="mt-2 text-xs font-semibold text-ink-muted">
+              <span className="mt-1.5 max-w-[78%] text-center text-xs font-semibold leading-tight text-ink-muted">
                 {label}
               </span>
             ) : null}
             {hindiLabel ? (
-              <span lang="hi" className="text-2xs text-ink-subtle">
+              <span lang="hi" className="max-w-[78%] text-center text-2xs leading-tight text-ink-muted">
                 {hindiLabel}
               </span>
             ) : null}

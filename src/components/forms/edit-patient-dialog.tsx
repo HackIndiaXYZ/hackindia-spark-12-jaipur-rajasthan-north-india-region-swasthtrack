@@ -1,11 +1,12 @@
 "use client";
 
-import { useRef, useState, type FormEvent } from "react";
+import { useRef, useState, type ChangeEvent, type FormEvent } from "react";
 import { AlertCircle, UserCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Field, NumberInput, Select, TextInput } from "@/components/ui/form-field";
 import { Modal } from "@/components/ui/modal";
 import { updatePatientProfile, type PatientProfile } from "@/services/patient-service";
+import { updatePatientSettings } from "@/services/settings-service";
 
 type EditPatientDialogProps = {
   isOpen: boolean;
@@ -57,6 +58,18 @@ function EditPatientForm({
   const [loading, setLoading] = useState(false);
   const busyRef = useRef(false);
 
+  /** Typing into a flagged field takes its error away; the summary goes when nothing is flagged any more. */
+  function edit(key: keyof FieldErrors, set: (value: string) => void) {
+    return (e: ChangeEvent<HTMLInputElement>) => {
+      set(e.target.value);
+      if (!fieldErrors[key]) return;
+      const next = { ...fieldErrors };
+      delete next[key];
+      setFieldErrors(next);
+      if (Object.keys(next).length === 0) setError("");
+    };
+  }
+
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     if (busyRef.current) return;
@@ -85,6 +98,16 @@ function EditPatientForm({
     busyRef.current = true;
     setLoading(true);
     try {
+      // Required by the database: validated above, so never null here.
+      const calorieTarget = calR.value ?? patient.daily_calorie_target;
+
+      // The Settings page, Food page, scores and reports read the target from patient_settings, the
+      // profile row carries a copy. Write the settings first (same function the Settings page uses),
+      // so a failure leaves both untouched and the two can never drift apart.
+      if (calorieTarget !== patient.daily_calorie_target) {
+        await updatePatientSettings(patient.id, { daily_calorie_target: calorieTarget });
+      }
+
       await updatePatientProfile(
         {
           name: name.trim(),
@@ -93,8 +116,7 @@ function EditPatientForm({
           height_cm: heightR.value,
           current_weight_kg: weightR.value,
           target_weight_kg: targetR.value,
-          // Required by the database: validated above, so never null here.
-          daily_calorie_target: calR.value ?? patient.daily_calorie_target,
+          daily_calorie_target: calorieTarget,
         },
         patient.id,
       );
@@ -129,7 +151,7 @@ function EditPatientForm({
           type="text"
           placeholder="पूरा नाम"
           value={name}
-          onChange={(e) => setName(e.target.value)}
+          onChange={edit("name", setName)}
           aria-invalid={Boolean(fieldErrors.name)}
           required
         />
@@ -139,7 +161,7 @@ function EditPatientForm({
         <Field label="Age (आयु / वर्ष)" hint="वैकल्पिक" error={fieldErrors.age}>
           <NumberInput
             value={age}
-            onChange={(e) => setAge(e.target.value)}
+            onChange={edit("age", setAge)}
             placeholder="वर्ष"
             aria-invalid={Boolean(fieldErrors.age)}
           />
@@ -160,7 +182,7 @@ function EditPatientForm({
           <NumberInput
             allowDecimal
             value={heightCm}
-            onChange={(e) => setHeightCm(e.target.value)}
+            onChange={edit("height", setHeightCm)}
             placeholder="सेमी"
             aria-invalid={Boolean(fieldErrors.height)}
           />
@@ -170,7 +192,7 @@ function EditPatientForm({
           <NumberInput
             allowDecimal
             value={currentWeightKg}
-            onChange={(e) => setCurrentWeightKg(e.target.value)}
+            onChange={edit("weight", setCurrentWeightKg)}
             placeholder="kg"
             aria-invalid={Boolean(fieldErrors.weight)}
           />
@@ -180,7 +202,7 @@ function EditPatientForm({
           <NumberInput
             allowDecimal
             value={targetWeightKg}
-            onChange={(e) => setTargetWeightKg(e.target.value)}
+            onChange={edit("target", setTargetWeightKg)}
             placeholder="kg"
             aria-invalid={Boolean(fieldErrors.target)}
           />
@@ -195,7 +217,7 @@ function EditPatientForm({
       >
         <NumberInput
           value={calorieTarget}
-          onChange={(e) => setCalorieTarget(e.target.value)}
+          onChange={edit("calories", setCalorieTarget)}
           placeholder="kcal"
           className="text-lg font-semibold"
           aria-invalid={Boolean(fieldErrors.calories)}

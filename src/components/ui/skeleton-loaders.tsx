@@ -49,7 +49,7 @@ const SkeletonCardBase: React.FC<{ className?: string }> = ({
   className = "",
 }) => (
   <div
-    className={`rounded-card border border-line bg-surface p-5 space-y-4 ${className}`}
+    className={`gilt rounded-card p-5 space-y-4 ${className}`}
     aria-hidden="true"
   >
     {/* Header area */}
@@ -83,7 +83,7 @@ export const SkeletonCard: React.FC<{ className?: string }> = ({
 /** Single metric card skeleton (icon circle + title + value + helper) */
 const SkeletonMetricCard: React.FC = () => (
   <div
-    className="rounded-card border border-line bg-surface p-5 space-y-3"
+    className="gilt rounded-card p-5 space-y-3"
     aria-hidden="true"
   >
     <div className="flex items-center gap-3">
@@ -139,7 +139,7 @@ export const SkeletonHealthPanel: React.FC<{ className?: string }> = ({
   <>
   <LoadingStatus />
   <div
-    className={`rounded-card border border-line bg-surface p-5 space-y-6 ${className}`}
+    className={`gilt rounded-card p-5 space-y-6 ${className}`}
     aria-hidden="true"
   >
     {/* Header row */}
@@ -202,7 +202,7 @@ export const SkeletonDashboard: React.FC<{ className?: string }> = ({
   <div className={`space-y-6 ${className}`}>
     <LoadingStatus />
     {/* Patient overview banner skeleton */}
-    <div aria-hidden="true" className="rounded-card border border-line bg-surface p-5 flex items-center gap-4">
+    <div aria-hidden="true" className="gilt rounded-card p-5 flex items-center gap-4">
       {/* Avatar */}
       <div className="skeleton h-14 w-14 shrink-0 rounded-full" />
       <div className="space-y-2 flex-1">

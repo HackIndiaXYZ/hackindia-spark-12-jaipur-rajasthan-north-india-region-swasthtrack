@@ -1,0 +1,7953 @@
+{
+ "items": [
+  {
+   "slug": "roti-chapati",
+   "name": "Roti (Chapati)",
+   "hi": "रोटी (चपाती)",
+   "alias": [
+    "chapati",
+    "chapatti",
+    "chapathi",
+    "chappati",
+    "wheat roti",
+    "whole wheat roti",
+    "atta roti",
+    "gehun ki roti",
+    "सादी रोटी",
+    "चपाती"
+   ],
+   "cat": "roti",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 265,
+   "p": 8.5,
+   "c": 47,
+   "f": 3.5,
+   "fib": 7.5,
+   "na": 60,
+   "portions": [
+    {
+     "n": "1 medium roti (35 g)",
+     "hi": "1 रोटी",
+     "g": 35
+    },
+    {
+     "n": "1 small roti (25 g)",
+     "hi": "1 छोटी रोटी",
+     "g": 25
+    },
+    {
+     "n": "1 thick roti (60 g)",
+     "hi": "1 मोटी रोटी",
+     "g": 60
+    }
+   ],
+   "core": true,
+   "src": "IFCT 2017 atta (A019) with ~25 % cooking moisture loss and tawa oil; cross-checked INDB ASC096 (202) and NIN",
+   "conf": "high",
+   "note": "6-inch home roti, whole-wheat atta, no ghee, a trace of oil on the tawa; ~93 kcal per 35 g roti"
+  },
+  {
+   "slug": "phulka",
+   "name": "Phulka (Fulka)",
+   "hi": "फुलका",
+   "alias": [
+    "fulka",
+    "puffed roti",
+    "jhulka",
+    "thin roti",
+    "dry roti",
+    "oil free roti",
+    "फुलका रोटी",
+    "पतली रोटी"
+   ],
+   "cat": "roti",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 250,
+   "p": 9,
+   "c": 47,
+   "f": 1.8,
+   "fib": 8,
+   "na": 50,
+   "portions": [
+    {
+     "n": "1 phulka (30 g)",
+     "hi": "1 फुलका",
+     "g": 30
+    },
+    {
+     "n": "2 phulka (60 g)",
+     "hi": "2 फुलका",
+     "g": 60
+    }
+   ],
+   "core": true,
+   "src": "Standard home recipe computed from IFCT 2017 flours (atta/besan/millet) with cooking moisture loss plus cooking fat; cross-checked NIN tables and INDB",
+   "conf": "high",
+   "note": "thin dry-roasted roti puffed on open flame, no oil, ~30 g, ~75 kcal each"
+  },
+  {
+   "slug": "roti-with-ghee",
+   "name": "Roti with Ghee",
+   "hi": "घी वाली रोटी",
+   "alias": [
+    "ghee roti",
+    "ghee chapati",
+    "chupdi roti",
+    "ghee chupdi roti",
+    "roti ghee lagi",
+    "घी चुपड़ी रोटी",
+    "घी की रोटी"
+   ],
+   "cat": "roti",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 310,
+   "p": 7.8,
+   "c": 43,
+   "f": 10.4,
+   "fib": 6.9,
+   "na": 55,
+   "portions": [
+    {
+     "n": "1 roti with ghee (38 g)",
+     "hi": "1 घी की रोटी",
+     "g": 38
+    },
+    {
+     "n": "1 thick roti with ghee (65 g)",
+     "hi": "1 मोटी घी रोटी",
+     "g": 65
+    }
+   ],
+   "core": true,
+   "src": "Standard home recipe computed from IFCT 2017 flours (atta/besan/millet) with cooking moisture loss plus cooking fat; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "35 g roti smeared with about half a teaspoon (2.5 g) of ghee; add ~45 kcal for each extra teaspoon of ghee"
+  },
+  {
+   "slug": "multigrain-roti",
+   "name": "Multigrain Roti",
+   "hi": "मल्टीग्रेन रोटी",
+   "alias": [
+    "multigrain chapati",
+    "multi grain roti",
+    "multigrain atta roti",
+    "mixed flour roti",
+    "mix atta roti",
+    "मल्टीग्रेन चपाती",
+    "मिक्स आटे की रोटी"
+   ],
+   "cat": "roti",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 260,
+   "p": 9.5,
+   "c": 44,
+   "f": 3.8,
+   "fib": 8.5,
+   "na": 60,
+   "portions": [
+    {
+     "n": "1 roti (35 g)",
+     "hi": "1 रोटी",
+     "g": 35
+    },
+    {
+     "n": "2 roti (70 g)",
+     "hi": "2 रोटी",
+     "g": 70
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 flours (atta/besan/millet) with cooking moisture loss plus cooking fat; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "atta blended with soya/chana/jowar/bajra/oats flours, home style with trace oil"
+  },
+  {
+   "slug": "butter-roti",
+   "name": "Butter Roti (Tandoori)",
+   "hi": "बटर रोटी",
+   "alias": [
+    "butter tandoori roti",
+    "tandoori butter roti",
+    "butter chapati",
+    "makhan roti",
+    "बटर तंदूरी रोटी",
+    "मक्खन रोटी"
+   ],
+   "cat": "roti",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 315,
+   "p": 8,
+   "c": 42,
+   "f": 12,
+   "fib": 6,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 butter roti (60 g)",
+     "hi": "1 बटर रोटी",
+     "g": 60
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 flours (atta/besan/millet) with cooking moisture loss plus cooking fat; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "restaurant tandoori roti brushed with ~5 g butter"
+  },
+  {
+   "slug": "tandoori-roti",
+   "name": "Tandoori Roti",
+   "hi": "तंदूरी रोटी",
+   "alias": [
+    "tandoor roti",
+    "tandoori chapati",
+    "tawa tandoori roti",
+    "plain tandoori roti",
+    "dhaba roti",
+    "तंदूर की रोटी"
+   ],
+   "cat": "roti",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 280,
+   "p": 9,
+   "c": 50,
+   "f": 2.5,
+   "fib": 5,
+   "na": 300,
+   "portions": [
+    {
+     "n": "1 tandoori roti (50 g)",
+     "hi": "1 तंदूरी रोटी",
+     "g": 50
+    },
+    {
+     "n": "1 large dhaba roti (70 g)",
+     "hi": "1 बड़ी तंदूरी रोटी",
+     "g": 70
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 flours (atta/besan/millet) with cooking moisture loss plus cooking fat; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "whole wheat (sometimes part maida) baked in tandoor with no butter, restaurant salt level"
+  },
+  {
+   "slug": "missi-roti",
+   "name": "Missi Roti",
+   "hi": "मिस्सी रोटी",
+   "alias": [
+    "missi chapati",
+    "besan atta roti",
+    "missi rotti",
+    "mixed flour punjabi roti",
+    "मिस्सी चपाती"
+   ],
+   "cat": "roti",
+   "region": "Punjab",
+   "diet": "veg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 290,
+   "p": 11,
+   "c": 40,
+   "f": 8,
+   "fib": 8,
+   "na": 320,
+   "portions": [
+    {
+     "n": "1 missi roti (50 g)",
+     "hi": "1 मिस्सी रोटी",
+     "g": 50
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 flours (atta/besan/millet) with cooking moisture loss plus cooking fat; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "atta + besan 1:1 with oil, ajwain, onion, green chilli kneaded in; tawa or tandoor"
+  },
+  {
+   "slug": "besan-roti",
+   "name": "Besan Roti",
+   "hi": "बेसन की रोटी",
+   "alias": [
+    "besan ki roti",
+    "gram flour roti",
+    "chickpea flour roti",
+    "besan chapati",
+    "बेसन रोटी"
+   ],
+   "cat": "roti",
+   "region": "Rajasthan",
+   "diet": "veg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 255,
+   "p": 10,
+   "c": 38,
+   "f": 6,
+   "fib": 7,
+   "na": 300,
+   "portions": [
+    {
+     "n": "1 besan roti (50 g)",
+     "hi": "1 बेसन रोटी",
+     "g": 50
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 flours (atta/besan/millet) with cooking moisture loss plus cooking fat; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "thick Rajasthani roti of besan with spices and some oil, cooked on tawa"
+  },
+  {
+   "slug": "maida-roti",
+   "name": "Maida Roti (Refined Flour)",
+   "hi": "मैदा रोटी",
+   "alias": [
+    "maida chapati",
+    "refined flour roti",
+    "plain flour roti",
+    "white flour roti",
+    "मैदे की रोटी"
+   ],
+   "cat": "roti",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 258,
+   "p": 7.5,
+   "c": 52,
+   "f": 2.5,
+   "fib": 2.5,
+   "na": 60,
+   "portions": [
+    {
+     "n": "1 roti (35 g)",
+     "hi": "1 रोटी",
+     "g": 35
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 flours (atta/besan/millet) with cooking moisture loss plus cooking fat; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "refined flour roti; same energy as atta roti but almost no fibre"
+  },
+  {
+   "slug": "rumali-roti",
+   "name": "Rumali Roti",
+   "hi": "रुमाली रोटी",
+   "alias": [
+    "roomali roti",
+    "rumali",
+    "roomali",
+    "handkerchief roti",
+    "rumal roti",
+    "रूमाली रोटी"
+   ],
+   "cat": "roti",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 275,
+   "p": 9,
+   "c": 55,
+   "f": 1.5,
+   "fib": 2,
+   "na": 200,
+   "portions": [
+    {
+     "n": "1 rumali roti (40 g)",
+     "hi": "1 रुमाली रोटी",
+     "g": 40
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 flours (atta/besan/millet) with cooking moisture loss plus cooking fat; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "very thin maida/atta roti stretched and cooked on an inverted tawa; no fat"
+  },
+  {
+   "slug": "bajra-roti",
+   "name": "Bajra Roti (Pearl Millet)",
+   "hi": "बाजरे की रोटी",
+   "alias": [
+    "bajre ki roti",
+    "bajra rotla",
+    "bajri roti",
+    "bajra bhakri",
+    "sajje rotti",
+    "pearl millet roti",
+    "bajra chapati",
+    "बाजरा रोटी",
+    "रोटला"
+   ],
+   "cat": "roti",
+   "region": "Rajasthan",
+   "diet": "veg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 255,
+   "p": 8,
+   "c": 42,
+   "f": 4.5,
+   "fib": 7,
+   "na": 40,
+   "portions": [
+    {
+     "n": "1 bajra roti (50 g)",
+     "hi": "1 बाजरे की रोटी",
+     "g": 50
+    },
+    {
+     "n": "1 small roti (35 g)",
+     "hi": "1 छोटी बाजरा रोटी",
+     "g": 35
+    }
+   ],
+   "core": true,
+   "src": "Standard home recipe computed from IFCT 2017 flours (atta/besan/millet) with cooking moisture loss plus cooking fat; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "bajra flour roti, hand-patted, no ghee; IFCT bajra flour 348 kcal raw with ~30 % water in the roti"
+  },
+  {
+   "slug": "bajra-roti-ghee",
+   "name": "Bajra Roti with Ghee",
+   "hi": "घी वाली बाजरे की रोटी",
+   "alias": [
+    "bajra rotla with ghee",
+    "bajre ki roti with ghee",
+    "bajra roti makhan",
+    "bajra roti ghee gud",
+    "rotla ghee"
+   ],
+   "cat": "roti",
+   "region": "Rajasthan",
+   "diet": "veg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 310,
+   "p": 7.3,
+   "c": 38,
+   "f": 12.5,
+   "fib": 6.5,
+   "na": 40,
+   "portions": [
+    {
+     "n": "1 roti with ghee (55 g)",
+     "hi": "1 घी वाली बाजरा रोटी",
+     "g": 55
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 flours (atta/besan/millet) with cooking moisture loss plus cooking fat; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "50 g bajra roti with about a teaspoon (5 g) ghee or white butter"
+  },
+  {
+   "slug": "jowar-roti",
+   "name": "Jowar Roti (Jolada Rotti)",
+   "hi": "ज्वार की रोटी",
+   "alias": [
+    "jolada rotti",
+    "jowar chapati",
+    "jonna rotte",
+    "jwari roti",
+    "sorghum roti",
+    "jowar ki roti",
+    "ज्वार की रोटी",
+    "ज्वारी रोटी"
+   ],
+   "cat": "roti",
+   "region": "Karnataka",
+   "diet": "veg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 240,
+   "p": 7.5,
+   "c": 47,
+   "f": 1.8,
+   "fib": 6.5,
+   "na": 40,
+   "portions": [
+    {
+     "n": "1 jowar roti (40 g)",
+     "hi": "1 ज्वार की रोटी",
+     "g": 40
+    }
+   ],
+   "core": true,
+   "src": "Standard home recipe computed from IFCT 2017 flours (atta/besan/millet) with cooking moisture loss plus cooking fat; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "gluten-free jowar roti, no oil; IFCT jowar flour 334 kcal raw"
+  },
+  {
+   "slug": "jowar-bhakri",
+   "name": "Jowar Bhakri (Maharashtrian)",
+   "hi": "ज्वारीची भाकरी",
+   "alias": [
+    "jwari bhakri",
+    "jondhalyachi bhakri",
+    "jowar bhakar",
+    "bhakri",
+    "bhakari",
+    "ज्वारी भाकरी",
+    "भाकरी"
+   ],
+   "cat": "roti",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 240,
+   "p": 7.5,
+   "c": 47,
+   "f": 1.8,
+   "fib": 6.5,
+   "na": 40,
+   "portions": [
+    {
+     "n": "1 bhakri (60 g)",
+     "hi": "1 भाकरी",
+     "g": 60
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 flours (atta/besan/millet) with cooking moisture loss plus cooking fat; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "thicker hand-patted jowar bhakri cooked dry on tawa, ~60 g"
+  },
+  {
+   "slug": "ragi-roti",
+   "name": "Ragi Roti (Finger Millet)",
+   "hi": "रागी रोटी",
+   "alias": [
+    "ragi chapati",
+    "nachni roti",
+    "mandua roti",
+    "ragi rotti",
+    "ragi atta roti",
+    "nachni bhakri",
+    "रागी की रोटी",
+    "नाचनी रोटी"
+   ],
+   "cat": "roti",
+   "region": "Karnataka",
+   "diet": "veg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 235,
+   "p": 5,
+   "c": 44,
+   "f": 3,
+   "fib": 6,
+   "na": 60,
+   "portions": [
+    {
+     "n": "1 ragi roti (45 g)",
+     "hi": "1 रागी रोटी",
+     "g": 45
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 flours (atta/besan/millet) with cooking moisture loss plus cooking fat; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "ragi flour roti (often with a little onion/oil), IFCT ragi 321 kcal raw"
+  },
+  {
+   "slug": "ragi-mudde",
+   "name": "Ragi Mudde (Ragi Ball)",
+   "hi": "रागी मुद्दे",
+   "alias": [
+    "ragi sangati",
+    "ragi kali",
+    "ragi ball",
+    "finger millet ball",
+    "ragi sankati",
+    "ragi mudda",
+    "रागी का मुद्दा"
+   ],
+   "cat": "roti",
+   "region": "Karnataka",
+   "diet": "veg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 100,
+   "p": 2.2,
+   "c": 20.8,
+   "f": 0.6,
+   "fib": 3.5,
+   "na": 5,
+   "portions": [
+    {
+     "n": "1 mudde (150 g)",
+     "hi": "1 मुद्दे",
+     "g": 150
+    },
+    {
+     "n": "1 large mudde (200 g)",
+     "hi": "1 बड़ा मुद्दे",
+     "g": 200
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 flours (atta/besan/millet) with cooking moisture loss plus cooking fat; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "ragi flour cooked in water into a soft ball (~70 % water); eaten with sambar or saaru, so energy is low per 100 g"
+  },
+  {
+   "slug": "makki-ki-roti",
+   "name": "Makki ki Roti (Plain)",
+   "hi": "मक्की की रोटी",
+   "alias": [
+    "makki roti",
+    "makai roti",
+    "makke di roti",
+    "maize roti",
+    "corn roti",
+    "makka roti",
+    "मक्के की रोटी",
+    "मकई की रोटी"
+   ],
+   "cat": "roti",
+   "region": "Punjab",
+   "diet": "veg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 240,
+   "p": 6,
+   "c": 46,
+   "f": 3,
+   "fib": 8,
+   "na": 50,
+   "portions": [
+    {
+     "n": "1 makki roti (70 g)",
+     "hi": "1 मक्की की रोटी",
+     "g": 70
+    }
+   ],
+   "src": "IFCT 2017 maize (A006) with cooking moisture; cross-checked INDB ASC150 (264, includes butter)",
+   "conf": "medium",
+   "note": "maize flour roti without butter; thick ~70 g; IFCT maize dry 334 kcal raw"
+  },
+  {
+   "slug": "makki-ki-roti-butter",
+   "name": "Makki ki Roti with Ghee or Butter",
+   "hi": "घी वाली मक्की की रोटी",
+   "alias": [
+    "makki roti with white butter",
+    "makke di roti makhan",
+    "makai roti with ghee",
+    "makki roti butter",
+    "मक्के की रोटी मक्खन के साथ"
+   ],
+   "cat": "roti",
+   "region": "Punjab",
+   "diet": "veg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 295,
+   "p": 5.5,
+   "c": 42,
+   "f": 10.8,
+   "fib": 7.5,
+   "na": 60,
+   "portions": [
+    {
+     "n": "1 roti with butter (75 g)",
+     "hi": "1 मक्खन वाली मक्की रोटी",
+     "g": 75
+    }
+   ],
+   "src": "IFCT 2017 maize (A006) plus butter; cross-checked INDB ASC150 (264)",
+   "conf": "medium",
+   "note": "70 g maize roti topped with ~7 g white butter/ghee as it is usually served with sarson ka saag"
+  },
+  {
+   "slug": "akki-rotti",
+   "name": "Akki Rotti (Karnataka Rice Roti)",
+   "hi": "अक्की रोटी",
+   "alias": [
+    "akki roti",
+    "rice roti",
+    "rice flour roti",
+    "chawal ki roti",
+    "chawal ka roti",
+    "akki rotti with onion",
+    "चावल की रोटी"
+   ],
+   "cat": "roti",
+   "region": "Karnataka",
+   "diet": "veg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 205,
+   "p": 3.5,
+   "c": 36,
+   "f": 5,
+   "fib": 2,
+   "na": 250,
+   "portions": [
+    {
+     "n": "1 akki rotti (80 g)",
+     "hi": "1 अक्की रोटी",
+     "g": 80
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 flours (atta/besan/millet) with cooking moisture loss plus cooking fat; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "rice flour rotti with onion, coconut, dill and ~1 tsp oil per rotti, pan-roasted"
+  },
+  {
+   "slug": "tandalachi-bhakri",
+   "name": "Tandalachi Bhakri (Rice Bhakri)",
+   "hi": "तांदळाची भाकरी",
+   "alias": [
+    "tandulachi bhakri",
+    "rice bhakri",
+    "tandul bhakri",
+    "chawal ki bhakri",
+    "tandalachi bhakar",
+    "तांदूळ भाकरी"
+   ],
+   "cat": "roti",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 195,
+   "p": 4,
+   "c": 43,
+   "f": 0.8,
+   "fib": 1.5,
+   "na": 40,
+   "portions": [
+    {
+     "n": "1 bhakri (55 g)",
+     "hi": "1 तांदळाची भाकरी",
+     "g": 55
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 flours (atta/besan/millet) with cooking moisture loss plus cooking fat; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "Konkan rice-flour bhakri cooked dry on tawa, no oil"
+  },
+  {
+   "slug": "pathiri",
+   "name": "Pathiri (Malabar Rice Roti)",
+   "hi": "पथिरी",
+   "alias": [
+    "pathiri roti",
+    "arippathiri",
+    "ari pathiri",
+    "kerala rice roti",
+    "malabar pathiri",
+    "pathiri bread"
+   ],
+   "cat": "roti",
+   "region": "Kerala",
+   "diet": "veg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 190,
+   "p": 3.5,
+   "c": 40,
+   "f": 1.5,
+   "fib": 1.5,
+   "na": 150,
+   "portions": [
+    {
+     "n": "1 pathiri (45 g)",
+     "hi": "1 पथिरी",
+     "g": 45
+    },
+    {
+     "n": "2 pathiri (90 g)",
+     "hi": "2 पथिरी",
+     "g": 90
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 flours (atta/besan/millet) with cooking moisture loss plus cooking fat; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "thin Malabar rice-flour roti, steamed then roasted, a little coconut oil in dough"
+  },
+  {
+   "slug": "thalipeeth",
+   "name": "Thalipeeth (Maharashtrian Multigrain Pancake)",
+   "hi": "थालीपीठ",
+   "alias": [
+    "thalipith",
+    "bhajani thalipeeth",
+    "thalipit",
+    "thaalipeeth",
+    "multigrain thalipeeth",
+    "थालीपिठ"
+   ],
+   "cat": "roti",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 240,
+   "p": 7,
+   "c": 33,
+   "f": 8,
+   "fib": 6,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 thalipeeth (70 g)",
+     "hi": "1 थालीपीठ",
+     "g": 70
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 flours (atta/besan/millet) with cooking moisture loss plus cooking fat; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "bhajani flour (jowar/bajra/wheat/chana dal) with onion and spices, shallow-fried ~1 tsp oil each"
+  },
+  {
+   "slug": "plain-paratha",
+   "name": "Plain Paratha",
+   "hi": "सादा पराठा",
+   "alias": [
+    "paratha",
+    "parantha",
+    "parotha",
+    "parontha",
+    "tawa paratha",
+    "plain parantha",
+    "wheat paratha",
+    "सादा परांठा",
+    "पराठा"
+   ],
+   "cat": "roti",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 320,
+   "p": 7.5,
+   "c": 44,
+   "f": 11.5,
+   "fib": 6.5,
+   "na": 250,
+   "portions": [
+    {
+     "n": "1 paratha (55 g)",
+     "hi": "1 पराठा",
+     "g": 55
+    },
+    {
+     "n": "2 parathas (110 g)",
+     "hi": "2 पराठे",
+     "g": 110
+    }
+   ],
+   "core": true,
+   "src": "IFCT 2017 atta + cooking fat computed; cross-checked INDB ASC097 (298) and NIN",
+   "conf": "medium",
+   "note": "home tawa paratha, ~1 tsp ghee/oil per paratha; ~175 kcal each"
+  },
+  {
+   "slug": "laccha-paratha",
+   "name": "Laccha Paratha (Lachha)",
+   "hi": "लच्छा पराठा",
+   "alias": [
+    "lachha paratha",
+    "lacha paratha",
+    "layered paratha",
+    "lachcha paratha",
+    "laccha parantha",
+    "लच्छेदार पराठा",
+    "लच्छा परांठा"
+   ],
+   "cat": "roti",
+   "region": "Punjab",
+   "diet": "veg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 350,
+   "p": 7,
+   "c": 42,
+   "f": 16.5,
+   "fib": 5,
+   "na": 300,
+   "portions": [
+    {
+     "n": "1 laccha paratha (65 g)",
+     "hi": "1 लच्छा पराठा",
+     "g": 65
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 flours (atta/besan/millet) with cooking moisture loss plus cooking fat; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "restaurant style layered paratha with ghee/oil between layers"
+  },
+  {
+   "slug": "aloo-paratha",
+   "name": "Aloo Paratha",
+   "hi": "आलू पराठा",
+   "alias": [
+    "alu paratha",
+    "aloo parantha",
+    "potato paratha",
+    "aloo ka paratha",
+    "aaloo paratha",
+    "batata paratha",
+    "आलू का पराठा",
+    "आलू परांठा"
+   ],
+   "cat": "roti",
+   "region": "Punjab",
+   "diet": "veg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 255,
+   "p": 5.5,
+   "c": 38,
+   "f": 8.5,
+   "fib": 4.5,
+   "na": 260,
+   "portions": [
+    {
+     "n": "1 paratha (105 g)",
+     "hi": "1 आलू पराठा",
+     "g": 105
+    },
+    {
+     "n": "1 small paratha (80 g)",
+     "hi": "1 छोटा आलू पराठा",
+     "g": 80
+    }
+   ],
+   "core": true,
+   "src": "Recipe computed from atta, potato (IFCT) and cooking fat; cross-checked INDB ASC098 (205)",
+   "conf": "medium",
+   "note": "tawa paratha stuffed with spiced mashed potato, ~1 tsp oil/ghee each side; INDB 205 assumes less fat"
+  },
+  {
+   "slug": "gobi-paratha",
+   "name": "Gobi Paratha",
+   "hi": "गोभी पराठा",
+   "alias": [
+    "gobhi paratha",
+    "cauliflower paratha",
+    "phool gobi paratha",
+    "gobi parantha",
+    "gobhi parantha",
+    "गोभी का पराठा",
+    "फूलगोभी पराठा"
+   ],
+   "cat": "roti",
+   "region": "Punjab",
+   "diet": "veg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 245,
+   "p": 6,
+   "c": 34,
+   "f": 9.5,
+   "fib": 5,
+   "na": 280,
+   "portions": [
+    {
+     "n": "1 paratha (100 g)",
+     "hi": "1 गोभी पराठा",
+     "g": 100
+    }
+   ],
+   "src": "Recipe computed from atta, cauliflower (IFCT) and cooking fat; cross-checked INDB ASC100 (178)",
+   "conf": "medium",
+   "note": "tawa paratha stuffed with spiced grated cauliflower, ~1 tsp fat; INDB 178 assumes less fat"
+  },
+  {
+   "slug": "mooli-paratha",
+   "name": "Mooli Paratha",
+   "hi": "मूली पराठा",
+   "alias": [
+    "muli paratha",
+    "radish paratha",
+    "mooli parantha",
+    "mooli ka paratha",
+    "मूली का पराठा",
+    "मूली परांठा"
+   ],
+   "cat": "roti",
+   "region": "Punjab",
+   "diet": "veg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 235,
+   "p": 5.8,
+   "c": 33,
+   "f": 9,
+   "fib": 5,
+   "na": 280,
+   "portions": [
+    {
+     "n": "1 paratha (100 g)",
+     "hi": "1 मूली पराठा",
+     "g": 100
+    }
+   ],
+   "src": "Recipe computed from atta, radish (IFCT) and cooking fat; cross-checked INDB ASC099 (184)",
+   "conf": "medium",
+   "note": "tawa paratha stuffed with squeezed grated radish, ~1 tsp fat; INDB 184"
+  },
+  {
+   "slug": "paneer-paratha",
+   "name": "Paneer Paratha",
+   "hi": "पनीर पराठा",
+   "alias": [
+    "paneer parantha",
+    "cottage cheese paratha",
+    "paneer stuffed paratha",
+    "पनीर का पराठा",
+    "पनीर परांठा"
+   ],
+   "cat": "roti",
+   "region": "Punjab",
+   "diet": "veg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 290,
+   "p": 10,
+   "c": 32,
+   "f": 14,
+   "fib": 4,
+   "na": 300,
+   "portions": [
+    {
+     "n": "1 paratha (105 g)",
+     "hi": "1 पनीर पराठा",
+     "g": 105
+    }
+   ],
+   "src": "Recipe computed from atta, paneer and cooking fat; cross-checked INDB ASC105 (263)",
+   "conf": "medium",
+   "note": "tawa paratha stuffed with crumbled paneer and spices; ~1 tsp ghee; INDB 263"
+  },
+  {
+   "slug": "methi-paratha",
+   "name": "Methi Paratha",
+   "hi": "मेथी पराठा",
+   "alias": [
+    "methi parantha",
+    "fenugreek paratha",
+    "menthi paratha",
+    "methi ka paratha",
+    "मेथी का पराठा",
+    "मेथी परांठा"
+   ],
+   "cat": "roti",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 295,
+   "p": 8,
+   "c": 40,
+   "f": 10,
+   "fib": 7,
+   "na": 300,
+   "portions": [
+    {
+     "n": "1 paratha (60 g)",
+     "hi": "1 मेथी पराठा",
+     "g": 60
+    }
+   ],
+   "src": "Recipe computed from atta, fenugreek leaves (IFCT) and fat; INDB BFP110 148 judged too low",
+   "conf": "medium",
+   "note": "atta dough with chopped methi, ~1 tsp oil per paratha; INDB BFP110 (148) looks too low for a fried paratha"
+  },
+  {
+   "slug": "palak-paratha",
+   "name": "Palak Paratha",
+   "hi": "पालक पराठा",
+   "alias": [
+    "spinach paratha",
+    "palak parantha",
+    "palak ka paratha",
+    "green paratha",
+    "पालक का पराठा",
+    "पालक परांठा"
+   ],
+   "cat": "roti",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 290,
+   "p": 8,
+   "c": 40,
+   "f": 9.8,
+   "fib": 7,
+   "na": 300,
+   "portions": [
+    {
+     "n": "1 paratha (60 g)",
+     "hi": "1 पालक पराठा",
+     "g": 60
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 flours (atta/besan/millet) with cooking moisture loss plus cooking fat; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "atta dough kneaded with spinach puree, ~1 tsp oil per paratha"
+  },
+  {
+   "slug": "mixed-vegetable-paratha",
+   "name": "Mixed Vegetable Paratha",
+   "hi": "मिक्स वेज पराठा",
+   "alias": [
+    "mix veg paratha",
+    "vegetable paratha",
+    "veg paratha",
+    "sabzi paratha",
+    "mixed veg parantha",
+    "मिक्स वेज परांठा",
+    "सब्जी पराठा"
+   ],
+   "cat": "roti",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 235,
+   "p": 5.5,
+   "c": 33,
+   "f": 8.5,
+   "fib": 5.5,
+   "na": 280,
+   "portions": [
+    {
+     "n": "1 paratha (100 g)",
+     "hi": "1 मिक्स वेज पराठा",
+     "g": 100
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 flours (atta/besan/millet) with cooking moisture loss plus cooking fat; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "stuffed with carrot, peas, beans, cabbage, potato; ~1 tsp fat"
+  },
+  {
+   "slug": "onion-paratha",
+   "name": "Onion Paratha (Pyaz)",
+   "hi": "प्याज पराठा",
+   "alias": [
+    "pyaz paratha",
+    "pyaaz ka paratha",
+    "onion parantha",
+    "pyaz ka paratha",
+    "प्याज का पराठा",
+    "प्याज परांठा"
+   ],
+   "cat": "roti",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 265,
+   "p": 6,
+   "c": 38,
+   "f": 10,
+   "fib": 5,
+   "na": 300,
+   "portions": [
+    {
+     "n": "1 paratha (90 g)",
+     "hi": "1 प्याज पराठा",
+     "g": 90
+    }
+   ],
+   "src": "Recipe computed from atta, onion and fat; cross-checked INDB BFP108 (191)",
+   "conf": "medium",
+   "note": "stuffed with chopped onion, green chilli and spices; INDB BFP108 191"
+  },
+  {
+   "slug": "egg-paratha",
+   "name": "Egg Paratha",
+   "hi": "अंडा पराठा",
+   "alias": [
+    "anda paratha",
+    "egg parantha",
+    "egg stuffed paratha",
+    "muttai paratha",
+    "अंडा परांठा",
+    "एग पराठा"
+   ],
+   "cat": "roti",
+   "region": "North India",
+   "diet": "egg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 285,
+   "p": 11,
+   "c": 30,
+   "f": 14,
+   "fib": 4,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 egg paratha (110 g)",
+     "hi": "1 अंडा पराठा",
+     "g": 110
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 flours (atta/besan/millet) with cooking moisture loss plus cooking fat; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "paratha with one egg cooked in/on it, ~1 tsp fat"
+  },
+  {
+   "slug": "pudina-paratha",
+   "name": "Pudina Paratha",
+   "hi": "पुदीना पराठा",
+   "alias": [
+    "mint paratha",
+    "pudina parantha",
+    "phudina paratha",
+    "pudine ka paratha",
+    "पुदीने का पराठा"
+   ],
+   "cat": "roti",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 320,
+   "p": 7.5,
+   "c": 43,
+   "f": 12,
+   "fib": 6.5,
+   "na": 280,
+   "portions": [
+    {
+     "n": "1 paratha (60 g)",
+     "hi": "1 पुदीना पराठा",
+     "g": 60
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 flours (atta/besan/millet) with cooking moisture loss plus cooking fat; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "layered paratha with dried mint, ghee/oil between layers"
+  },
+  {
+   "slug": "ajwain-paratha",
+   "name": "Ajwain Paratha",
+   "hi": "अजवाइन पराठा",
+   "alias": [
+    "carom seed paratha",
+    "ajwain parantha",
+    "ajwain ka paratha",
+    "ajwayan paratha",
+    "अजवायन पराठा"
+   ],
+   "cat": "roti",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 325,
+   "p": 7.5,
+   "c": 44,
+   "f": 12,
+   "fib": 6.5,
+   "na": 300,
+   "portions": [
+    {
+     "n": "1 paratha (55 g)",
+     "hi": "1 अजवाइन पराठा",
+     "g": 55
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 flours (atta/besan/millet) with cooking moisture loss plus cooking fat; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "plain triangle paratha with carom seeds, ~1 tsp ghee"
+  },
+  {
+   "slug": "besan-paratha",
+   "name": "Besan Paratha",
+   "hi": "बेसन पराठा",
+   "alias": [
+    "besan parantha",
+    "gram flour paratha",
+    "besan ka paratha",
+    "बेसन का पराठा"
+   ],
+   "cat": "roti",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 305,
+   "p": 10,
+   "c": 38,
+   "f": 12,
+   "fib": 7,
+   "na": 300,
+   "portions": [
+    {
+     "n": "1 paratha (70 g)",
+     "hi": "1 बेसन पराठा",
+     "g": 70
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 flours (atta/besan/millet) with cooking moisture loss plus cooking fat; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "atta with besan, spices and oil, shallow fried on tawa"
+  },
+  {
+   "slug": "sattu-paratha",
+   "name": "Sattu Paratha",
+   "hi": "सत्तू पराठा",
+   "alias": [
+    "sattu parantha",
+    "sattu ka paratha",
+    "sattu stuffed paratha",
+    "sattu bhara paratha",
+    "सत्तू का पराठा",
+    "सत्तू परांठा"
+   ],
+   "cat": "roti",
+   "region": "Bihar",
+   "diet": "veg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 280,
+   "p": 9.5,
+   "c": 38,
+   "f": 10,
+   "fib": 5.5,
+   "na": 280,
+   "portions": [
+    {
+     "n": "1 paratha (100 g)",
+     "hi": "1 सत्तू पराठा",
+     "g": 100
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 flours (atta/besan/millet) with cooking moisture loss plus cooking fat; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "stuffed with roasted chana sattu, onion, mustard oil, lemon, ajwain; ~1 tsp fat"
+  },
+  {
+   "slug": "cheese-paratha",
+   "name": "Cheese Paratha",
+   "hi": "चीज़ पराठा",
+   "alias": [
+    "cheese parantha",
+    "stuffed cheese paratha",
+    "cheesy paratha",
+    "चीज पराठा",
+    "चीज़ परांठा"
+   ],
+   "cat": "roti",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 310,
+   "p": 10,
+   "c": 34,
+   "f": 15,
+   "fib": 3,
+   "na": 420,
+   "portions": [
+    {
+     "n": "1 paratha (100 g)",
+     "hi": "1 चीज़ पराठा",
+     "g": 100
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 flours (atta/besan/millet) with cooking moisture loss plus cooking fat; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "stuffed with processed cheese, shallow fried"
+  },
+  {
+   "slug": "dal-paratha",
+   "name": "Dal Paratha",
+   "hi": "दाल पराठा",
+   "alias": [
+    "daal paratha",
+    "dal parantha",
+    "dal stuffed paratha",
+    "dal bhara paratha",
+    "दाल का पराठा",
+    "दाल परांठा"
+   ],
+   "cat": "roti",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 270,
+   "p": 7,
+   "c": 34,
+   "f": 12,
+   "fib": 6,
+   "na": 300,
+   "portions": [
+    {
+     "n": "1 paratha (95 g)",
+     "hi": "1 दाल पराठा",
+     "g": 95
+    }
+   ],
+   "src": "Recipe computed from atta, dal and cooking fat; cross-checked INDB ASC101 (268)",
+   "conf": "medium",
+   "note": "stuffed with spiced cooked moong/chana dal; INDB ASC101 268"
+  },
+  {
+   "slug": "matar-paratha",
+   "name": "Matar Paratha",
+   "hi": "मटर पराठा",
+   "alias": [
+    "mutter paratha",
+    "peas paratha",
+    "green peas paratha",
+    "matar parantha",
+    "मटर का पराठा",
+    "मटर परांठा"
+   ],
+   "cat": "roti",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 240,
+   "p": 6.5,
+   "c": 32,
+   "f": 9.5,
+   "fib": 5.5,
+   "na": 280,
+   "portions": [
+    {
+     "n": "1 paratha (100 g)",
+     "hi": "1 मटर पराठा",
+     "g": 100
+    }
+   ],
+   "src": "Recipe computed from atta, green peas (IFCT) and cooking fat; cross-checked INDB ASC103 (191)",
+   "conf": "medium",
+   "note": "stuffed with mashed spiced green peas, ~1 tsp fat; INDB ASC103 (191) assumes less fat"
+  },
+  {
+   "slug": "keema-paratha",
+   "name": "Keema Paratha",
+   "hi": "कीमा पराठा",
+   "alias": [
+    "keema parantha",
+    "mince paratha",
+    "minced meat paratha",
+    "mutton keema paratha",
+    "कीमा परांठा",
+    "कीमा भरा पराठा"
+   ],
+   "cat": "roti",
+   "region": "North India",
+   "diet": "nonveg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 275,
+   "p": 11,
+   "c": 28,
+   "f": 13,
+   "fib": 3.5,
+   "na": 350,
+   "portions": [
+    {
+     "n": "1 paratha (110 g)",
+     "hi": "1 कीमा पराठा",
+     "g": 110
+    }
+   ],
+   "src": "Recipe computed from atta, mutton keema and cooking fat; cross-checked INDB ASC104 (238)",
+   "conf": "medium",
+   "note": "stuffed with spiced mutton keema; INDB ASC104 238"
+  },
+  {
+   "slug": "tandoori-paratha",
+   "name": "Tandoori Paratha",
+   "hi": "तंदूरी पराठा",
+   "alias": [
+    "tandoor paratha",
+    "tandoori parantha",
+    "tandoori layered paratha",
+    "तंदूरी परांठा"
+   ],
+   "cat": "roti",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 300,
+   "p": 7.5,
+   "c": 46,
+   "f": 9.5,
+   "fib": 5.5,
+   "na": 300,
+   "portions": [
+    {
+     "n": "1 tandoori paratha (70 g)",
+     "hi": "1 तंदूरी पराठा",
+     "g": 70
+    }
+   ],
+   "src": "Recipe computed from atta and butter; cross-checked INDB ASC112 (295)",
+   "conf": "medium",
+   "note": "whole wheat paratha baked in tandoor and brushed with butter/ghee; INDB ASC112 295"
+  },
+  {
+   "slug": "lauki-paratha",
+   "name": "Lauki Paratha",
+   "hi": "लौकी पराठा",
+   "alias": [
+    "doodhi paratha",
+    "bottle gourd paratha",
+    "ghiya paratha",
+    "lauki parantha",
+    "dudhi paratha",
+    "लौकी का पराठा",
+    "दूधी पराठा"
+   ],
+   "cat": "roti",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 225,
+   "p": 6,
+   "c": 33,
+   "f": 7.5,
+   "fib": 5.5,
+   "na": 260,
+   "portions": [
+    {
+     "n": "1 paratha (80 g)",
+     "hi": "1 लौकी पराठा",
+     "g": 80
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 flours (atta/besan/millet) with cooking moisture loss plus cooking fat; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "atta dough kneaded with grated lauki, ~3/4 tsp fat per paratha"
+  },
+  {
+   "slug": "amritsari-kulcha",
+   "name": "Amritsari Kulcha (Stuffed)",
+   "hi": "अमृतसरी कुलचा",
+   "alias": [
+    "amritsari aloo kulcha",
+    "amritsari stuffed kulcha",
+    "amritsari kulche",
+    "kulcha amritsari",
+    "aloo kulcha",
+    "अमृतसरी कुल्चा",
+    "आलू कुलचा"
+   ],
+   "cat": "roti",
+   "region": "Punjab",
+   "diet": "veg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 290,
+   "p": 7,
+   "c": 42,
+   "f": 10,
+   "fib": 2.5,
+   "na": 420,
+   "portions": [
+    {
+     "n": "1 kulcha (120 g)",
+     "hi": "1 अमृतसरी कुलचा",
+     "g": 120
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 flours (atta/besan/millet) with cooking moisture loss plus cooking fat; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "maida kulcha stuffed with spiced potato/paneer, tandoor baked and basted with butter"
+  },
+  {
+   "slug": "kulcha-plain",
+   "name": "Kulcha (Plain)",
+   "hi": "कुलचा",
+   "alias": [
+    "plain kulcha",
+    "maida kulcha",
+    "tandoori kulcha",
+    "kulche",
+    "naan kulcha",
+    "कुल्चा",
+    "सादा कुलचा"
+   ],
+   "cat": "roti",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 290,
+   "p": 8,
+   "c": 52,
+   "f": 6,
+   "fib": 2.5,
+   "na": 420,
+   "portions": [
+    {
+     "n": "1 kulcha (80 g)",
+     "hi": "1 कुलचा",
+     "g": 80
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 flours (atta/besan/millet) with cooking moisture loss plus cooking fat; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "maida/curd kulcha baked in tandoor, light butter"
+  },
+  {
+   "slug": "onion-kulcha",
+   "name": "Onion Kulcha",
+   "hi": "प्याज कुलचा",
+   "alias": [
+    "pyaz kulcha",
+    "stuffed onion kulcha",
+    "onion kulche",
+    "pyaaz kulcha",
+    "प्याज कुल्चा"
+   ],
+   "cat": "roti",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 285,
+   "p": 7.5,
+   "c": 45,
+   "f": 8.5,
+   "fib": 2.8,
+   "na": 420,
+   "portions": [
+    {
+     "n": "1 kulcha (100 g)",
+     "hi": "1 प्याज कुलचा",
+     "g": 100
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 flours (atta/besan/millet) with cooking moisture loss plus cooking fat; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "maida kulcha with onion-spice stuffing, tandoor baked"
+  },
+  {
+   "slug": "methi-thepla",
+   "name": "Methi Thepla",
+   "hi": "मेथी थेपला",
+   "alias": [
+    "thepla",
+    "fenugreek thepla",
+    "gujarati thepla",
+    "gujarati methi thepla",
+    "methi thepla gujarati",
+    "थेपला",
+    "मेथी का थेपला"
+   ],
+   "cat": "roti",
+   "region": "Gujarat",
+   "diet": "veg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 290,
+   "p": 8.5,
+   "c": 40,
+   "f": 10,
+   "fib": 7,
+   "na": 400,
+   "portions": [
+    {
+     "n": "1 thepla (40 g)",
+     "hi": "1 थेपला",
+     "g": 40
+    },
+    {
+     "n": "2 thepla (80 g)",
+     "hi": "2 थेपला",
+     "g": 80
+    }
+   ],
+   "core": true,
+   "src": "Recipe computed from atta, besan, methi (IFCT) and oil; cross-checked INDB OSR104 (346)",
+   "conf": "medium",
+   "note": "atta + besan + methi, oil and curd in dough, roasted with ~1/2 tsp oil; INDB OSR104 346 judged a bit high"
+  },
+  {
+   "slug": "doodhi-thepla",
+   "name": "Doodhi Thepla (Lauki)",
+   "hi": "दूधी थेपला",
+   "alias": [
+    "lauki thepla",
+    "dudhi thepla",
+    "bottle gourd thepla",
+    "doodhi na thepla",
+    "लौकी थेपला"
+   ],
+   "cat": "roti",
+   "region": "Gujarat",
+   "diet": "veg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 270,
+   "p": 7.5,
+   "c": 38,
+   "f": 9,
+   "fib": 6,
+   "na": 380,
+   "portions": [
+    {
+     "n": "1 thepla (45 g)",
+     "hi": "1 दूधी थेपला",
+     "g": 45
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 flours (atta/besan/millet) with cooking moisture loss plus cooking fat; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "atta + besan with grated doodhi, roasted with a little oil"
+  },
+  {
+   "slug": "khakhra",
+   "name": "Khakhra (Methi)",
+   "hi": "खाखरा",
+   "alias": [
+    "methi khakhra",
+    "jeera khakhra",
+    "gujarati khakhra",
+    "khakra",
+    "plain khakhra",
+    "wheat khakhra",
+    "खाखरे",
+    "खाखरा रोटी"
+   ],
+   "cat": "roti",
+   "region": "Gujarat",
+   "diet": "veg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 385,
+   "p": 11,
+   "c": 64,
+   "f": 8,
+   "fib": 9,
+   "na": 650,
+   "portions": [
+    {
+     "n": "1 khakhra (20 g)",
+     "hi": "1 खाखरा",
+     "g": 20
+    },
+    {
+     "n": "2 khakhra (40 g)",
+     "hi": "2 खाखरा",
+     "g": 40
+    }
+   ],
+   "src": "Typical packaged methi khakhra label (~380-410 kcal/100 g) and IFCT atta; INDB OSR102 178 rejected",
+   "conf": "medium",
+   "note": "dry-roasted crisp whole-wheat flatbread, ~15-20 g each (~75 kcal); INDB OSR102 (178) is far too low for a crisp dry bread"
+  },
+  {
+   "slug": "puri",
+   "name": "Puri (Poori)",
+   "hi": "पूरी",
+   "alias": [
+    "poori",
+    "pooris",
+    "puris",
+    "wheat puri",
+    "gehu ki puri",
+    "fried puri",
+    "पुरी",
+    "गेहूं की पूरी"
+   ],
+   "cat": "roti",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 395,
+   "p": 7.5,
+   "c": 44,
+   "f": 21,
+   "fib": 5,
+   "na": 260,
+   "portions": [
+    {
+     "n": "1 puri (25 g)",
+     "hi": "1 पूरी",
+     "g": 25
+    },
+    {
+     "n": "3 puri (75 g)",
+     "hi": "3 पूरी",
+     "g": 75
+    }
+   ],
+   "core": true,
+   "src": "IFCT 2017 atta + typical deep-fry oil uptake; cross-check NIN (1 puri ~100 kcal)",
+   "conf": "medium",
+   "note": "deep-fried whole-wheat puri, ~25 g each (~100 kcal), realistic oil uptake ~15-18 %"
+  },
+  {
+   "slug": "palak-puri",
+   "name": "Palak Puri",
+   "hi": "पालक पूरी",
+   "alias": [
+    "spinach puri",
+    "palak poori",
+    "green puri",
+    "palak ki puri",
+    "पालक की पूरी"
+   ],
+   "cat": "roti",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 385,
+   "p": 8,
+   "c": 42,
+   "f": 21,
+   "fib": 5.5,
+   "na": 300,
+   "portions": [
+    {
+     "n": "1 puri (25 g)",
+     "hi": "1 पालक पूरी",
+     "g": 25
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 flours (atta/besan/millet) with cooking moisture loss plus cooking fat; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "wheat puri with spinach puree, deep fried"
+  },
+  {
+   "slug": "kuttu-ki-puri",
+   "name": "Kuttu ki Puri (Buckwheat)",
+   "hi": "कुट्टू की पूरी",
+   "alias": [
+    "kuttu puri",
+    "kuttu poori",
+    "buckwheat puri",
+    "vrat puri",
+    "falahari puri",
+    "फलाहारी पूरी",
+    "कुट्टू पूरी"
+   ],
+   "cat": "roti",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 380,
+   "p": 7,
+   "c": 42,
+   "f": 20,
+   "fib": 4,
+   "na": 200,
+   "portions": [
+    {
+     "n": "1 puri (25 g)",
+     "hi": "1 कुट्टू की पूरी",
+     "g": 25
+    },
+    {
+     "n": "3 puri (75 g)",
+     "hi": "3 कुट्टू पूरी",
+     "g": 75
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 flours (atta/besan/millet) with cooking moisture loss plus cooking fat; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "buckwheat flour + boiled potato dough, deep fried; eaten in fasts with rock salt"
+  },
+  {
+   "slug": "bhatura",
+   "name": "Bhatura",
+   "hi": "भटूरा",
+   "alias": [
+    "bhature",
+    "bhatoora",
+    "fried bhatura",
+    "batura",
+    "भटूरे",
+    "भटूरा रोटी"
+   ],
+   "cat": "roti",
+   "region": "Punjab",
+   "diet": "veg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 355,
+   "p": 7.5,
+   "c": 48,
+   "f": 15,
+   "fib": 2,
+   "na": 320,
+   "portions": [
+    {
+     "n": "1 bhatura (90 g)",
+     "hi": "1 भटूरा",
+     "g": 90
+    }
+   ],
+   "src": "Recipe computed from maida, curd, oil absorption ~12-15 %; INDB ASC143 793 rejected as impossible",
+   "conf": "medium",
+   "note": "leavened maida/curd bread, deep fried, ~90 g; INDB ASC143 (793 kcal) is a gross error"
+  },
+  {
+   "slug": "luchi",
+   "name": "Luchi (Bengali Puri)",
+   "hi": "लुची",
+   "alias": [
+    "luchi bengali",
+    "loochi",
+    "bengali puri",
+    "maida puri",
+    "luchee"
+   ],
+   "cat": "roti",
+   "region": "West Bengal",
+   "diet": "veg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 410,
+   "p": 7,
+   "c": 50,
+   "f": 20,
+   "fib": 2,
+   "na": 150,
+   "portions": [
+    {
+     "n": "1 luchi (25 g)",
+     "hi": "1 लुची",
+     "g": 25
+    },
+    {
+     "n": "4 luchi (100 g)",
+     "hi": "4 लुची",
+     "g": 100
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 flours (atta/besan/millet) with cooking moisture loss plus cooking fat; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "small puffed maida puri deep fried in oil, ~25 g each (~100 kcal)"
+  },
+  {
+   "slug": "naan",
+   "name": "Naan (Plain)",
+   "hi": "नान",
+   "alias": [
+    "plain naan",
+    "tandoori naan",
+    "naan bread",
+    "nan",
+    "maida naan",
+    "सादा नान",
+    "नान रोटी"
+   ],
+   "cat": "roti",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 280,
+   "p": 8.8,
+   "c": 49,
+   "f": 5,
+   "fib": 2,
+   "na": 430,
+   "portions": [
+    {
+     "n": "1 naan (90 g)",
+     "hi": "1 नान",
+     "g": 90
+    }
+   ],
+   "src": "Recipe computed from maida, curd, oil; cross-checked INDB ASC142 (286) and packaged naan labels",
+   "conf": "medium",
+   "note": "restaurant maida naan with curd/milk, tandoor baked, no butter brushed; INDB ASC142 286"
+  },
+  {
+   "slug": "butter-naan",
+   "name": "Butter Naan",
+   "hi": "बटर नान",
+   "alias": [
+    "naan butter",
+    "butter nan",
+    "buttered naan",
+    "बटर नान रोटी"
+   ],
+   "cat": "roti",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 305,
+   "p": 8,
+   "c": 45,
+   "f": 10,
+   "fib": 2,
+   "na": 470,
+   "portions": [
+    {
+     "n": "1 butter naan (95 g)",
+     "hi": "1 बटर नान",
+     "g": 95
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 flours (atta/besan/millet) with cooking moisture loss plus cooking fat; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "plain naan brushed with ~6 g butter"
+  },
+  {
+   "slug": "garlic-naan",
+   "name": "Garlic Naan",
+   "hi": "गार्लिक नान",
+   "alias": [
+    "lehsun naan",
+    "garlic nan",
+    "naan with garlic",
+    "लहसुन नान"
+   ],
+   "cat": "roti",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 295,
+   "p": 8.5,
+   "c": 46,
+   "f": 9,
+   "fib": 2.2,
+   "na": 470,
+   "portions": [
+    {
+     "n": "1 garlic naan (95 g)",
+     "hi": "1 गार्लिक नान",
+     "g": 95
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 flours (atta/besan/millet) with cooking moisture loss plus cooking fat; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "naan topped with chopped garlic, coriander and butter"
+  },
+  {
+   "slug": "keema-naan",
+   "name": "Keema Naan",
+   "hi": "कीमा नान",
+   "alias": [
+    "stuffed keema naan",
+    "mutton keema naan",
+    "keema nan",
+    "कीमा भरा नान"
+   ],
+   "cat": "roti",
+   "region": "North India",
+   "diet": "nonveg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 285,
+   "p": 12,
+   "c": 36,
+   "f": 10,
+   "fib": 1.8,
+   "na": 500,
+   "portions": [
+    {
+     "n": "1 keema naan (130 g)",
+     "hi": "1 कीमा नान",
+     "g": 130
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 flours (atta/besan/millet) with cooking moisture loss plus cooking fat; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "naan stuffed with spiced mutton mince, tandoor baked"
+  },
+  {
+   "slug": "cheese-naan",
+   "name": "Cheese Naan",
+   "hi": "चीज़ नान",
+   "alias": [
+    "cheese stuffed naan",
+    "cheesy naan",
+    "cheese nan",
+    "चीज नान"
+   ],
+   "cat": "roti",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 305,
+   "p": 11,
+   "c": 40,
+   "f": 11.5,
+   "fib": 2,
+   "na": 560,
+   "portions": [
+    {
+     "n": "1 cheese naan (110 g)",
+     "hi": "1 चीज़ नान",
+     "g": 110
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 flours (atta/besan/millet) with cooking moisture loss plus cooking fat; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "naan stuffed with processed cheese, tandoor baked"
+  },
+  {
+   "slug": "whole-wheat-naan",
+   "name": "Whole Wheat Naan (Atta Naan)",
+   "hi": "आटा नान",
+   "alias": [
+    "atta naan",
+    "wheat naan",
+    "tandoori atta naan",
+    "brown naan",
+    "गेहूं का नान"
+   ],
+   "cat": "roti",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 265,
+   "p": 9.5,
+   "c": 45,
+   "f": 4.5,
+   "fib": 5.5,
+   "na": 420,
+   "portions": [
+    {
+     "n": "1 naan (80 g)",
+     "hi": "1 आटा नान",
+     "g": 80
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 flours (atta/besan/millet) with cooking moisture loss plus cooking fat; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "atta based tandoori naan with a little oil/curd"
+  },
+  {
+   "slug": "sheermal",
+   "name": "Sheermal",
+   "hi": "शीरमाल",
+   "alias": [
+    "shirmal",
+    "sheermal bread",
+    "sheer mal",
+    "saffron sheermal",
+    "शीर माल"
+   ],
+   "cat": "roti",
+   "region": "Uttar Pradesh",
+   "diet": "veg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 330,
+   "p": 8,
+   "c": 52,
+   "f": 10,
+   "fib": 2,
+   "na": 200,
+   "portions": [
+    {
+     "n": "1 sheermal (80 g)",
+     "hi": "1 शीरमाल",
+     "g": 80
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 flours (atta/besan/millet) with cooking moisture loss plus cooking fat; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "lightly sweet saffron-milk maida bread with ghee, baked in tandoor/oven (Lucknow)"
+  },
+  {
+   "slug": "taftan",
+   "name": "Taftan",
+   "hi": "तफ्तान",
+   "alias": [
+    "taftaan",
+    "taaftan",
+    "taftan roti",
+    "तफ़्तान",
+    "तफ्तान रोटी"
+   ],
+   "cat": "roti",
+   "region": "Uttar Pradesh",
+   "diet": "veg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 300,
+   "p": 8,
+   "c": 52,
+   "f": 7,
+   "fib": 2,
+   "na": 300,
+   "portions": [
+    {
+     "n": "1 taftan (90 g)",
+     "hi": "1 तफ्तान",
+     "g": 90
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 flours (atta/besan/millet) with cooking moisture loss plus cooking fat; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "leavened maida bread with milk/curd and a little ghee, mildly sweet (Mughlai/Lucknow)"
+  },
+  {
+   "slug": "bakarkhani",
+   "name": "Bakarkhani",
+   "hi": "बाकरखानी",
+   "alias": [
+    "bakirkhani",
+    "bakar khani",
+    "bakarkhani roti",
+    "bakerkhani",
+    "बाकरखानी रोटी",
+    "बाकरखानी"
+   ],
+   "cat": "roti",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 390,
+   "p": 8,
+   "c": 52,
+   "f": 17,
+   "fib": 2,
+   "na": 300,
+   "portions": [
+    {
+     "n": "1 bakarkhani (50 g)",
+     "hi": "1 बाकरखानी",
+     "g": 50
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 flours (atta/besan/millet) with cooking moisture loss plus cooking fat; cross-checked NIN tables and INDB",
+   "conf": "low",
+   "note": "crisp layered ghee-rich Mughlai bread, ~50 g piece"
+  },
+  {
+   "slug": "appam-palappam",
+   "name": "Appam (Palappam)",
+   "hi": "अप्पम",
+   "alias": [
+    "palappam",
+    "vellayappam",
+    "hoppers",
+    "kerala appam",
+    "aappam",
+    "appam hopper",
+    "अप्पम रोटी"
+   ],
+   "cat": "roti",
+   "region": "Kerala",
+   "diet": "veg",
+   "emoji": "🥞",
+   "unit": "g",
+   "kcal": 135,
+   "p": 2.5,
+   "c": 26,
+   "f": 2.8,
+   "fib": 1,
+   "na": 160,
+   "portions": [
+    {
+     "n": "1 appam (70 g)",
+     "hi": "1 अप्पम",
+     "g": 70
+    },
+    {
+     "n": "2 appam (140 g)",
+     "hi": "2 अप्पम",
+     "g": 140
+    }
+   ],
+   "src": "Recipe computed from IFCT raw rice + coconut + yeast batter; INDB BFP153 268 judged too high",
+   "conf": "medium",
+   "note": "fermented rice-and-coconut batter hopper, crisp edges, no frying oil; INDB BFP153 (268) looks too high"
+  },
+  {
+   "slug": "kerala-parotta",
+   "name": "Parotta (Kerala / Tamil Nadu)",
+   "hi": "परोटा",
+   "alias": [
+    "porotta",
+    "kerala parotta",
+    "malabar parotta",
+    "veechu parotta",
+    "layered parotta",
+    "parota",
+    "kerala paratha",
+    "वीचू परोटा"
+   ],
+   "cat": "roti",
+   "region": "Kerala",
+   "diet": "veg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 335,
+   "p": 7,
+   "c": 46,
+   "f": 14,
+   "fib": 1.8,
+   "na": 450,
+   "portions": [
+    {
+     "n": "1 parotta (90 g)",
+     "hi": "1 परोटा",
+     "g": 90
+    },
+    {
+     "n": "2 parotta (180 g)",
+     "hi": "2 परोटा",
+     "g": 180
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 flours (atta/besan/millet) with cooking moisture loss plus cooking fat; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "maida parotta layered with oil/ghee and shallow fried; ~90 g each (~300 kcal)"
+  },
+  {
+   "slug": "veg-kothu-parotta",
+   "name": "Veg Kothu Parotta",
+   "hi": "वेज कोथु परोटा",
+   "alias": [
+    "vegetable kothu parotta",
+    "kothu parotta veg",
+    "veg kothu paratha",
+    "kothu porotta veg",
+    "veg koththu parotta"
+   ],
+   "cat": "roti",
+   "region": "Tamil Nadu",
+   "diet": "veg",
+   "emoji": "🍛",
+   "unit": "g",
+   "kcal": 215,
+   "p": 5.5,
+   "c": 30,
+   "f": 8,
+   "fib": 2.5,
+   "na": 520,
+   "portions": [
+    {
+     "n": "1 plate (250 g)",
+     "hi": "1 प्लेट",
+     "g": 250
+    },
+    {
+     "n": "1 small plate (150 g)",
+     "hi": "1 छोटी प्लेट",
+     "g": 150
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 flours (atta/besan/millet) with cooking moisture loss plus cooking fat; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "shredded parotta tossed with onion, tomato, vegetables and salna on a griddle"
+  },
+  {
+   "slug": "egg-kothu-parotta",
+   "name": "Egg Kothu Parotta",
+   "hi": "एग कोथु परोटा",
+   "alias": [
+    "muttai kothu parotta",
+    "kothu parotta egg",
+    "egg kothu paratha",
+    "egg koththu parotta",
+    "anda kothu parotta"
+   ],
+   "cat": "roti",
+   "region": "Tamil Nadu",
+   "diet": "egg",
+   "emoji": "🍛",
+   "unit": "g",
+   "kcal": 235,
+   "p": 8,
+   "c": 27,
+   "f": 10,
+   "fib": 2,
+   "na": 560,
+   "portions": [
+    {
+     "n": "1 plate (250 g)",
+     "hi": "1 प्लेट",
+     "g": 250
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 flours (atta/besan/millet) with cooking moisture loss plus cooking fat; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "shredded parotta tossed with scrambled egg, onion, salna"
+  },
+  {
+   "slug": "chicken-kothu-parotta",
+   "name": "Chicken Kothu Parotta",
+   "hi": "चिकन कोथु परोटा",
+   "alias": [
+    "kothu parotta chicken",
+    "chicken kothu paratha",
+    "chicken koththu parotta",
+    "kozhi kothu parotta"
+   ],
+   "cat": "roti",
+   "region": "Tamil Nadu",
+   "diet": "nonveg",
+   "emoji": "🍛",
+   "unit": "g",
+   "kcal": 240,
+   "p": 11,
+   "c": 24,
+   "f": 10.5,
+   "fib": 1.8,
+   "na": 600,
+   "portions": [
+    {
+     "n": "1 plate (250 g)",
+     "hi": "1 प्लेट",
+     "g": 250
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 flours (atta/besan/millet) with cooking moisture loss plus cooking fat; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "shredded parotta with chicken, egg-less, onion, salna on a griddle"
+  },
+  {
+   "slug": "chapati-roll",
+   "name": "Chapati Roll (Veg Roti Roll)",
+   "hi": "रोटी रोल",
+   "alias": [
+    "roti roll",
+    "veg roti roll",
+    "chapati wrap",
+    "sabzi roll",
+    "roti wrap",
+    "chapathi roll",
+    "रोटी रैप"
+   ],
+   "cat": "roti",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🌯",
+   "unit": "g",
+   "kcal": 190,
+   "p": 5.5,
+   "c": 30,
+   "f": 4.5,
+   "fib": 4.5,
+   "na": 380,
+   "portions": [
+    {
+     "n": "1 roll (120 g)",
+     "hi": "1 रोल",
+     "g": 120
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 flours (atta/besan/millet) with cooking moisture loss plus cooking fat; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "35 g roti wrapped around ~80 g dry vegetable/paneer sabzi (home style, little oil)"
+  },
+  {
+   "slug": "white-rice-cooked",
+   "name": "White Rice, Cooked (Steamed)",
+   "hi": "पका हुआ चावल (भात)",
+   "alias": [
+    "steamed rice",
+    "plain rice",
+    "boiled rice",
+    "chawal",
+    "bhaat",
+    "sada chawal",
+    "cooked rice",
+    "annam",
+    "चावल",
+    "भात"
+   ],
+   "cat": "rice",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍚",
+   "unit": "g",
+   "kcal": 130,
+   "p": 2.7,
+   "c": 28.5,
+   "f": 0.3,
+   "fib": 0.4,
+   "na": 5,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 plate (250 g)",
+     "hi": "1 प्लेट",
+     "g": 250
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 cup (160 g)",
+     "hi": "1 कप",
+     "g": 160
+    }
+   ],
+   "core": true,
+   "src": "IFCT 2017 raw milled rice (A015) at standard cooked yield; cross-checked USDA cooked rice and INDB ASC113 (117)",
+   "conf": "high",
+   "note": "milled raw rice (IFCT 356 kcal) cooked to ~2.7x weight, unsalted, no fat; 1 katori ~195 kcal"
+  },
+  {
+   "slug": "basmati-rice-cooked",
+   "name": "Basmati Rice, Cooked",
+   "hi": "बासमती चावल (पका)",
+   "alias": [
+    "cooked basmati",
+    "steamed basmati rice",
+    "basmati chawal",
+    "plain basmati",
+    "basmati bhat",
+    "बासमती भात"
+   ],
+   "cat": "rice",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍚",
+   "unit": "g",
+   "kcal": 128,
+   "p": 2.8,
+   "c": 28,
+   "f": 0.3,
+   "fib": 0.4,
+   "na": 5,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 plate (250 g)",
+     "hi": "1 प्लेट",
+     "g": 250
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 raw rice/dal/vegetables (cooked yield ~2.5x) plus tempering fat; cross-checked NIN and INDB",
+   "conf": "high",
+   "note": "long-grain basmati cooked in water, unsalted, no fat"
+  },
+  {
+   "slug": "brown-rice-cooked",
+   "name": "Brown Rice, Cooked",
+   "hi": "ब्राउन राइस (पका)",
+   "alias": [
+    "cooked brown rice",
+    "steamed brown rice",
+    "brown chawal",
+    "unpolished rice cooked",
+    "ब्राउन चावल"
+   ],
+   "cat": "rice",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍚",
+   "unit": "g",
+   "kcal": 125,
+   "p": 2.8,
+   "c": 25.5,
+   "f": 1,
+   "fib": 1.8,
+   "na": 5,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 plate (250 g)",
+     "hi": "1 प्लेट",
+     "g": 250
+    }
+   ],
+   "src": "IFCT 2017 raw brown rice (A013) at standard cooked yield; USDA cooked brown rice ~123",
+   "conf": "high",
+   "note": "IFCT raw brown rice 354 kcal cooked to ~2.8x weight, unsalted"
+  },
+  {
+   "slug": "parboiled-rice-cooked",
+   "name": "Parboiled Rice, Cooked (Sela / Ukda)",
+   "hi": "उसना चावल (पका)",
+   "alias": [
+    "sela rice cooked",
+    "ukda chawal",
+    "boiled rice parboiled",
+    "ukda rice",
+    "usna chawal",
+    "kerala boiled rice",
+    "उबला चावल सेला"
+   ],
+   "cat": "rice",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍚",
+   "unit": "g",
+   "kcal": 123,
+   "p": 2.6,
+   "c": 27.5,
+   "f": 0.2,
+   "fib": 0.8,
+   "na": 5,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 plate (250 g)",
+     "hi": "1 प्लेट",
+     "g": 250
+    }
+   ],
+   "src": "IFCT 2017 parboiled milled rice (A014) at standard cooked yield",
+   "conf": "high",
+   "note": "parboiled milled rice cooked in water, unsalted (IFCT A014 352 kcal raw)"
+  },
+  {
+   "slug": "red-rice-matta-cooked",
+   "name": "Red Rice, Cooked (Matta / Rosematta)",
+   "hi": "लाल चावल (पका)",
+   "alias": [
+    "matta rice",
+    "rosematta rice",
+    "kerala red rice",
+    "red rice cooked",
+    "palakkadan matta",
+    "lal chawal",
+    "लाल भात"
+   ],
+   "cat": "rice",
+   "region": "Kerala",
+   "diet": "veg",
+   "emoji": "🍚",
+   "unit": "g",
+   "kcal": 125,
+   "p": 2.8,
+   "c": 26.5,
+   "f": 0.7,
+   "fib": 1.5,
+   "na": 5,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 plate (250 g)",
+     "hi": "1 प्लेट",
+     "g": 250
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 raw rice/dal/vegetables (cooked yield ~2.5x) plus tempering fat; cross-checked NIN and INDB",
+   "conf": "medium",
+   "note": "red parboiled unpolished rice, cooked, unsalted"
+  },
+  {
+   "slug": "black-rice-cooked",
+   "name": "Black Rice, Cooked (Chak-hao)",
+   "hi": "काला चावल (पका)",
+   "alias": [
+    "forbidden rice cooked",
+    "chakhao cooked",
+    "chak hao rice",
+    "kala chawal",
+    "black rice",
+    "काला भात"
+   ],
+   "cat": "rice",
+   "region": "Manipur",
+   "diet": "veg",
+   "emoji": "🍚",
+   "unit": "g",
+   "kcal": 133,
+   "p": 3.4,
+   "c": 27.5,
+   "f": 1,
+   "fib": 1.5,
+   "na": 5,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 plate (250 g)",
+     "hi": "1 प्लेट",
+     "g": 250
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 raw rice/dal/vegetables (cooked yield ~2.5x) plus tempering fat; cross-checked NIN and INDB",
+   "conf": "medium",
+   "note": "black glutinous rice cooked in water, unsalted; slightly higher protein than white"
+  },
+  {
+   "slug": "dal-chawal",
+   "name": "Dal Chawal (Dal Rice)",
+   "hi": "दाल चावल",
+   "alias": [
+    "daal chawal",
+    "dal rice",
+    "dal bhat",
+    "dal bhaat",
+    "dhal rice",
+    "boiled rice with dal",
+    "paruppu sadam",
+    "दाल भात",
+    "दाल-चावल"
+   ],
+   "cat": "rice",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍛",
+   "unit": "g",
+   "kcal": 115,
+   "p": 3.9,
+   "c": 20,
+   "f": 1.8,
+   "fib": 1.8,
+   "na": 280,
+   "portions": [
+    {
+     "n": "1 plate (300 g)",
+     "hi": "1 प्लेट",
+     "g": 300
+    },
+    {
+     "n": "1 katori mixed (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    }
+   ],
+   "core": true,
+   "src": "Standard home recipe computed from IFCT 2017 raw rice/dal/vegetables (cooked yield ~2.5x) plus tempering fat; cross-checked NIN and INDB",
+   "conf": "medium",
+   "note": "plated 150 g cooked rice + 150 g thin home dal (~85-110 kcal/100 g); mixed values per 100 g"
+  },
+  {
+   "slug": "rajma-chawal",
+   "name": "Rajma Chawal",
+   "hi": "राजमा चावल",
+   "alias": [
+    "rajma rice",
+    "rajma chaval",
+    "rajmah chawal",
+    "kidney bean curry rice",
+    "rajma with rice",
+    "राजमा-चावल",
+    "राजमा भात"
+   ],
+   "cat": "rice",
+   "region": "Punjab",
+   "diet": "veg",
+   "emoji": "🍛",
+   "unit": "g",
+   "kcal": 126,
+   "p": 4.8,
+   "c": 21.5,
+   "f": 2.2,
+   "fib": 2.8,
+   "na": 300,
+   "portions": [
+    {
+     "n": "1 plate (300 g)",
+     "hi": "1 प्लेट",
+     "g": 300
+    },
+    {
+     "n": "1 katori mixed (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    }
+   ],
+   "core": true,
+   "src": "Standard home recipe computed from IFCT 2017 raw rice/dal/vegetables (cooked yield ~2.5x) plus tempering fat; cross-checked NIN and INDB",
+   "conf": "medium",
+   "note": "plate of 150 g rice + 150 g home-style rajma curry (~125 kcal/100 g)"
+  },
+  {
+   "slug": "kadhi-chawal",
+   "name": "Kadhi Chawal",
+   "hi": "कढ़ी चावल",
+   "alias": [
+    "kadhi rice",
+    "kadi chawal",
+    "kadhi pakora chawal",
+    "kadhi with rice",
+    "कढ़ी-चावल",
+    "कढी चावल"
+   ],
+   "cat": "rice",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🍛",
+   "unit": "g",
+   "kcal": 112,
+   "p": 2.9,
+   "c": 18.5,
+   "f": 3.2,
+   "fib": 0.9,
+   "na": 260,
+   "portions": [
+    {
+     "n": "1 plate (300 g)",
+     "hi": "1 प्लेट",
+     "g": 300
+    },
+    {
+     "n": "1 katori mixed (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 raw rice/dal/vegetables (cooked yield ~2.5x) plus tempering fat; cross-checked NIN and INDB",
+   "conf": "medium",
+   "note": "plate of 150 g rice + 150 g curd-besan kadhi (~100 kcal/100 g)"
+  },
+  {
+   "slug": "chole-chawal",
+   "name": "Chole Chawal",
+   "hi": "छोले चावल",
+   "alias": [
+    "chana chawal",
+    "chole rice",
+    "chhole chawal",
+    "chana masala rice",
+    "छोले-चावल",
+    "छोले भात"
+   ],
+   "cat": "rice",
+   "region": "Punjab",
+   "diet": "veg",
+   "emoji": "🍛",
+   "unit": "g",
+   "kcal": 135,
+   "p": 4.6,
+   "c": 22,
+   "f": 3.4,
+   "fib": 3,
+   "na": 340,
+   "portions": [
+    {
+     "n": "1 plate (300 g)",
+     "hi": "1 प्लेट",
+     "g": 300
+    },
+    {
+     "n": "1 katori mixed (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 raw rice/dal/vegetables (cooked yield ~2.5x) plus tempering fat; cross-checked NIN and INDB",
+   "conf": "medium",
+   "note": "plate of 150 g rice + 150 g home chole (~140 kcal/100 g)"
+  },
+  {
+   "slug": "jeera-rice",
+   "name": "Jeera Rice",
+   "hi": "जीरा राइस",
+   "alias": [
+    "jeera chawal",
+    "cumin rice",
+    "zeera rice",
+    "jira rice",
+    "jeera pulao",
+    "जीरा चावल",
+    "ज़ीरा राइस"
+   ],
+   "cat": "rice",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🍚",
+   "unit": "g",
+   "kcal": 148,
+   "p": 2.6,
+   "c": 26.5,
+   "f": 3.3,
+   "fib": 0.6,
+   "na": 150,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 plate (250 g)",
+     "hi": "1 प्लेट",
+     "g": 250
+    }
+   ],
+   "core": true,
+   "src": "Recipe computed from IFCT rice + ghee; cross-checked INDB BFP134 (135)",
+   "conf": "medium",
+   "note": "basmati rice tempered with ~1 tsp ghee/oil and cumin per 150 g; INDB BFP134 jeera pulao 135"
+  },
+  {
+   "slug": "vegetable-pulao",
+   "name": "Vegetable Pulao",
+   "hi": "वेज पुलाव",
+   "alias": [
+    "veg pulao",
+    "veg pulav",
+    "vegetable pulav",
+    "mixed veg pulao",
+    "sabzi pulao",
+    "veg pulao rice",
+    "वेज पुलाव",
+    "सब्जी पुलाव"
+   ],
+   "cat": "rice",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🍛",
+   "unit": "g",
+   "kcal": 145,
+   "p": 3,
+   "c": 24.5,
+   "f": 3.5,
+   "fib": 1.8,
+   "na": 200,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 plate (250 g)",
+     "hi": "1 प्लेट",
+     "g": 250
+    }
+   ],
+   "core": true,
+   "src": "Recipe computed from IFCT rice, vegetables and fat; cross-checked INDB ASC115 (113)",
+   "conf": "medium",
+   "note": "home pulao with peas, carrot, beans, whole spices and ~1.5 tsp fat per 150 g; INDB ASC115 113 assumes less fat"
+  },
+  {
+   "slug": "plain-pulao",
+   "name": "Plain Pulao",
+   "hi": "सादा पुलाव",
+   "alias": [
+    "plain pulav",
+    "ghee pulao",
+    "whole spice pulao",
+    "sada pulao",
+    "pulao",
+    "pulav",
+    "सादा पुलाओ"
+   ],
+   "cat": "rice",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🍛",
+   "unit": "g",
+   "kcal": 148,
+   "p": 2.8,
+   "c": 26,
+   "f": 3.5,
+   "fib": 0.8,
+   "na": 190,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 plate (250 g)",
+     "hi": "1 प्लेट",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed from IFCT rice + ghee; cross-checked INDB ASC114 (140)",
+   "conf": "medium",
+   "note": "basmati rice with ghee and whole spices (bay leaf, cloves, cardamom); INDB ASC114 140"
+  },
+  {
+   "slug": "peas-pulao",
+   "name": "Peas Pulao (Matar Pulao)",
+   "hi": "मटर पुलाव",
+   "alias": [
+    "matar pulav",
+    "matar pulao",
+    "green peas pulao",
+    "mutter pulao",
+    "peas pulav",
+    "मटर पुलाओ"
+   ],
+   "cat": "rice",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🍛",
+   "unit": "g",
+   "kcal": 145,
+   "p": 3.4,
+   "c": 25,
+   "f": 3.3,
+   "fib": 2,
+   "na": 190,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 plate (250 g)",
+     "hi": "1 प्लेट",
+     "g": 250
+    }
+   ],
+   "core": true,
+   "src": "Recipe computed from IFCT rice, green peas, ghee; cross-checked INDB BFP136 (109)",
+   "conf": "medium",
+   "note": "rice with green peas and ~1.5 tsp ghee per 150 g; INDB BFP136 109 assumes little fat"
+  },
+  {
+   "slug": "mushroom-pulao",
+   "name": "Mushroom Pulao",
+   "hi": "मशरूम पुलाव",
+   "alias": [
+    "mushroom pulav",
+    "mushroom rice pulao",
+    "khumb pulao",
+    "मशरूम पुलाओ"
+   ],
+   "cat": "rice",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🍛",
+   "unit": "g",
+   "kcal": 142,
+   "p": 3.2,
+   "c": 24,
+   "f": 3.6,
+   "fib": 1.2,
+   "na": 210,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 plate (250 g)",
+     "hi": "1 प्लेट",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed from IFCT rice, mushroom, ghee; cross-checked INDB ASC116 (124)",
+   "conf": "medium",
+   "note": "rice with button mushrooms, onion, whole spices and ghee; INDB ASC116 124"
+  },
+  {
+   "slug": "kashmiri-pulao",
+   "name": "Kashmiri Pulao",
+   "hi": "कश्मीरी पुलाव",
+   "alias": [
+    "kashmiri pulav",
+    "kashmiri fruit pulao",
+    "mughlai kashmiri pulao",
+    "dry fruit pulao",
+    "कश्मीरी पुलाओ"
+   ],
+   "cat": "rice",
+   "region": "Jammu & Kashmir",
+   "diet": "veg",
+   "emoji": "🍛",
+   "unit": "g",
+   "kcal": 185,
+   "p": 3.6,
+   "c": 30,
+   "f": 6,
+   "fib": 1.5,
+   "na": 180,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 plate (250 g)",
+     "hi": "1 प्लेट",
+     "g": 250
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 raw rice/dal/vegetables (cooked yield ~2.5x) plus tempering fat; cross-checked NIN and INDB",
+   "conf": "low",
+   "note": "saffron basmati with ghee, almonds, cashew, raisins and pineapple/apple pieces, mildly sweet"
+  },
+  {
+   "slug": "tawa-pulao",
+   "name": "Tawa Pulao (Mumbai Style)",
+   "hi": "तवा पुलाव",
+   "alias": [
+    "tawa pulav",
+    "mumbai tawa pulao",
+    "pav bhaji pulao",
+    "street tawa pulao",
+    "तवा पुलाओ"
+   ],
+   "cat": "rice",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🍛",
+   "unit": "g",
+   "kcal": 165,
+   "p": 3.2,
+   "c": 25,
+   "f": 5.5,
+   "fib": 2.2,
+   "na": 350,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 plate (250 g)",
+     "hi": "1 प्लेट",
+     "g": 250
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 raw rice/dal/vegetables (cooked yield ~2.5x) plus tempering fat; cross-checked NIN and INDB",
+   "conf": "medium",
+   "note": "street style: rice tossed on tawa with butter, vegetables and pav bhaji masala"
+  },
+  {
+   "slug": "navratan-pulao",
+   "name": "Navratan Pulao",
+   "hi": "नवरत्न पुलाव",
+   "alias": [
+    "navratna pulao",
+    "nawratan pulao",
+    "navratan pulav",
+    "nine gem pulao",
+    "नवरत्न पुलाओ"
+   ],
+   "cat": "rice",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🍛",
+   "unit": "g",
+   "kcal": 168,
+   "p": 3.5,
+   "c": 26,
+   "f": 5.5,
+   "fib": 1.8,
+   "na": 220,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 plate (250 g)",
+     "hi": "1 प्लेट",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed from IFCT rice, vegetables, nuts, ghee; INDB ASC120 262 judged too high",
+   "conf": "low",
+   "note": "pulao with vegetables, paneer, dry fruits; INDB ASC120 (262) looks too high for a plain rice dish"
+  },
+  {
+   "slug": "paneer-pulao",
+   "name": "Paneer Pulao",
+   "hi": "पनीर पुलाव",
+   "alias": [
+    "paneer pulav",
+    "cottage cheese pulao",
+    "paneer rice pulao",
+    "पनीर पुलाओ"
+   ],
+   "cat": "rice",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🍛",
+   "unit": "g",
+   "kcal": 175,
+   "p": 5.2,
+   "c": 24,
+   "f": 6.5,
+   "fib": 1.2,
+   "na": 230,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 plate (250 g)",
+     "hi": "1 प्लेट",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed from IFCT rice, paneer, ghee; INDB ASC118 582 rejected as impossible",
+   "conf": "medium",
+   "note": "rice with paneer cubes and ghee; INDB ASC118 (582) is a gross error"
+  },
+  {
+   "slug": "veg-biryani",
+   "name": "Veg Biryani",
+   "hi": "वेज बिरयानी",
+   "alias": [
+    "vegetable biryani",
+    "veg biriyani",
+    "veg briyani",
+    "sabzi biryani",
+    "veg dum biryani",
+    "वेज बिरयानी",
+    "सब्जी बिरयानी"
+   ],
+   "cat": "rice",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍛",
+   "unit": "g",
+   "kcal": 168,
+   "p": 3.4,
+   "c": 26,
+   "f": 5.5,
+   "fib": 2.2,
+   "na": 250,
+   "portions": [
+    {
+     "n": "1 plate (300 g)",
+     "hi": "1 प्लेट",
+     "g": 300
+    },
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    }
+   ],
+   "core": true,
+   "src": "Recipe computed from IFCT rice, vegetables, oil and fried onion; cross-checked INDB ASC123 (175)",
+   "conf": "medium",
+   "note": "restaurant/home veg biryani with ~2 tsp oil/ghee per 150 g cooked, fried onions; INDB ASC123 175"
+  },
+  {
+   "slug": "hyderabadi-veg-biryani",
+   "name": "Hyderabadi Veg Biryani",
+   "hi": "हैदराबादी वेज बिरयानी",
+   "alias": [
+    "hyderabadi vegetable biryani",
+    "hyderabadi dum biryani veg",
+    "veg dum biryani hyderabadi",
+    "hyderabadi biriyani veg",
+    "हैदराबादी बिरयानी"
+   ],
+   "cat": "rice",
+   "region": "Telangana",
+   "diet": "veg",
+   "emoji": "🍛",
+   "unit": "g",
+   "kcal": 175,
+   "p": 3.6,
+   "c": 26,
+   "f": 6,
+   "fib": 2.3,
+   "na": 280,
+   "portions": [
+    {
+     "n": "1 plate (300 g)",
+     "hi": "1 प्लेट",
+     "g": 300
+    },
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 raw rice/dal/vegetables (cooked yield ~2.5x) plus tempering fat; cross-checked NIN and INDB",
+   "conf": "medium",
+   "note": "dum-cooked layered basmati with vegetables, curd, fried onion, ghee"
+  },
+  {
+   "slug": "lucknowi-veg-biryani",
+   "name": "Lucknowi Veg Biryani",
+   "hi": "लखनवी वेज बिरयानी",
+   "alias": [
+    "awadhi veg biryani",
+    "lucknowi vegetable biryani",
+    "awadhi dum biryani veg",
+    "lucknowi biryani",
+    "लखनऊ बिरयानी"
+   ],
+   "cat": "rice",
+   "region": "Uttar Pradesh",
+   "diet": "veg",
+   "emoji": "🍛",
+   "unit": "g",
+   "kcal": 172,
+   "p": 3.3,
+   "c": 27,
+   "f": 5.5,
+   "fib": 1.8,
+   "na": 250,
+   "portions": [
+    {
+     "n": "1 plate (300 g)",
+     "hi": "1 प्लेट",
+     "g": 300
+    },
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 raw rice/dal/vegetables (cooked yield ~2.5x) plus tempering fat; cross-checked NIN and INDB",
+   "conf": "medium",
+   "note": "mild awadhi-style dum biryani with vegetables, kewra, ghee"
+  },
+  {
+   "slug": "paneer-biryani",
+   "name": "Paneer Biryani",
+   "hi": "पनीर बिरयानी",
+   "alias": [
+    "paneer dum biryani",
+    "paneer biriyani",
+    "paneer pulao biryani",
+    "पनीर बिरियानी"
+   ],
+   "cat": "rice",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍛",
+   "unit": "g",
+   "kcal": 190,
+   "p": 5.5,
+   "c": 24,
+   "f": 8,
+   "fib": 1.5,
+   "na": 270,
+   "portions": [
+    {
+     "n": "1 plate (300 g)",
+     "hi": "1 प्लेट",
+     "g": 300
+    },
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 raw rice/dal/vegetables (cooked yield ~2.5x) plus tempering fat; cross-checked NIN and INDB",
+   "conf": "low",
+   "note": "veg biryani with fried paneer cubes, curd and ghee"
+  },
+  {
+   "slug": "mushroom-biryani",
+   "name": "Mushroom Biryani",
+   "hi": "मशरूम बिरयानी",
+   "alias": [
+    "mushroom dum biryani",
+    "mushroom biriyani",
+    "khumb biryani",
+    "मशरूम बिरियानी"
+   ],
+   "cat": "rice",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍛",
+   "unit": "g",
+   "kcal": 165,
+   "p": 3.5,
+   "c": 25,
+   "f": 5.5,
+   "fib": 1.8,
+   "na": 260,
+   "portions": [
+    {
+     "n": "1 plate (300 g)",
+     "hi": "1 प्लेट",
+     "g": 300
+    },
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 raw rice/dal/vegetables (cooked yield ~2.5x) plus tempering fat; cross-checked NIN and INDB",
+   "conf": "low",
+   "note": "dum biryani with button mushrooms, fried onion, ghee"
+  },
+  {
+   "slug": "moong-dal-khichdi",
+   "name": "Moong Dal Khichdi",
+   "hi": "मूंग दाल खिचड़ी",
+   "alias": [
+    "moong khichdi",
+    "mung dal khichdi",
+    "khichri",
+    "khichadi",
+    "plain khichdi",
+    "dal khichdi",
+    "kichdi",
+    "मूंग की खिचड़ी",
+    "खिचड़ी"
+   ],
+   "cat": "rice",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 110,
+   "p": 3.9,
+   "c": 18,
+   "f": 2.2,
+   "fib": 1.6,
+   "na": 180,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 plate (250 g)",
+     "hi": "1 प्लेट",
+     "g": 250
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    }
+   ],
+   "core": true,
+   "src": "Recipe computed from IFCT rice + moong dal + ghee; INDB BFP144 (57) too watery, ASC487 (143) and BFP576 (93) bracket it",
+   "conf": "medium",
+   "note": "home khichdi: rice and yellow moong dal 1:1, soft, ~1 tsp ghee per 150 g; INDB BFP144 plain khichdi 57 is too watery"
+  },
+  {
+   "slug": "masoor-dal-khichdi",
+   "name": "Masoor Dal Khichdi",
+   "hi": "मसूर दाल खिचड़ी",
+   "alias": [
+    "masoor khichdi",
+    "red lentil khichdi",
+    "masur dal khichri",
+    "masoor ki khichdi",
+    "मसूर की खिचड़ी"
+   ],
+   "cat": "rice",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 108,
+   "p": 4.2,
+   "c": 17.5,
+   "f": 2,
+   "fib": 1.8,
+   "na": 180,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 plate (250 g)",
+     "hi": "1 प्लेट",
+     "g": 250
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 raw rice/dal/vegetables (cooked yield ~2.5x) plus tempering fat; cross-checked NIN and INDB",
+   "conf": "medium",
+   "note": "soft home khichdi with red lentil, ~1 tsp ghee per 150 g"
+  },
+  {
+   "slug": "bajra-khichdi",
+   "name": "Bajra Khichdi",
+   "hi": "बाजरा खिचड़ी",
+   "alias": [
+    "bajre ki khichdi",
+    "pearl millet khichdi",
+    "bajra moong khichdi",
+    "bajra khichri",
+    "बाजरे की खिचड़ी"
+   ],
+   "cat": "rice",
+   "region": "Rajasthan",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 115,
+   "p": 4.2,
+   "c": 18,
+   "f": 2.5,
+   "fib": 2.5,
+   "na": 190,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 plate (250 g)",
+     "hi": "1 प्लेट",
+     "g": 250
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 raw rice/dal/vegetables (cooked yield ~2.5x) plus tempering fat; cross-checked NIN and INDB",
+   "conf": "medium",
+   "note": "cracked bajra with moong dal and ghee, winter dish; eaten with ghee/jaggery/kadhi"
+  },
+  {
+   "slug": "vegetable-khichdi",
+   "name": "Vegetable Khichdi",
+   "hi": "वेज खिचड़ी",
+   "alias": [
+    "veg khichdi",
+    "mixed veg khichdi",
+    "sabzi khichdi",
+    "vegetable khichri",
+    "masala khichdi",
+    "वेजिटेबल खिचड़ी",
+    "सब्जी खिचड़ी"
+   ],
+   "cat": "rice",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 120,
+   "p": 4,
+   "c": 18.5,
+   "f": 2.8,
+   "fib": 2.2,
+   "na": 230,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 plate (250 g)",
+     "hi": "1 प्लेट",
+     "g": 250
+    }
+   ],
+   "core": true,
+   "src": "Recipe computed from IFCT rice, dal, vegetables, ghee; cross-checked INDB ASC487 (143)",
+   "conf": "medium",
+   "note": "rice, moong dal and mixed vegetables with tadka; INDB ASC487 143"
+  },
+  {
+   "slug": "palak-khichdi",
+   "name": "Palak Khichdi",
+   "hi": "पालक खिचड़ी",
+   "alias": [
+    "spinach khichdi",
+    "palak khichri",
+    "green khichdi",
+    "palak moong khichdi",
+    "पालक की खिचड़ी"
+   ],
+   "cat": "rice",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 110,
+   "p": 4.2,
+   "c": 16.5,
+   "f": 2.8,
+   "fib": 2,
+   "na": 220,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 plate (250 g)",
+     "hi": "1 प्लेट",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed from IFCT rice, dal, spinach, ghee; cross-checked INDB BFP556 (102)",
+   "conf": "medium",
+   "note": "khichdi with spinach puree and tadka; INDB BFP556 102"
+  },
+  {
+   "slug": "dalia-khichdi",
+   "name": "Dalia Khichdi (Cracked Wheat)",
+   "hi": "दलिया खिचड़ी",
+   "alias": [
+    "daliya khichdi",
+    "dalia khichri",
+    "broken wheat khichdi",
+    "cracked wheat khichdi",
+    "वेज दलिया खिचड़ी",
+    "दलिया की खिचड़ी"
+   ],
+   "cat": "rice",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 125,
+   "p": 4.5,
+   "c": 19,
+   "f": 3,
+   "fib": 3.2,
+   "na": 230,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 plate (250 g)",
+     "hi": "1 प्लेट",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed from IFCT wheat dalia, dal, vegetables, ghee; cross-checked INDB ASC490 (168)",
+   "conf": "medium",
+   "note": "cracked wheat + moong dal + vegetables, ~1 tsp fat per 150 g; INDB ASC490 168 is high for the usual water ratio"
+  },
+  {
+   "slug": "oats-khichdi",
+   "name": "Oats Khichdi",
+   "hi": "ओट्स खिचड़ी",
+   "alias": [
+    "oats moong khichdi",
+    "masala oats khichdi",
+    "veg oats khichdi",
+    "oats ki khichdi",
+    "ओट्स की खिचड़ी"
+   ],
+   "cat": "rice",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 105,
+   "p": 3.6,
+   "c": 15,
+   "f": 2.8,
+   "fib": 2.2,
+   "na": 220,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 plate (250 g)",
+     "hi": "1 प्लेट",
+     "g": 250
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 raw rice/dal/vegetables (cooked yield ~2.5x) plus tempering fat; cross-checked NIN and INDB",
+   "conf": "medium",
+   "note": "rolled oats cooked with moong dal and vegetables, light oil"
+  },
+  {
+   "slug": "bhoger-khichuri",
+   "name": "Bhoger Khichuri (Bengali Bhog Khichdi)",
+   "hi": "भोगेर खिचुड़ी",
+   "alias": [
+    "bhog khichuri",
+    "bengali khichuri",
+    "khichuri",
+    "bhoger khichdi",
+    "gobindobhog khichuri",
+    "बंगाली खिचड़ी",
+    "भोग की खिचड़ी"
+   ],
+   "cat": "rice",
+   "region": "West Bengal",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 150,
+   "p": 4.2,
+   "c": 22,
+   "f": 5,
+   "fib": 2,
+   "na": 250,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 plate (250 g)",
+     "hi": "1 प्लेट",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed from IFCT rice, moong dal, vegetables and ~2 tsp ghee per 150 g",
+   "conf": "medium",
+   "note": "gobindobhog rice with roasted moong dal, ghee, cauliflower, peas, potato; richer than plain khichdi"
+  },
+  {
+   "slug": "gujarati-khichdi-kadhi",
+   "name": "Gujarati Khichdi with Kadhi",
+   "hi": "गुजराती खिचड़ी कढ़ी",
+   "alias": [
+    "khichdi kadhi",
+    "gujarati khichdi kadhi",
+    "khichdi with kadhi",
+    "khichdi kadhi plate",
+    "khichdi kadhi gujarati",
+    "खिचड़ी-कढ़ी",
+    "गुजराती खिचड़ी"
+   ],
+   "cat": "rice",
+   "region": "Gujarat",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 92,
+   "p": 3.3,
+   "c": 14,
+   "f": 2.5,
+   "fib": 1.2,
+   "na": 280,
+   "portions": [
+    {
+     "n": "1 plate (300 g)",
+     "hi": "1 प्लेट",
+     "g": 300
+    },
+    {
+     "n": "1 bowl mixed (200 g)",
+     "hi": "1 कटोरा",
+     "g": 200
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 raw rice/dal/vegetables (cooked yield ~2.5x) plus tempering fat; cross-checked NIN and INDB",
+   "conf": "medium",
+   "note": "plate of 150 g soft khichdi + 150 g thin Gujarati kadhi (~65 kcal/100 g); mixed per 100 g"
+  },
+  {
+   "slug": "dal-khichdi-tadka",
+   "name": "Dal Khichdi Tadka (Dhaba Style)",
+   "hi": "दाल खिचड़ी तड़का",
+   "alias": [
+    "dhaba khichdi",
+    "dal khichdi tadka",
+    "tadka khichdi",
+    "restaurant dal khichdi",
+    "ghee tadka khichdi",
+    "तड़का खिचड़ी"
+   ],
+   "cat": "rice",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 147,
+   "p": 4.5,
+   "c": 19,
+   "f": 5.5,
+   "fib": 1.8,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 plate (300 g)",
+     "hi": "1 प्लेट",
+     "g": 300
+    },
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 raw rice/dal/vegetables (cooked yield ~2.5x) plus tempering fat; cross-checked NIN and INDB",
+   "conf": "medium",
+   "note": "restaurant style khichdi finished with a ghee, garlic and chilli tadka (~2 tsp fat per 150 g)"
+  },
+  {
+   "slug": "curd-rice",
+   "name": "Curd Rice (Thayir Sadam)",
+   "hi": "दही चावल",
+   "alias": [
+    "thayir sadam",
+    "dahi chawal",
+    "dahi bhaat",
+    "daddojanam",
+    "perugu annam",
+    "mosaru anna",
+    "curd rice south indian",
+    "दही भात",
+    "दही-चावल"
+   ],
+   "cat": "rice",
+   "region": "South India",
+   "diet": "veg",
+   "emoji": "🍚",
+   "unit": "g",
+   "kcal": 125,
+   "p": 3.6,
+   "c": 19.5,
+   "f": 3.5,
+   "fib": 0.5,
+   "na": 180,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 plate (250 g)",
+     "hi": "1 प्लेट",
+     "g": 250
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "core": true,
+   "src": "Recipe computed from IFCT rice, curd and tempering oil; INDB ASC126 (196) judged high",
+   "conf": "medium",
+   "note": "soft rice mixed with whole-milk curd/milk and a mustard-curry leaf tadka (~60 % rice, 40 % curd); INDB ASC126 196 is high"
+  },
+  {
+   "slug": "lemon-rice",
+   "name": "Lemon Rice",
+   "hi": "लेमन राइस",
+   "alias": [
+    "chitranna",
+    "elumichai sadam",
+    "nimmakaya pulihora",
+    "nimbu chawal",
+    "lemon pulihora",
+    "lemon bhat",
+    "नींबू चावल",
+    "नींबू भात"
+   ],
+   "cat": "rice",
+   "region": "South India",
+   "diet": "veg",
+   "emoji": "🍚",
+   "unit": "g",
+   "kcal": 162,
+   "p": 3,
+   "c": 27,
+   "f": 4.5,
+   "fib": 1,
+   "na": 200,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 plate (250 g)",
+     "hi": "1 प्लेट",
+     "g": 250
+    }
+   ],
+   "core": true,
+   "src": "Recipe computed from IFCT rice, peanuts, oil; cross-checked INDB ASC124 (176)",
+   "conf": "medium",
+   "note": "rice tossed with turmeric, lemon juice, peanuts, curry leaves and ~1.5 tsp oil per 150 g; INDB ASC124 176"
+  },
+  {
+   "slug": "tamarind-rice",
+   "name": "Tamarind Rice (Puliyodharai / Pulihora)",
+   "hi": "इमली चावल",
+   "alias": [
+    "puliyodharai",
+    "pulihora",
+    "puliyogare",
+    "puli sadam",
+    "chintapandu pulihora",
+    "imli chawal",
+    "tamarind pulao",
+    "इमली भात",
+    "पुलिहोरा"
+   ],
+   "cat": "rice",
+   "region": "Tamil Nadu",
+   "diet": "veg",
+   "emoji": "🍚",
+   "unit": "g",
+   "kcal": 175,
+   "p": 3,
+   "c": 28,
+   "f": 5.5,
+   "fib": 1.2,
+   "na": 230,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 plate (250 g)",
+     "hi": "1 प्लेट",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed from IFCT rice, peanuts, oil; INDB ASC127 373 rejected as impossible",
+   "conf": "medium",
+   "note": "rice mixed with tamarind-spice paste, peanuts, sesame oil; INDB ASC127 (373) is a gross error"
+  },
+  {
+   "slug": "coconut-rice",
+   "name": "Coconut Rice (Thengai Sadam)",
+   "hi": "नारियल चावल",
+   "alias": [
+    "thengai sadam",
+    "kobbari annam",
+    "thenga choru",
+    "coconut bhat",
+    "kobbari annam andhra",
+    "narial chawal",
+    "नारियल भात"
+   ],
+   "cat": "rice",
+   "region": "South India",
+   "diet": "veg",
+   "emoji": "🍚",
+   "unit": "g",
+   "kcal": 178,
+   "p": 3,
+   "c": 26,
+   "f": 6.5,
+   "fib": 1.5,
+   "na": 190,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 plate (250 g)",
+     "hi": "1 प्लेट",
+     "g": 250
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 raw rice/dal/vegetables (cooked yield ~2.5x) plus tempering fat; cross-checked NIN and INDB",
+   "conf": "medium",
+   "note": "rice with fresh grated coconut, cashew/peanut, mustard and curry leaf tadka"
+  },
+  {
+   "slug": "tomato-rice",
+   "name": "Tomato Rice (Thakkali Sadam)",
+   "hi": "टमाटर चावल",
+   "alias": [
+    "thakkali sadam",
+    "tomato bhat",
+    "tomato pulihora",
+    "tomato rice south indian",
+    "tamatar chawal",
+    "टमाटर भात"
+   ],
+   "cat": "rice",
+   "region": "Tamil Nadu",
+   "diet": "veg",
+   "emoji": "🍚",
+   "unit": "g",
+   "kcal": 147,
+   "p": 2.8,
+   "c": 24.5,
+   "f": 4,
+   "fib": 1.2,
+   "na": 230,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 plate (250 g)",
+     "hi": "1 प्लेट",
+     "g": 250
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 raw rice/dal/vegetables (cooked yield ~2.5x) plus tempering fat; cross-checked NIN and INDB",
+   "conf": "medium",
+   "note": "rice cooked with onion, tomato, spices and ~1.5 tsp oil per 150 g"
+  },
+  {
+   "slug": "bisi-bele-bath",
+   "name": "Bisi Bele Bath",
+   "hi": "बिसि बेले भात",
+   "alias": [
+    "bisibelebath",
+    "bisi bele huli anna",
+    "bisi bele baath",
+    "bisibele bhat",
+    "hot lentil rice",
+    "बिसिबेले भात"
+   ],
+   "cat": "rice",
+   "region": "Karnataka",
+   "diet": "veg",
+   "emoji": "🍛",
+   "unit": "g",
+   "kcal": 135,
+   "p": 4.5,
+   "c": 20,
+   "f": 4,
+   "fib": 2.5,
+   "na": 280,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 plate (250 g)",
+     "hi": "1 प्लेट",
+     "g": 250
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 raw rice/dal/vegetables (cooked yield ~2.5x) plus tempering fat; cross-checked NIN and INDB",
+   "conf": "medium",
+   "note": "thick Karnataka rice-toor dal-vegetable dish with bisi bele powder, tamarind, ghee"
+  },
+  {
+   "slug": "vangi-bath",
+   "name": "Vangi Bath (Brinjal Rice)",
+   "hi": "वांगी भात",
+   "alias": [
+    "vangi bhat",
+    "vangibath",
+    "brinjal rice",
+    "baingan rice",
+    "eggplant rice",
+    "baingan bhat",
+    "वांगी बाथ"
+   ],
+   "cat": "rice",
+   "region": "Karnataka",
+   "diet": "veg",
+   "emoji": "🍛",
+   "unit": "g",
+   "kcal": 162,
+   "p": 3,
+   "c": 25,
+   "f": 5.5,
+   "fib": 2,
+   "na": 230,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 plate (250 g)",
+     "hi": "1 प्लेट",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed from IFCT rice, brinjal, oil; cross-checked INDB BFP132 (185)",
+   "conf": "medium",
+   "note": "rice mixed with brinjal and vangi bath masala, oil; INDB BFP132 185"
+  },
+  {
+   "slug": "ven-pongal",
+   "name": "Ven Pongal (Khara Pongal)",
+   "hi": "वेन पोंगल",
+   "alias": [
+    "pongal",
+    "khara pongal",
+    "venn pongal",
+    "ghee pongal",
+    "pongal rice",
+    "huggi",
+    "सादा पोंगल",
+    "पोंगल"
+   ],
+   "cat": "rice",
+   "region": "Tamil Nadu",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 145,
+   "p": 4,
+   "c": 21.5,
+   "f": 4.7,
+   "fib": 1.3,
+   "na": 250,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 plate (250 g)",
+     "hi": "1 प्लेट",
+     "g": 250
+    },
+    {
+     "n": "1 cup (200 g)",
+     "hi": "1 कप",
+     "g": 200
+    }
+   ],
+   "core": true,
+   "src": "Standard home recipe computed from IFCT 2017 raw rice/dal/vegetables (cooked yield ~2.5x) plus tempering fat; cross-checked NIN and INDB",
+   "conf": "medium",
+   "note": "rice and moong dal cooked soft with ghee, pepper, cumin, cashew; ~290 kcal per 200 g cup"
+  },
+  {
+   "slug": "sambar-rice",
+   "name": "Sambar Rice (Sambar Sadam)",
+   "hi": "सांभर राइस",
+   "alias": [
+    "sambar sadam",
+    "sambar bhat",
+    "sambar chawal",
+    "sambhar rice",
+    "sambar annam",
+    "सांबर चावल"
+   ],
+   "cat": "rice",
+   "region": "Tamil Nadu",
+   "diet": "veg",
+   "emoji": "🍛",
+   "unit": "g",
+   "kcal": 118,
+   "p": 3.6,
+   "c": 19,
+   "f": 3,
+   "fib": 2,
+   "na": 300,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 plate (250 g)",
+     "hi": "1 प्लेट",
+     "g": 250
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 raw rice/dal/vegetables (cooked yield ~2.5x) plus tempering fat; cross-checked NIN and INDB",
+   "conf": "medium",
+   "note": "rice mixed with thick sambar (about 50:50) and a little ghee"
+  },
+  {
+   "slug": "rasam-rice",
+   "name": "Rasam Rice (Rasam Sadam)",
+   "hi": "रसम राइस",
+   "alias": [
+    "rasam sadam",
+    "rasam chawal",
+    "rasam annam",
+    "rasam bhat",
+    "रसम चावल"
+   ],
+   "cat": "rice",
+   "region": "Tamil Nadu",
+   "diet": "veg",
+   "emoji": "🍚",
+   "unit": "g",
+   "kcal": 104,
+   "p": 2.7,
+   "c": 19,
+   "f": 1.8,
+   "fib": 0.9,
+   "na": 320,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 plate (250 g)",
+     "hi": "1 प्लेट",
+     "g": 250
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 raw rice/dal/vegetables (cooked yield ~2.5x) plus tempering fat; cross-checked NIN and INDB",
+   "conf": "medium",
+   "note": "rice mixed with thin tomato-tamarind rasam and ~1/2 tsp ghee"
+  },
+  {
+   "slug": "ghee-rice",
+   "name": "Ghee Rice (Neyyi Choru)",
+   "hi": "घी राइस",
+   "alias": [
+    "neychoru",
+    "neyyi choru",
+    "ney choru",
+    "ghee bhat",
+    "ghee chawal",
+    "nei sadam",
+    "घी भात"
+   ],
+   "cat": "rice",
+   "region": "Kerala",
+   "diet": "veg",
+   "emoji": "🍚",
+   "unit": "g",
+   "kcal": 168,
+   "p": 2.7,
+   "c": 25.5,
+   "f": 6,
+   "fib": 0.5,
+   "na": 200,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 plate (250 g)",
+     "hi": "1 प्लेट",
+     "g": 250
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 raw rice/dal/vegetables (cooked yield ~2.5x) plus tempering fat; cross-checked NIN and INDB",
+   "conf": "medium",
+   "note": "rice cooked in ghee with whole spices, cashew, raisin; ~1 tbsp ghee per 150 g"
+  },
+  {
+   "slug": "curry-leaf-rice",
+   "name": "Curry Leaf Rice (Karuveppilai Sadam)",
+   "hi": "करी पत्ता चावल",
+   "alias": [
+    "karuveppilai sadam",
+    "kariveppila rice",
+    "curry patta rice",
+    "kadi patta rice",
+    "karivepaku annam",
+    "कढ़ी पत्ता चावल"
+   ],
+   "cat": "rice",
+   "region": "Tamil Nadu",
+   "diet": "veg",
+   "emoji": "🍚",
+   "unit": "g",
+   "kcal": 148,
+   "p": 2.8,
+   "c": 25,
+   "f": 4,
+   "fib": 1.3,
+   "na": 200,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 plate (250 g)",
+     "hi": "1 प्लेट",
+     "g": 250
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 raw rice/dal/vegetables (cooked yield ~2.5x) plus tempering fat; cross-checked NIN and INDB",
+   "conf": "medium",
+   "note": "rice mixed with curry leaf podi, urad dal, and ~1 tsp oil per 150 g"
+  },
+  {
+   "slug": "pudina-rice",
+   "name": "Pudina Rice (Mint Rice)",
+   "hi": "पुदीना राइस",
+   "alias": [
+    "mint rice",
+    "pudina chawal",
+    "pudina bhat",
+    "pudina pulao",
+    "mint pulao",
+    "पुदीना चावल"
+   ],
+   "cat": "rice",
+   "region": "South India",
+   "diet": "veg",
+   "emoji": "🍚",
+   "unit": "g",
+   "kcal": 150,
+   "p": 2.8,
+   "c": 25,
+   "f": 4.2,
+   "fib": 1.4,
+   "na": 220,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 plate (250 g)",
+     "hi": "1 प्लेट",
+     "g": 250
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 raw rice/dal/vegetables (cooked yield ~2.5x) plus tempering fat; cross-checked NIN and INDB",
+   "conf": "medium",
+   "note": "rice mixed with mint-coriander paste and tempering"
+  },
+  {
+   "slug": "gongura-rice",
+   "name": "Gongura Rice",
+   "hi": "गोंगुरा राइस",
+   "alias": [
+    "gongura annam",
+    "gongura pulihora",
+    "ambadi rice",
+    "sorrel leaves rice",
+    "gongura chawal",
+    "गोंगुरा चावल"
+   ],
+   "cat": "rice",
+   "region": "Andhra Pradesh",
+   "diet": "veg",
+   "emoji": "🍚",
+   "unit": "g",
+   "kcal": 160,
+   "p": 3,
+   "c": 26,
+   "f": 4.8,
+   "fib": 2,
+   "na": 260,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 plate (250 g)",
+     "hi": "1 प्लेट",
+     "g": 250
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 raw rice/dal/vegetables (cooked yield ~2.5x) plus tempering fat; cross-checked NIN and INDB",
+   "conf": "low",
+   "note": "rice mixed with sautéed gongura (sorrel) leaves and spices, oil"
+  },
+  {
+   "slug": "masale-bhat",
+   "name": "Masale Bhat (Maharashtrian)",
+   "hi": "मसाले भात",
+   "alias": [
+    "masala bhat",
+    "masale bhaat",
+    "masala bhath",
+    "maharashtrian masale bhat",
+    "वांगी मसाले भात",
+    "मसाला भात"
+   ],
+   "cat": "rice",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🍛",
+   "unit": "g",
+   "kcal": 150,
+   "p": 3,
+   "c": 24,
+   "f": 4.5,
+   "fib": 2.2,
+   "na": 300,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 plate (250 g)",
+     "hi": "1 प्लेट",
+     "g": 250
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 raw rice/dal/vegetables (cooked yield ~2.5x) plus tempering fat; cross-checked NIN and INDB",
+   "conf": "medium",
+   "note": "rice with goda masala, mixed vegetables and coconut, ~1.5 tsp oil per 150 g"
+  },
+  {
+   "slug": "rice-kanji",
+   "name": "Rice Kanji (Kanji Gruel)",
+   "hi": "चावल की कांजी",
+   "alias": [
+    "kanji",
+    "kanjee",
+    "rice gruel",
+    "ganji",
+    "kerala kanji",
+    "rice porridge",
+    "pej",
+    "चावल का माड़",
+    "पेज"
+   ],
+   "cat": "rice",
+   "region": "Kerala",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 45,
+   "p": 0.9,
+   "c": 10,
+   "f": 0.1,
+   "fib": 0.1,
+   "na": 40,
+   "portions": [
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    },
+    {
+     "n": "1 glass (200 g)",
+     "hi": "1 गिलास",
+     "g": 200
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 raw rice/dal/vegetables (cooked yield ~2.5x) plus tempering fat; cross-checked NIN and INDB",
+   "conf": "medium",
+   "note": "thin rice gruel (1 part rice : ~8 parts water, lightly salted); eaten with payar thoran/pickle"
+  },
+  {
+   "slug": "panta-bhat",
+   "name": "Panta Bhat (Fermented Rice)",
+   "hi": "पांता भात",
+   "alias": [
+    "pantabhat",
+    "panta bhaat",
+    "poita bhat",
+    "water rice",
+    "paanta bhat",
+    "बासी भात"
+   ],
+   "cat": "rice",
+   "region": "West Bengal",
+   "diet": "veg",
+   "emoji": "🍚",
+   "unit": "g",
+   "kcal": 65,
+   "p": 1.4,
+   "c": 14,
+   "f": 0.2,
+   "fib": 0.4,
+   "na": 150,
+   "portions": [
+    {
+     "n": "1 bowl (300 g)",
+     "hi": "1 कटोरा",
+     "g": 300
+    },
+    {
+     "n": "1 small bowl (200 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 200
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 raw rice/dal/vegetables (cooked yield ~2.5x) plus tempering fat; cross-checked NIN and INDB",
+   "conf": "medium",
+   "note": "leftover cooked rice soaked overnight in water, lightly salted; per 100 g including soaking water"
+  },
+  {
+   "slug": "pakhala-bhata",
+   "name": "Pakhala Bhata (Odisha)",
+   "hi": "पखाल भात",
+   "alias": [
+    "pakhala",
+    "pakhal bhat",
+    "odia pakhala",
+    "pakhala with curd",
+    "dahi pakhala",
+    "पखाल"
+   ],
+   "cat": "rice",
+   "region": "Odisha",
+   "diet": "veg",
+   "emoji": "🍚",
+   "unit": "g",
+   "kcal": 68,
+   "p": 1.6,
+   "c": 14,
+   "f": 0.4,
+   "fib": 0.4,
+   "na": 150,
+   "portions": [
+    {
+     "n": "1 bowl (300 g)",
+     "hi": "1 कटोरा",
+     "g": 300
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 raw rice/dal/vegetables (cooked yield ~2.5x) plus tempering fat; cross-checked NIN and INDB",
+   "conf": "medium",
+   "note": "Odia fermented/water rice, often with a spoon of curd and roasted cumin; per 100 g including water"
+  },
+  {
+   "slug": "samak-rice-cooked",
+   "name": "Samak Rice (Barnyard Millet), Cooked",
+   "hi": "समा के चावल (पके)",
+   "alias": [
+    "samak ke chawal",
+    "vrat ke chawal",
+    "sama rice",
+    "barnyard millet rice",
+    "moraiya rice",
+    "vrat rice",
+    "समक चावल",
+    "व्रत के चावल"
+   ],
+   "cat": "rice",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🍚",
+   "unit": "g",
+   "kcal": 112,
+   "p": 3.3,
+   "c": 21,
+   "f": 1.2,
+   "fib": 3,
+   "na": 150,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 plate (250 g)",
+     "hi": "1 प्लेट",
+     "g": 250
+    }
+   ],
+   "src": "Standard home recipe computed from IFCT 2017 raw rice/dal/vegetables (cooked yield ~2.5x) plus tempering fat; cross-checked NIN and INDB",
+   "conf": "low",
+   "note": "barnyard millet (sama) cooked in water with rock salt and a little ghee; eaten in fasts"
+  },
+  {
+   "slug": "idli",
+   "name": "Idli",
+   "hi": "इडली",
+   "alias": [
+    "idly",
+    "plain idli",
+    "rice idli",
+    "steamed idli",
+    "idli south indian",
+    "इडली सांभर",
+    "इडली (सादी)"
+   ],
+   "cat": "tiffin",
+   "region": "South India",
+   "diet": "veg",
+   "emoji": "🍽️",
+   "unit": "g",
+   "kcal": 138,
+   "p": 4.2,
+   "c": 28,
+   "f": 0.5,
+   "fib": 1.2,
+   "na": 150,
+   "portions": [
+    {
+     "n": "1 idli (40 g)",
+     "hi": "1 इडली",
+     "g": 40
+    },
+    {
+     "n": "2 idli (80 g)",
+     "hi": "2 इडली",
+     "g": 80
+    },
+    {
+     "n": "3 idli (120 g)",
+     "hi": "3 इडली",
+     "g": 120
+    }
+   ],
+   "core": true,
+   "src": "Recipe computed from IFCT raw rice + urad dal (2:1) with steaming; cross-checked INDB ASC144 (137) and NIN",
+   "conf": "high",
+   "note": "steamed rice-urad batter cake, no oil, ~40 g (~55 kcal) each; INDB ASC144 137"
+  },
+  {
+   "slug": "rava-idli",
+   "name": "Rava Idli",
+   "hi": "रवा इडली",
+   "alias": [
+    "suji idli",
+    "semolina idli",
+    "rava idly",
+    "instant rava idli",
+    "सूजी इडली",
+    "रवा इडली"
+   ],
+   "cat": "tiffin",
+   "region": "Karnataka",
+   "diet": "veg",
+   "emoji": "🍽️",
+   "unit": "g",
+   "kcal": 150,
+   "p": 4.3,
+   "c": 25,
+   "f": 3,
+   "fib": 1.8,
+   "na": 250,
+   "portions": [
+    {
+     "n": "1 idli (50 g)",
+     "hi": "1 रवा इडली",
+     "g": 50
+    },
+    {
+     "n": "2 idli (100 g)",
+     "hi": "2 रवा इडली",
+     "g": 100
+    }
+   ],
+   "src": "Recipe computed from IFCT semolina, curd, oil; INDB BFP579 206 judged high",
+   "conf": "medium",
+   "note": "semolina-curd idli with mustard/chana dal tadka and a little oil; INDB BFP579 (206) judged high, BFP147 (247) is dry mix"
+  },
+  {
+   "slug": "mini-idli",
+   "name": "Mini Idli",
+   "hi": "मिनी इडली",
+   "alias": [
+    "button idli",
+    "mini idly",
+    "small idli",
+    "mini idli sambar",
+    "मिनी इडली सांभर"
+   ],
+   "cat": "tiffin",
+   "region": "South India",
+   "diet": "veg",
+   "emoji": "🍽️",
+   "unit": "g",
+   "kcal": 138,
+   "p": 4.2,
+   "c": 28,
+   "f": 0.5,
+   "fib": 1.2,
+   "na": 150,
+   "portions": [
+    {
+     "n": "1 mini idli (15 g)",
+     "hi": "1 मिनी इडली",
+     "g": 15
+    },
+    {
+     "n": "1 plate 10 mini idli (150 g)",
+     "hi": "10 मिनी इडली",
+     "g": 150
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 rice/urad/besan/semolina values and cooking oil; cross-checked NIN tables and INDB",
+   "conf": "high",
+   "note": "same batter as idli, ~15 g each"
+  },
+  {
+   "slug": "idli-sambar",
+   "name": "Idli Sambar (Plate)",
+   "hi": "इडली सांभर",
+   "alias": [
+    "idli with sambar",
+    "idli sambar chutney",
+    "idli sambhar",
+    "2 idli sambar",
+    "इडली सांबर",
+    "इडली चटनी सांभर"
+   ],
+   "cat": "tiffin",
+   "region": "South India",
+   "diet": "veg",
+   "emoji": "🍽️",
+   "unit": "g",
+   "kcal": 93,
+   "p": 3.5,
+   "c": 15.5,
+   "f": 1.5,
+   "fib": 1.8,
+   "na": 250,
+   "portions": [
+    {
+     "n": "1 plate (2 idli + sambar + chutney, 200 g)",
+     "hi": "1 प्लेट",
+     "g": 200
+    },
+    {
+     "n": "1 plate (3 idli + sambar + chutney, 280 g)",
+     "hi": "3 इडली प्लेट",
+     "g": 280
+    }
+   ],
+   "core": true,
+   "src": "Standard recipe computed from IFCT 2017 rice/urad/besan/semolina values and cooking oil; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "plated combo: idli 40 g each with ~100 g sambar and 20 g coconut chutney; per 100 g of the whole plate"
+  },
+  {
+   "slug": "ghee-podi-idli",
+   "name": "Ghee Podi Idli",
+   "hi": "घी पोडी इडली",
+   "alias": [
+    "podi idli",
+    "ghee idli podi",
+    "idli podi ghee",
+    "gunpowder idli"
+   ],
+   "cat": "tiffin",
+   "region": "Tamil Nadu",
+   "diet": "veg",
+   "emoji": "🍽️",
+   "unit": "g",
+   "kcal": 190,
+   "p": 5,
+   "c": 25,
+   "f": 7.5,
+   "fib": 2,
+   "na": 280,
+   "portions": [
+    {
+     "n": "1 plate (3 idli, 150 g)",
+     "hi": "3 इडली प्लेट",
+     "g": 150
+    },
+    {
+     "n": "1 idli with podi (50 g)",
+     "hi": "1 पोडी इडली",
+     "g": 50
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 rice/urad/besan/semolina values and cooking oil; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "idli tossed with ~1 tsp ghee and 1 tsp podi (lentil-chilli powder) each"
+  },
+  {
+   "slug": "thatte-idli",
+   "name": "Thatte Idli",
+   "hi": "थट्टे इडली",
+   "alias": [
+    "thatte idly",
+    "plate idli",
+    "karnataka thatte idli",
+    "thatte idli bangalore",
+    "थट्टे इडली"
+   ],
+   "cat": "tiffin",
+   "region": "Karnataka",
+   "diet": "veg",
+   "emoji": "🍽️",
+   "unit": "g",
+   "kcal": 140,
+   "p": 4.2,
+   "c": 27.5,
+   "f": 0.7,
+   "fib": 1.3,
+   "na": 170,
+   "portions": [
+    {
+     "n": "1 thatte idli (100 g)",
+     "hi": "1 थट्टे इडली",
+     "g": 100
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 rice/urad/besan/semolina values and cooking oil; cross-checked NIN tables and INDB",
+   "conf": "high",
+   "note": "big flat plate-sized idli ~100 g, same batter as idli"
+  },
+  {
+   "slug": "kanchipuram-idli",
+   "name": "Kanchipuram Idli",
+   "hi": "कांचीपुरम इडली",
+   "alias": [
+    "kancheepuram idli",
+    "kanchi idli",
+    "kanjeevaram idli",
+    "temple idli",
+    "कांचीपुरम इडली"
+   ],
+   "cat": "tiffin",
+   "region": "Tamil Nadu",
+   "diet": "veg",
+   "emoji": "🍽️",
+   "unit": "g",
+   "kcal": 172,
+   "p": 5,
+   "c": 27,
+   "f": 4.5,
+   "fib": 1.5,
+   "na": 280,
+   "portions": [
+    {
+     "n": "1 idli (100 g)",
+     "hi": "1 कांचीपुरम इडली",
+     "g": 100
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 rice/urad/besan/semolina values and cooking oil; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "idli batter with ghee, cumin, pepper, ginger and cashew steamed in a basket; ~100 g"
+  },
+  {
+   "slug": "ragi-idli",
+   "name": "Ragi Idli",
+   "hi": "रागी इडली",
+   "alias": [
+    "ragi idly",
+    "finger millet idli",
+    "nachni idli",
+    "रागी की इडली"
+   ],
+   "cat": "tiffin",
+   "region": "Karnataka",
+   "diet": "veg",
+   "emoji": "🍽️",
+   "unit": "g",
+   "kcal": 118,
+   "p": 3.8,
+   "c": 24,
+   "f": 0.5,
+   "fib": 2.5,
+   "na": 150,
+   "portions": [
+    {
+     "n": "1 idli (50 g)",
+     "hi": "1 रागी इडली",
+     "g": 50
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 rice/urad/besan/semolina values and cooking oil; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "ragi flour + urad batter, steamed, no oil"
+  },
+  {
+   "slug": "oats-idli",
+   "name": "Oats Idli",
+   "hi": "ओट्स इडली",
+   "alias": [
+    "oats idly",
+    "instant oats idli",
+    "oats rava idli",
+    "ओट्स की इडली"
+   ],
+   "cat": "tiffin",
+   "region": "South India",
+   "diet": "veg",
+   "emoji": "🍽️",
+   "unit": "g",
+   "kcal": 120,
+   "p": 4.5,
+   "c": 22,
+   "f": 1.5,
+   "fib": 2,
+   "na": 220,
+   "portions": [
+    {
+     "n": "1 idli (50 g)",
+     "hi": "1 ओट्स इडली",
+     "g": 50
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 rice/urad/besan/semolina values and cooking oil; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "oats-semolina-curd steamed idli, minimal oil"
+  },
+  {
+   "slug": "idli-vada-sambar",
+   "name": "Idli Vada Sambar (Plate)",
+   "hi": "इडली वड़ा सांभर",
+   "alias": [
+    "idli vada combo",
+    "idli vada plate",
+    "idli medu vada sambar",
+    "idly vadai sambar",
+    "इडली वडा सांबर"
+   ],
+   "cat": "tiffin",
+   "region": "South India",
+   "diet": "veg",
+   "emoji": "🍽️",
+   "unit": "g",
+   "kcal": 132,
+   "p": 4.1,
+   "c": 16.5,
+   "f": 5.2,
+   "fib": 2.1,
+   "na": 300,
+   "portions": [
+    {
+     "n": "1 plate (2 idli + 1 vada + sambar + chutney, 260 g)",
+     "hi": "1 प्लेट",
+     "g": 260
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 rice/urad/besan/semolina values and cooking oil; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "plated tiffin: 2 idli (80 g) + 1 medu vada (50 g) + 100 g sambar + 30 g chutney; per 100 g of the plate"
+  },
+  {
+   "slug": "plain-dosa",
+   "name": "Plain Dosa",
+   "hi": "सादा डोसा",
+   "alias": [
+    "dosa",
+    "dosai",
+    "dose",
+    "sada dosa",
+    "plain dosai",
+    "rice dosa",
+    "plain dose",
+    "डोसा",
+    "सादा डोसा"
+   ],
+   "cat": "tiffin",
+   "region": "South India",
+   "diet": "veg",
+   "emoji": "🥞",
+   "unit": "g",
+   "kcal": 170,
+   "p": 4.5,
+   "c": 29,
+   "f": 4,
+   "fib": 1.2,
+   "na": 250,
+   "portions": [
+    {
+     "n": "1 dosa (80 g)",
+     "hi": "1 डोसा",
+     "g": 80
+    },
+    {
+     "n": "2 dosa (160 g)",
+     "hi": "2 डोसा",
+     "g": 160
+    }
+   ],
+   "core": true,
+   "src": "Recipe computed from IFCT rice + urad dal and tawa oil; NIN plain dosa ~165-190 kcal/100 g",
+   "conf": "high",
+   "note": "fermented rice-urad dosa, ~80 g with ~1 tsp oil per dosa (~136 kcal); INDB BFP148 (381) is dry-mix and not comparable"
+  },
+  {
+   "slug": "masala-dosa",
+   "name": "Masala Dosa",
+   "hi": "मसाला डोसा",
+   "alias": [
+    "masale dosa",
+    "masala dosai",
+    "potato dosa",
+    "aloo masala dosa",
+    "masala dose",
+    "मसाला डोसे",
+    "आलू मसाला डोसा"
+   ],
+   "cat": "tiffin",
+   "region": "South India",
+   "diet": "veg",
+   "emoji": "🥞",
+   "unit": "g",
+   "kcal": 180,
+   "p": 3.8,
+   "c": 27,
+   "f": 6.5,
+   "fib": 2,
+   "na": 320,
+   "portions": [
+    {
+     "n": "1 masala dosa (170 g)",
+     "hi": "1 मसाला डोसा",
+     "g": 170
+    },
+    {
+     "n": "1 home-style masala dosa (140 g)",
+     "hi": "1 घर का मसाला डोसा",
+     "g": 140
+    }
+   ],
+   "core": true,
+   "src": "Recipe computed from dosa + potato bhaji with restaurant-level oil; cross-checked INDB ASC146 (165)",
+   "conf": "medium",
+   "note": "80-100 g dosa + ~80 g potato-onion bhaji with oil, restaurant style (~305 kcal per 170 g); INDB ASC146 165 and BFP150 145 assume little oil"
+  },
+  {
+   "slug": "rava-dosa",
+   "name": "Rava Dosa",
+   "hi": "रवा डोसा",
+   "alias": [
+    "suji dosa",
+    "semolina dosa",
+    "rava dosai",
+    "onion rava dosa",
+    "instant rava dosa",
+    "सूजी डोसा",
+    "रवा डोसे"
+   ],
+   "cat": "tiffin",
+   "region": "South India",
+   "diet": "veg",
+   "emoji": "🥞",
+   "unit": "g",
+   "kcal": 200,
+   "p": 4.5,
+   "c": 31,
+   "f": 6.5,
+   "fib": 1.5,
+   "na": 270,
+   "portions": [
+    {
+     "n": "1 dosa (90 g)",
+     "hi": "1 रवा डोसा",
+     "g": 90
+    }
+   ],
+   "src": "Recipe computed from IFCT semolina, rice flour, oil; cross-checked INDB ASC147 (227)",
+   "conf": "medium",
+   "note": "crisp lacy dosa from rava + rice flour + maida with more oil; INDB ASC147 227"
+  },
+  {
+   "slug": "set-dosa",
+   "name": "Set Dosa",
+   "hi": "सेट डोसा",
+   "alias": [
+    "set dose",
+    "sponge dosa",
+    "sett dosa",
+    "set dosai",
+    "बेंगलुरु सेट डोसा"
+   ],
+   "cat": "tiffin",
+   "region": "Karnataka",
+   "diet": "veg",
+   "emoji": "🥞",
+   "unit": "g",
+   "kcal": 160,
+   "p": 4.3,
+   "c": 30,
+   "f": 2.5,
+   "fib": 1.2,
+   "na": 220,
+   "portions": [
+    {
+     "n": "1 set (3 small dosa, 150 g)",
+     "hi": "1 सेट (3 डोसा)",
+     "g": 150
+    },
+    {
+     "n": "1 dosa (50 g)",
+     "hi": "1 डोसा",
+     "g": 50
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 rice/urad/besan/semolina values and cooking oil; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "3 small thick soft dosas (~50 g each) with little oil, served with saagu/chutney"
+  },
+  {
+   "slug": "ghee-roast-dosa",
+   "name": "Ghee Roast Dosa",
+   "hi": "घी रोस्ट डोसा",
+   "alias": [
+    "ghee roast",
+    "ghee dosa",
+    "neyi roast",
+    "ghee roast dosai",
+    "घी रोस्ट"
+   ],
+   "cat": "tiffin",
+   "region": "Karnataka",
+   "diet": "veg",
+   "emoji": "🥞",
+   "unit": "g",
+   "kcal": 215,
+   "p": 4,
+   "c": 29,
+   "f": 9,
+   "fib": 1.2,
+   "na": 270,
+   "portions": [
+    {
+     "n": "1 dosa (100 g)",
+     "hi": "1 घी रोस्ट डोसा",
+     "g": 100
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 rice/urad/besan/semolina values and cooking oil; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "large thin crisp dosa roasted with ~2 tsp ghee"
+  },
+  {
+   "slug": "paper-dosa",
+   "name": "Paper Dosa",
+   "hi": "पेपर डोसा",
+   "alias": [
+    "paper dose",
+    "paper roast",
+    "paper thin dosa",
+    "crispy dosa",
+    "पेपर रोस्ट"
+   ],
+   "cat": "tiffin",
+   "region": "South India",
+   "diet": "veg",
+   "emoji": "🥞",
+   "unit": "g",
+   "kcal": 195,
+   "p": 4.3,
+   "c": 31,
+   "f": 6,
+   "fib": 1.2,
+   "na": 260,
+   "portions": [
+    {
+     "n": "1 dosa (90 g)",
+     "hi": "1 पेपर डोसा",
+     "g": 90
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 rice/urad/besan/semolina values and cooking oil; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "very thin large crisp dosa with oil"
+  },
+  {
+   "slug": "onion-dosa",
+   "name": "Onion Dosa",
+   "hi": "प्याज डोसा",
+   "alias": [
+    "onion dosai",
+    "onion dose",
+    "pyaz dosa",
+    "onion rava dosa plain",
+    "प्याज का डोसा"
+   ],
+   "cat": "tiffin",
+   "region": "South India",
+   "diet": "veg",
+   "emoji": "🥞",
+   "unit": "g",
+   "kcal": 180,
+   "p": 4.4,
+   "c": 28.5,
+   "f": 5.5,
+   "fib": 1.5,
+   "na": 270,
+   "portions": [
+    {
+     "n": "1 dosa (90 g)",
+     "hi": "1 प्याज डोसा",
+     "g": 90
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 rice/urad/besan/semolina values and cooking oil; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "dosa topped with chopped onion, ~1.2 tsp oil"
+  },
+  {
+   "slug": "cheese-dosa",
+   "name": "Cheese Dosa",
+   "hi": "चीज़ डोसा",
+   "alias": [
+    "cheese dosai",
+    "cheese dose",
+    "paneer cheese dosa",
+    "चीज डोसा"
+   ],
+   "cat": "tiffin",
+   "region": "South India",
+   "diet": "veg",
+   "emoji": "🥞",
+   "unit": "g",
+   "kcal": 225,
+   "p": 8,
+   "c": 24,
+   "f": 11,
+   "fib": 1.2,
+   "na": 380,
+   "portions": [
+    {
+     "n": "1 dosa (110 g)",
+     "hi": "1 चीज़ डोसा",
+     "g": 110
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 rice/urad/besan/semolina values and cooking oil; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "dosa topped with ~20 g grated processed cheese and butter"
+  },
+  {
+   "slug": "mysore-masala-dosa",
+   "name": "Mysore Masala Dosa",
+   "hi": "मैसूर मसाला डोसा",
+   "alias": [
+    "mysore dosa",
+    "mysore masala dose",
+    "mysuru masala dosa",
+    "red chutney masala dosa",
+    "मैसूर डोसा"
+   ],
+   "cat": "tiffin",
+   "region": "Karnataka",
+   "diet": "veg",
+   "emoji": "🥞",
+   "unit": "g",
+   "kcal": 195,
+   "p": 4,
+   "c": 26,
+   "f": 8,
+   "fib": 2.2,
+   "na": 340,
+   "portions": [
+    {
+     "n": "1 dosa (190 g)",
+     "hi": "1 मैसूर मसाला डोसा",
+     "g": 190
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 rice/urad/besan/semolina values and cooking oil; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "dosa spread with red garlic chutney and potato bhaji, extra oil/butter (~370 kcal per 190 g)"
+  },
+  {
+   "slug": "pesarattu",
+   "name": "Pesarattu (Green Moong Dosa)",
+   "hi": "पेसरट्टू",
+   "alias": [
+    "pesarattu dosa",
+    "green gram dosa",
+    "moong dal dosa",
+    "pesara attu",
+    "moong dosa",
+    "हरी मूंग डोसा",
+    "पेसरट्टु"
+   ],
+   "cat": "tiffin",
+   "region": "Andhra Pradesh",
+   "diet": "veg",
+   "emoji": "🥞",
+   "unit": "g",
+   "kcal": 158,
+   "p": 7.5,
+   "c": 20,
+   "f": 4.5,
+   "fib": 3,
+   "na": 190,
+   "portions": [
+    {
+     "n": "1 pesarattu (80 g)",
+     "hi": "1 पेसरट्टू",
+     "g": 80
+    }
+   ],
+   "src": "Recipe computed from IFCT whole green gram, rice, oil; INDB OSR103 286 judged too high",
+   "conf": "medium",
+   "note": "whole green moong + rice batter dosa with ginger/chilli, ~1 tsp oil; INDB OSR103 (286) too high"
+  },
+  {
+   "slug": "pesarattu-upma",
+   "name": "Pesarattu Upma",
+   "hi": "पेसरट्टू उपमा",
+   "alias": [
+    "upma pesarattu",
+    "pesarattu with upma",
+    "upma pesarattu dosa",
+    "पेसरट्टु उपमा"
+   ],
+   "cat": "tiffin",
+   "region": "Andhra Pradesh",
+   "diet": "veg",
+   "emoji": "🥞",
+   "unit": "g",
+   "kcal": 170,
+   "p": 6,
+   "c": 24,
+   "f": 5.5,
+   "fib": 3,
+   "na": 260,
+   "portions": [
+    {
+     "n": "1 pesarattu upma (150 g)",
+     "hi": "1 पेसरट्टू उपमा",
+     "g": 150
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 rice/urad/besan/semolina values and cooking oil; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "green moong dosa (80 g) filled with ~70 g upma"
+  },
+  {
+   "slug": "neer-dosa",
+   "name": "Neer Dosa",
+   "hi": "नीर डोसा",
+   "alias": [
+    "neer dose",
+    "neer dosai",
+    "mangalore neer dosa",
+    "coconut neer dosa",
+    "नीर डोसे"
+   ],
+   "cat": "tiffin",
+   "region": "Karnataka",
+   "diet": "veg",
+   "emoji": "🥞",
+   "unit": "g",
+   "kcal": 140,
+   "p": 2.5,
+   "c": 28,
+   "f": 1.8,
+   "fib": 0.8,
+   "na": 140,
+   "portions": [
+    {
+     "n": "1 neer dosa (50 g)",
+     "hi": "1 नीर डोसा",
+     "g": 50
+    },
+    {
+     "n": "3 neer dosa (150 g)",
+     "hi": "3 नीर डोसा",
+     "g": 150
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 rice/urad/besan/semolina values and cooking oil; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "thin unfermented rice-coconut dosa, little oil; typical coastal Karnataka"
+  },
+  {
+   "slug": "adai",
+   "name": "Adai (Mixed Dal Dosa)",
+   "hi": "अडई",
+   "alias": [
+    "adai dosai",
+    "adai dosa",
+    "mixed dal dosa",
+    "adai tamil",
+    "dal dosa",
+    "अडै"
+   ],
+   "cat": "tiffin",
+   "region": "Tamil Nadu",
+   "diet": "veg",
+   "emoji": "🥞",
+   "unit": "g",
+   "kcal": 195,
+   "p": 8,
+   "c": 28,
+   "f": 6,
+   "fib": 4.5,
+   "na": 260,
+   "portions": [
+    {
+     "n": "1 adai (70 g)",
+     "hi": "1 अडई",
+     "g": 70
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 rice/urad/besan/semolina values and cooking oil; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "thick pancake from rice + toor/chana/urad/moong dal, ~1.2 tsp oil"
+  },
+  {
+   "slug": "ragi-dosa",
+   "name": "Ragi Dosa",
+   "hi": "रागी डोसा",
+   "alias": [
+    "ragi dosai",
+    "nachni dosa",
+    "instant ragi dosa",
+    "ragi dose",
+    "finger millet dosa",
+    "रागी डोसे"
+   ],
+   "cat": "tiffin",
+   "region": "Karnataka",
+   "diet": "veg",
+   "emoji": "🥞",
+   "unit": "g",
+   "kcal": 155,
+   "p": 3.5,
+   "c": 28,
+   "f": 2.8,
+   "fib": 3,
+   "na": 200,
+   "portions": [
+    {
+     "n": "1 dosa (70 g)",
+     "hi": "1 रागी डोसा",
+     "g": 70
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 rice/urad/besan/semolina values and cooking oil; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "instant ragi flour + rice flour dosa, ~1 tsp oil"
+  },
+  {
+   "slug": "oats-dosa",
+   "name": "Oats Dosa",
+   "hi": "ओट्स डोसा",
+   "alias": [
+    "instant oats dosa",
+    "oats dosai",
+    "oats rava dosa"
+   ],
+   "cat": "tiffin",
+   "region": "South India",
+   "diet": "veg",
+   "emoji": "🥞",
+   "unit": "g",
+   "kcal": 140,
+   "p": 5,
+   "c": 21,
+   "f": 3.5,
+   "fib": 2.5,
+   "na": 220,
+   "portions": [
+    {
+     "n": "1 dosa (60 g)",
+     "hi": "1 ओट्स डोसा",
+     "g": 60
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 rice/urad/besan/semolina values and cooking oil; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "oats-rava-curd instant dosa with ~3/4 tsp oil"
+  },
+  {
+   "slug": "wheat-dosa",
+   "name": "Wheat Dosa (Godhuma Dosa)",
+   "hi": "गेहूं का डोसा",
+   "alias": [
+    "godhuma dosa",
+    "atta dosa",
+    "instant wheat dosa",
+    "gehu dosa",
+    "godhi dosa",
+    "आटा डोसा"
+   ],
+   "cat": "tiffin",
+   "region": "South India",
+   "diet": "veg",
+   "emoji": "🥞",
+   "unit": "g",
+   "kcal": 150,
+   "p": 5,
+   "c": 27,
+   "f": 2.8,
+   "fib": 3.5,
+   "na": 200,
+   "portions": [
+    {
+     "n": "1 dosa (70 g)",
+     "hi": "1 गेहूं का डोसा",
+     "g": 70
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 rice/urad/besan/semolina values and cooking oil; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "atta + rava + curd instant dosa, thin, ~3/4 tsp oil"
+  },
+  {
+   "slug": "instant-dosa",
+   "name": "Instant Dosa (Rice Flour)",
+   "hi": "इंस्टेंट डोसा",
+   "alias": [
+    "rice flour dosa",
+    "instant rice dosa",
+    "quick dosa",
+    "no ferment dosa",
+    "इंस्टेंट डोसे"
+   ],
+   "cat": "tiffin",
+   "region": "South India",
+   "diet": "veg",
+   "emoji": "🥞",
+   "unit": "g",
+   "kcal": 165,
+   "p": 3.5,
+   "c": 29,
+   "f": 4,
+   "fib": 1.2,
+   "na": 230,
+   "portions": [
+    {
+     "n": "1 dosa (70 g)",
+     "hi": "1 इंस्टेंट डोसा",
+     "g": 70
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 rice/urad/besan/semolina values and cooking oil; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "rice flour + rava + curd unfermented batter, ~1 tsp oil"
+  },
+  {
+   "slug": "uttapam",
+   "name": "Uttapam (Plain)",
+   "hi": "उत्तपम",
+   "alias": [
+    "uttappam",
+    "oothappam",
+    "uthappam",
+    "utthapam",
+    "plain uttapam",
+    "oothapam",
+    "उत्तपा",
+    "उत्थपम"
+   ],
+   "cat": "tiffin",
+   "region": "South India",
+   "diet": "veg",
+   "emoji": "🥞",
+   "unit": "g",
+   "kcal": 175,
+   "p": 4.3,
+   "c": 29,
+   "f": 4.5,
+   "fib": 1.3,
+   "na": 240,
+   "portions": [
+    {
+     "n": "1 uttapam (110 g)",
+     "hi": "1 उत्तपम",
+     "g": 110
+    }
+   ],
+   "core": true,
+   "src": "Recipe computed from dosa batter + oil; INDB BFP152 (256) and ASC148 (462) judged too high",
+   "conf": "medium",
+   "note": "thick pancake from dosa batter, ~1 tsp oil; INDB BFP152 256 and ASC148 462 are inflated"
+  },
+  {
+   "slug": "onion-uttapam",
+   "name": "Onion Uttapam",
+   "hi": "प्याज उत्तपम",
+   "alias": [
+    "onion uthappam",
+    "onion oothappam",
+    "onion uttappam",
+    "pyaz uttapam",
+    "प्याज उत्थपम"
+   ],
+   "cat": "tiffin",
+   "region": "South India",
+   "diet": "veg",
+   "emoji": "🥞",
+   "unit": "g",
+   "kcal": 170,
+   "p": 4.2,
+   "c": 28,
+   "f": 4.5,
+   "fib": 1.5,
+   "na": 250,
+   "portions": [
+    {
+     "n": "1 uttapam (120 g)",
+     "hi": "1 प्याज उत्तपम",
+     "g": 120
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 rice/urad/besan/semolina values and cooking oil; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "dosa batter pancake topped with chopped onion, ~1 tsp oil"
+  },
+  {
+   "slug": "tomato-uttapam",
+   "name": "Tomato Uttapam",
+   "hi": "टमाटर उत्तपम",
+   "alias": [
+    "tomato uthappam",
+    "tomato oothappam",
+    "tamatar uttapam",
+    "टमाटर उत्थपम"
+   ],
+   "cat": "tiffin",
+   "region": "South India",
+   "diet": "veg",
+   "emoji": "🥞",
+   "unit": "g",
+   "kcal": 165,
+   "p": 4.1,
+   "c": 27,
+   "f": 4.5,
+   "fib": 1.4,
+   "na": 250,
+   "portions": [
+    {
+     "n": "1 uttapam (120 g)",
+     "hi": "1 टमाटर उत्तपम",
+     "g": 120
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 rice/urad/besan/semolina values and cooking oil; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "dosa batter pancake topped with tomato, ~1 tsp oil"
+  },
+  {
+   "slug": "vegetable-uttapam",
+   "name": "Vegetable Uttapam",
+   "hi": "वेज उत्तपम",
+   "alias": [
+    "veg uttapam",
+    "mixed veg uttapam",
+    "veg uthappam",
+    "vegetable uthappam",
+    "वेजिटेबल उत्तपम"
+   ],
+   "cat": "tiffin",
+   "region": "South India",
+   "diet": "veg",
+   "emoji": "🥞",
+   "unit": "g",
+   "kcal": 175,
+   "p": 4.8,
+   "c": 28,
+   "f": 4.8,
+   "fib": 2,
+   "na": 260,
+   "portions": [
+    {
+     "n": "1 uttapam (130 g)",
+     "hi": "1 वेज उत्तपम",
+     "g": 130
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 rice/urad/besan/semolina values and cooking oil; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "pancake topped with onion, tomato, carrot, capsicum, ~1 tsp oil"
+  },
+  {
+   "slug": "rava-uttapam",
+   "name": "Rava Uttapam",
+   "hi": "रवा उत्तपम",
+   "alias": [
+    "suji uttapam",
+    "semolina uttapam",
+    "rava uthappam",
+    "instant rava uttapam",
+    "सूजी उत्तपम"
+   ],
+   "cat": "tiffin",
+   "region": "South India",
+   "diet": "veg",
+   "emoji": "🥞",
+   "unit": "g",
+   "kcal": 185,
+   "p": 4.5,
+   "c": 28,
+   "f": 5.5,
+   "fib": 1.8,
+   "na": 260,
+   "portions": [
+    {
+     "n": "1 uttapam (120 g)",
+     "hi": "1 रवा उत्तपम",
+     "g": 120
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 rice/urad/besan/semolina values and cooking oil; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "semolina-curd batter pancake with vegetables, ~1.2 tsp oil"
+  },
+  {
+   "slug": "besan-chilla",
+   "name": "Besan Chilla (Cheela)",
+   "hi": "बेसन चीला",
+   "alias": [
+    "besan cheela",
+    "gram flour pancake",
+    "besan ka chilla",
+    "besan puda",
+    "pudla",
+    "besan chila",
+    "बेसन का चीला",
+    "बेसन चिल्ला"
+   ],
+   "cat": "tiffin",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🥞",
+   "unit": "g",
+   "kcal": 170,
+   "p": 8,
+   "c": 17.5,
+   "f": 7,
+   "fib": 3.8,
+   "na": 280,
+   "portions": [
+    {
+     "n": "1 chilla (60 g)",
+     "hi": "1 बेसन चीला",
+     "g": 60
+    },
+    {
+     "n": "2 chilla (120 g)",
+     "hi": "2 बेसन चीला",
+     "g": 120
+    }
+   ],
+   "core": true,
+   "src": "Recipe computed from IFCT besan + oil; cross-checked INDB OSR100 (136)",
+   "conf": "medium",
+   "note": "besan batter with onion/chilli, ~1 tsp oil per chilla (~100 kcal each); INDB OSR100 136"
+  },
+  {
+   "slug": "moong-dal-chilla",
+   "name": "Moong Dal Chilla",
+   "hi": "मूंग दाल चीला",
+   "alias": [
+    "moong chilla",
+    "mung dal cheela",
+    "moong dal cheela",
+    "green moong chilla",
+    "yellow moong chilla",
+    "मूंग का चीला",
+    "मूंग चिल्ला"
+   ],
+   "cat": "tiffin",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🥞",
+   "unit": "g",
+   "kcal": 168,
+   "p": 8.5,
+   "c": 19,
+   "f": 6,
+   "fib": 3,
+   "na": 260,
+   "portions": [
+    {
+     "n": "1 chilla (60 g)",
+     "hi": "1 मूंग चीला",
+     "g": 60
+    },
+    {
+     "n": "2 chilla (120 g)",
+     "hi": "2 मूंग चीला",
+     "g": 120
+    }
+   ],
+   "core": true,
+   "src": "Standard recipe computed from IFCT 2017 rice/urad/besan/semolina values and cooking oil; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "ground soaked moong dal batter, ~1 tsp oil per chilla"
+  },
+  {
+   "slug": "sprouts-cheela",
+   "name": "Sprouts Cheela",
+   "hi": "स्प्राउट्स चीला",
+   "alias": [
+    "sprouted moong cheela",
+    "sprouts chilla",
+    "moong sprouts chilla",
+    "sprout cheela",
+    "अंकुरित मूंग चीला"
+   ],
+   "cat": "tiffin",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🥞",
+   "unit": "g",
+   "kcal": 150,
+   "p": 8.2,
+   "c": 17,
+   "f": 5.5,
+   "fib": 4,
+   "na": 240,
+   "portions": [
+    {
+     "n": "1 cheela (60 g)",
+     "hi": "1 स्प्राउट्स चीला",
+     "g": 60
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 rice/urad/besan/semolina values and cooking oil; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "batter of ground sprouted moong with onion, ~3/4 tsp oil"
+  },
+  {
+   "slug": "paneer-cheela",
+   "name": "Paneer Stuffed Besan Cheela",
+   "hi": "पनीर चीला",
+   "alias": [
+    "paneer chilla",
+    "paneer besan cheela",
+    "stuffed besan chilla",
+    "paneer stuffed chilla",
+    "पनीर वाला चीला"
+   ],
+   "cat": "tiffin",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🥞",
+   "unit": "g",
+   "kcal": 200,
+   "p": 11,
+   "c": 15,
+   "f": 11,
+   "fib": 3,
+   "na": 300,
+   "portions": [
+    {
+     "n": "1 cheela (90 g)",
+     "hi": "1 पनीर चीला",
+     "g": 90
+    }
+   ],
+   "src": "Recipe computed from besan, paneer, oil; cross-checked INDB BFP047 (205)",
+   "conf": "medium",
+   "note": "besan chilla (60 g) filled with ~30 g spiced paneer; INDB BFP047 205"
+  },
+  {
+   "slug": "oats-chilla",
+   "name": "Oats Chilla",
+   "hi": "ओट्स चीला",
+   "alias": [
+    "oats cheela",
+    "oats besan chilla",
+    "oats pancake savoury",
+    "ओट्स का चीला"
+   ],
+   "cat": "tiffin",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🥞",
+   "unit": "g",
+   "kcal": 140,
+   "p": 6,
+   "c": 18,
+   "f": 4.5,
+   "fib": 3,
+   "na": 230,
+   "portions": [
+    {
+     "n": "1 chilla (60 g)",
+     "hi": "1 ओट्स चीला",
+     "g": 60
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 rice/urad/besan/semolina values and cooking oil; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "oats + besan batter with vegetables, ~3/4 tsp oil"
+  },
+  {
+   "slug": "suji-upma",
+   "name": "Upma (Suji / Rava)",
+   "hi": "उपमा (सूजी)",
+   "alias": [
+    "rava upma",
+    "uppittu",
+    "upittu",
+    "uppuma",
+    "sooji upma",
+    "semolina upma",
+    "uppma",
+    "उपमा",
+    "रवा उपमा",
+    "सूजी उपमा"
+   ],
+   "cat": "tiffin",
+   "region": "South India",
+   "diet": "veg",
+   "emoji": "🍛",
+   "unit": "g",
+   "kcal": 143,
+   "p": 3.2,
+   "c": 20,
+   "f": 5,
+   "fib": 1.8,
+   "na": 300,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 plate (200 g)",
+     "hi": "1 प्लेट",
+     "g": 200
+    }
+   ],
+   "core": true,
+   "src": "Recipe computed from IFCT semolina + oil; cross-checked INDB BFP039 (148)",
+   "conf": "medium",
+   "note": "home upma with ~1.5 tsp oil per 150 g, mustard, onion, curry leaf, a few vegetables; INDB BFP039 148"
+  },
+  {
+   "slug": "vermicelli-upma",
+   "name": "Semiya Upma (Vermicelli)",
+   "hi": "सेवई उपमा",
+   "alias": [
+    "vermicelli upma",
+    "semiya upma",
+    "seviyan upma",
+    "shavige uppittu",
+    "sevai upma",
+    "सेमिया उपमा",
+    "सेवइयां नमकीन"
+   ],
+   "cat": "tiffin",
+   "region": "South India",
+   "diet": "veg",
+   "emoji": "🍛",
+   "unit": "g",
+   "kcal": 148,
+   "p": 3.2,
+   "c": 22,
+   "f": 4.5,
+   "fib": 1.6,
+   "na": 300,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 plate (200 g)",
+     "hi": "1 प्लेट",
+     "g": 200
+    }
+   ],
+   "src": "Recipe computed from IFCT wheat vermicelli + oil; cross-checked INDB BFP040 (149)",
+   "conf": "medium",
+   "note": "roasted wheat vermicelli cooked with onion, vegetables, ~1.5 tsp oil per 150 g; INDB BFP040 149"
+  },
+  {
+   "slug": "rice-upma",
+   "name": "Rice Upma (Arisi Upma)",
+   "hi": "चावल उपमा",
+   "alias": [
+    "arisi upma",
+    "akki tari upma",
+    "broken rice upma",
+    "rice rava upma",
+    "चावल का उपमा"
+   ],
+   "cat": "tiffin",
+   "region": "Tamil Nadu",
+   "diet": "veg",
+   "emoji": "🍛",
+   "unit": "g",
+   "kcal": 145,
+   "p": 3,
+   "c": 23,
+   "f": 4.3,
+   "fib": 1.2,
+   "na": 280,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 plate (200 g)",
+     "hi": "1 प्लेट",
+     "g": 200
+    }
+   ],
+   "src": "Recipe computed from IFCT raw rice, dal, oil; cross-checked INDB BFP041 (151)",
+   "conf": "medium",
+   "note": "broken rice and dal cooked with coconut, curry leaf, ~1.2 tsp oil per 150 g; INDB BFP041 151"
+  },
+  {
+   "slug": "vegetable-upma",
+   "name": "Vegetable Upma",
+   "hi": "वेज उपमा",
+   "alias": [
+    "veg upma",
+    "mixed veg upma",
+    "vegetable rava upma",
+    "veg rava upma",
+    "वेजिटेबल उपमा"
+   ],
+   "cat": "tiffin",
+   "region": "South India",
+   "diet": "veg",
+   "emoji": "🍛",
+   "unit": "g",
+   "kcal": 135,
+   "p": 3.5,
+   "c": 19,
+   "f": 4.5,
+   "fib": 2.5,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 plate (200 g)",
+     "hi": "1 प्लेट",
+     "g": 200
+    }
+   ],
+   "src": "Recipe computed from IFCT semolina, vegetables, oil; cross-checked INDB BFP043 (147)",
+   "conf": "medium",
+   "note": "suji upma loaded with carrot, beans, peas, ~1.2 tsp oil per 150 g; INDB BFP043 147"
+  },
+  {
+   "slug": "oats-upma",
+   "name": "Oats Upma",
+   "hi": "ओट्स उपमा",
+   "alias": [
+    "masala oats upma",
+    "veg oats upma",
+    "oats uppittu",
+    "ओट्स का उपमा"
+   ],
+   "cat": "tiffin",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍛",
+   "unit": "g",
+   "kcal": 108,
+   "p": 3.8,
+   "c": 15,
+   "f": 3.5,
+   "fib": 2.5,
+   "na": 280,
+   "portions": [
+    {
+     "n": "1 bowl (200 g)",
+     "hi": "1 कटोरा",
+     "g": 200
+    },
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 rice/urad/besan/semolina values and cooking oil; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "rolled oats sautéed with vegetables and ~1 tsp oil per 150 g"
+  },
+  {
+   "slug": "bread-upma",
+   "name": "Bread Upma",
+   "hi": "ब्रेड उपमा",
+   "alias": [
+    "bread uppittu",
+    "masala bread upma",
+    "bread upma tomato",
+    "ब्रेड का उपमा",
+    "ब्रेड उप्पीटू"
+   ],
+   "cat": "tiffin",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍛",
+   "unit": "g",
+   "kcal": 168,
+   "p": 4.5,
+   "c": 26,
+   "f": 5.5,
+   "fib": 2,
+   "na": 380,
+   "portions": [
+    {
+     "n": "1 plate (150 g)",
+     "hi": "1 प्लेट",
+     "g": 150
+    },
+    {
+     "n": "1 katori (100 g)",
+     "hi": "1 कटोरी",
+     "g": 100
+    }
+   ],
+   "src": "Recipe computed from white bread, onion, tomato, oil; cross-checked INDB BFP042 (130)",
+   "conf": "medium",
+   "note": "bread cubes sautéed with onion, tomato and ~1.5 tsp oil per 150 g; INDB BFP042 (130) assumes less oil"
+  },
+  {
+   "slug": "kanda-poha",
+   "name": "Kanda Poha",
+   "hi": "कांदा पोहा",
+   "alias": [
+    "poha",
+    "pohe",
+    "kande pohe",
+    "onion poha",
+    "aval upma",
+    "poha maharashtrian",
+    "flattened rice poha",
+    "पोहा",
+    "कांदे पोहे"
+   ],
+   "cat": "tiffin",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🍛",
+   "unit": "g",
+   "kcal": 145,
+   "p": 3.4,
+   "c": 22.5,
+   "f": 4.8,
+   "fib": 1.5,
+   "na": 280,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 plate (200 g)",
+     "hi": "1 प्लेट",
+     "g": 200
+    }
+   ],
+   "core": true,
+   "src": "Recipe computed from IFCT rice flakes (A011), onion, peanuts, oil; cross-checked INDB BFP044/045 (295/181)",
+   "conf": "medium",
+   "note": "soaked flattened rice (IFCT 354 kcal dry) with onion, peanuts, ~1.2 tsp oil per 150 g; INDB BFP045 181 is veg poha with extra fat"
+  },
+  {
+   "slug": "indori-poha",
+   "name": "Indori Poha",
+   "hi": "इंदौरी पोहा",
+   "alias": [
+    "indore poha",
+    "indori pohe",
+    "indori poha jalebi poha",
+    "poha indori",
+    "इंदौरी पोहे",
+    "इन्दौरी पोहा"
+   ],
+   "cat": "tiffin",
+   "region": "Madhya Pradesh",
+   "diet": "veg",
+   "emoji": "🍛",
+   "unit": "g",
+   "kcal": 160,
+   "p": 3.5,
+   "c": 25,
+   "f": 5,
+   "fib": 1.4,
+   "na": 300,
+   "portions": [
+    {
+     "n": "1 plate (180 g)",
+     "hi": "1 प्लेट",
+     "g": 180
+    },
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 rice/urad/besan/semolina values and cooking oil; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "poha with fennel, sugar pinch, lemon, topped with sev, pomegranate (~1 tsp sev per plate)"
+  },
+  {
+   "slug": "batata-poha",
+   "name": "Batata Poha (Aloo Poha)",
+   "hi": "बटाटा पोहा",
+   "alias": [
+    "aloo poha",
+    "potato poha",
+    "batata pohe",
+    "alu poha",
+    "बटाटे पोहे",
+    "आलू पोहा"
+   ],
+   "cat": "tiffin",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🍛",
+   "unit": "g",
+   "kcal": 150,
+   "p": 3.2,
+   "c": 24,
+   "f": 4.5,
+   "fib": 1.7,
+   "na": 290,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 plate (200 g)",
+     "hi": "1 प्लेट",
+     "g": 200
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 rice/urad/besan/semolina values and cooking oil; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "poha with onion and potato cubes, ~1.2 tsp oil per 150 g"
+  },
+  {
+   "slug": "dahi-chura",
+   "name": "Dahi Chura (Poha with Curd)",
+   "hi": "दही चूड़ा",
+   "alias": [
+    "dahi chiwda",
+    "chura dahi",
+    "poha dahi",
+    "dahi poha",
+    "chuda dahi",
+    "दही चिवड़ा",
+    "दही चुरा"
+   ],
+   "cat": "tiffin",
+   "region": "Bihar",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 125,
+   "p": 3.9,
+   "c": 22,
+   "f": 2.2,
+   "fib": 0.8,
+   "na": 110,
+   "portions": [
+    {
+     "n": "1 bowl (200 g)",
+     "hi": "1 कटोरा",
+     "g": 200
+    },
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    }
+   ],
+   "src": "Recipe computed from IFCT rice flakes, curd, jaggery; cross-checked INDB ASC484 (173)",
+   "conf": "medium",
+   "note": "soaked chura with curd and a little jaggery (~40 g dry poha, 100 g curd, 10 g jaggery per 190 g); INDB ASC484 poha with curd 173"
+  },
+  {
+   "slug": "poha-jalebi",
+   "name": "Poha Jalebi (Indori Combo)",
+   "hi": "पोहा जलेबी",
+   "alias": [
+    "poha with jalebi",
+    "indori poha jalebi",
+    "jalebi poha",
+    "पोहे जलेबी",
+    "पोहा-जलेबी"
+   ],
+   "cat": "tiffin",
+   "region": "Madhya Pradesh",
+   "diet": "veg",
+   "emoji": "🍛",
+   "unit": "g",
+   "kcal": 225,
+   "p": 3,
+   "c": 36,
+   "f": 8,
+   "fib": 1.2,
+   "na": 190,
+   "portions": [
+    {
+     "n": "1 plate (poha 150 g + 2 jalebi 60 g, 210 g)",
+     "hi": "1 प्लेट",
+     "g": 210
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 rice/urad/besan/semolina values and cooking oil; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "combo: 150 g poha (~220 kcal) plus 2 jalebi (60 g, ~260 kcal)"
+  },
+  {
+   "slug": "sabudana-khichdi",
+   "name": "Sabudana Khichdi",
+   "hi": "साबूदाना खिचड़ी",
+   "alias": [
+    "sabudana khichri",
+    "sago khichdi",
+    "sabudana khichadi",
+    "sabbakki khichdi",
+    "javvarisi upma",
+    "sabudana upma",
+    "साबूदाना की खिचड़ी",
+    "साबुदाना खिचड़ी"
+   ],
+   "cat": "tiffin",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🍛",
+   "unit": "g",
+   "kcal": 190,
+   "p": 3,
+   "c": 29.5,
+   "f": 6.5,
+   "fib": 1.2,
+   "na": 150,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 plate (200 g)",
+     "hi": "1 प्लेट",
+     "g": 200
+    }
+   ],
+   "core": true,
+   "src": "Recipe computed from tapioca pearls, peanuts, potato, oil; cross-checked INDB OSR099 (187)",
+   "conf": "medium",
+   "note": "soaked tapioca pearls with potato, peanuts, cumin, ~1.5 tsp oil per 150 g; vrat food; INDB OSR099 187"
+  },
+  {
+   "slug": "sabudana-vada",
+   "name": "Sabudana Vada",
+   "hi": "साबूदाना वड़ा",
+   "alias": [
+    "sago vada",
+    "sabudana wada",
+    "sabudana vadai",
+    "sabudana tikki fried",
+    "साबूदाना वडा"
+   ],
+   "cat": "tiffin",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🍘",
+   "unit": "g",
+   "kcal": 300,
+   "p": 3.5,
+   "c": 40,
+   "f": 14,
+   "fib": 2,
+   "na": 280,
+   "portions": [
+    {
+     "n": "1 vada (40 g)",
+     "hi": "1 साबूदाना वड़ा",
+     "g": 40
+    },
+    {
+     "n": "3 vada (120 g)",
+     "hi": "3 साबूदाना वड़ा",
+     "g": 120
+    }
+   ],
+   "src": "Recipe computed with realistic oil uptake ~12 %; INDB ASC379 750 rejected as impossible",
+   "conf": "medium",
+   "note": "deep-fried sabudana-potato-peanut patty; INDB ASC379 (750) and BFP425 (559) are gross errors from oil absorption"
+  },
+  {
+   "slug": "khaman-dhokla",
+   "name": "Khaman Dhokla",
+   "hi": "खमन ढोकला",
+   "alias": [
+    "khaman",
+    "besan dhokla",
+    "dhokla",
+    "yellow dhokla",
+    "nylon khaman",
+    "gujarati dhokla",
+    "ढोकला",
+    "खमण ढोकला"
+   ],
+   "cat": "tiffin",
+   "region": "Gujarat",
+   "diet": "veg",
+   "emoji": "🍽️",
+   "unit": "g",
+   "kcal": 165,
+   "p": 7,
+   "c": 21,
+   "f": 5.5,
+   "fib": 3,
+   "na": 400,
+   "portions": [
+    {
+     "n": "1 piece (40 g)",
+     "hi": "1 ढोकला",
+     "g": 40
+    },
+    {
+     "n": "1 plate (4 pieces, 160 g)",
+     "hi": "1 प्लेट (4 पीस)",
+     "g": 160
+    }
+   ],
+   "core": true,
+   "src": "Recipe computed from IFCT besan, sugar, oil; INDB ASC474 217 / BFP439 55 bracket it",
+   "conf": "medium",
+   "note": "steamed besan cake with sugar/lemon and oil-mustard tadka (~66 kcal per 40 g piece); INDB ASC474 217, BFP439 55 bracket it"
+  },
+  {
+   "slug": "white-dhokla",
+   "name": "White Dhokla (Safed Dhokla)",
+   "hi": "सफेद ढोकला",
+   "alias": [
+    "safed dhokla",
+    "rice dhokla",
+    "urad dhokla",
+    "white dhokla gujarati",
+    "सफेद ढोकले"
+   ],
+   "cat": "tiffin",
+   "region": "Gujarat",
+   "diet": "veg",
+   "emoji": "🍽️",
+   "unit": "g",
+   "kcal": 142,
+   "p": 4,
+   "c": 25,
+   "f": 3,
+   "fib": 1,
+   "na": 380,
+   "portions": [
+    {
+     "n": "1 piece (40 g)",
+     "hi": "1 सफेद ढोकला",
+     "g": 40
+    },
+    {
+     "n": "1 plate (4 pieces, 160 g)",
+     "hi": "1 प्लेट",
+     "g": 160
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 rice/urad/besan/semolina values and cooking oil; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "steamed rice-urad cake with curd, tempered with oil and mustard"
+  },
+  {
+   "slug": "rava-dhokla",
+   "name": "Rava Dhokla (Suji)",
+   "hi": "रवा ढोकला",
+   "alias": [
+    "suji dhokla",
+    "semolina dhokla",
+    "instant rava dhokla",
+    "rava dhokla gujarati",
+    "सूजी ढोकला"
+   ],
+   "cat": "tiffin",
+   "region": "Gujarat",
+   "diet": "veg",
+   "emoji": "🍽️",
+   "unit": "g",
+   "kcal": 160,
+   "p": 4.5,
+   "c": 25,
+   "f": 4.5,
+   "fib": 2,
+   "na": 380,
+   "portions": [
+    {
+     "n": "1 piece (40 g)",
+     "hi": "1 रवा ढोकला",
+     "g": 40
+    },
+    {
+     "n": "1 plate (4 pieces, 160 g)",
+     "hi": "1 प्लेट",
+     "g": 160
+    }
+   ],
+   "src": "Recipe computed from IFCT semolina, curd, oil; cross-checked INDB OSR115 (195)",
+   "conf": "medium",
+   "note": "semolina-curd steamed cake with tempering; INDB OSR115 195"
+  },
+  {
+   "slug": "idada-idra",
+   "name": "Idra (Idada Dhokla)",
+   "hi": "इदरा",
+   "alias": [
+    "idada",
+    "idada surti",
+    "idra dhokla",
+    "surti idada",
+    "idra gujarati",
+    "इडदा",
+    "इदड़ा"
+   ],
+   "cat": "tiffin",
+   "region": "Gujarat",
+   "diet": "veg",
+   "emoji": "🍽️",
+   "unit": "g",
+   "kcal": 150,
+   "p": 5,
+   "c": 25,
+   "f": 3.5,
+   "fib": 2,
+   "na": 380,
+   "portions": [
+    {
+     "n": "1 piece (40 g)",
+     "hi": "1 इदरा",
+     "g": 40
+    },
+    {
+     "n": "1 plate (4 pieces, 160 g)",
+     "hi": "1 प्लेट",
+     "g": 160
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 rice/urad/besan/semolina values and cooking oil; cross-checked NIN tables and INDB",
+   "conf": "low",
+   "note": "steamed rice-urad-chana dal cake with spices, ginger, tempering"
+  },
+  {
+   "slug": "sandwich-dhokla",
+   "name": "Sandwich Dhokla",
+   "hi": "सैंडविच ढोकला",
+   "alias": [
+    "green chutney dhokla",
+    "dhokla sandwich",
+    "layered dhokla",
+    "सैंडविच ढोकले"
+   ],
+   "cat": "tiffin",
+   "region": "Gujarat",
+   "diet": "veg",
+   "emoji": "🍽️",
+   "unit": "g",
+   "kcal": 155,
+   "p": 5,
+   "c": 24,
+   "f": 4.5,
+   "fib": 2.2,
+   "na": 400,
+   "portions": [
+    {
+     "n": "1 piece (50 g)",
+     "hi": "1 सैंडविच ढोकला",
+     "g": 50
+    },
+    {
+     "n": "1 plate (3 pieces, 150 g)",
+     "hi": "1 प्लेट",
+     "g": 150
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 rice/urad/besan/semolina values and cooking oil; cross-checked NIN tables and INDB",
+   "conf": "low",
+   "note": "white dhokla layered with mint-coriander chutney"
+  },
+  {
+   "slug": "khandvi",
+   "name": "Khandvi",
+   "hi": "खांडवी",
+   "alias": [
+    "khandavi",
+    "suralichi wadi",
+    "gujarati khandvi",
+    "patuli",
+    "khandvi rolls",
+    "सुरळीची वडी",
+    "खांडवी रोल्स"
+   ],
+   "cat": "tiffin",
+   "region": "Gujarat",
+   "diet": "veg",
+   "emoji": "🍽️",
+   "unit": "g",
+   "kcal": 155,
+   "p": 6,
+   "c": 15,
+   "f": 7.8,
+   "fib": 2.5,
+   "na": 400,
+   "portions": [
+    {
+     "n": "1 piece (15 g)",
+     "hi": "1 खांडवी",
+     "g": 15
+    },
+    {
+     "n": "1 plate (8 rolls, 120 g)",
+     "hi": "1 प्लेट",
+     "g": 120
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 rice/urad/besan/semolina values and cooking oil; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "besan-buttermilk sheets rolled with oil-sesame-coconut tempering"
+  },
+  {
+   "slug": "handvo",
+   "name": "Handvo",
+   "hi": "हांडवो",
+   "alias": [
+    "handwa",
+    "gujarati handvo",
+    "handvo cake",
+    "mixed dal handvo",
+    "vegetable handvo",
+    "हांडवा",
+    "हांडवो केक"
+   ],
+   "cat": "tiffin",
+   "region": "Gujarat",
+   "diet": "veg",
+   "emoji": "🍽️",
+   "unit": "g",
+   "kcal": 195,
+   "p": 7,
+   "c": 27,
+   "f": 6,
+   "fib": 3.5,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 slice (80 g)",
+     "hi": "1 स्लाइस",
+     "g": 80
+    },
+    {
+     "n": "2 slices (160 g)",
+     "hi": "2 स्लाइस",
+     "g": 160
+    }
+   ],
+   "src": "Recipe computed from IFCT rice, dals, bottle gourd, oil; cross-checked INDB OSR146 (207)",
+   "conf": "medium",
+   "note": "baked/pan-cooked lentil-rice cake with bottle gourd and oil, ~80 g slice; INDB OSR146 207"
+  },
+  {
+   "slug": "methi-muthia",
+   "name": "Methi Muthia (Steamed)",
+   "hi": "मेथी मुठिया",
+   "alias": [
+    "muthia",
+    "methi muthiya",
+    "steamed muthia",
+    "gujarati muthia",
+    "methi na muthiya",
+    "मुठिया",
+    "मेथी के मुठिये"
+   ],
+   "cat": "tiffin",
+   "region": "Gujarat",
+   "diet": "veg",
+   "emoji": "🍽️",
+   "unit": "g",
+   "kcal": 165,
+   "p": 5.5,
+   "c": 22,
+   "f": 5.5,
+   "fib": 4,
+   "na": 360,
+   "portions": [
+    {
+     "n": "1 piece (25 g)",
+     "hi": "1 मुठिया",
+     "g": 25
+    },
+    {
+     "n": "1 plate (6 pieces, 150 g)",
+     "hi": "1 प्लेट",
+     "g": 150
+    }
+   ],
+   "src": "Recipe computed from IFCT atta, besan, methi, oil; INDB ASC456 839 rejected as impossible",
+   "conf": "medium",
+   "note": "steamed atta-besan-methi rolls, sliced and tempered with ~1 tsp oil; INDB ASC456 (839) is a gross error"
+  },
+  {
+   "slug": "doodhi-muthia",
+   "name": "Doodhi Muthia (Steamed)",
+   "hi": "दूधी मुठिया",
+   "alias": [
+    "lauki muthia",
+    "dudhi na muthiya",
+    "bottle gourd muthia",
+    "doodhi na muthia",
+    "दूधी के मुठिये"
+   ],
+   "cat": "tiffin",
+   "region": "Gujarat",
+   "diet": "veg",
+   "emoji": "🍽️",
+   "unit": "g",
+   "kcal": 155,
+   "p": 5,
+   "c": 21,
+   "f": 5,
+   "fib": 3.5,
+   "na": 340,
+   "portions": [
+    {
+     "n": "1 piece (25 g)",
+     "hi": "1 मुठिया",
+     "g": 25
+    },
+    {
+     "n": "1 plate (6 pieces, 150 g)",
+     "hi": "1 प्लेट",
+     "g": 150
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 rice/urad/besan/semolina values and cooking oil; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "steamed bottle gourd-atta-besan rolls, tempered"
+  },
+  {
+   "slug": "patra-steamed",
+   "name": "Patra (Steamed Colocasia Rolls)",
+   "hi": "पात्रा",
+   "alias": [
+    "patra",
+    "alu vadi",
+    "alu vadi steamed",
+    "arbi leaf patra",
+    "gujarati patra",
+    "paatra",
+    "अळू वडी",
+    "अरबी पत्ता रोल"
+   ],
+   "cat": "tiffin",
+   "region": "Gujarat",
+   "diet": "veg",
+   "emoji": "🍽️",
+   "unit": "g",
+   "kcal": 150,
+   "p": 5,
+   "c": 22,
+   "f": 4.5,
+   "fib": 4.5,
+   "na": 360,
+   "portions": [
+    {
+     "n": "1 piece (30 g)",
+     "hi": "1 पात्रा",
+     "g": 30
+    },
+    {
+     "n": "1 plate (4 pieces, 120 g)",
+     "hi": "1 प्लेट",
+     "g": 120
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 rice/urad/besan/semolina values and cooking oil; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "arbi leaves layered with besan-tamarind-jaggery paste, steamed, sliced and tempered with a little oil"
+  },
+  {
+   "slug": "medu-vada",
+   "name": "Medu Vada",
+   "hi": "मेदू वड़ा",
+   "alias": [
+    "medhu vada",
+    "uzhunnu vada",
+    "ulundu vadai",
+    "garelu",
+    "minapa garelu",
+    "urad dal vada",
+    "medu wada",
+    "वडा",
+    "उडद दाल वडा"
+   ],
+   "cat": "tiffin",
+   "region": "South India",
+   "diet": "veg",
+   "emoji": "🍘",
+   "unit": "g",
+   "kcal": 280,
+   "p": 8.5,
+   "c": 24,
+   "f": 16.5,
+   "fib": 3.5,
+   "na": 300,
+   "portions": [
+    {
+     "n": "1 vada (50 g)",
+     "hi": "1 मेदू वड़ा",
+     "g": 50
+    },
+    {
+     "n": "2 vada (100 g)",
+     "hi": "2 मेदू वड़ा",
+     "g": 100
+    }
+   ],
+   "core": true,
+   "src": "Recipe computed from IFCT urad dal with realistic oil uptake ~12-15 %; INDB BFP436 746 rejected as impossible",
+   "conf": "medium",
+   "note": "deep-fried urad dal doughnut, ~50 g each (~140 kcal); INDB BFP436 (746) is a gross error from oil absorption"
+  },
+  {
+   "slug": "masala-vada",
+   "name": "Masala Vada (Paruppu Vadai)",
+   "hi": "मसाला वड़ा",
+   "alias": [
+    "paruppu vadai",
+    "chana dal vada",
+    "masala vadai",
+    "kadalai paruppu vadai",
+    "dal vada",
+    "masala wada",
+    "चना दाल वड़ा",
+    "दाल वड़ा"
+   ],
+   "cat": "tiffin",
+   "region": "Tamil Nadu",
+   "diet": "veg",
+   "emoji": "🍘",
+   "unit": "g",
+   "kcal": 300,
+   "p": 11,
+   "c": 28,
+   "f": 15,
+   "fib": 6,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 vada (40 g)",
+     "hi": "1 मसाला वड़ा",
+     "g": 40
+    },
+    {
+     "n": "3 vada (120 g)",
+     "hi": "3 मसाला वड़ा",
+     "g": 120
+    }
+   ],
+   "src": "Recipe computed from IFCT bengal gram dal with realistic oil uptake ~12 %; INDB ASC378 826 rejected as impossible",
+   "conf": "medium",
+   "note": "deep-fried coarsely ground chana dal patty with onion, chilli, fennel; INDB ASC378 (826) is a gross error"
+  },
+  {
+   "slug": "sambar-vada",
+   "name": "Sambar Vada (2 Vada in Sambar)",
+   "hi": "सांभर वड़ा",
+   "alias": [
+    "sambar vadai",
+    "vada sambar",
+    "sambar wada",
+    "medu vada sambar",
+    "वडा सांभर",
+    "सांबर वडा"
+   ],
+   "cat": "tiffin",
+   "region": "Tamil Nadu",
+   "diet": "veg",
+   "emoji": "🍘",
+   "unit": "g",
+   "kcal": 150,
+   "p": 5,
+   "c": 17,
+   "f": 7,
+   "fib": 3,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 plate (2 vada in sambar, 250 g)",
+     "hi": "1 प्लेट",
+     "g": 250
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 rice/urad/besan/semolina values and cooking oil; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "2 medu vada (100 g) soaked in ~150 g sambar; per 100 g of the plate"
+  },
+  {
+   "slug": "appe-paniyaram",
+   "name": "Appe (Kuzhi Paniyaram)",
+   "hi": "अप्पे",
+   "alias": [
+    "paniyaram",
+    "kuzhi paniyaram",
+    "appe",
+    "guliyappa",
+    "gunta ponganalu",
+    "ponganalu",
+    "अप्पे",
+    "पनियारम"
+   ],
+   "cat": "tiffin",
+   "region": "South India",
+   "diet": "veg",
+   "emoji": "🍘",
+   "unit": "g",
+   "kcal": 190,
+   "p": 4.2,
+   "c": 28,
+   "f": 6.5,
+   "fib": 1.5,
+   "na": 280,
+   "portions": [
+    {
+     "n": "1 piece (25 g)",
+     "hi": "1 अप्पे",
+     "g": 25
+    },
+    {
+     "n": "1 plate (6 pieces, 150 g)",
+     "hi": "1 प्लेट",
+     "g": 150
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 rice/urad/besan/semolina values and cooking oil; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "dosa-batter balls cooked in a paniyaram pan with ~1 tsp oil per 6 pieces"
+  },
+  {
+   "slug": "idiyappam",
+   "name": "Idiyappam (String Hoppers)",
+   "hi": "इडियप्पम",
+   "alias": [
+    "string hoppers",
+    "idiappam",
+    "idi appam",
+    "noolputtu",
+    "nool puttu",
+    "sevai rice",
+    "इडियाप्पम",
+    "सेवई चावल"
+   ],
+   "cat": "tiffin",
+   "region": "Kerala",
+   "diet": "veg",
+   "emoji": "🍜",
+   "unit": "g",
+   "kcal": 135,
+   "p": 2.7,
+   "c": 29,
+   "f": 0.5,
+   "fib": 0.9,
+   "na": 100,
+   "portions": [
+    {
+     "n": "1 idiyappam (40 g)",
+     "hi": "1 इडियप्पम",
+     "g": 40
+    },
+    {
+     "n": "1 plate (3 pieces, 120 g)",
+     "hi": "1 प्लेट",
+     "g": 120
+    }
+   ],
+   "src": "Recipe computed from IFCT rice flour with steaming",
+   "conf": "medium",
+   "note": "steamed rice-flour noodles, no coconut/oil beyond a trace"
+  },
+  {
+   "slug": "lemon-sevai",
+   "name": "Lemon Sevai",
+   "hi": "लेमन सेवई",
+   "alias": [
+    "elumichai sevai",
+    "nimbu sevai",
+    "lemon idiyappam",
+    "lemon shavige",
+    "lemon semiya",
+    "नींबू सेवई"
+   ],
+   "cat": "tiffin",
+   "region": "Tamil Nadu",
+   "diet": "veg",
+   "emoji": "🍜",
+   "unit": "g",
+   "kcal": 155,
+   "p": 3,
+   "c": 26,
+   "f": 4.5,
+   "fib": 1.2,
+   "na": 230,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 plate (200 g)",
+     "hi": "1 प्लेट",
+     "g": 200
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 rice/urad/besan/semolina values and cooking oil; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "idiyappam tossed with lemon, peanuts, mustard and ~1.2 tsp oil per 150 g"
+  },
+  {
+   "slug": "coconut-sevai",
+   "name": "Coconut Sevai (Thengai Sevai)",
+   "hi": "नारियल सेवई",
+   "alias": [
+    "thengai sevai",
+    "coconut idiyappam",
+    "coconut shavige",
+    "kobbari sevai",
+    "नारियल इडियप्पम"
+   ],
+   "cat": "tiffin",
+   "region": "Tamil Nadu",
+   "diet": "veg",
+   "emoji": "🍜",
+   "unit": "g",
+   "kcal": 175,
+   "p": 3,
+   "c": 27,
+   "f": 6,
+   "fib": 1.8,
+   "na": 220,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 plate (200 g)",
+     "hi": "1 प्लेट",
+     "g": 200
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 rice/urad/besan/semolina values and cooking oil; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "idiyappam mixed with fresh coconut and tadka"
+  },
+  {
+   "slug": "puttu-rice",
+   "name": "Puttu (Rice, with Coconut)",
+   "hi": "पुट्टू",
+   "alias": [
+    "rice puttu",
+    "ari puttu",
+    "kerala puttu",
+    "puttu kerala",
+    "puttu with coconut",
+    "पुट्टु",
+    "चावल का पुट्टू"
+   ],
+   "cat": "tiffin",
+   "region": "Kerala",
+   "diet": "veg",
+   "emoji": "🍽️",
+   "unit": "g",
+   "kcal": 168,
+   "p": 3,
+   "c": 33,
+   "f": 3.5,
+   "fib": 2,
+   "na": 90,
+   "portions": [
+    {
+     "n": "1 puttu cylinder (100 g)",
+     "hi": "1 पुट्टू",
+     "g": 100
+    },
+    {
+     "n": "2 puttu (200 g)",
+     "hi": "2 पुट्टू",
+     "g": 200
+    }
+   ],
+   "src": "Recipe computed from IFCT rice flour and coconut; INDB OSR105 82 judged too low",
+   "conf": "medium",
+   "note": "steamed rice-flour and fresh coconut layers; INDB OSR105 (82) looks like a coconut-free recipe and is too low"
+  },
+  {
+   "slug": "ragi-puttu",
+   "name": "Ragi Puttu",
+   "hi": "रागी पुट्टू",
+   "alias": [
+    "ragi puttu kerala",
+    "finger millet puttu",
+    "ragi puttu with coconut",
+    "रागी का पुट्टू"
+   ],
+   "cat": "tiffin",
+   "region": "Kerala",
+   "diet": "veg",
+   "emoji": "🍽️",
+   "unit": "g",
+   "kcal": 150,
+   "p": 3.5,
+   "c": 28,
+   "f": 2.8,
+   "fib": 4,
+   "na": 90,
+   "portions": [
+    {
+     "n": "1 puttu cylinder (100 g)",
+     "hi": "1 रागी पुट्टू",
+     "g": 100
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 rice/urad/besan/semolina values and cooking oil; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "steamed ragi flour and coconut layers"
+  },
+  {
+   "slug": "puttu-kadala-curry",
+   "name": "Puttu with Kadala Curry",
+   "hi": "पुट्टू कडला करी",
+   "alias": [
+    "puttu kadala",
+    "puttum kadalayum",
+    "puttu and kadala curry",
+    "puttu black chana curry",
+    "पुट्टू और कडला"
+   ],
+   "cat": "tiffin",
+   "region": "Kerala",
+   "diet": "veg",
+   "emoji": "🍽️",
+   "unit": "g",
+   "kcal": 155,
+   "p": 5,
+   "c": 25,
+   "f": 4.6,
+   "fib": 4,
+   "na": 260,
+   "portions": [
+    {
+     "n": "1 plate (1 puttu + kadala curry, 250 g)",
+     "hi": "1 प्लेट",
+     "g": 250
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 rice/urad/besan/semolina values and cooking oil; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "classic Kerala breakfast: 100 g rice puttu + ~150 g black chana (kadala) coconut curry; per 100 g of the plate"
+  },
+  {
+   "slug": "sanna-goan",
+   "name": "Sanna (Goan Steamed Rice Cake)",
+   "hi": "सन्ना",
+   "alias": [
+    "sannas",
+    "goan sanna",
+    "sana",
+    "sanas",
+    "goan idli",
+    "सन्नास"
+   ],
+   "cat": "tiffin",
+   "region": "Goa",
+   "diet": "veg",
+   "emoji": "🍽️",
+   "unit": "g",
+   "kcal": 160,
+   "p": 2.8,
+   "c": 32,
+   "f": 2,
+   "fib": 1.2,
+   "na": 150,
+   "portions": [
+    {
+     "n": "1 sanna (60 g)",
+     "hi": "1 सन्ना",
+     "g": 60
+    },
+    {
+     "n": "2 sannas (120 g)",
+     "hi": "2 सन्ना",
+     "g": 120
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 rice/urad/besan/semolina values and cooking oil; cross-checked NIN tables and INDB",
+   "conf": "low",
+   "note": "fermented rice-coconut toddy/yeast steamed cake, lightly sweet"
+  },
+  {
+   "slug": "aloo-paratha-curd",
+   "name": "Aloo Paratha with Curd",
+   "hi": "आलू पराठा दही",
+   "alias": [
+    "aloo paratha with dahi",
+    "aloo paratha curd plate",
+    "paratha dahi",
+    "aloo paratha and curd",
+    "आलू पराठा और दही"
+   ],
+   "cat": "tiffin",
+   "region": "Punjab",
+   "diet": "veg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 160,
+   "p": 4.5,
+   "c": 21.7,
+   "f": 6.3,
+   "fib": 2.3,
+   "na": 200,
+   "portions": [
+    {
+     "n": "1 plate (1 paratha 105 g + curd 100 g, 205 g)",
+     "hi": "1 प्लेट",
+     "g": 205
+    }
+   ],
+   "core": true,
+   "src": "Standard recipe computed from IFCT 2017 rice/urad/besan/semolina values and cooking oil; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "plate: 1 aloo paratha (105 g, ~268 kcal) + 100 g curd (~62 kcal); per 100 g of the plate"
+  },
+  {
+   "slug": "gobi-paratha-curd",
+   "name": "Gobi Paratha with Curd",
+   "hi": "गोभी पराठा दही",
+   "alias": [
+    "gobi paratha with dahi",
+    "gobhi paratha curd",
+    "gobi paratha and curd",
+    "गोभी पराठा और दही"
+   ],
+   "cat": "tiffin",
+   "region": "Punjab",
+   "diet": "veg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 152,
+   "p": 5,
+   "c": 17.5,
+   "f": 6.2,
+   "fib": 2.5,
+   "na": 200,
+   "portions": [
+    {
+     "n": "1 plate (1 paratha 100 g + curd 100 g, 200 g)",
+     "hi": "1 प्लेट",
+     "g": 200
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 rice/urad/besan/semolina values and cooking oil; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "plate: 1 gobi paratha (100 g, ~245 kcal) + 100 g curd (~62 kcal); per 100 g of the plate"
+  },
+  {
+   "slug": "methi-paratha-curd",
+   "name": "Methi Paratha with Curd",
+   "hi": "मेथी पराठा दही",
+   "alias": [
+    "methi paratha with dahi",
+    "methi paratha curd plate",
+    "methi paratha and curd",
+    "मेथी पराठा और दही"
+   ],
+   "cat": "tiffin",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 185,
+   "p": 5.5,
+   "c": 22,
+   "f": 7.2,
+   "fib": 3.5,
+   "na": 200,
+   "portions": [
+    {
+     "n": "1 plate (1 paratha 60 g + curd 100 g, 160 g)",
+     "hi": "1 प्लेट",
+     "g": 160
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 rice/urad/besan/semolina values and cooking oil; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "plate: 1 methi paratha (60 g, ~177 kcal) + 100 g curd (~62 kcal); per 100 g of the plate"
+  },
+  {
+   "slug": "poori-sabzi",
+   "name": "Poori Sabzi (Poori Aloo)",
+   "hi": "पूरी सब्जी",
+   "alias": [
+    "poori bhaji",
+    "puri bhaji",
+    "puri sabzi",
+    "poori aloo",
+    "puri aloo",
+    "poori aloo sabzi",
+    "पूरी भाजी",
+    "पूरी आलू"
+   ],
+   "cat": "tiffin",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🍛",
+   "unit": "g",
+   "kcal": 205,
+   "p": 3.7,
+   "c": 26,
+   "f": 9.7,
+   "fib": 2.9,
+   "na": 380,
+   "portions": [
+    {
+     "n": "1 plate (3 puri + aloo sabzi, 225 g)",
+     "hi": "1 प्लेट",
+     "g": 225
+    },
+    {
+     "n": "1 plate (2 puri + aloo sabzi, 175 g)",
+     "hi": "1 छोटी प्लेट",
+     "g": 175
+    }
+   ],
+   "core": true,
+   "src": "Standard recipe computed from IFCT 2017 rice/urad/besan/semolina values and cooking oil; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "3 puri (75 g, ~300 kcal) + 150 g aloo sabzi (~165 kcal); per 100 g of the plate"
+  },
+  {
+   "slug": "chole-bhature",
+   "name": "Chole Bhature",
+   "hi": "छोले भटूरे",
+   "alias": [
+    "chhole bhature",
+    "chole bhatura",
+    "chana bhatura",
+    "chole bhature plate",
+    "छोले भटूरा",
+    "छोले-भटूरे"
+   ],
+   "cat": "tiffin",
+   "region": "Punjab",
+   "diet": "veg",
+   "emoji": "🍛",
+   "unit": "g",
+   "kcal": 245,
+   "p": 6.7,
+   "c": 31.6,
+   "f": 10.2,
+   "fib": 3.6,
+   "na": 480,
+   "portions": [
+    {
+     "n": "1 plate (2 bhature + chole, 340 g)",
+     "hi": "1 प्लेट",
+     "g": 340
+    },
+    {
+     "n": "1 bhatura + chole (210 g)",
+     "hi": "1 भटूरा छोले",
+     "g": 210
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 rice/urad/besan/semolina values and cooking oil; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "restaurant plate: 2 bhature (160 g, ~570 kcal) + ~180 g chole (~265 kcal); per 100 g of the plate"
+  },
+  {
+   "slug": "kachori-sabzi",
+   "name": "Kachori Sabzi",
+   "hi": "कचौड़ी सब्जी",
+   "alias": [
+    "kachori aloo sabzi",
+    "kachori with aloo sabzi",
+    "kachauri sabzi",
+    "kachori bhaji",
+    "कचौरी सब्जी",
+    "कचौड़ी आलू"
+   ],
+   "cat": "tiffin",
+   "region": "Uttar Pradesh",
+   "diet": "veg",
+   "emoji": "🍛",
+   "unit": "g",
+   "kcal": 230,
+   "p": 4.1,
+   "c": 28.1,
+   "f": 11.6,
+   "fib": 2.3,
+   "na": 400,
+   "portions": [
+    {
+     "n": "1 plate (2 kachori + aloo sabzi, 270 g)",
+     "hi": "1 प्लेट",
+     "g": 270
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 rice/urad/besan/semolina values and cooking oil; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "2 moong-dal kachori (120 g, ~455 kcal) + 150 g aloo sabzi (~165 kcal); per 100 g of the plate"
+  },
+  {
+   "slug": "bedmi-puri-aloo",
+   "name": "Bedmi Puri with Aloo Sabzi",
+   "hi": "बेड़मी पूरी आलू",
+   "alias": [
+    "bedmi poori aloo",
+    "bedmi puri",
+    "bedai aloo",
+    "bedmi aloo",
+    "bedvi puri",
+    "बेड़मी आलू",
+    "बेदमी पूरी"
+   ],
+   "cat": "tiffin",
+   "region": "Uttar Pradesh",
+   "diet": "veg",
+   "emoji": "🍛",
+   "unit": "g",
+   "kcal": 205,
+   "p": 4,
+   "c": 25,
+   "f": 9.9,
+   "fib": 2.6,
+   "na": 380,
+   "portions": [
+    {
+     "n": "1 plate (2 bedmi + aloo sabzi, 230 g)",
+     "hi": "1 प्लेट",
+     "g": 230
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 rice/urad/besan/semolina values and cooking oil; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "2 bedmi puri (urad-stuffed, 80 g, ~305 kcal) + 150 g aloo sabzi (~165 kcal); per 100 g of the plate"
+  },
+  {
+   "slug": "luchi-alur-dom",
+   "name": "Luchi with Alur Dom",
+   "hi": "लुची आलूर दम",
+   "alias": [
+    "luchi aloor dom",
+    "luchi alu dum",
+    "luchi aloo dum",
+    "luchi aloor dom bengali",
+    "लुची आलू दम"
+   ],
+   "cat": "tiffin",
+   "region": "West Bengal",
+   "diet": "veg",
+   "emoji": "🍛",
+   "unit": "g",
+   "kcal": 248,
+   "p": 4,
+   "c": 31.1,
+   "f": 11.9,
+   "fib": 2.1,
+   "na": 340,
+   "portions": [
+    {
+     "n": "1 plate (4 luchi + alur dom, 250 g)",
+     "hi": "1 प्लेट",
+     "g": 250
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 rice/urad/besan/semolina values and cooking oil; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "4 luchi (100 g, ~410 kcal) + 150 g alur dom (~210 kcal); per 100 g of the plate"
+  },
+  {
+   "slug": "luchi-cholar-dal",
+   "name": "Luchi with Cholar Dal",
+   "hi": "लुची छोलार दाल",
+   "alias": [
+    "luchi chholar dal",
+    "luchi chhola",
+    "luchi and cholar dal",
+    "luchi cholar daal",
+    "लुची छोलार डाल"
+   ],
+   "cat": "tiffin",
+   "region": "West Bengal",
+   "diet": "veg",
+   "emoji": "🍛",
+   "unit": "g",
+   "kcal": 245,
+   "p": 6.4,
+   "c": 28.4,
+   "f": 11.9,
+   "fib": 3.5,
+   "na": 300,
+   "portions": [
+    {
+     "n": "1 plate (4 luchi + dal, 250 g)",
+     "hi": "1 प्लेट",
+     "g": 250
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 rice/urad/besan/semolina values and cooking oil; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "4 luchi (100 g) + 150 g Bengali cholar dal with coconut (~150 kcal/100 g); per 100 g of the plate"
+  },
+  {
+   "slug": "vegetable-daliya",
+   "name": "Vegetable Daliya (Namkeen)",
+   "hi": "वेज दलिया (नमकीन)",
+   "alias": [
+    "namkeen daliya",
+    "dalia upma",
+    "veg dalia",
+    "vegetable dalia",
+    "broken wheat upma",
+    "salty dalia",
+    "नमकीन दलिया",
+    "सब्जी दलिया"
+   ],
+   "cat": "tiffin",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 125,
+   "p": 3.8,
+   "c": 20,
+   "f": 3,
+   "fib": 3.2,
+   "na": 250,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 bowl (200 g)",
+     "hi": "1 कटोरा",
+     "g": 200
+    }
+   ],
+   "core": true,
+   "src": "Recipe computed from IFCT wheat dalia, vegetables, oil; INDB BFP577 295 is a dry-mix value",
+   "conf": "medium",
+   "note": "cracked wheat cooked with vegetables and ~1 tsp oil per 150 g; INDB BFP577 (295) is dry, not cooked"
+  },
+  {
+   "slug": "sweet-daliya",
+   "name": "Sweet Daliya (Meetha Daliya)",
+   "hi": "मीठा दलिया",
+   "alias": [
+    "meetha daliya",
+    "dalia with milk",
+    "daliya porridge",
+    "sweet dalia",
+    "milk daliya",
+    "मीठा दलिया",
+    "दूध दलिया"
+   ],
+   "cat": "tiffin",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 115,
+   "p": 3.5,
+   "c": 19,
+   "f": 2.8,
+   "fib": 1.8,
+   "na": 30,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 bowl (200 g)",
+     "hi": "1 कटोरा",
+     "g": 200
+    }
+   ],
+   "src": "Recipe computed from IFCT wheat dalia, toned milk, jaggery; INDB ASC486 141 / ASC047 82 bracket it",
+   "conf": "medium",
+   "note": "cracked wheat cooked in toned milk with jaggery/sugar and a little ghee; INDB ASC486 141, ASC047 82 bracket it"
+  },
+  {
+   "slug": "plain-daliya-cooked",
+   "name": "Daliya (Cracked Wheat), Plain Cooked",
+   "hi": "दलिया (पका, सादा)",
+   "alias": [
+    "dalia cooked",
+    "cooked broken wheat",
+    "boiled daliya",
+    "plain dalia",
+    "cracked wheat cooked",
+    "सादा दलिया",
+    "उबला दलिया"
+   ],
+   "cat": "tiffin",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 80,
+   "p": 3.1,
+   "c": 14.2,
+   "f": 0.3,
+   "fib": 4.5,
+   "na": 5,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 bowl (200 g)",
+     "hi": "1 कटोरा",
+     "g": 200
+    }
+   ],
+   "src": "IFCT 2017 wheat bulgur/dalia (A021) at cooked yield ~2.6x; USDA cooked bulgur 83 kcal",
+   "conf": "high",
+   "note": "cracked wheat/bulgur boiled in water, no salt or fat; USDA cooked bulgur 83 kcal"
+  },
+  {
+   "slug": "oats-porridge-milk",
+   "name": "Oats Porridge with Milk",
+   "hi": "ओट्स दलिया दूध के साथ",
+   "alias": [
+    "oatmeal with milk",
+    "oats with milk",
+    "milk oats porridge",
+    "oats porridge",
+    "rolled oats milk",
+    "ओट्स दूध",
+    "ओट्स पॉरिज"
+   ],
+   "cat": "tiffin",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 95,
+   "p": 4.4,
+   "c": 12,
+   "f": 3,
+   "fib": 1.5,
+   "na": 30,
+   "portions": [
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    },
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    }
+   ],
+   "src": "Recipe computed from IFCT/USDA rolled oats and toned milk; INDB ASC050 73 is water-based",
+   "conf": "medium",
+   "note": "40 g rolled oats cooked in ~200 ml toned milk, no sugar (~240 kcal per 250 g); INDB ASC050 oatmeal porridge 73 (water-based)"
+  },
+  {
+   "slug": "oats-cooked-water",
+   "name": "Oats, Cooked in Water (Plain)",
+   "hi": "ओट्स (पानी में पके)",
+   "alias": [
+    "plain oatmeal",
+    "oatmeal cooked in water",
+    "boiled oats",
+    "oats plain cooked",
+    "porridge oats water",
+    "ओट्स दलिया",
+    "सादा ओट्स"
+   ],
+   "cat": "tiffin",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 72,
+   "p": 2.5,
+   "c": 12,
+   "f": 1.5,
+   "fib": 1.7,
+   "na": 5,
+   "portions": [
+    {
+     "n": "1 bowl (200 g)",
+     "hi": "1 कटोरा",
+     "g": 200
+    },
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    }
+   ],
+   "src": "USDA oatmeal cooked in water (71 kcal/100 g); INDB ASC050 73",
+   "conf": "high",
+   "note": "rolled oats cooked in water, no salt, sugar or milk; USDA oatmeal cooked 71 kcal"
+  },
+  {
+   "slug": "masala-oats-cooked",
+   "name": "Masala Oats (Cooked with Vegetables)",
+   "hi": "मसाला ओट्स",
+   "alias": [
+    "savoury oats",
+    "veg masala oats",
+    "salty oats porridge",
+    "oats masala",
+    "namkeen oats",
+    "नमकीन ओट्स"
+   ],
+   "cat": "tiffin",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 90,
+   "p": 3,
+   "c": 13,
+   "f": 2.2,
+   "fib": 1.8,
+   "na": 280,
+   "portions": [
+    {
+     "n": "1 bowl (200 g)",
+     "hi": "1 कटोरा",
+     "g": 200
+    },
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    }
+   ],
+   "src": "Standard recipe computed from IFCT 2017 rice/urad/besan/semolina values and cooking oil; cross-checked NIN tables and INDB",
+   "conf": "medium",
+   "note": "oats cooked in water with onion, tomato, peas, masala, ~1/2 tsp oil per 200 g"
+  },
+  {
+   "slug": "cornflakes-milk",
+   "name": "Cornflakes with Milk",
+   "hi": "कॉर्नफ्लेक्स दूध के साथ",
+   "alias": [
+    "corn flakes with milk",
+    "cornflakes milk",
+    "cereal with milk",
+    "kelloggs cornflakes milk",
+    "कॉर्न फ्लेक्स दूध"
+   ],
+   "cat": "tiffin",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 110,
+   "p": 3.4,
+   "c": 18,
+   "f": 2.6,
+   "fib": 0.4,
+   "na": 130,
+   "portions": [
+    {
+     "n": "1 bowl (180 g)",
+     "hi": "1 कटोरा",
+     "g": 180
+    }
+   ],
+   "src": "Packaged cornflakes label (~375 kcal/100 g) plus toned milk (~58 kcal/100 ml); recipe computed",
+   "conf": "medium",
+   "note": "30 g cornflakes (~113 kcal) in 150 ml toned milk (~87 kcal), no added sugar; per 100 g of the bowl"
+  },
+  {
+   "slug": "muesli-milk",
+   "name": "Muesli with Milk",
+   "hi": "म्यूसली दूध के साथ",
+   "alias": [
+    "muesli with toned milk",
+    "muesli bowl",
+    "breakfast muesli milk",
+    "fruit muesli milk",
+    "म्यूजली दूध"
+   ],
+   "cat": "tiffin",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 125,
+   "p": 4,
+   "c": 19.5,
+   "f": 3.5,
+   "fib": 1.5,
+   "na": 70,
+   "portions": [
+    {
+     "n": "1 bowl (190 g)",
+     "hi": "1 कटोरा",
+     "g": 190
+    }
+   ],
+   "src": "Packaged muesli label (~370 kcal/100 g, fruit & nut) plus toned milk; recipe computed",
+   "conf": "low",
+   "note": "40 g muesli (~150 kcal) in 150 ml toned milk (~87 kcal); per 100 g of the bowl"
+  },
+  {
+   "slug": "ragi-malt",
+   "name": "Ragi Malt (Ragi Porridge with Milk)",
+   "hi": "रागी माल्ट",
+   "alias": [
+    "ragi porridge",
+    "ragi java",
+    "ragi kanji sweet",
+    "nachni satva",
+    "ragi ambil",
+    "ragi malt drink",
+    "रागी जावा",
+    "रागी दलिया"
+   ],
+   "cat": "tiffin",
+   "region": "Karnataka",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "ml",
+   "kcal": 68,
+   "p": 1.8,
+   "c": 12,
+   "f": 1.2,
+   "fib": 1.2,
+   "na": 25,
+   "portions": [
+    {
+     "n": "1 glass (200 ml)",
+     "hi": "1 गिलास",
+     "g": 200
+    },
+    {
+     "n": "1 cup (150 ml)",
+     "hi": "1 कप",
+     "g": 150
+    }
+   ],
+   "src": "Recipe computed from IFCT ragi (A010), toned milk, jaggery",
+   "conf": "medium",
+   "note": "ragi flour (~15 g) cooked in water/milk with jaggery; thin drinkable porridge"
+  },
+  {
+   "slug": "suji-porridge-milk",
+   "name": "Suji (Rava) Porridge with Milk",
+   "hi": "सूजी का दलिया (दूध)",
+   "alias": [
+    "rava porridge",
+    "semolina porridge",
+    "suji porridge",
+    "sooji kheer porridge",
+    "suji daliya milk",
+    "रवा पॉरिज"
+   ],
+   "cat": "tiffin",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 105,
+   "p": 3.2,
+   "c": 17,
+   "f": 2.8,
+   "fib": 0.5,
+   "na": 35,
+   "portions": [
+    {
+     "n": "1 bowl (200 g)",
+     "hi": "1 कटोरा",
+     "g": 200
+    },
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    }
+   ],
+   "src": "Recipe computed from IFCT semolina, toned milk, sugar; cross-checked INDB ASC048 (101)",
+   "conf": "medium",
+   "note": "roasted semolina cooked in toned milk with a little sugar; INDB ASC048 101"
+  },
+  {
+   "slug": "moong-sprouts-steamed",
+   "name": "Moong Sprouts (Steamed / Boiled)",
+   "hi": "अंकुरित मूंग (उबले)",
+   "alias": [
+    "sprouted moong",
+    "boiled sprouts",
+    "steamed sprouts",
+    "ankurit moong",
+    "moong sprouts",
+    "sprouts",
+    "अंकुरित मूंग",
+    "स्प्राउट्स"
+   ],
+   "cat": "tiffin",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🫛",
+   "unit": "g",
+   "kcal": 85,
+   "p": 7.2,
+   "c": 11.5,
+   "f": 0.6,
+   "fib": 3.3,
+   "na": 15,
+   "portions": [
+    {
+     "n": "1 katori (100 g)",
+     "hi": "1 कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (150 g)",
+     "hi": "1 कटोरा",
+     "g": 150
+    }
+   ],
+   "src": "IFCT 2017 sprouted green gram (raw ~62-90 kcal) at boiled water content; recipe estimate",
+   "conf": "medium",
+   "note": "sprouted whole green moong, steamed or boiled, no oil; lemon and chaat masala extra"
+  }
+ ]
+}

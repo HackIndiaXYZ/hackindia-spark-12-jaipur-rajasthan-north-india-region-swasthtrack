@@ -34,14 +34,17 @@ import {
   sleepStats,
   weightStats,
 } from "./ledger";
-import { containsAnyPhrase, detectIntents, detectMetrics, suggestCorrections, type Intent } from "./normalize";
-import { assessSafety } from "./safety";
+import { frequencyLabel, mealRelationLabel } from "@/lib/medicine-format";
+import { containsAnyPhrase, detectIntents, detectMetrics, hasHealthAnchor, hasPhrase, fold, suggestCorrections, type Intent } from "./normalize";
+import { assessSafety, readingsInMessage } from "./safety";
+import { contentTokens, detectAdviceQuestion, detectMemoryLookup, detectOffTopic, detectScheduleQuestion, detectSmallTalk, detectSymptomMention, detectTakeWhen, detectUntracked, matchMedicines, type UntrackedTopic } from "./scope";
 import { formatDateEn, formatDateHi, resolveTemporal, startOfISOWeek, type Span } from "./temporal";
 import type {
   AnswerDraft,
   AnswerNumber,
   KeyPoint,
   Ledger,
+  MedicineInfo,
   Metric,
   PatientContext,
   Recommendation,
@@ -75,7 +78,7 @@ export interface FallbackResult {
   spans: Array<{ from: string; to: string }>;
 }
 
-type Mode = "latest" | "value" | "average" | "trend" | "compare" | "goal" | "adherence" | "missing" | "summary" | "advice";
+type Mode = "latest" | "value" | "average" | "trend" | "compare" | "goal" | "adherence" | "missing" | "summary" | "advice" | "extreme";
 
 const METRIC_NAME: Record<Metric, Bi> = {
   bp: { hi: "BP", en: "BP" },
@@ -339,13 +342,17 @@ function stepsSection(ctx: PatientContext, ledger: Ledger, s: { from: string; to
   };
 }
 
-function medicineSection(ctx: PatientContext, ledger: Ledger, s: { from: string; to: string } | null): Section {
+function medicineSection(ctx: PatientContext, ledger: Ledger, s: { from: string; to: string } | null, only: MedicineInfo[] = []): Section {
   const span = s ?? { from: addDaysIST(ctx.today, -6), to: ctx.today };
   const lbl = spanLabel(span);
-  const st = adherenceStats(ctx.doses, span.from, span.to);
-  const rows = inRange(ctx.doses, span.from, span.to);
+  // When the question names a medicine ("amlodipine li kya?"), answer for THAT medicine only.
+  const ids = new Set(only.map((m) => m.id));
+  const doses = ids.size ? ctx.doses.filter((x) => ids.has(x.medicineId)) : ctx.doses;
+  const who = ids.size ? only.map((m) => `${m.name} ${m.dose}`).join(", ") : "";
+  const st = adherenceStats(doses, span.from, span.to);
+  const rows = inRange(doses, span.from, span.to);
   if (rows.length === 0) {
-    return { hi: ctx.medicines.length === 0 ? "इस मरीज़ की कोई दवा ऐप में दर्ज नहीं है।" : `${lbl.hi} के लिए दवा की कोई खुराक देय नहीं थी।`, en: ctx.medicines.length === 0 ? "No medicines are recorded for this patient." : `No doses were due in ${lbl.en}.`, kp: [], nums: [], metrics: ["medicine"], n: 0 };
+    return { hi: ctx.medicines.length === 0 ? "इस मरीज़ की कोई दवा ऐप में दर्ज नहीं है।" : `${who ? `${who}: ` : ""}${lbl.hi} के लिए दवा की कोई खुराक देय नहीं थी।`, en: ctx.medicines.length === 0 ? "No medicines are recorded for this patient." : `${who ? `${who}: ` : ""}No doses were due in ${lbl.en}.`, kp: [], nums: [], metrics: ["medicine"], n: 0 };
   }
   const statusHi = { taken: "समय पर ली", late: "देर से ली", missed: "छूट गई", pending: "बाकी है" } as const;
   const statusEn = { taken: "taken", late: "taken late", missed: "missed", pending: "still pending" } as const;
@@ -360,13 +367,15 @@ function medicineSection(ctx: PatientContext, ledger: Ledger, s: { from: string;
     };
   }
   const wk = windowKey(ctx, span);
-  const refs = wk ? factRefs(ledger, [`meds.${wk}.adherence_pct`, `meds.${wk}.due`]) : rows.slice(-3).map((r) => r.ref);
+  // The ledger's adherence facts cover ALL medicines, so they back the numbers only when the question did not name one.
+  const factIds = wk && !ids.size ? factRefs(ledger, [`meds.${wk}.adherence_pct`, `meds.${wk}.due`]) : [];
+  const refs = factIds.length ? factIds : rows.slice(-3).map((r) => r.ref);
   const worst = st.perMedicine.filter((m) => m.due > 0).sort((a, b) => (a.pct ?? 100) - (b.pct ?? 100))[0];
   const partNames = { morning: ["सुबह", "morning"], afternoon: ["दोपहर", "afternoon"], evening: ["शाम", "evening"], night: ["रात", "night"] } as const;
   const parts = (Object.keys(st.perPart) as Array<keyof typeof st.perPart>).filter((k) => st.perPart[k].due > 0);
   return {
-    hi: st.due === 0 ? `${lbl.hi} में कोई खुराक अभी तक देय नहीं हुई।` : `${lbl.hi} में ${st.due} खुराकें देय थीं: ${st.taken} समय पर, ${st.late} देर से (${MEDICINE_LATE_AFTER_MIN} मिनट से ज़्यादा), ${st.missed} छूटीं। दवा पालन ${st.pct}%।` + (worst && worst.pct !== null && worst.pct < 100 ? ` सबसे कम पालन: ${worst.name} (${worst.pct}%)।` : "") + (parts.length ? ` समय के हिसाब से: ${parts.map((k) => `${partNames[k][0]} ${st.perPart[k].pct}%`).join(", ")}।` : "") + (st.missedDates.length ? ` छूटी हुई तारीख़ें: ${st.missedDates.slice(-6).map(formatDateHi).join(", ")}।` : ""),
-    en: st.due === 0 ? `No doses were due yet in ${lbl.en}.` : `${st.due} doses were due in ${lbl.en}: ${st.taken} on time, ${st.late} late (over ${MEDICINE_LATE_AFTER_MIN} min), ${st.missed} missed. Adherence ${st.pct}%.` + (worst && worst.pct !== null && worst.pct < 100 ? ` Lowest: ${worst.name} (${worst.pct}%).` : "") + (parts.length ? ` By time of day: ${parts.map((k) => `${partNames[k][1]} ${st.perPart[k].pct}%`).join(", ")}.` : "") + (st.missedDates.length ? ` Days with a missed dose: ${st.missedDates.slice(-6).map(formatDateEn).join(", ")}.` : ""),
+    hi: st.due === 0 ? `${lbl.hi} में कोई खुराक अभी तक देय नहीं हुई।` : `${who ? `${who}, ` : ""}${lbl.hi} में ${st.due} खुराकें देय थीं: ${st.taken} समय पर, ${st.late} देर से (${MEDICINE_LATE_AFTER_MIN} मिनट से ज़्यादा), ${st.missed} छूटीं। दवा पालन ${st.pct}%।` + (worst && worst.pct !== null && worst.pct < 100 ? ` सबसे कम पालन: ${worst.name} (${worst.pct}%)।` : "") + (parts.length ? ` समय के हिसाब से: ${parts.map((k) => `${partNames[k][0]} ${st.perPart[k].pct}%`).join(", ")}।` : "") + (st.missedDates.length ? ` छूटी हुई तारीख़ें: ${st.missedDates.slice(-6).map(formatDateHi).join(", ")}।` : ""),
+    en: st.due === 0 ? `No doses were due yet in ${lbl.en}.` : `${who ? `${who}: ` : ""}${st.due} doses were due in ${lbl.en}: ${st.taken} on time, ${st.late} late (over ${MEDICINE_LATE_AFTER_MIN} min), ${st.missed} missed. Adherence ${st.pct}%.` + (worst && worst.pct !== null && worst.pct < 100 ? ` Lowest: ${worst.name} (${worst.pct}%).` : "") + (parts.length ? ` By time of day: ${parts.map((k) => `${partNames[k][1]} ${st.perPart[k].pct}%`).join(", ")}.` : "") + (st.missedDates.length ? ` Days with a missed dose: ${st.missedDates.slice(-6).map(formatDateEn).join(", ")}.` : ""),
     kp: [{ text: `दवा पालन ${st.pct}% (${st.due} देय)`, fact_refs: refs }],
     nums: st.due > 0 ? [{ label: "दवा पालन", value: st.pct ?? 0, unit: "%", ref: refs[0] }, { label: "छूटी खुराकें", value: st.missed, unit: "doses", ref: refs[0] }] : [],
     metrics: ["medicine"],
@@ -522,6 +531,210 @@ function summarySection(ctx: PatientContext, ledger: Ledger, span: Period): Sect
 }
 
 // ---------------------------------------------------------------------------
+// Scope-aware sections: small talk, untracked topics, typed readings, schedule, extremes
+// ---------------------------------------------------------------------------
+
+const TRACKED: Bi = { hi: "BP/नब्ज़, वज़न, खाना, नींद, कदम और दवाएँ", en: "BP/pulse, weight, food, sleep, steps and medicines" };
+
+const plain = (hi: string, en: string, metrics: Metric[] = []): Section => ({ hi, en, kp: [], nums: [], metrics, n: 0 });
+
+function smallTalkSection(kind: "greeting" | "thanks"): Section {
+  return kind === "greeting"
+    ? plain(
+        `नमस्ते! मैं SOIE हूँ। मैं मरीज़ के दर्ज ${TRACKED.hi} के बारे में बता सकता हूँ। जैसे: "आज पापा कैसे रहे?", "पिछले 7 दिन का average BP", "कल खाने में क्या था?"`,
+        `Hello! I am SOIE. I can tell you about the patient's logged ${TRACKED.en}. For example: "How was Papa today?", "Average BP over the last 7 days", "What did he eat yesterday?"`,
+      )
+    : plain("आपका स्वागत है। कुछ और पूछना हो तो बताइए।", "You are welcome. Ask me anything else about the logged data.");
+}
+
+const joinBi = (xs: Bi[]): Bi => ({ hi: xs.map((x) => x.hi).join(", "), en: xs.map((x) => x.en).join(", ") });
+
+/** The question is about something the app never records: say so, show nothing unrelated, never estimate. */
+function untrackedSection(topics: UntrackedTopic[]): Section {
+  const names = joinBi(topics);
+  return plain(
+    `${names.hi} इस ऐप में दर्ज नहीं होता, इसलिए मैं इसका कोई आँकड़ा नहीं बता सकता और अंदाज़ा भी नहीं लगाऊँगा। ऐप में ये दर्ज होता है: ${TRACKED.hi}। ${names.hi} के लिए अपनी जाँच रिपोर्ट देखें या डॉक्टर से पूछें।`,
+    `${names.en} is not recorded in this app, so I cannot give a value and I will not guess one. The app records ${TRACKED.en}. For ${names.en}, check the lab report or ask the doctor.`,
+  );
+}
+
+const untrackedNote = (topics: UntrackedTopic[]): Bi => {
+  const names = joinBi(topics);
+  return { hi: `(${names.hi} ऐप में दर्ज नहीं होता, इसलिए उसका जवाब नहीं दे रहा।)`, en: `(${names.en} is not recorded in this app, so I am not answering that part.)` };
+};
+
+/** The user typed a reading ("mera BP 150/95 hai"): classify THAT reading, never substitute a logged one. */
+function typedReadingSection(ctx: PatientContext, readings: Array<{ systolic: number; diastolic: number }>): { sec: Section; needsDoctor: boolean } {
+  const th = ctx.goals.bp;
+  const items = readings.slice(0, 2).map((r) => ({ r, c: classifyBP(r.systolic, r.diastolic, th) }));
+  const hi: string[] = [];
+  const en: string[] = [];
+  for (const { r, c } of items) {
+    hi.push(`आपने BP ${r.systolic}/${r.diastolic} बताया। लक्ष्य (${th.target_systolic}/${th.target_diastolic} से कम) और अलर्ट सीमा के हिसाब से यह "${c.labelHi}" श्रेणी में आता है।`);
+    en.push(`You mentioned a BP of ${r.systolic}/${r.diastolic}. Against the target (below ${th.target_systolic}/${th.target_diastolic}) and the alert limits, that is in the "${c.labelEn}" category.`);
+  }
+  const attention = items.some(({ c }) => c.aboveTarget || c.exceedsAlert || c.needsUrgentAttention || c.category === "low");
+  hi.push("यह रीडिंग ऐप में दर्ज नहीं हुई है; दर्ज करने के लिए BP पेज पर जाएँ। एक रीडिंग से नतीजा न निकालें: 5 मिनट आराम से बैठकर दोबारा नापें।" + (attention ? " चक्कर, सीने में दर्द, साँस फूलना, बोलने में दिक्कत या कमज़ोरी हो तो तुरंत 112/108 पर कॉल करें। रीडिंग बार-बार ऊँची आए तो डॉक्टर को दिखाएँ; दवा अपने आप न बदलें।" : ""));
+  en.push("This reading is not saved in the app; log it on the BP page. Do not judge by a single reading: sit quietly for 5 minutes and measure again." + (attention ? " If there is dizziness, chest pain, breathlessness, trouble speaking or weakness, call 112/108 at once. If readings stay high, show the doctor; do not change any medicine on your own." : ""));
+  const last = ctx.bp[ctx.bp.length - 1];
+  const kp: KeyPoint[] = [];
+  if (last) {
+    hi.push(`तुलना के लिए: ऐप में दर्ज आख़िरी रीडिंग ${last.systolic}/${last.diastolic} (${formatDateHi(last.date)}, ${last.time}) है।`);
+    en.push(`For comparison, the latest reading logged in the app is ${last.systolic}/${last.diastolic} (${formatDateEn(last.date)}, ${last.time}).`);
+    kp.push({ text: `आख़िरी दर्ज BP ${last.systolic}/${last.diastolic}`, fact_refs: [last.ref] });
+  }
+  return { sec: { hi: hi.join("\n"), en: en.join("\n"), kp, nums: [], metrics: ["bp"], n: 1 }, needsDoctor: attention };
+}
+
+const DOSE_STATUS_HI = { taken: "आज समय पर ली", late: "आज देर से ली", missed: "आज छूट गई", pending: "आज अभी बाकी" } as const;
+const DOSE_STATUS_EN = { taken: "taken on time today", late: "taken late today", missed: "missed today", pending: "still due today" } as const;
+
+/** "kaun si dawai", "amlodipine kab leni hai": the plan (what, how much, when), not the adherence record. */
+function scheduleSection(ctx: PatientContext, named: MedicineInfo[]): Section {
+  if (ctx.medicines.length === 0) return plain("इस मरीज़ की कोई दवा ऐप में दर्ज नहीं है।", "No medicines are recorded for this patient.", ["medicine"]);
+  const list = (named.length ? named : ctx.medicines.filter((m) => m.active)).slice().sort((a, b) => a.scheduled.localeCompare(b.scheduled));
+  if (list.length === 0) return plain("अभी कोई सक्रिय दवा दर्ज नहीं है।", "There are no active medicines recorded.", ["medicine"]);
+  const todays = ctx.doses.filter((x) => x.date === ctx.today);
+  const hi: string[] = [];
+  const en: string[] = [];
+  const kp: KeyPoint[] = [];
+  for (const m of list) {
+    const meal = mealRelationLabel(m.mealRelation);
+    const freq = frequencyLabel(m.frequency);
+    const dose = todays.find((x) => x.medicineId === m.id && x.scheduled === m.scheduled) ?? todays.find((x) => x.medicineId === m.id);
+    const off = m.active ? "" : " [बंद]";
+    const offEn = m.active ? "" : " [inactive]";
+    hi.push(`${m.name} ${m.dose} — ${m.scheduled} बजे${meal ? ` (${meal})` : ""}${freq ? `, ${freq}` : ""}${dose ? `; ${DOSE_STATUS_HI[dose.status]}` : ""}${off}`);
+    en.push(`${m.name} ${m.dose}: ${m.scheduled}${m.mealRelation ? ` (${m.mealRelation.replace(/_/g, " ")})` : ""}${m.frequency ? `, ${m.frequency}` : ""}${dose ? `; ${DOSE_STATUS_EN[dose.status]}` : ""}${offEn}`);
+    kp.push({ text: `${m.name} ${m.dose} ${m.scheduled}`, fact_refs: dose ? [dose.ref] : [] });
+  }
+  const head = named.length ? { hi: "दर्ज दवा का समय:", en: "Recorded schedule:" } : { hi: `ऐप में ${list.length} सक्रिय दवाएँ दर्ज हैं:`, en: `${list.length} active medicines are recorded:` };
+  return { hi: `${head.hi}\n${hi.join("\n")}`, en: `${head.en}\n${en.join("\n")}`, kp, nums: [], metrics: ["medicine"], n: list.length };
+}
+
+/** Highest / lowest entry and WHEN it was ("sabse zyada BP kab tha"). */
+function extremeSection(ctx: PatientContext, m: Metric, span: Period, want: { high: boolean; low: boolean }, byPulse = false): Section {
+  const lbl = spanLabel(span);
+  const both = want.high === want.low;
+  const wantHigh = both || want.high;
+  const wantLow = both || want.low;
+  const none = noData(m, span, ctx);
+  type Row = { ref: string; date: string; time?: string; v: number };
+  const pick = (rows: Row[]): { hi: Row; lo: Row } | null => {
+    if (rows.length === 0) return null;
+    let hi = rows[0];
+    let lo = rows[0];
+    for (const r of rows) {
+      if (r.v >= hi.v) hi = r;
+      if (r.v <= lo.v) lo = r;
+    }
+    return { hi, lo };
+  };
+  const when = (r: Row, lang: "hi" | "en") => `${lang === "hi" ? formatDateHi(r.date) : formatDateEn(r.date)}${r.time ? `, ${r.time}` : ""}`;
+  const build = (rows: Row[], fmt: (r: Row) => string, nameHi: string, nameEn: string, unit: Bi, hiWord: Bi, loWord: Bi, nm: string): Section => {
+    const e = pick(rows);
+    if (!e) return none;
+    const hiParts: string[] = [];
+    const enParts: string[] = [];
+    const kp: KeyPoint[] = [];
+    const nums: AnswerNumber[] = [];
+    if (wantHigh) {
+      hiParts.push(`सबसे ${hiWord.hi} ${nameHi} ${fmt(e.hi)} ${unit.hi} (${when(e.hi, "hi")})`);
+      enParts.push(`${hiWord.en} ${nameEn}: ${fmt(e.hi)} ${unit.en} (${when(e.hi, "en")})`);
+      kp.push({ text: `सबसे ${hiWord.hi} ${nameHi} ${fmt(e.hi)} (${e.hi.date})`, fact_refs: [e.hi.ref] });
+      nums.push({ label: `सबसे ${hiWord.hi} ${nameHi}`, value: e.hi.v, unit: nm, ref: e.hi.ref });
+    }
+    if (wantLow) {
+      hiParts.push(`सबसे ${loWord.hi} ${nameHi} ${fmt(e.lo)} ${unit.hi} (${when(e.lo, "hi")})`);
+      enParts.push(`${loWord.en} ${nameEn}: ${fmt(e.lo)} ${unit.en} (${when(e.lo, "en")})`);
+      kp.push({ text: `सबसे ${loWord.hi} ${nameHi} ${fmt(e.lo)} (${e.lo.date})`, fact_refs: [e.lo.ref] });
+      nums.push({ label: `सबसे ${loWord.hi} ${nameHi}`, value: e.lo.v, unit: nm, ref: e.lo.ref });
+    }
+    return { hi: `${lbl.hi} में ${rows.length} एंट्री में से: ${hiParts.join("; ")}।`, en: `Of ${rows.length} entries in ${lbl.en}: ${enParts.join("; ")}.`, kp, nums, metrics: [m], n: rows.length };
+  };
+  switch (m) {
+    case "bp": {
+      if (byPulse) {
+        const withPulse = inRange(ctx.bp, span.from, span.to).filter((r) => r.pulse !== null);
+        return build(withPulse.map((r) => ({ ref: r.ref, date: r.date, time: r.time, v: r.pulse as number })), (r) => String(r.v), "नब्ज़", "pulse", { hi: "प्रति मिनट", en: "bpm" }, { hi: "तेज़", en: "Fastest" }, { hi: "धीमी", en: "Slowest" }, "bpm");
+      }
+      const bp = inRange(ctx.bp, span.from, span.to);
+      const rows: Row[] = bp.map((r) => ({ ref: r.ref, date: r.date, time: r.time, v: r.systolic }));
+      const byRef = new Map(bp.map((r) => [r.ref, r]));
+      const sec = build(rows, (r) => `${r.v}/${byRef.get(r.ref)!.diastolic}`, "BP", "BP", { hi: "mmHg", en: "mmHg" }, { hi: "ऊँची", en: "Highest" }, { hi: "कम", en: "Lowest" }, "mmHg");
+      return { ...sec, hi: `${sec.hi} (ऊँची/कम सिस्टोलिक BP के हिसाब से)`, en: `${sec.en} (ranked by systolic)` };
+    }
+    case "weight":
+      return build(inRange(ctx.weight, span.from, span.to).map((r) => ({ ref: r.ref, date: r.date, time: r.time, v: r.kg })), (r) => String(r.v), "वज़न", "weight", { hi: "किग्रा", en: "kg" }, { hi: "ज़्यादा", en: "Highest" }, { hi: "कम", en: "Lowest" }, "kg");
+    case "steps":
+      return build(inRange(ctx.activity, span.from, span.to).map((r) => ({ ref: r.ref, date: r.date, v: r.steps })), (r) => String(r.v), "कदम", "steps", { hi: "कदम", en: "steps" }, { hi: "ज़्यादा", en: "Highest" }, { hi: "कम", en: "Lowest" }, "steps");
+    case "sleep":
+      return build(inRange(ctx.sleep, span.from, span.to).map((r) => ({ ref: r.ref, date: r.date, v: r.hours })), (r) => String(r.v), "नींद", "sleep", { hi: "घंटे", en: "hours" }, { hi: "ज़्यादा", en: "Longest" }, { hi: "कम", en: "Shortest" }, "hours");
+    case "food": {
+      const byDay = new Map<string, { cal: number; ref: string }>();
+      for (const r of inRange(ctx.food, span.from, span.to)) {
+        const cur = byDay.get(r.date);
+        byDay.set(r.date, { cal: (cur?.cal ?? 0) + r.calories, ref: cur?.ref ?? r.ref });
+      }
+      return build(Array.from(byDay, ([date, v]) => ({ ref: v.ref, date, v: Math.round(v.cal) })), (r) => String(r.v), "कैलोरी (पूरा दिन)", "calories (whole day)", { hi: "kcal", en: "kcal" }, { hi: "ज़्यादा", en: "Highest" }, { hi: "कम", en: "Lowest" }, "kcal");
+    }
+    default:
+      return none;
+  }
+}
+
+/** Notes the family asked SOIE to remember (allergies, preferences). Only these can answer "doodh se allergy hai kya". */
+function memorySection(ctx: PatientContext, text: string): Section {
+  const toks = contentTokens(text);
+  const hits = ctx.memories.filter((m) => {
+    const f = fold(m.content);
+    return toks.length === 0 || toks.some((t) => hasPhrase(f, t));
+  });
+  if (hits.length === 0) {
+    return plain(
+      ctx.memories.length ? "आपके सेव किए नोट्स में इस बारे में कुछ नहीं मिला। जो बात आप जानते हैं, उसे \"याद रखो ...\" लिखकर सेव कर सकते हैं। एलर्जी की पक्की जानकारी के लिए डॉक्टर से पूछें।" : "अभी कोई नोट सेव नहीं है, इसलिए इस बारे में मेरे पास कोई जानकारी नहीं है। जो बात आप जानते हैं, उसे \"याद रखो ...\" लिखकर सेव कर सकते हैं। एलर्जी की पक्की जानकारी के लिए डॉक्टर से पूछें।",
+      ctx.memories.length ? 'Nothing in the notes you saved covers this. You can save what you know by writing "remember ...". For a reliable answer on allergies, ask the doctor.' : 'No notes are saved yet, so I have no information on this. You can save what you know by writing "remember ...". For a reliable answer on allergies, ask the doctor.',
+    );
+  }
+  return plain(`आपके सेव किए नोट्स में दर्ज है: ${hits.slice(0, 5).map((m) => `"${m.content}"`).join("; ")}।`, `Your saved notes say: ${hits.slice(0, 5).map((m) => `"${m.content}"`).join("; ")}.`);
+}
+
+const SYMPTOM_CAUTION: Bi = {
+  hi: "लक्षणों (दर्द, चक्कर, कमज़ोरी जैसी बातों) का आकलन यह ऐप नहीं कर सकता। लक्षण नए, अचानक या तेज़ हों तो तुरंत डॉक्टर से मिलें या 112/108 पर कॉल करें। डॉक्टर को दिखाने के लिए नीचे BP का हाल है।",
+  en: "This app cannot assess symptoms such as pain, dizziness or weakness. If they are new, sudden or severe, see a doctor at once or call 112/108. The BP picture below is something to show the doctor.",
+};
+
+const SYMPTOM_SHORT: Bi = {
+  hi: "(लक्षण नए, अचानक या तेज़ हों तो तुरंत डॉक्टर से मिलें या 112/108 पर कॉल करें; यह ऐप लक्षणों का आकलन नहीं कर सकता।)",
+  en: "(If symptoms are new, sudden or severe, see a doctor at once or call 112/108; this app cannot assess symptoms.)",
+};
+
+const MODE_LABEL: Record<string, Bi> = {
+  latest: { hi: "आख़िरी दर्ज एंट्री", en: "latest entry" },
+  value: { hi: "दर्ज आँकड़े", en: "logged values" },
+  average: { hi: "औसत / सारांश", en: "average / summary" },
+  trend: { hi: "रुझान", en: "trend" },
+  compare: { hi: "तुलना", en: "comparison" },
+  goal: { hi: "लक्ष्य से तुलना", en: "versus target" },
+  adherence: { hi: "दवा पालन", en: "adherence" },
+  missing: { hi: "क्या दर्ज नहीं हुआ", en: "what is not logged" },
+  summary: { hi: "सारांश", en: "summary" },
+  schedule: { hi: "दवा का समय", en: "medicine schedule" },
+  extreme: { hi: "सबसे ज़्यादा / कम", en: "highest / lowest" },
+};
+
+/** Says out loud how the question was understood, so a misreading is visible instead of silent. */
+function understood(mode: string, metrics: Metric[], span: Period | null, defaulted = false): Bi {
+  const names = metrics.filter((x) => x !== "pulse").map((x) => METRIC_NAME[x]);
+  const base = span ? spanLabel(span) : null;
+  const lbl = base && defaulted ? { hi: `${base.hi} (अवधि नहीं बताई, इसलिए पूरा पढ़ा गया इतिहास)`, en: `${base.en} (no period given, so the whole history I read)` } : base;
+  const label = MODE_LABEL[mode];
+  const hi = [names.length ? names.map((n) => n.hi).join(" + ") : null, lbl?.hi ?? null, label?.hi ?? null].filter(Boolean).join(" · ");
+  const en = [names.length ? names.map((n) => n.en).join(" + ") : null, lbl?.en ?? null, label?.en ?? null].filter(Boolean).join(" · ");
+  return { hi: `(मैंने सवाल ऐसे समझा: ${hi}। यह आपका सवाल नहीं था तो थोड़ा अलग तरह से पूछिए।)`, en: `(I read the question as: ${en}. If that is not what you asked, please rephrase.)` };
+}
+
+// ---------------------------------------------------------------------------
 // Rule-based recommendations (deterministic, from ledger flags)
 // ---------------------------------------------------------------------------
 
@@ -553,6 +766,7 @@ function pickMode(intents: Intent[], metrics: Metric[], spans: Span[]): Mode {
   if (intents.includes("advice") && !intents.includes("compare")) return "advice";
   if (intents.includes("missing")) return "missing";
   if (intents.includes("compare")) return "compare";
+  if (intents.includes("extreme")) return "extreme";
   if (intents.includes("goal_gap")) return "goal";
   if (intents.includes("trend")) return "trend";
   if (intents.includes("average")) return "average";
@@ -588,9 +802,11 @@ function finish(
     metrics: Metric[];
     spans: Period[];
     headline?: string;
+    /** Small talk / out-of-scope answers: no data-driven suggestions (they would read as an answer to something else). */
+    noRules?: boolean;
   },
 ): FallbackResult {
-  const recs = [...(opts.extraRecs ?? []), ...ruleRecommendations(ctx, ledger)].slice(0, 6);
+  const recs = [...(opts.extraRecs ?? []), ...(opts.noRules ? [] : ruleRecommendations(ctx, ledger))].slice(0, 6);
   const urgent = ledger.flags.some((f) => f.severity === "urgent");
   const attention = urgent || ledger.flags.some((f) => f.severity === "attention");
   const notesHi = (opts.notes ?? []).map((n) => n.hi).join(" ");
@@ -633,8 +849,15 @@ export function answerWithRules(input: FallbackInput): FallbackResult {
   const { ctx, ledger } = input;
   const safety = input.safety ?? assessSafety(input.message, { latestBP: ctx.bp[ctx.bp.length - 1] ?? null, thresholds: ctx.goals.bp, now: new Date(ctx.generatedAt) });
   const text = safety.sanitized;
-  const metrics = detectMetrics(text);
+  // A medicine named in the question ("amlodipine li kya?") makes it a medicine question even without the word "dawai".
+  const namedMeds = matchMedicines(text, ctx.medicines);
+  const rawMetrics = detectMetrics(text);
+  const metrics: Metric[] = namedMeds.length && !rawMetrics.includes("medicine") ? [...rawMetrics, "medicine"] : rawMetrics;
   const intents = detectIntents(text);
+  // Word order must not decide whether this is advice ("BP kam kaise karein" vs "kaise karein BP kam").
+  const adviceAsked = detectAdviceQuestion(text);
+  if (adviceAsked && !intents.includes("advice")) intents.push("advice");
+  const untracked = detectUntracked(text);
   const tr = resolveTemporal(text, ctx.today);
   const spans = tr.spans;
   const spanNotes: Bi[] = spans
@@ -650,6 +873,12 @@ export function answerWithRules(input: FallbackInput): FallbackResult {
   }
   const allMetrics: Metric[] = ["bp", "weight", "food", "sleep", "steps", "medicine"];
 
+  // 0. Small talk.
+  const talk = detectSmallTalk(text);
+  if (talk) {
+    return finish(ctx, ledger, smallTalkSection(talk), { intent: talk, span: null, metrics: [], spans: [], noRules: true, headline: talk === "greeting" ? "नमस्ते! पूछिए" : "आपका स्वागत है", followUps: ["आज पापा कैसे रहे?", "पिछले 7 दिन का average BP क्या रहा?", "इस हफ़्ते दवा पालन कैसा रहा?"] });
+  }
+
   // 1. Requests the app must not act on: explain and refer to the doctor.
   if (safety.medicineChangeRequest || safety.diagnosisRequest) {
     const span = { from: addDaysIST(ctx.today, -29), to: ctx.today };
@@ -658,15 +887,39 @@ export function answerWithRules(input: FallbackInput): FallbackResult {
     const what = safety.medicineChangeRequest
       ? { hi: "दवा शुरू करना, बंद करना या खुराक बदलना सिर्फ़ डॉक्टर तय कर सकते हैं; ऐप यह नहीं बता सकता।", en: "Starting, stopping or changing a medicine or dose is a decision only the doctor can make; this app cannot advise on it." }
       : { hi: "ऐप कोई बीमारी तय (डायग्नोज़) नहीं कर सकता; इसके लिए डॉक्टर से जाँच ज़रूरी है।", en: "This app cannot diagnose a condition; that needs a doctor's examination." };
-    const sec = mergeSections([{ ...what, kp: [], nums: [], metrics: [], n: 0 }, ...(safety.medicineChangeRequest ? [med] : []), bp]);
+    const recorded: Section = safety.diagnosisRequest
+      ? plain(
+          ctx.conditions.length ? `ऐप में दर्ज स्थितियाँ: ${ctx.conditions.map((c) => `${c.name}${c.year ? ` (${c.year} से)` : ""}`).join(", ")}।` : "ऐप में कोई बीमारी/स्थिति दर्ज नहीं है।",
+          ctx.conditions.length ? `Conditions recorded in the app: ${ctx.conditions.map((c) => `${c.name}${c.year ? ` (since ${c.year})` : ""}`).join(", ")}.` : "No condition is recorded in the app.",
+        )
+      : plain("", "");
+    // BP numbers belong to a BP / stroke / heart question; for "diabetes hai kya" they would be an answer to something else.
+    const bpRelevant = safety.medicineChangeRequest || metrics.includes("bp") || containsAnyPhrase(text, ["hypertension", "stroke", "heart", "हाइपरटेंशन", "स्ट्रोक", "हार्ट", "दिल"]);
+    const sec = mergeSections([{ ...what, kp: [], nums: [], metrics: [], n: 0 }, ...(safety.diagnosisRequest ? [recorded] : []), ...(safety.medicineChangeRequest ? [med] : []), ...(bpRelevant ? [bp] : [])]);
     return finish(ctx, ledger, sec, {
       intent: safety.medicineChangeRequest ? "medicine_change_refusal" : "diagnosis_refusal",
       span,
       needsDoctor: true,
       refusal: safety.medicineChangeRequest ? "दवा/खुराक बदलने की सलाह नहीं दी जा सकती" : "बीमारी तय करने की सलाह नहीं दी जा सकती",
       extraRecs: [{ text: "डॉक्टर के पास ये ऐप के आँकड़े (BP, दवा पालन, लक्षण और उनका समय) साथ ले जाएँ और सीधे यही सवाल पूछें।", kind: "ask_doctor", basis: "patient_data", source_urls: [] }],
-      metrics: safety.medicineChangeRequest ? ["medicine", "bp"] : ["bp"],
+      metrics: safety.medicineChangeRequest ? ["medicine", "bp"] : bpRelevant ? ["bp"] : [],
       spans: [span],
+    });
+  }
+
+  // 1b. The user typed a reading: classify THAT reading.
+  const typed = readingsInMessage(text);
+  if (typed.length > 0 && !intents.some((i) => i === "average" || i === "trend" || i === "compare" || i === "missing")) {
+    const { sec, needsDoctor } = typedReadingSection(ctx, typed);
+    return finish(ctx, ledger, sec, {
+      intent: "typed_reading",
+      span: null,
+      metrics: ["bp"],
+      spans: [],
+      needsDoctor,
+      extraRecs: needsDoctor ? [{ text: "यह रीडिंग और लक्षण (अगर कोई हों) डॉक्टर को बताएँ; दवा अपने आप न बदलें।", kind: "ask_doctor", basis: "general", source_urls: [] }] : [],
+      headline: `आपका बताया BP ${typed[0].systolic}/${typed[0].diastolic}`,
+      followUps: ["पिछले 7 दिन का average BP क्या रहा?", "आख़िरी दर्ज BP क्या है?"],
     });
   }
 
@@ -688,6 +941,39 @@ export function answerWithRules(input: FallbackInput): FallbackResult {
   const mealKey = MEAL_WORDS.find((m) => containsAnyPhrase(text, m.words))?.key ?? null;
   const metricList = metrics.filter((m) => m !== "pulse" || metrics.length === 1).map((m) => (m === "pulse" ? "bp" : m));
   const uniqueMetrics = Array.from(new Set(metricList)) as Metric[];
+  const pulseOnly = metrics.length === 1 && metrics[0] === "pulse";
+  const symptom = detectSymptomMention(text);
+  // Short notes that ride along with a data answer: a part of the question we cannot answer, or a symptom to take to the doctor.
+  const unrelatedNote: Bi[] = [...(untracked.length && uniqueMetrics.length ? [untrackedNote(untracked)] : []), ...(symptom && uniqueMetrics.length ? [SYMPTOM_SHORT] : [])];
+
+  // 3b. Questions that are not about the patient's tracked data must not be answered with patient data.
+  if (detectMemoryLookup(text)) {
+    return finish(ctx, ledger, memorySection(ctx, text), { intent: "saved_notes", span: null, metrics: [], spans: [], noRules: true, headline: "सेव किए नोट्स से", followUps: ["आज पापा कैसे रहे?", "इस हफ़्ते दवा पालन कैसा रहा?"] });
+  }
+  if (uniqueMetrics.length === 0) {
+    if (symptom && mode !== "advice") {
+      const sec = mergeSections([plain(SYMPTOM_CAUTION.hi, SYMPTOM_CAUTION.en), bpSection(ctx, ledger, null, "latest"), bpSection(ctx, ledger, { from: addDaysIST(ctx.today, -6), to: ctx.today }, "average")]);
+      return finish(ctx, ledger, sec, { intent: "symptom_mention", span: null, metrics: ["bp"], spans: [], needsDoctor: true, headline: "लक्षणों के लिए डॉक्टर से संपर्क करें", extraRecs: [{ text: "लक्षण कब शुरू हुए, कितनी देर रहे और उस समय का BP नोट करके डॉक्टर को बताएँ।", kind: "ask_doctor", basis: "general", source_urls: [] }], followUps: ["पिछले 7 दिन का average BP क्या रहा?", "इस हफ़्ते दवा पालन कैसा रहा?"] });
+    }
+    if (detectOffTopic(text) && !hasHealthAnchor(text)) {
+      const sec = plain(
+        `यह सवाल मरीज़ के स्वास्थ्य से जुड़ा नहीं लगता, इसलिए मैं इसका जवाब नहीं दूँगा। मैं दर्ज ${TRACKED.hi} और सेहत से जुड़े सवालों में मदद कर सकता हूँ।`,
+        `That does not look like a question about the patient's health, so I will not answer it. I can help with the logged ${TRACKED.en} and health questions.`,
+      );
+      return finish(ctx, ledger, sec, { intent: "out_of_scope", span: null, metrics: [], spans: [], noRules: true, headline: "यह सवाल सेहत से जुड़ा नहीं है", followUps: ["आज पापा कैसे रहे?", "पिछले 7 दिन का average BP क्या रहा?", "इस हफ़्ते दवा पालन कैसा रहा?"] });
+    }
+    if (untracked.length && mode !== "advice") {
+      return finish(ctx, ledger, untrackedSection(untracked), { intent: `untracked:${untracked.map((u) => u.key).join("+")}`, span: null, metrics: [], spans: [], noRules: true, headline: `${untracked[0].hi} ऐप में दर्ज नहीं होता`, followUps: ["पिछले 7 दिन का average BP क्या रहा?", "इस हफ़्ते दवा पालन कैसा रहा?", "आज पापा कैसे रहे?"] });
+    }
+  }
+
+  // 3c. "When / which medicine" is the plan, not the adherence record.
+  const unknownDrug = uniqueMetrics.length === 0 && namedMeds.length === 0 && detectTakeWhen(text);
+  if ((detectScheduleQuestion(text) && (uniqueMetrics.includes("medicine") || namedMeds.length > 0)) || unknownDrug) {
+    const sec = scheduleSection(ctx, namedMeds);
+    const unknownNote: Bi[] = unknownDrug ? [{ hi: "(आपने जिस दवा का नाम लिया वह दर्ज दवाओं में नहीं मिली, इसलिए नीचे दर्ज सभी दवाओं का समय है।)", en: "(The medicine you named is not among the recorded medicines, so here is the schedule of all recorded medicines.)" }] : [];
+    return finish(ctx, ledger, sec, { intent: "medicine_schedule", span: null, metrics: ["medicine"], spans: [], notes: [...unknownNote, understood("schedule", ["medicine"], null), ...unrelatedNote], followUps: ["इस हफ़्ते दवा पालन कैसा रहा?", "आज कौन सी दवा बाकी है?"], headline: namedMeds.length ? `${namedMeds[0].name} का दर्ज समय` : "दर्ज दवाओं का समय" });
+  }
 
   const oneMetric = (m: Metric, span: Period | null): Section => {
     const useMode: Mode = mode === "average" || mode === "trend" ? "average" : mode;
@@ -703,7 +989,7 @@ export function answerWithRules(input: FallbackInput): FallbackResult {
       case "steps":
         return stepsSection(ctx, ledger, span);
       default:
-        return medicineSection(ctx, ledger, span ?? { from: addDaysIST(ctx.today, -6), to: ctx.today });
+        return medicineSection(ctx, ledger, span ?? { from: addDaysIST(ctx.today, -6), to: ctx.today }, namedMeds);
     }
   };
 
@@ -734,52 +1020,80 @@ export function answerWithRules(input: FallbackInput): FallbackResult {
     }
     const ms = uniqueMetrics.length ? uniqueMetrics : allMetrics;
     const sec = compareSection(ctx, ms, a, b);
-    return finish(ctx, ledger, sec, { intent: "compare", span: { from: b.from < a.from ? b.from : a.from, to: a.to > b.to ? a.to : b.to }, metrics: ms, spans: [a, b], notes: spanNotes });
+    return finish(ctx, ledger, sec, { intent: "compare", span: { from: b.from < a.from ? b.from : a.from, to: a.to > b.to ? a.to : b.to }, metrics: ms, spans: [a, b], notes: [...spanNotes, understood("compare", uniqueMetrics, null), ...unrelatedNote] });
   }
 
   if (mode === "goal") {
     const sec = goalSection(ctx, ledger, uniqueMetrics);
-    return finish(ctx, ledger, sec, { intent: "goal_gap", span: null, metrics: sec.metrics, spans: [] });
+    return finish(ctx, ledger, sec, { intent: "goal_gap", span: null, metrics: sec.metrics, spans: [], notes: [understood("goal", sec.metrics, null), ...unrelatedNote] });
   }
 
   if (mode === "missing") {
     const span = first ?? { from: addDaysIST(ctx.today, -6), to: ctx.today };
     const sec = missingSection(ctx, span);
-    return finish(ctx, ledger, sec, { intent: "missing", span, metrics: sec.metrics, spans: [span], notes: spanNotes });
+    return finish(ctx, ledger, sec, { intent: "missing", span, metrics: sec.metrics, spans: [span], notes: [...spanNotes, understood("missing", [], span)] });
+  }
+
+  if (mode === "extreme" && uniqueMetrics.length > 0) {
+    const span = first ?? { from: ctx.range.from, to: ctx.today };
+    const f = fold(text);
+    const LOW = ["sabse kam", "sabse low", "sabse neeche", "sabse chhota", "lowest", "minimum", "सबसे कम", "सबसे छोटा"].map(fold);
+    const HIGH = ["sabse zyada", "sabse jyada", "sabse jada", "sabse high", "sabse upar", "sabse bada", "highest", "maximum", "peak", "सबसे ज़्यादा", "सबसे ज्यादा", "सबसे ऊँचा", "सबसे ऊंचा", "सबसे ऊँची", "सबसे ऊंची", "सबसे बड़ा"].map(fold);
+    const want = { high: HIGH.some((p) => hasPhrase(f, p)), low: LOW.some((p) => hasPhrase(f, p)) };
+    const parts = uniqueMetrics.slice(0, 3).map((m) => (m === "medicine" ? medicineSection(ctx, ledger, span, namedMeds) : extremeSection(ctx, m, span, want, pulseOnly)));
+    const sec = mergeSections(parts);
+    return finish(ctx, ledger, sec, { intent: `extreme:${uniqueMetrics.join("+")}`, span, metrics: uniqueMetrics, spans: [span], notes: [...spanNotes, understood("extreme", uniqueMetrics, span, !first), ...unrelatedNote] });
   }
 
   if (mode === "advice") {
     const span = { from: addDaysIST(ctx.today, -29), to: ctx.today };
-    const focus = uniqueMetrics.length ? uniqueMetrics : (["bp"] as Metric[]);
-    const sec = mergeSections(focus.map((m) => oneMetric(m, m === "food" || m === "bp" ? span : null)));
     const note: Bi = { hi: "यह सवाल सलाह (क्या करें / क्या खाएँ) का है। विस्तृत, स्रोत-सहित सलाह के लिए AI + इंटरनेट खोज चाहिए, जो अभी चालू नहीं है। नीचे आपके असली आँकड़े और नियम-आधारित सामान्य सुझाव हैं; इलाज के फ़ैसले डॉक्टर ही करेंगे।", en: "This is an advice question. Detailed, sourced advice needs the AI + web search, which is not active right now. Below are your actual numbers and rule-based general suggestions; treatment decisions belong to the doctor." };
-    return finish(ctx, ledger, { ...sec, hi: `${note.hi}\n${sec.hi}`, en: `${note.en}\n${sec.en}` }, { intent: "advice_limited", span, metrics: sec.metrics, spans: [span], headline: "सलाह के लिए AI चालू नहीं है; आपके आँकड़े नीचे हैं" });
+    // Only the data the question is about. With no tracked topic ("kya karein?") show what the data flags, not a guessed metric.
+    const sec: Section =
+      uniqueMetrics.length > 0
+        ? mergeSections(uniqueMetrics.map((m) => oneMetric(m, m === "food" || m === "bp" ? span : null)))
+        : plain(ledger.flags.length ? "ध्यान देने लायक: " + ledger.flags.slice(0, 4).map((f) => f.textHi).join(" ") : "अभी दर्ज आँकड़ों में कोई ख़ास चेतावनी नहीं है।", ledger.flags.length ? "Worth noticing: " + ledger.flags.slice(0, 4).map((f) => f.textEn).join(" ") : "The logged data carries no particular warning right now.");
+    const extras: Bi[] = [...(untracked.length ? [untrackedNote(untracked)] : []), ...(symptom ? [SYMPTOM_SHORT] : [])];
+    return finish(ctx, ledger, { ...sec, hi: [note.hi, sec.hi, ...extras.map((x) => x.hi)].join("\n"), en: [note.en, sec.en, ...extras.map((x) => x.en)].join("\n") }, { intent: "advice_limited", span, metrics: sec.metrics, spans: [span], headline: "सलाह के लिए AI चालू नहीं है; आपके आँकड़े नीचे हैं" });
   }
 
   // 5. Summary of everything (e.g. "आज पापा कैसे रहे?").
   const wantsEverything = uniqueMetrics.length === 0;
   if (wantsEverything) {
-    if (spans.length === 0 && !intents.includes("summary") && !intents.includes("latest")) {
+    // A summary is only the right answer when the question names the patient / asks for a review.
+    // A date or a "how is it" word alone ("aaj mausam kaisa hai") is not a health question.
+    const summaryAsked = intents.includes("summary");
+    if (!summaryAsked || mode === "extreme") {
       const sug = suggestCorrections(text);
       const hint = sug.length ? { hi: ` शायद आपका मतलब "${sug[0].suggestion}" था?`, en: ` Did you mean "${sug[0].suggestion}"?` } : { hi: "", en: "" };
-      const sec: Section = {
-        hi: `मैं यह सवाल पूरी तरह समझ नहीं पाया।${hint.hi} आप ऐसे पूछ सकते हैं: "आज पापा कैसे रहे?", "पिछले 7 दिन का average BP", "कल खाने में क्या था?", "इस हफ़्ते दवा पालन", "वज़न लक्ष्य से कितना दूर है?"`,
-        en: `I could not fully understand that question.${hint.en} You can ask things like: "How was Papa today?", "Average BP over the last 7 days", "What did he eat yesterday?", "Medicine adherence this week", "How far is the weight from target?"`,
-        kp: [],
-        nums: [],
-        metrics: [],
-        n: 0,
-      };
-      return finish(ctx, ledger, sec, { intent: "unrecognised", span: null, metrics: [], spans: [], headline: "सवाल समझ नहीं आया", followUps: ["आज पापा कैसे रहे?", "पिछले 7 दिन का average BP क्या रहा?", "इस हफ़्ते दवा पालन कैसा रहा?"] });
+      const dateOnly = spans.length > 0 || mode === "extreme";
+      const sec: Section = dateOnly
+        ? {
+            hi: `मैं समझ नहीं पाया कि आप किस चीज़ के बारे में पूछ रहे हैं: BP, खाना, दवा, नींद, कदम या वज़न? जैसे: "कल का BP", "पिछले हफ़्ते की नींद", "आज की दवाएँ"।`,
+            en: `I could not tell what you are asking about: BP, food, medicines, sleep, steps or weight? For example: "BP yesterday", "sleep last week", "today's medicines".`,
+            kp: [],
+            nums: [],
+            metrics: [],
+            n: 0,
+          }
+        : {
+            hi: `मैं यह सवाल पूरी तरह समझ नहीं पाया।${hint.hi} आप ऐसे पूछ सकते हैं: "आज पापा कैसे रहे?", "पिछले 7 दिन का average BP", "कल खाने में क्या था?", "इस हफ़्ते दवा पालन", "वज़न लक्ष्य से कितना दूर है?"`,
+            en: `I could not fully understand that question.${hint.en} You can ask things like: "How was Papa today?", "Average BP over the last 7 days", "What did he eat yesterday?", "Medicine adherence this week", "How far is the weight from target?"`,
+            kp: [],
+            nums: [],
+            metrics: [],
+            n: 0,
+          };
+      return finish(ctx, ledger, sec, { intent: dateOnly ? "clarify_topic" : "unrecognised", span: null, metrics: [], spans: [], noRules: true, headline: "सवाल समझ नहीं आया", followUps: ["आज पापा कैसे रहे?", "पिछले 7 दिन का average BP क्या रहा?", "इस हफ़्ते दवा पालन कैसा रहा?"] });
     }
     const span = first ?? { from: ctx.today, to: ctx.today };
     const sec = summarySection(ctx, ledger, span);
     const flags = ledger.flags.length ? { hi: "ध्यान देने लायक: " + ledger.flags.slice(0, 4).map((f) => f.textHi).join(" "), en: "Worth noticing: " + ledger.flags.slice(0, 4).map((f) => f.textEn).join(" ") } : null;
-    return finish(ctx, ledger, flags && span.from === span.to ? { ...sec, hi: `${sec.hi}\n${flags.hi}`, en: `${sec.en}\n${flags.en}` } : sec, { intent: span.from === span.to ? "daily_summary" : "period_summary", span, metrics: sec.metrics, spans: [span], notes: spanNotes });
+    return finish(ctx, ledger, flags && span.from === span.to ? { ...sec, hi: `${sec.hi}\n${flags.hi}`, en: `${sec.en}\n${flags.en}` } : sec, { intent: span.from === span.to ? "daily_summary" : "period_summary", span, metrics: sec.metrics, spans: [span], notes: [...spanNotes, ...unrelatedNote] });
   }
 
   // 6. One or more specific metrics.
   const parts = uniqueMetrics.slice(0, 3).map((m) => oneMetric(m, first));
   const sec = mergeSections(parts);
-  return finish(ctx, ledger, sec, { intent: `${mode}:${uniqueMetrics.join("+")}`, span: first, metrics: uniqueMetrics, spans: first ? [first] : [], notes: spanNotes });
+  return finish(ctx, ledger, sec, { intent: `${mode}:${uniqueMetrics.join("+")}`, span: first, metrics: uniqueMetrics, spans: first ? [first] : [], notes: [...spanNotes, understood(mode, uniqueMetrics.slice(0, 3), first), ...unrelatedNote] });
 }

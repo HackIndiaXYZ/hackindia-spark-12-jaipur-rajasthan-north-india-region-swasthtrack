@@ -49,7 +49,11 @@ function MedicineDialogBody({ isOpen, onClose, patientId, medicineToEdit, onSucc
     if (!dose.trim()) next.dose = "खुराक लिखें, जैसे 40 mg (Enter the dose)";
     if (!TIME_24H.test(scheduledTime)) next.time = "लेने का समय चुनें (Choose the time)";
     setErrors(next);
-    if (Object.keys(next).length > 0) return;
+    if (Object.keys(next).length > 0) {
+      // Move focus to the first field that needs fixing (after the error state has rendered).
+      requestAnimationFrame(() => document.querySelector<HTMLElement>(`#${FORM_ID} [aria-invalid="true"]`)?.focus());
+      return;
+    }
 
     const payload = {
       medicine_name: name.trim(),

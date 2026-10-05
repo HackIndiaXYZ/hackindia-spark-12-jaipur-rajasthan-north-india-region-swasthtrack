@@ -2,6 +2,7 @@
  * Small pure helpers shared by the meal entry panel and the log editor, so a
  * tablespoon of oil is the same number of calories in both places.
  */
+import { istHour, istInstant } from "@/lib/health-rules";
 
 export const OIL_OPTIONS = [
   { id: "None", label: "बिना तेल", cal: 0 },
@@ -40,7 +41,48 @@ export const MEAL_SLOTS = [
 
 export const MEAL_ORDER: string[] = [...MEAL_SLOTS.map((m) => m.id), "Other"];
 
+/** The four meals of a normal day. They always show on the log, even empty, so a gap is visible. */
+export const MAIN_MEALS: readonly string[] = ["Breakfast", "Lunch", "Evening snack", "Dinner"];
+
+/** A typical India clock time ("HH:MM") for each slot, used when a meal is added to a past day. */
+export const MEAL_DEFAULT_HHMM: Record<string, string> = {
+  Breakfast: "08:00",
+  "Mid-morning": "11:00",
+  Lunch: "13:30",
+  "Evening snack": "17:30",
+  Dinner: "20:30",
+  Bedtime: "22:30",
+  Other: "12:00",
+};
+
+/**
+ * When a meal logged for `dateIST` was eaten: right now for today, otherwise the
+ * slot's typical time on that day (we cannot know the real one), so it lands on
+ * the day the reader is looking at.
+ */
+export function consumedAtFor(dateIST: string, mealType: string, today: string, now: Date = new Date()): string {
+  if (dateIST >= today) return now.toISOString();
+  const hhmm = MEAL_DEFAULT_HHMM[mealType] ?? MEAL_DEFAULT_HHMM.Other;
+  return istInstant(dateIST, hhmm).toISOString();
+}
+
 export function mealLabel(id: string): string {
   const slot = MEAL_SLOTS.find((m) => m.id === id);
   return slot ? `${slot.label} (${slot.english})` : "अन्य (Other)";
+}
+
+/** The food search box; the page focuses it when a meal card's "add" button is pressed. */
+export const SEARCH_INPUT_ID = "food-search-input";
+/** The whole entry panel, as a scroll target. */
+export const ENTRY_PANEL_ID = "food-entry";
+
+/** Slot for the current India time, so the right meal is pre-selected (the reader can change it). */
+export function mealSlotNow(now: Date = new Date()): string {
+  const hour = istHour(now);
+  if (hour >= 6 && hour < 10) return "Breakfast";
+  if (hour >= 10 && hour < 12) return "Mid-morning";
+  if (hour >= 12 && hour < 16) return "Lunch";
+  if (hour >= 16 && hour < 19) return "Evening snack";
+  if (hour >= 19 && hour < 22) return "Dinner";
+  return "Bedtime";
 }

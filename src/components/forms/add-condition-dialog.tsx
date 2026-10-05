@@ -52,7 +52,11 @@ function ConditionDialogBody({ isOpen, onClose, patientId, onSuccess }: AddCondi
       next.year = `वर्ष 1920 से ${currentYear} के बीच लिखें, या खाली छोड़ें`;
     }
     setErrors(next);
-    if (Object.keys(next).length > 0) return;
+    if (Object.keys(next).length > 0) {
+      // Move focus to the first field that needs fixing (after the error state has rendered).
+      requestAnimationFrame(() => document.querySelector<HTMLElement>(`#${FORM_ID} [aria-invalid="true"]`)?.focus());
+      return;
+    }
 
     setSaving(true);
     try {

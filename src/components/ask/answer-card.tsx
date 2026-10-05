@@ -1,11 +1,12 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 import {
   AlertTriangle,
   BookOpen,
   Bot,
   Copy,
+  Database,
   ExternalLink,
   Globe,
   ListChecks,
@@ -51,9 +52,16 @@ function chipText(e: EvidenceItem): string {
   return t.length > 30 ? `${t.slice(0, 29)}…` : t;
 }
 
+/** "2026-10-05" -> "5 Oct 2026"; anything that is not an ISO date is returned untouched. */
+function prettyDate(iso: string): string {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso);
+  if (!m) return iso;
+  return new Date(Date.UTC(+m[1], +m[2] - 1, +m[3])).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" });
+}
+
 function coverageLine(a: SoieAnswer): string {
   const { range, n, metrics } = a.data_coverage;
-  const when = range.from === range.to ? range.from : `${range.from} से ${range.to}`;
+  const when = range.from === range.to ? prettyDate(range.from) : `${prettyDate(range.from)} से ${prettyDate(range.to)}`;
   const what = metrics.length ? metrics.map((m) => METRIC_HI[m] ?? m).join(", ") : "डेटा";
   return `${when} · ${what} · ${n} रिकॉर्ड`;
 }
@@ -71,7 +79,7 @@ export function EvidenceChip({ item, onOpen }: { item: EvidenceItem; onOpen: (e:
       type="button"
       onClick={() => onOpen(item)}
       aria-label={`प्रमाण देखें: ${item.label}`}
-      className="pressable inline-flex min-h-9 max-w-full items-center gap-1 rounded-full border border-line bg-surface-sunken px-3 text-xs font-medium text-ink-muted hover:border-brand-line hover:bg-brand-softer hover:text-brand-ink"
+      className="pressable inline-flex min-h-9 max-w-full items-center gap-1 rounded-full border border-line bg-surface-sunken px-3 pointer-coarse:min-h-control text-xs font-medium text-ink-muted hover:border-brand-line hover:bg-brand-softer hover:text-brand-ink"
     >
       <ListChecks aria-hidden className="h-3.5 w-3.5 shrink-0" />
       <span className="truncate">{chipText(item)}</span>
@@ -84,32 +92,30 @@ export function EvidenceModal({ item, onClose }: { item: EvidenceItem | null; on
     <Modal isOpen={item !== null} onClose={onClose} title="प्रमाण" hindiTitle="Evidence" description="यह संख्या इन दर्ज आँकड़ों से कोड ने निकाली है, AI ने नहीं।" size="sm">
       {item ? (
         <dl className="space-y-3 text-sm">
-          <div>
-            <dt className="text-xs text-ink-subtle">{item.kind === "fact" ? "गणना" : "दर्ज एंट्री"}</dt>
-            <dd className="font-semibold text-ink">{item.label}</dd>
+          <div className="rounded-card border border-gold-line bg-gold-soft px-3.5 py-3">
+            <dt className="text-xs font-medium text-ink-muted">{item.kind === "fact" ? "गणना" : "दर्ज एंट्री"} · {item.label}</dt>
+            <dd className="tabular mt-0.5 text-lg font-semibold text-ink">{item.valueText}</dd>
           </div>
-          <div>
-            <dt className="text-xs text-ink-subtle">मान</dt>
-            <dd className="text-ink">{item.valueText}</dd>
+          <div className="grid grid-cols-2 gap-3">
+            {item.window ? (
+              <div>
+                <dt className="text-xs text-ink-subtle">अवधि</dt>
+                <dd className="text-ink">{item.window}</dd>
+              </div>
+            ) : null}
+            {item.date ? (
+              <div>
+                <dt className="text-xs text-ink-subtle">तारीख़ / समय (IST)</dt>
+                <dd className="text-ink">{item.date}</dd>
+              </div>
+            ) : null}
+            {item.n !== undefined ? (
+              <div>
+                <dt className="text-xs text-ink-subtle">कितने रिकॉर्ड पर आधारित</dt>
+                <dd className="tabular text-ink">{item.n}</dd>
+              </div>
+            ) : null}
           </div>
-          {item.window ? (
-            <div>
-              <dt className="text-xs text-ink-subtle">अवधि</dt>
-              <dd className="text-ink">{item.window}</dd>
-            </div>
-          ) : null}
-          {item.date ? (
-            <div>
-              <dt className="text-xs text-ink-subtle">तारीख़ / समय (IST)</dt>
-              <dd className="text-ink">{item.date}</dd>
-            </div>
-          ) : null}
-          {item.n !== undefined ? (
-            <div>
-              <dt className="text-xs text-ink-subtle">कितने रिकॉर्ड पर आधारित</dt>
-              <dd className="text-ink">{item.n}</dd>
-            </div>
-          ) : null}
           <p className="rounded-field bg-surface-sunken p-2.5 text-2xs text-ink-subtle">संदर्भ: {item.ref}</p>
         </dl>
       ) : null}
@@ -120,11 +126,11 @@ export function EvidenceModal({ item, onClose }: { item: EvidenceItem | null; on
 function RecGroup({ kind, recs }: { kind: RecommendationKind; recs: Recommendation[] }) {
   const urgent = kind === "urgent";
   return (
-    <div className={cn("rounded-card border p-3", urgent ? "border-critical-line bg-critical-soft" : "border-line bg-surface-sunken")}>
-      <p className={cn("mb-2 text-xs font-semibold", urgent ? "text-critical" : "text-ink-muted")}>
-        <span lang="hi">{KIND_LABEL[kind].hi}</span> <span className="font-normal text-ink-subtle">· {KIND_LABEL[kind].en}</span>
+    <div className={cn("rounded-card border p-3", urgent ? "border-critical-line bg-critical-soft" : "tile")}>
+      <p className={cn("mb-2 text-xs font-semibold", urgent ? "text-critical" : "text-ink")}>
+        <span lang="hi">{KIND_LABEL[kind].hi}</span> <span className="font-normal text-ink-muted">· {KIND_LABEL[kind].en}</span>
       </p>
-      <ul className="space-y-2.5">
+      <ul className="space-y-3">
         {recs.map((r, i) => (
           <li key={i} className="text-sm text-ink">
             <p lang="hi" className="leading-relaxed">
@@ -135,7 +141,7 @@ function RecGroup({ kind, recs }: { kind: RecommendationKind; recs: Recommendati
                 <span lang="hi">{BASIS_LABEL[r.basis].hi}</span>
               </Badge>
               {r.source_urls.map((u) => (
-                <a key={u} href={u} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-2xs font-medium text-info underline underline-offset-2">
+                <a key={u} href={u} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-6 items-center gap-1 text-2xs font-medium text-info pointer-coarse:min-h-control pointer-coarse:min-w-control pointer-coarse:justify-center underline underline-offset-2">
                   <ExternalLink aria-hidden className="h-3 w-3" />
                   स्रोत
                 </a>
@@ -148,11 +154,15 @@ function RecGroup({ kind, recs }: { kind: RecommendationKind; recs: Recommendati
   );
 }
 
+/**
+ * Pre-written safety answer for an emergency. A status surface, not a gilt
+ * card: it has to read as "act now" before it reads as anything else.
+ */
 export function EmergencyCard({ answer }: { answer: SoieAnswer }) {
   const [lang, setLang] = useState<"hi" | "en">("hi");
   const text = lang === "hi" ? answer.answer_hi : answer.answer_en;
   return (
-    <Card className="border-2 border-critical bg-critical-soft" role="alert" aria-live="assertive">
+    <section className="rounded-card border-2 border-critical bg-critical-soft p-4 shadow-e2 sm:p-5" role="alert" aria-live="assertive">
       <div className="flex items-start gap-3">
         <span className="grid h-12 w-12 shrink-0 place-items-center rounded-control bg-critical text-ink-inverse">
           <AlertTriangle aria-hidden className="h-6 w-6" />
@@ -190,19 +200,30 @@ export function EmergencyCard({ answer }: { answer: SoieAnswer }) {
         </p>
       </div>
       <p className="mt-3 text-2xs text-ink-muted">यह जवाब पहले से तय सुरक्षा नियमों से आया है, AI से नहीं।</p>
-    </Card>
+    </section>
   );
 }
 
 export interface AnswerCardProps {
   answer: SoieAnswer;
+  /** The newest answer on screen: gets the deeper hero gold, older ones recede. */
+  featured?: boolean;
   feedback?: "helpful" | "not_helpful";
   canRate: boolean;
   onFeedback: (rating: "helpful" | "not_helpful", comment: string | null) => void;
   onAsk: (q: string) => void;
 }
 
-export function AnswerCard({ answer, feedback, canRate, onFeedback, onAsk }: AnswerCardProps) {
+function SectionLabel({ children, icon: Icon }: { children: ReactNode; icon?: typeof BookOpen }) {
+  return (
+    <h4 className="mb-2 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-ink-muted">
+      {Icon ? <Icon aria-hidden className="h-3.5 w-3.5" /> : null}
+      {children}
+    </h4>
+  );
+}
+
+export function AnswerCard({ answer, featured = false, feedback, canRate, onFeedback, onAsk }: AnswerCardProps) {
   const [lang, setLang] = useState<"hi" | "en">("hi");
   const [open, setOpen] = useState<EvidenceItem | null>(null);
   const [commenting, setCommenting] = useState(false);
@@ -249,8 +270,8 @@ export function AnswerCard({ answer, feedback, canRate, onFeedback, onAsk }: Ans
 
   const EngineIcon = engineBadge.icon;
   return (
-    <Card tone="premium" className="space-y-4" aria-live="polite">
-      <div className="flex flex-wrap items-center gap-2">
+    <Card tone={featured ? "premium" : "default"} className="space-y-4" aria-live="polite">
+      <div className="flex flex-wrap items-center gap-x-2 gap-y-2">
         <Badge variant={engineBadge.variant}>
           <EngineIcon aria-hidden className="h-3 w-3" />
           <span lang="hi">{engineBadge.label}</span>
@@ -310,14 +331,31 @@ export function AnswerCard({ answer, feedback, canRate, onFeedback, onAsk }: Ans
         </p>
       </div>
 
+      {answer.numbers.length > 0 ? (
+        <ul className="grid grid-cols-2 gap-2 sm:grid-cols-3" aria-label="मुख्य आँकड़े">
+          {answer.numbers.map((n, i) => {
+            const ev = evidence.get(n.ref);
+            return (
+              <li key={i} className="tile flex min-w-0 flex-col justify-between gap-1.5 rounded-card p-3">
+                <span className="text-xs leading-snug text-ink-muted">{n.label}</span>
+                <span className="tabular text-xl font-semibold leading-tight text-ink">
+                  {n.value} <span className="text-xs font-normal text-ink-muted">{n.unit}</span>
+                </span>
+                {ev ? <EvidenceChip item={ev} onOpen={setOpen} /> : null}
+              </li>
+            );
+          })}
+        </ul>
+      ) : null}
+
       {answer.key_points.length > 0 ? (
         <div>
-          <h4 className="mb-2 text-xs font-semibold uppercase tracking-wide text-ink-subtle">मुख्य बातें · Key points</h4>
-          <ul className="space-y-3">
+          <SectionLabel>मुख्य बातें · Key points</SectionLabel>
+          <ul className="space-y-2">
             {answer.key_points.map((k, i) => {
               const items = k.fact_refs.map((r) => evidence.get(r)).filter((e): e is EvidenceItem => Boolean(e));
               return (
-                <li key={i} className="rounded-field border border-line bg-surface p-3">
+                <li key={i} className="tile rounded-card p-3">
                   <p lang="hi" className="text-sm leading-relaxed text-ink">
                     {k.text}
                   </p>
@@ -335,30 +373,9 @@ export function AnswerCard({ answer, feedback, canRate, onFeedback, onAsk }: Ans
         </div>
       ) : null}
 
-      {answer.numbers.length > 0 ? (
-        <ul className="divide-y divide-line rounded-field border border-line" aria-label="मुख्य आँकड़े">
-          {answer.numbers.map((n, i) => {
-            const ev = evidence.get(n.ref);
-            return (
-              <li key={i} className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1.5 px-3 py-2 text-sm">
-                <span className="min-w-0 text-ink-muted">{n.label}</span>
-                <span className="tabular font-semibold text-ink">
-                  {n.value} <span className="font-normal text-ink-subtle">{n.unit}</span>
-                </span>
-                {ev ? (
-                  <span className="basis-full sm:basis-auto">
-                    <EvidenceChip item={ev} onOpen={setOpen} />
-                  </span>
-                ) : null}
-              </li>
-            );
-          })}
-        </ul>
-      ) : null}
-
       {grouped.length > 0 ? (
         <div className="space-y-2.5">
-          <h4 className="text-xs font-semibold uppercase tracking-wide text-ink-subtle">क्या करें · What to do</h4>
+          <SectionLabel>क्या करें · What to do</SectionLabel>
           {grouped.map((g) => (
             <RecGroup key={g.kind} kind={g.kind} recs={g.recs} />
           ))}
@@ -367,14 +384,11 @@ export function AnswerCard({ answer, feedback, canRate, onFeedback, onAsk }: Ans
 
       {answer.sources.length > 0 ? (
         <div>
-          <h4 className="mb-2 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-ink-subtle">
-            <BookOpen aria-hidden className="h-3.5 w-3.5" />
-            स्रोत · Sources
-          </h4>
+          <SectionLabel icon={BookOpen}>स्रोत · Sources</SectionLabel>
           <ul className="space-y-1.5">
             {answer.sources.map((s) => (
               <li key={s.url} className="text-sm">
-                <a href={s.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-start gap-1.5 text-info underline underline-offset-2">
+                <a href={s.url} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-8 items-start gap-1.5 text-info underline underline-offset-2 pointer-coarse:min-h-control">
                   <ExternalLink aria-hidden className="mt-1 h-3.5 w-3.5 shrink-0" />
                   <span>
                     <span className="font-semibold">{s.publisher}</span>: {s.title}
@@ -386,23 +400,27 @@ export function AnswerCard({ answer, feedback, canRate, onFeedback, onAsk }: Ans
         </div>
       ) : null}
 
-      <p className="rounded-field bg-surface-sunken px-3 py-2 text-xs text-ink-muted" lang="hi">
-        जिस डेटा पर यह जवाब टिका है: {coverageLine(answer)}
+      <p className="flex items-start gap-2 rounded-field bg-surface/70 px-3 py-2 text-xs text-ink-muted" lang="hi">
+        <Database aria-hidden className="mt-0.5 h-3.5 w-3.5 shrink-0" />
+        <span>जिस डेटा पर यह जवाब टिका है: {coverageLine(answer)}</span>
       </p>
 
       {answer.follow_up_questions.length > 0 ? (
-        <div className="flex flex-wrap gap-2">
-          {answer.follow_up_questions.map((q) => (
-            <Button key={q} size="sm" variant="secondary" onClick={() => onAsk(q)}>
-              <span lang="hi" className="whitespace-normal text-left">
-                {q}
-              </span>
-            </Button>
-          ))}
+        <div>
+          <SectionLabel>आगे पूछें · Ask next</SectionLabel>
+          <div className="flex flex-wrap gap-2">
+            {answer.follow_up_questions.map((q) => (
+              <Button key={q} size="sm" variant="secondary" onClick={() => onAsk(q)} className="h-auto min-h-control-sm py-1.5">
+                <span lang="hi" className="whitespace-normal text-left leading-snug">
+                  {q}
+                </span>
+              </Button>
+            ))}
+          </div>
         </div>
       ) : null}
 
-      <div className="flex flex-wrap items-center gap-2 border-t border-line pt-3">
+      <div className="flex flex-wrap items-center gap-2 border-t border-gold-line pt-3">
         <Button size="sm" variant="quiet" onClick={copy}>
           <Copy aria-hidden className="h-4 w-4" />
           कॉपी
@@ -413,10 +431,10 @@ export function AnswerCard({ answer, feedback, canRate, onFeedback, onAsk }: Ans
         </Button>
         {canRate ? (
           <div className="ml-auto flex items-center gap-1.5" role="group" aria-label="क्या यह जवाब काम का था?">
-            <Button size="sm" variant={feedback === "helpful" ? "primary" : "quiet"} aria-pressed={feedback === "helpful"} aria-label="काम का था" onClick={() => onFeedback("helpful", null)}>
+            <Button size="sm" variant={feedback === "helpful" ? "primary" : "quiet"} aria-pressed={feedback === "helpful"} aria-label="काम का था" className="min-w-control" onClick={() => onFeedback("helpful", null)}>
               <ThumbsUp aria-hidden className="h-4 w-4" />
             </Button>
-            <Button size="sm" variant={feedback === "not_helpful" ? "danger" : "quiet"} aria-pressed={feedback === "not_helpful"} aria-label="काम का नहीं था" onClick={() => setCommenting(true)}>
+            <Button size="sm" variant={feedback === "not_helpful" ? "danger" : "quiet"} aria-pressed={feedback === "not_helpful"} aria-label="काम का नहीं था" className="min-w-control" onClick={() => setCommenting(true)}>
               <ThumbsDown aria-hidden className="h-4 w-4" />
             </Button>
           </div>

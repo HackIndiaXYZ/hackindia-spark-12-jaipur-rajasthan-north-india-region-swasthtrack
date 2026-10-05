@@ -5,6 +5,7 @@
  */
 import { istMinutesOfDay, toISTDate } from "../health-rules";
 import { toCsv, type CsvCell } from "./csv";
+import type { DayTrendPoint } from "./report-calc";
 
 export interface ExportPatient {
   id: string;
@@ -143,4 +144,51 @@ export function buildExportCsv(data: ExportData): string {
   );
 
   return `﻿${toCsv(rows)}`;
+}
+
+export interface PeriodCsvInput {
+  patientName: string;
+  /** Human label of the period, e.g. "5 Sept – 4 Oct 2026". */
+  rangeLabel: string;
+  /** IST date the file was made. */
+  generatedDate: string;
+  /** The headline figures of the report, written above the daily table. */
+  summary: Array<[string, CsvCell]>;
+  /** One row per IST day of the period. */
+  days: DayTrendPoint[];
+}
+
+/**
+ * A period (monthly / doctor-visit) report as a daily table. Days with nothing
+ * recorded keep their row with empty cells: a gap is a gap, not a zero.
+ */
+export function buildPeriodCsv(input: PeriodCsvInput): string {
+  const rows: CsvCell[][] = [];
+  rows.push(["SwasthTrack Health Summary Report"]);
+  rows.push(["Patient", input.patientName]);
+  rows.push(["Report Range", input.rangeLabel]);
+  rows.push(["Generated Date (IST)", input.generatedDate]);
+  rows.push([]);
+  rows.push(["SUMMARY"]);
+  for (const [label, value] of input.summary) rows.push([label, value]);
+  rows.push([]);
+  rows.push(["DAILY VALUES"]);
+  rows.push([
+    "Date",
+    "Wellness Score",
+    "BP readings",
+    "Avg Systolic (mmHg)",
+    "Avg Diastolic (mmHg)",
+    "Weight (kg)",
+    "Steps",
+    "Sleep (hours)",
+    "Calories (kcal)",
+  ]);
+  for (const d of input.days) {
+    rows.push([d.date, d.score, d.bpCount || null, d.sys, d.dia, d.weightKg, d.steps, d.sleepHours, d.calories]);
+  }
+  rows.push([]);
+  rows.push(["DISCLAIMER"]);
+  rows.push(["This report reflects habit tracking and logging consistency only. It is not a clinical medical diagnosis or treatment plan."]);
+  return `\uFEFF${toCsv(rows)}`;
 }

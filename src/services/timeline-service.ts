@@ -39,7 +39,13 @@ export type TimelineDomain =
   | "settings_change";
 
 export type EventDataSource = "Manual" | "Calculated" | "Estimated" | "Imported";
-export type DateScope = "today" | "yesterday" | "7d" | "30d" | "all";
+export type DateScope = "today" | "yesterday" | "7d" | "30d" | "all" | "custom";
+
+/** Inclusive IST dates for `DateScope` "custom". */
+export interface CustomRange {
+  start: string;
+  end: string;
+}
 
 export interface TimelineEvent {
   id: string;
@@ -74,19 +80,27 @@ export interface TimelineEvent {
   canDelete?: boolean;
 }
 
-export type TimelineTimeGroup = "Today" | "Yesterday" | "This Week" | "Older";
-
+/** One IST calendar day of the feed, newest day first. */
 export interface TimelineGroup {
-  groupKey: TimelineTimeGroup;
+  /** The IST date ("YYYY-MM-DD"): unique per group. */
+  groupKey: string;
+  dateStr: string;
+  /** Set for today / yesterday so the page can badge them. */
+  relative: "today" | "yesterday" | null;
   groupLabel: string;
   groupLabelHi: string;
+  /** Events of this day on the page(s) loaded so far. */
   events: TimelineEvent[];
+  /** Every event of this day in the window (more than `events.length` while later pages are unloaded). */
+  totalInDay: number;
 }
 
 export interface TimelineResult {
   groups: TimelineGroup[];
   /** Events in the whole window (not just this page). */
   totalCount: number;
+  /** Events per domain in the whole window (not just this page). */
+  domainCounts: Partial<Record<TimelineDomain, number>>;
   hasMore: boolean;
   /** IST dates (inclusive) the query covered; "all" is the last 365 days. */
   coveredFrom: string;
@@ -94,6 +108,7 @@ export interface TimelineResult {
 }
 
 const ALL_SCOPE_DAYS = 365;
+const MAX_CUSTOM_DAYS = 366;
 const DATE_ONLY_LABEL_HI = "पूरे दिन का";
 
 function formatTimeIST(iso: string): string {
@@ -109,14 +124,7 @@ function dateOnlyTimestamp(dateStr: string): string {
   return istInstant(dateStr, "00:00").toISOString();
 }
 
-function groupKeyOf(dateStr: string, today: string): TimelineTimeGroup {
-  if (dateStr === today) return "Today";
-  if (dateStr === addDaysIST(today, -1)) return "Yesterday";
-  if (dateStr >= addDaysIST(today, -6)) return "This Week";
-  return "Older";
-}
-
-function scopeWindow(scope: DateScope, today: string): { start: string; end: string } {
+function scopeWindow(scope: DateScope, today: string, custom?: CustomRange): { start: string; end: string } {
   switch (scope) {
     case "today":
       return { start: today, end: today };
@@ -128,6 +136,19 @@ function scopeWindow(scope: DateScope, today: string): { start: string; end: str
       return { start: addDaysIST(today, -6), end: today };
     case "30d":
       return { start: addDaysIST(today, -29), end: today };
+    case "custom": {
+      if (custom?.start && custom?.end) {
+        // Tolerate a reversed pick, never look past today, and bound the work.
+        let start = custom.start <= custom.end ? custom.start : custom.end;
+        let end = custom.start <= custom.end ? custom.end : custom.start;
+        if (end > today) end = today;
+        if (start > end) start = end;
+        const floor = addDaysIST(end, -(MAX_CUSTOM_DAYS - 1));
+        if (start < floor) start = floor;
+        return { start, end };
+      }
+      return { start: today, end: today };
+    }
     default:
       return { start: addDaysIST(today, -(ALL_SCOPE_DAYS - 1)), end: today };
   }
@@ -139,17 +160,32 @@ function bpTone(c: BPClassification): TimelineEvent["statusBadgeTone"] {
   return "green";
 }
 
+/** "सुबह · Morning" for the app's reading types; anything else is shown as typed. */
+function readingTypeLabel(type: string | null | undefined): string {
+  switch ((type ?? "").trim().toLowerCase()) {
+    case "morning":
+      return "सुबह (Morning)";
+    case "evening":
+      return "शाम (Evening)";
+    case "":
+      return "रीडिंग";
+    default:
+      return type as string;
+  }
+}
+
 function hhmmOrNull(value: string | null | undefined): string | null {
   const m = value ? /^(\d{1,2}):(\d{2})/.exec(value) : null;
   return m ? `${m[1].padStart(2, "0")}:${m[2]}` : null;
 }
 
-const GROUP_LABELS: Record<TimelineTimeGroup, { en: string; hi: string }> = {
-  Today: { en: "Today", hi: "आज" },
-  Yesterday: { en: "Yesterday", hi: "कल (बीता हुआ दिन)" },
-  "This Week": { en: "This Week", hi: "इस सप्ताह" },
-  Older: { en: "Earlier", hi: "पूर्व के रिकॉर्ड्स" },
-};
+const dayLabelFmt = new Intl.DateTimeFormat("en-IN", { timeZone: "UTC", weekday: "short", day: "numeric", month: "short" });
+
+/** "Sat, 3 Oct" for an IST calendar date (formatted in UTC from the date parts, so no timezone can shift it). */
+function dayLabel(dateStr: string): string {
+  const [y, m, d] = dateStr.split("-").map(Number);
+  return dayLabelFmt.format(new Date(Date.UTC(y, m - 1, d)));
+}
 
 /**
  * Unified health timeline. Every domain is read for the whole selected window
@@ -162,11 +198,12 @@ export async function getHealthTimelineEvents(
   dateScope: DateScope = "today",
   offset: number = 0,
   limit: number = 30,
+  customRange?: CustomRange,
 ): Promise<TimelineResult> {
   const profile = await getPatientProfile(patientId);
   const pid = patientId || profile.id;
   const today = todayIST();
-  const win = scopeWindow(dateScope, today);
+  const win = scopeWindow(dateScope, today, customRange);
   const wants = (d: TimelineDomain) => filterDomain === "all" || filterDomain === d;
 
   const keys: SeriesKey[] = [];
@@ -207,12 +244,12 @@ export async function getHealthTimelineEvents(
       metadata: { meal_type: f.meal_type, quantity: f.quantity, unit: f.unit },
       domain: "food",
       title: f.food_name,
-      titleHi: `${f.meal_type}: ${f.food_name}`,
+      titleHi: f.food_name,
       displayTime: formatTimeIST(time),
       dateStr: toISTDate(time),
       value: `${f.calories || 0} kcal`,
       unit: "kcal",
-      statusText: `${f.quantity} ${f.unit || "serving"} · ${f.meal_type}`,
+      statusText: `${f.quantity} ${f.unit || "serving"}`,
       statusBadge: f.meal_type,
       statusBadgeTone: "amber",
       source: "Manual",
@@ -238,13 +275,13 @@ export async function getHealthTimelineEvents(
       metadata: { systolic: b.systolic, diastolic: b.diastolic, pulse: b.pulse, category: cls.category },
       domain: "bp",
       title: "Blood Pressure Reading",
-      titleHi: `ब्लड प्रेशर माप (${b.reading_type || "रीडिंग"})`,
+      titleHi: "ब्लड प्रेशर माप",
       displayTime: formatTimeIST(time),
       dateStr: toISTDate(time),
       value: `${b.systolic}/${b.diastolic} mmHg`,
       unit: "mmHg",
-      statusText: `${cls.labelHi}${b.pulse ? ` · नाड़ी (Pulse): ${b.pulse} bpm` : ""}`,
-      statusBadge: b.reading_type || "BP",
+      statusText: `${readingTypeLabel(b.reading_type)}${b.pulse ? ` · नाड़ी (Pulse): ${b.pulse} bpm` : ""}`,
+      statusBadge: cls.labelHi,
       statusBadgeTone: bpTone(cls),
       source: "Manual",
       calculationStatus: "Raw",
@@ -283,12 +320,11 @@ export async function getHealthTimelineEvents(
         metadata: { status: m.status, scheduled_time: scheduledAt, medicine_id: m.medicine_id },
         domain: "medicine",
         title: name,
-        titleHi: `${name}: ${statusHi}`,
+        titleHi: name,
         displayTime: formatTimeIST(time),
         dateStr: took ? toISTDate(took) : doseDate,
-        value: m.status === "taken" ? "Taken ✓" : m.status === "late" ? "Late ⏳" : m.status === "missed" ? "Missed ✗" : "Pending",
-        statusText: took ? `निर्धारित समय ${formatTimeIST(scheduledAt)}` : `निर्धारित समय ${formatTimeIST(scheduledAt)} (दर्ज समय नहीं)`,
-        statusBadge: m.status.toUpperCase(),
+        value: m.status === "taken" ? "ली गई ✓" : m.status === "late" ? "देर से ⏳" : m.status === "missed" ? "छूटी ✗" : "बाकी",
+        statusText: `${statusHi} · ${took ? `निर्धारित समय ${formatTimeIST(scheduledAt)}` : `निर्धारित समय ${formatTimeIST(scheduledAt)} (दर्ज समय नहीं)`}`,
         statusBadgeTone: m.status === "taken" ? "green" : m.status === "late" ? "amber" : m.status === "missed" ? "red" : "neutral",
         source: isVirtual ? "Calculated" : "Manual",
         calculationStatus: isVirtual ? "Calculated" : "Raw",
@@ -429,25 +465,45 @@ export async function getHealthTimelineEvents(
     });
   }
 
-  events.sort((a, b) => new Date(b.event_timestamp).getTime() - new Date(a.event_timestamp).getTime());
+  // Newest first. Ties (several records stamped the same minute, or date-only
+  // records at midnight) fall back to the id so a page boundary is stable.
+  const ts = (e: TimelineEvent) => new Date(e.event_timestamp).getTime();
+  events.sort((a, b) => ts(b) - ts(a) || a.id.localeCompare(b.id));
 
   const totalCount = events.length;
   const page = events.slice(offset, offset + limit);
 
-  const order: TimelineTimeGroup[] = ["Today", "Yesterday", "This Week", "Older"];
-  const buckets: Record<TimelineTimeGroup, TimelineEvent[]> = { Today: [], Yesterday: [], "This Week": [], Older: [] };
-  page.forEach((ev) => buckets[groupKeyOf(ev.dateStr, today)].push(ev));
+  const perDay = new Map<string, number>();
+  const domainCounts: Partial<Record<TimelineDomain, number>> = {};
+  for (const ev of events) {
+    perDay.set(ev.dateStr, (perDay.get(ev.dateStr) ?? 0) + 1);
+    domainCounts[ev.domain] = (domainCounts[ev.domain] ?? 0) + 1;
+  }
+
+  // One group per IST day; the page is already newest-first, so insertion order is newest day first.
+  const byDay = new Map<string, TimelineEvent[]>();
+  for (const ev of page) {
+    const list = byDay.get(ev.dateStr);
+    if (list) list.push(ev);
+    else byDay.set(ev.dateStr, [ev]);
+  }
+  const yesterday = addDaysIST(today, -1);
 
   return {
-    groups: order
-      .filter((k) => buckets[k].length > 0)
-      .map((k) => ({
-        groupKey: k,
-        groupLabel: GROUP_LABELS[k].en,
-        groupLabelHi: GROUP_LABELS[k].hi,
-        events: buckets[k],
-      })),
+    groups: [...byDay.entries()].map(([dateStr, dayEvents]) => {
+      const relative = dateStr === today ? "today" : dateStr === yesterday ? "yesterday" : null;
+      return {
+        groupKey: dateStr,
+        dateStr,
+        relative,
+        groupLabel: relative === "today" ? "Today" : relative === "yesterday" ? "Yesterday" : dayLabel(dateStr),
+        groupLabelHi: relative === "today" ? "आज" : relative === "yesterday" ? "कल" : dayLabel(dateStr),
+        events: dayEvents,
+        totalInDay: perDay.get(dateStr) ?? dayEvents.length,
+      };
+    }),
     totalCount,
+    domainCounts,
     hasMore: offset + limit < totalCount,
     coveredFrom: win.start,
     coveredTo: win.end,

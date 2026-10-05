@@ -1,0 +1,7363 @@
+{
+ "items": [
+  {
+   "slug": "pizza-margherita",
+   "name": "Margherita Pizza",
+   "hi": "मार्गरिटा पिज़्ज़ा",
+   "alias": [
+    "margarita pizza",
+    "cheese pizza",
+    "plain cheese pizza",
+    "pizza margherita",
+    "पिज़्ज़ा"
+   ],
+   "cat": "fastfood",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🍕",
+   "unit": "g",
+   "kcal": 255,
+   "p": 10.5,
+   "c": 30,
+   "f": 10.5,
+   "fib": 1.8,
+   "na": 560,
+   "portions": [
+    {
+     "n": "1 slice (100 g)",
+     "hi": "1 स्लाइस",
+     "g": 100
+    },
+    {
+     "n": "2 slices (200 g)",
+     "hi": "2 स्लाइस",
+     "g": 200
+    },
+    {
+     "n": "1 personal pizza (7 inch) (250 g)",
+     "hi": "1 पर्सनल पिज़्ज़ा",
+     "g": 250
+    }
+   ],
+   "src": "Standard Indian restaurant/chain recipe estimate; cross-checked USDA fast-food entries and INDB",
+   "conf": "medium",
+   "note": "Indian pizza-chain regular crust, cheese + tomato sauce; medium 8-slice pizza, 1 slice ~100 g. INDB cheese pizza 250 agrees."
+  },
+  {
+   "slug": "pizza-veg",
+   "name": "Veg Pizza",
+   "hi": "वेज पिज़्ज़ा",
+   "alias": [
+    "vegetable pizza",
+    "veggie pizza",
+    "onion capsicum pizza",
+    "veg loaded pizza",
+    "सब्ज़ी पिज़्ज़ा"
+   ],
+   "cat": "fastfood",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🍕",
+   "unit": "g",
+   "kcal": 245,
+   "p": 9.5,
+   "c": 30,
+   "f": 9.5,
+   "fib": 2.2,
+   "na": 520,
+   "portions": [
+    {
+     "n": "1 slice (100 g)",
+     "hi": "1 स्लाइस",
+     "g": 100
+    },
+    {
+     "n": "2 slices (200 g)",
+     "hi": "2 स्लाइस",
+     "g": 200
+    },
+    {
+     "n": "1 personal pizza (7 inch) (250 g)",
+     "hi": "1 पर्सनल पिज़्ज़ा",
+     "g": 250
+    }
+   ],
+   "src": "Standard Indian restaurant/chain recipe estimate; cross-checked USDA fast-food entries and INDB",
+   "conf": "medium",
+   "note": "Regular crust with onion, capsicum, tomato, sweet corn and cheese; slightly lower than plain cheese pizza because of the vegetables."
+  },
+  {
+   "slug": "pizza-paneer-tikka",
+   "name": "Paneer Tikka Pizza",
+   "hi": "पनीर टिक्का पिज़्ज़ा",
+   "alias": [
+    "paneer pizza",
+    "panir pizza",
+    "paneer tikka pizza slice",
+    "पनीर पिज़्ज़ा"
+   ],
+   "cat": "fastfood",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🍕",
+   "unit": "g",
+   "kcal": 265,
+   "p": 11.5,
+   "c": 29,
+   "f": 11.7,
+   "fib": 2,
+   "na": 540,
+   "portions": [
+    {
+     "n": "1 slice (100 g)",
+     "hi": "1 स्लाइस",
+     "g": 100
+    },
+    {
+     "n": "2 slices (200 g)",
+     "hi": "2 स्लाइस",
+     "g": 200
+    },
+    {
+     "n": "1 personal pizza (7 inch) (250 g)",
+     "hi": "1 पर्सनल पिज़्ज़ा",
+     "g": 250
+    }
+   ],
+   "src": "Standard Indian restaurant/chain recipe estimate; cross-checked USDA fast-food entries and INDB",
+   "conf": "medium",
+   "note": "Regular crust with tandoori paneer cubes, onion, capsicum and cheese."
+  },
+  {
+   "slug": "pizza-chicken",
+   "name": "Chicken Pizza",
+   "hi": "चिकन पिज़्ज़ा",
+   "alias": [
+    "chicken tikka pizza",
+    "non veg pizza",
+    "chicken topping pizza",
+    "चिकन टिक्का पिज़्ज़ा"
+   ],
+   "cat": "fastfood",
+   "region": "International",
+   "diet": "nonveg",
+   "emoji": "🍕",
+   "unit": "g",
+   "kcal": 255,
+   "p": 13,
+   "c": 28,
+   "f": 10,
+   "fib": 1.6,
+   "na": 570,
+   "portions": [
+    {
+     "n": "1 slice (100 g)",
+     "hi": "1 स्लाइस",
+     "g": 100
+    },
+    {
+     "n": "2 slices (200 g)",
+     "hi": "2 स्लाइस",
+     "g": 200
+    },
+    {
+     "n": "1 personal pizza (7 inch) (250 g)",
+     "hi": "1 पर्सनल पिज़्ज़ा",
+     "g": 250
+    }
+   ],
+   "src": "Standard Indian restaurant/chain recipe estimate; cross-checked USDA fast-food entries and INDB",
+   "conf": "medium",
+   "note": "Regular crust with chicken tikka pieces and cheese."
+  },
+  {
+   "slug": "pizza-farmhouse",
+   "name": "Farmhouse Pizza",
+   "hi": "फार्महाउस पिज़्ज़ा",
+   "alias": [
+    "farm house pizza",
+    "mushroom capsicum pizza",
+    "garden pizza",
+    "फार्म हाउस पिज़्ज़ा"
+   ],
+   "cat": "fastfood",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🍕",
+   "unit": "g",
+   "kcal": 245,
+   "p": 9.8,
+   "c": 30,
+   "f": 9.3,
+   "fib": 2.4,
+   "na": 520,
+   "portions": [
+    {
+     "n": "1 slice (100 g)",
+     "hi": "1 स्लाइस",
+     "g": 100
+    },
+    {
+     "n": "2 slices (200 g)",
+     "hi": "2 स्लाइस",
+     "g": 200
+    },
+    {
+     "n": "1 personal pizza (7 inch) (250 g)",
+     "hi": "1 पर्सनल पिज़्ज़ा",
+     "g": 250
+    }
+   ],
+   "src": "Standard Indian restaurant/chain recipe estimate; cross-checked USDA fast-food entries and INDB",
+   "conf": "medium",
+   "note": "Regular crust with onion, capsicum, tomato, mushroom and cheese."
+  },
+  {
+   "slug": "pizza-cheese-burst",
+   "name": "Cheese Burst Pizza",
+   "hi": "चीज़ बर्स्ट पिज़्ज़ा",
+   "alias": [
+    "cheese burst",
+    "extra cheese pizza",
+    "double cheese pizza",
+    "चीज़ बर्स्ट"
+   ],
+   "cat": "fastfood",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🍕",
+   "unit": "g",
+   "kcal": 290,
+   "p": 12,
+   "c": 30,
+   "f": 13.5,
+   "fib": 1.5,
+   "na": 620,
+   "portions": [
+    {
+     "n": "1 slice (110 g)",
+     "hi": "1 स्लाइस",
+     "g": 110
+    },
+    {
+     "n": "2 slices (220 g)",
+     "hi": "2 स्लाइस",
+     "g": 220
+    }
+   ],
+   "src": "Standard Indian restaurant/chain recipe estimate; cross-checked USDA fast-food entries and INDB",
+   "conf": "medium",
+   "note": "Cheese-filled crust edge adds ~35 kcal per 100 g over a normal pizza; slice ~110 g."
+  },
+  {
+   "slug": "burger-aloo-tikki",
+   "name": "Aloo Tikki Burger",
+   "hi": "आलू टिक्की बर्गर",
+   "alias": [
+    "mcaloo tikki",
+    "mc aloo tikki burger",
+    "aloo patty burger",
+    "potato burger",
+    "आलू बर्गर"
+   ],
+   "cat": "fastfood",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍔",
+   "unit": "g",
+   "kcal": 235,
+   "p": 6.3,
+   "c": 34,
+   "f": 8.5,
+   "fib": 2.3,
+   "na": 480,
+   "portions": [
+    {
+     "n": "1 burger (150 g)",
+     "hi": "1 बर्गर",
+     "g": 150
+    }
+   ],
+   "src": "Standard Indian restaurant/chain recipe estimate; cross-checked USDA fast-food entries and INDB",
+   "conf": "medium",
+   "note": "Fast-food chain style potato-pea patty in a plain bun with mayo and sauce; 1 burger ~150 g ~ 350 kcal (published chain value ~340). INDB veg burger (520/100 g) is wrong, it assumes patty is oil-soaked."
+  },
+  {
+   "slug": "burger-veg",
+   "name": "Veg Burger",
+   "hi": "वेज बर्गर",
+   "alias": [
+    "vegetable burger",
+    "veg patty burger",
+    "veggie burger",
+    "वेज पैटी बर्गर"
+   ],
+   "cat": "fastfood",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍔",
+   "unit": "g",
+   "kcal": 250,
+   "p": 8,
+   "c": 34,
+   "f": 9.5,
+   "fib": 2.5,
+   "na": 500,
+   "portions": [
+    {
+     "n": "1 burger (160 g)",
+     "hi": "1 बर्गर",
+     "g": 160
+    }
+   ],
+   "src": "Standard Indian restaurant/chain recipe estimate; cross-checked USDA fast-food entries and INDB",
+   "conf": "medium",
+   "note": "Mixed-veg crumb-coated shallow-fried patty, bun, mayo, lettuce; 1 burger ~160 g. INDB 520/100 g not used (gross oil error)."
+  },
+  {
+   "slug": "burger-chicken",
+   "name": "Chicken Burger",
+   "hi": "चिकन बर्गर",
+   "alias": [
+    "chicken patty burger",
+    "crispy chicken burger",
+    "zinger burger",
+    "चिकन पैटी बर्गर"
+   ],
+   "cat": "fastfood",
+   "region": "International",
+   "diet": "nonveg",
+   "emoji": "🍔",
+   "unit": "g",
+   "kcal": 258,
+   "p": 12.5,
+   "c": 27,
+   "f": 11.5,
+   "fib": 1.3,
+   "na": 560,
+   "portions": [
+    {
+     "n": "1 burger (170 g)",
+     "hi": "1 बर्गर",
+     "g": 170
+    }
+   ],
+   "src": "Standard Indian restaurant/chain recipe estimate; cross-checked USDA fast-food entries and INDB",
+   "conf": "medium",
+   "note": "Crumb-fried chicken patty in a plain bun with mayo and lettuce; 1 burger ~170 g."
+  },
+  {
+   "slug": "burger-paneer",
+   "name": "Paneer Burger",
+   "hi": "पनीर बर्गर",
+   "alias": [
+    "paneer tikka burger",
+    "paneer patty burger",
+    "paneer crunch burger",
+    "पनीर टिक्का बर्गर"
+   ],
+   "cat": "fastfood",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍔",
+   "unit": "g",
+   "kcal": 265,
+   "p": 10,
+   "c": 29,
+   "f": 12.5,
+   "fib": 1.8,
+   "na": 480,
+   "portions": [
+    {
+     "n": "1 burger (175 g)",
+     "hi": "1 बर्गर",
+     "g": 175
+    }
+   ],
+   "src": "Standard Indian restaurant/chain recipe estimate; cross-checked USDA fast-food entries and INDB",
+   "conf": "medium",
+   "note": "Crumb-coated fried paneer patty in a bun with mayo; 1 burger ~175 g."
+  },
+  {
+   "slug": "burger-double-chicken-cheese",
+   "name": "Double Chicken Cheeseburger",
+   "hi": "डबल चिकन चीज़ बर्गर",
+   "alias": [
+    "double burger",
+    "double patty burger",
+    "double cheese burger",
+    "डबल बर्गर"
+   ],
+   "cat": "fastfood",
+   "region": "International",
+   "diet": "nonveg",
+   "emoji": "🍔",
+   "unit": "g",
+   "kcal": 270,
+   "p": 14.5,
+   "c": 24,
+   "f": 13.5,
+   "fib": 1.2,
+   "na": 600,
+   "portions": [
+    {
+     "n": "1 burger (220 g)",
+     "hi": "1 बर्गर",
+     "g": 220
+    }
+   ],
+   "src": "Standard Indian restaurant/chain recipe estimate; cross-checked USDA fast-food entries and INDB",
+   "conf": "medium",
+   "note": "Two grilled chicken patties, cheese slice, bun and sauce; 1 burger ~220 g ~ 590 kcal."
+  },
+  {
+   "slug": "sandwich-veg-grilled",
+   "name": "Veg Grilled Sandwich",
+   "hi": "वेज ग्रिल्ड सैंडविच",
+   "alias": [
+    "grilled sandwich",
+    "veg sandwich",
+    "vegetable sandwich",
+    "bombay grilled sandwich",
+    "वेज सैंडविच"
+   ],
+   "cat": "fastfood",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥪",
+   "unit": "g",
+   "kcal": 215,
+   "p": 6,
+   "c": 30,
+   "f": 7.5,
+   "fib": 2.8,
+   "na": 480,
+   "portions": [
+    {
+     "n": "1 sandwich (2 slices) (120 g)",
+     "hi": "1 सैंडविच",
+     "g": 120
+    },
+    {
+     "n": "1 triangle (60 g)",
+     "hi": "1 तिकोना",
+     "g": 60
+    }
+   ],
+   "src": "Standard Indian restaurant/chain recipe estimate; cross-checked USDA fast-food entries and INDB",
+   "conf": "medium",
+   "note": "White/brown bread, butter, green chutney, cucumber-tomato-onion-potato, grilled; INDB ASC036 244 and ASC025 189 bracket this."
+  },
+  {
+   "slug": "sandwich-cheese-grilled",
+   "name": "Cheese Grilled Sandwich",
+   "hi": "चीज़ ग्रिल्ड सैंडविच",
+   "alias": [
+    "cheese sandwich",
+    "grilled cheese sandwich",
+    "veg cheese sandwich",
+    "cheese toast sandwich",
+    "चीज़ सैंडविच"
+   ],
+   "cat": "fastfood",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥪",
+   "unit": "g",
+   "kcal": 290,
+   "p": 11,
+   "c": 29,
+   "f": 14.5,
+   "fib": 1.8,
+   "na": 600,
+   "portions": [
+    {
+     "n": "1 sandwich (2 slices) (130 g)",
+     "hi": "1 सैंडविच",
+     "g": 130
+    },
+    {
+     "n": "1 triangle (65 g)",
+     "hi": "1 तिकोना",
+     "g": 65
+    }
+   ],
+   "src": "Standard Indian restaurant/chain recipe estimate; cross-checked USDA fast-food entries and INDB",
+   "conf": "medium",
+   "note": "Bread, butter and a cheese slice or grated processed cheese, grilled; INDB toasted cheese sandwich 225-245 but without enough cheese."
+  },
+  {
+   "slug": "sandwich-club-veg",
+   "name": "Veg Club Sandwich",
+   "hi": "वेज क्लब सैंडविच",
+   "alias": [
+    "vegetable club sandwich",
+    "triple decker veg sandwich",
+    "veg triple decker",
+    "वेज क्लब"
+   ],
+   "cat": "fastfood",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🥪",
+   "unit": "g",
+   "kcal": 215,
+   "p": 6.5,
+   "c": 22,
+   "f": 11,
+   "fib": 2.5,
+   "na": 430,
+   "portions": [
+    {
+     "n": "1 sandwich (4 triangles) (240 g)",
+     "hi": "1 सैंडविच",
+     "g": 240
+    }
+   ],
+   "src": "Standard Indian restaurant/chain recipe estimate; cross-checked USDA fast-food entries and INDB",
+   "conf": "medium",
+   "note": "Three bread slices, mayo, cheese slice, lettuce, tomato, cucumber; 1 club sandwich ~240 g."
+  },
+  {
+   "slug": "sandwich-club-chicken",
+   "name": "Chicken Club Sandwich",
+   "hi": "चिकन क्लब सैंडविच",
+   "alias": [
+    "club sandwich",
+    "triple decker chicken sandwich",
+    "chicken triple decker",
+    "क्लब सैंडविच"
+   ],
+   "cat": "fastfood",
+   "region": "International",
+   "diet": "nonveg",
+   "emoji": "🥪",
+   "unit": "g",
+   "kcal": 230,
+   "p": 11.5,
+   "c": 20,
+   "f": 11.5,
+   "fib": 1.5,
+   "na": 520,
+   "portions": [
+    {
+     "n": "1 sandwich (4 triangles) (250 g)",
+     "hi": "1 सैंडविच",
+     "g": 250
+    }
+   ],
+   "src": "Standard Indian restaurant/chain recipe estimate; cross-checked USDA fast-food entries and INDB",
+   "conf": "medium",
+   "note": "Three bread slices, grilled chicken, egg or cheese, mayo, salad; 1 sandwich ~250 g. INDB club sandwich 235 agrees."
+  },
+  {
+   "slug": "sandwich-bombay-masala-toast",
+   "name": "Bombay Masala Toast Sandwich",
+   "hi": "बॉम्बे मसाला टोस्ट सैंडविच",
+   "alias": [
+    "bombay sandwich",
+    "mumbai sandwich",
+    "masala toast sandwich",
+    "mumbai masala toast",
+    "मुंबई सैंडविच",
+    "मसाला टोस्ट"
+   ],
+   "cat": "fastfood",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🥪",
+   "unit": "g",
+   "kcal": 205,
+   "p": 5,
+   "c": 30,
+   "f": 7.5,
+   "fib": 2.5,
+   "na": 480,
+   "portions": [
+    {
+     "n": "1 sandwich (2 slices) (130 g)",
+     "hi": "1 सैंडविच",
+     "g": 130
+    }
+   ],
+   "src": "Standard Indian restaurant/chain recipe estimate; cross-checked USDA fast-food entries and INDB",
+   "conf": "medium",
+   "note": "Mumbai street style: bread, butter, green chutney, boiled potato, beetroot, cucumber, tomato, onion, sandwich masala, toasted."
+  },
+  {
+   "slug": "sandwich-egg",
+   "name": "Egg Sandwich",
+   "hi": "अंडा सैंडविच",
+   "alias": [
+    "anda sandwich",
+    "egg bhurji sandwich",
+    "omelette sandwich",
+    "boiled egg sandwich",
+    "एग सैंडविच"
+   ],
+   "cat": "fastfood",
+   "region": "Pan-India",
+   "diet": "egg",
+   "emoji": "🥪",
+   "unit": "g",
+   "kcal": 240,
+   "p": 10,
+   "c": 24,
+   "f": 11.5,
+   "fib": 1.5,
+   "na": 460,
+   "portions": [
+    {
+     "n": "1 sandwich (2 slices) (130 g)",
+     "hi": "1 सैंडविच",
+     "g": 130
+    },
+    {
+     "n": "1 triangle (65 g)",
+     "hi": "1 तिकोना",
+     "g": 65
+    }
+   ],
+   "src": "Standard Indian restaurant/chain recipe estimate; cross-checked USDA fast-food entries and INDB",
+   "conf": "medium",
+   "note": "Bread, butter, 1 omelette or egg per sandwich; INDB ASC024 286 is higher because of heavy butter."
+  },
+  {
+   "slug": "sandwich-chicken",
+   "name": "Chicken Sandwich",
+   "hi": "चिकन सैंडविच",
+   "alias": [
+    "grilled chicken sandwich",
+    "chicken mayo sandwich",
+    "chicken tikka sandwich",
+    "चिकन ग्रिल्ड सैंडविच"
+   ],
+   "cat": "fastfood",
+   "region": "International",
+   "diet": "nonveg",
+   "emoji": "🥪",
+   "unit": "g",
+   "kcal": 230,
+   "p": 12.5,
+   "c": 24,
+   "f": 9.5,
+   "fib": 1.5,
+   "na": 500,
+   "portions": [
+    {
+     "n": "1 sandwich (2 slices) (140 g)",
+     "hi": "1 सैंडविच",
+     "g": 140
+    },
+    {
+     "n": "1 triangle (70 g)",
+     "hi": "1 तिकोना",
+     "g": 70
+    }
+   ],
+   "src": "Standard Indian restaurant/chain recipe estimate; cross-checked USDA fast-food entries and INDB",
+   "conf": "medium",
+   "note": "Bread with shredded chicken in light mayo and veg, grilled; INDB ASC028 253 / ASC043 167 bracket this."
+  },
+  {
+   "slug": "sandwich-paneer-tikka",
+   "name": "Paneer Tikka Sandwich",
+   "hi": "पनीर टिक्का सैंडविच",
+   "alias": [
+    "paneer sandwich",
+    "paneer grilled sandwich",
+    "panir sandwich",
+    "पनीर सैंडविच"
+   ],
+   "cat": "fastfood",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥪",
+   "unit": "g",
+   "kcal": 255,
+   "p": 11,
+   "c": 26,
+   "f": 11.5,
+   "fib": 1.8,
+   "na": 470,
+   "portions": [
+    {
+     "n": "1 sandwich (2 slices) (140 g)",
+     "hi": "1 सैंडविच",
+     "g": 140
+    },
+    {
+     "n": "1 triangle (70 g)",
+     "hi": "1 तिकोना",
+     "g": 70
+    }
+   ],
+   "src": "Standard Indian restaurant/chain recipe estimate; cross-checked USDA fast-food entries and INDB",
+   "conf": "medium",
+   "note": "Bread, butter, marinated paneer cubes, onion, capsicum, grilled."
+  },
+  {
+   "slug": "sandwich-cucumber",
+   "name": "Cucumber Sandwich",
+   "hi": "खीरा सैंडविच",
+   "alias": [
+    "kheera sandwich",
+    "kakdi sandwich",
+    "cucumber tea sandwich",
+    "ककड़ी सैंडविच"
+   ],
+   "cat": "fastfood",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥪",
+   "unit": "g",
+   "kcal": 190,
+   "p": 5,
+   "c": 28,
+   "f": 6.5,
+   "fib": 2,
+   "na": 380,
+   "portions": [
+    {
+     "n": "1 triangle (35 g)",
+     "hi": "1 तिकोना",
+     "g": 35
+    },
+    {
+     "n": "1 sandwich (2 slices) (90 g)",
+     "hi": "1 सैंडविच",
+     "g": 90
+    }
+   ],
+   "src": "Standard Indian restaurant/chain recipe estimate; cross-checked USDA fast-food entries and INDB",
+   "conf": "medium",
+   "note": "Cold, white bread with butter, cucumber slices and salt; INDB ASC025 189 agrees."
+  },
+  {
+   "slug": "sandwich-pav",
+   "name": "Pav Sandwich",
+   "hi": "पाव सैंडविच",
+   "alias": [
+    "masala pav sandwich",
+    "grilled pav sandwich",
+    "veg pav sandwich",
+    "पाव भाजी सैंडविच"
+   ],
+   "cat": "fastfood",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🥪",
+   "unit": "g",
+   "kcal": 235,
+   "p": 6,
+   "c": 36,
+   "f": 7.5,
+   "fib": 2.5,
+   "na": 480,
+   "portions": [
+    {
+     "n": "1 pav sandwich (110 g)",
+     "hi": "1 पाव सैंडविच",
+     "g": 110
+    }
+   ],
+   "src": "Standard Indian restaurant/chain recipe estimate; cross-checked USDA fast-food entries and INDB",
+   "conf": "medium",
+   "note": "Pav stuffed with spiced potato-veg masala and butter, grilled; 1 sandwich ~110 g."
+  },
+  {
+   "slug": "roll-egg",
+   "name": "Egg Roll (Kathi Roll)",
+   "hi": "एग रोल",
+   "alias": [
+    "anda roll",
+    "egg kathi roll",
+    "kolkata egg roll",
+    "egg wrap",
+    "अंडा रोल"
+   ],
+   "cat": "fastfood",
+   "region": "West Bengal",
+   "diet": "egg",
+   "emoji": "🌯",
+   "unit": "g",
+   "kcal": 215,
+   "p": 8,
+   "c": 24,
+   "f": 10,
+   "fib": 1.5,
+   "na": 380,
+   "portions": [
+    {
+     "n": "1 roll (150 g)",
+     "hi": "1 रोल",
+     "g": 150
+    }
+   ],
+   "src": "Standard Indian restaurant/chain recipe estimate; cross-checked USDA fast-food entries and INDB",
+   "conf": "medium",
+   "note": "Paratha rolled round an egg omelette, onion, lime, chilli sauce; 1 roll ~150 g ~ 320 kcal."
+  },
+  {
+   "slug": "roll-veg-kathi",
+   "name": "Veg Kathi Roll",
+   "hi": "वेज काठी रोल",
+   "alias": [
+    "aloo kathi roll",
+    "veg roll",
+    "vegetable roll",
+    "veg wrap",
+    "वेज रोल"
+   ],
+   "cat": "fastfood",
+   "region": "West Bengal",
+   "diet": "veg",
+   "emoji": "🌯",
+   "unit": "g",
+   "kcal": 210,
+   "p": 5,
+   "c": 29,
+   "f": 8,
+   "fib": 2.5,
+   "na": 400,
+   "portions": [
+    {
+     "n": "1 roll (160 g)",
+     "hi": "1 रोल",
+     "g": 160
+    }
+   ],
+   "src": "Standard Indian restaurant/chain recipe estimate; cross-checked USDA fast-food entries and INDB",
+   "conf": "medium",
+   "note": "Paratha with spiced potato/veg filling, onion, chutney; 1 roll ~160 g."
+  },
+  {
+   "slug": "roll-paneer",
+   "name": "Paneer Kathi Roll",
+   "hi": "पनीर काठी रोल",
+   "alias": [
+    "paneer roll",
+    "paneer tikka roll",
+    "paneer wrap",
+    "panir roll",
+    "पनीर रोल"
+   ],
+   "cat": "fastfood",
+   "region": "West Bengal",
+   "diet": "veg",
+   "emoji": "🌯",
+   "unit": "g",
+   "kcal": 238,
+   "p": 9,
+   "c": 24,
+   "f": 11.5,
+   "fib": 2,
+   "na": 400,
+   "portions": [
+    {
+     "n": "1 roll (170 g)",
+     "hi": "1 रोल",
+     "g": 170
+    }
+   ],
+   "src": "Standard Indian restaurant/chain recipe estimate; cross-checked USDA fast-food entries and INDB",
+   "conf": "medium",
+   "note": "Paratha with tandoori paneer, onion, capsicum and sauce; 1 roll ~170 g ~ 400 kcal."
+  },
+  {
+   "slug": "roll-chicken",
+   "name": "Chicken Kathi Roll",
+   "hi": "चिकन काठी रोल",
+   "alias": [
+    "chicken roll",
+    "chicken tikka roll",
+    "chicken wrap",
+    "चिकन रोल"
+   ],
+   "cat": "fastfood",
+   "region": "West Bengal",
+   "diet": "nonveg",
+   "emoji": "🌯",
+   "unit": "g",
+   "kcal": 220,
+   "p": 11,
+   "c": 22,
+   "f": 9.5,
+   "fib": 1.3,
+   "na": 420,
+   "portions": [
+    {
+     "n": "1 roll (170 g)",
+     "hi": "1 रोल",
+     "g": 170
+    }
+   ],
+   "src": "Standard Indian restaurant/chain recipe estimate; cross-checked USDA fast-food entries and INDB",
+   "conf": "medium",
+   "note": "Paratha with chicken tikka pieces, onion, sauce; 1 roll ~170 g."
+  },
+  {
+   "slug": "roll-seekh-kabab",
+   "name": "Seekh Kabab Roll",
+   "hi": "सीख कबाब रोल",
+   "alias": [
+    "kabab roll",
+    "kebab roll",
+    "seekh kebab roll",
+    "mutton kabab roll",
+    "कबाब रोल"
+   ],
+   "cat": "fastfood",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🌯",
+   "unit": "g",
+   "kcal": 235,
+   "p": 12,
+   "c": 22,
+   "f": 11.5,
+   "fib": 1.3,
+   "na": 480,
+   "portions": [
+    {
+     "n": "1 roll (170 g)",
+     "hi": "1 रोल",
+     "g": 170
+    }
+   ],
+   "src": "Standard Indian restaurant/chain recipe estimate; cross-checked USDA fast-food entries and INDB",
+   "conf": "medium",
+   "note": "Paratha or roomali with 2 seekh kababs, onion, mint chutney; 1 roll ~170 g."
+  },
+  {
+   "slug": "roll-frankie",
+   "name": "Bombay Veg Frankie",
+   "hi": "वेज फ्रैंकी",
+   "alias": [
+    "frankie",
+    "aloo frankie",
+    "veg frankie",
+    "mumbai frankie",
+    "वेज फ्रेंकी"
+   ],
+   "cat": "fastfood",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🌯",
+   "unit": "g",
+   "kcal": 215,
+   "p": 5,
+   "c": 31,
+   "f": 8,
+   "fib": 2.8,
+   "na": 450,
+   "portions": [
+    {
+     "n": "1 frankie (130 g)",
+     "hi": "1 फ्रैंकी",
+     "g": 130
+    }
+   ],
+   "src": "Standard Indian restaurant/chain recipe estimate; cross-checked USDA fast-food entries and INDB",
+   "conf": "medium",
+   "note": "Thin roti rolled with spiced potato filling, onion and tangy masala; 1 frankie ~130 g."
+  },
+  {
+   "slug": "roll-shawarma-chicken",
+   "name": "Chicken Shawarma Roll",
+   "hi": "चिकन शावरमा",
+   "alias": [
+    "shawarma",
+    "shwarma",
+    "shawarma wrap",
+    "chicken shawarma",
+    "शवर्मा"
+   ],
+   "cat": "fastfood",
+   "region": "International",
+   "diet": "nonveg",
+   "emoji": "🌯",
+   "unit": "g",
+   "kcal": 220,
+   "p": 13,
+   "c": 20,
+   "f": 10,
+   "fib": 1.2,
+   "na": 520,
+   "portions": [
+    {
+     "n": "1 roll (200 g)",
+     "hi": "1 रोल",
+     "g": 200
+    }
+   ],
+   "src": "Standard Indian restaurant/chain recipe estimate; cross-checked USDA fast-food entries and INDB",
+   "conf": "medium",
+   "note": "Pita/khubz with shaved spit-roast chicken, garlic mayo, pickles and salad; 1 roll ~200 g ~ 440 kcal."
+  },
+  {
+   "slug": "wrap-falafel",
+   "name": "Falafel Wrap",
+   "hi": "फलाफल रैप",
+   "alias": [
+    "falafel roll",
+    "falafel pita",
+    "falafel sandwich",
+    "फलाफेल"
+   ],
+   "cat": "fastfood",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🌯",
+   "unit": "g",
+   "kcal": 230,
+   "p": 7,
+   "c": 28,
+   "f": 10,
+   "fib": 4,
+   "na": 430,
+   "portions": [
+    {
+     "n": "1 wrap (200 g)",
+     "hi": "1 रैप",
+     "g": 200
+    }
+   ],
+   "src": "Standard Indian restaurant/chain recipe estimate; cross-checked USDA fast-food entries and INDB",
+   "conf": "medium",
+   "note": "Fried chickpea falafel with hummus, salad and pita; 1 wrap ~200 g."
+  },
+  {
+   "slug": "momos-veg-steamed",
+   "name": "Steamed Veg Momos",
+   "hi": "वेज मोमोज़",
+   "alias": [
+    "veg momo",
+    "momo",
+    "momos",
+    "vegetable momos",
+    "veg dumplings",
+    "steamed momos",
+    "मोमो"
+   ],
+   "cat": "fastfood",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥟",
+   "unit": "g",
+   "kcal": 150,
+   "p": 4.5,
+   "c": 25,
+   "f": 3,
+   "fib": 2,
+   "na": 380,
+   "portions": [
+    {
+     "n": "1 piece (25 g)",
+     "hi": "1 पीस",
+     "g": 25
+    },
+    {
+     "n": "1 plate (6 pieces) (150 g)",
+     "hi": "1 प्लेट",
+     "g": 150
+    }
+   ],
+   "src": "Standard Indian restaurant/chain recipe estimate; cross-checked USDA fast-food entries and INDB",
+   "conf": "medium",
+   "note": "Maida wrapper with cabbage-carrot-onion filling, steamed, no dip; momo chutney adds ~10 kcal per piece."
+  },
+  {
+   "slug": "momos-chicken-steamed",
+   "name": "Steamed Chicken Momos",
+   "hi": "चिकन मोमोज़",
+   "alias": [
+    "chicken momo",
+    "chicken dumplings",
+    "chicken steamed momo",
+    "चिकन मोमो"
+   ],
+   "cat": "fastfood",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🥟",
+   "unit": "g",
+   "kcal": 175,
+   "p": 9.5,
+   "c": 22,
+   "f": 5.5,
+   "fib": 1,
+   "na": 420,
+   "portions": [
+    {
+     "n": "1 piece (28 g)",
+     "hi": "1 पीस",
+     "g": 28
+    },
+    {
+     "n": "1 plate (6 pieces) (170 g)",
+     "hi": "1 प्लेट",
+     "g": 170
+    }
+   ],
+   "src": "Standard Indian restaurant/chain recipe estimate; cross-checked USDA fast-food entries and INDB",
+   "conf": "medium",
+   "note": "Maida wrapper with minced chicken and onion, steamed, no dip."
+  },
+  {
+   "slug": "momos-paneer-steamed",
+   "name": "Steamed Paneer Momos",
+   "hi": "पनीर मोमोज़",
+   "alias": [
+    "paneer momo",
+    "paneer dumplings",
+    "panir momos",
+    "पनीर मोमो"
+   ],
+   "cat": "fastfood",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥟",
+   "unit": "g",
+   "kcal": 190,
+   "p": 8.5,
+   "c": 23,
+   "f": 7,
+   "fib": 1.2,
+   "na": 360,
+   "portions": [
+    {
+     "n": "1 piece (28 g)",
+     "hi": "1 पीस",
+     "g": 28
+    },
+    {
+     "n": "1 plate (6 pieces) (170 g)",
+     "hi": "1 प्लेट",
+     "g": 170
+    }
+   ],
+   "src": "Standard Indian restaurant/chain recipe estimate; cross-checked USDA fast-food entries and INDB",
+   "conf": "medium",
+   "note": "Maida wrapper with crumbled paneer, onion and spices, steamed."
+  },
+  {
+   "slug": "momos-veg-fried",
+   "name": "Fried Momos (Veg)",
+   "hi": "फ्राइड वेज मोमोज़",
+   "alias": [
+    "fried veg momo",
+    "veg fried momo",
+    "deep fried momos",
+    "फ्राइड मोमो"
+   ],
+   "cat": "fastfood",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥟",
+   "unit": "g",
+   "kcal": 255,
+   "p": 5.5,
+   "c": 29,
+   "f": 12.5,
+   "fib": 2,
+   "na": 400,
+   "portions": [
+    {
+     "n": "1 piece (28 g)",
+     "hi": "1 पीस",
+     "g": 28
+    },
+    {
+     "n": "1 plate (6 pieces) (170 g)",
+     "hi": "1 प्लेट",
+     "g": 170
+    }
+   ],
+   "src": "Standard Indian restaurant/chain recipe estimate; cross-checked USDA fast-food entries and INDB",
+   "conf": "medium",
+   "note": "Steamed veg momo shallow/deep fried; absorbs ~8 g oil per 100 g over the steamed version."
+  },
+  {
+   "slug": "momos-chicken-fried",
+   "name": "Fried Momos (Chicken)",
+   "hi": "फ्राइड चिकन मोमोज़",
+   "alias": [
+    "fried chicken momo",
+    "chicken fried momo",
+    "fry momos chicken",
+    "फ्राइड चिकन मोमो"
+   ],
+   "cat": "fastfood",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🥟",
+   "unit": "g",
+   "kcal": 280,
+   "p": 10.5,
+   "c": 25,
+   "f": 15,
+   "fib": 1,
+   "na": 440,
+   "portions": [
+    {
+     "n": "1 piece (30 g)",
+     "hi": "1 पीस",
+     "g": 30
+    },
+    {
+     "n": "1 plate (6 pieces) (180 g)",
+     "hi": "1 प्लेट",
+     "g": 180
+    }
+   ],
+   "src": "Standard Indian restaurant/chain recipe estimate; cross-checked USDA fast-food entries and INDB",
+   "conf": "medium",
+   "note": "Chicken momo fried; absorbs ~9 g oil per 100 g."
+  },
+  {
+   "slug": "momos-tandoori-chicken",
+   "name": "Tandoori Chicken Momos",
+   "hi": "तंदूरी मोमोज़",
+   "alias": [
+    "tandoori momo",
+    "tandoori momos",
+    "grilled momos",
+    "तंदूरी मोमो"
+   ],
+   "cat": "fastfood",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🥟",
+   "unit": "g",
+   "kcal": 200,
+   "p": 8,
+   "c": 22,
+   "f": 9,
+   "fib": 1.5,
+   "na": 480,
+   "portions": [
+    {
+     "n": "1 piece (32 g)",
+     "hi": "1 पीस",
+     "g": 32
+    },
+    {
+     "n": "1 plate (6 pieces) (190 g)",
+     "hi": "1 प्लेट",
+     "g": 190
+    }
+   ],
+   "src": "Standard Indian restaurant/chain recipe estimate; cross-checked USDA fast-food entries and INDB",
+   "conf": "medium",
+   "note": "Steamed chicken momos tossed in tandoori marinade and charred with a little oil and mayo."
+  },
+  {
+   "slug": "momos-kurkure",
+   "name": "Kurkure Momos",
+   "hi": "कुरकुरे मोमोज़",
+   "alias": [
+    "crispy momos",
+    "kurkure momo",
+    "crispy fried momos",
+    "कुरकुरे मोमो"
+   ],
+   "cat": "fastfood",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥟",
+   "unit": "g",
+   "kcal": 290,
+   "p": 8,
+   "c": 33,
+   "f": 14,
+   "fib": 2,
+   "na": 480,
+   "portions": [
+    {
+     "n": "1 piece (35 g)",
+     "hi": "1 पीस",
+     "g": 35
+    },
+    {
+     "n": "1 plate (6 pieces) (210 g)",
+     "hi": "1 प्लेट",
+     "g": 210
+    }
+   ],
+   "src": "Standard Indian restaurant/chain recipe estimate; cross-checked USDA fast-food entries and INDB",
+   "conf": "low",
+   "note": "Veg momos coated in batter and corn-flake/crumb crust then deep-fried; estimate from fried momo + crumb coat."
+  },
+  {
+   "slug": "noodles-hakka-veg",
+   "name": "Veg Hakka Noodles",
+   "hi": "वेज हक्का नूडल्स",
+   "alias": [
+    "hakka noodles",
+    "veg noodles",
+    "vegetable noodles",
+    "hakka noodle",
+    "हक्का नूडल्स"
+   ],
+   "cat": "fastfood",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍜",
+   "unit": "g",
+   "kcal": 170,
+   "p": 4,
+   "c": 27,
+   "f": 5,
+   "fib": 2,
+   "na": 450,
+   "portions": [
+    {
+     "n": "1 plate (250 g) (250 g)",
+     "hi": "1 प्लेट",
+     "g": 250
+    },
+    {
+     "n": "1 half plate (125 g)",
+     "hi": "1/2 प्लेट",
+     "g": 125
+    }
+   ],
+   "src": "Standard Indian restaurant/chain recipe estimate; cross-checked USDA fast-food entries and INDB",
+   "conf": "medium",
+   "note": "Restaurant style: boiled noodles stir-fried with cabbage, carrot, capsicum, soy sauce, ~1 tbsp oil per plate. INDB 130 for chowmein is on the low side."
+  },
+  {
+   "slug": "noodles-chowmein-veg",
+   "name": "Veg Chowmein",
+   "hi": "वेज चाऊमीन",
+   "alias": [
+    "chow mein",
+    "chowmin",
+    "veg chow mein",
+    "chaumin",
+    "vegetable chowmein",
+    "चाउमिन"
+   ],
+   "cat": "fastfood",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍜",
+   "unit": "g",
+   "kcal": 175,
+   "p": 4.2,
+   "c": 27,
+   "f": 5.5,
+   "fib": 2,
+   "na": 480,
+   "portions": [
+    {
+     "n": "1 plate (250 g) (250 g)",
+     "hi": "1 प्लेट",
+     "g": 250
+    },
+    {
+     "n": "1 half plate (125 g)",
+     "hi": "1/2 प्लेट",
+     "g": 125
+    }
+   ],
+   "src": "Standard Indian restaurant/chain recipe estimate; cross-checked USDA fast-food entries and INDB",
+   "conf": "medium",
+   "note": "Indian street/restaurant chowmein with cabbage, carrot, soy and chilli sauce; slightly oilier than hakka noodles."
+  },
+  {
+   "slug": "noodles-schezwan",
+   "name": "Schezwan Noodles",
+   "hi": "शेज़वान नूडल्स",
+   "alias": [
+    "szechuan noodles",
+    "sezwan noodles",
+    "schezwan chowmein",
+    "schezwan hakka noodles",
+    "सेज़वान नूडल्स"
+   ],
+   "cat": "fastfood",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍜",
+   "unit": "g",
+   "kcal": 185,
+   "p": 4.2,
+   "c": 28,
+   "f": 6.3,
+   "fib": 2,
+   "na": 620,
+   "portions": [
+    {
+     "n": "1 plate (250 g) (250 g)",
+     "hi": "1 प्लेट",
+     "g": 250
+    },
+    {
+     "n": "1 half plate (125 g)",
+     "hi": "1/2 प्लेट",
+     "g": 125
+    }
+   ],
+   "src": "Standard Indian restaurant/chain recipe estimate; cross-checked USDA fast-food entries and INDB",
+   "conf": "medium",
+   "note": "Hakka noodles tossed in schezwan (red chilli-garlic) sauce; extra oil and sodium from the sauce."
+  },
+  {
+   "slug": "noodles-singapore",
+   "name": "Singapore Noodles",
+   "hi": "सिंगापुर नूडल्स",
+   "alias": [
+    "singapore fried noodles",
+    "singapore vermicelli",
+    "singapuri noodles",
+    "curry vermicelli noodles"
+   ],
+   "cat": "fastfood",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍜",
+   "unit": "g",
+   "kcal": 170,
+   "p": 4.5,
+   "c": 26,
+   "f": 5.2,
+   "fib": 1.8,
+   "na": 430,
+   "portions": [
+    {
+     "n": "1 plate (250 g) (250 g)",
+     "hi": "1 प्लेट",
+     "g": 250
+    }
+   ],
+   "src": "Standard Indian restaurant/chain recipe estimate; cross-checked USDA fast-food entries and INDB",
+   "conf": "low",
+   "note": "Rice vermicelli stir-fried with veg and curry powder (Indian-Chinese version)."
+  },
+  {
+   "slug": "noodles-chicken",
+   "name": "Chicken Chowmein",
+   "hi": "चिकन चाऊमीन",
+   "alias": [
+    "chicken hakka noodles",
+    "chicken noodles",
+    "chicken chow mein",
+    "चिकन नूडल्स"
+   ],
+   "cat": "fastfood",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍜",
+   "unit": "g",
+   "kcal": 185,
+   "p": 8,
+   "c": 24,
+   "f": 6.3,
+   "fib": 1.5,
+   "na": 500,
+   "portions": [
+    {
+     "n": "1 plate (250 g) (250 g)",
+     "hi": "1 प्लेट",
+     "g": 250
+    },
+    {
+     "n": "1 half plate (125 g)",
+     "hi": "1/2 प्लेट",
+     "g": 125
+    }
+   ],
+   "src": "Standard Indian restaurant/chain recipe estimate; cross-checked USDA fast-food entries and INDB",
+   "conf": "medium",
+   "note": "Noodles stir-fried with shredded chicken and veg; INDB ASC135 151 is on the low side."
+  },
+  {
+   "slug": "noodles-egg",
+   "name": "Egg Hakka Noodles",
+   "hi": "एग हक्का नूडल्स",
+   "alias": [
+    "egg noodles",
+    "egg chowmein",
+    "anda noodles",
+    "egg chow mein",
+    "अंडा नूडल्स"
+   ],
+   "cat": "fastfood",
+   "region": "Pan-India",
+   "diet": "egg",
+   "emoji": "🍜",
+   "unit": "g",
+   "kcal": 185,
+   "p": 6.5,
+   "c": 25,
+   "f": 6.5,
+   "fib": 1.6,
+   "na": 470,
+   "portions": [
+    {
+     "n": "1 plate (250 g) (250 g)",
+     "hi": "1 प्लेट",
+     "g": 250
+    },
+    {
+     "n": "1 half plate (125 g)",
+     "hi": "1/2 प्लेट",
+     "g": 125
+    }
+   ],
+   "src": "Standard Indian restaurant/chain recipe estimate; cross-checked USDA fast-food entries and INDB",
+   "conf": "medium",
+   "note": "Hakka noodles with scrambled egg and veg."
+  },
+  {
+   "slug": "noodles-instant-cooked",
+   "name": "Instant Noodles, Cooked (Masala)",
+   "hi": "इंस्टेंट नूडल्स (पके हुए)",
+   "alias": [
+    "maggi cooked",
+    "maggi noodles",
+    "maggie",
+    "2 minute noodles",
+    "masala noodles cooked",
+    "मैगी"
+   ],
+   "cat": "fastfood",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍜",
+   "unit": "g",
+   "kcal": 173,
+   "p": 3.9,
+   "c": 23.4,
+   "f": 7,
+   "fib": 1.2,
+   "na": 500,
+   "portions": [
+    {
+     "n": "1 small pack cooked (70 g dry) (180 g)",
+     "hi": "1 छोटा पैकेट",
+     "g": 180
+    },
+    {
+     "n": "1 plate cooked (220 g)",
+     "hi": "1 प्लेट",
+     "g": 220
+    }
+   ],
+   "src": "Computed from pack label values of the ingredients, standard serving; cross-checked INDB",
+   "conf": "medium",
+   "note": "70 g dry pack cooked with tastemaker in ~1.5 cups water to a thick, little-broth consistency (~180 g cooked). Dry pack 440-450 kcal per 100 g; sodium ~1300 mg per 100 g dry."
+  },
+  {
+   "slug": "rice-fried-veg",
+   "name": "Veg Fried Rice",
+   "hi": "वेज फ्राइड राइस",
+   "alias": [
+    "vegetable fried rice",
+    "chinese rice",
+    "chinese fried rice",
+    "fried rice",
+    "वेज चाइनीज़ राइस"
+   ],
+   "cat": "fastfood",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍚",
+   "unit": "g",
+   "kcal": 165,
+   "p": 3.5,
+   "c": 27,
+   "f": 4.8,
+   "fib": 1.2,
+   "na": 430,
+   "portions": [
+    {
+     "n": "1 plate (250 g) (250 g)",
+     "hi": "1 प्लेट",
+     "g": 250
+    },
+    {
+     "n": "1 katori (150 g) (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    }
+   ],
+   "src": "Standard Indian restaurant/chain recipe estimate; cross-checked USDA fast-food entries and INDB",
+   "conf": "medium",
+   "note": "Restaurant style: cooked rice stir-fried with veg, soy sauce and ~1 tbsp oil per plate. INDB ASC129 121 is too low."
+  },
+  {
+   "slug": "rice-fried-egg",
+   "name": "Egg Fried Rice",
+   "hi": "एग फ्राइड राइस",
+   "alias": [
+    "anda fried rice",
+    "egg rice chinese",
+    "egg chinese rice",
+    "अंडा फ्राइड राइस"
+   ],
+   "cat": "fastfood",
+   "region": "Pan-India",
+   "diet": "egg",
+   "emoji": "🍚",
+   "unit": "g",
+   "kcal": 175,
+   "p": 5.5,
+   "c": 26,
+   "f": 5.5,
+   "fib": 1,
+   "na": 450,
+   "portions": [
+    {
+     "n": "1 plate (250 g) (250 g)",
+     "hi": "1 प्लेट",
+     "g": 250
+    },
+    {
+     "n": "1 katori (150 g) (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    }
+   ],
+   "src": "Standard Indian restaurant/chain recipe estimate; cross-checked USDA fast-food entries and INDB",
+   "conf": "medium",
+   "note": "Fried rice with scrambled egg and spring onion."
+  },
+  {
+   "slug": "rice-fried-chicken",
+   "name": "Chicken Fried Rice",
+   "hi": "चिकन फ्राइड राइस",
+   "alias": [
+    "chicken chinese rice",
+    "chicken rice chinese",
+    "chicken fried rice chinese",
+    "चिकन चाइनीज़ राइस"
+   ],
+   "cat": "fastfood",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍚",
+   "unit": "g",
+   "kcal": 180,
+   "p": 8,
+   "c": 25,
+   "f": 5.5,
+   "fib": 1,
+   "na": 480,
+   "portions": [
+    {
+     "n": "1 plate (250 g) (250 g)",
+     "hi": "1 प्लेट",
+     "g": 250
+    },
+    {
+     "n": "1 katori (150 g) (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    }
+   ],
+   "src": "Standard Indian restaurant/chain recipe estimate; cross-checked USDA fast-food entries and INDB",
+   "conf": "medium",
+   "note": "Fried rice with diced chicken, egg, veg."
+  },
+  {
+   "slug": "rice-schezwan",
+   "name": "Schezwan Fried Rice",
+   "hi": "शेज़वान फ्राइड राइस",
+   "alias": [
+    "szechuan fried rice",
+    "schezwan rice",
+    "sezwan rice",
+    "triple schezwan rice",
+    "सेज़वान राइस"
+   ],
+   "cat": "fastfood",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍚",
+   "unit": "g",
+   "kcal": 185,
+   "p": 3.6,
+   "c": 28,
+   "f": 6,
+   "fib": 1.3,
+   "na": 620,
+   "portions": [
+    {
+     "n": "1 plate (250 g) (250 g)",
+     "hi": "1 प्लेट",
+     "g": 250
+    },
+    {
+     "n": "1 katori (150 g) (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    }
+   ],
+   "src": "Standard Indian restaurant/chain recipe estimate; cross-checked USDA fast-food entries and INDB",
+   "conf": "medium",
+   "note": "Veg fried rice tossed in schezwan chilli-garlic sauce (extra oil and salt)."
+  },
+  {
+   "slug": "manchurian-gobi-dry",
+   "name": "Gobi Manchurian (Dry)",
+   "hi": "गोभी मंचूरियन (ड्राई)",
+   "alias": [
+    "gobi manchurian",
+    "cauliflower manchurian",
+    "gobhi manchurian",
+    "dry gobi manchurian",
+    "phool gobi manchurian",
+    "गोभी मंचूरियन"
+   ],
+   "cat": "fastfood",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 205,
+   "p": 4,
+   "c": 22,
+   "f": 11,
+   "fib": 2.5,
+   "na": 560,
+   "portions": [
+    {
+     "n": "1 plate (150 g) (150 g)",
+     "hi": "1 प्लेट",
+     "g": 150
+    },
+    {
+     "n": "1 piece (20 g)",
+     "hi": "1 पीस",
+     "g": 20
+    }
+   ],
+   "src": "Standard Indo-Chinese restaurant recipe estimate (street/restaurant oil use); cross-checked INDB and USDA",
+   "conf": "medium",
+   "note": "Batter-coated fried cauliflower tossed in soy-chilli-garlic sauce. INDB-type values of 600+ kcal for fried snacks are wrong; real oil uptake gives ~200 kcal per 100 g."
+  },
+  {
+   "slug": "manchurian-gobi-gravy",
+   "name": "Gobi Manchurian (Gravy)",
+   "hi": "गोभी मंचूरियन (ग्रेवी)",
+   "alias": [
+    "gobi manchurian wet",
+    "cauliflower manchurian gravy",
+    "gobhi manchurian gravy",
+    "wet gobi manchurian"
+   ],
+   "cat": "fastfood",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 125,
+   "p": 2.8,
+   "c": 15,
+   "f": 6,
+   "fib": 1.8,
+   "na": 520,
+   "portions": [
+    {
+     "n": "1 katori (150 g) (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 plate (250 g) (250 g)",
+     "hi": "1 प्लेट",
+     "g": 250
+    }
+   ],
+   "src": "Standard Indo-Chinese restaurant recipe estimate (street/restaurant oil use); cross-checked INDB and USDA",
+   "conf": "medium",
+   "note": "Fried cauliflower in thickened soy-garlic gravy (cornflour); gravy dilutes the calories."
+  },
+  {
+   "slug": "manchurian-veg-gravy",
+   "name": "Veg Manchurian (Gravy)",
+   "hi": "वेज मंचूरियन (ग्रेवी)",
+   "alias": [
+    "veg manchurian",
+    "vegetable manchurian",
+    "veg manchurian balls",
+    "veg manchurian wet",
+    "वेज मंचूरियन"
+   ],
+   "cat": "fastfood",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 130,
+   "p": 3,
+   "c": 15.5,
+   "f": 6.3,
+   "fib": 1.8,
+   "na": 540,
+   "portions": [
+    {
+     "n": "1 katori (150 g) (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 plate (250 g) (250 g)",
+     "hi": "1 प्लेट",
+     "g": 250
+    }
+   ],
+   "src": "Standard Indo-Chinese restaurant recipe estimate (street/restaurant oil use); cross-checked INDB and USDA",
+   "conf": "medium",
+   "note": "Deep-fried cabbage-carrot balls in soy-garlic gravy."
+  },
+  {
+   "slug": "manchurian-chicken-gravy",
+   "name": "Chicken Manchurian (Gravy)",
+   "hi": "चिकन मंचूरियन (ग्रेवी)",
+   "alias": [
+    "chicken manchurian",
+    "chicken manchurian wet",
+    "wet chicken manchurian",
+    "चिकन मंचूरियन"
+   ],
+   "cat": "fastfood",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 140,
+   "p": 8,
+   "c": 10,
+   "f": 7.5,
+   "fib": 0.6,
+   "na": 520,
+   "portions": [
+    {
+     "n": "1 katori (150 g) (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 plate (250 g) (250 g)",
+     "hi": "1 प्लेट",
+     "g": 250
+    }
+   ],
+   "src": "Standard Indo-Chinese restaurant recipe estimate (street/restaurant oil use); cross-checked INDB and USDA",
+   "conf": "medium",
+   "note": "Fried chicken pieces in thickened soy-garlic gravy."
+  },
+  {
+   "slug": "chilli-paneer-dry",
+   "name": "Chilli Paneer (Dry)",
+   "hi": "चिली पनीर (ड्राई)",
+   "alias": [
+    "paneer chilli",
+    "chilly paneer",
+    "chili paneer",
+    "paneer chilli dry",
+    "dry chilli paneer",
+    "चिल्ली पनीर"
+   ],
+   "cat": "fastfood",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🧀",
+   "unit": "g",
+   "kcal": 255,
+   "p": 11.5,
+   "c": 9.5,
+   "f": 18.5,
+   "fib": 1.2,
+   "na": 520,
+   "portions": [
+    {
+     "n": "1 plate (150 g) (150 g)",
+     "hi": "1 प्लेट",
+     "g": 150
+    },
+    {
+     "n": "1 piece (18 g)",
+     "hi": "1 पीस",
+     "g": 18
+    }
+   ],
+   "src": "Standard Indo-Chinese restaurant recipe estimate (street/restaurant oil use); cross-checked INDB and USDA",
+   "conf": "medium",
+   "note": "Paneer cubes (batter-fried) tossed with capsicum, onion and soy-chilli sauce. INDB ASC224 (777 kcal) is impossible, ignored."
+  },
+  {
+   "slug": "chilli-paneer-gravy",
+   "name": "Chilli Paneer (Gravy)",
+   "hi": "चिली पनीर (ग्रेवी)",
+   "alias": [
+    "paneer chilli gravy",
+    "chilly paneer gravy",
+    "chili paneer gravy",
+    "wet chilli paneer"
+   ],
+   "cat": "fastfood",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🧀",
+   "unit": "g",
+   "kcal": 175,
+   "p": 7.5,
+   "c": 8,
+   "f": 12,
+   "fib": 0.8,
+   "na": 480,
+   "portions": [
+    {
+     "n": "1 katori (150 g) (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 plate (250 g) (250 g)",
+     "hi": "1 प्लेट",
+     "g": 250
+    }
+   ],
+   "src": "Standard Indo-Chinese restaurant recipe estimate (street/restaurant oil use); cross-checked INDB and USDA",
+   "conf": "medium",
+   "note": "Chilli paneer with a cornflour-soy gravy."
+  },
+  {
+   "slug": "chilli-chicken-dry",
+   "name": "Chilli Chicken (Dry)",
+   "hi": "चिली चिकन (ड्राई)",
+   "alias": [
+    "chicken chilli",
+    "chilly chicken",
+    "chili chicken",
+    "dry chilli chicken",
+    "चिल्ली चिकन"
+   ],
+   "cat": "fastfood",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍗",
+   "unit": "g",
+   "kcal": 215,
+   "p": 15,
+   "c": 8,
+   "f": 13.5,
+   "fib": 0.8,
+   "na": 540,
+   "portions": [
+    {
+     "n": "1 plate (150 g) (150 g)",
+     "hi": "1 प्लेट",
+     "g": 150
+    },
+    {
+     "n": "1 piece (25 g)",
+     "hi": "1 पीस",
+     "g": 25
+    }
+   ],
+   "src": "Standard Indo-Chinese restaurant recipe estimate (street/restaurant oil use); cross-checked INDB and USDA",
+   "conf": "medium",
+   "note": "Batter-fried boneless chicken tossed with capsicum, onion and soy-chilli sauce. INDB ASC244 199 agrees."
+  },
+  {
+   "slug": "chilli-chicken-gravy",
+   "name": "Chilli Chicken (Gravy)",
+   "hi": "चिली चिकन (ग्रेवी)",
+   "alias": [
+    "chicken chilli gravy",
+    "chilly chicken gravy",
+    "chili chicken gravy",
+    "wet chilli chicken"
+   ],
+   "cat": "fastfood",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍗",
+   "unit": "g",
+   "kcal": 148,
+   "p": 10,
+   "c": 7,
+   "f": 8.5,
+   "fib": 0.6,
+   "na": 480,
+   "portions": [
+    {
+     "n": "1 katori (150 g) (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 plate (250 g) (250 g)",
+     "hi": "1 प्लेट",
+     "g": 250
+    }
+   ],
+   "src": "Standard Indo-Chinese restaurant recipe estimate (street/restaurant oil use); cross-checked INDB and USDA",
+   "conf": "medium",
+   "note": "Chilli chicken with soy-cornflour gravy."
+  },
+  {
+   "slug": "chilli-potato",
+   "name": "Chilli Potato",
+   "hi": "चिली पोटैटो",
+   "alias": [
+    "chilly potato",
+    "chili potato",
+    "aloo chilli",
+    "potato chilli",
+    "चिल्ली आलू"
+   ],
+   "cat": "fastfood",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥔",
+   "unit": "g",
+   "kcal": 215,
+   "p": 2.5,
+   "c": 30,
+   "f": 9,
+   "fib": 2.5,
+   "na": 480,
+   "portions": [
+    {
+     "n": "1 plate (150 g) (150 g)",
+     "hi": "1 प्लेट",
+     "g": 150
+    }
+   ],
+   "src": "Standard Indo-Chinese restaurant recipe estimate (street/restaurant oil use); cross-checked INDB and USDA",
+   "conf": "medium",
+   "note": "Deep-fried potato fingers tossed with onion, capsicum and soy-chilli sauce."
+  },
+  {
+   "slug": "honey-chilli-potato",
+   "name": "Honey Chilli Potato",
+   "hi": "हनी चिली पोटैटो",
+   "alias": [
+    "honey chilly potato",
+    "honey chili potato",
+    "crispy honey potato",
+    "हनी चिल्ली आलू"
+   ],
+   "cat": "fastfood",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥔",
+   "unit": "g",
+   "kcal": 255,
+   "p": 2.5,
+   "c": 38,
+   "f": 10,
+   "fib": 2.2,
+   "na": 420,
+   "portions": [
+    {
+     "n": "1 plate (150 g) (150 g)",
+     "hi": "1 प्लेट",
+     "g": 150
+    }
+   ],
+   "src": "Standard Indo-Chinese restaurant recipe estimate (street/restaurant oil use); cross-checked INDB and USDA",
+   "conf": "medium",
+   "note": "Crisp-fried potato fingers in honey-chilli glaze with sesame; sugar/honey raises it above plain chilli potato."
+  },
+  {
+   "slug": "spring-roll-veg",
+   "name": "Veg Spring Roll",
+   "hi": "वेज स्प्रिंग रोल",
+   "alias": [
+    "spring rolls",
+    "veg spring rolls",
+    "vegetable spring roll",
+    "chinese spring roll",
+    "स्प्रिंग रोल"
+   ],
+   "cat": "fastfood",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🌯",
+   "unit": "g",
+   "kcal": 235,
+   "p": 4.5,
+   "c": 29,
+   "f": 11,
+   "fib": 2,
+   "na": 450,
+   "portions": [
+    {
+     "n": "1 roll (70 g)",
+     "hi": "1 रोल",
+     "g": 70
+    },
+    {
+     "n": "1 plate (4 rolls) (280 g)",
+     "hi": "1 प्लेट",
+     "g": 280
+    }
+   ],
+   "src": "Standard Indo-Chinese restaurant recipe estimate (street/restaurant oil use); cross-checked INDB and USDA",
+   "conf": "medium",
+   "note": "Deep-fried maida wrapper with cabbage-carrot-noodle filling; 1 roll ~70 g ~ 165 kcal. INDB ASC383 (624/100 g) is wrong (oil absorption error)."
+  },
+  {
+   "slug": "american-chop-suey",
+   "name": "American Chop Suey",
+   "hi": "अमेरिकन चॉप सूई",
+   "alias": [
+    "chop suey",
+    "american chopsuey",
+    "crispy noodles with sweet sour sauce",
+    "chopsuey",
+    "चॉपसूई"
+   ],
+   "cat": "fastfood",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍜",
+   "unit": "g",
+   "kcal": 215,
+   "p": 3.5,
+   "c": 30,
+   "f": 9,
+   "fib": 2,
+   "na": 520,
+   "portions": [
+    {
+     "n": "1 plate (200 g) (200 g)",
+     "hi": "1 प्लेट",
+     "g": 200
+    }
+   ],
+   "src": "Standard Indo-Chinese restaurant recipe estimate (street/restaurant oil use); cross-checked INDB and USDA",
+   "conf": "low",
+   "note": "Indian-Chinese: fried crispy noodles topped with sweet-and-sour tomato-veg sauce; 1 plate ~200 g."
+  },
+  {
+   "slug": "chicken-lollipop",
+   "name": "Chicken Lollipop",
+   "hi": "चिकन लॉलीपॉप",
+   "alias": [
+    "chicken lollypop",
+    "lollipop chicken",
+    "chicken wings lollipop",
+    "चिकन लॉलीपॉप फ्राई"
+   ],
+   "cat": "fastfood",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍗",
+   "unit": "g",
+   "kcal": 250,
+   "p": 17,
+   "c": 9,
+   "f": 16,
+   "fib": 0.5,
+   "na": 520,
+   "portions": [
+    {
+     "n": "1 piece (45 g)",
+     "hi": "1 पीस",
+     "g": 45
+    },
+    {
+     "n": "1 plate (4 pieces) (180 g)",
+     "hi": "1 प्लेट",
+     "g": 180
+    }
+   ],
+   "src": "Standard Indo-Chinese restaurant recipe estimate (street/restaurant oil use); cross-checked INDB and USDA",
+   "conf": "medium",
+   "note": "Batter-fried frenched chicken wing, edible portion excluding bone; 1 piece ~45 g edible."
+  },
+  {
+   "slug": "crispy-corn",
+   "name": "Crispy Corn",
+   "hi": "क्रिस्पी कॉर्न",
+   "alias": [
+    "crispy sweet corn",
+    "chilli crispy corn",
+    "corn crispy",
+    "क्रिस्पी स्वीट कॉर्न"
+   ],
+   "cat": "fastfood",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🌽",
+   "unit": "g",
+   "kcal": 235,
+   "p": 4,
+   "c": 28,
+   "f": 11.5,
+   "fib": 3,
+   "na": 450,
+   "portions": [
+    {
+     "n": "1 plate (120 g) (120 g)",
+     "hi": "1 प्लेट",
+     "g": 120
+    }
+   ],
+   "src": "Standard Indo-Chinese restaurant recipe estimate (street/restaurant oil use); cross-checked INDB and USDA",
+   "conf": "medium",
+   "note": "Sweet corn kernels coated in cornflour and deep-fried, tossed with spices and capsicum."
+  },
+  {
+   "slug": "pasta-white-sauce",
+   "name": "Pasta in White Sauce",
+   "hi": "व्हाइट सॉस पास्ता",
+   "alias": [
+    "white sauce pasta",
+    "alfredo pasta",
+    "creamy pasta",
+    "bechamel pasta",
+    "पास्ता"
+   ],
+   "cat": "fastfood",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🍝",
+   "unit": "g",
+   "kcal": 175,
+   "p": 5.2,
+   "c": 21,
+   "f": 7.8,
+   "fib": 1.2,
+   "na": 400,
+   "portions": [
+    {
+     "n": "1 plate (250 g) (250 g)",
+     "hi": "1 प्लेट",
+     "g": 250
+    },
+    {
+     "n": "1 katori (150 g) (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    }
+   ],
+   "src": "Standard Indian restaurant/chain recipe estimate; cross-checked USDA fast-food entries and INDB",
+   "conf": "medium",
+   "note": "Penne/macaroni in butter-maida-milk white sauce with cheese and veg; plate ~250 g ~ 440 kcal."
+  },
+  {
+   "slug": "pasta-red-sauce",
+   "name": "Pasta in Red Sauce",
+   "hi": "रेड सॉस पास्ता",
+   "alias": [
+    "red sauce pasta",
+    "arrabbiata pasta",
+    "tomato pasta",
+    "penne arrabbiata",
+    "रेड पास्ता"
+   ],
+   "cat": "fastfood",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🍝",
+   "unit": "g",
+   "kcal": 145,
+   "p": 4.3,
+   "c": 24.5,
+   "f": 3.4,
+   "fib": 2,
+   "na": 420,
+   "portions": [
+    {
+     "n": "1 plate (250 g) (250 g)",
+     "hi": "1 प्लेट",
+     "g": 250
+    },
+    {
+     "n": "1 katori (150 g) (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    }
+   ],
+   "src": "Standard Indian restaurant/chain recipe estimate; cross-checked USDA fast-food entries and INDB",
+   "conf": "medium",
+   "note": "Penne/macaroni in tomato-garlic sauce with olive oil and veg."
+  },
+  {
+   "slug": "pasta-pink-sauce",
+   "name": "Pasta in Pink Sauce",
+   "hi": "पिंक सॉस पास्ता",
+   "alias": [
+    "pink sauce pasta",
+    "mix sauce pasta",
+    "rose sauce pasta",
+    "mixed sauce pasta",
+    "पिंक पास्ता"
+   ],
+   "cat": "fastfood",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🍝",
+   "unit": "g",
+   "kcal": 160,
+   "p": 4.6,
+   "c": 22,
+   "f": 5.8,
+   "fib": 1.5,
+   "na": 410,
+   "portions": [
+    {
+     "n": "1 plate (250 g) (250 g)",
+     "hi": "1 प्लेट",
+     "g": 250
+    },
+    {
+     "n": "1 katori (150 g) (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    }
+   ],
+   "src": "Standard Indian restaurant/chain recipe estimate; cross-checked USDA fast-food entries and INDB",
+   "conf": "medium",
+   "note": "Penne in a half white-sauce, half tomato-sauce blend."
+  },
+  {
+   "slug": "mac-and-cheese",
+   "name": "Mac and Cheese",
+   "hi": "मैक एंड चीज़",
+   "alias": [
+    "macaroni and cheese",
+    "mac n cheese",
+    "cheese macaroni",
+    "macaroni cheese",
+    "मैकरोनी चीज़"
+   ],
+   "cat": "fastfood",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🍝",
+   "unit": "g",
+   "kcal": 178,
+   "p": 7,
+   "c": 20,
+   "f": 7.5,
+   "fib": 1,
+   "na": 420,
+   "portions": [
+    {
+     "n": "1 bowl (200 g) (200 g)",
+     "hi": "1 कटोरा",
+     "g": 200
+    }
+   ],
+   "src": "Standard Indian restaurant/chain recipe estimate; cross-checked USDA fast-food entries and INDB",
+   "conf": "medium",
+   "note": "Macaroni in cheese sauce, as prepared; USDA prepared mac and cheese ~165-200 kcal per 100 g."
+  },
+  {
+   "slug": "pasta-baked",
+   "name": "Baked Cheese Pasta",
+   "hi": "बेक्ड चीज़ पास्ता",
+   "alias": [
+    "baked pasta",
+    "pasta bake",
+    "cheesy baked pasta",
+    "oven baked pasta",
+    "बेक्ड पास्ता"
+   ],
+   "cat": "fastfood",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🍝",
+   "unit": "g",
+   "kcal": 190,
+   "p": 8,
+   "c": 21,
+   "f": 8,
+   "fib": 1.5,
+   "na": 450,
+   "portions": [
+    {
+     "n": "1 portion (250 g) (250 g)",
+     "hi": "1 हिस्सा",
+     "g": 250
+    }
+   ],
+   "src": "Standard Indian restaurant/chain recipe estimate; cross-checked USDA fast-food entries and INDB",
+   "conf": "medium",
+   "note": "Pasta with white/red sauce and vegetables topped with mozzarella and oven-baked."
+  },
+  {
+   "slug": "pasta-boiled-plain",
+   "name": "Pasta, Boiled (plain, cooked)",
+   "hi": "उबला पास्ता",
+   "alias": [
+    "boiled pasta",
+    "cooked macaroni",
+    "boiled macaroni",
+    "plain cooked pasta",
+    "penne boiled",
+    "उबली मैकरोनी"
+   ],
+   "cat": "fastfood",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🍝",
+   "unit": "g",
+   "kcal": 158,
+   "p": 5.8,
+   "c": 29.5,
+   "f": 0.9,
+   "fib": 1.8,
+   "na": 5,
+   "portions": [
+    {
+     "n": "1 katori (120 g) (120 g)",
+     "hi": "1 कटोरी",
+     "g": 120
+    },
+    {
+     "n": "1 plate (200 g) (200 g)",
+     "hi": "1 प्लेट",
+     "g": 200
+    }
+   ],
+   "src": "USDA FoodData Central cooked pasta (unenriched, no salt); IFCT wheat vermicelli cross-check",
+   "conf": "high",
+   "note": "Cooked durum pasta without salt, sauce or oil (USDA cooked pasta 158 kcal per 100 g). Dry pasta is ~360 kcal per 100 g."
+  },
+  {
+   "slug": "garlic-bread",
+   "name": "Garlic Bread",
+   "hi": "गार्लिक ब्रेड",
+   "alias": [
+    "garlic bread sticks",
+    "garlic toast",
+    "garlic bread slice",
+    "garlic bread stick",
+    "लहसुन ब्रेड"
+   ],
+   "cat": "fastfood",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🍞",
+   "unit": "g",
+   "kcal": 350,
+   "p": 8,
+   "c": 45,
+   "f": 15,
+   "fib": 2.5,
+   "na": 600,
+   "portions": [
+    {
+     "n": "1 piece (35 g)",
+     "hi": "1 पीस",
+     "g": 35
+    },
+    {
+     "n": "1 serving (4 pieces) (140 g)",
+     "hi": "1 सर्विंग",
+     "g": 140
+    }
+   ],
+   "src": "Standard Indian restaurant/chain recipe estimate; cross-checked USDA fast-food entries and INDB",
+   "conf": "medium",
+   "note": "Bread/baguette with garlic butter, baked; USDA garlic bread 350 kcal per 100 g."
+  },
+  {
+   "slug": "garlic-bread-cheese",
+   "name": "Cheesy Garlic Bread",
+   "hi": "चीज़ी गार्लिक ब्रेड",
+   "alias": [
+    "garlic bread with cheese",
+    "cheese garlic bread",
+    "cheese garlic toast",
+    "चीज़ गार्लिक ब्रेड"
+   ],
+   "cat": "fastfood",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🍞",
+   "unit": "g",
+   "kcal": 375,
+   "p": 11,
+   "c": 40,
+   "f": 19,
+   "fib": 2,
+   "na": 650,
+   "portions": [
+    {
+     "n": "1 piece (45 g)",
+     "hi": "1 पीस",
+     "g": 45
+    },
+    {
+     "n": "1 serving (4 pieces) (180 g)",
+     "hi": "1 सर्विंग",
+     "g": 180
+    }
+   ],
+   "src": "Standard Indian restaurant/chain recipe estimate; cross-checked USDA fast-food entries and INDB",
+   "conf": "medium",
+   "note": "Garlic bread topped with melted mozzarella; piece ~45 g."
+  },
+  {
+   "slug": "french-fries",
+   "name": "French Fries",
+   "hi": "फ्रेंच फ्राइज़",
+   "alias": [
+    "fries",
+    "potato fries",
+    "finger chips",
+    "aloo fries",
+    "chips fries",
+    "फ्राइज़"
+   ],
+   "cat": "fastfood",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🍟",
+   "unit": "g",
+   "kcal": 310,
+   "p": 3.5,
+   "c": 38,
+   "f": 15,
+   "fib": 3.5,
+   "na": 280,
+   "portions": [
+    {
+     "n": "1 small serving (80 g) (80 g)",
+     "hi": "1 छोटी सर्विंग",
+     "g": 80
+    },
+    {
+     "n": "1 medium serving (110 g) (110 g)",
+     "hi": "1 मीडियम सर्विंग",
+     "g": 110
+    },
+    {
+     "n": "1 large serving (150 g) (150 g)",
+     "hi": "1 बड़ी सर्विंग",
+     "g": 150
+    }
+   ],
+   "src": "Standard Indian restaurant/chain recipe estimate; cross-checked USDA fast-food entries and INDB",
+   "conf": "high",
+   "note": "Deep-fried salted fries as sold by chains (USDA fast-food fries 312 kcal per 100 g); without sauce."
+  },
+  {
+   "slug": "loaded-fries",
+   "name": "Loaded Cheese Fries",
+   "hi": "लोडेड चीज़ फ्राइज़",
+   "alias": [
+    "cheese fries",
+    "loaded fries",
+    "peri peri loaded fries",
+    "cheesy fries",
+    "चीज़ फ्राइज़"
+   ],
+   "cat": "fastfood",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🍟",
+   "unit": "g",
+   "kcal": 330,
+   "p": 6,
+   "c": 31,
+   "f": 20,
+   "fib": 2.7,
+   "na": 520,
+   "portions": [
+    {
+     "n": "1 serving (200 g) (200 g)",
+     "hi": "1 सर्विंग",
+     "g": 200
+    }
+   ],
+   "src": "Standard Indian restaurant/chain recipe estimate; cross-checked USDA fast-food entries and INDB",
+   "conf": "low",
+   "note": "French fries topped with cheese sauce, jalapeno and mayo; serving ~200 g ~ 660 kcal."
+  },
+  {
+   "slug": "chicken-nuggets-fried",
+   "name": "Chicken Nuggets (fried)",
+   "hi": "चिकन नगेट्स (तले)",
+   "alias": [
+    "nuggets",
+    "chicken popcorn nuggets",
+    "fried nuggets",
+    "crispy chicken nuggets",
+    "नगेट्स"
+   ],
+   "cat": "fastfood",
+   "region": "International",
+   "diet": "nonveg",
+   "emoji": "🍗",
+   "unit": "g",
+   "kcal": 262,
+   "p": 15,
+   "c": 16,
+   "f": 15.5,
+   "fib": 1,
+   "na": 520,
+   "portions": [
+    {
+     "n": "1 piece (18 g)",
+     "hi": "1 पीस",
+     "g": 18
+    },
+    {
+     "n": "1 serving (6 pieces) (108 g)",
+     "hi": "1 सर्विंग",
+     "g": 108
+    }
+   ],
+   "src": "Standard Indian restaurant/chain recipe estimate; cross-checked USDA fast-food entries and INDB",
+   "conf": "medium",
+   "note": "Breaded, deep-fried chicken nuggets as served (chain values ~250-270 kcal per 100 g)."
+  },
+  {
+   "slug": "fried-chicken-crispy",
+   "name": "Fried Chicken (crispy)",
+   "hi": "क्रिस्पी फ्राइड चिकन",
+   "alias": [
+    "kfc chicken",
+    "crispy chicken",
+    "fried chicken piece",
+    "broasted chicken",
+    "fried chicken drumstick",
+    "फ्राइड चिकन"
+   ],
+   "cat": "fastfood",
+   "region": "International",
+   "diet": "nonveg",
+   "emoji": "🍗",
+   "unit": "g",
+   "kcal": 265,
+   "p": 18,
+   "c": 10,
+   "f": 17,
+   "fib": 0.4,
+   "na": 600,
+   "portions": [
+    {
+     "n": "1 piece (90 g)",
+     "hi": "1 पीस",
+     "g": 90
+    },
+    {
+     "n": "1 serving (2 pieces) (180 g)",
+     "hi": "1 सर्विंग",
+     "g": 180
+    }
+   ],
+   "src": "Standard Indian restaurant/chain recipe estimate; cross-checked USDA fast-food entries and INDB",
+   "conf": "medium",
+   "note": "Breaded fried chicken with skin; weights are edible portion without bone (USDA fried chicken 246-290 kcal per 100 g)."
+  },
+  {
+   "slug": "hot-dog",
+   "name": "Hot Dog",
+   "hi": "हॉट डॉग",
+   "alias": [
+    "hotdog",
+    "sausage in bun",
+    "chicken hot dog",
+    "hot dog bun",
+    "हॉटडॉग"
+   ],
+   "cat": "fastfood",
+   "region": "International",
+   "diet": "nonveg",
+   "emoji": "🌭",
+   "unit": "g",
+   "kcal": 265,
+   "p": 10,
+   "c": 25,
+   "f": 14,
+   "fib": 1,
+   "na": 700,
+   "portions": [
+    {
+     "n": "1 hot dog (120 g)",
+     "hi": "1 हॉट डॉग",
+     "g": 120
+    }
+   ],
+   "src": "Standard Indian restaurant/chain recipe estimate; cross-checked USDA fast-food entries and INDB",
+   "conf": "medium",
+   "note": "Chicken sausage in a bun with sauce and mustard; 1 hot dog ~120 g ~ 320 kcal."
+  },
+  {
+   "slug": "tacos-veg",
+   "name": "Veg Tacos",
+   "hi": "वेज टैकोज़",
+   "alias": [
+    "taco",
+    "tacos",
+    "mexican taco",
+    "crunchy tacos",
+    "veg taco",
+    "टैको"
+   ],
+   "cat": "fastfood",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🌮",
+   "unit": "g",
+   "kcal": 225,
+   "p": 7,
+   "c": 26,
+   "f": 9.5,
+   "fib": 4,
+   "na": 420,
+   "portions": [
+    {
+     "n": "1 taco (80 g)",
+     "hi": "1 टैको",
+     "g": 80
+    },
+    {
+     "n": "1 serving (2 tacos) (160 g)",
+     "hi": "1 सर्विंग",
+     "g": 160
+    }
+   ],
+   "src": "Standard Indian restaurant/chain recipe estimate; cross-checked USDA fast-food entries and INDB",
+   "conf": "medium",
+   "note": "Crisp corn shell with beans, salsa, lettuce and cheese; USDA taco 215-230 kcal per 100 g."
+  },
+  {
+   "slug": "burrito-veg",
+   "name": "Veg Burrito",
+   "hi": "वेज बरिटो",
+   "alias": [
+    "bean burrito",
+    "mexican burrito",
+    "burrito",
+    "veg burrito wrap",
+    "बरिटो"
+   ],
+   "cat": "fastfood",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🌯",
+   "unit": "g",
+   "kcal": 205,
+   "p": 6.5,
+   "c": 30,
+   "f": 6,
+   "fib": 4,
+   "na": 450,
+   "portions": [
+    {
+     "n": "1 burrito (180 g)",
+     "hi": "1 बरिटो",
+     "g": 180
+    }
+   ],
+   "src": "Standard Indian restaurant/chain recipe estimate; cross-checked USDA fast-food entries and INDB",
+   "conf": "medium",
+   "note": "Flour tortilla with rice, beans, salsa, cheese; USDA bean burrito ~203 kcal per 100 g; 1 burrito 180 g ~ 370 kcal."
+  },
+  {
+   "slug": "nachos-cheese",
+   "name": "Nachos with Cheese",
+   "hi": "चीज़ नाचोज़",
+   "alias": [
+    "nachos",
+    "cheese nachos",
+    "cinema nachos",
+    "nacho chips with cheese dip",
+    "नाचोज़"
+   ],
+   "cat": "fastfood",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🍽️",
+   "unit": "g",
+   "kcal": 380,
+   "p": 7,
+   "c": 40,
+   "f": 21,
+   "fib": 4,
+   "na": 600,
+   "portions": [
+    {
+     "n": "1 serving (100 g) (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    },
+    {
+     "n": "1 cinema tray (150 g) (150 g)",
+     "hi": "1 ट्रे",
+     "g": 150
+    }
+   ],
+   "src": "Standard Indian restaurant/chain recipe estimate; cross-checked USDA fast-food entries and INDB",
+   "conf": "low",
+   "note": "Tortilla chips (~490 kcal/100 g) with warm cheese dip (~180 kcal/100 g), about 2 parts chips to 1 part sauce."
+  },
+  {
+   "slug": "dosa-pizza",
+   "name": "Dosa Pizza",
+   "hi": "डोसा पिज़्ज़ा",
+   "alias": [
+    "pizza dosa",
+    "cheese dosa pizza",
+    "dosa pizza veg",
+    "डोसा पिज़ा"
+   ],
+   "cat": "fastfood",
+   "region": "South India",
+   "diet": "veg",
+   "emoji": "🍕",
+   "unit": "g",
+   "kcal": 205,
+   "p": 7,
+   "c": 25,
+   "f": 8.5,
+   "fib": 2,
+   "na": 380,
+   "portions": [
+    {
+     "n": "1 piece (150 g)",
+     "hi": "1 पीस",
+     "g": 150
+    }
+   ],
+   "src": "Standard Indian restaurant/chain recipe estimate; cross-checked USDA fast-food entries and INDB",
+   "conf": "low",
+   "note": "Thick plain dosa base topped with veg, sauce and grated cheese; 1 piece ~150 g ~ 310 kcal."
+  },
+  {
+   "slug": "veg-puff",
+   "name": "Veg Puff",
+   "hi": "वेज पफ",
+   "alias": [
+    "vegetable puff",
+    "aloo puff",
+    "bakery puff",
+    "veg puff pastry",
+    "वेज पफ पेस्ट्री"
+   ],
+   "cat": "fastfood",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥐",
+   "unit": "g",
+   "kcal": 330,
+   "p": 5.5,
+   "c": 33,
+   "f": 20,
+   "fib": 2,
+   "na": 420,
+   "portions": [
+    {
+     "n": "1 puff (65 g)",
+     "hi": "1 पफ",
+     "g": 65
+    }
+   ],
+   "src": "Standard Indian restaurant/chain recipe estimate; cross-checked USDA fast-food entries and INDB",
+   "conf": "medium",
+   "note": "Baked puff pastry (butter/margarine layers) with spiced potato-veg filling; 1 puff ~65 g ~ 215 kcal."
+  },
+  {
+   "slug": "egg-puff",
+   "name": "Egg Puff",
+   "hi": "अंडा पफ",
+   "alias": [
+    "anda puff",
+    "egg puff pastry",
+    "bakery egg puff",
+    "एग पफ"
+   ],
+   "cat": "fastfood",
+   "region": "Pan-India",
+   "diet": "egg",
+   "emoji": "🥐",
+   "unit": "g",
+   "kcal": 315,
+   "p": 7.5,
+   "c": 28,
+   "f": 19,
+   "fib": 1.5,
+   "na": 400,
+   "portions": [
+    {
+     "n": "1 puff (80 g)",
+     "hi": "1 पफ",
+     "g": 80
+    }
+   ],
+   "src": "Standard Indian restaurant/chain recipe estimate; cross-checked USDA fast-food entries and INDB",
+   "conf": "medium",
+   "note": "Baked puff pastry with half a boiled egg in onion-masala; 1 puff ~80 g ~ 250 kcal."
+  },
+  {
+   "slug": "paneer-puff",
+   "name": "Paneer Puff",
+   "hi": "पनीर पफ",
+   "alias": [
+    "panir puff",
+    "paneer puff pastry",
+    "bakery paneer puff",
+    "पनीर पफ पेस्ट्री"
+   ],
+   "cat": "fastfood",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥐",
+   "unit": "g",
+   "kcal": 342,
+   "p": 7.5,
+   "c": 28,
+   "f": 22,
+   "fib": 1.5,
+   "na": 420,
+   "portions": [
+    {
+     "n": "1 puff (75 g)",
+     "hi": "1 पफ",
+     "g": 75
+    }
+   ],
+   "src": "Standard Indian restaurant/chain recipe estimate; cross-checked USDA fast-food entries and INDB",
+   "conf": "medium",
+   "note": "Baked puff pastry with spiced crumbled paneer filling."
+  },
+  {
+   "slug": "chicken-puff",
+   "name": "Chicken Puff",
+   "hi": "चिकन पफ",
+   "alias": [
+    "chicken puff pastry",
+    "bakery chicken puff",
+    "chicken patty puff",
+    "चिकन पफ पेस्ट्री"
+   ],
+   "cat": "fastfood",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🥐",
+   "unit": "g",
+   "kcal": 320,
+   "p": 9,
+   "c": 26,
+   "f": 20,
+   "fib": 1.5,
+   "na": 450,
+   "portions": [
+    {
+     "n": "1 puff (80 g)",
+     "hi": "1 पफ",
+     "g": 80
+    }
+   ],
+   "src": "Standard Indian restaurant/chain recipe estimate; cross-checked USDA fast-food entries and INDB",
+   "conf": "medium",
+   "note": "Baked puff pastry with spiced minced-chicken filling."
+  },
+  {
+   "slug": "veg-patty-bakery",
+   "name": "Veg Patty (bakery patties)",
+   "hi": "वेज पैटीज़",
+   "alias": [
+    "patties",
+    "veg patties",
+    "aloo patty",
+    "bakery patty",
+    "vegetable patty",
+    "पैटीज़"
+   ],
+   "cat": "fastfood",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥧",
+   "unit": "g",
+   "kcal": 300,
+   "p": 5,
+   "c": 33,
+   "f": 16.5,
+   "fib": 2.5,
+   "na": 450,
+   "portions": [
+    {
+     "n": "1 patty (70 g)",
+     "hi": "1 पैटी",
+     "g": 70
+    }
+   ],
+   "src": "Standard Indian restaurant/chain recipe estimate; cross-checked USDA fast-food entries and INDB",
+   "conf": "medium",
+   "note": "Baked maida shell with mashed potato-veg filling (Mumbai/Delhi bakery patty); 1 patty ~70 g ~ 210 kcal."
+  },
+  {
+   "slug": "cheese-corn-cup",
+   "name": "Cheese Corn Cup",
+   "hi": "चीज़ कॉर्न",
+   "alias": [
+    "cheese corn",
+    "butter cheese sweet corn",
+    "corn cheese",
+    "cheesy sweet corn",
+    "chilli cheese corn",
+    "चीज़ कॉर्न कप"
+   ],
+   "cat": "fastfood",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🌽",
+   "unit": "g",
+   "kcal": 172,
+   "p": 5.5,
+   "c": 18,
+   "f": 8.5,
+   "fib": 2.5,
+   "na": 380,
+   "portions": [
+    {
+     "n": "1 cup (150 g) (150 g)",
+     "hi": "1 कप",
+     "g": 150
+    }
+   ],
+   "src": "Standard Indian restaurant/chain recipe estimate; cross-checked USDA fast-food entries and INDB",
+   "conf": "medium",
+   "note": "Boiled sweet corn kernels tossed with butter, grated cheese and masala; 1 cup ~150 g ~ 260 kcal."
+  },
+  {
+   "slug": "bread-white",
+   "name": "White Bread",
+   "hi": "सफेद ब्रेड",
+   "alias": [
+    "bread",
+    "white bread slice",
+    "sandwich bread",
+    "milk white bread",
+    "double roti",
+    "डबल रोटी",
+    "ब्रेड"
+   ],
+   "cat": "bakery",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍞",
+   "unit": "g",
+   "kcal": 262,
+   "p": 8.3,
+   "c": 49,
+   "f": 3.2,
+   "fib": 2.4,
+   "na": 470,
+   "portions": [
+    {
+     "n": "1 slice (28 g)",
+     "hi": "1 स्लाइस",
+     "g": 28
+    },
+    {
+     "n": "2 slices (56 g)",
+     "hi": "2 स्लाइस",
+     "g": 56
+    }
+   ],
+   "src": "Typical Indian bakery/pack label values per 100 g; cross-checked USDA and NIN Nutritive Value of Indian Foods",
+   "conf": "high",
+   "note": "Packaged sliced maida bread, 1 slice ~28 g (~73 kcal); Indian pack labels 245-270 kcal per 100 g.",
+   "core": true
+  },
+  {
+   "slug": "bread-brown",
+   "name": "Brown Bread",
+   "hi": "ब्राउन ब्रेड",
+   "alias": [
+    "atta bread",
+    "brown bread slice",
+    "wheat brown bread",
+    "भूरी ब्रेड"
+   ],
+   "cat": "bakery",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍞",
+   "unit": "g",
+   "kcal": 255,
+   "p": 9,
+   "c": 46,
+   "f": 3.5,
+   "fib": 4,
+   "na": 470,
+   "portions": [
+    {
+     "n": "1 slice (30 g)",
+     "hi": "1 स्लाइस",
+     "g": 30
+    },
+    {
+     "n": "2 slices (60 g)",
+     "hi": "2 स्लाइस",
+     "g": 60
+    }
+   ],
+   "src": "Typical Indian bakery/pack label values per 100 g; cross-checked USDA and NIN Nutritive Value of Indian Foods",
+   "conf": "medium",
+   "note": "Typical Indian 'brown bread' is maida + atta (not 100% whole wheat) with caramel colour; labels 245-265 kcal per 100 g.",
+   "core": true
+  },
+  {
+   "slug": "bread-whole-wheat",
+   "name": "Whole Wheat Bread",
+   "hi": "होल व्हीट ब्रेड",
+   "alias": [
+    "100 percent whole wheat bread",
+    "wholemeal bread",
+    "atta bread whole",
+    "whole wheat bread slice",
+    "गेहूं की ब्रेड"
+   ],
+   "cat": "bakery",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍞",
+   "unit": "g",
+   "kcal": 250,
+   "p": 10,
+   "c": 43,
+   "f": 3.6,
+   "fib": 6,
+   "na": 450,
+   "portions": [
+    {
+     "n": "1 slice (30 g)",
+     "hi": "1 स्लाइस",
+     "g": 30
+    },
+    {
+     "n": "2 slices (60 g)",
+     "hi": "2 स्लाइस",
+     "g": 60
+    }
+   ],
+   "src": "Typical Indian bakery/pack label values per 100 g; cross-checked USDA and NIN Nutritive Value of Indian Foods",
+   "conf": "medium",
+   "note": "100% whole wheat atta loaf, higher fibre than brown bread; labels 240-260 kcal per 100 g."
+  },
+  {
+   "slug": "bread-multigrain",
+   "name": "Multigrain Bread",
+   "hi": "मल्टीग्रेन ब्रेड",
+   "alias": [
+    "multi grain bread",
+    "7 grain bread",
+    "seeds bread",
+    "grain bread",
+    "मल्टी ग्रेन ब्रेड"
+   ],
+   "cat": "bakery",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍞",
+   "unit": "g",
+   "kcal": 260,
+   "p": 10,
+   "c": 44,
+   "f": 4.5,
+   "fib": 5.5,
+   "na": 450,
+   "portions": [
+    {
+     "n": "1 slice (30 g)",
+     "hi": "1 स्लाइस",
+     "g": 30
+    },
+    {
+     "n": "2 slices (60 g)",
+     "hi": "2 स्लाइस",
+     "g": 60
+    }
+   ],
+   "src": "Typical Indian bakery/pack label values per 100 g; cross-checked USDA and NIN Nutritive Value of Indian Foods",
+   "conf": "medium",
+   "note": "Wheat bread with oats, ragi, flax/sunflower seeds; labels 250-270 kcal per 100 g."
+  },
+  {
+   "slug": "bread-milk",
+   "name": "Milk Bread",
+   "hi": "मिल्क ब्रेड",
+   "alias": [
+    "sweet bread",
+    "soft milk bread",
+    "sweet milk bread",
+    "दूध वाली ब्रेड"
+   ],
+   "cat": "bakery",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍞",
+   "unit": "g",
+   "kcal": 285,
+   "p": 8.5,
+   "c": 51,
+   "f": 5,
+   "fib": 2,
+   "na": 420,
+   "portions": [
+    {
+     "n": "1 slice (28 g)",
+     "hi": "1 स्लाइस",
+     "g": 28
+    },
+    {
+     "n": "2 slices (56 g)",
+     "hi": "2 स्लाइस",
+     "g": 56
+    }
+   ],
+   "src": "Typical Indian bakery/pack label values per 100 g; cross-checked USDA and NIN Nutritive Value of Indian Foods",
+   "conf": "medium",
+   "note": "Enriched bread with milk, sugar and butter; slightly richer than white bread."
+  },
+  {
+   "slug": "pav-ladi",
+   "name": "Pav (Ladi Pav)",
+   "hi": "पाव",
+   "alias": [
+    "pau",
+    "ladi pav",
+    "pao",
+    "dinner roll",
+    "pav bread",
+    "पाउ",
+    "लादी पाव"
+   ],
+   "cat": "bakery",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🍞",
+   "unit": "g",
+   "kcal": 268,
+   "p": 8.5,
+   "c": 50,
+   "f": 3.5,
+   "fib": 2.5,
+   "na": 480,
+   "portions": [
+    {
+     "n": "1 pav (40 g)",
+     "hi": "1 पाव",
+     "g": 40
+    },
+    {
+     "n": "2 pav (80 g)",
+     "hi": "2 पाव",
+     "g": 80
+    }
+   ],
+   "src": "Typical Indian bakery/pack label values per 100 g; cross-checked USDA and NIN Nutritive Value of Indian Foods",
+   "conf": "medium",
+   "note": "Soft Mumbai bakery bread roll (maida, little fat); 1 pav ~40 g ~ 107 kcal. Butter or oil for toasting is extra.",
+   "core": true
+  },
+  {
+   "slug": "burger-bun",
+   "name": "Burger Bun (plain)",
+   "hi": "बर्गर बन",
+   "alias": [
+    "hamburger bun",
+    "bun for burger",
+    "sesame bun",
+    "plain bun",
+    "बर्गर का बन"
+   ],
+   "cat": "bakery",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🍞",
+   "unit": "g",
+   "kcal": 270,
+   "p": 8.5,
+   "c": 48,
+   "f": 4.5,
+   "fib": 2.3,
+   "na": 450,
+   "portions": [
+    {
+     "n": "1 bun (55 g)",
+     "hi": "1 बन",
+     "g": 55
+    }
+   ],
+   "src": "Typical Indian bakery/pack label values per 100 g; cross-checked USDA and NIN Nutritive Value of Indian Foods",
+   "conf": "medium",
+   "note": "Plain refined-flour burger bun; 1 bun ~55 g ~ 150 kcal."
+  },
+  {
+   "slug": "bun-sweet-bakery",
+   "name": "Sweet Bun (bakery)",
+   "hi": "मीठा बन",
+   "alias": [
+    "bakery bun",
+    "tea bun",
+    "dinner bun",
+    "sweet pav",
+    "बन"
+   ],
+   "cat": "bakery",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥐",
+   "unit": "g",
+   "kcal": 305,
+   "p": 7.5,
+   "c": 55,
+   "f": 6.5,
+   "fib": 1.8,
+   "na": 300,
+   "portions": [
+    {
+     "n": "1 bun (60 g)",
+     "hi": "1 बन",
+     "g": 60
+    }
+   ],
+   "src": "Typical Indian bakery/pack label values per 100 g; cross-checked USDA and NIN Nutritive Value of Indian Foods",
+   "conf": "low",
+   "note": "Soft sweet yeast bun (sugar, milk, some fat); varies by bakery."
+  },
+  {
+   "slug": "kulcha-packaged",
+   "name": "Kulcha, Packaged (ready-to-eat)",
+   "hi": "पैकेट कुलचा",
+   "alias": [
+    "packaged kulcha",
+    "ready kulcha",
+    "amritsari kulcha packet",
+    "kulcha pack",
+    "कुलचा पैकेट"
+   ],
+   "cat": "bakery",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥖",
+   "unit": "g",
+   "kcal": 280,
+   "p": 8,
+   "c": 53,
+   "f": 4,
+   "fib": 2,
+   "na": 500,
+   "portions": [
+    {
+     "n": "1 kulcha (60 g)",
+     "hi": "1 कुलचा",
+     "g": 60
+    },
+    {
+     "n": "1 pack (2 kulcha) (120 g)",
+     "hi": "1 पैकेट",
+     "g": 120
+    }
+   ],
+   "src": "Typical Indian bakery/pack label values per 100 g; cross-checked USDA and NIN Nutritive Value of Indian Foods",
+   "conf": "medium",
+   "note": "Maida kulcha sold in bakery packs, eaten plain or toasted; no butter."
+  },
+  {
+   "slug": "rusk-toast",
+   "name": "Rusk (Toast Rusk)",
+   "hi": "रस्क",
+   "alias": [
+    "toast rusk",
+    "tea rusk",
+    "rusk toast",
+    "atta rusk",
+    "rask",
+    "टोस्ट रस्क"
+   ],
+   "cat": "bakery",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍞",
+   "unit": "g",
+   "kcal": 400,
+   "p": 10,
+   "c": 72,
+   "f": 7.5,
+   "fib": 3,
+   "na": 380,
+   "portions": [
+    {
+     "n": "1 rusk (10 g)",
+     "hi": "1 रस्क",
+     "g": 10
+    },
+    {
+     "n": "4 rusks (40 g)",
+     "hi": "4 रस्क",
+     "g": 40
+    }
+   ],
+   "src": "Typical Indian bakery/pack label values per 100 g; cross-checked USDA and NIN Nutritive Value of Indian Foods",
+   "conf": "medium",
+   "note": "Twice-baked dry bread (Indian 'toast' pack), dunked in chai; label values 395-420 kcal per 100 g.",
+   "core": true
+  },
+  {
+   "slug": "rusk-suji",
+   "name": "Suji Rusk",
+   "hi": "सूजी रस्क",
+   "alias": [
+    "sooji rusk",
+    "rava rusk",
+    "semolina rusk",
+    "suji toast",
+    "सूजी टोस्ट"
+   ],
+   "cat": "bakery",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍞",
+   "unit": "g",
+   "kcal": 410,
+   "p": 10,
+   "c": 74,
+   "f": 8,
+   "fib": 2.5,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 rusk (10 g)",
+     "hi": "1 रस्क",
+     "g": 10
+    },
+    {
+     "n": "4 rusks (40 g)",
+     "hi": "4 रस्क",
+     "g": 40
+    }
+   ],
+   "src": "Typical Indian bakery/pack label values per 100 g; cross-checked USDA and NIN Nutritive Value of Indian Foods",
+   "conf": "medium",
+   "note": "Semolina-based baked rusk; label values 400-420 kcal per 100 g."
+  },
+  {
+   "slug": "rusk-milk",
+   "name": "Milk Rusk",
+   "hi": "मिल्क रस्क",
+   "alias": [
+    "doodh rusk",
+    "milk toast rusk",
+    "milk rusk biscuit",
+    "दूध रस्क"
+   ],
+   "cat": "bakery",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍞",
+   "unit": "g",
+   "kcal": 410,
+   "p": 9.5,
+   "c": 73,
+   "f": 8,
+   "fib": 2,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 rusk (10 g)",
+     "hi": "1 रस्क",
+     "g": 10
+    },
+    {
+     "n": "4 rusks (40 g)",
+     "hi": "4 रस्क",
+     "g": 40
+    }
+   ],
+   "src": "Typical Indian bakery/pack label values per 100 g; cross-checked USDA and NIN Nutritive Value of Indian Foods",
+   "conf": "medium",
+   "note": "Sweet milk-enriched baked rusk; label values 400-420 kcal per 100 g."
+  },
+  {
+   "slug": "rusk-cake",
+   "name": "Cake Rusk",
+   "hi": "केक रस्क",
+   "alias": [
+    "cake toast",
+    "tutti frutti rusk",
+    "vanilla cake rusk",
+    "केक टोस्ट"
+   ],
+   "cat": "bakery",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍞",
+   "unit": "g",
+   "kcal": 420,
+   "p": 8,
+   "c": 74,
+   "f": 10.5,
+   "fib": 1.5,
+   "na": 280,
+   "portions": [
+    {
+     "n": "1 piece (15 g)",
+     "hi": "1 पीस",
+     "g": 15
+    },
+    {
+     "n": "3 pieces (45 g)",
+     "hi": "3 पीस",
+     "g": 45
+    }
+   ],
+   "src": "Typical Indian bakery/pack label values per 100 g; cross-checked USDA and NIN Nutritive Value of Indian Foods",
+   "conf": "medium",
+   "note": "Twice-baked slice of cake (egg, sugar, fat); label values 410-430 kcal per 100 g."
+  },
+  {
+   "slug": "toast-bread-dry",
+   "name": "Bread Toast (dry toasted)",
+   "hi": "टोस्ट ब्रेड",
+   "alias": [
+    "toasted bread",
+    "toast",
+    "bread toast plain",
+    "सिकी हुई ब्रेड",
+    "सूखा टोस्ट"
+   ],
+   "cat": "bakery",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍞",
+   "unit": "g",
+   "kcal": 295,
+   "p": 9.5,
+   "c": 55,
+   "f": 3.5,
+   "fib": 2.7,
+   "na": 530,
+   "portions": [
+    {
+     "n": "1 slice toasted (24 g)",
+     "hi": "1 स्लाइस",
+     "g": 24
+    },
+    {
+     "n": "2 slices toasted (48 g)",
+     "hi": "2 स्लाइस",
+     "g": 48
+    }
+   ],
+   "src": "Computed from pack label values of the ingredients, standard serving; cross-checked INDB",
+   "conf": "medium",
+   "note": "White bread toasted dry, no butter; 12% moisture loss concentrates energy (28 g slice becomes ~24 g)."
+  },
+  {
+   "slug": "toast-bread-butter",
+   "name": "Butter Toast",
+   "hi": "बटर टोस्ट",
+   "alias": [
+    "bread butter toast",
+    "toast with butter",
+    "buttered toast",
+    "bread butter",
+    "ब्रेड बटर"
+   ],
+   "cat": "bakery",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍞",
+   "unit": "g",
+   "kcal": 340,
+   "p": 8,
+   "c": 47,
+   "f": 13,
+   "fib": 2,
+   "na": 600,
+   "portions": [
+    {
+     "n": "1 slice (30 g)",
+     "hi": "1 स्लाइस",
+     "g": 30
+    },
+    {
+     "n": "2 slices (60 g)",
+     "hi": "2 स्लाइस",
+     "g": 60
+    }
+   ],
+   "src": "Computed from pack label values of the ingredients, standard serving; cross-checked INDB",
+   "conf": "medium",
+   "note": "1 slice white bread toasted with ~5 g (1 tsp) butter."
+  },
+  {
+   "slug": "paratha-packaged-plain",
+   "name": "Packaged Paratha (plain, frozen)",
+   "hi": "पैकेट पराठा",
+   "alias": [
+    "frozen paratha",
+    "ready to cook paratha",
+    "malabar paratha packet",
+    "lachha paratha frozen",
+    "plain paratha packet"
+   ],
+   "cat": "bakery",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 300,
+   "p": 6.5,
+   "c": 42,
+   "f": 12,
+   "fib": 2.5,
+   "na": 400,
+   "portions": [
+    {
+     "n": "1 paratha (80 g)",
+     "hi": "1 पराठा",
+     "g": 80
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "medium",
+   "note": "Label value as sold; roasted on a dry tawa, no extra ghee/oil. 1 paratha ~80 g ~ 240 kcal."
+  },
+  {
+   "slug": "paratha-packaged-aloo",
+   "name": "Packaged Aloo Paratha (frozen)",
+   "hi": "पैकेट आलू पराठा",
+   "alias": [
+    "frozen aloo paratha",
+    "ready aloo paratha",
+    "aloo paratha packet",
+    "आलू पराठा पैकेट"
+   ],
+   "cat": "bakery",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🫓",
+   "unit": "g",
+   "kcal": 240,
+   "p": 5.5,
+   "c": 35,
+   "f": 8,
+   "fib": 2.8,
+   "na": 380,
+   "portions": [
+    {
+     "n": "1 paratha (100 g)",
+     "hi": "1 पराठा",
+     "g": 100
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "medium",
+   "note": "Label value as sold; roasted on a dry tawa, no extra ghee/oil. 1 paratha ~100 g ~ 240 kcal."
+  },
+  {
+   "slug": "biscuit-marie",
+   "name": "Marie Biscuit",
+   "hi": "मैरी बिस्कुट",
+   "alias": [
+    "marie",
+    "marie gold",
+    "tea biscuit",
+    "plain biscuit",
+    "britannia marie",
+    "मैरी"
+   ],
+   "cat": "bakery",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍪",
+   "unit": "g",
+   "kcal": 438,
+   "p": 7.5,
+   "c": 75,
+   "f": 11.5,
+   "fib": 2.5,
+   "na": 320,
+   "portions": [
+    {
+     "n": "1 biscuit (6 g)",
+     "hi": "1 बिस्कुट",
+     "g": 6
+    },
+    {
+     "n": "4 biscuits (24 g)",
+     "hi": "4 बिस्कुट",
+     "g": 24
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "high",
+   "note": "Label values for Indian Marie biscuits: 430-445 kcal per 100 g, ~25 g sugar. 1 biscuit ~6 g ~ 26 kcal.",
+   "core": true
+  },
+  {
+   "slug": "biscuit-glucose",
+   "name": "Glucose Biscuit",
+   "hi": "ग्लूकोज़ बिस्कुट",
+   "alias": [
+    "parle-g",
+    "parle g",
+    "parleg",
+    "glucose biscuits",
+    "gluco biscuit",
+    "पारले जी",
+    "ग्लूकोज बिस्कुट"
+   ],
+   "cat": "bakery",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍪",
+   "unit": "g",
+   "kcal": 456,
+   "p": 6.9,
+   "c": 77,
+   "f": 13,
+   "fib": 0.5,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 biscuit (5 g)",
+     "hi": "1 बिस्कुट",
+     "g": 5
+    },
+    {
+     "n": "1 small pack (56 g) (56 g)",
+     "hi": "1 छोटा पैकेट",
+     "g": 56
+    },
+    {
+     "n": "4 biscuits (20 g)",
+     "hi": "4 बिस्कुट",
+     "g": 20
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "high",
+   "note": "Label values for Indian glucose biscuits: ~455 kcal per 100 g. 1 biscuit ~5 g ~ 23 kcal; a Rs 5 pack (56 g) ~ 255 kcal.",
+   "core": true
+  },
+  {
+   "slug": "biscuit-butter-cookie",
+   "name": "Butter Cookie Biscuit (packaged)",
+   "hi": "बटर कुकी बिस्कुट",
+   "alias": [
+    "good day",
+    "good day butter",
+    "butter cookies pack",
+    "cashew cookies",
+    "britannia good day",
+    "गुड डे"
+   ],
+   "cat": "bakery",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍪",
+   "unit": "g",
+   "kcal": 480,
+   "p": 6.5,
+   "c": 65,
+   "f": 21,
+   "fib": 1.5,
+   "na": 300,
+   "portions": [
+    {
+     "n": "1 biscuit (12 g)",
+     "hi": "1 बिस्कुट",
+     "g": 12
+    },
+    {
+     "n": "2 biscuits (24 g)",
+     "hi": "2 बिस्कुट",
+     "g": 24
+    },
+    {
+     "n": "1 small pack (50 g) (50 g)",
+     "hi": "1 छोटा पैकेट",
+     "g": 50
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "high",
+   "note": "Label values for Indian butter/cashew cookies: 475-490 kcal per 100 g. 1 biscuit ~12 g ~ 58 kcal."
+  },
+  {
+   "slug": "biscuit-choco-chip-cookie",
+   "name": "Choco Chip Cookies (packaged)",
+   "hi": "चॉको चिप कुकीज़",
+   "alias": [
+    "hide and seek",
+    "hide n seek",
+    "choco chip biscuit",
+    "chocolate chip cookie packet",
+    "चॉकलेट चिप बिस्कुट"
+   ],
+   "cat": "bakery",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍪",
+   "unit": "g",
+   "kcal": 488,
+   "p": 5.8,
+   "c": 65,
+   "f": 22.5,
+   "fib": 1.5,
+   "na": 190,
+   "portions": [
+    {
+     "n": "1 biscuit (10 g)",
+     "hi": "1 बिस्कुट",
+     "g": 10
+    },
+    {
+     "n": "3 biscuits (30 g)",
+     "hi": "3 बिस्कुट",
+     "g": 30
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "high",
+   "note": "Label values for Indian choco-chip cookies: 485-495 kcal per 100 g."
+  },
+  {
+   "slug": "biscuit-digestive",
+   "name": "Digestive Biscuit",
+   "hi": "डाइजेस्टिव बिस्कुट",
+   "alias": [
+    "digestive",
+    "whole wheat digestive",
+    "nutrichoice digestive",
+    "wheat digestive biscuit",
+    "डाइजेस्टिव"
+   ],
+   "cat": "bakery",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍪",
+   "unit": "g",
+   "kcal": 455,
+   "p": 7,
+   "c": 66,
+   "f": 17.5,
+   "fib": 4,
+   "na": 380,
+   "portions": [
+    {
+     "n": "1 biscuit (12 g)",
+     "hi": "1 बिस्कुट",
+     "g": 12
+    },
+    {
+     "n": "2 biscuits (24 g)",
+     "hi": "2 बिस्कुट",
+     "g": 24
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "high",
+   "note": "Label values for Indian whole-wheat digestive: 440-470 kcal per 100 g. NOT a diabetic/low-calorie food, same energy as other biscuits."
+  },
+  {
+   "slug": "biscuit-cream-sandwich",
+   "name": "Cream Biscuit (sandwich)",
+   "hi": "क्रीम बिस्कुट",
+   "alias": [
+    "cream biscuits",
+    "orange cream biscuit",
+    "vanilla cream biscuit",
+    "bourbon",
+    "क्रीम सैंडविच बिस्कुट"
+   ],
+   "cat": "bakery",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍪",
+   "unit": "g",
+   "kcal": 478,
+   "p": 5,
+   "c": 68,
+   "f": 20.5,
+   "fib": 1,
+   "na": 180,
+   "portions": [
+    {
+     "n": "1 biscuit (12 g)",
+     "hi": "1 बिस्कुट",
+     "g": 12
+    },
+    {
+     "n": "3 biscuits (36 g)",
+     "hi": "3 बिस्कुट",
+     "g": 36
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "high",
+   "note": "Label values for sandwich biscuits with sugar-fat cream: 470-490 kcal per 100 g."
+  },
+  {
+   "slug": "biscuit-chocolate-cream",
+   "name": "Chocolate Cream Sandwich Biscuit",
+   "hi": "चॉकलेट क्रीम बिस्कुट",
+   "alias": [
+    "oreo",
+    "oreo biscuit",
+    "chocolate sandwich biscuit",
+    "oreo type biscuit",
+    "ओरियो"
+   ],
+   "cat": "bakery",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍪",
+   "unit": "g",
+   "kcal": 474,
+   "p": 4.8,
+   "c": 67.5,
+   "f": 20,
+   "fib": 3,
+   "na": 400,
+   "portions": [
+    {
+     "n": "1 biscuit (11 g)",
+     "hi": "1 बिस्कुट",
+     "g": 11
+    },
+    {
+     "n": "3 biscuits (33 g)",
+     "hi": "3 बिस्कुट",
+     "g": 33
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "high",
+   "note": "Oreo-type label values: ~470 kcal per 100 g; 1 biscuit ~11 g ~ 52 kcal."
+  },
+  {
+   "slug": "biscuit-jam-filled",
+   "name": "Jam-Filled Biscuit",
+   "hi": "जैम बिस्कुट",
+   "alias": [
+    "jim jam",
+    "jam biscuit",
+    "jam cream biscuit",
+    "jam sandwich biscuit",
+    "जिम जैम"
+   ],
+   "cat": "bakery",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍪",
+   "unit": "g",
+   "kcal": 440,
+   "p": 5.5,
+   "c": 70,
+   "f": 15.5,
+   "fib": 1.5,
+   "na": 200,
+   "portions": [
+    {
+     "n": "1 biscuit (12 g)",
+     "hi": "1 बिस्कुट",
+     "g": 12
+    },
+    {
+     "n": "2 biscuits (24 g)",
+     "hi": "2 बिस्कुट",
+     "g": 24
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "medium",
+   "note": "Biscuit with jam and cream layer; label values ~435-450 kcal per 100 g."
+  },
+  {
+   "slug": "biscuit-salted-cracker",
+   "name": "Salted Cracker Biscuit",
+   "hi": "नमकीन क्रैकर बिस्कुट",
+   "alias": [
+    "monaco",
+    "monaco biscuit",
+    "salted biscuit",
+    "salty cracker",
+    "cheese cracker biscuit",
+    "मोनैको"
+   ],
+   "cat": "bakery",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍪",
+   "unit": "g",
+   "kcal": 468,
+   "p": 9,
+   "c": 65,
+   "f": 18.5,
+   "fib": 2.5,
+   "na": 950,
+   "portions": [
+    {
+     "n": "1 biscuit (4 g)",
+     "hi": "1 बिस्कुट",
+     "g": 4
+    },
+    {
+     "n": "1 small pack (50 g) (50 g)",
+     "hi": "1 छोटा पैकेट",
+     "g": 50
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "medium",
+   "note": "Label values for Monaco-type salted cracker: ~470 kcal and ~900-1000 mg sodium per 100 g. 1 biscuit ~4 g."
+  },
+  {
+   "slug": "biscuit-sweet-salty-cracker",
+   "name": "Sweet and Salty Cracker Biscuit",
+   "hi": "मीठा नमकीन क्रैकर बिस्कुट",
+   "alias": [
+    "krackjack",
+    "krack jack",
+    "sweet salty biscuit",
+    "khatta meetha biscuit",
+    "क्रैकजैक"
+   ],
+   "cat": "bakery",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍪",
+   "unit": "g",
+   "kcal": 485,
+   "p": 7,
+   "c": 68,
+   "f": 20,
+   "fib": 2,
+   "na": 650,
+   "portions": [
+    {
+     "n": "1 biscuit (7 g)",
+     "hi": "1 बिस्कुट",
+     "g": 7
+    },
+    {
+     "n": "1 small pack (60 g) (60 g)",
+     "hi": "1 छोटा पैकेट",
+     "g": 60
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "medium",
+   "note": "Label values for Krackjack-type sweet-salty cracker: ~480-490 kcal per 100 g; 1 biscuit ~7 g."
+  },
+  {
+   "slug": "biscuit-salty-butter",
+   "name": "Salty Butter Biscuit (crispy)",
+   "hi": "नमकीन बटर बिस्कुट",
+   "alias": [
+    "50-50",
+    "fifty fifty biscuit",
+    "maska chaska",
+    "50 50 biscuit",
+    "salted butter biscuit",
+    "फिफ्टी फिफ्टी"
+   ],
+   "cat": "bakery",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍪",
+   "unit": "g",
+   "kcal": 493,
+   "p": 7.5,
+   "c": 58.5,
+   "f": 25,
+   "fib": 2,
+   "na": 650,
+   "portions": [
+    {
+     "n": "1 biscuit (6 g)",
+     "hi": "1 बिस्कुट",
+     "g": 6
+    },
+    {
+     "n": "1 small pack (40 g) (40 g)",
+     "hi": "1 छोटा पैकेट",
+     "g": 40
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "medium",
+   "note": "Label values for 50-50 type sweet-salty crisp: 490-500 kcal per 100 g."
+  },
+  {
+   "slug": "biscuit-heart-shaped",
+   "name": "Heart-Shaped Sweet Biscuit",
+   "hi": "दिल वाला मीठा बिस्कुट",
+   "alias": [
+    "little hearts",
+    "heart biscuit",
+    "little heart biscuits",
+    "sugar glazed biscuit",
+    "लिटिल हार्ट्स"
+   ],
+   "cat": "bakery",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍪",
+   "unit": "g",
+   "kcal": 457,
+   "p": 6,
+   "c": 74,
+   "f": 15,
+   "fib": 1,
+   "na": 170,
+   "portions": [
+    {
+     "n": "1 biscuit (3 g)",
+     "hi": "1 बिस्कुट",
+     "g": 3
+    },
+    {
+     "n": "1 small pack (35 g) (35 g)",
+     "hi": "1 छोटा पैकेट",
+     "g": 35
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "medium",
+   "note": "Little Hearts-type sugar-glazed biscuit; ~455 kcal per 100 g, very light pieces (3 g each)."
+  },
+  {
+   "slug": "cookies-bakery-butter",
+   "name": "Butter Cookies (bakery)",
+   "hi": "बटर कुकीज़",
+   "alias": [
+    "cookies",
+    "bakery cookies",
+    "butter cookie",
+    "homemade cookies",
+    "कुकीज़"
+   ],
+   "cat": "bakery",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🍪",
+   "unit": "g",
+   "kcal": 492,
+   "p": 5.5,
+   "c": 63,
+   "f": 24,
+   "fib": 1.5,
+   "na": 250,
+   "portions": [
+    {
+     "n": "1 cookie (15 g)",
+     "hi": "1 कुकी",
+     "g": 15
+    },
+    {
+     "n": "3 cookies (45 g)",
+     "hi": "3 कुकी",
+     "g": 45
+    }
+   ],
+   "src": "Typical Indian bakery/pack label values per 100 g; cross-checked USDA and NIN Nutritive Value of Indian Foods",
+   "conf": "medium",
+   "note": "Bakery/home butter cookies (flour, butter, sugar); USDA butter cookies ~ 500 kcal per 100 g."
+  },
+  {
+   "slug": "cookie-oatmeal",
+   "name": "Oatmeal Cookie",
+   "hi": "ओटमील कुकी",
+   "alias": [
+    "oats cookie",
+    "oat cookies",
+    "oatmeal biscuit",
+    "oats biscuit",
+    "ओट्स कुकी"
+   ],
+   "cat": "bakery",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🍪",
+   "unit": "g",
+   "kcal": 455,
+   "p": 6,
+   "c": 66,
+   "f": 18,
+   "fib": 4,
+   "na": 280,
+   "portions": [
+    {
+     "n": "1 cookie (15 g)",
+     "hi": "1 कुकी",
+     "g": 15
+    },
+    {
+     "n": "3 cookies (45 g)",
+     "hi": "3 कुकी",
+     "g": 45
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "medium",
+   "note": "Packaged oat cookie; label values 440-470 kcal per 100 g."
+  },
+  {
+   "slug": "biscuit-namkeen",
+   "name": "Namkeen Biscuit",
+   "hi": "नमकीन बिस्कुट",
+   "alias": [
+    "salted masala biscuit",
+    "namkin biscuit",
+    "masala biscuit",
+    "savoury biscuit",
+    "नमकीन मसाला बिस्कुट"
+   ],
+   "cat": "bakery",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍪",
+   "unit": "g",
+   "kcal": 475,
+   "p": 8,
+   "c": 58,
+   "f": 23,
+   "fib": 2,
+   "na": 800,
+   "portions": [
+    {
+     "n": "1 biscuit (8 g)",
+     "hi": "1 बिस्कुट",
+     "g": 8
+    },
+    {
+     "n": "4 biscuits (32 g)",
+     "hi": "4 बिस्कुट",
+     "g": 32
+    }
+   ],
+   "src": "Typical Indian bakery/pack label values per 100 g; cross-checked USDA and NIN Nutritive Value of Indian Foods",
+   "conf": "low",
+   "note": "Savoury masala/cumin biscuit of the bakery type; estimate from flour + fat + salt."
+  },
+  {
+   "slug": "biscuit-jeera",
+   "name": "Jeera Biscuit (cumin)",
+   "hi": "जीरा बिस्कुट",
+   "alias": [
+    "jeera biscuits",
+    "jeera cookies",
+    "cumin biscuit",
+    "zeera biscuit",
+    "जीरा कुकीज़"
+   ],
+   "cat": "bakery",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍪",
+   "unit": "g",
+   "kcal": 478,
+   "p": 7,
+   "c": 62,
+   "f": 22.5,
+   "fib": 2,
+   "na": 520,
+   "portions": [
+    {
+     "n": "1 biscuit (10 g)",
+     "hi": "1 बिस्कुट",
+     "g": 10
+    },
+    {
+     "n": "3 biscuits (30 g)",
+     "hi": "3 बिस्कुट",
+     "g": 30
+    }
+   ],
+   "src": "Typical Indian bakery/pack label values per 100 g; cross-checked USDA and NIN Nutritive Value of Indian Foods",
+   "conf": "low",
+   "note": "Salty-sweet cumin biscuit of the bakery type; estimate from flour + fat + salt."
+  },
+  {
+   "slug": "nankhatai",
+   "name": "Nankhatai",
+   "hi": "नानखटाई",
+   "alias": [
+    "nan khatai",
+    "nankhatai biscuit",
+    "ghee biscuit",
+    "nankatai",
+    "नान खटाई"
+   ],
+   "cat": "bakery",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍪",
+   "unit": "g",
+   "kcal": 480,
+   "p": 6,
+   "c": 60,
+   "f": 24,
+   "fib": 1.5,
+   "na": 90,
+   "portions": [
+    {
+     "n": "1 piece (20 g)",
+     "hi": "1 पीस",
+     "g": 20
+    },
+    {
+     "n": "3 pieces (60 g)",
+     "hi": "3 पीस",
+     "g": 60
+    }
+   ],
+   "src": "Typical Indian bakery/pack label values per 100 g; cross-checked USDA and NIN Nutritive Value of Indian Foods",
+   "conf": "medium",
+   "note": "Flour, ghee/butter, sugar, besan/suji shortbread-type biscuit; 1 piece ~20 g ~ 96 kcal."
+  },
+  {
+   "slug": "biscuit-atta",
+   "name": "Atta Biscuit (whole wheat)",
+   "hi": "आटा बिस्कुट",
+   "alias": [
+    "wheat biscuit",
+    "whole wheat biscuit",
+    "atta biscuits",
+    "gehu biscuit",
+    "आटे का बिस्कुट"
+   ],
+   "cat": "bakery",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍪",
+   "unit": "g",
+   "kcal": 450,
+   "p": 7,
+   "c": 66,
+   "f": 17,
+   "fib": 3.5,
+   "na": 350,
+   "portions": [
+    {
+     "n": "1 biscuit (10 g)",
+     "hi": "1 बिस्कुट",
+     "g": 10
+    },
+    {
+     "n": "3 biscuits (30 g)",
+     "hi": "3 बिस्कुट",
+     "g": 30
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "medium",
+   "note": "Label values for whole-wheat atta biscuits: 440-460 kcal per 100 g."
+  },
+  {
+   "slug": "khari-biscuit",
+   "name": "Khari Biscuit",
+   "hi": "खारी बिस्कुट",
+   "alias": [
+    "khari",
+    "flaky khari",
+    "puff biscuit",
+    "salted puff biscuit",
+    "खारी"
+   ],
+   "cat": "bakery",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍪",
+   "unit": "g",
+   "kcal": 495,
+   "p": 7,
+   "c": 52,
+   "f": 28,
+   "fib": 2,
+   "na": 600,
+   "portions": [
+    {
+     "n": "1 piece (12 g)",
+     "hi": "1 पीस",
+     "g": 12
+    },
+    {
+     "n": "4 pieces (48 g)",
+     "hi": "4 पीस",
+     "g": 48
+    }
+   ],
+   "src": "Typical Indian bakery/pack label values per 100 g; cross-checked USDA and NIN Nutritive Value of Indian Foods",
+   "conf": "low",
+   "note": "Flaky salted puff-pastry biscuit (maida + fat layers); estimate from puff pastry."
+  },
+  {
+   "slug": "cream-roll-bakery",
+   "name": "Cream Roll",
+   "hi": "क्रीम रोल",
+   "alias": [
+    "cream rolls",
+    "bakery cream roll",
+    "cream horn",
+    "cream filled roll",
+    "क्रीम रोल पेस्ट्री"
+   ],
+   "cat": "bakery",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥐",
+   "unit": "g",
+   "kcal": 400,
+   "p": 4.5,
+   "c": 40,
+   "f": 25,
+   "fib": 1,
+   "na": 200,
+   "portions": [
+    {
+     "n": "1 piece (35 g)",
+     "hi": "1 पीस",
+     "g": 35
+    }
+   ],
+   "src": "Typical Indian bakery/pack label values per 100 g; cross-checked USDA and NIN Nutritive Value of Indian Foods",
+   "conf": "low",
+   "note": "Puff-pastry or biscuit roll filled with sweet fat-cream; 1 piece ~35 g ~ 140 kcal."
+  },
+  {
+   "slug": "osmania-biscuit",
+   "name": "Osmania Biscuit",
+   "hi": "उस्मानिया बिस्कुट",
+   "alias": [
+    "osmania biscuits",
+    "hyderabadi tea biscuit",
+    "osmania cookie",
+    "irani chai biscuit",
+    "उस्मानिया"
+   ],
+   "cat": "bakery",
+   "region": "Telangana",
+   "diet": "veg",
+   "emoji": "🍪",
+   "unit": "g",
+   "kcal": 458,
+   "p": 7,
+   "c": 62,
+   "f": 20,
+   "fib": 1.5,
+   "na": 380,
+   "portions": [
+    {
+     "n": "1 biscuit (12 g)",
+     "hi": "1 बिस्कुट",
+     "g": 12
+    },
+    {
+     "n": "3 biscuits (36 g)",
+     "hi": "3 बिस्कुट",
+     "g": 36
+    }
+   ],
+   "src": "Typical Indian bakery/pack label values per 100 g; cross-checked USDA and NIN Nutritive Value of Indian Foods",
+   "conf": "low",
+   "note": "Hyderabadi sweet-salty tea biscuit (flour, butter, sugar, pinch of salt); estimate."
+  },
+  {
+   "slug": "biscuit-cream-wafer",
+   "name": "Cream Wafer Biscuit",
+   "hi": "क्रीम वेफर बिस्कुट",
+   "alias": [
+    "cream wafers",
+    "chocolate wafer biscuit",
+    "wafer biscuit",
+    "वेफर बिस्कुट"
+   ],
+   "cat": "bakery",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍪",
+   "unit": "g",
+   "kcal": 515,
+   "p": 5,
+   "c": 66,
+   "f": 26,
+   "fib": 1,
+   "na": 130,
+   "portions": [
+    {
+     "n": "1 wafer (9 g)",
+     "hi": "1 वेफर",
+     "g": 9
+    },
+    {
+     "n": "1 small pack (35 g) (35 g)",
+     "hi": "1 छोटा पैकेट",
+     "g": 35
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "medium",
+   "note": "Label values for cream-filled wafer biscuits: 510-530 kcal per 100 g."
+  },
+  {
+   "slug": "biscuit-sugar-free-digestive",
+   "name": "Sugar-Free Digestive Biscuit",
+   "hi": "शुगर-फ्री डाइजेस्टिव बिस्कुट",
+   "alias": [
+    "sugar free biscuit",
+    "diabetic biscuit",
+    "sugar free digestive",
+    "no sugar biscuit",
+    "शुगर फ्री बिस्कुट"
+   ],
+   "cat": "bakery",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍪",
+   "unit": "g",
+   "kcal": 430,
+   "p": 8,
+   "c": 56,
+   "f": 18,
+   "fib": 8,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 biscuit (12 g)",
+     "hi": "1 बिस्कुट",
+     "g": 12
+    },
+    {
+     "n": "2 biscuits (24 g)",
+     "hi": "2 बिस्कुट",
+     "g": 24
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "low",
+   "note": "Sweetened with polyols/sweetener, not calorie-free; energy is close to a normal digestive biscuit (labels 410-450 kcal per 100 g). Carbs shown are available carbs only."
+  },
+  {
+   "slug": "cake-plain-sponge",
+   "name": "Plain Sponge Cake",
+   "hi": "सादा केक",
+   "alias": [
+    "vanilla cake",
+    "tea cake",
+    "plain cake",
+    "vanilla sponge cake",
+    "सादा स्पंज केक"
+   ],
+   "cat": "bakery",
+   "region": "International",
+   "diet": "egg",
+   "emoji": "🎂",
+   "unit": "g",
+   "kcal": 355,
+   "p": 5.5,
+   "c": 52,
+   "f": 14,
+   "fib": 0.7,
+   "na": 270,
+   "portions": [
+    {
+     "n": "1 slice (50 g)",
+     "hi": "1 स्लाइस",
+     "g": 50
+    },
+    {
+     "n": "1 packaged tea-cake slice (40 g)",
+     "hi": "1 पीस",
+     "g": 40
+    }
+   ],
+   "src": "Typical Indian bakery/pack label values per 100 g; cross-checked USDA and NIN Nutritive Value of Indian Foods",
+   "conf": "medium",
+   "note": "Bakery/packaged vanilla sponge (flour, egg, sugar, oil); USDA sponge/yellow cake 350-370 kcal per 100 g. Most Indian bakery cakes contain egg; eggless versions are marked."
+  },
+  {
+   "slug": "cake-chocolate",
+   "name": "Chocolate Cake",
+   "hi": "चॉकलेट केक",
+   "alias": [
+    "choco cake",
+    "chocolate sponge cake",
+    "chocolate cake slice",
+    "चॉको केक"
+   ],
+   "cat": "bakery",
+   "region": "International",
+   "diet": "egg",
+   "emoji": "🎂",
+   "unit": "g",
+   "kcal": 380,
+   "p": 4.5,
+   "c": 52,
+   "f": 17,
+   "fib": 2,
+   "na": 300,
+   "portions": [
+    {
+     "n": "1 slice (80 g)",
+     "hi": "1 स्लाइस",
+     "g": 80
+    },
+    {
+     "n": "1 pastry slice (100 g)",
+     "hi": "1 पीस",
+     "g": 100
+    }
+   ],
+   "src": "Typical Indian bakery/pack label values per 100 g; cross-checked USDA and NIN Nutritive Value of Indian Foods",
+   "conf": "medium",
+   "note": "Bakery chocolate cake with light chocolate frosting; USDA chocolate cake with frosting 371 kcal per 100 g; INDB 336 for unfrosted."
+  },
+  {
+   "slug": "cake-fruit",
+   "name": "Fruit Cake",
+   "hi": "फ्रूट केक",
+   "alias": [
+    "dry fruit cake",
+    "tutti frutti cake",
+    "fruit and nut cake",
+    "फ्रूट एंड नट केक"
+   ],
+   "cat": "bakery",
+   "region": "International",
+   "diet": "egg",
+   "emoji": "🎂",
+   "unit": "g",
+   "kcal": 350,
+   "p": 4.5,
+   "c": 55,
+   "f": 12.5,
+   "fib": 2,
+   "na": 180,
+   "portions": [
+    {
+     "n": "1 slice (60 g)",
+     "hi": "1 स्लाइस",
+     "g": 60
+    }
+   ],
+   "src": "Typical Indian bakery/pack label values per 100 g; cross-checked USDA and NIN Nutritive Value of Indian Foods",
+   "conf": "medium",
+   "note": "Fruit-and-nut cake without icing; between sponge and rich plum cake."
+  },
+  {
+   "slug": "cake-plum",
+   "name": "Plum Cake",
+   "hi": "प्लम केक",
+   "alias": [
+    "christmas cake",
+    "christmas plum cake",
+    "rich fruit cake",
+    "क्रिसमस केक"
+   ],
+   "cat": "bakery",
+   "region": "International",
+   "diet": "egg",
+   "emoji": "🎂",
+   "unit": "g",
+   "kcal": 372,
+   "p": 5,
+   "c": 55,
+   "f": 14.5,
+   "fib": 2.5,
+   "na": 140,
+   "portions": [
+    {
+     "n": "1 slice (70 g)",
+     "hi": "1 स्लाइस",
+     "g": 70
+    }
+   ],
+   "src": "Typical Indian bakery/pack label values per 100 g; cross-checked USDA and NIN Nutritive Value of Indian Foods",
+   "conf": "medium",
+   "note": "Rich fruit cake with dried fruits, nuts and butter (INDB Christmas cake 373 agrees)."
+  },
+  {
+   "slug": "cake-rum",
+   "name": "Rum Cake",
+   "hi": "रम केक",
+   "alias": [
+    "rum soaked cake",
+    "rum and raisin cake",
+    "rum fruit cake",
+    "रम फ्रूट केक"
+   ],
+   "cat": "bakery",
+   "region": "International",
+   "diet": "egg",
+   "emoji": "🎂",
+   "unit": "g",
+   "kcal": 378,
+   "p": 4.5,
+   "c": 57,
+   "f": 15,
+   "fib": 1,
+   "na": 160,
+   "portions": [
+    {
+     "n": "1 slice (70 g)",
+     "hi": "1 स्लाइस",
+     "g": 70
+    }
+   ],
+   "src": "Typical Indian bakery/pack label values per 100 g; cross-checked USDA and NIN Nutritive Value of Indian Foods",
+   "conf": "low",
+   "note": "Butter cake soaked in rum syrup (alcohol energy included, most of it bakes off). Contains alcohol."
+  },
+  {
+   "slug": "cake-black-forest",
+   "name": "Black Forest Cake",
+   "hi": "ब्लैक फॉरेस्ट केक",
+   "alias": [
+    "black forest pastry",
+    "cherry chocolate cake",
+    "black forest slice",
+    "ब्लैक फारेस्ट केक"
+   ],
+   "cat": "bakery",
+   "region": "International",
+   "diet": "egg",
+   "emoji": "🍰",
+   "unit": "g",
+   "kcal": 318,
+   "p": 4.5,
+   "c": 36,
+   "f": 17,
+   "fib": 1.5,
+   "na": 190,
+   "portions": [
+    {
+     "n": "1 pastry slice (100 g)",
+     "hi": "1 पीस",
+     "g": 100
+    },
+    {
+     "n": "1 slice (heavy) (130 g)",
+     "hi": "1 स्लाइस",
+     "g": 130
+    }
+   ],
+   "src": "Typical Indian bakery/pack label values per 100 g; cross-checked USDA and NIN Nutritive Value of Indian Foods",
+   "conf": "medium",
+   "note": "Chocolate sponge with whipped cream and cherries; cream lowers the energy density compared to plain sponge."
+  },
+  {
+   "slug": "cake-pound",
+   "name": "Pound Cake",
+   "hi": "पाउंड केक",
+   "alias": [
+    "butter cake",
+    "vanilla pound cake",
+    "madeira cake",
+    "बटर केक"
+   ],
+   "cat": "bakery",
+   "region": "International",
+   "diet": "egg",
+   "emoji": "🎂",
+   "unit": "g",
+   "kcal": 395,
+   "p": 5.5,
+   "c": 52,
+   "f": 18.5,
+   "fib": 0.6,
+   "na": 260,
+   "portions": [
+    {
+     "n": "1 slice (60 g)",
+     "hi": "1 स्लाइस",
+     "g": 60
+    }
+   ],
+   "src": "Typical Indian bakery/pack label values per 100 g; cross-checked USDA and NIN Nutritive Value of Indian Foods",
+   "conf": "medium",
+   "note": "Equal-parts butter, sugar, flour, egg; USDA pound cake 389 kcal per 100 g."
+  },
+  {
+   "slug": "muffin-bakery",
+   "name": "Muffin",
+   "hi": "मफिन",
+   "alias": [
+    "chocolate chip muffin",
+    "vanilla muffin",
+    "blueberry muffin",
+    "muffins",
+    "मफ़िन"
+   ],
+   "cat": "bakery",
+   "region": "International",
+   "diet": "egg",
+   "emoji": "🧁",
+   "unit": "g",
+   "kcal": 355,
+   "p": 5,
+   "c": 50,
+   "f": 15,
+   "fib": 1.2,
+   "na": 340,
+   "portions": [
+    {
+     "n": "1 muffin (90 g)",
+     "hi": "1 मफिन",
+     "g": 90
+    }
+   ],
+   "src": "Typical Indian bakery/pack label values per 100 g; cross-checked USDA and NIN Nutritive Value of Indian Foods",
+   "conf": "medium",
+   "note": "Bakery muffin (vanilla/choco-chip/blueberry), 1 muffin ~90 g ~ 320 kcal."
+  },
+  {
+   "slug": "cupcake-frosted",
+   "name": "Cupcake (frosted)",
+   "hi": "कपकेक",
+   "alias": [
+    "cup cake",
+    "butter cream cupcake",
+    "iced cupcake",
+    "कप केक"
+   ],
+   "cat": "bakery",
+   "region": "International",
+   "diet": "egg",
+   "emoji": "🧁",
+   "unit": "g",
+   "kcal": 380,
+   "p": 3.5,
+   "c": 55,
+   "f": 16.5,
+   "fib": 0.8,
+   "na": 280,
+   "portions": [
+    {
+     "n": "1 cupcake (60 g)",
+     "hi": "1 कपकेक",
+     "g": 60
+    }
+   ],
+   "src": "Typical Indian bakery/pack label values per 100 g; cross-checked USDA and NIN Nutritive Value of Indian Foods",
+   "conf": "medium",
+   "note": "Sponge cupcake with buttercream frosting; 1 cupcake ~60 g ~ 230 kcal."
+  },
+  {
+   "slug": "brownie-chocolate",
+   "name": "Chocolate Brownie",
+   "hi": "चॉकलेट ब्राउनी",
+   "alias": [
+    "brownie",
+    "fudge brownie",
+    "walnut brownie",
+    "brownie piece",
+    "ब्राउनी"
+   ],
+   "cat": "bakery",
+   "region": "International",
+   "diet": "egg",
+   "emoji": "🍫",
+   "unit": "g",
+   "kcal": 420,
+   "p": 5,
+   "c": 50,
+   "f": 22,
+   "fib": 2.5,
+   "na": 280,
+   "portions": [
+    {
+     "n": "1 piece (50 g)",
+     "hi": "1 पीस",
+     "g": 50
+    },
+    {
+     "n": "1 large piece (70 g)",
+     "hi": "1 बड़ा पीस",
+     "g": 70
+    }
+   ],
+   "src": "Typical Indian bakery/pack label values per 100 g; cross-checked USDA and NIN Nutritive Value of Indian Foods",
+   "conf": "medium",
+   "note": "Fudgy chocolate brownie; USDA brownie 466, home recipes 400-430 kcal per 100 g."
+  },
+  {
+   "slug": "pastry-cream",
+   "name": "Cream Pastry",
+   "hi": "क्रीम पेस्ट्री",
+   "alias": [
+    "pineapple pastry",
+    "bakery pastry",
+    "pastry",
+    "vanilla pastry",
+    "cake pastry",
+    "पेस्ट्री"
+   ],
+   "cat": "bakery",
+   "region": "Pan-India",
+   "diet": "egg",
+   "emoji": "🍰",
+   "unit": "g",
+   "kcal": 300,
+   "p": 4,
+   "c": 38,
+   "f": 15,
+   "fib": 0.5,
+   "na": 150,
+   "portions": [
+    {
+     "n": "1 pastry piece (90 g)",
+     "hi": "1 पीस",
+     "g": 90
+    }
+   ],
+   "src": "Typical Indian bakery/pack label values per 100 g; cross-checked USDA and NIN Nutritive Value of Indian Foods",
+   "conf": "medium",
+   "note": "Indian bakery pastry slice (sponge, whipped cream, fruit/essence); 1 piece ~90 g ~ 270 kcal."
+  },
+  {
+   "slug": "doughnut",
+   "name": "Doughnut",
+   "hi": "डोनट",
+   "alias": [
+    "donut",
+    "glazed donut",
+    "chocolate donut",
+    "doughnut ring",
+    "डोनट्स"
+   ],
+   "cat": "bakery",
+   "region": "International",
+   "diet": "egg",
+   "emoji": "🍩",
+   "unit": "g",
+   "kcal": 395,
+   "p": 5,
+   "c": 48,
+   "f": 20,
+   "fib": 1.5,
+   "na": 350,
+   "portions": [
+    {
+     "n": "1 doughnut (60 g)",
+     "hi": "1 डोनट",
+     "g": 60
+    }
+   ],
+   "src": "Typical Indian bakery/pack label values per 100 g; cross-checked USDA and NIN Nutritive Value of Indian Foods",
+   "conf": "medium",
+   "note": "Yeast-raised fried ring with sugar glaze; USDA glazed doughnut ~420, Indian chain ~380-400 kcal per 100 g."
+  },
+  {
+   "slug": "croissant-butter",
+   "name": "Croissant",
+   "hi": "क्रोइसां",
+   "alias": [
+    "butter croissant",
+    "croissant roll",
+    "plain croissant",
+    "क्रॉसेंट"
+   ],
+   "cat": "bakery",
+   "region": "International",
+   "diet": "egg",
+   "emoji": "🥐",
+   "unit": "g",
+   "kcal": 405,
+   "p": 8.2,
+   "c": 44,
+   "f": 21,
+   "fib": 2.4,
+   "na": 450,
+   "portions": [
+    {
+     "n": "1 croissant (55 g)",
+     "hi": "1 क्रोइसां",
+     "g": 55
+    }
+   ],
+   "src": "Typical Indian bakery/pack label values per 100 g; cross-checked USDA and NIN Nutritive Value of Indian Foods",
+   "conf": "high",
+   "note": "USDA butter croissant 406 kcal per 100 g; 1 croissant ~55 g ~ 225 kcal."
+  },
+  {
+   "slug": "danish-pastry",
+   "name": "Danish Pastry",
+   "hi": "डेनिश पेस्ट्री",
+   "alias": [
+    "danish",
+    "fruit danish",
+    "cheese danish",
+    "danish roll",
+    "डेनिश"
+   ],
+   "cat": "bakery",
+   "region": "International",
+   "diet": "egg",
+   "emoji": "🥐",
+   "unit": "g",
+   "kcal": 378,
+   "p": 5.8,
+   "c": 44,
+   "f": 20,
+   "fib": 1.5,
+   "na": 340,
+   "portions": [
+    {
+     "n": "1 piece (75 g)",
+     "hi": "1 पीस",
+     "g": 75
+    }
+   ],
+   "src": "Typical Indian bakery/pack label values per 100 g; cross-checked USDA and NIN Nutritive Value of Indian Foods",
+   "conf": "medium",
+   "note": "Laminated pastry with fruit/cream-cheese filling; USDA Danish 374 kcal per 100 g."
+  },
+  {
+   "slug": "cheesecake-baked",
+   "name": "Cheesecake",
+   "hi": "चीज़केक",
+   "alias": [
+    "baked cheese cake",
+    "new york cheesecake",
+    "blueberry cheesecake",
+    "cheese cake",
+    "चीज़ केक"
+   ],
+   "cat": "bakery",
+   "region": "International",
+   "diet": "egg",
+   "emoji": "🍰",
+   "unit": "g",
+   "kcal": 325,
+   "p": 5.5,
+   "c": 25,
+   "f": 22.5,
+   "fib": 0.4,
+   "na": 280,
+   "portions": [
+    {
+     "n": "1 slice (90 g)",
+     "hi": "1 स्लाइस",
+     "g": 90
+    }
+   ],
+   "src": "Typical Indian bakery/pack label values per 100 g; cross-checked USDA and NIN Nutritive Value of Indian Foods",
+   "conf": "medium",
+   "note": "Baked cream-cheese cake with biscuit base; USDA cheesecake 321 kcal per 100 g."
+  },
+  {
+   "slug": "swiss-roll-packaged",
+   "name": "Swiss Roll (packaged cake roll)",
+   "hi": "स्विस रोल",
+   "alias": [
+    "cake roll",
+    "chocolate swiss roll",
+    "jam roll cake",
+    "mini swiss roll",
+    "स्विस रोल केक"
+   ],
+   "cat": "bakery",
+   "region": "Pan-India",
+   "diet": "egg",
+   "emoji": "🎂",
+   "unit": "g",
+   "kcal": 380,
+   "p": 5,
+   "c": 55,
+   "f": 15.5,
+   "fib": 1,
+   "na": 250,
+   "portions": [
+    {
+     "n": "1 mini roll (30 g)",
+     "hi": "1 पीस",
+     "g": 30
+    },
+    {
+     "n": "1 slice (40 g)",
+     "hi": "1 स्लाइस",
+     "g": 40
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "medium",
+   "note": "Packaged sponge roll with cream/jam filling; label values 370-400 kcal per 100 g."
+  },
+  {
+   "slug": "mawa-cake",
+   "name": "Mawa Cake",
+   "hi": "मावा केक",
+   "alias": [
+    "khoya cake",
+    "irani mawa cake",
+    "mawa cake slice",
+    "खोया केक"
+   ],
+   "cat": "bakery",
+   "region": "Maharashtra",
+   "diet": "egg",
+   "emoji": "🎂",
+   "unit": "g",
+   "kcal": 385,
+   "p": 6.5,
+   "c": 50,
+   "f": 17.5,
+   "fib": 1,
+   "na": 150,
+   "portions": [
+    {
+     "n": "1 slice (60 g)",
+     "hi": "1 स्लाइस",
+     "g": 60
+    },
+    {
+     "n": "1 small cake (Irani cafe) (80 g)",
+     "hi": "1 केक",
+     "g": 80
+    }
+   ],
+   "src": "Typical Indian bakery/pack label values per 100 g; cross-checked USDA and NIN Nutritive Value of Indian Foods",
+   "conf": "low",
+   "note": "Irani-cafe style cardamom cake made with khoya (mawa), flour, egg, butter, sugar; estimate."
+  },
+  {
+   "slug": "cornflakes-dry",
+   "name": "Cornflakes (dry)",
+   "hi": "कॉर्नफ्लेक्स",
+   "alias": [
+    "corn flakes",
+    "kelloggs cornflakes",
+    "cereal flakes",
+    "plain cornflakes",
+    "कॉर्न फ्लेक्स"
+   ],
+   "cat": "bakery",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 360,
+   "p": 7.5,
+   "c": 81,
+   "f": 0.9,
+   "fib": 2.5,
+   "na": 650,
+   "portions": [
+    {
+     "n": "1 bowl dry (30 g)",
+     "hi": "1 कटोरी",
+     "g": 30
+    },
+    {
+     "n": "1 cup dry (28 g)",
+     "hi": "1 कप",
+     "g": 28
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "high",
+   "note": "Label/USDA values: 357-363 kcal per 100 g; sodium ~600-730 mg per 100 g; 30 g serving ~ 108 kcal."
+  },
+  {
+   "slug": "cornflakes-milk",
+   "name": "Cornflakes with Milk",
+   "hi": "दूध के साथ कॉर्नफ्लेक्स",
+   "alias": [
+    "corn flakes with milk",
+    "cornflakes in milk",
+    "milk cornflakes",
+    "cereal with milk",
+    "दूध कॉर्नफ्लेक्स"
+   ],
+   "cat": "bakery",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 108,
+   "p": 3.75,
+   "c": 17.3,
+   "f": 2.65,
+   "fib": 0.4,
+   "na": 140,
+   "portions": [
+    {
+     "n": "1 bowl (30 g flakes + 150 ml toned milk) (180 g)",
+     "hi": "1 कटोरी",
+     "g": 180
+    }
+   ],
+   "src": "Computed from pack label values of the ingredients, standard serving; cross-checked INDB",
+   "conf": "medium",
+   "note": "30 g cornflakes + 150 ml toned milk, no sugar added; 1 bowl ~ 195 kcal. INDB ASC051 117 agrees."
+  },
+  {
+   "slug": "cereal-chocos",
+   "name": "Chocolate Cereal (Chocos type)",
+   "hi": "चॉकलेट सीरियल",
+   "alias": [
+    "chocos",
+    "choco cereal",
+    "choco pops",
+    "chocolate wheat pillows",
+    "चॉकोस"
+   ],
+   "cat": "bakery",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 375,
+   "p": 7,
+   "c": 78,
+   "f": 2.5,
+   "fib": 5,
+   "na": 380,
+   "portions": [
+    {
+     "n": "1 bowl dry (30 g)",
+     "hi": "1 कटोरी",
+     "g": 30
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "medium",
+   "note": "Label values for chocolate whole-grain cereal: 370-385 kcal per 100 g, ~30 g sugar."
+  },
+  {
+   "slug": "wheat-flakes-dry",
+   "name": "Wheat Flakes (dry)",
+   "hi": "गेहूं के फ्लेक्स",
+   "alias": [
+    "wheat flake cereal",
+    "whole wheat flakes",
+    "wheat flakes cereal",
+    "गेहूं फ्लेक्स"
+   ],
+   "cat": "bakery",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 350,
+   "p": 10,
+   "c": 70,
+   "f": 1.8,
+   "fib": 9,
+   "na": 400,
+   "portions": [
+    {
+     "n": "1 bowl dry (30 g)",
+     "hi": "1 कटोरी",
+     "g": 30
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "medium",
+   "note": "Label values for whole-wheat flake cereals: 340-360 kcal per 100 g."
+  },
+  {
+   "slug": "muesli-fruit-nut-dry",
+   "name": "Muesli, Fruit and Nut (dry)",
+   "hi": "म्यूसली",
+   "alias": [
+    "muesli",
+    "museli",
+    "fruit and nut muesli",
+    "fruit muesli",
+    "swiss muesli"
+   ],
+   "cat": "bakery",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 365,
+   "p": 9,
+   "c": 65,
+   "f": 6.5,
+   "fib": 7.5,
+   "na": 110,
+   "portions": [
+    {
+     "n": "1 bowl dry (40 g) (40 g)",
+     "hi": "1 कटोरी",
+     "g": 40
+    },
+    {
+     "n": "1 tbsp (10 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 10
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "medium",
+   "note": "Label values for Indian muesli: 350-380 kcal per 100 g; 40 g serving ~ 146 kcal."
+  },
+  {
+   "slug": "muesli-with-milk",
+   "name": "Muesli with Milk",
+   "hi": "दूध के साथ म्यूसली",
+   "alias": [
+    "muesli in milk",
+    "museli with milk",
+    "muesli bowl with milk",
+    "दूध म्यूसली"
+   ],
+   "cat": "bakery",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 122,
+   "p": 4.3,
+   "c": 17.3,
+   "f": 3.7,
+   "fib": 1.6,
+   "na": 57,
+   "portions": [
+    {
+     "n": "1 bowl (40 g muesli + 150 ml toned milk) (190 g)",
+     "hi": "1 कटोरी",
+     "g": 190
+    }
+   ],
+   "src": "Computed from pack label values of the ingredients, standard serving; cross-checked INDB",
+   "conf": "medium",
+   "note": "40 g muesli + 150 ml toned milk, no added sugar; 1 bowl ~ 230 kcal."
+  },
+  {
+   "slug": "granola-baked",
+   "name": "Granola",
+   "hi": "ग्रेनोला",
+   "alias": [
+    "baked granola",
+    "oat granola",
+    "granola clusters",
+    "honey granola",
+    "ग्रेनोला क्लस्टर"
+   ],
+   "cat": "bakery",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 450,
+   "p": 10,
+   "c": 62,
+   "f": 17,
+   "fib": 7,
+   "na": 60,
+   "portions": [
+    {
+     "n": "1 bowl (40 g) (40 g)",
+     "hi": "1 कटोरी",
+     "g": 40
+    },
+    {
+     "n": "1 tbsp (12 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 12
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "medium",
+   "note": "Oat clusters baked with honey/oil, nuts and seeds; label values 430-470 kcal per 100 g."
+  },
+  {
+   "slug": "oats-rolled-dry",
+   "name": "Rolled Oats (dry)",
+   "hi": "ओट्स (कच्चे)",
+   "alias": [
+    "oats",
+    "rolled oats",
+    "oatmeal dry",
+    "jaee",
+    "jai oats",
+    "जई"
+   ],
+   "cat": "bakery",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 380,
+   "p": 13,
+   "c": 60,
+   "f": 7.2,
+   "fib": 10,
+   "na": 5,
+   "portions": [
+    {
+     "n": "1 serving (40 g) (40 g)",
+     "hi": "1 सर्विंग",
+     "g": 40
+    },
+    {
+     "n": "1 tbsp (10 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 10
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "high",
+   "note": "USDA/Indian label values for plain rolled oats: ~380-390 kcal per 100 g, 10 g fibre; 40 g dry makes ~1 bowl of porridge."
+  },
+  {
+   "slug": "oats-instant-dry",
+   "name": "Instant Oats (quick, dry)",
+   "hi": "इंस्टेंट ओट्स",
+   "alias": [
+    "quick oats",
+    "quick cooking oats",
+    "instant oatmeal",
+    "saffola oats",
+    "इंस्टेंट ओटमील"
+   ],
+   "cat": "bakery",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 375,
+   "p": 12.5,
+   "c": 60,
+   "f": 7,
+   "fib": 9.5,
+   "na": 8,
+   "portions": [
+    {
+     "n": "1 serving (40 g) (40 g)",
+     "hi": "1 सर्विंग",
+     "g": 40
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "high",
+   "note": "Pre-cut/steamed oats; same composition as rolled oats within label rounding."
+  },
+  {
+   "slug": "oats-masala-sachet",
+   "name": "Masala Oats (flavoured sachet, dry)",
+   "hi": "मसाला ओट्स",
+   "alias": [
+    "flavoured oats",
+    "saffola masala oats",
+    "masala oats sachet",
+    "veg masala oats",
+    "मसाला ओट्स सैशे"
+   ],
+   "cat": "bakery",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 372,
+   "p": 10,
+   "c": 58,
+   "f": 8.5,
+   "fib": 8,
+   "na": 950,
+   "portions": [
+    {
+     "n": "1 sachet (40 g) (40 g)",
+     "hi": "1 सैशे",
+     "g": 40
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "medium",
+   "note": "Label values for savoury masala oats: 370-390 kcal per 100 g and ~900-1000 mg sodium per 100 g (spice mix with salt); one 40 g sachet ~ 150 kcal, ~380 mg sodium."
+  },
+  {
+   "slug": "oats-porridge-water",
+   "name": "Oats Porridge (cooked with water)",
+   "hi": "ओट्स दलिया (पानी में)",
+   "alias": [
+    "oatmeal porridge",
+    "oats cooked",
+    "boiled oats",
+    "oats with water",
+    "ओट्स पोरिज"
+   ],
+   "cat": "tiffin",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 68,
+   "p": 2.4,
+   "c": 11,
+   "f": 1.4,
+   "fib": 1.7,
+   "na": 20,
+   "portions": [
+    {
+     "n": "1 bowl (40 g dry oats) (235 g)",
+     "hi": "1 कटोरी",
+     "g": 235
+    },
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    }
+   ],
+   "src": "Computed from pack label values of the ingredients, standard serving; cross-checked INDB",
+   "conf": "high",
+   "note": "40 g rolled oats cooked in water to ~235 g, pinch of salt, no sugar/milk; USDA cooked oatmeal 71 kcal per 100 g."
+  },
+  {
+   "slug": "oats-porridge-milk",
+   "name": "Oats Porridge (cooked with milk)",
+   "hi": "ओट्स दलिया (दूध में)",
+   "alias": [
+    "oats with milk",
+    "milk oats",
+    "oatmeal with milk",
+    "ओट्स दूध"
+   ],
+   "cat": "tiffin",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 108,
+   "p": 4.7,
+   "c": 13.8,
+   "f": 3.7,
+   "fib": 1.7,
+   "na": 38,
+   "portions": [
+    {
+     "n": "1 bowl (40 g oats + 200 ml toned milk) (240 g)",
+     "hi": "1 कटोरी",
+     "g": 240
+    }
+   ],
+   "src": "Computed from pack label values of the ingredients, standard serving; cross-checked INDB",
+   "conf": "medium",
+   "note": "40 g oats cooked in 200 ml toned milk, no sugar; 1 bowl ~ 260 kcal. Honey/sugar extra."
+  },
+  {
+   "slug": "protein-bar",
+   "name": "Protein Bar",
+   "hi": "प्रोटीन बार",
+   "alias": [
+    "high protein bar",
+    "max protein bar",
+    "ritebite",
+    "gym protein bar",
+    "प्रोटीन बार"
+   ],
+   "cat": "bakery",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍫",
+   "unit": "g",
+   "kcal": 380,
+   "p": 30,
+   "c": 35,
+   "f": 13,
+   "fib": 6,
+   "na": 150,
+   "portions": [
+    {
+     "n": "1 bar (60 g) (60 g)",
+     "hi": "1 बार",
+     "g": 60
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "medium",
+   "note": "Label values for 20 g-protein Indian bars: 360-400 kcal per 100 g (1 bar of 60 g ~ 230 kcal). Carbs are available carbs; polyols may add."
+  },
+  {
+   "slug": "energy-bar-oats",
+   "name": "Energy Bar (oats, nuts and fruit)",
+   "hi": "एनर्जी बार",
+   "alias": [
+    "muesli bar",
+    "oats bar",
+    "granola bar",
+    "cereal bar",
+    "एनर्जी बार ओट्स"
+   ],
+   "cat": "bakery",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍫",
+   "unit": "g",
+   "kcal": 420,
+   "p": 8,
+   "c": 62,
+   "f": 15,
+   "fib": 6,
+   "na": 110,
+   "portions": [
+    {
+     "n": "1 bar (35 g) (35 g)",
+     "hi": "1 बार",
+     "g": 35
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "medium",
+   "note": "Label values for oat/nut/fruit bars: 400-440 kcal per 100 g; 1 bar ~35 g ~ 147 kcal."
+  },
+  {
+   "slug": "chocolate-milk",
+   "name": "Milk Chocolate",
+   "hi": "मिल्क चॉकलेट",
+   "alias": [
+    "dairy milk",
+    "cadbury dairy milk",
+    "chocolate bar",
+    "dairy milk chocolate",
+    "चॉकलेट"
+   ],
+   "cat": "bakery",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🍫",
+   "unit": "g",
+   "kcal": 534,
+   "p": 7.5,
+   "c": 57,
+   "f": 30,
+   "fib": 1.5,
+   "na": 80,
+   "portions": [
+    {
+     "n": "1 square (5 g)",
+     "hi": "1 टुकड़ा",
+     "g": 5
+    },
+    {
+     "n": "1 small bar (13 g)",
+     "hi": "1 छोटी बार",
+     "g": 13
+    },
+    {
+     "n": "1 bar (50 g)",
+     "hi": "1 बार",
+     "g": 50
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "high",
+   "note": "Label values for Indian milk chocolate: 530-540 kcal per 100 g, ~56 g sugar."
+  },
+  {
+   "slug": "chocolate-dark-70",
+   "name": "Dark Chocolate (70%)",
+   "hi": "डार्क चॉकलेट (70%)",
+   "alias": [
+    "dark choc",
+    "70 percent dark chocolate",
+    "bitter chocolate",
+    "cocoa 70",
+    "डार्क चॉकलेट"
+   ],
+   "cat": "bakery",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🍫",
+   "unit": "g",
+   "kcal": 548,
+   "p": 7.5,
+   "c": 36,
+   "f": 39,
+   "fib": 10,
+   "na": 20,
+   "portions": [
+    {
+     "n": "1 square (6 g)",
+     "hi": "1 टुकड़ा",
+     "g": 6
+    },
+    {
+     "n": "2 squares (12 g)",
+     "hi": "2 टुकड़े",
+     "g": 12
+    },
+    {
+     "n": "1 bar (40 g) (40 g)",
+     "hi": "1 बार",
+     "g": 40
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "high",
+   "note": "USDA 70-85% cocoa dark chocolate 598 kcal; typical 70% commercial bar 545-560 kcal per 100 g. Lower sugar than milk chocolate but not low-calorie."
+  },
+  {
+   "slug": "chocolate-white",
+   "name": "White Chocolate",
+   "hi": "व्हाइट चॉकलेट",
+   "alias": [
+    "white choc",
+    "milky bar",
+    "white chocolate bar",
+    "व्हाइट चॉक"
+   ],
+   "cat": "bakery",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🍫",
+   "unit": "g",
+   "kcal": 545,
+   "p": 6,
+   "c": 59,
+   "f": 32,
+   "fib": 0,
+   "na": 90,
+   "portions": [
+    {
+     "n": "1 square (5 g)",
+     "hi": "1 टुकड़ा",
+     "g": 5
+    },
+    {
+     "n": "1 bar (25 g) (25 g)",
+     "hi": "1 बार",
+     "g": 25
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "high",
+   "note": "USDA white chocolate 539 kcal per 100 g; Indian label values 535-550."
+  },
+  {
+   "slug": "chocolate-wafer-bar",
+   "name": "Chocolate Wafer Bar",
+   "hi": "चॉकलेट वेफर बार",
+   "alias": [
+    "kitkat",
+    "kit kat",
+    "chocolate wafer fingers",
+    "crispy wafer chocolate",
+    "किटकैट"
+   ],
+   "cat": "bakery",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🍫",
+   "unit": "g",
+   "kcal": 515,
+   "p": 6,
+   "c": 61,
+   "f": 26.5,
+   "fib": 1.5,
+   "na": 60,
+   "portions": [
+    {
+     "n": "1 finger (10 g)",
+     "hi": "1 फिंगर",
+     "g": 10
+    },
+    {
+     "n": "1 bar (2 finger) (19 g)",
+     "hi": "1 बार",
+     "g": 19
+    },
+    {
+     "n": "1 bar (4 finger) (42 g)",
+     "hi": "1 बार",
+     "g": 42
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "high",
+   "note": "Label values for KitKat-type chocolate-coated wafer: ~510-520 kcal per 100 g."
+  },
+  {
+   "slug": "chocolate-caramel-bar",
+   "name": "Caramel Chocolate Bar (chewy)",
+   "hi": "कैरेमल चॉकलेट बार",
+   "alias": [
+    "five star",
+    "5 star chocolate",
+    "caramel nougat bar",
+    "chewy chocolate bar",
+    "फाइव स्टार"
+   ],
+   "cat": "bakery",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍫",
+   "unit": "g",
+   "kcal": 460,
+   "p": 3.5,
+   "c": 70,
+   "f": 18.5,
+   "fib": 0.5,
+   "na": 90,
+   "portions": [
+    {
+     "n": "1 bar (22 g) (22 g)",
+     "hi": "1 बार",
+     "g": 22
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "medium",
+   "note": "Label values for chewy caramel-nougat chocolate bars: 450-470 kcal per 100 g; 1 bar ~22 g ~ 100 kcal."
+  },
+  {
+   "slug": "chocolate-spread-hazelnut",
+   "name": "Hazelnut Chocolate Spread",
+   "hi": "चॉकलेट स्प्रेड",
+   "alias": [
+    "nutella",
+    "choco spread",
+    "chocolate spread",
+    "hazelnut spread",
+    "चॉको स्प्रेड"
+   ],
+   "cat": "bakery",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🫙",
+   "unit": "g",
+   "kcal": 540,
+   "p": 6.3,
+   "c": 57.5,
+   "f": 31,
+   "fib": 0,
+   "na": 40,
+   "portions": [
+    {
+     "n": "1 tbsp (15 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 15
+    },
+    {
+     "n": "1 tsp (6 g)",
+     "hi": "1 छोटा चम्मच",
+     "g": 6
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "high",
+   "note": "Label value for hazelnut-cocoa spreads: ~540 kcal per 100 g (~56% sugar, 31% fat). 1 tbsp ~ 81 kcal."
+  },
+  {
+   "slug": "candy-hard",
+   "name": "Hard Candy (boiled sweet)",
+   "hi": "हार्ड कैंडी",
+   "alias": [
+    "boiled sweet",
+    "pulse candy",
+    "mint candy",
+    "lollipop candy",
+    "कैंडी",
+    "टॉफ़ी कड़ी"
+   ],
+   "cat": "bakery",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 390,
+   "p": 0,
+   "c": 97.5,
+   "f": 0.2,
+   "fib": 0,
+   "na": 20,
+   "portions": [
+    {
+     "n": "1 candy (4 g)",
+     "hi": "1 कैंडी",
+     "g": 4
+    },
+    {
+     "n": "3 candies (12 g)",
+     "hi": "3 कैंडी",
+     "g": 12
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "high",
+   "note": "Essentially sugar/glucose syrup; 1 candy ~4 g ~ 16 kcal."
+  },
+  {
+   "slug": "toffee-milk-chewy",
+   "name": "Toffee (milk, chewy)",
+   "hi": "टॉफ़ी",
+   "alias": [
+    "eclairs",
+    "milk toffee",
+    "chocolate toffee",
+    "chewy toffee",
+    "चॉकलेट टॉफ़ी",
+    "एक्लेयर्स"
+   ],
+   "cat": "bakery",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 430,
+   "p": 2,
+   "c": 72,
+   "f": 14,
+   "fib": 0,
+   "na": 100,
+   "portions": [
+    {
+     "n": "1 toffee (4.5 g)",
+     "hi": "1 टॉफ़ी",
+     "g": 4.5
+    },
+    {
+     "n": "3 toffees (13.5 g)",
+     "hi": "3 टॉफ़ी",
+     "g": 13.5
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "medium",
+   "note": "Label values for chocolate-filled/milk toffees: 420-450 kcal per 100 g; 1 toffee ~4.5 g ~ 19 kcal."
+  },
+  {
+   "slug": "chewing-gum-sugar-free",
+   "name": "Chewing Gum (sugar-free)",
+   "hi": "च्युइंग गम (शुगर-फ्री)",
+   "alias": [
+    "sugar free gum",
+    "chewing gum",
+    "orbit gum",
+    "bubble gum sugar free",
+    "गम"
+   ],
+   "cat": "bakery",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🍬",
+   "unit": "g",
+   "kcal": 225,
+   "p": 0.5,
+   "c": 60,
+   "f": 0.3,
+   "fib": 0,
+   "na": 10,
+   "portions": [
+    {
+     "n": "1 stick (2 g)",
+     "hi": "1 स्टिक",
+     "g": 2
+    },
+    {
+     "n": "1 pellet (1.5 g)",
+     "hi": "1 गोली",
+     "g": 1.5
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "low",
+   "note": "Mostly polyols (xylitol/sorbitol, ~2.4 kcal/g) and inert gum base; carbs shown are largely polyols, so 4 kcal/g does not apply. 1 stick ~ 4-5 kcal."
+  },
+  {
+   "slug": "noodles-instant-dry",
+   "name": "Instant Noodles, Dry (Masala)",
+   "hi": "इंस्टेंट नूडल्स (सूखे)",
+   "alias": [
+    "maggi dry",
+    "maggi packet",
+    "instant noodle packet",
+    "maggie packet",
+    "uncooked maggi",
+    "मैगी पैकेट"
+   ],
+   "cat": "bakery",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍜",
+   "unit": "g",
+   "kcal": 445,
+   "p": 9.8,
+   "c": 60,
+   "f": 18,
+   "fib": 3,
+   "na": 1300,
+   "portions": [
+    {
+     "n": "1 small pack (70 g) (70 g)",
+     "hi": "1 छोटा पैकेट",
+     "g": 70
+    },
+    {
+     "n": "1 half pack (35 g) (35 g)",
+     "hi": "1/2 पैकेट",
+     "g": 35
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "high",
+   "note": "Label values for masala instant noodles incl. tastemaker: 430-450 kcal per 100 g, sodium ~1200-1400 mg per 100 g (one 70 g pack ~ 900 mg, nearly half a day's limit for a BP patient)."
+  },
+  {
+   "slug": "noodles-cup-dry",
+   "name": "Cup Noodles, Dry (instant cup)",
+   "hi": "कप नूडल्स (सूखे)",
+   "alias": [
+    "instant cup noodles",
+    "cup noodle",
+    "cuppa noodles",
+    "yippee cup noodles",
+    "कप नूडल"
+   ],
+   "cat": "bakery",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍜",
+   "unit": "g",
+   "kcal": 450,
+   "p": 9,
+   "c": 58,
+   "f": 20,
+   "fib": 2,
+   "na": 1400,
+   "portions": [
+    {
+     "n": "1 cup (70 g dry) (70 g)",
+     "hi": "1 कप",
+     "g": 70
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "medium",
+   "note": "Label values for instant cup noodles incl. seasoning; ~450 kcal and ~1400 mg sodium per 100 g dry."
+  },
+  {
+   "slug": "noodles-cup-prepared",
+   "name": "Cup Noodles, Prepared (with hot water)",
+   "hi": "कप नूडल्स (तैयार)",
+   "alias": [
+    "cup noodles ready",
+    "prepared cup noodles",
+    "instant cup noodles cooked",
+    "कप नूडल्स तैयार"
+   ],
+   "cat": "bakery",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍜",
+   "unit": "g",
+   "kcal": 105,
+   "p": 2.1,
+   "c": 13.5,
+   "f": 4.7,
+   "fib": 0.5,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 cup prepared (70 g dry + 230 ml water) (300 g)",
+     "hi": "1 कप",
+     "g": 300
+    }
+   ],
+   "src": "Computed from pack label values of the ingredients, standard serving; cross-checked INDB",
+   "conf": "medium",
+   "note": "70 g dry noodles made up with ~230 ml hot water incl. soupy broth; 1 cup ~ 315 kcal."
+  },
+  {
+   "slug": "pasta-dry-uncooked",
+   "name": "Pasta, Dry (macaroni / penne, uncooked)",
+   "hi": "पास्ता (कच्चा)",
+   "alias": [
+    "dry pasta",
+    "macaroni dry",
+    "penne uncooked",
+    "raw pasta",
+    "macaroni",
+    "मैकरोनी"
+   ],
+   "cat": "bakery",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🍝",
+   "unit": "g",
+   "kcal": 360,
+   "p": 13,
+   "c": 71.5,
+   "f": 1.5,
+   "fib": 3.2,
+   "na": 8,
+   "portions": [
+    {
+     "n": "1 serving (80 g dry) (80 g)",
+     "hi": "1 सर्विंग",
+     "g": 80
+    },
+    {
+     "n": "1 cup dry (100 g) (100 g)",
+     "hi": "1 कप",
+     "g": 100
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "high",
+   "note": "USDA dry pasta 371 kcal; Indian pack labels 350-365 kcal per 100 g. 80 g dry makes ~200 g cooked."
+  },
+  {
+   "slug": "mix-poha-instant",
+   "name": "Instant Poha Mix (dry)",
+   "hi": "इंस्टेंट पोहा मिक्स",
+   "alias": [
+    "poha mix",
+    "ready poha mix",
+    "instant poha packet",
+    "पोहा मिक्स"
+   ],
+   "cat": "bakery",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 355,
+   "p": 6,
+   "c": 74,
+   "f": 3.5,
+   "fib": 2,
+   "na": 800,
+   "portions": [
+    {
+     "n": "1 serving (60 g dry) (60 g)",
+     "hi": "1 सर्विंग",
+     "g": 60
+    },
+    {
+     "n": "1 pack (180 g) (180 g)",
+     "hi": "1 पैकेट",
+     "g": 180
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "low",
+   "note": "Dry flattened-rice + spice mix as per pack; just add hot water or a little oil (not included)."
+  },
+  {
+   "slug": "mix-upma-instant",
+   "name": "Instant Upma Mix (dry)",
+   "hi": "इंस्टेंट उपमा मिक्स",
+   "alias": [
+    "upma mix",
+    "ready upma mix",
+    "rava upma mix",
+    "suji upma mix",
+    "उपमा मिक्स"
+   ],
+   "cat": "bakery",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 360,
+   "p": 8,
+   "c": 66,
+   "f": 6.5,
+   "fib": 3,
+   "na": 900,
+   "portions": [
+    {
+     "n": "1 serving (60 g dry) (60 g)",
+     "hi": "1 सर्विंग",
+     "g": 60
+    },
+    {
+     "n": "1 pack (180 g) (180 g)",
+     "hi": "1 पैकेट",
+     "g": 180
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "low",
+   "note": "Dry semolina + dal + spice + oil mix as per pack; 60 g dry makes ~200 g cooked upma."
+  },
+  {
+   "slug": "mix-dosa-instant",
+   "name": "Instant Dosa Mix (dry)",
+   "hi": "इंस्टेंट डोसा मिक्स",
+   "alias": [
+    "dosa mix",
+    "ready dosa mix",
+    "rava dosa mix",
+    "instant dosa batter powder",
+    "डोसा मिक्स"
+   ],
+   "cat": "bakery",
+   "region": "South India",
+   "diet": "veg",
+   "emoji": "🥞",
+   "unit": "g",
+   "kcal": 345,
+   "p": 8,
+   "c": 72,
+   "f": 1.8,
+   "fib": 3,
+   "na": 700,
+   "portions": [
+    {
+     "n": "1 serving (50 g dry) (50 g)",
+     "hi": "1 सर्विंग",
+     "g": 50
+    },
+    {
+     "n": "1 pack (200 g) (200 g)",
+     "hi": "1 पैकेट",
+     "g": 200
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "low",
+   "note": "Dry rice/rava/urad flour mix; made batter is ~3x heavier. Oil for roasting not included."
+  },
+  {
+   "slug": "mix-idli-instant",
+   "name": "Instant Idli Mix (dry)",
+   "hi": "इंस्टेंट इडली मिक्स",
+   "alias": [
+    "idli mix",
+    "ready idli mix",
+    "rava idli mix",
+    "instant idli powder",
+    "इडली मिक्स"
+   ],
+   "cat": "bakery",
+   "region": "South India",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 340,
+   "p": 9,
+   "c": 70,
+   "f": 1.5,
+   "fib": 4,
+   "na": 650,
+   "portions": [
+    {
+     "n": "1 serving (50 g dry, 3 idlis) (50 g)",
+     "hi": "1 सर्विंग",
+     "g": 50
+    },
+    {
+     "n": "1 pack (200 g) (200 g)",
+     "hi": "1 पैकेट",
+     "g": 200
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "low",
+   "note": "Dry rice-rava-urad flour mix with fruit salt; 50 g dry makes ~3 idlis (~150 g)."
+  },
+  {
+   "slug": "mix-pancake-dry",
+   "name": "Pancake Mix (dry)",
+   "hi": "पैनकेक मिक्स",
+   "alias": [
+    "pancake powder",
+    "ready pancake mix",
+    "pan cake mix",
+    "waffle mix",
+    "पैनकेक पाउडर"
+   ],
+   "cat": "bakery",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "g",
+   "kcal": 360,
+   "p": 8,
+   "c": 75,
+   "f": 2.5,
+   "fib": 2,
+   "na": 1000,
+   "portions": [
+    {
+     "n": "1 serving (50 g dry) (50 g)",
+     "hi": "1 सर्विंग",
+     "g": 50
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "medium",
+   "note": "Dry flour + sugar + leavening mix (USDA dry pancake mix ~363 kcal per 100 g); milk, egg and oil are extra."
+  },
+  {
+   "slug": "namkeen-bhujia-sev",
+   "name": "Bhujia Sev (packaged namkeen)",
+   "hi": "बीकानेरी भुजिया",
+   "alias": [
+    "bikaneri bhujia",
+    "haldiram bhujia",
+    "bhujiya",
+    "besan bhujia",
+    "moth bhujia",
+    "भुजिया"
+   ],
+   "cat": "bakery",
+   "region": "Rajasthan",
+   "diet": "veg",
+   "emoji": "🍘",
+   "unit": "g",
+   "kcal": 545,
+   "p": 14.5,
+   "c": 43,
+   "f": 34.5,
+   "fib": 5,
+   "na": 800,
+   "portions": [
+    {
+     "n": "1 handful (25 g) (25 g)",
+     "hi": "1 मुट्ठी",
+     "g": 25
+    },
+    {
+     "n": "1 small packet (30 g) (30 g)",
+     "hi": "1 छोटा पैकेट",
+     "g": 30
+    },
+    {
+     "n": "1 pack (150 g) (150 g)",
+     "hi": "1 पैकेट",
+     "g": 150
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "medium",
+   "note": "Packaged besan-moth sev, fried and dry; label values 540-580 kcal per 100 g are above the 520 limit of fresh fried snacks because packaged namkeen has very low moisture (<3%)."
+  },
+  {
+   "slug": "namkeen-aloo-bhujia",
+   "name": "Aloo Bhujia (packaged)",
+   "hi": "आलू भुजिया",
+   "alias": [
+    "aloo bhujiya",
+    "potato bhujia",
+    "aloo sev packet",
+    "आलू सेव"
+   ],
+   "cat": "bakery",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍘",
+   "unit": "g",
+   "kcal": 555,
+   "p": 7.5,
+   "c": 50,
+   "f": 36,
+   "fib": 4,
+   "na": 780,
+   "portions": [
+    {
+     "n": "1 handful (25 g) (25 g)",
+     "hi": "1 मुट्ठी",
+     "g": 25
+    },
+    {
+     "n": "1 small packet (30 g) (30 g)",
+     "hi": "1 छोटा पैकेट",
+     "g": 30
+    },
+    {
+     "n": "1 pack (150 g) (150 g)",
+     "hi": "1 पैकेट",
+     "g": 150
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "medium",
+   "note": "Packaged potato-besan sev; label values 540-570 kcal per 100 g (dry, low moisture)."
+  },
+  {
+   "slug": "namkeen-moong-dal",
+   "name": "Moong Dal Namkeen (packaged)",
+   "hi": "मूंग दाल नमकीन",
+   "alias": [
+    "moong dal",
+    "fried moong dal",
+    "haldiram moong dal",
+    "moong dal packet",
+    "तली मूंग दाल"
+   ],
+   "cat": "bakery",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍘",
+   "unit": "g",
+   "kcal": 495,
+   "p": 22,
+   "c": 45,
+   "f": 25,
+   "fib": 6,
+   "na": 700,
+   "portions": [
+    {
+     "n": "1 handful (25 g) (25 g)",
+     "hi": "1 मुट्ठी",
+     "g": 25
+    },
+    {
+     "n": "1 small packet (30 g) (30 g)",
+     "hi": "1 छोटा पैकेट",
+     "g": 30
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "medium",
+   "note": "Fried and salted split moong dal; label values 480-510 kcal per 100 g."
+  },
+  {
+   "slug": "namkeen-khatta-meetha",
+   "name": "Khatta Meetha Namkeen (packaged)",
+   "hi": "खट्टा मीठा नमकीन",
+   "alias": [
+    "khatta meetha mixture",
+    "sweet and sour mixture",
+    "khatta mitha",
+    "khatta meetha mix",
+    "खट्टा मीठा मिक्सचर"
+   ],
+   "cat": "bakery",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍘",
+   "unit": "g",
+   "kcal": 500,
+   "p": 10,
+   "c": 55,
+   "f": 28,
+   "fib": 4,
+   "na": 650,
+   "portions": [
+    {
+     "n": "1 handful (25 g) (25 g)",
+     "hi": "1 मुट्ठी",
+     "g": 25
+    },
+    {
+     "n": "1 small packet (30 g) (30 g)",
+     "hi": "1 छोटा पैकेट",
+     "g": 30
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "medium",
+   "note": "Packaged mixture with sugar-coated sweet bits; label values 490-515 kcal per 100 g."
+  },
+  {
+   "slug": "namkeen-mixture",
+   "name": "Namkeen Mixture (packaged)",
+   "hi": "नमकीन मिक्सचर",
+   "alias": [
+    "mixture",
+    "bombay mixture",
+    "bombay mix",
+    "namkin mixture",
+    "navratan mixture",
+    "चिवड़ा मिक्सचर"
+   ],
+   "cat": "bakery",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍘",
+   "unit": "g",
+   "kcal": 515,
+   "p": 12,
+   "c": 45,
+   "f": 32,
+   "fib": 4,
+   "na": 800,
+   "portions": [
+    {
+     "n": "1 handful (25 g) (25 g)",
+     "hi": "1 मुट्ठी",
+     "g": 25
+    },
+    {
+     "n": "1 small packet (30 g) (30 g)",
+     "hi": "1 छोटा पैकेट",
+     "g": 30
+    },
+    {
+     "n": "1 pack (150 g) (150 g)",
+     "hi": "1 पैकेट",
+     "g": 150
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "medium",
+   "note": "Packaged mix of sev, boondi, peanuts, flattened rice; label values 490-540 kcal per 100 g."
+  },
+  {
+   "slug": "snack-corn-puffs",
+   "name": "Corn Puffs Snack (Kurkure type)",
+   "hi": "कुरकुरे",
+   "alias": [
+    "kurkure",
+    "masala munch",
+    "corn puff masala",
+    "kurkure masala munch",
+    "कुरकुरे मसाला"
+   ],
+   "cat": "bakery",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍘",
+   "unit": "g",
+   "kcal": 535,
+   "p": 6.5,
+   "c": 58,
+   "f": 31,
+   "fib": 1.5,
+   "na": 950,
+   "portions": [
+    {
+     "n": "1 small packet (30 g) (30 g)",
+     "hi": "1 छोटा पैकेट",
+     "g": 30
+    },
+    {
+     "n": "1 pack (90 g) (90 g)",
+     "hi": "1 पैकेट",
+     "g": 90
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "high",
+   "note": "Label values for masala corn puffs: 530-540 kcal and ~900-1000 mg sodium per 100 g; Rs 10 pack ~ 30 g ~ 160 kcal."
+  },
+  {
+   "slug": "chips-potato-salted",
+   "name": "Potato Chips, Salted (packaged)",
+   "hi": "आलू चिप्स",
+   "alias": [
+    "lays",
+    "lays classic",
+    "salted chips",
+    "potato wafers",
+    "wafers",
+    "aloo wafers",
+    "बटाटा वेफर्स"
+   ],
+   "cat": "bakery",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🍟",
+   "unit": "g",
+   "kcal": 535,
+   "p": 6.5,
+   "c": 52,
+   "f": 33,
+   "fib": 3,
+   "na": 560,
+   "portions": [
+    {
+     "n": "1 small packet (30 g) (30 g)",
+     "hi": "1 छोटा पैकेट",
+     "g": 30
+    },
+    {
+     "n": "1 pack (52 g) (52 g)",
+     "hi": "1 पैकेट",
+     "g": 52
+    },
+    {
+     "n": "1 handful (20 g) (20 g)",
+     "hi": "1 मुट्ठी",
+     "g": 20
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "high",
+   "note": "Label values for salted potato chips: 530-550 kcal per 100 g; Rs 10-20 packs 30-52 g."
+  },
+  {
+   "slug": "chips-potato-masala",
+   "name": "Potato Chips, Masala (packaged)",
+   "hi": "मसाला आलू चिप्स",
+   "alias": [
+    "lays magic masala",
+    "masala chips",
+    "masala wafers",
+    "spicy potato chips",
+    "magic masala chips"
+   ],
+   "cat": "bakery",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍟",
+   "unit": "g",
+   "kcal": 535,
+   "p": 6.5,
+   "c": 52,
+   "f": 33,
+   "fib": 3,
+   "na": 800,
+   "portions": [
+    {
+     "n": "1 small packet (30 g) (30 g)",
+     "hi": "1 छोटा पैकेट",
+     "g": 30
+    },
+    {
+     "n": "1 pack (52 g) (52 g)",
+     "hi": "1 पैकेट",
+     "g": 52
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "high",
+   "note": "Same energy as salted chips but spice mix pushes sodium to ~800 mg per 100 g."
+  },
+  {
+   "slug": "chips-triangle-masala",
+   "name": "Triangle Masala Chips (Mad Angles type)",
+   "hi": "ट्राएंगल मसाला चिप्स",
+   "alias": [
+    "bingo mad angles",
+    "mad angles",
+    "bingo tedhe medhe",
+    "tangles",
+    "bingo chips",
+    "टेढ़े मेढ़े"
+   ],
+   "cat": "bakery",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍘",
+   "unit": "g",
+   "kcal": 520,
+   "p": 6.5,
+   "c": 58,
+   "f": 28,
+   "fib": 2,
+   "na": 900,
+   "portions": [
+    {
+     "n": "1 small packet (30 g) (30 g)",
+     "hi": "1 छोटा पैकेट",
+     "g": 30
+    },
+    {
+     "n": "1 pack (66 g) (66 g)",
+     "hi": "1 पैकेट",
+     "g": 66
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "medium",
+   "note": "Label values for extruded triangle masala chips: 505-530 kcal per 100 g."
+  },
+  {
+   "slug": "snack-cheese-puffs",
+   "name": "Cheese Puffs Snack (Cheetos type)",
+   "hi": "चीज़ पफ्स",
+   "alias": [
+    "cheetos",
+    "cheese puffs",
+    "cheese balls snack",
+    "cheetos puffs",
+    "चीटोस"
+   ],
+   "cat": "bakery",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🍘",
+   "unit": "g",
+   "kcal": 545,
+   "p": 6,
+   "c": 56,
+   "f": 33,
+   "fib": 1,
+   "na": 900,
+   "portions": [
+    {
+     "n": "1 small packet (30 g) (30 g)",
+     "hi": "1 छोटा पैकेट",
+     "g": 30
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "medium",
+   "note": "Label values for cheese-flavoured corn puffs: 530-570 kcal per 100 g."
+  },
+  {
+   "slug": "popcorn-packaged",
+   "name": "Popcorn, Ready-to-Eat (butter, packaged)",
+   "hi": "पैकेट पॉपकॉर्न",
+   "alias": [
+    "ready popcorn",
+    "butter popcorn packet",
+    "microwave popcorn popped",
+    "salted popcorn packet",
+    "पॉपकॉर्न"
+   ],
+   "cat": "bakery",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🍿",
+   "unit": "g",
+   "kcal": 480,
+   "p": 8,
+   "c": 52,
+   "f": 25,
+   "fib": 9,
+   "na": 700,
+   "portions": [
+    {
+     "n": "1 small packet (30 g) (30 g)",
+     "hi": "1 छोटा पैकेट",
+     "g": 30
+    },
+    {
+     "n": "1 cup popped (10 g) (10 g)",
+     "hi": "1 कप",
+     "g": 10
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "medium",
+   "note": "Oil/butter-popped packaged popcorn (air-popped plain popcorn is only ~390 kcal per 100 g); label values 470-500."
+  },
+  {
+   "slug": "makhana-roasted-packaged",
+   "name": "Roasted Makhana, Flavoured (packaged)",
+   "hi": "भुना मखाना (पैकेट)",
+   "alias": [
+    "flavoured makhana",
+    "peri peri makhana",
+    "fox nuts packet",
+    "roasted fox nut",
+    "phool makhana packet",
+    "मखाना फ्लेवर्ड"
+   ],
+   "cat": "bakery",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍿",
+   "unit": "g",
+   "kcal": 390,
+   "p": 9,
+   "c": 68,
+   "f": 7,
+   "fib": 7,
+   "na": 350,
+   "portions": [
+    {
+     "n": "1 small packet (30 g) (30 g)",
+     "hi": "1 छोटा पैकेट",
+     "g": 30
+    },
+    {
+     "n": "1 cup (25 g) (25 g)",
+     "hi": "1 कप",
+     "g": 25
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "medium",
+   "note": "Label values for lightly oiled and seasoned roasted makhana: 380-410 kcal per 100 g. Plain raw makhana is ~350 kcal per 100 g."
+  },
+  {
+   "slug": "chips-tortilla-corn",
+   "name": "Tortilla Corn Chips (nacho chips)",
+   "hi": "टॉर्टिला चिप्स",
+   "alias": [
+    "nacho chips",
+    "corn chips",
+    "tortilla chips",
+    "plain nacho chips",
+    "नाचो चिप्स"
+   ],
+   "cat": "bakery",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🍘",
+   "unit": "g",
+   "kcal": 490,
+   "p": 7.5,
+   "c": 59,
+   "f": 24,
+   "fib": 5,
+   "na": 450,
+   "portions": [
+    {
+     "n": "1 handful (30 g) (30 g)",
+     "hi": "1 मुट्ठी",
+     "g": 30
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "high",
+   "note": "USDA tortilla chips 489 kcal per 100 g."
+  },
+  {
+   "slug": "paneer-tikka-frozen",
+   "name": "Paneer Tikka, Frozen (ready-to-cook)",
+   "hi": "फ्रोज़न पनीर टिक्का",
+   "alias": [
+    "frozen paneer tikka",
+    "ready paneer tikka",
+    "paneer tikka packet",
+    "फ्रोज़न पनीर टिक्का पैकेट"
+   ],
+   "cat": "bakery",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🧀",
+   "unit": "g",
+   "kcal": 255,
+   "p": 14,
+   "c": 7,
+   "f": 19,
+   "fib": 1,
+   "na": 520,
+   "portions": [
+    {
+     "n": "1 piece (25 g)",
+     "hi": "1 पीस",
+     "g": 25
+    },
+    {
+     "n": "1 serving (6 pieces) (150 g)",
+     "hi": "1 सर्विंग",
+     "g": 150
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "medium",
+   "note": "Marinated paneer cubes with capsicum/onion as sold (before cooking); grilling or air-frying adds little, deep frying adds ~8 g fat per 100 g."
+  },
+  {
+   "slug": "chicken-nuggets-frozen",
+   "name": "Chicken Nuggets, Frozen (uncooked)",
+   "hi": "फ्रोज़न चिकन नगेट्स",
+   "alias": [
+    "frozen nuggets",
+    "raw chicken nuggets",
+    "venkys nuggets",
+    "ready to fry nuggets",
+    "फ्रोज़न नगेट्स"
+   ],
+   "cat": "bakery",
+   "region": "Pan-India",
+   "diet": "nonveg",
+   "emoji": "🍗",
+   "unit": "g",
+   "kcal": 235,
+   "p": 14,
+   "c": 14,
+   "f": 13.5,
+   "fib": 1,
+   "na": 550,
+   "portions": [
+    {
+     "n": "1 piece (18 g)",
+     "hi": "1 पीस",
+     "g": 18
+    },
+    {
+     "n": "1 serving (6 pieces) (108 g)",
+     "hi": "1 सर्विंग",
+     "g": 108
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "medium",
+   "note": "Label value as sold; after deep frying they absorb more oil and reach ~260 kcal per 100 g (see Chicken Nuggets, fried)."
+  },
+  {
+   "slug": "aloo-tikki-frozen",
+   "name": "Aloo Tikki, Frozen (ready-to-cook)",
+   "hi": "फ्रोज़न आलू टिक्की",
+   "alias": [
+    "frozen aloo tikki",
+    "mccain aloo tikki",
+    "ready aloo tikki",
+    "आलू टिक्की पैकेट"
+   ],
+   "cat": "bakery",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥔",
+   "unit": "g",
+   "kcal": 165,
+   "p": 2.5,
+   "c": 22,
+   "f": 7,
+   "fib": 2.5,
+   "na": 300,
+   "portions": [
+    {
+     "n": "1 tikki (50 g)",
+     "hi": "1 टिक्की",
+     "g": 50
+    },
+    {
+     "n": "1 serving (2 tikkis) (100 g)",
+     "hi": "1 सर्विंग",
+     "g": 100
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "medium",
+   "note": "Label value as sold; shallow-fry with oil adds ~25-40 kcal per tikki, air-frying adds none."
+  },
+  {
+   "slug": "icecream-vanilla",
+   "name": "Vanilla Ice Cream",
+   "hi": "वनीला आइसक्रीम",
+   "alias": [
+    "vanilla icecream",
+    "ice cream",
+    "vanilla ice cream tub",
+    "आइसक्रीम",
+    "वैनिला आइसक्रीम"
+   ],
+   "cat": "bakery",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍨",
+   "unit": "g",
+   "kcal": 195,
+   "p": 3.5,
+   "c": 21,
+   "f": 10.5,
+   "fib": 0.2,
+   "na": 70,
+   "portions": [
+    {
+     "n": "1 scoop (60 g)",
+     "hi": "1 स्कूप",
+     "g": 60
+    },
+    {
+     "n": "1 small cup (100 g)",
+     "hi": "1 छोटा कप",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (2 scoops) (120 g)",
+     "hi": "1 कटोरी",
+     "g": 120
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "medium",
+   "note": "Milk-fat ice cream, label values 185-205 kcal per 100 g (INDB chocolate 178). Weight, not volume: 1 scoop ~60 g."
+  },
+  {
+   "slug": "icecream-chocolate",
+   "name": "Chocolate Ice Cream",
+   "hi": "चॉकलेट आइसक्रीम",
+   "alias": [
+    "chocolate icecream",
+    "choco ice cream",
+    "chocolate ice cream tub",
+    "चॉको आइसक्रीम"
+   ],
+   "cat": "bakery",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍨",
+   "unit": "g",
+   "kcal": 220,
+   "p": 4,
+   "c": 26,
+   "f": 11,
+   "fib": 0.8,
+   "na": 70,
+   "portions": [
+    {
+     "n": "1 scoop (60 g)",
+     "hi": "1 स्कूप",
+     "g": 60
+    },
+    {
+     "n": "1 small cup (100 g)",
+     "hi": "1 छोटा कप",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (2 scoops) (120 g)",
+     "hi": "1 कटोरी",
+     "g": 120
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "medium",
+   "note": "Label values 210-230 kcal per 100 g."
+  },
+  {
+   "slug": "icecream-butterscotch",
+   "name": "Butterscotch Ice Cream",
+   "hi": "बटरस्कॉच आइसक्रीम",
+   "alias": [
+    "butterscotch icecream",
+    "butter scotch ice cream",
+    "butterscotch ice cream tub",
+    "बटर स्कॉच आइसक्रीम"
+   ],
+   "cat": "bakery",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍨",
+   "unit": "g",
+   "kcal": 220,
+   "p": 3.6,
+   "c": 28,
+   "f": 10.5,
+   "fib": 0.2,
+   "na": 80,
+   "portions": [
+    {
+     "n": "1 scoop (60 g)",
+     "hi": "1 स्कूप",
+     "g": 60
+    },
+    {
+     "n": "1 small cup (100 g)",
+     "hi": "1 छोटा कप",
+     "g": 100
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "medium",
+   "note": "Label values 210-230 kcal per 100 g (caramel + praline bits)."
+  },
+  {
+   "slug": "icecream-mango",
+   "name": "Mango Ice Cream",
+   "hi": "मैंगो आइसक्रीम",
+   "alias": [
+    "mango icecream",
+    "aam ice cream",
+    "mango ice cream tub",
+    "आम की आइसक्रीम"
+   ],
+   "cat": "bakery",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍨",
+   "unit": "g",
+   "kcal": 200,
+   "p": 3.2,
+   "c": 25,
+   "f": 9.5,
+   "fib": 0.4,
+   "na": 55,
+   "portions": [
+    {
+     "n": "1 scoop (60 g)",
+     "hi": "1 स्कूप",
+     "g": 60
+    },
+    {
+     "n": "1 small cup (100 g)",
+     "hi": "1 छोटा कप",
+     "g": 100
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "medium",
+   "note": "Label values 190-210 kcal per 100 g (INDB 126 is too low for a milk-fat ice cream)."
+  },
+  {
+   "slug": "kulfi-stick-packaged",
+   "name": "Kulfi Stick (packaged, malai)",
+   "hi": "कुल्फी स्टिक",
+   "alias": [
+    "kulfi stick",
+    "malai kulfi stick",
+    "packaged kulfi",
+    "kulfi candy",
+    "मलाई कुल्फी"
+   ],
+   "cat": "bakery",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍨",
+   "unit": "g",
+   "kcal": 212,
+   "p": 4.2,
+   "c": 24,
+   "f": 10.8,
+   "fib": 0.2,
+   "na": 60,
+   "portions": [
+    {
+     "n": "1 stick (60 g)",
+     "hi": "1 स्टिक",
+     "g": 60
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "medium",
+   "note": "Packaged stick kulfi (milk solids, sugar, nuts); 1 stick ~60 g ~ 127 kcal. Traditional matka kulfi is a separate entry."
+  },
+  {
+   "slug": "icecream-cone",
+   "name": "Ice Cream Cone",
+   "hi": "आइसक्रीम कोन",
+   "alias": [
+    "cornetto",
+    "cone ice cream",
+    "chocolate cone",
+    "vanilla cone",
+    "आइसक्रीम कोन चॉकलेट"
+   ],
+   "cat": "bakery",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍦",
+   "unit": "g",
+   "kcal": 245,
+   "p": 3.5,
+   "c": 31,
+   "f": 12.5,
+   "fib": 0.8,
+   "na": 90,
+   "portions": [
+    {
+     "n": "1 cone (85 g)",
+     "hi": "1 कोन",
+     "g": 85
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "medium",
+   "note": "Wafer cone with ice cream, choco coating and nut bits; 1 cone ~85 g ~ 208 kcal."
+  },
+  {
+   "slug": "icecream-cassata",
+   "name": "Cassata Ice Cream",
+   "hi": "कसाटा आइसक्रीम",
+   "alias": [
+    "cassata",
+    "cassata slice",
+    "tri colour ice cream",
+    "कसाटा"
+   ],
+   "cat": "bakery",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍨",
+   "unit": "g",
+   "kcal": 230,
+   "p": 4,
+   "c": 30,
+   "f": 10.5,
+   "fib": 0.5,
+   "na": 70,
+   "portions": [
+    {
+     "n": "1 slice (80 g)",
+     "hi": "1 स्लाइस",
+     "g": 80
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "low",
+   "note": "Layered ice cream with dried fruit and nuts; estimate from layered ice cream labels."
+  },
+  {
+   "slug": "frozen-dessert-vegfat",
+   "name": "Frozen Dessert (vegetable-fat based)",
+   "hi": "फ्रोज़न डेज़र्ट",
+   "alias": [
+    "frozen dessert",
+    "vegetable fat ice cream",
+    "family pack frozen dessert",
+    "फ्रोज़न डिज़र्ट"
+   ],
+   "cat": "bakery",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍨",
+   "unit": "g",
+   "kcal": 190,
+   "p": 2.8,
+   "c": 26,
+   "f": 8.5,
+   "fib": 0.2,
+   "na": 60,
+   "portions": [
+    {
+     "n": "1 scoop (55 g)",
+     "hi": "1 स्कूप",
+     "g": 55
+    },
+    {
+     "n": "1 small cup (90 g)",
+     "hi": "1 छोटा कप",
+     "g": 90
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "medium",
+   "note": "Palm-oil based 'frozen dessert' (not legally ice cream); label values 180-200 kcal per 100 g."
+  },
+  {
+   "slug": "ice-candy-fruit",
+   "name": "Ice Candy (fruit flavoured)",
+   "hi": "आइस कैंडी",
+   "alias": [
+    "ice lolly",
+    "orange ice candy",
+    "popsicle",
+    "barf ka gola",
+    "ice stick",
+    "बर्फ का गोला"
+   ],
+   "cat": "bakery",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍧",
+   "unit": "g",
+   "kcal": 80,
+   "p": 0,
+   "c": 20,
+   "f": 0,
+   "fib": 0,
+   "na": 5,
+   "portions": [
+    {
+     "n": "1 stick (55 g)",
+     "hi": "1 स्टिक",
+     "g": 55
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "medium",
+   "note": "Sugar-syrup water ice; 1 stick ~55 g ~ 44 kcal."
+  },
+  {
+   "slug": "cheese-spread-processed",
+   "name": "Processed Cheese Spread",
+   "hi": "चीज़ स्प्रेड",
+   "alias": [
+    "cheese spread",
+    "amul cheese spread",
+    "spreadable cheese",
+    "cheese spread tub",
+    "स्प्रेडेबल चीज़"
+   ],
+   "cat": "bakery",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🧀",
+   "unit": "g",
+   "kcal": 248,
+   "p": 9.5,
+   "c": 7,
+   "f": 20,
+   "fib": 0,
+   "na": 800,
+   "portions": [
+    {
+     "n": "1 tbsp (15 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 15
+    },
+    {
+     "n": "1 sandwich spread (1 slice) (20 g)",
+     "hi": "1 स्लाइस पर",
+     "g": 20
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "medium",
+   "note": "Label values for processed cheese spread: 240-270 kcal and ~800 mg sodium per 100 g."
+  },
+  {
+   "slug": "jam-mixed-fruit",
+   "name": "Mixed Fruit Jam",
+   "hi": "मिक्स्ड फ्रूट जैम",
+   "alias": [
+    "jam",
+    "fruit jam",
+    "kissan jam",
+    "mixed fruit jam bottle",
+    "जैम"
+   ],
+   "cat": "bakery",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🫙",
+   "unit": "g",
+   "kcal": 276,
+   "p": 0.4,
+   "c": 68.5,
+   "f": 0.1,
+   "fib": 0.5,
+   "na": 30,
+   "portions": [
+    {
+     "n": "1 tbsp (20 g)",
+     "hi": "1 बड़ा चम्मच",
+     "g": 20
+    },
+    {
+     "n": "1 tsp (7 g)",
+     "hi": "1 छोटा चम्मच",
+     "g": 7
+    },
+    {
+     "n": "1 bread spread (15 g)",
+     "hi": "1 स्लाइस पर",
+     "g": 15
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "high",
+   "note": "Label values for Indian mixed-fruit jam: 270-285 kcal per 100 g (~68% sugar). 1 tbsp ~ 55 kcal."
+  },
+  {
+   "slug": "whey-protein-powder",
+   "name": "Whey Protein Powder",
+   "hi": "व्हे प्रोटीन पाउडर",
+   "alias": [
+    "whey protein",
+    "protein powder",
+    "whey concentrate",
+    "gym protein powder",
+    "प्रोटीन पाउडर"
+   ],
+   "cat": "bakery",
+   "region": "International",
+   "diet": "veg",
+   "emoji": "🥤",
+   "unit": "g",
+   "kcal": 380,
+   "p": 76,
+   "c": 9,
+   "f": 4,
+   "fib": 0,
+   "na": 350,
+   "portions": [
+    {
+     "n": "1 scoop (30 g)",
+     "hi": "1 स्कूप",
+     "g": 30
+    },
+    {
+     "n": "2 scoops (60 g)",
+     "hi": "2 स्कूप",
+     "g": 60
+    }
+   ],
+   "src": "Typical Indian pack label values per 100 g (brand-agnostic average); cross-checked USDA",
+   "conf": "high",
+   "note": "Label values for whey concentrate/blend: 370-390 kcal, ~75 g protein per 100 g; 1 scoop (30 g) ~ 115 kcal and ~23 g protein. Mixed with water; milk adds more."
+  }
+ ]
+}

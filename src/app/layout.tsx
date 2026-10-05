@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Noto_Sans_Devanagari } from "next/font/google";
 import { AppShell } from "@/components/layout/app-shell";
-import { BRAND_COLOR } from "@/lib/brand";
+import { THEME_COLOR } from "@/lib/brand";
 import "./globals.css";
 
 /**
@@ -25,9 +25,8 @@ const notoDevanagari = Noto_Sans_Devanagari({
 });
 
 export const viewport: Viewport = {
-  // Same value as theme_color in src/app/manifest.ts (both from lib/brand.ts)
-  // and as --color-brand in globals.css.
-  themeColor: BRAND_COLOR,
+  // Same value as theme_color in src/app/manifest.ts (both from lib/brand.ts).
+  themeColor: THEME_COLOR,
   colorScheme: "light",
   width: "device-width",
   initialScale: 1,

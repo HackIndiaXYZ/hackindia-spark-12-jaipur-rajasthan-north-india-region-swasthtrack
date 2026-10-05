@@ -12,13 +12,14 @@
 import { agentCases } from "./cases-agent";
 import { contextCases } from "./cases-context";
 import { pureCases } from "./cases-pure";
+import { routingCases } from "./cases-routing";
 import { verifyCases } from "./cases-verify";
 import { runCases, type EvalCase, type EvalReport } from "./harness";
 
 export type { CaseResult, EvalCase, EvalReport } from "./harness";
 
 export function allCases(): EvalCase[] {
-  return [...pureCases(), ...verifyCases(), ...agentCases(), ...contextCases()];
+  return [...pureCases(), ...routingCases(), ...verifyCases(), ...agentCases(), ...contextCases()];
 }
 
 export async function runEval(onProgress?: (done: number, total: number) => void): Promise<EvalReport> {

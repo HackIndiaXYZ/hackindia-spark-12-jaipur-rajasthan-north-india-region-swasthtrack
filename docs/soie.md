@@ -32,14 +32,15 @@ browser ──(Bearer token, SSE)──▶ POST /api/soie
 | `ledger.ts` | The analytics engine: stats per window, adherence, nutrition, completeness, flags, associations | yes |
 | `evidence.ts` | Citation index (fact ids, record refs) and chip resolution | yes |
 | `verify.ts` | The accuracy guarantee (below) | yes |
-| `fallback.ts` | Deterministic rule engine: intents → ledger-rendered bilingual answers | yes |
+| `scope.ts` | What the question is ABOUT: small talk, not-tracked topics (sugar, cholesterol, labs), off-topic, advice (word-order free), medicine schedule vs adherence, medicine names (typo-tolerant), symptoms, saved-note lookups | yes |
+| `fallback.ts` | Deterministic rule engine: scope gates → intents → ledger-rendered bilingual answers | yes |
 | `answer.ts` | Final assembly, crisis lead, honest notices | yes |
 | `prompt.ts`, `tools.ts` | Stable system prompt, strict tool schemas, tool executors | yes (`save_memory` via injected dep) |
 | `agent.ts` | The Claude loop over an injectable `LlmClient` | yes (no SDK values) |
 | `anthropic-client.ts` | The real `LlmClient` (official SDK, streaming) | server only |
 | `engine.ts` | One turn end to end (shared by the route and the eval harness) | yes |
 | `context.ts`, `persist.ts` | Supabase IO (paging, sessions, events) | server only |
-| `eval/` | Fixtures, 243 cases, scripted fake model, fake Supabase | test only |
+| `eval/` | Fixtures, 376 cases, scripted fake model, fake Supabase | test only |
 
 ## The accuracy guarantee (`verify.ts`)
 
@@ -53,6 +54,16 @@ Before an AI answer reaches the user, code checks it. A failure is returned to t
 - **Required content.** For a medicine-change or diagnosis request: `needs_doctor` and an `ask_doctor` recommendation.
 
 **What it does not do:** it cannot judge whether a sentence is *wise*, check spelled-out numbers ("तीन"), or confirm that a guideline claim matches its source. It checks traceability, not medical correctness.
+
+## Answering the question that was asked
+
+"Asked one thing, answered another" was the main complaint, so both paths are guarded.
+
+**Languages and voice.** Questions may be Hindi (Devanagari), English, Hinglish, or spoken (voice input in the composer: lower-case, no punctuation, English words written in Devanagari, "150 by 95" / "150 बाय 95" for a BP). Everything is matched on whole tokens after folding (`normalize.ts`); the eval has the same questions in all of these styles (`routing: languages`).
+
+**Rules engine (`fallback.ts`), in this order.** Small talk → refusals (medicine change / diagnosis; the diagnosis answer lists the conditions *recorded in the app* and shows BP only for a BP / stroke / heart question) → a reading the user typed or spoke (classified, never swapped for a logged one) → impossible / future dates → saved-note lookups ("doodh se allergy hai kya" is answered from the family's notes, never from food logs) → symptoms (cannot assess; doctor / 112 / 108 + the BP picture to show) → not health at all ("aaj mausam kaisa hai": declined, no patient data) → a measure the app does not record ("sugar kitni hai": says so, estimates nothing) → medicine schedule ("kaun si dawai", "amlodipine kab leni hai") → compare / goal / missing / highest-lowest / advice / summary / one or more metrics. A date or a "how is it" word alone never produces a summary; a summary needs a real summary intent ("kaise rahe", or "kaise hain" **with** the patient named). Answers say how the question was read ("I read the question as: BP · 28 Sep – 4 Oct · average") so a misreading is visible, not silent.
+
+**AI path.** The system prompt has an "Answer exactly what was asked" section, and the verifier adds one rule (`off_topic`): if the question names a tracked measure, the answer must cover at least one of them (in `data_coverage.metrics` or in its own words); otherwise it is bounced back to the model like any other violation. A declined question and a not-tracked measure are exempt.
 
 ## Safety model
 
@@ -86,10 +97,11 @@ Nothing "learns" in the model. Two things are real: (1) notes the family saves (
 
 ## Evaluation (`npm run soie:eval`, `npm run soie:wire`, and `/simulation-lab` for admins)
 
-243 cases run real engine code over six synthetic patients (steady, crisis reading, sparse, missed medicines, high-sodium diet, empty) at a fixed "now" (2026-10-04 09:30 IST), with independent oracles for the numbers:
+376 cases run real engine code over six synthetic patients (steady, crisis reading, sparse, missed medicines, high-sodium diet, empty) at a fixed "now" (2026-10-04 09:30 IST), with independent oracles for the numbers:
 
 - safety (28 emergency phrasings + 8 non-emergencies, medicine/diagnosis/injection/crisis/remember), temporal (41), normaliser (7), records (7: IST edges, legacy UTC-shifted dose logs, auto-missed), ledger (11: oracles + invariants), rules engine (34 questions in Hindi/Hinglish/English/Devanagari including the old failure modes: "Kal Papa ne kya khaya", "papa" ≠ medicine, "blood" ≠ food, impossible dates, no-data patients);
-- verifier (34): fabricated numbers/dates/times/refs/URLs must fail, faithful answers (rounding, derived numbers, tool refs) must pass;
+- routing (72 + 57 language cases): off-topic, small talk, not-tracked measures, advice in any word order (and not fooled by "kya aap bata sakte hain"), typed/spoken readings, medicine schedule vs adherence, typo'd medicine names, highest/lowest with oracles, symptoms, diagnosis vs "what to eat for diabetes", saved-note allergy lookup, empty patient;
+- verifier (38): fabricated numbers/dates/times/refs/URLs must fail, faithful answers (rounding, derived numbers, tool refs) must pass, an answer about another measure is `off_topic`;
 - agent loop + tools (scripted fake model, 35 cases): tools, all results in ONE user message, `pause_turn`, repair, 3 bad submissions → fallback, refusal, nudge, `max_tokens`, API error, timeout, crisis lead, injection removal, memory safety, request shape;
 - loaders (in-memory fake Supabase): 2,500 rows past a 1,000-row cap, a server cap below the page size, ceiling flag, IST range edges, defaults, scoping, rate-limit counter.
 
@@ -111,5 +123,6 @@ Nothing "learns" in the model. Two things are real: (1) notes the family saves (
 - History is the last 120 IST days (a hard ceiling of 20,000 rows per table, flagged if hit). "Last year" questions are answered with that stated limit.
 - Inactive medicines count only on days with a real log (their stop date is not stored). Medicine logs written by older app versions with a UTC-shifted time are re-aligned by matching the schedule.
 - Averages are over *logged* days only, and say so; sodium is a lower bound when items lack sodium data; "oil/fried" is counted by food name.
-- The rules engine has no internet and no open-ended advice; for advice questions it says so and shows the data plus rule-based suggestions.
+- The rules engine has no internet and no open-ended advice; for advice questions it says so and shows the data plus rule-based suggestions. It is keyword-based: it handles the question styles in the eval, but a phrasing it has never seen can still land on "I could not fully understand" (it will not guess a topic). **For open-ended, any-phrasing questions the AI path is required: set `ANTHROPIC_API_KEY`.**
+- Voice input uses the browser's speech service (Chrome: Google's), so it needs a supporting browser and internet; recognised text goes into the question box for checking before sending. Spoken number *words* ("एक सौ पचास") are not parsed; digits ("150") are. Not exercised on a real device in the build environment.
 - The UI was type-checked and linted but not rendered in a browser in the build environment.

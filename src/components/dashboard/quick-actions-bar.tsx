@@ -30,13 +30,25 @@ type QuickAction = {
   hint: string;
   icon: LucideIcon;
   tone: MetricTone;
-  /** Coloured ambient shadow on hover — one per vital. */
-  glow: string;
   onClick: () => void;
 };
 
+/** Literal strings so Tailwind sees them: each tile blooms in its own vital's hue on hover. */
+const hoverGlow: Record<MetricTone, string> = {
+  brand: "hover:shadow-glow-brand",
+  bp: "hover:shadow-glow-bp",
+  weight: "hover:shadow-glow-weight",
+  food: "hover:shadow-glow-food",
+  meds: "hover:shadow-glow-meds",
+  activity: "hover:shadow-glow-activity",
+  sleep: "hover:shadow-glow-sleep",
+  neutral: "",
+};
+
 /**
- * Quick Log (§18). Six equal, thumb-sized targets in a 2×3 grid on a phone.
+ * Quick Log (§18). Six equal, thumb-sized targets: 3 x 2 on a phone (the
+ * previous 2 x 3 spent ~440px of a screen on six buttons), one row of six on
+ * wide cards. Frosted `.tile` glass on the gilt card, never a second gilt.
  *
  * The hint line describes what gets entered; it used to read "120/80 mmHg"
  * under Blood pressure, which looked like an actual reading for the day.
@@ -50,75 +62,30 @@ export function QuickActionsBar({
   onOpenMedicine,
 }: QuickActionsBarProps) {
   const actions: QuickAction[] = [
-    {
-      label: "BP",
-      hindiLabel: "रक्तचाप",
-      hint: "ऊपर / नीचे वाला",
-      icon: HeartPulse,
-      tone: "bp",
-      glow: "hover:shadow-glow-bp",
-      onClick: onOpenBP,
-    },
-    {
-      label: "Weight",
-      hindiLabel: "वजन",
-      hint: "kg में मापें",
-      icon: Scale,
-      tone: "weight",
-      glow: "hover:shadow-glow-weight",
-      onClick: onOpenWeight,
-    },
-    {
-      label: "Food",
-      hindiLabel: "भोजन",
-      hint: "रोटी, दाल, फल…",
-      icon: Utensils,
-      tone: "food",
-      glow: "hover:shadow-glow-food",
-      onClick: onOpenFood,
-    },
-    {
-      label: "Medicine",
-      hindiLabel: "दवाई",
-      hint: "खुराक व समय",
-      icon: Pill,
-      tone: "meds",
-      glow: "hover:shadow-glow-meds",
-      onClick: onOpenMedicine,
-    },
-    {
-      label: "Steps",
-      hindiLabel: "कदम",
-      hint: "सैर व टहलना",
-      icon: Footprints,
-      tone: "activity",
-      glow: "hover:shadow-glow-activity",
-      onClick: onOpenActivity,
-    },
-    {
-      label: "Sleep",
-      hindiLabel: "नींद",
-      hint: "रात की नींद",
-      icon: Moon,
-      tone: "sleep",
-      glow: "hover:shadow-glow-sleep",
-      onClick: onOpenSleep,
-    },
+    { label: "BP", hindiLabel: "रक्तचाप", hint: "ऊपर / नीचे वाला", icon: HeartPulse, tone: "bp", onClick: onOpenBP },
+    { label: "Weight", hindiLabel: "वजन", hint: "kg में मापें", icon: Scale, tone: "weight", onClick: onOpenWeight },
+    { label: "Food", hindiLabel: "भोजन", hint: "रोटी, दाल, फल…", icon: Utensils, tone: "food", onClick: onOpenFood },
+    { label: "Medicine", hindiLabel: "दवाई", hint: "खुराक व समय", icon: Pill, tone: "meds", onClick: onOpenMedicine },
+    { label: "Steps", hindiLabel: "कदम", hint: "सैर व टहलना", icon: Footprints, tone: "activity", onClick: onOpenActivity },
+    { label: "Sleep", hindiLabel: "नींद", hint: "रात की नींद", icon: Moon, tone: "sleep", onClick: onOpenSleep },
   ];
 
   return (
-    <Card className="surface-lift" tone="default">
-      <div className="mb-3.5 flex flex-wrap items-center justify-between gap-2">
+    <Card aria-label="Quick log — आज क्या दर्ज करना है?">
+      <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
         <h2 className="flex items-center gap-2 text-base font-semibold text-ink">
-          <span className="grid h-7 w-7 place-items-center rounded-field grad-spring text-gold-ink shadow-e1">
-            <PlusCircle aria-hidden className="h-4 w-4" />
+          <span
+            aria-hidden
+            className="grid h-7 w-7 place-items-center rounded-field border border-gold-line grad-gold-button text-gold-ink shadow-gold-button"
+          >
+            <PlusCircle className="h-4 w-4" />
           </span>
           <span lang="hi">आज क्या दर्ज करना है?</span>
         </h2>
-        <Badge variant="brand">Quick Log · 1 टैप</Badge>
+        <Badge variant="gold">Quick Log · 1 टैप</Badge>
       </div>
 
-      <Stagger className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-6">
+      <Stagger className="@container grid grid-cols-3 gap-2 sm:gap-2.5 @2xl:grid-cols-6">
         {actions.map((action, i) => {
           const Icon = action.icon;
           return (
@@ -127,39 +94,25 @@ export function QuickActionsBar({
                 onClick={action.onClick}
                 ariaLabel={`${action.label} दर्ज करें — ${action.hindiLabel}`}
                 className={cn(
-                  "group surface-lift relative flex h-full w-full flex-col items-center",
-                  "justify-center gap-2 overflow-hidden rounded-card p-3.5 text-center",
-                  "transition-shadow duration-200",
-                  action.glow,
+                  "tile group flex h-full w-full flex-col items-center justify-center gap-1.5",
+                  "rounded-card px-1.5 py-3 text-center transition-shadow duration-200",
+                  hoverGlow[action.tone],
                 )}
               >
-                {/* Colour wash that blooms on hover. At rest the tile is
-                    white, so six of them side by side stay calm. */}
-                <span
-                  aria-hidden
-                  className={cn(
-                    "pointer-events-none absolute inset-x-0 -bottom-8 h-16 opacity-0 blur-2xl",
-                    "transition-opacity duration-300 group-hover:opacity-70",
-                    metricChipClasses[action.tone],
-                  )}
-                />
                 <span
                   className={cn(
-                    "relative grid h-11 w-11 place-items-center rounded-control shadow-e1",
+                    "grid h-10 w-10 place-items-center rounded-control shadow-e1",
                     "transition-transform duration-200 group-hover:scale-105",
                     metricChipClasses[action.tone],
                   )}
                 >
                   <Icon aria-hidden className="h-5 w-5" />
                 </span>
-                <span className="relative w-full">
-                  <span
-                    lang="hi"
-                    className="block truncate text-sm font-semibold leading-tight text-ink"
-                  >
+                <span className="w-full text-center">
+                  <span lang="hi" className="block truncate text-sm font-semibold leading-tight text-ink">
                     {action.hindiLabel}
                   </span>
-                  <span className="block truncate text-2xs text-ink-subtle">
+                  <span className="mt-0.5 hidden truncate text-2xs text-ink-muted @md:block">
                     {action.hint}
                   </span>
                 </span>

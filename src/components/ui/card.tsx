@@ -4,14 +4,17 @@ import { cn } from "@/lib/utils";
 type CardTone = "default" | "sunken" | "raised" | "premium";
 
 const toneClasses: Record<CardTone, string> = {
-  // Every card carries the same top highlight as the rest of the product, so
-  // surfaces read as lit from one direction (§38).
-  default: "bg-surface shadow-e2",
-  sunken: "bg-surface-sunken shadow-none",
+  // Champagne-gold polished metal: lit top reflection, specular streak and a
+  // bronze rim (see `.gilt` in globals.css). Every routine content card.
+  default: "gilt",
+  // A well, not a card: warm recess for secondary content.
+  sunken: "border border-line bg-surface-sunken shadow-none",
+  // Frosted white glass with a metal rim — for a card that must sit quietly
+  // beside a gilt neighbour (forms, menus).
   raised: "surface-lift",
-  // Gold hairline edge — the hero-tier surface (score, snapshot, the one
-  // featured card per screen). Not for routine content cards.
-  premium: "gold-edge",
+  // Deeper gold — the hero-tier surface (score, snapshot, the one featured
+  // card per screen).
+  premium: "gilt-rich",
 };
 
 type CardProps = ComponentProps<"section"> & {
@@ -36,7 +39,6 @@ export function Card({
     <section
       className={cn(
         "rounded-card",
-        tone === "raised" || tone === "premium" ? "" : "border border-line",
         toneClasses[tone],
         !flush && "p-4 sm:p-5",
         className,

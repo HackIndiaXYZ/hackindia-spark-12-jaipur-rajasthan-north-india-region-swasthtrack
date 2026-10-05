@@ -1,28 +1,36 @@
 /**
- * Every e-mail SwasthTrack can send, in one list: what it is, who gets it, how it
- * is triggered, and a sample render. The preview page and the "send me all
- * samples" script are built from this, so adding a template here is all it takes
- * for it to show up in both.
+ * Every e-mail SwasthTrack sends, in one list: what it is, who gets it, how it is
+ * triggered, and a sample render (the same sample data as the design file, so the
+ * preview matches it). The preview page and the "send me the samples" call are built
+ * from this list: add an entry and it shows up in both.
  */
 
 import type { MonthlyReportSummary, WeeklyReportSummary } from "@/services/reports-analytics-service";
+import { fillRecipient } from "./layout";
 import {
   renderAccessChangedEmail,
-  renderAlertEmail,
+  renderBpAlertEmail,
   renderCaregiverInviteEmail,
   renderCaregiverJoinedEmail,
+  renderConfirmSignupEmail,
   renderDailyReport,
   renderMonthlyReport,
+  renderPasswordResetEmail,
+  renderReminderEmail,
+  renderSignInCodeEmail,
   renderTestEmail,
   renderWeeklyReport,
   renderWeightAlertEmail,
   renderWelcomeEmail,
 } from "./templates";
-import type { EmailAlert, RenderedEmail } from "./types";
+import type { RenderedEmail, RenderOptions } from "./types";
 
 export type EmailTemplateKey =
-  | "alert.bp"
-  | "alert.reminders"
+  | "alert.bp.crisis"
+  | "alert.bp.high"
+  | "alert.bp.low"
+  | "alert.reminder"
+  | "alert.reminder.no-data"
   | "alert.weight"
   | "report.daily"
   | "report.weekly"
@@ -31,9 +39,13 @@ export type EmailTemplateKey =
   | "account.test"
   | "caregiver.invite"
   | "caregiver.joined"
-  | "caregiver.access-changed";
+  | "caregiver.access-removed"
+  | "caregiver.role-changed"
+  | "auth.confirm-signup"
+  | "auth.sign-in-code"
+  | "auth.password-reset";
 
-export type EmailCategory = "alert" | "report" | "account";
+export type EmailCategory = "alert" | "report" | "account" | "auth";
 
 export interface EmailTemplateDef {
   key: EmailTemplateKey;
@@ -41,46 +53,40 @@ export interface EmailTemplateDef {
   label: string;
   /** Who receives it and what sends it. */
   trigger: string;
-  sample: () => RenderedEmail;
+  /** `o` lets the preview choose the base URL used for the logo and links. */
+  sample: (o?: RenderOptions) => RenderedEmail;
 }
 
-const SAMPLE_PATIENT = "Raj Kishore Gupta";
-
-const bpAlert: EmailAlert = {
-  severity: "IMPORTANT",
-  titleHi: "रक्तचाप बहुत ज़्यादा: 186/122",
-  titleEn: "Very high blood pressure: 186/122",
-  messageHi:
-    "अभी की reading 186/122 mmHg · pulse 94 (7:42 AM · Morning) है। कृपया आराम से बैठकर कुछ मिनट बाद दोबारा नापें। reading ऐसी ही रहे, या चक्कर, सीने में दर्द या सांस फूलने जैसा कुछ लगे तो तुरंत डॉक्टर से संपर्क करें।",
-  messageEn:
-    "Latest reading is 186/122 mmHg · pulse 94 (7:42 AM · Morning). Please rest and re-measure after a few minutes. If it stays this high, or there is dizziness, chest pain or breathlessness, contact a doctor right away.",
-  path: "/health",
-};
+const PATIENT = "Ramesh Sharma";
+const SAMPLE_TO = "sunita.sharma@gmail.com";
+const sample = { sample: true } as const;
+const done = (mail: RenderedEmail): RenderedEmail => fillRecipient(mail, SAMPLE_TO);
 
 const sampleWeekly: WeeklyReportSummary = {
-  weekRangeLabel: "28 Sep – 4 Oct 2026",
-  startDate: "2026-09-28",
-  endDate: "2026-10-04",
+  weekRangeLabel: "29 Sep – 5 Oct 2026",
+  startDate: "2026-09-29",
+  endDate: "2026-10-05",
   hasSufficientData: true,
   daysTrackedCount: 6,
   totalDays: 7,
-  averageScore: 78,
-  highestScore: { score: 91, date: "2026-10-01", dayLabel: "Thu" },
-  lowestScore: { score: 55, date: "2026-09-30", dayLabel: "Wed" },
-  medicineAdherencePercent: 88,
+  averageScore: 74,
+  highestScore: { score: 88, date: "2026-10-01", dayLabel: "Thu 1" },
+  lowestScore: { score: 52, date: "2026-10-04", dayLabel: "Sun 4" },
+  medicineAdherencePercent: 86,
   hasMedicineData: true,
-  foodLoggingConsistencyPercent: 81,
-  averageCalories: 1540,
-  averageSteps: 5200,
+  foodLoggingConsistencyPercent: 71,
+  averageCalories: 1640,
+  averageSteps: 5120,
   averageSleepHours: 6.8,
   bpReadingsCount: 12,
   weightChangeKg: -0.4,
-  startWeightKg: 74.2,
-  endWeightKg: 73.8,
+  startWeightKg: 72.3,
+  endWeightKg: 71.9,
   dailyScores: [],
   personalizedInsights: [
-    "दवाइयों की निरंतरता इस सप्ताह अच्छी रही।",
-    "शारीरिक गतिविधि अच्छी रही — प्रतिदिन औसत 5,200 कदम दर्ज हुए।",
+    "सुबह की बीपी रीडिंग शाम से बेहतर रहीं।",
+    "रविवार को कोई दवा टिक नहीं हुई — एक बार देख लें।",
+    "औसत नींद 7 घंटे से थोड़ी कम रही।",
   ],
 };
 
@@ -91,170 +97,210 @@ const sampleMonthly: MonthlyReportSummary = {
   hasSufficientData: true,
   daysTrackedCount: 26,
   totalDays: 30,
-  averageScore: 76,
-  medicineAdherencePercent: 90,
-  hasMedicineData: true,
-  foodLoggingPercent: 83,
-  activityConsistencyPercent: 70,
-  sleepLoggingPercent: 60,
-  bpLoggingPercent: 93,
+  averageScore: 71,
+  medicineAdherencePercent: 0,
+  hasMedicineData: false,
+  foodLoggingPercent: 80,
+  activityConsistencyPercent: 63,
+  sleepLoggingPercent: 57,
+  bpLoggingPercent: 87,
   weightLoggingPercent: 40,
-  averageCalories: 1585,
-  averageSteps: 4900,
-  totalBpReadings: 48,
-  startWeightKg: 75.1,
-  endWeightKg: 73.8,
-  weightChangeKg: -1.3,
-  personalizedInsights: ["इस महीने वज़न धीरे-धीरे घटा है (-1.3 kg)।", "BP नियमित रूप से दर्ज हुआ।"],
+  averageCalories: 1610,
+  averageSteps: 4980,
+  totalBpReadings: 49,
+  startWeightKg: 72.8,
+  endWeightKg: 71.9,
+  weightChangeKg: -0.9,
+  personalizedInsights: [
+    "बीपी 87% दिनों में दर्ज हुआ — बहुत अच्छी नियमितता।",
+    "7 रीडिंग दायरे से बाहर रहीं, ज़्यादातर शाम को।",
+    "वज़न महीने भर में 0.9 kg कम हुआ।",
+  ],
 };
 
 export const EMAIL_TEMPLATES: EmailTemplateDef[] = [
   {
-    key: "alert.bp",
+    key: "alert.bp.crisis",
     category: "alert",
-    label: "BP alert (high / crisis / low)",
-    trigger: "Immediately after a BP reading is saved and crosses the patient's alert line.",
-    sample: () =>
-      renderAlertEmail(SAMPLE_PATIENT, [bpAlert], `🚨 SwasthTrack · ${SAMPLE_PATIENT} · BP 186/122 (Very high)`, {
-        sample: true,
-      }),
+    label: "BP alert — very high / crisis",
+    trigger: "Right after a BP reading is saved at or above the patient's crisis line. To REPORT_EMAIL_TO.",
+    sample: (o) =>
+      done(renderBpAlertEmail({ patientName: PATIENT, level: "critical", value: "186/122", pulse: 96, slot: "morning", timeLabel: "7:42 AM", outOfRange7d: 3 }, { ...sample, ...o })),
   },
   {
-    key: "alert.reminders",
+    key: "alert.bp.high",
     category: "alert",
-    label: "Missed medicine / not logged reminder",
-    trigger: "Cron, 2 PM IST — only sent when something is actually missing.",
-    sample: () =>
-      renderAlertEmail(
-        SAMPLE_PATIENT,
-        [
+    label: "BP alert — high",
+    trigger: "Right after a BP reading is saved at or above the patient's alert line. To REPORT_EMAIL_TO.",
+    sample: (o) =>
+      done(renderBpAlertEmail({ patientName: PATIENT, level: "high", value: "152/96", pulse: 84, slot: "evening", timeLabel: "8:10 PM", outOfRange7d: 2 }, { ...sample, ...o })),
+  },
+  {
+    key: "alert.bp.low",
+    category: "alert",
+    label: "BP alert — low",
+    trigger: "Right after a BP reading is saved below the patient's low line. To REPORT_EMAIL_TO.",
+    sample: (o) =>
+      done(renderBpAlertEmail({ patientName: PATIENT, level: "low", value: "88/56", pulse: 72, slot: "morning", timeLabel: "7:42 AM", outOfRange7d: 1 }, { ...sample, ...o })),
+  },
+  {
+    key: "alert.reminder",
+    category: "alert",
+    label: "Reminder — missed medicines + records",
+    trigger: "Cron, 2 PM IST. Only sent when something is missing. To REPORT_EMAIL_TO.",
+    sample: (o) =>
+      done(
+        renderReminderEmail(
           {
-            severity: "ATTENTION",
-            titleHi: "दवाई छूट गई",
-            titleEn: "Medicine dose missed",
-            messageHi: "आज ये दवाइयाँ अभी तक नहीं ली गईं: Telmisartan 40 mg, Metoprolol 50 mg।",
-            messageEn: "Not confirmed as taken today: Telmisartan 40 mg, Metoprolol 50 mg.",
-            path: "/medicines",
+            patientName: PATIENT,
+            when: { hi: "आज, दोपहर 2 बजे", en: "Today, 2 PM" },
+            missedMedicines: [
+              { name: "Amlodipine", sub: "5 mg · सुबह 8 बजे · 8 AM" },
+              { name: "Metformin", sub: "500 mg · नाश्ते के बाद · After breakfast" },
+            ],
+            missingRecords: [
+              { hi: "नाश्ता", en: "Breakfast" },
+              { hi: "सुबह का बीपी", en: "Morning BP" },
+              { hi: "नींद", en: "Sleep" },
+            ],
+            daysWithoutData: null,
           },
+          { ...sample, ...o },
+        ),
+      ),
+  },
+  {
+    key: "alert.reminder.no-data",
+    category: "alert",
+    label: "Reminder — no data for 4 days",
+    trigger: "Same 2 PM reminder, when nothing has been logged for 3 or more days.",
+    sample: (o) =>
+      done(
+        renderReminderEmail(
           {
-            severity: "ATTENTION",
-            titleHi: "आज के रिकॉर्ड बाकी हैं",
-            titleEn: "Today's records are still missing",
-            messageHi: "नाश्ता दर्ज नहीं (Breakfast) · सुबह का BP दर्ज नहीं (Morning BP)",
-            messageEn: "Please log these when you can.",
-            path: "/",
+            patientName: PATIENT,
+            when: { hi: "आज, दोपहर 2 बजे", en: "Today, 2 PM" },
+            missedMedicines: [],
+            missingRecords: [
+              { hi: "सुबह का बीपी", en: "Morning BP" },
+              { hi: "नाश्ता", en: "Breakfast" },
+              { hi: "दोपहर का खाना", en: "Lunch" },
+              { hi: "वज़न", en: "Weight" },
+            ],
+            daysWithoutData: 4,
           },
-        ],
-        `SwasthTrack reminder · ${SAMPLE_PATIENT} · 2 items need attention`,
-        { sample: true },
+          { ...sample, ...o },
+        ),
       ),
   },
   {
     key: "alert.weight",
     category: "alert",
     label: "Rapid weight change alert",
-    trigger: "Immediately after a weigh-in that moves ≥ 2 kg in 7 days or ≥ 5% in 30 days.",
-    sample: () =>
-      renderWeightAlertEmail(
-        {
-          patientName: SAMPLE_PATIENT,
-          currentKg: 76.4,
-          previousKg: 73.9,
-          changeKg: 2.5,
-          days: 6,
-          ruleHi: "7 दिन में 2 kg या उससे ज़्यादा का बदलाव।",
-          ruleEn: "a change of 2 kg or more within 7 days",
-        },
-        { sample: true },
+    trigger: "Right after a weigh-in that moves ≥ 2 kg in 7 days or ≥ 5% in 30 days. To REPORT_EMAIL_TO.",
+    sample: (o) =>
+      done(
+        renderWeightAlertEmail(
+          {
+            patientName: PATIENT,
+            previousKg: 72.4,
+            currentKg: 69.8,
+            changeKg: -2.6,
+            days: 6,
+            rule: { hi: "7 दिनों के अंदर 2 kg या उससे ज़्यादा बदलाव", en: "A change of 2 kg or more within 7 days" },
+          },
+          { ...sample, ...o },
+        ),
       ),
   },
   {
     key: "report.daily",
     category: "report",
     label: "Daily report",
-    trigger: "Cron, 9 PM IST every day.",
-    sample: () =>
-      renderDailyReport(
-        {
-          patientName: SAMPLE_PATIENT,
-          dateLabel: "Sun, 4 Oct 2026",
-          bpReadings: [
-            { time: "7:42 AM", value: "132/84", pulse: 74, label: "सुबह", tone: "normal" },
-            { time: "8:15 PM", value: "164/102", pulse: 88, label: "शाम", tone: "high" },
-          ],
-          medicines: { total: 6, taken: 5, missed: ["Metoprolol 50 mg"], pending: [] },
-          calories: { eaten: 1480, target: 1600, meals: ["Breakfast", "Lunch", "Dinner"] },
-          steps: 5400,
-          sleepHours: 6.5,
-          weightKg: null,
-          missing: ["नींद दर्ज नहीं (Sleep)"],
-          alerts: [
-            {
-              severity: "ATTENTION",
-              titleHi: "आज BP सामान्य सीमा से बाहर रहा",
-              titleEn: "BP outside the usual range today",
-              messageHi: "आज की readings: 8:15 PM 164/102 (High)। अगर यह बार-बार हो रहा है तो डॉक्टर से बात करें।",
-              messageEn: "Today's readings: 8:15 PM 164/102 (High). If this keeps happening, talk to the doctor.",
-              path: "/health",
+    trigger: "Cron, 9 PM IST every day. To REPORT_EMAIL_TO.",
+    sample: (o) =>
+      done(
+        renderDailyReport(
+          {
+            patientName: PATIENT,
+            date: { hi: "सोमवार, 5 अक्टूबर", en: "Mon, 5 Oct" },
+            alerts: [
+              {
+                severity: "ATTENTION",
+                titleHi: "शाम का बीपी ज़्यादा रहा",
+                titleEn: "Evening BP was high",
+                messageHi: "152/96 — 5 मिनट आराम के बाद दोबारा नापें।",
+                messageEn: "152/96 — rest 5 minutes and measure again.",
+              },
+            ],
+            bpReadings: [
+              { slot: "morning", timeLabel: "7:42 AM", pulse: 74, value: "128/82", tone: "normal" },
+              { slot: "evening", timeLabel: "8:10 PM", pulse: 84, value: "152/96", tone: "high" },
+            ],
+            medicines: { total: 4, taken: 3, missed: ["Metformin 500 mg"], pending: [] },
+            calories: {
+              eaten: 1420,
+              target: 1800,
+              meals: [
+                { hi: "नाश्ता", en: "Breakfast" },
+                { hi: "दोपहर", en: "Lunch" },
+                { hi: "शाम का नाश्ता", en: "Snack" },
+              ],
             },
-          ],
-        },
-        { sample: true },
+            steps: 4860,
+            sleepHours: 6.5,
+            weightKg: null,
+            notLogged: [
+              { hi: "रात का खाना", en: "Dinner" },
+              { hi: "वज़न", en: "Weight" },
+            ],
+          },
+          { ...sample, ...o },
+        ),
       ),
   },
   {
     key: "report.weekly",
     category: "report",
     label: "Weekly report",
-    trigger: "Cron, Sunday 8 PM IST.",
-    sample: () =>
-      renderWeeklyReport(
-        { patientName: SAMPLE_PATIENT, summary: sampleWeekly, bpAverage: { systolic: 138, diastolic: 86 }, bpAlertCount: 2 },
-        { sample: true },
-      ),
+    trigger: "Cron, Sunday 8 PM IST. To REPORT_EMAIL_TO.",
+    sample: (o) =>
+      done(renderWeeklyReport({ patientName: PATIENT, summary: sampleWeekly, bpAverage: { systolic: 134, diastolic: 86 }, bpAlertCount: 2 }, { ...sample, ...o })),
   },
   {
     key: "report.monthly",
     category: "report",
     label: "Monthly report (last 30 days)",
-    trigger: "Cron, 9 AM IST on the 1st of every month.",
-    sample: () =>
-      renderMonthlyReport(
-        { patientName: SAMPLE_PATIENT, summary: sampleMonthly, bpAverage: { systolic: 136, diastolic: 85 }, bpAlertCount: 5 },
-        { sample: true },
-      ),
+    trigger: "Cron, 9 AM IST on the 1st of every month. To REPORT_EMAIL_TO.",
+    sample: (o) =>
+      done(renderMonthlyReport({ patientName: PATIENT, summary: sampleMonthly, bpAverage: { systolic: 136, diastolic: 87 }, bpAlertCount: 7 }, { ...sample, ...o })),
   },
   {
     key: "account.welcome",
     category: "account",
     label: "Welcome",
     trigger: "To the new user, right after they create their first patient profile.",
-    sample: () => renderWelcomeEmail({ name: "Pawan", patientName: SAMPLE_PATIENT }, { sample: true }),
+    sample: (o) => done(renderWelcomeEmail({ name: "Sunita", patientName: PATIENT }, { ...sample, ...o })),
   },
   {
     key: "account.test",
     category: "account",
     label: "Test email",
-    trigger: "To the signed-in user's own address, from the \"Send test email\" button.",
-    sample: () =>
-      renderTestEmail({ to: "me.guptapawan@gmail.com", sentAtLabel: "4 Oct 2026, 1:45 PM IST" }, { sample: true }),
+    trigger: "To the signed-in user's own address, from Settings → \"Send test email\".",
+    sample: (o) =>
+      done(renderTestEmail({ to: SAMPLE_TO, sentAt: { hi: "5 अक्टूबर, 11:24 AM", en: "5 Oct, 11:24 AM IST" } }, { ...sample, ...o })),
   },
   {
     key: "caregiver.invite",
     category: "account",
     label: "Caregiver invite code",
-    trigger: "To the address the owner types, from \"Email this invite\" on the caregiver dialog.",
-    sample: () =>
-      renderCaregiverInviteEmail(
-        {
-          inviterName: "Pawan",
-          patientName: SAMPLE_PATIENT,
-          code: "K7M2QX9D",
-          role: "editor",
-          expiresAtLabel: "4 Oct, 2:00 PM",
-          minutesValid: 15,
-        },
-        { sample: true },
+    trigger: "To the address the owner types, from \"Send by email\" on the caregiver dialog.",
+    sample: (o) =>
+      done(
+        renderCaregiverInviteEmail(
+          { inviterName: "Sunita Sharma", patientName: PATIENT, code: "K7M2QX9D", role: "editor", validUntil: "11:39 AM IST", minutesValid: 15 },
+          { ...sample, ...o },
+        ),
       ),
   },
   {
@@ -262,28 +308,55 @@ export const EMAIL_TEMPLATES: EmailTemplateDef[] = [
     category: "account",
     label: "Caregiver joined (to the owner)",
     trigger: "To the owner right after someone redeems an invite (owner address via a database function, no service-role key).",
-    sample: () =>
-      renderCaregiverJoinedEmail(
-        {
-          patientName: SAMPLE_PATIENT,
-          caregiverName: "Neha Gupta",
-          caregiverEmail: "neha@example.com",
-          role: "viewer",
-          joinedAtLabel: "4 Oct 2026, 1:52 PM",
-        },
-        { sample: true },
+    sample: (o) =>
+      done(
+        renderCaregiverJoinedEmail(
+          {
+            patientName: PATIENT,
+            caregiverName: "Anil Sharma",
+            caregiverEmail: "anil.sharma@gmail.com",
+            role: "editor",
+            joinedAt: { hi: "5 अक्टूबर, 11:31 AM", en: "5 Oct, 11:31 AM" },
+          },
+          { ...sample, ...o },
+        ),
       ),
   },
   {
-    key: "caregiver.access-changed",
+    key: "caregiver.access-removed",
     category: "account",
-    label: "Caregiver access removed / role changed",
-    trigger: "To the caregiver when the owner removes them or changes their role.",
-    sample: () =>
-      renderAccessChangedEmail(
-        { patientName: SAMPLE_PATIENT, ownerName: "Pawan", change: "role-changed", newRole: "editor" },
-        { sample: true },
-      ),
+    label: "Access removed (to the caregiver)",
+    trigger: "To the caregiver when the owner removes their access.",
+    sample: (o) => done(renderAccessChangedEmail({ patientName: PATIENT, ownerName: "Sunita Sharma", change: "removed" }, { ...sample, ...o })),
+  },
+  {
+    key: "caregiver.role-changed",
+    category: "account",
+    label: "Role changed (to the caregiver)",
+    trigger: "To the caregiver when the owner changes their role.",
+    sample: (o) =>
+      done(renderAccessChangedEmail({ patientName: PATIENT, ownerName: "Sunita Sharma", change: "role-changed", newRole: "viewer" }, { ...sample, ...o })),
+  },
+  {
+    key: "auth.confirm-signup",
+    category: "auth",
+    label: "Confirm sign-up code",
+    trigger: "Sent by Supabase Auth when someone signs up. Template: supabase/email-templates/confirm-signup.html.",
+    sample: (o) => done(renderConfirmSignupEmail({ code: "482915" }, { ...sample, ...o })),
+  },
+  {
+    key: "auth.sign-in-code",
+    category: "auth",
+    label: "Sign-in code",
+    trigger: "Sent by Supabase Auth for \"sign in with e-mail code\". Template: supabase/email-templates/magic-link.html.",
+    sample: (o) => done(renderSignInCodeEmail({ code: "482915" }, { ...sample, ...o })),
+  },
+  {
+    key: "auth.password-reset",
+    category: "auth",
+    label: "Password reset code",
+    trigger: "Sent by Supabase Auth when someone forgets their password. Template: supabase/email-templates/reset-password.html.",
+    sample: (o) => done(renderPasswordResetEmail({ code: "482915" }, { ...sample, ...o })),
   },
 ];
 

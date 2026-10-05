@@ -44,7 +44,11 @@ export function Sparkline({
 
   const min = Math.min(...values);
   const max = Math.max(...values);
-  const span = max - min || 1;
+  // A near-flat series (weight holding steady at 80.4 -> 80.5) must not be
+  // stretched to the full height: it would read as a dramatic swing. Below 1.5%
+  // of the value the line is drawn with a floor on its span and centred.
+  const span = Math.max(max - min, Math.abs(max) * 0.015) || 1;
+  const offset = (span - (max - min)) / 2;
 
   // Inset by the endpoint halo radius so nothing is drawn outside the box.
   const pad = 5;
@@ -53,7 +57,7 @@ export function Sparkline({
 
   const points = values.map((v, i) => {
     const x = pad + (i / (values.length - 1)) * w;
-    const y = pad + h - ((v - min) / span) * h;
+    const y = pad + h - ((v - min + offset) / span) * h;
     return [x, y] as const;
   });
 

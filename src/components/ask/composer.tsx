@@ -1,15 +1,19 @@
 "use client";
 
-import { useRef, useState, type FormEvent, type KeyboardEvent } from "react";
-import { Loader2, Send, Square } from "lucide-react";
+import { useEffect, useId, useRef, useState, type FormEvent, type KeyboardEvent } from "react";
+import { Send, Square } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { TextArea } from "@/components/ui/form-field";
+import { VoiceInput } from "@/components/ask/voice-input";
 import { cn } from "@/lib/utils";
 
+const MAX_HEIGHT_PX = 160;
+
 /**
- * Sticky composer. On phones it sits ABOVE the fixed bottom navigation (about
- * 4.5rem tall plus the home-indicator safe area), so it is never hidden behind
- * it; from lg up the navigation is the sidebar and it pins to the viewport edge.
+ * Sticky composer: a floating glass panel that sits ABOVE the fixed bottom
+ * navigation on phones (`--bottom-nav-h` already includes the home-indicator
+ * inset) and pins to the viewport edge from lg up, where the navigation is the
+ * sidebar. The textarea grows with its content; Enter sends, Shift+Enter adds
+ * a line.
  */
 export function Composer({
   disabled,
@@ -17,6 +21,7 @@ export function Composer({
   onSend,
   onCancel,
   maxLength = 1000,
+  patientFirstName,
   className,
 }: {
   disabled?: boolean;
@@ -24,10 +29,22 @@ export function Composer({
   onSend: (text: string) => void;
   onCancel: () => void;
   maxLength?: number;
+  /** Used only to make the example in the placeholder about the right person. */
+  patientFirstName?: string;
   className?: string;
 }) {
   const [text, setText] = useState("");
   const ref = useRef<HTMLTextAreaElement>(null);
+  const inputId = useId();
+  const hintId = useId();
+
+  // Grow with the content up to a cap, then scroll inside.
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    el.style.height = "auto";
+    el.style.height = `${Math.min(el.scrollHeight, MAX_HEIGHT_PX)}px`;
+  }, [text]);
 
   function submit(e?: FormEvent) {
     e?.preventDefault();
@@ -46,41 +63,62 @@ export function Composer({
     }
   }
 
+  const nearLimit = text.length >= maxLength * 0.8;
+
   return (
-    <form
-      onSubmit={submit}
-      className={cn("sticky bottom-[calc(4.75rem+env(safe-area-inset-bottom,0px))] z-30 -mx-4 border-t border-line bg-surface/95 px-4 pt-3 pb-3 backdrop-blur sm:-mx-6 sm:px-6 lg:bottom-0 lg:mx-0 lg:rounded-t-card lg:border lg:px-4", className)}
+    <div
+      className={cn(
+        "sticky bottom-[calc(var(--bottom-nav-h)+0.5rem)] z-20 -mx-4 px-4 pb-1 pt-6 sm:-mx-6 sm:px-6 lg:bottom-4 lg:mx-0 lg:px-0",
+        "bg-linear-to-t from-canvas from-55% to-transparent",
+        className,
+      )}
     >
-      <label htmlFor="soie-input" className="sr-only">
-        अपना सवाल लिखें
-      </label>
-      <div className="flex items-end gap-2">
-        <TextArea
-          id="soie-input"
-          ref={ref}
-          rows={1}
-          value={text}
-          maxLength={maxLength}
-          disabled={disabled}
-          onChange={(e) => setText(e.target.value)}
-          onKeyDown={onKey}
-          placeholder="पूछें: आज पापा कैसे रहे? / BP kaise kam karein?"
-          enterKeyHint="send"
-          className="max-h-40 min-h-control flex-1 resize-none py-2.5"
-        />
-        {sending ? (
-          <Button type="button" variant="secondary" onClick={onCancel} aria-label="रोकें" className="h-control w-control px-0">
-            <Square aria-hidden className="h-5 w-5" />
-          </Button>
-        ) : (
-          <Button type="submit" variant="primary" disabled={disabled || text.trim().length === 0} aria-label="भेजें" className="h-control w-control px-0">
-            {disabled ? <Loader2 aria-hidden className="h-5 w-5 animate-spin" /> : <Send aria-hidden className="h-5 w-5" />}
-          </Button>
+      <form
+        onSubmit={submit}
+        className={cn(
+          "surface-lift rounded-panel p-2 pl-3",
+          "focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-brand",
+          disabled && "opacity-70",
         )}
-      </div>
-      <p className="mt-1.5 text-2xs text-ink-subtle">
-        सवाल में नाम या निजी जानकारी न लिखें। यह जानकारी सामान्य मार्गदर्शन है, डॉक्टर की सलाह का विकल्प नहीं।
-      </p>
-    </form>
+      >
+        <label htmlFor={inputId} className="sr-only">
+          अपना सवाल लिखें
+        </label>
+        <div className="flex items-end gap-2">
+          <textarea
+            id={inputId}
+            ref={ref}
+            rows={1}
+            value={text}
+            maxLength={maxLength}
+            disabled={disabled}
+            onChange={(e) => setText(e.target.value)}
+            onKeyDown={onKey}
+            aria-describedby={hintId}
+            placeholder={patientFirstName ? `पूछें: आज ${patientFirstName} कैसे रहे?` : "पूछें: आज का हाल कैसा रहा?"}
+            enterKeyHint="send"
+            className="max-h-40 min-h-control min-w-0 flex-1 resize-none bg-transparent py-2.5 text-field leading-normal text-ink placeholder:text-ink-subtle focus:outline-none disabled:cursor-not-allowed"
+          />
+          <VoiceInput value={text} onChange={setText} maxLength={maxLength} disabled={disabled || sending} />
+          {sending ? (
+            <Button type="button" variant="secondary" onClick={onCancel} aria-label="रोकें" title="रोकें" className="h-control w-control shrink-0 px-0">
+              <Square aria-hidden className="h-4 w-4 fill-current" />
+            </Button>
+          ) : (
+            <Button type="submit" variant="primary" disabled={disabled || text.trim().length === 0} aria-label="भेजें" title="भेजें (Enter)" className="h-control w-control shrink-0 px-0">
+              <Send aria-hidden className="h-5 w-5" />
+            </Button>
+          )}
+        </div>
+        <p id={hintId} className="mt-1 flex items-start justify-between gap-3 pb-0.5 pr-1 text-2xs leading-snug text-ink-subtle">
+          <span lang="hi">सवाल में नाम या निजी जानकारी न लिखें। यह सामान्य मार्गदर्शन है, डॉक्टर की सलाह का विकल्प नहीं।</span>
+          {nearLimit ? (
+            <span className={cn("tabular shrink-0", text.length >= maxLength && "font-semibold text-critical")} aria-live="polite">
+              {text.length}/{maxLength}
+            </span>
+          ) : null}
+        </p>
+      </form>
+    </div>
   );
 }

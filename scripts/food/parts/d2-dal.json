@@ -1,0 +1,6911 @@
+{
+ "items": [
+  {
+   "slug": "toor-dal-plain-boiled",
+   "name": "Toor Dal, Plain Boiled",
+   "hi": "तूर (अरहर) दाल, सादी उबली",
+   "alias": [
+    "arhar dal boiled",
+    "arhar daal",
+    "toor daal",
+    "tuvar dal",
+    "tur dal",
+    "dal pani",
+    "अरहर दाल"
+   ],
+   "cat": "dal",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 73,
+   "p": 4.8,
+   "c": 12.1,
+   "f": 0.3,
+   "fib": 2,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "core": true,
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe; cross-check: IFCT B021 dry toor dal 331; INDB OSR142 channa dal 100, BFP166 dal moong 44",
+   "conf": "medium",
+   "note": "boiled with salt and turmeric only, no tadka; 1 cup dry dal to ~4.5 cups water, i.e. thin home consistency (~22 g dry dal per 100 g cooked)"
+  },
+  {
+   "slug": "moong-dal-plain-boiled",
+   "name": "Moong Dal (Yellow Split), Plain Boiled",
+   "hi": "मूंग दाल (पीली), सादी उबली",
+   "alias": [
+    "moong daal boiled",
+    "mung dal plain",
+    "dhuli moong dal",
+    "yellow moong dal plain",
+    "pili moong dal",
+    "मूंग दाल"
+   ],
+   "cat": "dal",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 69,
+   "p": 5,
+   "c": 11,
+   "f": 0.3,
+   "fib": 2,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe; cross-check: IFCT B010 dry moong dal 326; INDB ASC151 dhuli moong dal 50 (thinner)",
+   "conf": "medium",
+   "note": "boiled with salt and turmeric only, no tadka; thin consistency, ~21 g dry dal per 100 g cooked"
+  },
+  {
+   "slug": "masoor-dal-plain-boiled",
+   "name": "Masoor Dal (Red Lentil), Plain Boiled",
+   "hi": "मसूर दाल (लाल), सादी उबली",
+   "alias": [
+    "masoor daal boiled",
+    "red lentil dal plain",
+    "lal masoor dal plain",
+    "malka masoor plain",
+    "मसूर दाल"
+   ],
+   "cat": "dal",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 68,
+   "p": 5.1,
+   "c": 11,
+   "f": 0.2,
+   "fib": 2.2,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe; cross-check: IFCT B013 dry masoor dal 322",
+   "conf": "medium",
+   "note": "boiled with salt and turmeric only, no tadka; thin consistency, ~21 g dry dal per 100 g cooked"
+  },
+  {
+   "slug": "urad-dal-plain-boiled",
+   "name": "Urad Dal (White Split), Plain Boiled",
+   "hi": "उड़द दाल (धुली), सादी उबली",
+   "alias": [
+    "urad daal boiled",
+    "dhuli urad dal plain",
+    "white urad dal plain",
+    "black gram dal plain",
+    "उड़द दाल"
+   ],
+   "cat": "dal",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 74,
+   "p": 5.3,
+   "c": 11.7,
+   "f": 0.4,
+   "fib": 2.7,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe; cross-check: IFCT B003 dry urad dal 324; INDB ASC152 dhuli urad dal 61 (thinner)",
+   "conf": "medium",
+   "note": "boiled with salt and turmeric only, no tadka; slightly thicker than toor, ~23 g dry dal per 100 g cooked"
+  },
+  {
+   "slug": "chana-dal-plain-boiled",
+   "name": "Chana Dal, Plain Boiled",
+   "hi": "चना दाल, सादी उबली",
+   "alias": [
+    "chana daal boiled",
+    "channa dal plain",
+    "bengal gram dal plain",
+    "split chickpea dal plain",
+    "चना दाल"
+   ],
+   "cat": "dal",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 84,
+   "p": 5.4,
+   "c": 11.7,
+   "f": 1.3,
+   "fib": 3.8,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe; cross-check: IFCT B001 dry chana dal 329; INDB OSR142 channa dal 100",
+   "conf": "medium",
+   "note": "boiled with salt and turmeric only, no tadka; ~25 g dry dal per 100 g cooked (chana dal needs more dal for the same thickness)"
+  },
+  {
+   "slug": "sabut-moong-plain-boiled",
+   "name": "Sabut Moong Dal (Green Whole), Plain Boiled",
+   "hi": "साबुत मूंग दाल (हरी), सादी उबली",
+   "alias": [
+    "whole moong dal boiled",
+    "green moong dal plain",
+    "sabut mung dal",
+    "green gram dal plain",
+    "हरी मूंग दाल"
+   ],
+   "cat": "dal",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 66,
+   "p": 5,
+   "c": 10.1,
+   "f": 0.3,
+   "fib": 3.7,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe; cross-check: IFCT B011 dry green gram whole 294; INDB ASC156 whole moong 54",
+   "conf": "medium",
+   "note": "boiled with salt and turmeric only; whole green gram, thin consistency, ~22 g dry per 100 g cooked"
+  },
+  {
+   "slug": "sabut-masoor-plain-boiled",
+   "name": "Sabut Masoor Dal (Brown Lentil), Plain Boiled",
+   "hi": "साबुत मसूर दाल (भूरी), सादी उबली",
+   "alias": [
+    "whole masoor dal boiled",
+    "brown lentil plain",
+    "kali masoor plain",
+    "sabut masur dal",
+    "साबुत मसूर"
+   ],
+   "cat": "dal",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 67,
+   "p": 4.9,
+   "c": 10.7,
+   "f": 0.1,
+   "fib": 3.7,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe; cross-check: IFCT B014 lentil whole 299; INDB ASC157 whole masoor 54",
+   "conf": "medium",
+   "note": "boiled with salt and turmeric only; whole brown lentil, ~22 g dry per 100 g cooked"
+  },
+  {
+   "slug": "sabut-urad-plain-boiled",
+   "name": "Sabut Urad Dal (Black Whole), Plain Boiled",
+   "hi": "साबुत उड़द (काली दाल), सादी उबली",
+   "alias": [
+    "whole urad dal boiled",
+    "kali dal plain",
+    "black gram whole plain",
+    "sabut urad daal",
+    "काली उड़द दाल"
+   ],
+   "cat": "dal",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 66,
+   "p": 4.8,
+   "c": 9.7,
+   "f": 0.3,
+   "fib": 4.5,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe; cross-check: IFCT B004 black gram whole 291; INDB ASC159 whole urad 54",
+   "conf": "medium",
+   "note": "boiled with salt only, no tadka, no butter; ~22 g dry per 100 g cooked"
+  },
+  {
+   "slug": "moong-dal-chilka-plain-boiled",
+   "name": "Moong Dal Chilka (Split Green with Skin), Plain Boiled",
+   "hi": "मूंग दाल छिलका, सादी उबली",
+   "alias": [
+    "moong chilka dal boiled",
+    "chilka moong plain",
+    "split green moong plain",
+    "green split moong dal",
+    "छिलके वाली मूंग दाल"
+   ],
+   "cat": "dal",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 69,
+   "p": 5.1,
+   "c": 10.9,
+   "f": 0.3,
+   "fib": 2.9,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "boiled with salt and turmeric only; ~22 g dry per 100 g cooked"
+  },
+  {
+   "slug": "dal-everyday-home-style",
+   "name": "Dal, Everyday Home Style",
+   "hi": "दाल (रोज़ की घरेलू)",
+   "alias": [
+    "daal",
+    "dhal",
+    "dahl",
+    "ghar ki dal",
+    "roz ki dal",
+    "dal cooked",
+    "simple dal",
+    "दाल",
+    "साधारण दाल"
+   ],
+   "cat": "dal",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 102,
+   "p": 4.9,
+   "c": 11.9,
+   "f": 3.6,
+   "fib": 2.2,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "core": true,
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe; cross-check: NIN/IFCT standard recipe; INDB ASC155 mixed dal 62, ASC167 sambar 97",
+   "conf": "medium",
+   "note": "typical thin home dal (mostly toor with a little moong/masoor), 1 tsp ghee tadka with a little onion-tomato per katori of 150 g"
+  },
+  {
+   "slug": "dal-tadka",
+   "name": "Dal Tadka",
+   "hi": "दाल तड़का",
+   "alias": [
+    "daal tadka",
+    "dhal tadka",
+    "tadka dal",
+    "toor dal tadka",
+    "arhar dal tadka",
+    "तड़का दाल",
+    "अरहर तड़का दाल"
+   ],
+   "cat": "dal",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 121,
+   "p": 5.4,
+   "c": 14.2,
+   "f": 4.5,
+   "fib": 2.6,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "core": true,
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe; cross-check: NIN standard recipe; dal tadka restaurant 120-150",
+   "conf": "medium",
+   "note": "home style: toor dal boiled medium-thick, tadka of ~2/3 tbsp oil/ghee, cumin, garlic, onion, tomato per 150 g katori (~6 g fat)"
+  },
+  {
+   "slug": "dal-fry-restaurant-style",
+   "name": "Dal Fry (Restaurant Style)",
+   "hi": "दाल फ्राई (रेस्टोरेंट स्टाइल)",
+   "alias": [
+    "daal fry",
+    "dhal fry",
+    "dal fry restaurant",
+    "restaurant dal fry",
+    "yellow dal fry",
+    "फ्राई दाल"
+   ],
+   "cat": "dal",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 147,
+   "p": 6,
+   "c": 15.1,
+   "f": 6.6,
+   "fib": 3.1,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "core": true,
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe; cross-check: NIN standard recipe + restaurant oil; INDB has no dal fry row",
+   "conf": "medium",
+   "note": "restaurant style: thicker toor+chana+moong dal, ~1 tbsp oil/ghee tadka with fried onion and tomato per 150 g katori (~9 g fat)"
+  },
+  {
+   "slug": "dhaba-dal-fry",
+   "name": "Dhaba Dal Fry",
+   "hi": "ढाबा दाल फ्राई",
+   "alias": [
+    "dhaba dal",
+    "dhaba daal fry",
+    "dhabe wali dal",
+    "punjabi dhaba dal",
+    "ढाबा दाल"
+   ],
+   "cat": "dal",
+   "region": "Punjab",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 165,
+   "p": 6.3,
+   "c": 15.8,
+   "f": 8.2,
+   "fib": 3.4,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe; cross-check: standard dhaba recipe; heavier than restaurant dal fry",
+   "conf": "medium",
+   "note": "dhaba style: thick mixed dal finished with a generous ghee tadka (~1.2 tbsp ghee per 150 g katori)"
+  },
+  {
+   "slug": "lasooni-dal-tadka",
+   "name": "Lasooni Dal Tadka (Garlic Dal)",
+   "hi": "लहसुनी दाल तड़का",
+   "alias": [
+    "lasuni dal",
+    "garlic dal tadka",
+    "lahsuni dal",
+    "lehsun dal",
+    "garlic dal fry",
+    "लहसुन दाल"
+   ],
+   "cat": "dal",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 129,
+   "p": 5.8,
+   "c": 14.7,
+   "f": 5,
+   "fib": 2.7,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "toor+moong dal with a heavy garlic tadka in ~2/3 tbsp oil per 150 g katori"
+  },
+  {
+   "slug": "moong-dal-tadka",
+   "name": "Moong Dal Tadka (Yellow)",
+   "hi": "मूंग दाल तड़का (पीली)",
+   "alias": [
+    "moong daal tadka",
+    "mung dal tadka",
+    "yellow moong dal fry",
+    "dhuli moong dal tadka",
+    "पीली मूंग दाल"
+   ],
+   "cat": "dal",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 108,
+   "p": 5.4,
+   "c": 12.3,
+   "f": 3.8,
+   "fib": 2.4,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "core": true,
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe; cross-check: IFCT B010; INDB ASC151 dhuli moong dal 50 is thinner",
+   "conf": "medium",
+   "note": "split yellow moong, light consistency, 1 tsp ghee tadka with cumin, garlic, onion, tomato per katori"
+  },
+  {
+   "slug": "sabut-moong-dal-tadka",
+   "name": "Sabut Moong Dal Tadka (Green Whole)",
+   "hi": "साबुत मूंग दाल तड़का (हरी)",
+   "alias": [
+    "whole moong dal tadka",
+    "green moong dal fry",
+    "hari moong dal",
+    "हरी मूंग दाल तड़का"
+   ],
+   "cat": "dal",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 94,
+   "p": 4.5,
+   "c": 9.6,
+   "f": 3.8,
+   "fib": 3.6,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe; cross-check: INDB BFP178 sabut moong dal with tadka 63 (thinner)",
+   "conf": "medium",
+   "note": "whole green moong, home style, ~1 tsp oil/ghee tadka per katori"
+  },
+  {
+   "slug": "moong-dal-chilka-tadka",
+   "name": "Moong Dal Chilka Tadka",
+   "hi": "मूंग दाल छिलका तड़का",
+   "alias": [
+    "chilka moong dal",
+    "moong chilka tadka",
+    "split green moong tadka",
+    "छिलके वाली मूंग दाल तड़का"
+   ],
+   "cat": "dal",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 98,
+   "p": 4.8,
+   "c": 10.5,
+   "f": 3.8,
+   "fib": 2.9,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "split green moong with skin, 1 tsp ghee tadka per katori"
+  },
+  {
+   "slug": "masoor-dal-tadka",
+   "name": "Masoor Dal Tadka (Red Lentil)",
+   "hi": "मसूर दाल तड़का (लाल)",
+   "alias": [
+    "masoor daal tadka",
+    "red lentil dal tadka",
+    "lal masoor dal tadka",
+    "masur dal fry",
+    "लाल मसूर दाल"
+   ],
+   "cat": "dal",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 107,
+   "p": 5.5,
+   "c": 12.3,
+   "f": 3.7,
+   "fib": 2.6,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "core": true,
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe; cross-check: IFCT B013 dry masoor dal 322",
+   "conf": "medium",
+   "note": "split red lentil, soft thin consistency, 1 tsp ghee/oil tadka with cumin, garlic, onion, tomato per katori"
+  },
+  {
+   "slug": "sabut-masoor-dal",
+   "name": "Sabut Masoor Dal (Brown Lentil Curry)",
+   "hi": "साबुत मसूर दाल (भूरी)",
+   "alias": [
+    "whole masoor dal tadka",
+    "brown lentil dal",
+    "kali masoor dal",
+    "sabut masur dal tadka",
+    "काली मसूर दाल"
+   ],
+   "cat": "dal",
+   "region": "Punjab",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 107,
+   "p": 5,
+   "c": 11.2,
+   "f": 4.2,
+   "fib": 3.9,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "Punjabi style whole masoor, ~1 tsp+ oil per katori with onion-tomato masala"
+  },
+  {
+   "slug": "urad-dal-tadka",
+   "name": "Urad Dal Tadka (White Split)",
+   "hi": "उड़द दाल तड़का (धुली)",
+   "alias": [
+    "urad daal tadka",
+    "dhuli urad dal fry",
+    "white urad dal tadka",
+    "black gram dal tadka"
+   ],
+   "cat": "dal",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 107,
+   "p": 5.3,
+   "c": 12,
+   "f": 3.9,
+   "fib": 2.9,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe; cross-check: INDB ASC152 dhuli urad dal 61 (thinner); IFCT B003",
+   "conf": "medium",
+   "note": "washed urad, thick and sticky, 1 tsp ghee tadka per katori"
+  },
+  {
+   "slug": "chana-dal-tadka",
+   "name": "Chana Dal Tadka",
+   "hi": "चना दाल तड़का",
+   "alias": [
+    "chana daal tadka",
+    "channa dal fry",
+    "chana dal fry",
+    "bengal gram dal tadka"
+   ],
+   "cat": "dal",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 122,
+   "p": 5.4,
+   "c": 12.1,
+   "f": 5.4,
+   "fib": 4,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "core": true,
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe; cross-check: INDB OSR142 channa dal 100; IFCT B001",
+   "conf": "medium",
+   "note": "boiled chana dal (needs ~25 g dry per 100 g to cook thick), ~2/3 tbsp oil tadka per katori"
+  },
+  {
+   "slug": "dal-palak",
+   "name": "Dal Palak (Spinach Dal)",
+   "hi": "दाल पालक",
+   "alias": [
+    "daal palak",
+    "palak dal",
+    "spinach dal",
+    "dal with spinach",
+    "palak toor dal",
+    "पालक दाल"
+   ],
+   "cat": "dal",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 110,
+   "p": 5.2,
+   "c": 12.6,
+   "f": 4,
+   "fib": 2.6,
+   "na": 335,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "core": true,
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe; cross-check: INDB BFP172 arhar dal aur palak 53 (thinner)",
+   "conf": "medium",
+   "note": "toor+moong dal cooked with chopped spinach, ~1 tsp oil tadka per katori"
+  },
+  {
+   "slug": "methi-dal",
+   "name": "Methi Dal (Fenugreek Leaves Dal)",
+   "hi": "मेथी दाल",
+   "alias": [
+    "methi daal",
+    "dal methi",
+    "fenugreek dal",
+    "methi toor dal",
+    "मेथी की दाल"
+   ],
+   "cat": "dal",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 110,
+   "p": 5.3,
+   "c": 12.4,
+   "f": 4,
+   "fib": 2.9,
+   "na": 335,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "toor+moong dal with fresh methi leaves, ~1 tsp oil tadka per katori"
+  },
+  {
+   "slug": "lauki-chana-dal",
+   "name": "Lauki Chana Dal (Bottle Gourd Dal)",
+   "hi": "लौकी चना दाल",
+   "alias": [
+    "dudhi chana dal",
+    "ghiya chana dal",
+    "lauki dal",
+    "bottle gourd dal",
+    "doodhi dal",
+    "लौकी दाल"
+   ],
+   "cat": "dal",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 80,
+   "p": 2.9,
+   "c": 6.8,
+   "f": 4.2,
+   "fib": 2.7,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe; cross-check: INDB ASC153 channa dal with ghiya 73",
+   "conf": "medium",
+   "note": "chana dal cooked with bottle gourd cubes, ~1 tsp oil tadka per katori"
+  },
+  {
+   "slug": "tomato-dal",
+   "name": "Tomato Dal (Tamatar Dal)",
+   "hi": "टमाटर दाल",
+   "alias": [
+    "tamatar dal",
+    "tamatar daal",
+    "tomato toor dal",
+    "dal with tomato",
+    "टमाटर वाली दाल"
+   ],
+   "cat": "dal",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 104,
+   "p": 4.7,
+   "c": 12,
+   "f": 3.9,
+   "fib": 2.3,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "toor+moong dal cooked with plenty of tomato, 1 tsp oil tadka per katori"
+  },
+  {
+   "slug": "khatti-dal",
+   "name": "Khatti Dal (Sour Dal)",
+   "hi": "खट्टी दाल",
+   "alias": [
+    "khatti daal",
+    "sour dal",
+    "imli dal",
+    "amchur dal",
+    "tamarind dal north",
+    "खट्टी मीठी दाल"
+   ],
+   "cat": "dal",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 85,
+   "p": 3.3,
+   "c": 10.1,
+   "f": 3.3,
+   "fib": 1.7,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe; cross-check: INDB BFP170 sour lentils 35 (very thin); this is a tadka version",
+   "conf": "medium",
+   "note": "thin toor dal soured with tamarind/amchur, 1 tsp oil tadka per katori"
+  },
+  {
+   "slug": "sookhi-moong-dal",
+   "name": "Sookhi Moong Dal (Dry Yellow Moong)",
+   "hi": "सूखी मूंग दाल",
+   "alias": [
+    "dry moong dal",
+    "sukhi moong dal",
+    "moong dal sabzi",
+    "sookhi dal",
+    "dry dal fry",
+    "मूंग दाल सूखी"
+   ],
+   "cat": "dal",
+   "region": "Rajasthan",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 156,
+   "p": 8.3,
+   "c": 18.6,
+   "f": 5,
+   "fib": 3.5,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "cooked dry (little water), served as a side with roti; ~1 tbsp oil per 150 g katori"
+  },
+  {
+   "slug": "dal-makhani-home-style",
+   "name": "Dal Makhani (Home Style)",
+   "hi": "दाल मखनी (घर की)",
+   "alias": [
+    "daal makhani",
+    "dhal makhani",
+    "dal makhni",
+    "kali dal makhani",
+    "maa ki dal makhani",
+    "दाल मखनी घर की"
+   ],
+   "cat": "dal",
+   "region": "Punjab",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 108,
+   "p": 4.1,
+   "c": 8.8,
+   "f": 5.9,
+   "fib": 3.9,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe; cross-check: INDB ASC160 Moti Mahal dal 103, OSR139 dal makhani 74 (too low for a butter dal)",
+   "conf": "medium",
+   "note": "home style: slow-cooked whole urad + a little rajma, ~1.5 tsp butter + 1 tsp cream per katori, thick but not rich"
+  },
+  {
+   "slug": "dal-makhani-restaurant",
+   "name": "Dal Makhani (Restaurant Style)",
+   "hi": "दाल मखनी (रेस्टोरेंट स्टाइल)",
+   "alias": [
+    "daal makhani restaurant",
+    "dal makhani with cream",
+    "butter dal makhani",
+    "restaurant dal makhni",
+    "रेस्टोरेंट दाल मखनी",
+    "मखनी दाल"
+   ],
+   "cat": "dal",
+   "region": "Punjab",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 157,
+   "p": 4.6,
+   "c": 9.7,
+   "f": 10.7,
+   "fib": 4.2,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "core": true,
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe; cross-check: calibrated to published restaurant values (150-190 kcal/100 g); INDB 74-103 too low",
+   "conf": "medium",
+   "note": "restaurant style: ~1.2 tbsp butter and 2 tbsp cream per 150 g katori, simmered for hours"
+  },
+  {
+   "slug": "amritsari-dal",
+   "name": "Amritsari Dal (Maa Chole Di Dal)",
+   "hi": "अमृतसरी दाल",
+   "alias": [
+    "amritsari daal",
+    "maa chole di dal",
+    "amritsari maa ki dal",
+    "dal amritsari",
+    "अमृतसरी माँ की दाल"
+   ],
+   "cat": "dal",
+   "region": "Punjab",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 116,
+   "p": 4,
+   "c": 8.8,
+   "f": 6.8,
+   "fib": 3.7,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe; cross-check: INDB ASC160 Moti Mahal dal 103 is the lighter version",
+   "conf": "medium",
+   "note": "whole urad + chana dal with butter and ghee tadka, ginger-garlic masala; thick dhaba style"
+  },
+  {
+   "slug": "maa-ki-dal",
+   "name": "Maa Ki Dal (Punjabi Whole Urad Dal)",
+   "hi": "माँ की दाल",
+   "alias": [
+    "maa di dal",
+    "ma ki dal",
+    "kali dal punjabi",
+    "punjabi urad dal",
+    "whole urad dal tadka",
+    "काली दाल पंजाबी"
+   ],
+   "cat": "dal",
+   "region": "Punjab",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 91,
+   "p": 4.2,
+   "c": 8.9,
+   "f": 3.9,
+   "fib": 4.1,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe; cross-check: INDB OSR155 maa chaane ki dal 345 is a dry-weight row, not usable",
+   "conf": "medium",
+   "note": "home style whole black urad, ~1 tsp oil/ghee tadka per katori"
+  },
+  {
+   "slug": "langar-dal",
+   "name": "Langar Dal (Gurdwara Style)",
+   "hi": "लंगर दाल",
+   "alias": [
+    "gurudwara dal",
+    "langar wali dal",
+    "langar ki dal",
+    "gurdwara langar dal",
+    "लंगर की दाल"
+   ],
+   "cat": "dal",
+   "region": "Punjab",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 98,
+   "p": 4.9,
+   "c": 10.6,
+   "f": 3.6,
+   "fib": 3.6,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "mixed black urad, chana dal and moong, cooked soft; simple oil tadka (~1 tsp per katori)"
+  },
+  {
+   "slug": "mixed-dal-panchratna",
+   "name": "Mixed Dal (Panchratna, 5-Dal)",
+   "hi": "मिक्स दाल (पंचरत्न)",
+   "alias": [
+    "panchratna dal",
+    "five dal mix",
+    "dal 5",
+    "mixed daal",
+    "mix dal tadka",
+    "पंचरत्न दाल",
+    "मिश्रित दाल"
+   ],
+   "cat": "dal",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 120,
+   "p": 5.7,
+   "c": 13.3,
+   "f": 4.5,
+   "fib": 2.9,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe; cross-check: INDB ASC155 mixed dal 62, OSR144 panchmel 111",
+   "conf": "medium",
+   "note": "equal parts toor, moong, masoor, chana and urad dal; ~1.3 tsp ghee tadka per katori"
+  },
+  {
+   "slug": "chole-masala-punjabi",
+   "name": "Chole Masala (Punjabi, Home Style)",
+   "hi": "छोले मसाला (पंजाबी, घर का)",
+   "alias": [
+    "chana masala",
+    "chole",
+    "chhole",
+    "chola masala",
+    "kabuli chana masala",
+    "punjabi chole",
+    "छोले",
+    "चना मसाला"
+   ],
+   "cat": "dal",
+   "region": "Punjab",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 129,
+   "p": 4.8,
+   "c": 13.3,
+   "f": 5.9,
+   "fib": 3.6,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "core": true,
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe; cross-check: INDB ASC162 chickpea curry 163 (more oil); lab dry chickpea ~340 kcal",
+   "conf": "medium",
+   "note": "home style: boiled kabuli chana in onion-tomato masala, ~1 tbsp oil per 150 g katori (~7 g fat)"
+  },
+  {
+   "slug": "chole-dhaba-restaurant",
+   "name": "Chole (Dhaba / Restaurant Style)",
+   "hi": "छोले (ढाबा / रेस्टोरेंट स्टाइल)",
+   "alias": [
+    "restaurant chole",
+    "dhaba chole",
+    "chole masala restaurant",
+    "oily chole",
+    "छोले ढाबा"
+   ],
+   "cat": "dal",
+   "region": "Punjab",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 167,
+   "p": 5.1,
+   "c": 14.3,
+   "f": 9.5,
+   "fib": 4,
+   "na": 335,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "restaurant style: ~1.7 tbsp oil/ghee per 150 g katori, thicker masala"
+  },
+  {
+   "slug": "chole-for-bhature-delhi",
+   "name": "Chole for Bhature (Delhi Style)",
+   "hi": "छोले (भटूरे वाले, दिल्ली)",
+   "alias": [
+    "chole bhature chole",
+    "delhi chole",
+    "chhole bhature filling",
+    "chole bhature gravy",
+    "भटूरे के छोले"
+   ],
+   "cat": "dal",
+   "region": "Delhi",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 150,
+   "p": 5.2,
+   "c": 14.2,
+   "f": 7.5,
+   "fib": 3.9,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "dark spiced Delhi chole (tea/amla colour, amchur), ~1.3 tbsp oil per 150 g katori; the bhature are NOT included"
+  },
+  {
+   "slug": "amritsari-chole",
+   "name": "Amritsari Chole",
+   "hi": "अमृतसरी छोले",
+   "alias": [
+    "amritsari chana masala",
+    "amritsari chhole",
+    "amritsari kulcha chole",
+    "अमृतसरी चना"
+   ],
+   "cat": "dal",
+   "region": "Punjab",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 159,
+   "p": 5.3,
+   "c": 14.4,
+   "f": 8.5,
+   "fib": 4,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "Amritsari style: dark, tangy chole finished with ghee, ~1.5 tbsp fat per 150 g katori"
+  },
+  {
+   "slug": "pindi-chana",
+   "name": "Pindi Chana (Pindi Chole)",
+   "hi": "पिंडी चना",
+   "alias": [
+    "pindi chole",
+    "rawalpindi chole",
+    "dry chole",
+    "sukha chole",
+    "पिंडी छोले"
+   ],
+   "cat": "dal",
+   "region": "Punjab",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 146,
+   "p": 5.6,
+   "c": 15,
+   "f": 6.7,
+   "fib": 4.1,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "semi-dry Rawalpindi style chole (little gravy, anardana, no tomato base), ~1 tbsp oil per 150 g"
+  },
+  {
+   "slug": "chana-curry-low-oil-light",
+   "name": "Chana Curry, Light (Low-Oil Safed Chana)",
+   "hi": "चना करी (कम तेल, हल्की)",
+   "alias": [
+    "safed chana curry",
+    "kabuli chana curry light",
+    "low oil chole",
+    "light chole",
+    "healthy chole",
+    "कम तेल के छोले"
+   ],
+   "cat": "dal",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 96,
+   "p": 4.2,
+   "c": 11.5,
+   "f": 3.4,
+   "fib": 3,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe; cross-check: INDB BFP185 kabuli channa curry 69 (very thin)",
+   "conf": "medium",
+   "note": "diet version: ~1/2 tbsp oil per 150 g katori, thin tomato gravy"
+  },
+  {
+   "slug": "kala-chana-curry",
+   "name": "Kala Chana Curry (Black Chickpea)",
+   "hi": "काला चना करी",
+   "alias": [
+    "kale chane ki sabzi",
+    "kala chana masala",
+    "black chana curry",
+    "kala chana gravy",
+    "काले चने की सब्ज़ी"
+   ],
+   "cat": "dal",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 113,
+   "p": 4.2,
+   "c": 9.7,
+   "f": 5.8,
+   "fib": 5.9,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe; cross-check: INDB ASC161 black channa curry 141",
+   "conf": "medium",
+   "note": "home style gravy, ~1 tbsp oil per 150 g katori"
+  },
+  {
+   "slug": "kala-chana-sookha",
+   "name": "Kala Chana, Dry (Sookha Kala Chana)",
+   "hi": "सूखा काला चना",
+   "alias": [
+    "sukha kala chana",
+    "kala chana dry",
+    "ashtami kala chana",
+    "dry black chana",
+    "काला चना सूखा"
+   ],
+   "cat": "dal",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 124,
+   "p": 5.9,
+   "c": 12.5,
+   "f": 4.7,
+   "fib": 8.1,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "boiled and tossed dry with ~2 tsp oil per 150 g (also the Ashtami prasad style chana)"
+  },
+  {
+   "slug": "rajma-masala-punjabi",
+   "name": "Rajma Masala (Punjabi, Home Style)",
+   "hi": "राजमा मसाला (पंजाबी, घर का)",
+   "alias": [
+    "rajma",
+    "rajmah",
+    "rajma curry",
+    "kidney bean curry",
+    "rajma chawal rajma",
+    "राजमा",
+    "लाल राजमा"
+   ],
+   "cat": "dal",
+   "region": "Punjab",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 122,
+   "p": 4.8,
+   "c": 12.9,
+   "f": 5.1,
+   "fib": 4.7,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "core": true,
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe; cross-check: INDB ASC165 rajmah curry 144",
+   "conf": "medium",
+   "note": "home style: ~1 tbsp oil per 150 g katori, thick onion-tomato gravy; the rice is NOT included"
+  },
+  {
+   "slug": "rajma-restaurant-style",
+   "name": "Rajma (Restaurant / Dhaba Style)",
+   "hi": "राजमा (रेस्टोरेंट / ढाबा स्टाइल)",
+   "alias": [
+    "restaurant rajma",
+    "dhaba rajma",
+    "butter rajma",
+    "rajma masala restaurant",
+    "राजमा ढाबा"
+   ],
+   "cat": "dal",
+   "region": "Punjab",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 150,
+   "p": 5,
+   "c": 13.2,
+   "f": 8.1,
+   "fib": 4.9,
+   "na": 335,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "restaurant style: ~1.4 tbsp oil/butter + a little cream per 150 g katori"
+  },
+  {
+   "slug": "lobia-masala-punjabi",
+   "name": "Lobia Masala (Black-Eyed Pea Curry)",
+   "hi": "लोबिया मसाला",
+   "alias": [
+    "lobia curry",
+    "lobhia masala",
+    "chawli masala",
+    "black eyed peas curry",
+    "rongi curry",
+    "लोबिया करी",
+    "चवली"
+   ],
+   "cat": "dal",
+   "region": "Punjab",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 117,
+   "p": 4.5,
+   "c": 12.7,
+   "f": 5,
+   "fib": 3.2,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe; cross-check: INDB ASC163 lobia curry 149",
+   "conf": "medium",
+   "note": "home style: ~1 tbsp oil per 150 g katori"
+  },
+  {
+   "slug": "kadhi-pakora-punjabi",
+   "name": "Kadhi Pakora (Punjabi)",
+   "hi": "कढ़ी पकोड़ा (पंजाबी)",
+   "alias": [
+    "punjabi kadhi",
+    "kadhi pakoda",
+    "kadhi pakode",
+    "karhi pakora",
+    "karhi",
+    "kadi pakora",
+    "पंजाबी कढ़ी",
+    "कढ़ी"
+   ],
+   "cat": "dal",
+   "region": "Punjab",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 96,
+   "p": 2.1,
+   "c": 4,
+   "f": 7.9,
+   "fib": 0.9,
+   "na": 340,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "core": true,
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe; cross-check: INDB ASC168 besan kadhi with pakodies 403 is a gross error (excess oil); ~115 is realistic",
+   "conf": "medium",
+   "note": "besan-curd gravy with 3-4 pakoras per katori (~4 g oil absorbed in frying per 100 g) plus a little tadka oil"
+  },
+  {
+   "slug": "kadhi-plain-no-pakora",
+   "name": "Kadhi, Plain (without Pakora)",
+   "hi": "सादी कढ़ी (बिना पकोड़े)",
+   "alias": [
+    "plain kadhi",
+    "dahi kadhi",
+    "curd kadhi",
+    "besan kadhi plain",
+    "sada kadhi",
+    "सादा कढ़ी"
+   ],
+   "cat": "dal",
+   "region": "North India",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 59,
+   "p": 2.1,
+   "c": 3.7,
+   "f": 3.9,
+   "fib": 0.8,
+   "na": 335,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "besan + sour curd, thin-medium, 1 tsp oil tadka (no pakora)"
+  },
+  {
+   "slug": "gujarati-kadhi",
+   "name": "Gujarati Kadhi (Sweet-Sour)",
+   "hi": "गुजराती कढ़ी",
+   "alias": [
+    "gujarati karhi",
+    "meethi kadhi",
+    "sweet kadhi",
+    "gujju kadhi",
+    "गुजराती कढ़ी मीठी"
+   ],
+   "cat": "dal",
+   "region": "Gujarat",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 56,
+   "p": 1.7,
+   "c": 4.9,
+   "f": 3.2,
+   "fib": 0.6,
+   "na": 335,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "thin, no pakora; 1 cup curd + 3 cups water, a little sugar and ghee tadka (~1/2 tsp ghee per katori)"
+  },
+  {
+   "slug": "rajasthani-kadhi",
+   "name": "Rajasthani Kadhi",
+   "hi": "राजस्थानी कढ़ी",
+   "alias": [
+    "rajasthani karhi",
+    "marwari kadhi",
+    "rajasthani kadi",
+    "राजस्थानी कढ़ी"
+   ],
+   "cat": "dal",
+   "region": "Rajasthan",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 65,
+   "p": 2.2,
+   "c": 3.9,
+   "f": 4.4,
+   "fib": 1.1,
+   "na": 340,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "thicker, spicy (red chilli, hing), no sugar, ghee tadka; no pakora"
+  },
+  {
+   "slug": "sindhi-kadhi",
+   "name": "Sindhi Kadhi",
+   "hi": "सिंधी कढ़ी",
+   "alias": [
+    "sindhi karhi",
+    "sindhi kadi",
+    "sindhi besan kadhi",
+    "सिंधी कढ़ी"
+   ],
+   "cat": "dal",
+   "region": "West India",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 59,
+   "p": 1.7,
+   "c": 4.7,
+   "f": 3.5,
+   "fib": 1.6,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "besan roux in water with tamarind (no curd), okra/drumstick/potato, ~2/3 tsp oil per katori"
+  },
+  {
+   "slug": "haryanvi-kadhi",
+   "name": "Haryanvi Kadhi",
+   "hi": "हरियाणवी कढ़ी",
+   "alias": [
+    "haryanvi karhi",
+    "haryana kadhi pakora",
+    "bajre ki kadhi",
+    "हरियाणवी कढ़ी"
+   ],
+   "cat": "dal",
+   "region": "Haryana",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 92,
+   "p": 2.4,
+   "c": 4.5,
+   "f": 7,
+   "fib": 1,
+   "na": 340,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "thick buttermilk kadhi with pakoras, ghee/oil tadka"
+  },
+  {
+   "slug": "kadhi-bari-bihari",
+   "name": "Kadhi Bari (Bihari)",
+   "hi": "कढ़ी बड़ी (बिहारी)",
+   "alias": [
+    "bihari kadhi",
+    "kadhi badi",
+    "kadhi bari",
+    "kadi bari bihar",
+    "बिहारी कढ़ी बड़ी"
+   ],
+   "cat": "dal",
+   "region": "Bihar",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 93,
+   "p": 2.2,
+   "c": 4.2,
+   "f": 7.4,
+   "fib": 0.9,
+   "na": 340,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "besan-curd kadhi with fried besan bari (dumplings), ~3 tsp oil per katori"
+  },
+  {
+   "slug": "gujarati-dal-sweet-sour",
+   "name": "Gujarati Dal (Sweet-Sour)",
+   "hi": "गुजराती दाल (मीठी-खट्टी)",
+   "alias": [
+    "gujarati daal",
+    "gujarati toor dal",
+    "meethi dal",
+    "khatti meethi dal",
+    "sweet and sour dal",
+    "गुजराती दाल"
+   ],
+   "cat": "dal",
+   "region": "Gujarat",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 88,
+   "p": 3.9,
+   "c": 11,
+   "f": 3,
+   "fib": 1.8,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "thin toor dal with a little jaggery, kokum/tamarind, peanuts; ~1/2 tsp ghee tadka per katori"
+  },
+  {
+   "slug": "dal-dhokli",
+   "name": "Dal Dhokli (Gujarati)",
+   "hi": "दाल ढोकली",
+   "alias": [
+    "daal dhokli",
+    "dal dhokali",
+    "dhokli nu shaak",
+    "varan phal",
+    "दाल ढोकली गुजराती"
+   ],
+   "cat": "dal",
+   "region": "Gujarat",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 110,
+   "p": 4,
+   "c": 14.1,
+   "f": 3.9,
+   "fib": 2.7,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe; cross-check: INDB OSR145 dal dhokli 69 is a thinner version",
+   "conf": "medium",
+   "note": "one-pot toor dal with wheat dhokli pieces (~12 g flour per 100 g), peanuts, jaggery; thick home version"
+  },
+  {
+   "slug": "mag-nu-shaak-gujarati",
+   "name": "Mag Nu Shaak (Gujarati Whole Moong Curry)",
+   "hi": "मग नु शाक (गुजराती मूंग)",
+   "alias": [
+    "mag ni dal shaak",
+    "gujarati moong curry",
+    "mag nu saak",
+    "whole moong gujarati",
+    "गुजराती मूंग की सब्ज़ी"
+   ],
+   "cat": "dal",
+   "region": "Gujarat",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 83,
+   "p": 3.8,
+   "c": 8.7,
+   "f": 3.3,
+   "fib": 3.2,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "boiled whole moong in a light onion-tomato gravy, ~2/3 tsp oil per katori"
+  },
+  {
+   "slug": "chora-nu-shaak-gujarati",
+   "name": "Chora Nu Shaak (Gujarati Black-Eyed Pea Curry)",
+   "hi": "चोरा नु शाक (गुजराती लोबिया)",
+   "alias": [
+    "chora shaak",
+    "chola nu shaak",
+    "gujarati lobia curry",
+    "gujarati chawli",
+    "चोरा का शाक"
+   ],
+   "cat": "dal",
+   "region": "Gujarat",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 95,
+   "p": 3.7,
+   "c": 10.7,
+   "f": 3.9,
+   "fib": 2.5,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "low",
+   "note": "black-eyed peas in a mildly sweet gravy, ~1 tsp oil per katori"
+  },
+  {
+   "slug": "varan-maharashtrian",
+   "name": "Varan (Maharashtrian Plain Toor Dal)",
+   "hi": "वरण (महाराष्ट्रीय तूर दाल)",
+   "alias": [
+    "varan dal",
+    "maharashtrian varan",
+    "varan bhaat dal",
+    "toor dal varan",
+    "वरण"
+   ],
+   "cat": "dal",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 80,
+   "p": 4.6,
+   "c": 11.6,
+   "f": 1.5,
+   "fib": 1.9,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "plain mashed toor dal with salt, turmeric, hing; a spoon of ghee on top (~1/2 tsp per katori)"
+  },
+  {
+   "slug": "amti-maharashtrian",
+   "name": "Amti (Maharashtrian Dal)",
+   "hi": "आमटी (महाराष्ट्रीय दाल)",
+   "alias": [
+    "aamti",
+    "dalichi amti",
+    "goda masala dal",
+    "maharashtrian amti dal",
+    "आमटी दाल"
+   ],
+   "cat": "dal",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 79,
+   "p": 2.9,
+   "c": 8.7,
+   "f": 3.4,
+   "fib": 1.6,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "thin toor dal with goda masala, jaggery, kokum/tamarind and a little coconut; ~2/3 tsp oil per katori"
+  },
+  {
+   "slug": "katachi-amti",
+   "name": "Katachi Amti (Puran Poli Amti)",
+   "hi": "कटाची आमटी",
+   "alias": [
+    "kataachi amti",
+    "katachi aamti",
+    "puranpoli amti",
+    "chana dal kat amti",
+    "कटाची आमटी"
+   ],
+   "cat": "dal",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 59,
+   "p": 1.2,
+   "c": 4,
+   "f": 4.1,
+   "fib": 1.4,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "low",
+   "note": "thin spicy curry made from the chana dal cooking water with coconut-onion paste and goda masala"
+  },
+  {
+   "slug": "matki-usal",
+   "name": "Matki Usal (Sprouted Moth Bean Curry)",
+   "hi": "मटकी उसळ",
+   "alias": [
+    "matki chi usal",
+    "mataki usal",
+    "moth bean usal",
+    "sprouted matki curry",
+    "मटकीची उसळ"
+   ],
+   "cat": "dal",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 104,
+   "p": 3.6,
+   "c": 9.7,
+   "f": 5.3,
+   "fib": 3.3,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "sprouted matki (moth bean), semi-dry; ~1 tbsp oil per 150 g katori with onion-tomato-coconut masala"
+  },
+  {
+   "slug": "misal-kat-tarri",
+   "name": "Misal Kat (Tarri / Rassa)",
+   "hi": "मिसळ कट (तर्री)",
+   "alias": [
+    "misal tarri",
+    "misal rassa",
+    "misal kat",
+    "kolhapuri kat",
+    "usal gravy",
+    "misal curry",
+    "तर्री रस्सा"
+   ],
+   "cat": "dal",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 54,
+   "p": 0.5,
+   "c": 1.5,
+   "f": 5,
+   "fib": 1.1,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "the thin spicy red gravy poured over usal for misal pav; the usal, farsan and pav are NOT included"
+  },
+  {
+   "slug": "chavli-usal",
+   "name": "Chavli Usal (Maharashtrian Lobia)",
+   "hi": "चवळी उसळ",
+   "alias": [
+    "chavli chi usal",
+    "chawli usal",
+    "lobia usal",
+    "black eyed pea usal",
+    "चवळीची उसळ"
+   ],
+   "cat": "dal",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 103,
+   "p": 3.8,
+   "c": 10.6,
+   "f": 4.7,
+   "fib": 2.8,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "boiled lobia in coconut-onion masala, ~1 tsp oil per katori"
+  },
+  {
+   "slug": "val-usal-birda",
+   "name": "Val Usal (Birda, Field Bean Curry)",
+   "hi": "वाल उसळ (बिरडं)",
+   "alias": [
+    "vaal usal",
+    "birda",
+    "valache birde",
+    "field bean curry maharashtra",
+    "वालाची उसळ"
+   ],
+   "cat": "dal",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 95,
+   "p": 3.4,
+   "c": 7.9,
+   "f": 5.1,
+   "fib": 4.3,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "peeled val (field bean) birda in coconut-goda masala gravy, ~1 tsp oil per katori"
+  },
+  {
+   "slug": "ragda-white-pea-curry",
+   "name": "Ragda (White Pea Curry)",
+   "hi": "रगडा (सफेद मटर)",
+   "alias": [
+    "ragda patties ragda",
+    "white pea ragda",
+    "mumbai ragda",
+    "safed vatana ragda",
+    "रगडा"
+   ],
+   "cat": "dal",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 78,
+   "p": 3.5,
+   "c": 8.7,
+   "f": 2.9,
+   "fib": 3.2,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "mashed-ish dried white peas in thin spiced gravy as used for ragda pattice; the patties are NOT included"
+  },
+  {
+   "slug": "takachi-kadhi-maharashtrian",
+   "name": "Takachi Kadhi (Maharashtrian Buttermilk Kadhi)",
+   "hi": "ताकाची कढी",
+   "alias": [
+    "maharashtrian kadhi",
+    "takachi karhi",
+    "taak kadhi",
+    "buttermilk kadhi",
+    "ताकाची कढी"
+   ],
+   "cat": "dal",
+   "region": "Maharashtra",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 51,
+   "p": 1.7,
+   "c": 3.9,
+   "f": 3.1,
+   "fib": 0.6,
+   "na": 335,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "thin, mildly tangy kadhi with a little besan and sugar, ~3/4 tsp ghee tadka per katori"
+  },
+  {
+   "slug": "dalitoy-goan",
+   "name": "Dalitoy (Goan Toor Dal)",
+   "hi": "डालिटॉय (गोअन दाल)",
+   "alias": [
+    "dali toi",
+    "goan dal",
+    "goan dalitoi",
+    "dalitoi",
+    "गोवा दाल"
+   ],
+   "cat": "dal",
+   "region": "Goa",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 65,
+   "p": 2.8,
+   "c": 7.8,
+   "f": 2.4,
+   "fib": 1.5,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "low",
+   "note": "thin Goan toor dal with a little coconut, tamarind and garlic tadka, ~1/2 tsp oil per katori"
+  },
+  {
+   "slug": "chana-ross-goan",
+   "name": "Chana Ross (Goan Chickpea Gravy)",
+   "hi": "चना रस्सा (गोअन)",
+   "alias": [
+    "chana ros",
+    "goan chana curry",
+    "goan chickpea curry",
+    "ross gravy chana",
+    "गोवा चना करी"
+   ],
+   "cat": "dal",
+   "region": "Goa",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 96,
+   "p": 3,
+   "c": 8,
+   "f": 5.5,
+   "fib": 2.7,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "low",
+   "note": "chickpeas in a thin coconut-based Goan gravy, ~2/3 tbsp oil/coconut fat per katori"
+  },
+  {
+   "slug": "panchmel-dal-rajasthani",
+   "name": "Panchmel Dal (Rajasthani)",
+   "hi": "पंचमेल दाल (राजस्थानी)",
+   "alias": [
+    "panchmel daal",
+    "panchratna dal rajasthani",
+    "dal baati dal",
+    "rajasthani dal",
+    "panchmail dal",
+    "पंचमेल दाल"
+   ],
+   "cat": "dal",
+   "region": "Rajasthan",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 132,
+   "p": 5.9,
+   "c": 13.7,
+   "f": 5.6,
+   "fib": 3.2,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe; cross-check: INDB OSR144 panchmel dal 111",
+   "conf": "medium",
+   "note": "five dals with a ghee-rich red-chilli tadka (~1.5 tsp ghee per katori), served with baati"
+  },
+  {
+   "slug": "moth-ki-dal",
+   "name": "Moth Ki Dal (Rajasthani)",
+   "hi": "मोठ की दाल (राजस्थानी)",
+   "alias": [
+    "moth dal",
+    "moth daal",
+    "matki dal",
+    "moth bean dal",
+    "मोठ दाल"
+   ],
+   "cat": "dal",
+   "region": "Rajasthan",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 98,
+   "p": 4.3,
+   "c": 11.6,
+   "f": 3.4,
+   "fib": 3.5,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe; cross-check: INDB ASC158 whole moth 55 (thinner)",
+   "conf": "medium",
+   "note": "split moth bean dal, thick, ghee tadka ~2/3 tsp per katori"
+  },
+  {
+   "slug": "malwa-dal-bafla",
+   "name": "Malwa Dal (Dal for Bafla)",
+   "hi": "मालवा दाल (दाल बाफला वाली)",
+   "alias": [
+    "dal bafla dal",
+    "malwi dal",
+    "mp dal bafla",
+    "malwa ki dal",
+    "मालवी दाल"
+   ],
+   "cat": "dal",
+   "region": "Madhya Pradesh",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 107,
+   "p": 4.5,
+   "c": 11.8,
+   "f": 4.4,
+   "fib": 2.2,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "toor dal with ghee-garlic tadka served over bafla; the bafla is NOT included"
+  },
+  {
+   "slug": "kaddu-dal-bihari",
+   "name": "Kaddu Dal (Bihari Pumpkin Chana Dal)",
+   "hi": "कद्दू दाल (बिहारी)",
+   "alias": [
+    "kaddu ki dal",
+    "pumpkin dal",
+    "kaddu chana dal",
+    "bihari kaddu dal",
+    "कद्दू की दाल"
+   ],
+   "cat": "dal",
+   "region": "Bihar",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 75,
+   "p": 2.5,
+   "c": 6.2,
+   "f": 4.1,
+   "fib": 2.4,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "chana dal cooked with pumpkin cubes, ~1 tsp oil tadka per katori"
+  },
+  {
+   "slug": "chana-madra-himachali",
+   "name": "Chana Madra (Himachali)",
+   "hi": "चना मदरा (हिमाचली)",
+   "alias": [
+    "chana madhra",
+    "chickpea madra",
+    "himachali chana",
+    "chamba madra",
+    "चने का मदरा"
+   ],
+   "cat": "dal",
+   "region": "Himachal Pradesh",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 109,
+   "p": 4.1,
+   "c": 10.2,
+   "f": 5.5,
+   "fib": 2.6,
+   "na": 335,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "boiled chickpeas cooked in curd and ghee with whole spices (dham style), ~1 tsp+ ghee per katori"
+  },
+  {
+   "slug": "gahat-ki-dal-kumaoni",
+   "name": "Gahat Ki Dal (Kumaoni Horse Gram Dal)",
+   "hi": "गहत की दाल (कुमाऊँनी)",
+   "alias": [
+    "kulthi dal",
+    "gahat dal",
+    "kulth dal",
+    "horse gram dal",
+    "pahadi gahat",
+    "कुलथ की दाल"
+   ],
+   "cat": "dal",
+   "region": "Uttarakhand",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 82,
+   "p": 3.6,
+   "c": 9.6,
+   "f": 3.2,
+   "fib": 1.5,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe; cross-check: INDB OSR143 horsegram dal 56 (thinner)",
+   "conf": "medium",
+   "note": "boiled horse gram dal with ghee/oil tadka (jakhya or hing), ~2/3 tsp fat per katori"
+  },
+  {
+   "slug": "bhatt-ki-churkani",
+   "name": "Bhatt Ki Churkani (Garhwali Black Soybean Curry)",
+   "hi": "भट्ट की चुरकानी",
+   "alias": [
+    "bhatt churkani",
+    "bhatt ki dal",
+    "bhat ki churkani",
+    "black soybean curry",
+    "garhwali churkani",
+    "भट्ट की दाल"
+   ],
+   "cat": "dal",
+   "region": "Uttarakhand",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 80,
+   "p": 3.7,
+   "c": 1.9,
+   "f": 6.1,
+   "fib": 2.5,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "low",
+   "note": "roasted ground black bhatt cooked into a thick gravy, ~1 tsp oil per katori"
+  },
+  {
+   "slug": "chainsoo-garhwali",
+   "name": "Chainsoo (Garhwali Black Dal)",
+   "hi": "चैंसू (गढ़वाली)",
+   "alias": [
+    "chaisu",
+    "chainsu",
+    "chainsoo dal",
+    "garhwali chainsoo",
+    "bhatt chainsoo",
+    "चैसू"
+   ],
+   "cat": "dal",
+   "region": "Uttarakhand",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 86,
+   "p": 4.4,
+   "c": 1.9,
+   "f": 6.4,
+   "fib": 2.8,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "low",
+   "note": "roasted and ground black bhatt dal cooked thick in iron kadhai, ~1 tsp oil per katori"
+  },
+  {
+   "slug": "pahadi-rajma-chitra",
+   "name": "Pahadi Rajma (Chitra Rajma)",
+   "hi": "पहाड़ी राजमा (चित्रा)",
+   "alias": [
+    "chitra rajma",
+    "uttarakhand rajma",
+    "pahari rajma",
+    "garhwali rajma",
+    "पहाड़ी राजमा"
+   ],
+   "cat": "dal",
+   "region": "Uttarakhand",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 93,
+   "p": 3.8,
+   "c": 9.7,
+   "f": 4,
+   "fib": 3.6,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "light pahadi rajma, simpler gravy than the Punjabi masala, ~1 tsp oil per katori"
+  },
+  {
+   "slug": "razma-gogji-kashmiri",
+   "name": "Razma Gogji (Kashmiri Rajma with Turnip)",
+   "hi": "रज़्मा गोग्जी (कश्मीरी राजमा)",
+   "alias": [
+    "kashmiri rajma",
+    "razma gogji",
+    "rajma turnip kashmiri",
+    "kashmiri razma",
+    "कश्मीरी राजमा"
+   ],
+   "cat": "dal",
+   "region": "Jammu & Kashmir",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 99,
+   "p": 3.8,
+   "c": 9.9,
+   "f": 4.5,
+   "fib": 3.8,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "low",
+   "note": "rajma with turnip in a mustard-oil, saunth-saunf gravy (no onion-garlic), ~1 tsp oil per katori"
+  },
+  {
+   "slug": "jammu-rajma-dogri",
+   "name": "Jammu Rajma (Dogri Style)",
+   "hi": "जम्मू राजमा (डोगरी)",
+   "alias": [
+    "jammu ka rajma",
+    "dogri rajma",
+    "rajma madra jammu",
+    "ramban rajma",
+    "जम्मू का राजमा"
+   ],
+   "cat": "dal",
+   "region": "Jammu & Kashmir",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 104,
+   "p": 4.5,
+   "c": 11.3,
+   "f": 4.1,
+   "fib": 4.1,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "low",
+   "note": "Jammu (Bhaderwah/Ramban) rajma, thick with ghee tadka and a little curd, ~1 tsp ghee per katori"
+  },
+  {
+   "slug": "kashmiri-moong-dal",
+   "name": "Moong Dal, Kashmiri Style",
+   "hi": "मूंग दाल (कश्मीरी)",
+   "alias": [
+    "kashmiri dal",
+    "kashmiri mong dal",
+    "moong dal hing saunth",
+    "pandit moong dal",
+    "कश्मीरी दाल"
+   ],
+   "cat": "dal",
+   "region": "Jammu & Kashmir",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 99,
+   "p": 4.9,
+   "c": 10.7,
+   "f": 3.9,
+   "fib": 2.1,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "low",
+   "note": "yellow moong with hing, dry ginger (saunth) and fennel, mustard-oil tadka, no onion-garlic"
+  },
+  {
+   "slug": "kulcha-matar-delhi",
+   "name": "Matar Kulcha (Delhi White Pea Curry)",
+   "hi": "मटर कुलचा (दिल्ली, सफेद मटर)",
+   "alias": [
+    "delhi matar",
+    "chole kulche matar",
+    "white matar curry",
+    "safed matar",
+    "dried white pea curry",
+    "कुलचा मटर"
+   ],
+   "cat": "dal",
+   "region": "Delhi",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 70,
+   "p": 3.1,
+   "c": 8.7,
+   "f": 2.2,
+   "fib": 2.9,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "thin tangy dried-white-pea curry served with kulcha; kulcha NOT included"
+  },
+  {
+   "slug": "dalma-odia",
+   "name": "Dalma (Odia Dal with Vegetables)",
+   "hi": "दालमा (ओड़िया)",
+   "alias": [
+    "dalma",
+    "odisha dalma",
+    "odia dalma",
+    "dal ma"
+   ],
+   "cat": "dal",
+   "region": "Odisha",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 86,
+   "p": 3.5,
+   "c": 9,
+   "f": 3.7,
+   "fib": 2.3,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe; cross-check: INDB OSR141 Dalma 119",
+   "conf": "medium",
+   "note": "toor dal cooked with raw banana, pumpkin, brinjal etc, panch phoron tadka in ghee, a little coconut"
+  },
+  {
+   "slug": "odia-dali-plain",
+   "name": "Odia Dali (Plain Toor Dal)",
+   "hi": "ओड़िया दाली",
+   "alias": [
+    "dali odia",
+    "odisha dali",
+    "odia dal",
+    "puri dali",
+    "ओड़िया दाल"
+   ],
+   "cat": "dal",
+   "region": "Odisha",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 74,
+   "p": 3.9,
+   "c": 10,
+   "f": 1.8,
+   "fib": 1.7,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "thin plain toor dal tempered lightly with ghee and cumin (~1/2 tsp per katori)"
+  },
+  {
+   "slug": "ghuguni-odia",
+   "name": "Ghuguni (Odia White Pea Curry)",
+   "hi": "घुघनी (ओड़िया)",
+   "alias": [
+    "ghugni odisha",
+    "odia ghuguni",
+    "cuttack ghuguni",
+    "dried pea ghuguni"
+   ],
+   "cat": "dal",
+   "region": "Odisha",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 90,
+   "p": 3.8,
+   "c": 10,
+   "f": 3.5,
+   "fib": 3.5,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "dried yellow/white peas cooked with a little potato, onion-tomato masala; street-food style"
+  },
+  {
+   "slug": "matar-ghugni-bengali",
+   "name": "Matar Ghugni (Bengali)",
+   "hi": "मटर घुगनी (बंगाली)",
+   "alias": [
+    "ghugni",
+    "ghugni chaat gravy",
+    "kolkata ghugni",
+    "bengali ghugni",
+    "ghoogni",
+    "घुगनी"
+   ],
+   "cat": "dal",
+   "region": "West Bengal",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 96,
+   "p": 4,
+   "c": 10.3,
+   "f": 3.9,
+   "fib": 3.7,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "dried yellow peas in thick spiced gravy with potato; the chaat toppings are NOT included"
+  },
+  {
+   "slug": "bhaja-moong-dal-bengali",
+   "name": "Bhaja Moong Dal (Bengali Roasted Moong Dal)",
+   "hi": "भाजा मूंग दाल (बंगाली)",
+   "alias": [
+    "bhaja mug dal",
+    "bengali moong dal",
+    "moog dal bengali",
+    "roasted moong dal",
+    "bengali mug dal"
+   ],
+   "cat": "dal",
+   "region": "West Bengal",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 101,
+   "p": 4.9,
+   "c": 10.8,
+   "f": 3.9,
+   "fib": 2.2,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe; cross-check: INDB ASC151 dhuli moong dal 50 (very thin)",
+   "conf": "medium",
+   "note": "dry-roasted moong dal boiled soft, ghee/mustard-oil phoron tadka with a little coconut"
+  },
+  {
+   "slug": "cholar-dal-bengali",
+   "name": "Cholar Dal (Bengali Chana Dal)",
+   "hi": "छोलार दाल (बंगाली)",
+   "alias": [
+    "cholar daal",
+    "chholar dal",
+    "bengali chana dal",
+    "narkel diye cholar dal",
+    "bengali cholar dal",
+    "छोलार दाल"
+   ],
+   "cat": "dal",
+   "region": "West Bengal",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 127,
+   "p": 5,
+   "c": 11.5,
+   "f": 6.4,
+   "fib": 4,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "chana dal with coconut slices, ghee and a pinch of sugar; thick festive dal, ~1 tsp ghee per katori"
+  },
+  {
+   "slug": "bengali-masoor-dal",
+   "name": "Masoor Dal (Bengali Style)",
+   "hi": "मसूर दाल (बंगाली)",
+   "alias": [
+    "bengali masur dal",
+    "masoor dal bengal",
+    "misti masoor dal",
+    "masur daal bengali",
+    "बंगाली मसूर दाल"
+   ],
+   "cat": "dal",
+   "region": "West Bengal",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 88,
+   "p": 4.5,
+   "c": 9.9,
+   "f": 3.2,
+   "fib": 2.1,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "thin red lentil with mustard oil and panch phoron/nigella tadka, ~2/3 tsp oil per katori"
+  },
+  {
+   "slug": "biulir-dal-bengali",
+   "name": "Biulir Dal (Bengali Urad Dal)",
+   "hi": "बिउलि दाल (बंगाली उड़द)",
+   "alias": [
+    "biuli dal",
+    "kalai dal",
+    "bengali urad dal",
+    "kolai er dal",
+    "बंगाली उड़द दाल"
+   ],
+   "cat": "dal",
+   "region": "West Bengal",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 87,
+   "p": 4.2,
+   "c": 9.4,
+   "f": 3.4,
+   "fib": 2.3,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "low",
+   "note": "split urad dal cooked soft with ginger and hing, mustard-oil tadka"
+  },
+  {
+   "slug": "dhokar-dalna-bengali",
+   "name": "Dhokar Dalna (Bengali Chana Dal Cakes Curry)",
+   "hi": "ढोकर डालना (बंगाली)",
+   "alias": [
+    "dhoka dalna",
+    "dhokar dalna",
+    "dhokar dalna bengali",
+    "chana dal cake curry",
+    "bengali dhoka curry",
+    "ढोकर दालना"
+   ],
+   "cat": "dal",
+   "region": "West Bengal",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 109,
+   "p": 2.9,
+   "c": 7.3,
+   "f": 7.3,
+   "fib": 2.4,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "low",
+   "note": "shallow-fried chana dal cakes simmered in a light potato-tomato gravy, ~1.5 tbsp oil per 150 g katori (4 pieces)"
+  },
+  {
+   "slug": "mati-maah-dail-assamese",
+   "name": "Mati Maah Dail (Assamese Black Gram Dal)",
+   "hi": "माटी माह दाइल (असमिया उड़द)",
+   "alias": [
+    "mati mah dal",
+    "assamese urad dal",
+    "assamese dal",
+    "mah dail",
+    "असमिया दाल"
+   ],
+   "cat": "dal",
+   "region": "Assam",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 72,
+   "p": 3.2,
+   "c": 6.6,
+   "f": 3.3,
+   "fib": 3.1,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "low",
+   "note": "whole black gram cooked thick in mustard oil with ginger, tomato"
+  },
+  {
+   "slug": "kalo-dal-sikkimese",
+   "name": "Kalo Dal (Sikkimese Black Dal)",
+   "hi": "कालो दाल (सिक्किमी)",
+   "alias": [
+    "kalo daal",
+    "nepali kalo dal",
+    "darjeeling kalo dal",
+    "sikkim black dal",
+    "काली दाल सिक्किम"
+   ],
+   "cat": "dal",
+   "region": "Sikkim",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 76,
+   "p": 3.5,
+   "c": 7.2,
+   "f": 3.3,
+   "fib": 3.4,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "low",
+   "note": "Nepali-style whole black urad dal with jimbu/cumin-ghee tadka, ~2/3 tsp ghee per katori"
+  },
+  {
+   "slug": "tove-togari-bele-karnataka",
+   "name": "Tove (Togari Bele Tovve, Karnataka Plain Toor Dal)",
+   "hi": "तोव्वे (तोगरी बेले)",
+   "alias": [
+    "tovve",
+    "togari bele tove",
+    "togari bele",
+    "karnataka toor dal",
+    "tove dal",
+    "तोव्वे"
+   ],
+   "cat": "dal",
+   "region": "Karnataka",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 82,
+   "p": 4.8,
+   "c": 12.1,
+   "f": 1.3,
+   "fib": 2,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "plain mashed toor dal with turmeric and a spoon of ghee, eaten with rice and ghee/chutney"
+  },
+  {
+   "slug": "bele-saaru-togari-karnataka",
+   "name": "Bele Saaru (Togari Bele Saaru, Karnataka)",
+   "hi": "बेले सारू (तोगरी बेले सारू)",
+   "alias": [
+    "togari bele saaru",
+    "toor dal saaru",
+    "bele saru",
+    "karnataka saaru",
+    "dal saaru",
+    "बेळे सारू"
+   ],
+   "cat": "dal",
+   "region": "Karnataka",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 56,
+   "p": 2,
+   "c": 6.7,
+   "f": 2.2,
+   "fib": 1.3,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "thin saaru-style dal rasam with tomato, tamarind, jaggery and ghee tempering"
+  },
+  {
+   "slug": "hesaru-bele-saaru-karnataka",
+   "name": "Hesaru Bele Saaru (Moong Dal Saaru, Karnataka)",
+   "hi": "हेसरू बेले सारू",
+   "alias": [
+    "hesaru bele saru",
+    "moong dal saaru",
+    "hesarubele saaru",
+    "green gram saaru",
+    "हेसरु बेळे सारु"
+   ],
+   "cat": "dal",
+   "region": "Karnataka",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 47,
+   "p": 1.9,
+   "c": 4.9,
+   "f": 2.1,
+   "fib": 1.3,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "thin moong dal saaru with tomato and a little coconut"
+  },
+  {
+   "slug": "hurali-saaru-karnataka",
+   "name": "Hurali Saaru (Horse Gram Saaru, Karnataka)",
+   "hi": "हुरली सारू (कुल्थी)",
+   "alias": [
+    "hurali saru",
+    "huruli saaru",
+    "kulthi saaru",
+    "horse gram saaru",
+    "hurali kalu saaru",
+    "हुरळी सारु"
+   ],
+   "cat": "dal",
+   "region": "Karnataka",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 52,
+   "p": 1.8,
+   "c": 5.2,
+   "f": 2.5,
+   "fib": 1.2,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "thin broth made from boiled horse gram with tomato and coconut-spice paste; good for winter"
+  },
+  {
+   "slug": "udupi-sambar-karnataka",
+   "name": "Udupi Sambar (Karnataka)",
+   "hi": "उडुपी सांबर",
+   "alias": [
+    "udupi sambhar",
+    "udupi style sambar",
+    "karnataka sambar",
+    "udupi huli",
+    "उडुपी साम्बर"
+   ],
+   "cat": "dal",
+   "region": "Karnataka",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 80,
+   "p": 2.7,
+   "c": 8.9,
+   "f": 3.4,
+   "fib": 2.4,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe; cross-check: INDB ASC167 sambar 97",
+   "conf": "medium",
+   "note": "slightly sweet sambar with freshly roasted coconut-spice paste, ~2/3 tsp oil per katori"
+  },
+  {
+   "slug": "majjige-huli-karnataka",
+   "name": "Majjige Huli (Karnataka Buttermilk Curry)",
+   "hi": "मज्जिगे हुली",
+   "alias": [
+    "majjige huli",
+    "majjige huli ash gourd",
+    "mor kuzhambu karnataka",
+    "buttermilk huli",
+    "मज्जिगे हुळी"
+   ],
+   "cat": "dal",
+   "region": "Karnataka",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 47,
+   "p": 1.1,
+   "c": 1.9,
+   "f": 3.7,
+   "fib": 1.3,
+   "na": 335,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "ash gourd or cucumber in a curd + coconut-cumin paste gravy, light tempering"
+  },
+  {
+   "slug": "paruppu-tamil",
+   "name": "Paruppu (Tamil Mashed Toor Dal with Ghee)",
+   "hi": "परुप्पु (तमिल तूर दाल)",
+   "alias": [
+    "thuvaram paruppu",
+    "paruppu kadayal",
+    "paruppu sadam dal",
+    "tamil dal",
+    "tur paruppu",
+    "परुप्पू"
+   ],
+   "cat": "dal",
+   "region": "Tamil Nadu",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 109,
+   "p": 5.7,
+   "c": 14.4,
+   "f": 2.9,
+   "fib": 2.4,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "thick mashed toor dal with pepper-cumin, ~1/2 tbsp ghee mixed into the rice meal (thick, about 26 g dry per 100 g)"
+  },
+  {
+   "slug": "sambar-tiffin-idli",
+   "name": "Sambar, Tiffin (Idli-Dosa Sambar, Thin)",
+   "hi": "सांबर (इडली-डोसा वाला, पतला)",
+   "alias": [
+    "idli sambar",
+    "hotel sambar",
+    "tiffin sambhar",
+    "thin sambar",
+    "dosa sambar",
+    "सांभर",
+    "साम्बर"
+   ],
+   "cat": "dal",
+   "region": "Tamil Nadu",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 53,
+   "p": 2.1,
+   "c": 6.8,
+   "f": 1.7,
+   "fib": 1.9,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "core": true,
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe; cross-check: INDB ASC167 sambar 97 (thicker rice sambar); calibration 45-80",
+   "conf": "medium",
+   "note": "thin hotel-style sambar for idli/dosa: ~7 g dry dal and ~28 g vegetables per 100 g, little oil"
+  },
+  {
+   "slug": "sambar-rice-home-style",
+   "name": "Sambar, Home Style (for Rice)",
+   "hi": "सांबर (घर का, चावल के लिए)",
+   "alias": [
+    "sambar",
+    "sambhar",
+    "sambar powder sambar",
+    "tamil sambar",
+    "mixed vegetable sambar",
+    "सांबर घर का"
+   ],
+   "cat": "dal",
+   "region": "Tamil Nadu",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 77,
+   "p": 3.1,
+   "c": 9.3,
+   "f": 2.8,
+   "fib": 2.5,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "core": true,
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe; cross-check: INDB ASC167 sambar 97",
+   "conf": "medium",
+   "note": "medium-thick sambar with vegetables, sambar powder, ~2/3 tsp oil per katori (the rice is NOT included)"
+  },
+  {
+   "slug": "arachuvitta-sambar",
+   "name": "Arachuvitta Sambar (Freshly Ground Masala)",
+   "hi": "अरचुविट्टा सांबर",
+   "alias": [
+    "arachuvitta sambhar",
+    "aracha sambar",
+    "ground masala sambar",
+    "tamil arachuvitta sambar",
+    "अरैचुविट्टा सांबर"
+   ],
+   "cat": "dal",
+   "region": "Tamil Nadu",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 87,
+   "p": 3,
+   "c": 8.9,
+   "f": 4.1,
+   "fib": 2.8,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "sambar with a freshly roasted-and-ground coconut + dal + spice paste, richer than powder sambar"
+  },
+  {
+   "slug": "vengaya-sambar",
+   "name": "Vengaya Sambar (Small Onion Sambar)",
+   "hi": "वेंगाया सांबर (छोटे प्याज़ का)",
+   "alias": [
+    "vengayam sambar",
+    "shallot sambar",
+    "small onion sambar",
+    "sambar with sambar onions",
+    "सांबर प्याज़"
+   ],
+   "cat": "dal",
+   "region": "Tamil Nadu",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 76,
+   "p": 2.7,
+   "c": 9.7,
+   "f": 2.7,
+   "fib": 1.7,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "sambar loaded with whole small onions (shallots), ~2/3 tsp oil per katori"
+  },
+  {
+   "slug": "drumstick-sambar-murungakkai",
+   "name": "Drumstick Sambar (Murungakkai Sambar)",
+   "hi": "ड्रमस्टिक सांबर (सहजन)",
+   "alias": [
+    "murungakkai sambar",
+    "sahjan sambar",
+    "drumstick sambhar",
+    "moringa sambar",
+    "सहजन का सांबर"
+   ],
+   "cat": "dal",
+   "region": "Tamil Nadu",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 68,
+   "p": 2.9,
+   "c": 7.8,
+   "f": 2.5,
+   "fib": 3.2,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "drumstick pieces in medium-thick sambar, ~2/3 tsp oil per katori (edible portion of drumstick only)"
+  },
+  {
+   "slug": "poricha-kootu-tamil",
+   "name": "Poricha Kootu (Vegetable and Moong Dal Kootu)",
+   "hi": "पोरिचा कूटू (मूंग दाल सब्ज़ी)",
+   "alias": [
+    "kootu",
+    "poricha kuzhambu kootu",
+    "mixed vegetable kootu",
+    "tamil kootu",
+    "कूटू"
+   ],
+   "cat": "dal",
+   "region": "Tamil Nadu",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 70,
+   "p": 2.6,
+   "c": 5.9,
+   "f": 3.8,
+   "fib": 2.2,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "vegetables (cabbage/beans/pumpkin) with moong dal and ground coconut-cumin, tempered; thick, ~1/2 tsp oil per katori"
+  },
+  {
+   "slug": "keerai-kootu-tamil",
+   "name": "Keerai Kootu (Spinach Moong Dal Kootu)",
+   "hi": "कीरै कूटू (पालक मूंग दाल)",
+   "alias": [
+    "keerai kootu",
+    "spinach kootu",
+    "palak kootu",
+    "keerai paruppu kootu",
+    "पालक कूटू"
+   ],
+   "cat": "dal",
+   "region": "Tamil Nadu",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 70,
+   "p": 3.1,
+   "c": 5.8,
+   "f": 3.5,
+   "fib": 2.2,
+   "na": 340,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "spinach/amaranth cooked with moong dal and coconut, tempered with ~1/2 tsp oil per katori"
+  },
+  {
+   "slug": "paruppu-urundai-kuzhambu",
+   "name": "Paruppu Urundai Kuzhambu (Dal Ball Curry)",
+   "hi": "परुप्पु उरुंडै कुज़म्बु",
+   "alias": [
+    "paruppu urundai kulambu",
+    "dal urundai curry",
+    "lentil ball curry",
+    "paruppu urundai kozhambu",
+    "दाल बॉल करी"
+   ],
+   "cat": "dal",
+   "region": "Tamil Nadu",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 85,
+   "p": 2.2,
+   "c": 6.6,
+   "f": 5.4,
+   "fib": 2,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "low",
+   "note": "steamed chana-toor dal balls simmered in a tamarind gravy (~3 balls per katori), ~1 tsp+ oil per katori"
+  },
+  {
+   "slug": "mor-kuzhambu-tamil",
+   "name": "Mor Kuzhambu (Tamil Buttermilk Curry)",
+   "hi": "मोर कुज़म्बु",
+   "alias": [
+    "more kuzhambu",
+    "moor kozhambu",
+    "tamil buttermilk curry",
+    "mor kolambu",
+    "मोर कुळम्बु"
+   ],
+   "cat": "dal",
+   "region": "Tamil Nadu",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 47,
+   "p": 1.1,
+   "c": 1.8,
+   "f": 3.8,
+   "fib": 1.2,
+   "na": 335,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "ash gourd or okra in curd + coconut-green chilli-cumin paste, light tempering"
+  },
+  {
+   "slug": "parippu-curry-kerala",
+   "name": "Parippu Curry (Kerala Moong Dal)",
+   "hi": "परिप्पु करी (केरल मूंग दाल)",
+   "alias": [
+    "kerala parippu",
+    "parippu",
+    "chera parippu curry",
+    "kerala moong dal",
+    "sadya parippu",
+    "परिप्पु"
+   ],
+   "cat": "dal",
+   "region": "Kerala",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 86,
+   "p": 4.4,
+   "c": 9.7,
+   "f": 3,
+   "fib": 2.1,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "sadya parippu: moong dal with turmeric, a little ground coconut and a ghee spoon (~1/2 tsp per katori)"
+  },
+  {
+   "slug": "sambar-kerala-style",
+   "name": "Sambar, Kerala Style",
+   "hi": "सांबर (केरल स्टाइल)",
+   "alias": [
+    "kerala sambhar",
+    "sadya sambar",
+    "kerala sambar coconut",
+    "केरल सांबर"
+   ],
+   "cat": "dal",
+   "region": "Kerala",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 73,
+   "p": 2.7,
+   "c": 8,
+   "f": 3.1,
+   "fib": 2.4,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe; cross-check: INDB ASC167 sambar 97",
+   "conf": "medium",
+   "note": "coconut-oil tempered sambar with roasted-coconut paste and mixed vegetables"
+  },
+  {
+   "slug": "moru-curry-kerala",
+   "name": "Moru Curry (Kerala Buttermilk Curry)",
+   "hi": "मोरु करी (केरल)",
+   "alias": [
+    "moru kachiyathu",
+    "kerala moru",
+    "moru kachiya",
+    "kerala buttermilk curry",
+    "मोरू करी"
+   ],
+   "cat": "dal",
+   "region": "Kerala",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 38,
+   "p": 0.8,
+   "c": 1,
+   "f": 3.4,
+   "fib": 0.5,
+   "na": 335,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "thin curd + coconut-ginger-chilli paste, coconut-oil tempering; sadya side"
+  },
+  {
+   "slug": "pulissery-kerala",
+   "name": "Pulissery (Kerala Mango / Banana Curd Curry)",
+   "hi": "पुलिसेरी (केरल)",
+   "alias": [
+    "mambazha pulissery",
+    "kerala pulissery",
+    "mango pulissery",
+    "pulisseri",
+    "पुलिस्सेरी"
+   ],
+   "cat": "dal",
+   "region": "Kerala",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 65,
+   "p": 1.1,
+   "c": 3.3,
+   "f": 5.1,
+   "fib": 1.2,
+   "na": 340,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "low",
+   "note": "ripe mango (or raw banana) in thick curd-coconut gravy; sadya dish, ~1 tbsp coconut paste per katori"
+  },
+  {
+   "slug": "olan-kerala",
+   "name": "Olan (Kerala Ash Gourd and Cowpea in Coconut Milk)",
+   "hi": "ओलन (केरल)",
+   "alias": [
+    "kerala olan",
+    "olan sadya",
+    "ash gourd olan",
+    "pumpkin olan",
+    "ओलन करी"
+   ],
+   "cat": "dal",
+   "region": "Kerala",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 67,
+   "p": 1.3,
+   "c": 3.1,
+   "f": 5.3,
+   "fib": 1.5,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "low",
+   "note": "ash gourd and red cowpea in thin coconut milk, coconut oil drizzle; ~28 g coconut milk per 100 g (medium-thin)"
+  },
+  {
+   "slug": "kadala-curry-kerala",
+   "name": "Kadala Curry (Kerala Black Chickpea Curry)",
+   "hi": "कडला करी (केरल)",
+   "alias": [
+    "kerala kadala curry",
+    "kala chana kerala",
+    "kadala curry puttu",
+    "kadala curry appam",
+    "कडला करी"
+   ],
+   "cat": "dal",
+   "region": "Kerala",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 108,
+   "p": 3.7,
+   "c": 8.1,
+   "f": 6.1,
+   "fib": 5.5,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "black chana in roasted coconut gravy (puttu/appam side), ~1 tsp coconut oil + coconut paste per katori"
+  },
+  {
+   "slug": "erissery-kerala",
+   "name": "Erissery (Kerala Pumpkin and Cowpea Curry)",
+   "hi": "एरिशेरी (केरल)",
+   "alias": [
+    "mathanga erissery",
+    "pumpkin erissery",
+    "kerala erissery",
+    "mathan erissery",
+    "एरिस्सेरी"
+   ],
+   "cat": "dal",
+   "region": "Kerala",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 67,
+   "p": 1.8,
+   "c": 5,
+   "f": 4.2,
+   "fib": 2.2,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "low",
+   "note": "pumpkin with red cowpea in a thick coconut gravy, ghee/coconut-oil tempering"
+  },
+  {
+   "slug": "cherupayar-curry-kerala",
+   "name": "Cherupayar Curry (Kerala Whole Moong Curry)",
+   "hi": "चेरुपयर करी (केरल)",
+   "alias": [
+    "cherupayar",
+    "cherupayar parippu curry",
+    "kerala green gram curry",
+    "payar curry",
+    "चेरुपयर"
+   ],
+   "cat": "dal",
+   "region": "Kerala",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 78,
+   "p": 3.4,
+   "c": 6.9,
+   "f": 3.8,
+   "fib": 3.1,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "whole green moong simmered with coconut paste, tempered in coconut oil; ~1/2 tsp oil per katori"
+  },
+  {
+   "slug": "mudda-pappu-andhra",
+   "name": "Mudda Pappu (Andhra Plain Toor Dal)",
+   "hi": "मुद्दा पप्पू (आंध्र)",
+   "alias": [
+    "mudda pappu",
+    "kandi pappu",
+    "pappu annam dal",
+    "andhra pappu",
+    "plain pappu"
+   ],
+   "cat": "dal",
+   "region": "Andhra Pradesh",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 104,
+   "p": 5.6,
+   "c": 14.4,
+   "f": 2.4,
+   "fib": 2.4,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "plain thick mashed toor dal with turmeric, eaten with ghee and rice, about 26 g dry per 100 g"
+  },
+  {
+   "slug": "tomato-pappu-andhra",
+   "name": "Tomato Pappu (Andhra)",
+   "hi": "टमाटर पप्पू (आंध्र)",
+   "alias": [
+    "tomato pappu",
+    "tamata pappu",
+    "andhra tomato dal",
+    "tomato dal andhra"
+   ],
+   "cat": "dal",
+   "region": "Andhra Pradesh",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 100,
+   "p": 4.2,
+   "c": 11.5,
+   "f": 3.9,
+   "fib": 2.2,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "thick toor dal with tomato, green chilli, ~1 tsp oil/ghee tadka per katori"
+  },
+  {
+   "slug": "gongura-pappu-andhra",
+   "name": "Gongura Pappu (Andhra)",
+   "hi": "गोंगुरा पप्पू (आंध्र)",
+   "alias": [
+    "gongura dal",
+    "gongura pappu",
+    "ambadi pappu",
+    "sorrel leaves dal",
+    "roselle leaves dal",
+    "गोंगूरा दाल"
+   ],
+   "cat": "dal",
+   "region": "Andhra Pradesh",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 105,
+   "p": 4.3,
+   "c": 11.4,
+   "f": 4.5,
+   "fib": 2.4,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "toor dal with tangy gongura (sorrel) leaves and garlic tadka, ~1 tsp+ oil per katori"
+  },
+  {
+   "slug": "palakura-pappu-andhra",
+   "name": "Palakura Pappu (Andhra Spinach Dal)",
+   "hi": "पालकूरा पप्पू (आंध्र)",
+   "alias": [
+    "palakura pappu",
+    "palak pappu",
+    "andhra palak dal",
+    "spinach pappu",
+    "andhra spinach dal"
+   ],
+   "cat": "dal",
+   "region": "Andhra Pradesh",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 98,
+   "p": 4.4,
+   "c": 10.7,
+   "f": 4,
+   "fib": 2.3,
+   "na": 335,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "toor dal with spinach, ~1 tsp oil tadka per katori"
+  },
+  {
+   "slug": "dosakaya-pappu-andhra",
+   "name": "Dosakaya Pappu (Andhra Yellow Cucumber Dal)",
+   "hi": "दोसाकाया पप्पू (आंध्र)",
+   "alias": [
+    "dosakaya pappu",
+    "dosakaya dal",
+    "yellow cucumber dal",
+    "andhra cucumber dal",
+    "दोसकाया दाल"
+   ],
+   "cat": "dal",
+   "region": "Andhra Pradesh",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 96,
+   "p": 3.9,
+   "c": 10.9,
+   "f": 3.8,
+   "fib": 1.9,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "toor dal with yellow cucumber and a touch of tamarind, ~1 tsp oil tadka per katori"
+  },
+  {
+   "slug": "mamidikaya-pappu-andhra",
+   "name": "Mamidikaya Pappu (Andhra Raw Mango Dal)",
+   "hi": "मामिडिकाया पप्पू (आंध्र)",
+   "alias": [
+    "mamidikaya pappu",
+    "raw mango dal",
+    "aam dal",
+    "mango dal andhra",
+    "कच्चे आम की दाल"
+   ],
+   "cat": "dal",
+   "region": "Andhra Pradesh",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 97,
+   "p": 3.9,
+   "c": 11.2,
+   "f": 3.9,
+   "fib": 2,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "tangy toor dal with raw mango pieces, ~1 tsp oil tadka per katori"
+  },
+  {
+   "slug": "pesara-pappu-andhra",
+   "name": "Pesara Pappu (Andhra Moong Dal)",
+   "hi": "पेसरा पप्पू (आंध्र मूंग दाल)",
+   "alias": [
+    "pesara pappu",
+    "pesarapappu",
+    "andhra moong dal",
+    "pesara pappu tomato",
+    "पेसर पप्पू"
+   ],
+   "cat": "dal",
+   "region": "Andhra Pradesh",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 98,
+   "p": 4.7,
+   "c": 10.6,
+   "f": 3.8,
+   "fib": 2.1,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "soft moong dal with tomato and a ghee/oil tadka, ~1 tsp per katori"
+  },
+  {
+   "slug": "dalcha-hyderabadi",
+   "name": "Dalcha (Hyderabadi Vegetarian)",
+   "hi": "दालचा (हैदराबादी)",
+   "alias": [
+    "dalcha",
+    "hyderabadi dalcha",
+    "khatti dalcha",
+    "lauki dalcha",
+    "dalcha vegetarian",
+    "दालचा हैदराबादी"
+   ],
+   "cat": "dal",
+   "region": "Telangana",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 102,
+   "p": 4,
+   "c": 10.9,
+   "f": 4.3,
+   "fib": 3.1,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "chana + toor dal with bottle gourd, tamarind and a gingelly-chilli tadka (veg version, no mutton), ~1 tsp oil per katori"
+  },
+  {
+   "slug": "pappu-charu-andhra",
+   "name": "Pappu Charu (Andhra Dal Rasam)",
+   "hi": "पप्पू चारू (आंध्र)",
+   "alias": [
+    "pappu chaaru",
+    "pappucharu",
+    "andhra rasam dal",
+    "pappu chaaru rasam",
+    "पप्पू चारु"
+   ],
+   "cat": "soup",
+   "region": "Andhra Pradesh",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "ml",
+   "kcal": 35,
+   "p": 1.3,
+   "c": 4.5,
+   "f": 1.2,
+   "fib": 0.9,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 ml)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 glass (200 ml)",
+     "hi": "1 गिलास",
+     "g": 200
+    },
+    {
+     "n": "1 small cup (100 ml)",
+     "hi": "1 छोटा कप",
+     "g": 100
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "thin tamarind-tomato broth made with dal water and a little mashed dal; ~1 tsp oil per 3 glasses"
+  },
+  {
+   "slug": "ulavacharu-andhra",
+   "name": "Ulavacharu (Andhra Horse Gram Broth)",
+   "hi": "उलवाचारू (आंध्र कुल्थी)",
+   "alias": [
+    "ulava charu",
+    "ulavacharu",
+    "horse gram rasam",
+    "kulthi soup",
+    "ulavalu charu",
+    "कुल्थी सूप"
+   ],
+   "cat": "soup",
+   "region": "Andhra Pradesh",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "ml",
+   "kcal": 38,
+   "p": 1.4,
+   "c": 4.3,
+   "f": 1.6,
+   "fib": 0.8,
+   "na": 325,
+   "portions": [
+    {
+     "n": "1 katori (150 ml)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 glass (200 ml)",
+     "hi": "1 गिलास",
+     "g": 200
+    },
+    {
+     "n": "1 small cup (100 ml)",
+     "hi": "1 छोटा कप",
+     "g": 100
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "thick broth from boiled horse gram, tamarind, ghee-garlic tempering; ~1 tsp ghee per katori"
+  },
+  {
+   "slug": "majjiga-pulusu-andhra",
+   "name": "Majjiga Pulusu (Andhra Buttermilk Curry)",
+   "hi": "मज्जिगा पुलुसु (आंध्र)",
+   "alias": [
+    "majjiga pulusu",
+    "majjiga charu",
+    "andhra buttermilk curry",
+    "perugu pulusu",
+    "मज्जिगा पुलुसू"
+   ],
+   "cat": "dal",
+   "region": "Andhra Pradesh",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 37,
+   "p": 1,
+   "c": 1.5,
+   "f": 2.9,
+   "fib": 0.5,
+   "na": 335,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "thin curd-based curry with a little besan and ginger-chilli, light tempering; with ash gourd/okra pieces in some homes"
+  },
+  {
+   "slug": "rasam-tomato",
+   "name": "Rasam, Tomato",
+   "hi": "रसम (टमाटर)",
+   "alias": [
+    "thakkali rasam",
+    "tomato rasam",
+    "tamatar rasam",
+    "rassam",
+    "south indian rasam",
+    "टमाटर रसम",
+    "रसम"
+   ],
+   "cat": "soup",
+   "region": "Tamil Nadu",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "ml",
+   "kcal": 28,
+   "p": 0.8,
+   "c": 3.8,
+   "f": 1,
+   "fib": 0.8,
+   "na": 290,
+   "portions": [
+    {
+     "n": "1 katori (150 ml)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 glass (200 ml)",
+     "hi": "1 गिलास",
+     "g": 200
+    },
+    {
+     "n": "1 small cup (100 ml)",
+     "hi": "1 छोटा कप",
+     "g": 100
+    }
+   ],
+   "core": true,
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe; cross-check: INDB BFP176 rasam with tamarind 27",
+   "conf": "medium",
+   "note": "thin tamarind-tomato rasam with a little dal water, ~1/2 tsp oil per katori"
+  },
+  {
+   "slug": "rasam-pepper-milagu",
+   "name": "Rasam, Pepper (Milagu Rasam)",
+   "hi": "रसम (काली मिर्च)",
+   "alias": [
+    "milagu rasam",
+    "pepper rasam",
+    "kali mirch rasam",
+    "milagu thanni",
+    "mulligatawny rasam",
+    "मिलगु रसम"
+   ],
+   "cat": "soup",
+   "region": "Tamil Nadu",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "ml",
+   "kcal": 27,
+   "p": 0.7,
+   "c": 3.4,
+   "f": 1.1,
+   "fib": 0.6,
+   "na": 290,
+   "portions": [
+    {
+     "n": "1 katori (150 ml)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 glass (200 ml)",
+     "hi": "1 गिलास",
+     "g": 200
+    },
+    {
+     "n": "1 small cup (100 ml)",
+     "hi": "1 छोटा कप",
+     "g": 100
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "pepper-cumin rasam with a little dal water, ghee tempering (~1/2 tsp per katori)"
+  },
+  {
+   "slug": "rasam-lemon",
+   "name": "Rasam, Lemon (Elumichai Rasam)",
+   "hi": "रसम (नींबू)",
+   "alias": [
+    "lemon rasam",
+    "elumichai rasam",
+    "nimmakaya rasam",
+    "nimbe hannu saaru",
+    "nimbu rasam",
+    "नींबू रसम"
+   ],
+   "cat": "soup",
+   "region": "Tamil Nadu",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "ml",
+   "kcal": 21,
+   "p": 0.8,
+   "c": 2.1,
+   "f": 1,
+   "fib": 0.6,
+   "na": 290,
+   "portions": [
+    {
+     "n": "1 katori (150 ml)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 glass (200 ml)",
+     "hi": "1 गिलास",
+     "g": 200
+    },
+    {
+     "n": "1 small cup (100 ml)",
+     "hi": "1 छोटा कप",
+     "g": 100
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe; cross-check: INDB BFP177 rasam with lemon 24",
+   "conf": "medium",
+   "note": "no tamarind; dal water + lemon juice added off the heat, ~1/2 tsp oil per katori"
+  },
+  {
+   "slug": "rasam-garlic-poondu",
+   "name": "Rasam, Garlic (Poondu Rasam)",
+   "hi": "रसम (लहसुन)",
+   "alias": [
+    "garlic rasam",
+    "poondu rasam",
+    "lahsun rasam",
+    "vellulli rasam",
+    "लहसुन रसम"
+   ],
+   "cat": "soup",
+   "region": "Tamil Nadu",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "ml",
+   "kcal": 29,
+   "p": 0.9,
+   "c": 3.8,
+   "f": 1.1,
+   "fib": 0.8,
+   "na": 290,
+   "portions": [
+    {
+     "n": "1 katori (150 ml)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 glass (200 ml)",
+     "hi": "1 गिलास",
+     "g": 200
+    },
+    {
+     "n": "1 small cup (100 ml)",
+     "hi": "1 छोटा कप",
+     "g": 100
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "garlic-pepper rasam, ~1/2 tsp oil per katori"
+  },
+  {
+   "slug": "rasam-mysore-karnataka",
+   "name": "Rasam, Mysore",
+   "hi": "रसम (मैसूर)",
+   "alias": [
+    "mysore rasam",
+    "mysuru rasam",
+    "karnataka rasam",
+    "mysore saaru",
+    "मैसूर रसम"
+   ],
+   "cat": "soup",
+   "region": "Karnataka",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "ml",
+   "kcal": 38,
+   "p": 1.1,
+   "c": 3.9,
+   "f": 1.8,
+   "fib": 1,
+   "na": 290,
+   "portions": [
+    {
+     "n": "1 katori (150 ml)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 glass (200 ml)",
+     "hi": "1 गिलास",
+     "g": 200
+    },
+    {
+     "n": "1 small cup (100 ml)",
+     "hi": "1 छोटा कप",
+     "g": 100
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "rasam with a freshly roasted dal-coconut-spice powder, ~1/2 tsp oil per katori"
+  },
+  {
+   "slug": "rasam-pineapple",
+   "name": "Rasam, Pineapple",
+   "hi": "रसम (अनानास)",
+   "alias": [
+    "pineapple rasam",
+    "ananas rasam",
+    "pineapple saaru",
+    "annasi rasam",
+    "अनानास रसम"
+   ],
+   "cat": "soup",
+   "region": "Tamil Nadu",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "ml",
+   "kcal": 27,
+   "p": 0.8,
+   "c": 3.6,
+   "f": 1,
+   "fib": 0.8,
+   "na": 290,
+   "portions": [
+    {
+     "n": "1 katori (150 ml)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 glass (200 ml)",
+     "hi": "1 गिलास",
+     "g": 200
+    },
+    {
+     "n": "1 small cup (100 ml)",
+     "hi": "1 छोटा कप",
+     "g": 100
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "lightly sweet-sour rasam with pineapple pieces, ~1/2 tsp oil per katori"
+  },
+  {
+   "slug": "rasam-paruppu-dal",
+   "name": "Rasam, Paruppu (Dal Rasam)",
+   "hi": "रसम (दाल वाला)",
+   "alias": [
+    "paruppu rasam",
+    "dal rasam",
+    "kandi pappu rasam",
+    "toor dal rasam",
+    "दाल रसम"
+   ],
+   "cat": "soup",
+   "region": "Tamil Nadu",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "ml",
+   "kcal": 34,
+   "p": 1.3,
+   "c": 4.5,
+   "f": 1.1,
+   "fib": 0.9,
+   "na": 290,
+   "portions": [
+    {
+     "n": "1 katori (150 ml)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 glass (200 ml)",
+     "hi": "1 गिलास",
+     "g": 200
+    },
+    {
+     "n": "1 small cup (100 ml)",
+     "hi": "1 छोटा कप",
+     "g": 100
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "thicker rasam with more mashed dal, ~1/2 tsp oil per katori"
+  },
+  {
+   "slug": "rasam-jeera-cumin",
+   "name": "Rasam, Jeera (Cumin)",
+   "hi": "रसम (जीरा)",
+   "alias": [
+    "jeera rasam",
+    "jeeraga rasam",
+    "cumin rasam",
+    "seeragam rasam",
+    "जीरा रसम"
+   ],
+   "cat": "soup",
+   "region": "Tamil Nadu",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "ml",
+   "kcal": 23,
+   "p": 0.6,
+   "c": 2.9,
+   "f": 0.9,
+   "fib": 0.6,
+   "na": 290,
+   "portions": [
+    {
+     "n": "1 katori (150 ml)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 glass (200 ml)",
+     "hi": "1 गिलास",
+     "g": 200
+    },
+    {
+     "n": "1 small cup (100 ml)",
+     "hi": "1 छोटा कप",
+     "g": 100
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "cumin-pepper digestive rasam, ~1/2 tsp ghee per katori"
+  },
+  {
+   "slug": "rasam-kollu-horse-gram",
+   "name": "Rasam, Kollu (Horse Gram)",
+   "hi": "रसम (कुल्थी / कोल्लू)",
+   "alias": [
+    "kollu rasam",
+    "kollu saaru",
+    "horse gram rasam tamil",
+    "kulthi rasam",
+    "कुल्थी रसम"
+   ],
+   "cat": "soup",
+   "region": "Tamil Nadu",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "ml",
+   "kcal": 27,
+   "p": 0.9,
+   "c": 3.3,
+   "f": 1,
+   "fib": 0.7,
+   "na": 290,
+   "portions": [
+    {
+     "n": "1 katori (150 ml)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 glass (200 ml)",
+     "hi": "1 गिलास",
+     "g": 200
+    },
+    {
+     "n": "1 small cup (100 ml)",
+     "hi": "1 छोटा कप",
+     "g": 100
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "rasam built on the water of boiled horse gram, ~1/2 tsp oil per katori"
+  },
+  {
+   "slug": "boiled-kala-chana",
+   "name": "Kala Chana, Boiled",
+   "hi": "काला चना, उबला",
+   "alias": [
+    "boiled black chickpeas",
+    "boiled chana",
+    "ubla kala chana",
+    "black chana boiled",
+    "उबले काले चने"
+   ],
+   "cat": "dal",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🫘",
+   "unit": "g",
+   "kcal": 137,
+   "p": 8.4,
+   "c": 17.8,
+   "f": 2.3,
+   "fib": 11.3,
+   "na": 175,
+   "portions": [
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 handful (40 g)",
+     "hi": "1 मुट्ठी",
+     "g": 40
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe; cross-check: IFCT B002 dry 287; boiled chickpea 140-165 (USDA)",
+   "conf": "medium",
+   "note": "boiled and drained with a little salt, no oil; 1 part dry chana gives ~2.2 parts boiled"
+  },
+  {
+   "slug": "boiled-kabuli-chana",
+   "name": "Kabuli Chana (White Chickpea), Boiled",
+   "hi": "काबुली चना, उबला",
+   "alias": [
+    "boiled chickpeas",
+    "boiled chole",
+    "safed chana boiled",
+    "boiled white chana",
+    "उबले छोले",
+    "उबला काबुली चना"
+   ],
+   "cat": "dal",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🫘",
+   "unit": "g",
+   "kcal": 153,
+   "p": 8.8,
+   "c": 23,
+   "f": 2.3,
+   "fib": 5.4,
+   "na": 175,
+   "portions": [
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 handful (40 g)",
+     "hi": "1 मुट्ठी",
+     "g": 40
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe; cross-check: INDB BFP185 kabuli channa curry 69 is a thin curry, not plain boiled",
+   "conf": "medium",
+   "note": "boiled and drained with salt, no oil; ~2.2 parts boiled per part dry (USDA boiled chickpeas ~164 kcal)"
+  },
+  {
+   "slug": "boiled-moong-sabut",
+   "name": "Moong (Whole Green), Boiled",
+   "hi": "मूंग (साबुत हरी), उबली",
+   "alias": [
+    "boiled green gram",
+    "boiled whole moong",
+    "ubli moong",
+    "boiled mung beans",
+    "उबली मूंग"
+   ],
+   "cat": "dal",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🫘",
+   "unit": "g",
+   "kcal": 100,
+   "p": 7.4,
+   "c": 15.2,
+   "f": 0.4,
+   "fib": 5.6,
+   "na": 175,
+   "portions": [
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 handful (40 g)",
+     "hi": "1 मुट्ठी",
+     "g": 40
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe; cross-check: USDA boiled mung beans 105",
+   "conf": "medium",
+   "note": "boiled and drained with salt, no oil; 1 part dry moong gives ~3 parts boiled"
+  },
+  {
+   "slug": "boiled-rajma",
+   "name": "Rajma (Kidney Beans), Boiled",
+   "hi": "राजमा, उबला",
+   "alias": [
+    "boiled kidney beans",
+    "ubla rajma",
+    "rajmah boiled",
+    "plain rajma",
+    "उबला राजमा"
+   ],
+   "cat": "dal",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🫘",
+   "unit": "g",
+   "kcal": 122,
+   "p": 7.8,
+   "c": 19.5,
+   "f": 0.7,
+   "fib": 6.8,
+   "na": 175,
+   "portions": [
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 handful (40 g)",
+     "hi": "1 मुट्ठी",
+     "g": 40
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe; cross-check: USDA boiled kidney beans 127",
+   "conf": "medium",
+   "note": "boiled and drained with salt, no oil; 1 part dry gives ~2.5 parts boiled"
+  },
+  {
+   "slug": "boiled-lobia",
+   "name": "Lobia (Black-Eyed Peas), Boiled",
+   "hi": "लोबिया, उबला",
+   "alias": [
+    "boiled black eyed peas",
+    "boiled chawli",
+    "boiled cowpea",
+    "ubla lobia",
+    "उबली लोबिया"
+   ],
+   "cat": "dal",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🫘",
+   "unit": "g",
+   "kcal": 119,
+   "p": 7.5,
+   "c": 20.2,
+   "f": 0.4,
+   "fib": 4.3,
+   "na": 175,
+   "portions": [
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 handful (40 g)",
+     "hi": "1 मुट्ठी",
+     "g": 40
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe; cross-check: USDA boiled cowpeas 116",
+   "conf": "medium",
+   "note": "boiled and drained with salt, no oil; 1 part dry gives ~2.7 parts boiled"
+  },
+  {
+   "slug": "boiled-white-matar-dried-peas",
+   "name": "White Matar (Dried Peas), Boiled",
+   "hi": "सफेद मटर (सूखे), उबले",
+   "alias": [
+    "boiled dried peas",
+    "boiled white peas",
+    "boiled vatana",
+    "safed matar boiled",
+    "उबले सफेद मटर",
+    "उबला सूखा मटर"
+   ],
+   "cat": "dal",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🫘",
+   "unit": "g",
+   "kcal": 125,
+   "p": 8.2,
+   "c": 19.6,
+   "f": 0.8,
+   "fib": 6.8,
+   "na": 175,
+   "portions": [
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 handful (40 g)",
+     "hi": "1 मुट्ठी",
+     "g": 40
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "boiled and drained with salt, no oil; 1 part dry gives ~2.5 parts boiled"
+  },
+  {
+   "slug": "boiled-matki-moth",
+   "name": "Matki (Moth Bean), Boiled",
+   "hi": "मटकी (मोठ), उबली",
+   "alias": [
+    "boiled moth beans",
+    "boiled matki",
+    "ubli matki",
+    "boiled moth",
+    "उबली मटकी"
+   ],
+   "cat": "dal",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🫘",
+   "unit": "g",
+   "kcal": 118,
+   "p": 7.3,
+   "c": 19.3,
+   "f": 0.7,
+   "fib": 5.6,
+   "na": 175,
+   "portions": [
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 handful (40 g)",
+     "hi": "1 मुट्ठी",
+     "g": 40
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "boiled (sprouted or not) and drained with salt, no oil; ~2.7 parts boiled per part dry"
+  },
+  {
+   "slug": "boiled-soyabean",
+   "name": "Soyabean (Whole), Boiled",
+   "hi": "सोयाबीन (साबुत), उबला",
+   "alias": [
+    "boiled soya beans",
+    "boiled soybean",
+    "ubla soyabean",
+    "boiled soya whole",
+    "उबला सोयाबीन"
+   ],
+   "cat": "dal",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🫘",
+   "unit": "g",
+   "kcal": 165,
+   "p": 14.9,
+   "c": 5.4,
+   "f": 8.3,
+   "fib": 9.1,
+   "na": 175,
+   "portions": [
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 handful (40 g)",
+     "hi": "1 मुट्ठी",
+     "g": 40
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe; cross-check: USDA boiled soybeans 173",
+   "conf": "medium",
+   "note": "boiled and drained with salt, no oil; 1 part dry gives ~2.4 parts boiled"
+  },
+  {
+   "slug": "boiled-horse-gram-kulthi",
+   "name": "Horse Gram (Kulthi), Boiled",
+   "hi": "कुल्थी, उबली",
+   "alias": [
+    "boiled kulthi",
+    "boiled kollu",
+    "boiled ulavalu",
+    "boiled muthira",
+    "boiled horse gram",
+    "उबली कुल्थी"
+   ],
+   "cat": "dal",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🫘",
+   "unit": "g",
+   "kcal": 119,
+   "p": 7.8,
+   "c": 20.6,
+   "f": 0.2,
+   "fib": 2.8,
+   "na": 175,
+   "portions": [
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 handful (40 g)",
+     "hi": "1 मुट्ठी",
+     "g": 40
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "boiled and drained with salt, no oil; 1 part dry gives ~2.8 parts boiled"
+  },
+  {
+   "slug": "boiled-val-field-beans",
+   "name": "Val (Field Beans, Dried), Boiled",
+   "hi": "वाल (सूखी), उबली",
+   "alias": [
+    "boiled val",
+    "boiled vaal",
+    "boiled field beans",
+    "boiled dried sem beans",
+    "उबली वाल"
+   ],
+   "cat": "dal",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🫘",
+   "unit": "g",
+   "kcal": 110,
+   "p": 7.5,
+   "c": 16.9,
+   "f": 0.4,
+   "fib": 8.7,
+   "na": 175,
+   "portions": [
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 handful (40 g)",
+     "hi": "1 मुट्ठी",
+     "g": 40
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "boiled and drained with salt, no oil; ~2.6 parts boiled per part dry"
+  },
+  {
+   "slug": "boiled-green-moong-dal-snack",
+   "name": "Moong Dal (Split), Boiled Snack",
+   "hi": "मूंग दाल (धुली), उबली",
+   "alias": [
+    "boiled moong dal",
+    "steamed moong dal",
+    "moong dal salad base",
+    "ubli moong dal",
+    "उबली मूंग दाल"
+   ],
+   "cat": "dal",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🫘",
+   "unit": "g",
+   "kcal": 118,
+   "p": 8.6,
+   "c": 18.9,
+   "f": 0.5,
+   "fib": 3.4,
+   "na": 175,
+   "portions": [
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 handful (40 g)",
+     "hi": "1 मुट्ठी",
+     "g": 40
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "split moong boiled until just soft and drained (not the thin dal-pani); ~2.8 parts boiled per part dry"
+  },
+  {
+   "slug": "sundal-kondakadalai-chana",
+   "name": "Sundal, Kondakadalai (Chana)",
+   "hi": "सुंदल (काला चना)",
+   "alias": [
+    "chana sundal",
+    "kondakadalai sundal",
+    "kala chana sundal",
+    "channa sundal",
+    "navratri sundal",
+    "सुंडल"
+   ],
+   "cat": "snack",
+   "region": "Tamil Nadu",
+   "diet": "veg",
+   "emoji": "🫘",
+   "unit": "g",
+   "kcal": 152,
+   "p": 7.3,
+   "c": 15.4,
+   "f": 5.6,
+   "fib": 10.1,
+   "na": 250,
+   "portions": [
+    {
+     "n": "1 small bowl (100 g)",
+     "hi": "1 छोटा कटोरा",
+     "g": 100
+    },
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 handful (40 g)",
+     "hi": "1 मुट्ठी",
+     "g": 40
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "boiled black chana tossed with ~1/2 tsp oil, mustard, curry leaf and fresh coconut per 100 g"
+  },
+  {
+   "slug": "sundal-pattani-white-peas",
+   "name": "Sundal, Pattani (White Peas)",
+   "hi": "सुंदल (सफेद मटर)",
+   "alias": [
+    "pattani sundal",
+    "white peas sundal",
+    "vatana sundal",
+    "matar sundal",
+    "सफेद मटर सुंडल"
+   ],
+   "cat": "snack",
+   "region": "Tamil Nadu",
+   "diet": "veg",
+   "emoji": "🫘",
+   "unit": "g",
+   "kcal": 145,
+   "p": 7.3,
+   "c": 17.5,
+   "f": 4.4,
+   "fib": 6.5,
+   "na": 250,
+   "portions": [
+    {
+     "n": "1 small bowl (100 g)",
+     "hi": "1 छोटा कटोरा",
+     "g": 100
+    },
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 handful (40 g)",
+     "hi": "1 मुट्ठी",
+     "g": 40
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "boiled dried white peas, ~1/2 tsp oil and fresh coconut per 100 g"
+  },
+  {
+   "slug": "sundal-payaru-green-moong",
+   "name": "Sundal, Payaru (Green Moong)",
+   "hi": "सुंदल (हरी मूंग)",
+   "alias": [
+    "payaru sundal",
+    "pachai payaru sundal",
+    "green gram sundal",
+    "moong sundal",
+    "हरी मूंग सुंडल"
+   ],
+   "cat": "snack",
+   "region": "Tamil Nadu",
+   "diet": "veg",
+   "emoji": "🫘",
+   "unit": "g",
+   "kcal": 126,
+   "p": 6.9,
+   "c": 14.2,
+   "f": 4,
+   "fib": 5.6,
+   "na": 250,
+   "portions": [
+    {
+     "n": "1 small bowl (100 g)",
+     "hi": "1 छोटा कटोरा",
+     "g": 100
+    },
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 handful (40 g)",
+     "hi": "1 मुट्ठी",
+     "g": 40
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "boiled whole moong, ~1/2 tsp oil and fresh coconut per 100 g"
+  },
+  {
+   "slug": "sundal-karamani-lobia",
+   "name": "Sundal, Karamani (Black-Eyed Peas)",
+   "hi": "सुंदल (लोबिया)",
+   "alias": [
+    "karamani sundal",
+    "lobia sundal",
+    "cowpea sundal",
+    "black eyed pea sundal",
+    "लोबिया सुंडल"
+   ],
+   "cat": "snack",
+   "region": "Tamil Nadu",
+   "diet": "veg",
+   "emoji": "🫘",
+   "unit": "g",
+   "kcal": 142,
+   "p": 6.9,
+   "c": 18.4,
+   "f": 4.1,
+   "fib": 4.3,
+   "na": 250,
+   "portions": [
+    {
+     "n": "1 small bowl (100 g)",
+     "hi": "1 छोटा कटोरा",
+     "g": 100
+    },
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 handful (40 g)",
+     "hi": "1 मुट्ठी",
+     "g": 40
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "boiled lobia, ~1/2 tsp oil and fresh coconut per 100 g"
+  },
+  {
+   "slug": "moong-dal-soup",
+   "name": "Moong Dal Soup",
+   "hi": "मूंग दाल सूप",
+   "alias": [
+    "moong daal soup",
+    "yellow dal soup",
+    "moong dal shorba",
+    "mung dal soup",
+    "मूंग दाल शोरबा"
+   ],
+   "cat": "soup",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "ml",
+   "kcal": 37,
+   "p": 2,
+   "c": 4.5,
+   "f": 1.1,
+   "fib": 0.9,
+   "na": 290,
+   "portions": [
+    {
+     "n": "1 bowl (200 ml)",
+     "hi": "1 कटोरा",
+     "g": 200
+    },
+    {
+     "n": "1 cup (150 ml)",
+     "hi": "1 कप",
+     "g": 150
+    },
+    {
+     "n": "1 mug (250 ml)",
+     "hi": "1 मग",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe; cross-check: INDB ASC080 lentil soup 31 (sodium unrealistic)",
+   "conf": "medium",
+   "note": "thin strained-style moong dal soup with ghee, garlic, cumin and tomato; no cream"
+  },
+  {
+   "slug": "toor-dal-soup",
+   "name": "Toor Dal Soup (Dal Ka Shorba)",
+   "hi": "तूर दाल सूप (दाल का शोरबा)",
+   "alias": [
+    "dal ka shorba",
+    "dal soup",
+    "toor dal shorba",
+    "arhar dal soup",
+    "tur dal soup",
+    "दाल शोरबा",
+    "दाल सूप"
+   ],
+   "cat": "soup",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "ml",
+   "kcal": 34,
+   "p": 1.6,
+   "c": 4.2,
+   "f": 1.1,
+   "fib": 0.8,
+   "na": 290,
+   "portions": [
+    {
+     "n": "1 bowl (200 ml)",
+     "hi": "1 कटोरा",
+     "g": 200
+    },
+    {
+     "n": "1 cup (150 ml)",
+     "hi": "1 कप",
+     "g": 150
+    },
+    {
+     "n": "1 mug (250 ml)",
+     "hi": "1 मग",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "thin toor dal broth with ghee-cumin tempering and lemon"
+  },
+  {
+   "slug": "masoor-dal-soup-red-lentil",
+   "name": "Masoor Dal Soup (Red Lentil Soup)",
+   "hi": "मसूर दाल सूप",
+   "alias": [
+    "lentil soup",
+    "red lentil soup",
+    "masoor daal soup",
+    "masur dal soup",
+    "indian lentil soup",
+    "लाल मसूर सूप"
+   ],
+   "cat": "soup",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "ml",
+   "kcal": 42,
+   "p": 2.3,
+   "c": 5.3,
+   "f": 1.1,
+   "fib": 1.2,
+   "na": 290,
+   "portions": [
+    {
+     "n": "1 bowl (200 ml)",
+     "hi": "1 कटोरा",
+     "g": 200
+    },
+    {
+     "n": "1 cup (150 ml)",
+     "hi": "1 कप",
+     "g": 150
+    },
+    {
+     "n": "1 mug (250 ml)",
+     "hi": "1 मग",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe; cross-check: INDB ASC080 lentil soup 31 is too thin and has absurd sodium",
+   "conf": "medium",
+   "note": "Indian-style red lentil soup with onion, tomato and 1 tsp oil per 3 bowls; no cream"
+  },
+  {
+   "slug": "mixed-dal-vegetable-soup",
+   "name": "Mixed Dal and Vegetable Soup",
+   "hi": "मिक्स दाल और सब्ज़ी सूप",
+   "alias": [
+    "dal vegetable soup",
+    "lentil vegetable soup",
+    "dal veg soup",
+    "healthy dal soup",
+    "दाल सब्ज़ी सूप"
+   ],
+   "cat": "soup",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "ml",
+   "kcal": 41,
+   "p": 2.1,
+   "c": 5.2,
+   "f": 1.2,
+   "fib": 1.3,
+   "na": 290,
+   "portions": [
+    {
+     "n": "1 bowl (200 ml)",
+     "hi": "1 कटोरा",
+     "g": 200
+    },
+    {
+     "n": "1 cup (150 ml)",
+     "hi": "1 कप",
+     "g": 150
+    },
+    {
+     "n": "1 mug (250 ml)",
+     "hi": "1 मग",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "blend of dals with carrot, beans, pumpkin; 1 tsp oil per 3 bowls"
+  },
+  {
+   "slug": "sprouted-moong-soup",
+   "name": "Sprouted Moong Soup",
+   "hi": "अंकुरित मूंग सूप",
+   "alias": [
+    "sprouts soup",
+    "moong sprouts soup",
+    "ankurit moong soup",
+    "sprouted moong shorba",
+    "अंकुरित मूंग शोरबा"
+   ],
+   "cat": "soup",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🥣",
+   "unit": "ml",
+   "kcal": 25,
+   "p": 1.2,
+   "c": 2.7,
+   "f": 0.9,
+   "fib": 1.1,
+   "na": 290,
+   "portions": [
+    {
+     "n": "1 bowl (200 ml)",
+     "hi": "1 कटोरा",
+     "g": 200
+    },
+    {
+     "n": "1 cup (150 ml)",
+     "hi": "1 कप",
+     "g": 150
+    },
+    {
+     "n": "1 mug (250 ml)",
+     "hi": "1 मग",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "light soup from sprouted moong (~5 g dry-equivalent per 100 ml) with tomato, ~1/2 tsp oil per bowl"
+  },
+  {
+   "slug": "moong-sprouts-curry",
+   "name": "Moong Sprouts Curry (Sprouted Moong Usal)",
+   "hi": "अंकुरित मूंग की सब्ज़ी",
+   "alias": [
+    "sprouted moong curry",
+    "moong sprouts sabzi",
+    "ankurit moong curry",
+    "moong usal",
+    "sprouts curry",
+    "अंकुरित मूंग करी"
+   ],
+   "cat": "dal",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 89,
+   "p": 3.5,
+   "c": 7.9,
+   "f": 4.5,
+   "fib": 3.2,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "home-sprouted moong (~14 g dry-equivalent per 100 g) simmered in onion-tomato masala, ~1 tsp oil per katori"
+  },
+  {
+   "slug": "mixed-sprouts-curry",
+   "name": "Mixed Sprouts Curry",
+   "hi": "मिक्स अंकुरित की सब्ज़ी",
+   "alias": [
+    "mixed sprouts usal",
+    "sprouts masala",
+    "mixed sprouts sabzi",
+    "mix sprouts curry",
+    "मिक्स स्प्राउट्स करी"
+   ],
+   "cat": "dal",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 90,
+   "p": 3.3,
+   "c": 7.9,
+   "f": 4.6,
+   "fib": 3.4,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "sprouted moong, matki and chana (~14 g dry-equivalent per 100 g) in onion-tomato masala, ~1 tsp oil per katori"
+  },
+  {
+   "slug": "moong-sprouts-stir-fry-dry",
+   "name": "Moong Sprouts, Stir-Fried (Dry)",
+   "hi": "अंकुरित मूंग (सूखी, तड़के वाली)",
+   "alias": [
+    "sprouted moong sabzi dry",
+    "sprouts sukhi sabzi",
+    "moong sprouts sauteed",
+    "dry sprouts",
+    "सूखी अंकुरित मूंग"
+   ],
+   "cat": "dal",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 94,
+   "p": 4.5,
+   "c": 9.6,
+   "f": 3.8,
+   "fib": 3.7,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "medium",
+   "note": "sprouted moong tossed dry with onion, ~1 tsp oil per 100 g; salad is NOT this item"
+  },
+  {
+   "slug": "soyabean-curry-whole",
+   "name": "Soyabean Curry (Whole Soya)",
+   "hi": "सोयाबीन की सब्ज़ी (साबुत)",
+   "alias": [
+    "whole soya curry",
+    "soya bean sabzi",
+    "soybean curry",
+    "soyabean masala",
+    "सोया की सब्ज़ी"
+   ],
+   "cat": "dal",
+   "region": "Pan-India",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 121,
+   "p": 6.8,
+   "c": 3.6,
+   "f": 8.3,
+   "fib": 4.6,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe; cross-check: INDB ASC164 soyabean curry 163",
+   "conf": "medium",
+   "note": "boiled whole soya beans (~18 g dry per 100 g) in onion-tomato gravy, ~1 tbsp oil per 150 g; soya chunks curry is a different item"
+  },
+  {
+   "slug": "double-beans-masala",
+   "name": "Double Beans Masala (Lima Bean Curry)",
+   "hi": "डबल बीन्स मसाला",
+   "alias": [
+    "lima beans curry",
+    "butter beans curry",
+    "double beans curry",
+    "avarai curry",
+    "doubles beans sabzi",
+    "डबल बीन करी"
+   ],
+   "cat": "dal",
+   "region": "South India",
+   "diet": "veg",
+   "emoji": "🍲",
+   "unit": "g",
+   "kcal": 108,
+   "p": 4,
+   "c": 9.3,
+   "f": 5.7,
+   "fib": 4.2,
+   "na": 330,
+   "portions": [
+    {
+     "n": "1 katori (150 g)",
+     "hi": "1 कटोरी",
+     "g": 150
+    },
+    {
+     "n": "1 small katori (100 g)",
+     "hi": "1 छोटी कटोरी",
+     "g": 100
+    },
+    {
+     "n": "1 bowl (250 g)",
+     "hi": "1 कटोरा",
+     "g": 250
+    }
+   ],
+   "src": "Recipe computed per 100 g finished dish from IFCT 2017 raw ingredient values (ICMR-NIN) + standard Indian home recipe",
+   "conf": "low",
+   "note": "dried lima beans boiled then cooked in onion-tomato-coconut masala, ~1 tbsp oil per 150 g"
+  }
+ ]
+}

@@ -17,7 +17,7 @@
  * to retire the old caches.
  */
 
-const VERSION = "v2";
+const VERSION = "v3";
 const PREFIX = "swasthtrack-";
 const STATIC_CACHE = `${PREFIX}static-${VERSION}`;
 const RUNTIME_CACHE = `${PREFIX}runtime-${VERSION}`;
@@ -28,7 +28,8 @@ const OFFLINE_URL = "/offline.html";
 const PRECACHE = [
   OFFLINE_URL,
   "/favicon.png",
-  "/logo.jpg",
+  "/brand/logo-mark.png",
+  "/brand/wordmark.svg",
   "/icons/icon-192x192.png",
   "/icons/icon-512x512.png",
   "/icons/apple-touch-icon.png",
@@ -126,7 +127,7 @@ function isCacheableStatic(url) {
   return (
     url.pathname.startsWith("/_next/static/") ||
     url.pathname.startsWith("/icons/") ||
-    url.pathname === "/logo.jpg" ||
+    url.pathname.startsWith("/brand/") ||
     url.pathname === "/favicon.png"
   );
 }

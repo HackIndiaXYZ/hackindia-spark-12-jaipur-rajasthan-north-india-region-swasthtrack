@@ -332,6 +332,10 @@ const DRUG_NAMES = new Set(
   ].map((w) => fold(w)),
 );
 const TAKE_VERBS = new Set(["take", "taking", "le", "lena", "lu", "leni", "khana", "khaun", "khalu", "sakta", "sakte", "sakti", "ले", "लेना", "लूं", "खाना", "सकता", "सकते"].map((w) => fold(w)));
+/** "amlodipine KAB leni hai", "amlodipine le li kya": asking WHEN it is taken, or whether it was, changes nothing. */
+const TIMING_OR_PAST = new Set(
+  ["kab", "kitne", "baje", "when", "time", "samay", "schedule", "timing", "li", "liya", "lee", "thi", "tha", "taken", "took", "कब", "कितने", "बजे", "समय", "ली", "लिया", "थी", "था"].map((w) => fold(w)),
+);
 
 export function detectMedicineChangeRequest(message: string): boolean {
   const tokens = fold(message).split(" ").filter(Boolean);
@@ -345,8 +349,10 @@ export function detectMedicineChangeRequest(message: string): boolean {
       }
     }
     if (DRUG_NAMES.has(tokens[i])) {
+      const timing = tokens.some((t) => TIMING_OR_PAST.has(t));
       for (let j = Math.max(0, i - 4); j <= Math.min(tokens.length - 1, i + 4); j++) {
-        if (TAKE_VERBS.has(tokens[j]) || CHANGE_VERBS.has(tokens[j])) return true;
+        if (CHANGE_VERBS.has(tokens[j])) return true;
+        if (TAKE_VERBS.has(tokens[j]) && !timing) return true;
       }
     }
   }
@@ -360,9 +366,38 @@ const DIAGNOSIS_PHRASES = [
   "क्या मुझे", "कौनसी बीमारी", "कौन सी बीमारी", "क्या बीमारी है", "बीमारी का नाम", "डायग्नोसिस", "डायग्नोज़", "को डायबिटीज़ है", "को डायबिटीज है", "को स्ट्रोक है", "को कैंसर है",
 ].map((p) => fold(p));
 
+/** Conditions a family may ask "does he have ...?" about. Whole tokens, folded. */
+const DISEASE_WORDS = new Set(
+  [
+    "diabetes", "diabetic", "cancer", "stroke", "thyroid", "kidney", "tb", "dementia", "alzheimer", "alzheimers", "parkinson", "parkinsons", "anemia", "anaemia", "infection", "covid", "dengue", "malaria", "typhoid", "arthritis", "hypertension",
+    "डायबिटीज़", "डायबिटीज", "शुगर की बीमारी", "कैंसर", "स्ट्रोक", "थायरॉइड", "किडनी", "टीबी", "डिमेंशिया", "अल्ज़ाइमर", "अल्जाइमर", "पार्किंसन", "एनीमिया", "इन्फेक्शन", "कोविड", "डेंगू", "मलेरिया", "टाइफाइड", "गठिया", "हाइपरटेंशन",
+  ].map((w) => fold(w)),
+);
+/** What follows a condition name when the question is "does he have it?" (word order varies in Hinglish). */
+const HAS_AFTER = [
+  "hai kya", "hain kya", "hai ya nahi", "hua kya", "hua hai kya", "ho gaya kya", "ho gayi kya", "to nahi", "toh nahi", "ho sakta hai", "ho sakti hai", "lagta hai", "lag raha hai", "ka khatra", "ka risk", "hone ka",
+  "है क्या", "हैं क्या", "है या नहीं", "हुआ क्या", "हो गया क्या", "तो नहीं", "हो सकता है", "लगता है", "का खतरा", "का ख़तरा", "होने का",
+].map((p) => fold(p));
+
 export function detectDiagnosisRequest(message: string): boolean {
-  const f = ` ${fold(message)} `;
-  return DIAGNOSIS_PHRASES.some((p) => f.includes(` ${p} `));
+  const tokens = fold(message).split(" ").filter(Boolean);
+  const f = ` ${tokens.join(" ")} `;
+  const asking = /[?？]/.test(message) || tokens.includes("kya") || tokens.includes("क्या");
+  for (const p of DIAGNOSIS_PHRASES) {
+    if (!f.includes(` ${p} `)) continue;
+    // "papa ko diabetes hai, BP kitna hai" states a fact; only "ko X hai ... kya/?" asks whether he has it.
+    if (/^(?:ko|को) /.test(p) && !asking) continue;
+    return true;
+  }
+  for (let i = 0; i < tokens.length; i++) {
+    if (!DISEASE_WORDS.has(tokens[i])) continue;
+    const after = ` ${tokens.slice(i + 1, i + 5).join(" ")} `;
+    if (HAS_AFTER.some((p) => after.includes(` ${p} `))) return true;
+    // "kya papa ko diabetes hai": a question word just before the condition and "hai" right after.
+    const before = tokens.slice(Math.max(0, i - 4), i);
+    if ((before.includes("kya") || before.includes("क्या")) && /^(?:hai|hain|hua|hui|है|हैं|हुआ|हुई)$/.test(tokens[i + 1] ?? "")) return true;
+  }
+  return false;
 }
 
 const REMEMBER_PHRASES = [
@@ -413,7 +448,8 @@ export function neutraliseInjection(text: string): { text: string; detected: boo
 // Crisis readings
 // ---------------------------------------------------------------------------
 
-const BP_PAIR = /(?:^|[^\d./])(\d{2,3})\s*[/\\]\s*(\d{2,3})(?!\d)/g;
+// "150/95" typed, or "150 by 95" / "150 बाय 95" / "150 over 95" as speech recognition writes it.
+const BP_PAIR = /(?:^|[^\d./])(\d{2,3})(?:\s*[/\\]\s*|\s+(?:by|over|upon|बाय|बटा|बटे|ओवर)\s+)(\d{2,3})(?!\d)/gi;
 
 /** BP readings the user typed into the message, e.g. "BP 190/125 aa raha hai". */
 export function readingsInMessage(message: string): Array<{ systolic: number; diastolic: number }> {

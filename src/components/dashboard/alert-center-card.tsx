@@ -95,14 +95,19 @@ export function AlertCenterCard({ alerts, patientId, onAlertChange }: AlertCente
   }
 
   return (
-    <Card>
-      <div className="mb-3 flex items-center gap-2">
-        <span className="grid h-8 w-8 shrink-0 place-items-center rounded-control bg-attention-soft text-attention">
-          <Bell aria-hidden className="h-4 w-4" />
+    // Frosted white rather than gilt: amber / red alert panels read cleanly on white and
+    // would turn muddy sitting on champagne gold.
+    <Card tone="raised" aria-label="Needs attention — ध्यान देने योग्य">
+      <div className="mb-3 flex items-center gap-2.5">
+        <span
+          aria-hidden
+          className="grid h-8 w-8 shrink-0 place-items-center rounded-control bg-attention-soft text-attention ring-1 ring-inset ring-attention-line"
+        >
+          <Bell className="h-4 w-4" />
         </span>
-        <h2 className="text-base font-semibold text-ink">
-          ध्यान देने योग्य
-          <span className="ml-1.5 font-normal text-ink-muted">
+        <h2 className="min-w-0 text-base font-semibold text-ink">
+          <span lang="hi">ध्यान देने योग्य</span>
+          <span className="ml-1.5 text-sm font-normal text-ink-muted">
             Needs attention ({visible.length})
           </span>
         </h2>

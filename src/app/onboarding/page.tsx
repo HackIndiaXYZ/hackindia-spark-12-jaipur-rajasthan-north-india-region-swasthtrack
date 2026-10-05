@@ -1,21 +1,23 @@
 "use client";
 
-import { useRef, useState, type FormEvent } from "react";
-import Image from "next/image";
+import { useRef, useState, type ChangeEvent, type FormEvent } from "react";
+import { LogoMark } from "@/components/brand/logo-mark";
 import { useRouter } from "next/navigation";
 import {
   Activity,
   AlertCircle,
   ArrowRight,
-  CheckCircle2,
+  Check,
   KeyRound,
   LogOut,
   Scale,
+  ShieldCheck,
   Sparkles,
   User,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 import { Field, NumberInput, Select, TextInput } from "@/components/ui/form-field";
 import { JoinPatientDialog } from "@/components/forms/join-patient-dialog";
 import { useAuth } from "@/context/auth-context";
@@ -71,6 +73,18 @@ export default function OnboardingPage() {
   const [createdWithGaps, setCreatedWithGaps] = useState(false);
   const busyRef = useRef(false);
 
+  /** Typing into a field that was flagged takes its error away; the summary goes when nothing is flagged any more. */
+  function edit(key: keyof FieldErrors, set: (value: string) => void) {
+    return (e: ChangeEvent<HTMLInputElement>) => {
+      set(e.target.value);
+      if (!fieldErrors[key]) return;
+      const next = { ...fieldErrors };
+      delete next[key];
+      setFieldErrors(next);
+      if (Object.keys(next).length === 0) setError("");
+    };
+  }
+
   function toggleCondition(condition: string) {
     setSelectedConditions((prev) =>
       prev.includes(condition) ? prev.filter((c) => c !== condition) : [...prev, condition],
@@ -104,6 +118,9 @@ export default function OnboardingPage() {
     setFieldErrors(errors);
     if (Object.keys(errors).length > 0) {
       setError("कृपया लाल निशान वाली जानकारी ठीक करें। (Please fix the highlighted fields.)");
+      // Take the keyboard (and a phone's viewport) straight to the first thing to fix.
+      const first = (["name", "age", "height", "weight", "target", "calories"] as const).find((k) => errors[k]);
+      if (first) requestAnimationFrame(() => document.getElementById(`ob-${first}`)?.focus());
       return;
     }
 
@@ -151,203 +168,226 @@ export default function OnboardingPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-canvas px-4 py-10">
-      <div className="gold-edge w-full max-w-xl rounded-panel bg-surface p-6 sm:p-8">
-        <div className="mb-6 text-center">
-          <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center overflow-hidden rounded-card border border-line bg-surface shadow-e2">
-            <Image src="/logo.jpg" alt="SwasthTrack" width={64} height={64} className="h-full w-full object-cover" />
-          </div>
-          <span className="rounded-full border border-brand-line bg-brand-soft px-3 py-1 text-xs font-semibold uppercase tracking-wider text-brand-ink">
-            {hasPatients ? "Add a patient · एक और मरीज़ जोड़ें" : "Get started · शुरुआत करें"}
-          </span>
-          <h1 className="mt-2 text-xl font-bold text-ink sm:text-2xl">किसकी सेहत ट्रैक करनी है?</h1>
-          <p className="mt-1 text-sm text-ink-muted">
-            सिर्फ़ नाम ज़रूरी है। बाकी जानकारी बाद में कभी भी जोड़ सकते हैं। (Only the name is required; add the rest later.)
-          </p>
-        </div>
+    <div className="mx-auto flex min-h-dvh w-full max-w-2xl flex-col justify-center px-4 py-8 sm:py-12">
+      <header className="mb-6 text-center">
+        <LogoMark alt="SwasthTrack" sizes="80px" priority className="mx-auto mb-3 h-20 w-20" />
+        <span className="inline-flex items-center gap-1.5 rounded-full border border-gold-line bg-gold-soft px-3 py-1 text-xs font-semibold uppercase tracking-wider text-gold-ink">
+          <Sparkles aria-hidden className="h-3 w-3" />
+          {hasPatients ? "Add a patient · एक और मरीज़ जोड़ें" : "Get started · शुरुआत करें"}
+        </span>
+        <h1 lang="hi" className="mt-3 text-2xl font-bold tracking-tight text-ink sm:text-3xl">
+          किसकी सेहत ट्रैक करनी है?
+        </h1>
+        <p className="mx-auto mt-1.5 max-w-md text-sm text-ink-muted">
+          <span lang="hi">सिर्फ़ नाम ज़रूरी है। बाकी जानकारी बाद में कभी भी जोड़ सकते हैं।</span> (Only the name is required; add the rest later.)
+        </p>
+      </header>
 
-        <div aria-live="polite" className="empty:hidden">
-          {error ? (
-            <div
-              role="alert"
-              className="mb-4 flex items-start gap-2 rounded-card border border-critical-line bg-critical-soft p-3 text-sm font-medium text-critical"
-            >
-              <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
-              <span>{error}</span>
-            </div>
-          ) : null}
-        </div>
-
-        {createdWithGaps ? (
-          <div className="space-y-4 text-center">
-            <div className="rounded-card border border-attention-line bg-attention-soft p-4 text-sm text-attention">
-              मरीज़ की प्रोफाइल बन गई है, पर कुछ स्वास्थ्य स्थितियाँ सेव नहीं हो सकीं। उन्हें Profile पेज पर जोड़ लें। (Profile created; some conditions were not saved: add them on the Profile page.)
-            </div>
-            <Button variant="primary" size="lg" block onClick={() => router.replace("/")}>
-              आगे बढ़ें (Continue)
-              <ArrowRight className="h-4 w-4" aria-hidden />
-            </Button>
-          </div>
-        ) : (
-          <form onSubmit={handleSubmit} className="space-y-4" noValidate>
-            <Card className="space-y-3 p-4">
-              <h2 className="flex items-center gap-1.5 text-sm font-semibold text-ink">
-                <User className="h-4 w-4 text-brand" aria-hidden />
-                व्यक्तिगत जानकारी (Personal info)
-              </h2>
-
-              <Field label="मरीज़ का नाम (Patient name)" required error={fieldErrors.name}>
-                <TextInput
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="पूरा नाम"
-                  autoComplete="off"
-                  aria-invalid={Boolean(fieldErrors.name)}
-                  required
-                />
-              </Field>
-
-              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-                <Field label="उम्र (Age)" hint="वैकल्पिक" error={fieldErrors.age}>
-                  <NumberInput
-                    value={age}
-                    onChange={(e) => setAge(e.target.value)}
-                    placeholder="वर्ष"
-                    aria-invalid={Boolean(fieldErrors.age)}
-                  />
-                </Field>
-                <Field label="लिंग (Gender)" hint="वैकल्पिक">
-                  <Select value={gender} onChange={(e) => setGender(e.target.value)}>
-                    <option value="">चुनें</option>
-                    <option value="Male">पुरुष (Male)</option>
-                    <option value="Female">महिला (Female)</option>
-                    <option value="Other">अन्य (Other)</option>
-                  </Select>
-                </Field>
-                <Field
-                  label="ऊंचाई (Height cm)"
-                  hint="वैकल्पिक"
-                  error={fieldErrors.height}
-                  className="col-span-2 sm:col-span-1"
-                >
-                  <NumberInput
-                    allowDecimal
-                    value={heightCm}
-                    onChange={(e) => setHeightCm(e.target.value)}
-                    placeholder="सेमी"
-                    aria-invalid={Boolean(fieldErrors.height)}
-                  />
-                </Field>
-              </div>
-            </Card>
-
-            <Card className="space-y-3 p-4">
-              <h2 className="flex items-center gap-1.5 text-sm font-semibold text-ink">
-                <Scale className="h-4 w-4 text-brand" aria-hidden />
-                वजन और पोषण लक्ष्य (Weight and calorie goals)
-              </h2>
-              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-                <Field label="वर्तमान वजन (kg)" hint="वैकल्पिक" error={fieldErrors.weight}>
-                  <NumberInput
-                    allowDecimal
-                    value={currentWeight}
-                    onChange={(e) => setCurrentWeight(e.target.value)}
-                    placeholder="kg"
-                    aria-invalid={Boolean(fieldErrors.weight)}
-                  />
-                </Field>
-                <Field label="लक्ष्य वजन (kg)" hint="वैकल्पिक" error={fieldErrors.target}>
-                  <NumberInput
-                    allowDecimal
-                    value={targetWeight}
-                    onChange={(e) => setTargetWeight(e.target.value)}
-                    placeholder="kg"
-                    aria-invalid={Boolean(fieldErrors.target)}
-                  />
-                </Field>
-                <Field
-                  label="दैनिक कैलोरी (kcal)"
-                  hint="खाली छोड़ने पर 1600 रहेगा; डॉक्टर के अनुसार बदलें"
-                  error={fieldErrors.calories}
-                  className="col-span-2 sm:col-span-1"
-                >
-                  <NumberInput
-                    value={calorieTarget}
-                    onChange={(e) => setCalorieTarget(e.target.value)}
-                    placeholder="kcal"
-                    aria-invalid={Boolean(fieldErrors.calories)}
-                  />
-                </Field>
-              </div>
-            </Card>
-
-            <Card className="space-y-2.5 p-4">
-              <h2 className="flex items-center gap-1.5 text-sm font-semibold text-ink">
-                <Activity className="h-4 w-4 text-brand" aria-hidden />
-                स्वास्थ्य स्थितियां (Medical conditions)
-              </h2>
-              <p className="text-xs text-ink-muted">लागू होने वाली स्थितियां चुनें (यदि कोई हो):</p>
-              <div className="grid grid-cols-1 gap-2 pt-1 sm:grid-cols-2">
-                {CONDITION_PRESETS.map((condition) => {
-                  const selected = selectedConditions.includes(condition.name);
-                  return (
-                    <button
-                      key={condition.name}
-                      type="button"
-                      role="checkbox"
-                      aria-checked={selected}
-                      onClick={() => toggleCondition(condition.name)}
-                      className={`flex min-h-control cursor-pointer items-center gap-2 rounded-card border p-2.5 text-left text-sm font-medium transition-colors ${
-                        selected
-                          ? "border-brand bg-brand-soft font-semibold text-brand-ink"
-                          : "border-line bg-surface text-ink-muted hover:bg-surface-sunken"
-                      }`}
-                    >
-                      <span
-                        className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-md border ${
-                          selected ? "border-brand bg-brand text-ink-inverse" : "border-line-strong bg-surface"
-                        }`}
-                      >
-                        {selected ? <CheckCircle2 className="h-3.5 w-3.5" aria-hidden /> : null}
-                      </span>
-                      <span>
-                        {condition.name} <span lang="hi">({condition.hi})</span>
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
-            </Card>
-
-            <Button type="submit" variant="primary" size="lg" block disabled={loading}>
-              <Sparkles className="h-4 w-4" aria-hidden />
-              {loading ? "प्रोफाइल बन रही है..." : "सेटअप पूरा करें"}
-              {!loading ? <ArrowRight className="h-4 w-4" aria-hidden /> : null}
-            </Button>
-          </form>
-        )}
-
-        {!createdWithGaps ? (
-          <div className="mt-6 space-y-1 border-t border-line pt-4">
-            <p className="text-center text-xs text-ink-subtle">परिवार के किसी सदस्य ने पहले से मरीज़ बनाया है?</p>
-            <Button variant="secondary" block onClick={() => setIsJoinOpen(true)}>
-              <KeyRound className="h-4 w-4" aria-hidden />
-              मेरे पास इनविटेशन कोड है (I have an invite code)
-            </Button>
-            {hasPatients ? (
-              <Button variant="ghost" block onClick={() => router.replace("/")}>
-                रद्द करें, वापस जाएं (Cancel)
-              </Button>
-            ) : (
-              <Button variant="ghost" block onClick={() => void signOut()}>
-                <LogOut className="h-4 w-4" aria-hidden />
-                लॉग आउट (Sign out)
-              </Button>
-            )}
+      <div aria-live="polite" className="empty:hidden">
+        {error ? (
+          <div
+            role="alert"
+            className="mb-4 flex items-start gap-2 rounded-card border border-critical-line bg-critical-soft p-3 text-sm font-medium text-critical"
+          >
+            <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
+            <span>{error}</span>
           </div>
         ) : null}
       </div>
+
+      {createdWithGaps ? (
+        <Card tone="premium" className="space-y-4 text-center">
+          <div className="rounded-card border border-attention-line bg-attention-soft p-4 text-sm text-attention">
+            <span lang="hi">मरीज़ की प्रोफाइल बन गई है, पर कुछ स्वास्थ्य स्थितियाँ सेव नहीं हो सकीं। उन्हें Profile पेज पर जोड़ लें।</span> (Profile created; some conditions were not saved: add them on the Profile page.)
+          </div>
+          <Button variant="primary" size="lg" block onClick={() => router.replace("/")}>
+            आगे बढ़ें (Continue)
+            <ArrowRight className="h-4 w-4" aria-hidden />
+          </Button>
+        </Card>
+      ) : (
+        <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+          <Card className="space-y-4">
+            <h2 className="flex items-center gap-2 text-base font-semibold text-ink">
+              <span className="grid h-8 w-8 place-items-center rounded-control bg-brand-soft text-brand-ink">
+                <User className="h-4 w-4" aria-hidden />
+              </span>
+              <span lang="hi">व्यक्तिगत जानकारी</span> <span className="text-sm font-normal text-ink-muted">Personal info</span>
+            </h2>
+
+            <Field label="मरीज़ का नाम (Patient name)" required error={fieldErrors.name}>
+              <TextInput
+                id="ob-name"
+                type="text"
+                value={name}
+                onChange={edit("name", setName)}
+                placeholder="पूरा नाम"
+                autoComplete="off"
+                aria-invalid={Boolean(fieldErrors.name)}
+                required
+              />
+            </Field>
+
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+              <Field label="उम्र (Age)" hint="वैकल्पिक" error={fieldErrors.age}>
+                <NumberInput
+                  id="ob-age"
+                  value={age}
+                  onChange={edit("age", setAge)}
+                  placeholder="वर्ष"
+                  aria-invalid={Boolean(fieldErrors.age)}
+                />
+              </Field>
+              <Field label="लिंग (Gender)" hint="वैकल्पिक">
+                <Select value={gender} onChange={(e) => setGender(e.target.value)}>
+                  <option value="">चुनें</option>
+                  <option value="Male">पुरुष (Male)</option>
+                  <option value="Female">महिला (Female)</option>
+                  <option value="Other">अन्य (Other)</option>
+                </Select>
+              </Field>
+              <Field
+                label="ऊंचाई (Height cm)"
+                hint="वैकल्पिक"
+                error={fieldErrors.height}
+                className="col-span-2 sm:col-span-1"
+              >
+                <NumberInput
+                  id="ob-height"
+                  allowDecimal
+                  value={heightCm}
+                  onChange={edit("height", setHeightCm)}
+                  placeholder="सेमी"
+                  aria-invalid={Boolean(fieldErrors.height)}
+                />
+              </Field>
+            </div>
+          </Card>
+
+          <Card className="space-y-4">
+            <h2 className="flex items-center gap-2 text-base font-semibold text-ink">
+              <span className="grid h-8 w-8 place-items-center rounded-control bg-weight-soft text-weight">
+                <Scale className="h-4 w-4" aria-hidden />
+              </span>
+              <span lang="hi">वजन और पोषण लक्ष्य</span> <span className="text-sm font-normal text-ink-muted">Weight & calories</span>
+            </h2>
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+              <Field label="वर्तमान वजन (kg)" hint="वैकल्पिक" error={fieldErrors.weight}>
+                <NumberInput
+                  id="ob-weight"
+                  allowDecimal
+                  value={currentWeight}
+                  onChange={edit("weight", setCurrentWeight)}
+                  placeholder="kg"
+                  aria-invalid={Boolean(fieldErrors.weight)}
+                />
+              </Field>
+              <Field label="लक्ष्य वजन (kg)" hint="वैकल्पिक" error={fieldErrors.target}>
+                <NumberInput
+                  id="ob-target"
+                  allowDecimal
+                  value={targetWeight}
+                  onChange={edit("target", setTargetWeight)}
+                  placeholder="kg"
+                  aria-invalid={Boolean(fieldErrors.target)}
+                />
+              </Field>
+              <Field
+                label="दैनिक कैलोरी (kcal)"
+                hint="खाली छोड़ने पर 1600 रहेगा; डॉक्टर के अनुसार बदलें"
+                error={fieldErrors.calories}
+                className="col-span-2 sm:col-span-1"
+              >
+                <NumberInput
+                  id="ob-calories"
+                  value={calorieTarget}
+                  onChange={edit("calories", setCalorieTarget)}
+                  placeholder="kcal"
+                  aria-invalid={Boolean(fieldErrors.calories)}
+                />
+              </Field>
+            </div>
+          </Card>
+
+          <Card className="space-y-3">
+            <h2 className="flex items-center gap-2 text-base font-semibold text-ink">
+              <span className="grid h-8 w-8 place-items-center rounded-control bg-bp-soft text-bp">
+                <Activity className="h-4 w-4" aria-hidden />
+              </span>
+              <span lang="hi">स्वास्थ्य स्थितियां</span> <span className="text-sm font-normal text-ink-muted">Medical conditions</span>
+            </h2>
+            <p lang="hi" className="text-sm text-ink-muted">
+              लागू होने वाली स्थितियां चुनें (यदि कोई हो)। बाद में Profile पेज से बदल सकते हैं।
+            </p>
+            <div role="group" aria-label="स्वास्थ्य स्थितियां" className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+              {CONDITION_PRESETS.map((condition) => {
+                const selected = selectedConditions.includes(condition.name);
+                return (
+                  <button
+                    key={condition.name}
+                    type="button"
+                    role="checkbox"
+                    aria-checked={selected}
+                    onClick={() => toggleCondition(condition.name)}
+                    className={cn(
+                      "pressable flex min-h-control cursor-pointer items-center gap-2.5 rounded-card border px-3 py-2 text-left text-sm transition-colors",
+                      selected
+                        ? "grad-gold-button border-gold-line font-semibold text-gold-ink shadow-gold-button"
+                        : "tile font-medium text-ink hover:border-gold-line hover:bg-surface",
+                    )}
+                  >
+                    <span
+                      aria-hidden
+                      className={cn(
+                        "grid h-5 w-5 shrink-0 place-items-center rounded-md border",
+                        selected ? "border-gold-ink bg-gold-ink text-ink-inverse" : "border-line-strong bg-surface",
+                      )}
+                    >
+                      {selected ? <Check className="h-3.5 w-3.5" /> : null}
+                    </span>
+                    <span>
+                      {condition.name} <span lang="hi">({condition.hi})</span>
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </Card>
+
+          <Button type="submit" variant="primary" size="lg" block loading={loading}>
+            {loading ? null : <Sparkles className="h-4 w-4" aria-hidden />}
+            <span lang="hi">{loading ? "प्रोफाइल बन रही है…" : "सेटअप पूरा करें"}</span>
+            {!loading ? <ArrowRight className="h-4 w-4" aria-hidden /> : null}
+          </Button>
+        </form>
+      )}
+
+      {!createdWithGaps ? (
+        <Card tone="sunken" className="mt-6 space-y-2.5">
+          <p lang="hi" className="text-center text-sm text-ink-muted">
+            परिवार के किसी सदस्य ने पहले से मरीज़ बनाया है?
+          </p>
+          <Button variant="secondary" block onClick={() => setIsJoinOpen(true)}>
+            <KeyRound className="h-4 w-4" aria-hidden />
+            <span lang="hi">मेरे पास इनविटेशन कोड है</span> (I have an invite code)
+          </Button>
+          {hasPatients ? (
+            <Button variant="ghost" block onClick={() => router.replace("/")}>
+              <span lang="hi">रद्द करें, वापस जाएं</span> (Cancel)
+            </Button>
+          ) : (
+            <Button variant="ghost" block onClick={() => void signOut()}>
+              <LogOut className="h-4 w-4" aria-hidden />
+              <span lang="hi">लॉग आउट</span> (Sign out)
+            </Button>
+          )}
+        </Card>
+      ) : null}
+
+      <p lang="hi" className="mt-5 flex items-center justify-center gap-1.5 text-center text-xs text-ink-muted">
+        <ShieldCheck aria-hidden className="h-3.5 w-3.5" />
+        आपकी जानकारी सुरक्षित रहती है और सिर्फ़ उन्हीं को दिखती है जिन्हें आप एक्सेस देते हैं।
+      </p>
 
       <JoinPatientDialog isOpen={isJoinOpen} onClose={() => setIsJoinOpen(false)} onSuccess={handleJoined} />
     </div>

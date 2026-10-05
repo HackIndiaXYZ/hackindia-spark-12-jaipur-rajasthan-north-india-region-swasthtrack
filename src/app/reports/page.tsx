@@ -5,6 +5,7 @@ import { ShieldAlert } from "lucide-react";
 import { NoPatientState } from "@/components/health/no-patient-state";
 import { FoodDataQuality } from "@/components/reports/food-data-quality";
 import { ReportsTabs } from "@/components/reports/reports-tabs";
+import { Card } from "@/components/ui/card";
 import { PageBody, PageHeader } from "@/components/ui/page";
 import { useAuth } from "@/context/auth-context";
 
@@ -15,6 +16,7 @@ export default function ReportsPage() {
   return (
     <PageBody>
       <PageHeader
+        className="print:hidden"
         eyebrow="Reports & analytics"
         title="Health & adherence reports"
         hindiTitle="रिपोर्ट और विश्लेषण"
@@ -32,17 +34,21 @@ export default function ReportsPage() {
         <NoPatientState what="रिपोर्ट" />
       )}
 
-      {isAdmin ? <FoodDataQuality /> : null}
+      {isAdmin ? (
+        <div className="no-print print:hidden">
+          <FoodDataQuality />
+        </div>
+      ) : null}
 
-      <div className="no-print flex flex-wrap items-center justify-between gap-3 rounded-card border border-line bg-surface p-4 text-xs text-ink-muted shadow-e1 print:hidden">
+      <Card tone="sunken" className="no-print flex flex-wrap items-center justify-between gap-3 py-3 text-xs text-ink-muted print:hidden sm:py-3">
         <p className="flex items-center gap-2">
           <ShieldAlert aria-hidden className="h-4 w-4 shrink-0 text-ink-subtle" />
           <span lang="hi">स्वास्थट्रैक की रिपोर्ट रिकॉर्ड का सारांश है। यह डॉक्टर की सलाह या निदान की जगह नहीं लेती।</span>
         </p>
-        <Link href="/medical-disclaimer" className="shrink-0 font-semibold text-brand-ink hover:underline">
+        <Link href="/medical-disclaimer" className="inline-flex min-h-control shrink-0 items-center font-semibold text-brand-ink hover:underline">
           Medical disclaimer →
         </Link>
-      </div>
+      </Card>
     </PageBody>
   );
 }

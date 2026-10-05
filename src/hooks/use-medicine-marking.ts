@@ -23,10 +23,13 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useAuth } from "@/context/auth-context";
 import { useConfirm } from "@/components/ui/confirm-dialog";
 import { useToast } from "@/components/ui/toast";
+import { doseDateOfLog, scheduledMinutes } from "@/lib/analytics/adherence";
 import {
   MEDICINE_MISSED_AFTER_MIN,
+  addDaysIST,
   adherencePct,
   istInstant,
+  toISTDate,
   todayIST,
   type DoseStatus,
 } from "@/lib/health-rules";
@@ -34,7 +37,7 @@ import { hhmm, type DoseState } from "@/lib/medicine-format";
 import {
   deleteMedicineLog,
   evaluateMedicineStatusAndMessage,
-  getMedicineLogsByDate,
+  getMedicineLogsInRange,
   getMedicines,
   isAutoMissedLogId,
   logMedicineStatus,
@@ -54,6 +57,10 @@ export type Dose = {
   recordedAt: string | null;
   /** Missed only because the deadline passed with nothing recorded (not tapped by a person). */
   autoMissed: boolean;
+  /** Minutes past the schedule right now (0 before it is due, or on any other day than today). */
+  overdueMin: number;
+  /** Recording it as taken right now would be stored as "late" (today only, same rule the save uses). */
+  lateIfTakenNow: boolean;
   /** A write for this dose is in flight. */
   busy: boolean;
 };
@@ -95,7 +102,24 @@ export function notifyMedicinesChanged(patientId: string): void {
   listeners.forEach((l) => l(patientId, EXTERNAL));
 }
 
+/** Run `cb` whenever a medicine or a dose changes for this patient (a history view re-reads on it). Returns the unsubscribe. */
+export function onMedicinesChanged(patientId: string, cb: () => void): () => void {
+  const listener: Listener = (changed) => {
+    if (changed === patientId) cb();
+  };
+  listeners.add(listener);
+  return () => {
+    listeners.delete(listener);
+  };
+}
+
 const READ_ONLY_MESSAGE = "आपके पास केवल देखने का एक्सेस है, इसलिए दवाई दर्ज नहीं हो सकती।";
+
+/** A medicine added after the viewed day: its doses that day were never the patient's to take (the adherence maths skips them too). */
+function addedAfter(medicine: MedicineItem, dateIST: string): boolean {
+  const created = new Date(medicine.created_at);
+  return !Number.isNaN(created.getTime()) && toISTDate(created) > dateIST;
+}
 
 function withLog(logs: MedicineLogEntry[], medicineId: string, next: MedicineLogEntry | null): MedicineLogEntry[] {
   const rest = logs.filter((l) => l.medicine_id !== medicineId);
@@ -115,24 +139,29 @@ function deriveDose(medicine: MedicineItem, log: MedicineLogEntry | null, dateIS
   const scheduledHHMM = hhmm(medicine.scheduled_time);
   const scheduledAt = istInstant(dateIST, scheduledHHMM);
   const recordedAt = log ? log.taken_time || log.created_at : null;
+  const sched = scheduledAt.getTime();
+  const isToday = dateIST === todayIST(new Date(now));
+  const overdueMin = isToday ? Math.max(0, Math.floor((now - sched) / 60_000)) : 0;
+  const lateIfTakenNow =
+    isToday && now >= sched && evaluateMedicineStatusAndMessage(medicine, dateIST, new Date(now).toISOString()).isLate;
+  const base = { medicine, log, scheduledAt, scheduledHHMM, overdueMin, lateIfTakenNow };
 
   if (log && (log.status === "taken" || log.status === "late" || log.status === "missed")) {
-    return { medicine, state: log.status, log, scheduledAt, scheduledHHMM, recordedAt, autoMissed: false };
+    return { ...base, state: log.status, recordedAt, autoMissed: false };
   }
 
   // Nothing recorded (a stored "pending" row counts as nothing).
-  const sched = scheduledAt.getTime();
   if (now < sched) {
-    return { medicine, state: "upcoming", log, scheduledAt, scheduledHHMM, recordedAt: null, autoMissed: false };
+    return { ...base, state: "upcoming", recordedAt: null, autoMissed: false };
   }
   // Same rule the service uses for its virtual rows: a dose scheduled before the
   // medicine was added was never the patient's to take, so it cannot be "missed".
   const existedThen = sched >= new Date(medicine.created_at).getTime();
   const pastDeadline = now > sched + MEDICINE_MISSED_AFTER_MIN * 60_000;
   if (pastDeadline && existedThen) {
-    return { medicine, state: "missed", log, scheduledAt, scheduledHHMM, recordedAt: null, autoMissed: true };
+    return { ...base, state: "missed", recordedAt: null, autoMissed: true };
   }
-  return { medicine, state: "pending", log, scheduledAt, scheduledHHMM, recordedAt: null, autoMissed: false };
+  return { ...base, state: "pending", recordedAt: null, autoMissed: false };
 }
 
 export function summarizeDoses(doses: Array<{ state: DoseState }>): DoseSummary {
@@ -178,10 +207,18 @@ export function useMedicineMarking(
   useEffect(() => {
     if (!patientId) return;
     let cancelled = false;
-    Promise.all([getMedicines(patientId), getMedicineLogsByDate(patientId, dateIST)])
+    // Older rows hold the schedule's wall-clock time as if it were UTC, so a late-evening dose of
+    // day D sits on D+1 in IST. Read one day further and assign each row to its dose's own day
+    // (the same rule the adherence maths uses), so this view and the history never disagree.
+    Promise.all([getMedicines(patientId), getMedicineLogsInRange(patientId, dateIST, addDaysIST(dateIST, 1))])
       .then(([medicines, logs]) => {
         if (cancelled) return;
-        setSnap({ key: `${patientId}|${dateIST}`, medicines, logs: logs.filter((l) => !isAutoMissedLogId(l.id)), error: false });
+        const minutes = new Map(medicines.map((m) => [m.id, scheduledMinutes(m.scheduled_time)]));
+        const ofDay = logs.filter((l) => {
+          const min = minutes.get(l.medicine_id);
+          return !isAutoMissedLogId(l.id) && min !== undefined && doseDateOfLog(l, min) === dateIST;
+        });
+        setSnap({ key: `${patientId}|${dateIST}`, medicines, logs: ofDay, error: false });
       })
       .catch(() => {
         if (cancelled) return;
@@ -216,12 +253,17 @@ export function useMedicineMarking(
   const doses: Dose[] = useMemo(() => {
     if (!current || current.error) return [];
     return current.medicines
-      .filter((m) => m.active)
+      .filter((m) => m.active && !addedAfter(m, dateIST))
       .map((m) => ({ ...deriveDose(m, latestRealLog(current.logs, m.id), dateIST, now), busy: busyIds.has(m.id) }))
       .sort((a, b) => a.scheduledHHMM.localeCompare(b.scheduledHHMM) || a.medicine.medicine_name.localeCompare(b.medicine.medicine_name));
   }, [current, dateIST, now, busyIds]);
 
   const summary = useMemo(() => summarizeDoses(doses), [doses]);
+  /** Active medicines that did not exist yet on the viewed day (so are not listed). */
+  const notYetAdded = useMemo(
+    () => (current ? current.medicines.filter((m) => m.active && addedAfter(m, dateIST)).length : 0),
+    [current, dateIST],
+  );
 
   const reload = useCallback(() => {
     setSnap(null);
@@ -483,6 +525,7 @@ export function useMedicineMarking(
     summary,
     /** Every medicine, active or not (for management screens). */
     medicines: current?.medicines ?? [],
+    notYetAdded,
     loading,
     error,
     reload,

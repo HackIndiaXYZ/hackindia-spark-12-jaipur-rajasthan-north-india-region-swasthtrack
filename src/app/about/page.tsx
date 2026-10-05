@@ -93,7 +93,7 @@ export default function AboutPage() {
       hindiTitle="हमारा उद्देश्य"
       description="A health and family-care companion that helps families look after everyday wellness together."
     >
-      <Card tone="premium" className="shine-sweep space-y-4 p-6 sm:p-8">
+      <Card tone="premium" className="space-y-4 p-6 sm:p-8">
         <div className="inline-flex items-center gap-1.5 rounded-full border border-gold-line bg-gold-soft px-3 py-1 text-xs font-semibold text-gold-ink">
           <Heart aria-hidden className="h-3.5 w-3.5 fill-gold-ink text-gold-ink" />
           <span>The heart of SwasthTrack</span>
@@ -117,12 +117,12 @@ export default function AboutPage() {
             स्वस्थट्रैक क्यों?
           </span>
         </h2>
-        <div className="space-y-3 rounded-card border border-line bg-surface p-5 text-sm leading-relaxed text-ink-muted sm:p-6">
+        <Card tone="raised" className="space-y-3 p-5 text-sm leading-relaxed text-ink-muted sm:p-6">
           <p>
             Most fitness apps are built for athletes and calorie counters, which makes them busy and hard for elderly parents. SwasthTrack
             is built with a different mindset:
           </p>
-          <ul className="list-disc space-y-1.5 pl-5 marker:text-ink-subtle">
+          <ul className="list-disc space-y-1.5 pl-5 marker:text-gold-ink">
             <li>
               <strong className="text-ink">Readable for elders</strong>: large clear text, Hindi labels and big touch targets.
             </li>
@@ -141,7 +141,7 @@ export default function AboutPage() {
               <strong className="text-ink">Family transparency</strong>: caregivers can see what has and has not been recorded.
             </li>
           </ul>
-        </div>
+        </Card>
       </section>
 
       <section className="space-y-4">
@@ -150,19 +150,21 @@ export default function AboutPage() {
           {FEATURES.map((feat) => {
             const Icon = feat.icon;
             return (
-              <li key={feat.title} className="space-y-2 rounded-card border border-line bg-surface p-4 shadow-e1 sm:p-5">
+              <li key={feat.title}>
+                <Card className="h-full space-y-2">
                 <div className="flex items-center gap-3">
                   <span className={cn("grid h-10 w-10 shrink-0 place-items-center rounded-control", metricChipClasses[feat.tone])}>
                     <Icon aria-hidden className="h-5 w-5" />
                   </span>
                   <div className="min-w-0">
                     <h3 className="text-sm font-semibold text-ink">{feat.title}</h3>
-                    <p lang="hi" className="text-xs text-ink-subtle">
+                    <p lang="hi" className="text-xs text-ink-muted">
                       {feat.hindi}
                     </p>
                   </div>
                 </div>
                 <p className="text-sm leading-relaxed text-ink-muted">{feat.desc}</p>
+                </Card>
               </li>
             );
           })}
@@ -183,14 +185,14 @@ export default function AboutPage() {
         </div>
       </div>
 
-      <div className="space-y-2 rounded-card border border-line bg-surface-sunken p-6 text-center">
+      <Card tone="sunken" className="space-y-2 p-6 text-center">
         <div className="flex items-center justify-center gap-1.5 text-sm font-semibold text-ink">
           <span>Made with</span>
           <Heart aria-hidden className="inline h-4 w-4 fill-bp text-bp" />
           <span>by Pawan Kumar</span>
         </div>
-        <p className="text-xs text-ink-subtle">Built with care for families who care for each other.</p>
-      </div>
+        <p className="text-xs text-ink-muted">Built with care for families who care for each other.</p>
+      </Card>
     </LegalPage>
   );
 }

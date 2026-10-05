@@ -1,17 +1,28 @@
+import { bi, num, rangeBi, weekdayBi, type Bi } from "../format";
 import {
   C,
-  alertBlock,
-  bullets,
-  callout,
-  emailShell,
+  alertCallout,
+  appBase,
+  bulletRows,
+  chips,
+  ctaSection,
+  en,
   esc,
+  finish,
   heading,
   hi,
-  kv,
-  en,
-  openApp,
-  sectionTitle,
-  toText,
+  kvRows,
+  noteBox,
+  pair,
+  pill,
+  progressBar,
+  section,
+  spacer,
+  tiles,
+  title,
+  topBar,
+  val,
+  type PillTone,
 } from "../layout";
 import type {
   BpTone,
@@ -22,203 +33,321 @@ import type {
   WeeklyReportData,
 } from "../types";
 
-const BP_TONE_COLOR: Record<BpTone, string> = {
-  critical: C.critical,
-  high: C.attention,
-  low: C.attention,
-  normal: C.green,
+const EN_FONT = "font-family:'Segoe UI',Roboto,Arial,sans-serif;";
+const HI_FONT = "font-family:'Noto Sans Devanagari','Mukta','Nirmala UI','Mangal',Arial,sans-serif;";
+const TBL = "border-collapse:collapse;border-spacing:0;mso-table-lspace:0pt;mso-table-rspace:0pt;width:100%;";
+
+const DASH = "—";
+const rule = `border-top:1px solid ${C.rule};`;
+
+const BP_TONE: Record<BpTone, { color: string; pill: PillTone; label: Bi }> = {
+  normal: { color: C.greenInk, pill: "ok", label: { hi: "सामान्य", en: "Normal" } },
+  high: { color: C.attn, pill: "attention", label: { hi: "ज़्यादा", en: "High" } },
+  low: { color: C.attn, pill: "attention", label: { hi: "कम", en: "Low" } },
+  critical: { color: C.crit, pill: "important", label: { hi: "बहुत ज़्यादा", en: "Very high" } },
 };
 
-const REPORT_REASON = {
-  hi: "आपने इस मरीज़ की रिपोर्ट चालू रखी हैं",
-  en: "You have reports turned on for this patient",
+const SLOT: Record<"morning" | "evening", Bi> = {
+  morning: { hi: "सुबह", en: "Morning" },
+  evening: { hi: "शाम", en: "Evening" },
 };
 
-const num = (n: number) => n.toLocaleString("en-IN");
-const dash = "—";
+const reportReason = (hiText: string, enText: string): Bi => ({ hi: hiText, en: enText });
 
-function noteInsufficient(days: number, total: number, unitHi: string, unitEn: string): string {
-  return callout(
-    "info",
-    `इस ${unitHi} बहुत कम डेटा दर्ज हुआ (${days}/${total} दिन), इसलिए नीचे के आँकड़े अधूरे हो सकते हैं।`,
-    `Very little was logged this ${unitEn} (${days}/${total} days), so the numbers below may be incomplete.`,
-  );
+/** Signed number with a real minus sign, e.g. "−0.4", "+1.2", "0". */
+function signed(n: number): string {
+  if (n === 0) return "0";
+  return `${n > 0 ? "+" : "−"}${Math.abs(n)}`;
 }
 
-function shell(
-  title: string,
-  preheader: string,
-  body: string,
-  opts: RenderOptions,
-): { html: string; text: string } {
-  const html = emailShell({
-    title,
-    preheader,
-    body,
-    reasonHi: REPORT_REASON.hi,
-    reasonEn: REPORT_REASON.en,
-    sample: opts.sample,
-  });
-  return { html, text: toText(html) };
+/** Two-line note in a tinted box without a title (low-data notices). */
+function notice(hiText: string, enText: string): string {
+  return noteBox("warn", hi(hiText, { size: 12, lh: 19 }) + en(enText, { size: 11.5, lh: 16, color: C.muted, mt: 1 }), "10px 12px");
+}
+
+// ---- daily ------------------------------------------------------------------
+
+function bpRows(rows: DailyReportData["bpReadings"]): string {
+  return `<table role="presentation" width="100%" style="${TBL}">${rows
+    .map((r) => {
+      const t = BP_TONE[r.tone];
+      const name = r.slot ? bi(SLOT[r.slot]) : "बीपी · BP";
+      const sub = `${r.timeLabel}${r.pulse !== null ? ` · नाड़ी / Pulse ${r.pulse}` : ""}`;
+      return `<tr><td valign="middle" style="padding:7px 0;${rule}">${hi(name, { size: 12.5, lh: 19, weight: 600 })}${hi(sub, { size: 11, lh: 16, color: C.muted })}</td><td align="right" valign="middle" style="padding:7px 0 7px 10px;${rule}"><p style="margin:0;line-height:19px;text-align:right;">${val(r.value, { size: 15, color: t.color })}</p><p style="margin:3px 0 0;line-height:17px;text-align:right;">${pill(t.pill, bi(t.label), 10.5)}</p></td></tr>`;
+    })
+    .join("")}</table>`;
+}
+
+function chipRow(label: Bi, items: string[], tone: "neutral" | "ok" | "attention", width = 74): string {
+  return `<table role="presentation" width="100%" style="${TBL}"><tr><td width="${width}" valign="top" style="width:${width}px;padding:8px 0 3px;${rule}">${hi(label.hi, { size: 12, lh: 17, weight: 600 })}${en(label.en, { size: 10.5, lh: 13, color: C.muted })}</td><td valign="top" style="padding:8px 0 3px;${rule}line-height:24px;">${chips(items, tone)}</td></tr></table>`;
 }
 
 export function renderDailyReport(d: DailyReportData, opts: RenderOptions = {}): RenderedEmail {
-  const parts: string[] = [heading(`${d.patientName} की दैनिक रिपोर्ट`, `Daily report · ${d.dateLabel}`)];
+  const base = opts.base === undefined ? appBase() : opts.base;
+  const sections: string[] = [
+    section(
+      topBar(pill("ok", "दैनिक रिपोर्ट · Daily report"), bi(d.date)) +
+        title({ hi: `${d.patientName} का आज का हाल`, en: `${d.patientName}'s day at a glance` }),
+      { first: true },
+    ),
+  ];
 
   if (d.alerts.length > 0) {
-    parts.push(sectionTitle("ध्यान देने योग्य", "Needs attention"), d.alerts.map(alertBlock).join(""));
+    sections.push(
+      section(heading({ hi: "ध्यान देने वाली बातें", en: "Needs attention" }) + d.alerts.map((a) => alertCallout(a) + spacer(8)).join(""), {
+        pad: "14px 22px 8px",
+      }),
+    );
   }
 
-  parts.push(sectionTitle("रक्तचाप", "Blood pressure"));
-  parts.push(
-    d.bpReadings.length === 0
-      ? hi("आज कोई BP दर्ज नहीं हुआ", { size: 12, color: C.muted, mb: 1 }) + en("No BP logged today", { size: 11 })
-      : kv(
-          d.bpReadings.map((r) => ({
-            label: `${r.time} · ${r.label}`,
-            value: `<span style="color:${BP_TONE_COLOR[r.tone]};">${esc(r.value)}</span>${r.pulse ? ` <span style="font-weight:400;color:${C.muted};">· ${esc(r.pulse)} bpm</span>` : ""}`,
-          })),
-        ),
+  sections.push(
+    section(
+      heading({ hi: "रक्तचाप (बीपी)", en: "Blood pressure · mmHg" }) +
+        (d.bpReadings.length === 0 ? pair({ hi: "आज कोई बीपी दर्ज नहीं हुआ", en: "No BP logged today" }, { hiSize: 12, enSize: 11 }) : bpRows(d.bpReadings)),
+    ),
   );
 
-  parts.push(sectionTitle("दवाइयाँ", "Medicines"));
-  if (d.medicines.total === 0) {
-    parts.push(hi("कोई सक्रिय दवाई नहीं", { size: 12, color: C.muted, mb: 1 }) + en("No active medicines", { size: 11 }));
+  const m = d.medicines;
+  let meds: string;
+  if (m.total === 0) {
+    meds = heading({ hi: "दवाइयाँ", en: "Medicines" }) + pair({ hi: "कोई सक्रिय दवाई नहीं", en: "No active medicines" }, { hiSize: 12, enSize: 11 });
   } else {
-    const rows = [{ label: "ली गईं · Taken", value: `${d.medicines.taken} / ${d.medicines.total}` }];
-    if (d.medicines.missed.length) {
-      rows.push({ label: "छूटी · Missed", value: `<span style="color:${C.critical};">${esc(d.medicines.missed.join(", "))}</span>` });
-    }
-    if (d.medicines.pending.length) {
-      rows.push({ label: "बाकी · Pending", value: esc(d.medicines.pending.join(", ")) });
-    }
-    parts.push(kv(rows));
+    const count = `<p style="margin:0;line-height:20px;text-align:right;">${val(`${m.taken}/${m.total}`, { size: 16 })}</p>${en("ली गईं · taken", { size: 10.5, lh: 13, color: C.muted, align: "right" })}`;
+    meds =
+      heading({ hi: "दवाइयाँ", en: "Medicines" }, count) +
+      progressBar((m.taken / m.total) * 100, C.green) +
+      (m.missed.length || m.pending.length ? spacer(10) : "") +
+      (m.missed.length ? chipRow({ hi: "छूटी", en: "Missed" }, m.missed, "attention") : "") +
+      (m.pending.length ? chipRow({ hi: "बाकी", en: "Pending" }, m.pending, "neutral") : "");
   }
+  sections.push(section(meds));
 
-  parts.push(
-    sectionTitle("आज का सारांश", "Today"),
-    kv([
-      { label: "कैलोरी · Calories", value: `${num(d.calories.eaten)} / ${num(d.calories.target)} kcal` },
-      { label: "भोजन दर्ज · Meals logged", value: d.calories.meals.length ? esc(d.calories.meals.join(", ")) : dash },
-      { label: "कदम · Steps", value: d.steps !== null ? num(d.steps) : dash },
-      { label: "नींद · Sleep", value: d.sleepHours !== null ? `${d.sleepHours} hrs` : dash },
-      { label: "वज़न · Weight", value: d.weightKg !== null ? `${d.weightKg} kg` : dash },
-    ]),
+  const c = d.calories;
+  const calorieRow = `<table role="presentation" width="100%" style="${TBL}"><tr><td valign="bottom" style="padding:0 0 6px;">${hi("कैलोरी", { size: 12.5, lh: 19, weight: 600 })}${en("Calories", { size: 11, lh: 15, color: C.muted })}</td><td align="right" valign="bottom" style="padding:0 0 6px 10px;">${val(num(c.eaten), { size: 15, unit: `/ ${num(c.target)} kcal` })}</td></tr></table>`;
+  const mealsRow = `<table role="presentation" width="100%" style="${TBL}"><tr><td width="74" valign="top" style="width:74px;padding:9px 0 3px;">${hi("भोजन", { size: 12, lh: 17, weight: 600 })}${en("Meals", { size: 10.5, lh: 13, color: C.muted })}</td><td valign="top" style="padding:9px 0 3px;line-height:24px;">${c.meals.length ? chips(c.meals.map(bi), "ok") : hi(DASH, { size: 12, color: C.muted })}</td></tr></table>`;
+  sections.push(
+    section(
+      heading({ hi: "आज की गतिविधि", en: "Today" }) +
+        calorieRow +
+        progressBar(c.target > 0 ? (c.eaten / c.target) * 100 : 0, C.gold) +
+        mealsRow +
+        spacer(8) +
+        tiles([
+          { label: { hi: "कदम", en: "Steps" }, value: val(d.steps !== null ? num(d.steps) : DASH, { size: 17 }) },
+          { label: { hi: "नींद (घंटे)", en: "Sleep · hours" }, value: val(d.sleepHours !== null ? String(d.sleepHours) : DASH, { size: 17 }) },
+          { label: { hi: "वज़न (kg)", en: "Weight · kg" }, value: val(d.weightKg !== null ? String(d.weightKg) : DASH, { size: 17 }) },
+        ]),
+    ),
   );
 
-  if (d.missing.length > 0) {
-    parts.push(sectionTitle("दर्ज होना बाकी", "Not logged today"), bullets(d.missing));
+  if (d.notLogged.length > 0) {
+    sections.push(section(heading({ hi: "आज दर्ज नहीं हुआ", en: "Not logged today" }) + chips(d.notLogged.map(bi), "neutral")));
   }
-  parts.push(openApp("/"));
+  sections.push(ctaSection(base, "/", { hi: "पूरी रिपोर्ट देखें", en: "Open full report" }));
 
   const flagged = d.alerts.some((a) => a.severity === "IMPORTANT");
-  const subject = `${flagged ? "⚠️ " : ""}SwasthTrack daily report · ${d.patientName} · ${d.dateLabel}`;
-  return {
-    subject,
-    ...shell(
-      subject,
-      d.alerts.length ? `${d.alerts.length} बातें ध्यान देने लायक · ${d.alerts.length} item(s) need attention` : "आज का सारांश · Today's summary",
-      parts.join(""),
-      opts,
+  return finish({
+    subject: `${flagged ? "⚠️ " : ""}SwasthTrack daily report · ${d.patientName} · ${d.date.en}`,
+    title: `SwasthTrack · Daily report · ${d.patientName}`,
+    preheader: d.alerts.length
+      ? `${d.alerts.length} बातें ध्यान देने लायक · ${d.alerts.length} item(s) need attention`
+      : "आज का सारांश · Today's summary",
+    sections,
+    reason: reportReason(
+      `आपको यह रिपोर्ट रोज़ रात 9 बजे मिलती है क्योंकि आप ${d.patientName} की देखभाल से जुड़े हैं।`,
+      `You get this report every day at 9 PM because you help care for ${d.patientName}.`,
     ),
-  };
+    ...opts,
+  });
 }
+
+// ---- weekly / monthly shared ------------------------------------------------
+
+/** Big score, "n / total days tracked" and a bar. */
+function scoreBlock(h: Bi, score: number, days: number, totalDays: number): string {
+  return (
+    heading(h) +
+    `<table role="presentation" width="100%" style="${TBL}"><tr><td valign="bottom" style="padding:0 0 10px;"><p style="margin:0;line-height:40px;"><span style="${EN_FONT}font-size:36px;line-height:45px;font-weight:700;color:${C.greenInk};white-space:nowrap;letter-spacing:-0.5px;">${esc(score)}</span><span style="${EN_FONT}font-size:13px;color:${C.muted};"> / 100</span></p>${hi("औसत स्कोर", { size: 11.5, lh: 16, weight: 600, color: C.muted })}${en("Average score", { size: 10.5, lh: 13, color: C.subtle })}</td><td align="right" valign="bottom" style="padding:0 0 10px 10px;"><p style="margin:0;line-height:22px;text-align:right;"><span style="${EN_FONT}font-size:18px;line-height:22px;font-weight:700;color:${C.ink};white-space:nowrap;">${esc(days)}</span><span style="${EN_FONT}font-size:12px;color:${C.muted};"> / ${esc(totalDays)}</span></p>${hi("दिन ट्रैक किए", { size: 11.5, lh: 18, weight: 600, align: "right" })}${en("days tracked", { size: 10.5, lh: 15, color: C.muted, align: "right" })}</td></tr></table>` +
+    progressBar(score, C.green, 8)
+  );
+}
+
+function bpBlock(count: number, avg: { systolic: number; diastolic: number } | null, outside: number): string {
+  return (
+    heading({ hi: "रक्तचाप (बीपी)", en: "Blood pressure" }) +
+    tiles([
+      { label: { hi: "रीडिंग", en: "Readings" }, value: val(String(count), { size: 17 }) },
+      { label: { hi: "औसत (mmHg)", en: "Average" }, value: val(avg ? `${avg.systolic}/${avg.diastolic}` : DASH, { size: 17 }) },
+      { label: { hi: "दायरे से बाहर", en: "Outside range" }, value: val(String(outside), { size: 17, color: outside > 0 ? C.attn : C.ink }) },
+    ])
+  );
+}
+
+function insightsBlock(items: string[]): string {
+  return items.length ? section(heading({ hi: "मुख्य बातें", en: "Insights" }) + bulletRows(items.map((t) => ({ hi: t })))) : "";
+}
+
+// ---- weekly -----------------------------------------------------------------
 
 export function renderWeeklyReport(w: WeeklyReportData, opts: RenderOptions = {}): RenderedEmail {
   const s = w.summary;
-  const parts: string[] = [heading(`${w.patientName} की साप्ताहिक रिपोर्ट`, `Weekly report · ${s.weekRangeLabel}`)];
+  const base = opts.base === undefined ? appBase() : opts.base;
+  const range = rangeBi(s.startDate, s.endDate);
 
-  if (!s.hasSufficientData) parts.push(noteInsufficient(s.daysTrackedCount, s.totalDays, "हफ़्ते", "week"));
+  const dayTile = (label: Bi, point: NonNullable<typeof s.highestScore>, color: string) => {
+    const wd = weekdayBi(point.date);
+    return {
+      label,
+      value: `${val(String(point.score), { size: 17, color })}<span style="${HI_FONT}font-size:11px;color:${C.muted};"> · ${esc(wd.hi)} · ${esc(wd.en)}</span>`,
+    };
+  };
+  const dayTiles =
+    s.highestScore && s.lowestScore
+      ? spacer(10) +
+        tiles([
+          dayTile({ hi: "सबसे अच्छा दिन", en: "Best day" }, s.highestScore, C.greenInk),
+          dayTile({ hi: "सबसे कम स्कोर", en: "Lowest day" }, s.lowestScore, C.ink),
+        ])
+      : "";
 
-  parts.push(
-    sectionTitle("हफ़्ते का स्कोर", "Weekly score"),
-    kv([
-      { label: "औसत स्कोर · Average score", value: `${s.averageScore} / 100` },
-      { label: "ट्रैक किए दिन · Days tracked", value: `${s.daysTrackedCount} / ${s.totalDays}` },
-      ...(s.highestScore ? [{ label: "सबसे अच्छा दिन · Best day", value: `${esc(s.highestScore.dayLabel)} · ${s.highestScore.score}` }] : []),
-      ...(s.lowestScore ? [{ label: "सबसे कमज़ोर दिन · Lowest day", value: `${esc(s.lowestScore.dayLabel)} · ${s.lowestScore.score}` }] : []),
-    ]),
-    sectionTitle("रक्तचाप", "Blood pressure"),
-    kv([
-      { label: "कुल readings · Readings", value: String(s.bpReadingsCount) },
-      { label: "औसत BP · Average", value: w.bpAverage ? `${w.bpAverage.systolic}/${w.bpAverage.diastolic}` : dash },
-      {
-        label: "अलर्ट सीमा से बाहर · Outside alert range",
-        value: w.bpAlertCount > 0 ? `<span style="color:${C.attention};">${w.bpAlertCount}</span>` : "0",
-      },
-    ]),
-    sectionTitle("आदतें", "Habits"),
-    kv([
-      { label: "दवाई अनुपालन · Medicine adherence", value: s.hasMedicineData ? `${s.medicineAdherencePercent}%` : dash },
-      { label: "भोजन दर्ज · Meal logging", value: `${s.foodLoggingConsistencyPercent}%` },
-      { label: "औसत कैलोरी · Avg calories", value: s.averageCalories !== null ? `${num(s.averageCalories)} kcal` : dash },
-      { label: "औसत कदम · Avg steps", value: s.averageSteps !== null ? num(s.averageSteps) : dash },
-      { label: "औसत नींद · Avg sleep", value: s.averageSleepHours !== null ? `${s.averageSleepHours} hrs` : dash },
-      {
-        label: "वज़न बदलाव · Weight change",
-        value: s.weightChangeKg !== null ? `${s.weightChangeKg > 0 ? "+" : ""}${s.weightChangeKg} kg` : dash,
-      },
-    ]),
-  );
+  const weightChange = s.weightChangeKg !== null ? val(signed(s.weightChangeKg), { unit: "kg" }) : val(DASH);
+  const sections = [
+    section(
+      topBar(pill("ok", "साप्ताहिक रिपोर्ट · Weekly report"), bi(range)) +
+        title({ hi: `${w.patientName} का यह हफ़्ता`, en: `${w.patientName}'s week in review` }),
+      { first: true },
+    ),
+    ...(s.hasSufficientData
+      ? []
+      : [
+          section(
+            notice(
+              `इस हफ़्ते बहुत कम डेटा दर्ज हुआ (${s.daysTrackedCount}/${s.totalDays} दिन), इसलिए आँकड़े अधूरे हो सकते हैं।`,
+              `Very little was logged this week (${s.daysTrackedCount}/${s.totalDays} days), so the numbers may be incomplete.`,
+            ),
+            { pad: "0 22px 14px", rule: false },
+          ),
+        ]),
+    section(scoreBlock({ hi: "साप्ताहिक स्कोर", en: "Weekly score" }, s.averageScore, s.daysTrackedCount, s.totalDays) + dayTiles),
+    section(bpBlock(s.bpReadingsCount, w.bpAverage, w.bpAlertCount)),
+    section(
+      heading({ hi: "आदतें", en: "Habits" }) +
+        kvRows([
+          { label: { hi: "दवा समय पर", en: "Medicine adherence" }, value: val(s.hasMedicineData ? `${s.medicineAdherencePercent}%` : DASH) },
+          { label: { hi: "भोजन दर्ज किया", en: "Meals logged" }, value: val(`${s.foodLoggingConsistencyPercent}%`) },
+          { label: { hi: "औसत कैलोरी", en: "Avg calories / day" }, value: s.averageCalories !== null ? val(num(s.averageCalories), { unit: "kcal" }) : val(DASH) },
+          { label: { hi: "औसत कदम", en: "Avg steps / day" }, value: val(s.averageSteps !== null ? num(s.averageSteps) : DASH) },
+          { label: { hi: "औसत नींद", en: "Avg sleep / night" }, value: s.averageSleepHours !== null ? val(String(s.averageSleepHours), { unit: "घंटे · hrs" }) : val(DASH) },
+          { label: { hi: "वज़न में बदलाव", en: "Weight change" }, value: weightChange },
+        ]),
+    ),
+    insightsBlock(s.personalizedInsights),
+    ctaSection(base, "/reports", { hi: "साप्ताहिक रिपोर्ट देखें", en: "Open weekly report" }),
+  ];
 
-  if (s.personalizedInsights.length > 0) {
-    parts.push(sectionTitle("इस हफ़्ते की बातें", "Insights"), bullets(s.personalizedInsights));
-  }
-  parts.push(openApp("/reports"));
+  return finish({
+    subject: `SwasthTrack weekly report · ${w.patientName} · ${range.en}`,
+    title: `SwasthTrack · Weekly report · ${w.patientName}`,
+    preheader: `औसत स्कोर ${s.averageScore}/100 · Average score ${s.averageScore}/100`,
+    sections,
+    reason: reportReason(
+      `आपको यह रिपोर्ट हर रविवार रात 8 बजे मिलती है क्योंकि आप ${w.patientName} की देखभाल से जुड़े हैं।`,
+      `You get this report every Sunday at 8 PM because you help care for ${w.patientName}.`,
+    ),
+    ...opts,
+  });
+}
 
-  const subject = `SwasthTrack weekly report · ${w.patientName} · ${s.weekRangeLabel}`;
-  return { subject, ...shell(subject, `औसत स्कोर ${s.averageScore}/100 · Average score ${s.averageScore}/100`, parts.join(""), opts) };
+// ---- monthly ----------------------------------------------------------------
+
+function consistencyRows(rows: { label: Bi; pct: number | null; hint?: string }[]): string {
+  return `<table role="presentation" width="100%" style="${TBL}">${rows
+    .map(
+      (r) =>
+        `<tr><td width="40%" valign="middle" style="width:40%;padding:6px 0;${rule}">${hi(r.label.hi, { size: 12.5, lh: 19, weight: 600 })}${en(r.label.en, { size: 11, lh: 15, color: C.muted })}</td><td valign="middle" style="padding:6px 10px;${rule}">${r.pct !== null ? progressBar(r.pct, C.green) : hi(r.hint ?? "", { size: 11, lh: 16, color: C.muted })}</td><td width="44" align="right" valign="middle" style="width:44px;padding:6px 0;${rule}">${val(r.pct !== null ? `${r.pct}%` : DASH, { size: 13 })}</td></tr>`,
+    )
+    .join("")}</table>`;
 }
 
 export function renderMonthlyReport(m: MonthlyReportData, opts: RenderOptions = {}): RenderedEmail {
   const s = m.summary;
-  const parts: string[] = [heading(`${m.patientName} की मासिक रिपोर्ट`, `Monthly report · ${s.monthLabel}`)];
+  const base = opts.base === undefined ? appBase() : opts.base;
+  const range = rangeBi(s.startDate, s.endDate);
 
-  if (!s.hasSufficientData) parts.push(noteInsufficient(s.daysTrackedCount, s.totalDays, "महीने", "month"));
-
-  parts.push(
-    sectionTitle("महीने का स्कोर", "Monthly score"),
-    kv([
-      { label: "औसत स्कोर · Average score", value: `${s.averageScore} / 100` },
-      { label: "ट्रैक किए दिन · Days tracked", value: `${s.daysTrackedCount} / ${s.totalDays}` },
-    ]),
-    sectionTitle("रक्तचाप", "Blood pressure"),
-    kv([
-      { label: "कुल readings · Readings", value: String(s.totalBpReadings) },
-      { label: "औसत BP · Average", value: m.bpAverage ? `${m.bpAverage.systolic}/${m.bpAverage.diastolic}` : dash },
-      {
-        label: "अलर्ट सीमा से बाहर · Outside alert range",
-        value: m.bpAlertCount > 0 ? `<span style="color:${C.attention};">${m.bpAlertCount}</span>` : "0",
-      },
-    ]),
-    sectionTitle("नियमितता", "Consistency (days logged)"),
-    kv([
-      { label: "दवाई अनुपालन · Medicine adherence", value: s.hasMedicineData ? `${s.medicineAdherencePercent}%` : dash },
-      { label: "भोजन · Food", value: `${s.foodLoggingPercent}%` },
-      { label: "BP", value: `${s.bpLoggingPercent}%` },
-      { label: "गतिविधि · Activity", value: `${s.activityConsistencyPercent}%` },
-      { label: "नींद · Sleep", value: `${s.sleepLoggingPercent}%` },
-      { label: "वज़न · Weight", value: `${s.weightLoggingPercent}%` },
-    ]),
-    sectionTitle("औसत", "Averages"),
-    kv([
-      { label: "कैलोरी · Calories", value: s.averageCalories !== null ? `${num(s.averageCalories)} kcal` : dash },
-      { label: "कदम · Steps", value: s.averageSteps !== null ? num(s.averageSteps) : dash },
-      {
-        label: "वज़न · Weight",
-        value:
-          s.startWeightKg !== null && s.endWeightKg !== null
-            ? `${s.startWeightKg} → ${s.endWeightKg} kg${s.weightChangeKg !== null ? ` (${s.weightChangeKg > 0 ? "+" : ""}${s.weightChangeKg})` : ""}`
-            : dash,
-      },
-    ]),
-  );
-
-  if (s.personalizedInsights.length > 0) {
-    parts.push(sectionTitle("इस महीने की बातें", "Insights"), bullets(s.personalizedInsights));
+  const sparse: Bi[] = [];
+  if (s.sleepLoggingPercent < 50) sparse.push({ hi: "नींद", en: "Sleep" });
+  if (s.weightLoggingPercent < 50) sparse.push({ hi: "वज़न", en: "weight" });
+  const notes: string[] = [];
+  if (!s.hasSufficientData) {
+    notes.push(
+      notice(
+        `इस महीने बहुत कम डेटा दर्ज हुआ (${s.daysTrackedCount}/${s.totalDays} दिन), इसलिए आँकड़े अधूरे हो सकते हैं।`,
+        `Very little was logged this month (${s.daysTrackedCount}/${s.totalDays} days), so the numbers may be incomplete.`,
+      ),
+    );
+  } else if (sparse.length > 0) {
+    notes.push(
+      notice(
+        `${sparse.map((x) => x.hi).join(" और ")} आधे से कम दिनों में दर्ज हुए, इसलिए इनके औसत पूरे नहीं हैं।`,
+        `${sparse.map((x) => x.en).join(" and ").replace(/^./, (c) => c.toUpperCase())} ${sparse.length > 1 ? "were" : "was"} logged on fewer than half the days, so ${sparse.length > 1 ? "those averages are" : "that average is"} incomplete.`,
+      ),
+    );
   }
-  parts.push(openApp("/reports"));
 
-  const subject = `SwasthTrack monthly report · ${m.patientName} · ${s.monthLabel}`;
-  return { subject, ...shell(subject, `औसत स्कोर ${s.averageScore}/100 · Average score ${s.averageScore}/100`, parts.join(""), opts) };
+  const weightTile = {
+    label: { hi: "वज़न", en: "Weight" } as Bi,
+    value: s.endWeightKg !== null ? val(String(s.endWeightKg), { size: 17, unit: "kg" }) : val(DASH, { size: 17 }),
+    sub:
+      s.startWeightKg !== null && s.endWeightKg !== null && s.weightChangeKg !== null
+        ? `${s.startWeightKg} → ${s.endWeightKg} (${signed(s.weightChangeKg)})`
+        : undefined,
+  };
+
+  const sections = [
+    section(
+      topBar(pill("ok", "मासिक रिपोर्ट · Monthly report"), bi(range)) +
+        title({ hi: `${m.patientName} के पिछले 30 दिन`, en: `${m.patientName}'s last 30 days` }),
+      { first: true },
+    ),
+    ...notes.map((n) => section(n, { pad: "0 22px 14px", rule: false })),
+    section(scoreBlock({ hi: "मासिक स्कोर", en: "Monthly score" }, s.averageScore, s.daysTrackedCount, s.totalDays)),
+    section(bpBlock(s.totalBpReadings, m.bpAverage, m.bpAlertCount)),
+    section(
+      heading({ hi: "नियमितता", en: "Consistency · days logged" }) +
+        consistencyRows([
+          { label: { hi: "खाना", en: "Food" }, pct: s.foodLoggingPercent },
+          { label: { hi: "बीपी", en: "BP" }, pct: s.bpLoggingPercent },
+          { label: { hi: "गतिविधि", en: "Activity" }, pct: s.activityConsistencyPercent },
+          { label: { hi: "नींद", en: "Sleep" }, pct: s.sleepLoggingPercent },
+          { label: { hi: "वज़न", en: "Weight" }, pct: s.weightLoggingPercent },
+          {
+            label: { hi: "दवा समय पर", en: "Medicine adherence" },
+            pct: s.hasMedicineData ? s.medicineAdherencePercent : null,
+            hint: "कोई दवा नहीं जोड़ी · No medicines added",
+          },
+        ]),
+    ),
+    section(
+      heading({ hi: "औसत", en: "Averages" }) +
+        tiles([
+          { label: { hi: "औसत कैलोरी", en: "Avg calories" }, value: val(s.averageCalories !== null ? num(s.averageCalories) : DASH, { size: 17, unit: s.averageCalories !== null ? "kcal" : undefined }) },
+          { label: { hi: "औसत कदम", en: "Avg steps" }, value: val(s.averageSteps !== null ? num(s.averageSteps) : DASH, { size: 17 }) },
+          weightTile,
+        ]),
+    ),
+    insightsBlock(s.personalizedInsights),
+    ctaSection(base, "/reports", { hi: "मासिक रिपोर्ट देखें", en: "Open monthly report" }),
+  ];
+
+  return finish({
+    subject: `SwasthTrack monthly report · ${m.patientName} · ${range.en}`,
+    title: `SwasthTrack · Monthly report · ${m.patientName}`,
+    preheader: `औसत स्कोर ${s.averageScore}/100 · Average score ${s.averageScore}/100`,
+    sections,
+    reason: reportReason(
+      `आपको यह रिपोर्ट हर महीने की 1 तारीख को सुबह 9 बजे मिलती है क्योंकि आप ${m.patientName} की देखभाल से जुड़े हैं।`,
+      `You get this report on the 1st of every month at 9 AM because you help care for ${m.patientName}.`,
+    ),
+    ...opts,
+  });
 }

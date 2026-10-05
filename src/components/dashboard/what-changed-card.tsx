@@ -6,7 +6,6 @@ import { Activity, ArrowDownRight, ArrowUpRight, HeartPulse, Minus, Moon, Scale,
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { ErrorState } from "@/components/ui/page";
-import { cn } from "@/lib/utils";
 import {
   getHealthChanges,
   type HealthChangesResult,
@@ -66,11 +65,11 @@ export function WhatChangedCard({ patientId }: WhatChangedCardProps) {
     return (
       <Card aria-busy="true" aria-label="पिछले 7 दिनों की तुलना लोड हो रही है">
         <div className="skeleton h-5 w-48" />
-        <div className="skeleton mt-2 h-3.5 w-64" />
-        <div className="mt-4 grid gap-3 sm:grid-cols-3">
-          <div className="skeleton h-20" />
-          <div className="skeleton h-20" />
-          <div className="skeleton h-20" />
+        <div className="skeleton mt-2 h-3.5 w-64 max-w-full" />
+        <div className="mt-4 grid gap-2.5">
+          <div className="skeleton h-16" />
+          <div className="skeleton h-16" />
+          <div className="skeleton h-16" />
         </div>
       </Card>
     );
@@ -91,7 +90,7 @@ export function WhatChangedCard({ patientId }: WhatChangedCardProps) {
   if (!data.dataSufficiency.isSufficient || data.metrics.length === 0) {
     return (
       <Card>
-        <h2 className="text-sm font-semibold text-ink sm:text-base">
+        <h2 className="text-base font-semibold text-ink">
           <span lang="hi">पिछले 7 दिनों में क्या बदला?</span>
         </h2>
         <p lang="hi" className="mt-1.5 text-sm text-ink-muted">
@@ -109,20 +108,20 @@ export function WhatChangedCard({ patientId }: WhatChangedCardProps) {
       : data.metrics.filter((m) => m.isSufficient).slice(0, 3);
 
   return (
-    <Card>
-      <div className="flex items-start justify-between gap-3 border-b border-line pb-3">
-        <div className="flex items-center gap-2.5">
-          <span aria-hidden className="grid h-8 w-8 shrink-0 place-items-center rounded-control bg-info-soft text-info">
+    <Card aria-label="What changed — पिछले 7 दिनों में क्या बदला?">
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex min-w-0 items-start gap-2.5">
+          <span
+            aria-hidden
+            className="grid h-8 w-8 shrink-0 place-items-center rounded-control bg-info-soft text-info ring-1 ring-inset ring-info-line"
+          >
             <Sparkles className="h-4 w-4" />
           </span>
-          <div>
-            <div className="flex flex-wrap items-center gap-2">
-              <h2 lang="hi" className="text-sm font-semibold text-ink sm:text-base">
-                पिछले 7 दिनों में क्या बदला?
-              </h2>
-              <Badge variant="info">What changed</Badge>
-            </div>
-            <p lang="hi" className="text-xs text-ink-muted">
+          <div className="min-w-0">
+            <h2 lang="hi" className="text-base font-semibold leading-tight text-ink">
+              पिछले 7 दिनों में क्या बदला?
+            </h2>
+            <p lang="hi" className="mt-0.5 text-xs text-ink-muted">
               हाल के 7 दिन बनाम उससे पहले के 7 दिन (आपके अपने रिकॉर्ड की तुलना)
             </p>
           </div>
@@ -130,63 +129,68 @@ export function WhatChangedCard({ patientId }: WhatChangedCardProps) {
 
         <Link
           href="/insights/changes"
-          className="flex min-h-control shrink-0 items-center px-1 text-xs font-semibold text-brand-ink hover:underline"
+          className="-mr-1 flex min-h-control shrink-0 items-center rounded-control px-2 text-xs font-semibold text-brand-ink hover:underline"
         >
-          <span lang="hi">विस्तृत देखें →</span>
+          <span lang="hi">विस्तृत →</span>
         </Link>
       </div>
 
-      <ul className="mt-3 grid gap-2.5 sm:grid-cols-3">
-        {topChanges.map((c: MetricHealthChange) => {
-          const cfg = dirConfig[c.direction] ?? dirConfig.stable;
-          const Icon = metricIcons[c.metric] ?? Activity;
-          const DirIcon = cfg.icon;
-          // Without an earlier window there is nothing to compare with: say so instead of "stable".
-          const compared = c.hasReference;
+      <div className="@container mt-3">
+        <ul className="grid gap-2.5 @xl:grid-cols-3">
+          {topChanges.map((c: MetricHealthChange) => {
+            const cfg = dirConfig[c.direction] ?? dirConfig.stable;
+            const Icon = metricIcons[c.metric] ?? Activity;
+            const DirIcon = cfg.icon;
+            // Without an earlier window there is nothing to compare with: say so instead of "stable".
+            const compared = c.hasReference;
 
-          return (
-            <li key={c.metric} className={cn("rounded-card border border-info-line bg-info-soft p-3")}>
-              <div className="mb-1.5 flex items-center justify-between gap-2">
-                <div className="flex min-w-0 items-center gap-1.5">
-                  <span aria-hidden className="grid h-6 w-6 shrink-0 place-items-center rounded-field border border-line bg-surface">
-                    <Icon className="h-3.5 w-3.5 text-ink-muted" />
-                  </span>
-                  <span lang="hi" className="truncate text-xs font-semibold text-ink">
-                    {c.metricHi}
-                  </span>
+            return (
+              <li key={c.metric} className="tile rounded-card p-3">
+                <div className="mb-1.5 flex items-center justify-between gap-2">
+                  <div className="flex min-w-0 items-center gap-2">
+                    <span
+                      aria-hidden
+                      className="grid h-7 w-7 shrink-0 place-items-center rounded-field bg-info-soft text-info ring-1 ring-inset ring-info-line"
+                    >
+                      <Icon className="h-3.5 w-3.5" />
+                    </span>
+                    <span lang="hi" className="truncate text-xs font-semibold text-ink">
+                      {c.metricHi}
+                    </span>
+                  </div>
+                  {compared ? (
+                    <Badge variant="info" className="shrink-0">
+                      <DirIcon aria-hidden className="h-3 w-3" />
+                      <span lang="hi">{cfg.label}</span>
+                    </Badge>
+                  ) : null}
                 </div>
-                {compared ? (
-                  <Badge variant="info" className="shrink-0">
-                    <DirIcon aria-hidden className="h-3 w-3" />
-                    <span lang="hi">{cfg.label}</span>
-                  </Badge>
-                ) : null}
-              </div>
 
-              <p className="tabular text-xs font-semibold text-ink">
-                {c.recentValue.toLocaleString("en-IN")} {c.unit}
-                {compared ? (
-                  <span lang="hi" className="ml-1 font-normal text-ink-muted">
-                    (पहले: {c.referenceValue.toLocaleString("en-IN")})
-                  </span>
-                ) : (
-                  <span lang="hi" className="ml-1 font-normal text-ink-muted">
-                    · पिछले दौर का डेटा नहीं
-                  </span>
-                )}
-              </p>
-
-              {c.personalPatternRange ? (
-                <p lang="hi" className="mt-0.5 text-xs text-ink-muted">
-                  आपका सामान्य दायरा: {c.personalPatternRange}
+                <p className="tabular text-sm font-semibold text-ink">
+                  {c.recentValue.toLocaleString("en-IN")} {c.unit}
+                  {compared ? (
+                    <span lang="hi" className="ml-1 text-xs font-normal text-ink-muted">
+                      (पहले: {c.referenceValue.toLocaleString("en-IN")})
+                    </span>
+                  ) : (
+                    <span lang="hi" className="ml-1 text-xs font-normal text-ink-muted">
+                      · पिछले दौर का डेटा नहीं
+                    </span>
+                  )}
                 </p>
-              ) : null}
-            </li>
-          );
-        })}
-      </ul>
 
-      <p lang="hi" className="mt-3 border-t border-line pt-2.5 text-xs text-ink-muted">
+                {c.personalPatternRange ? (
+                  <p lang="hi" className="mt-0.5 text-xs text-ink-muted">
+                    आपका सामान्य दायरा: {c.personalPatternRange}
+                  </p>
+                ) : null}
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+
+      <p lang="hi" className="mt-3 text-xs text-ink-muted">
         यह सिर्फ़ रिकॉर्ड की तुलना है (मध्यमान के आधार पर), निदान नहीं।
       </p>
     </Card>

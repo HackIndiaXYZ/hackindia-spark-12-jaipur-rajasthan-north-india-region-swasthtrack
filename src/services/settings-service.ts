@@ -261,7 +261,9 @@ export async function updatePatientSettings(
   if (!pid) throw new NoActivePatientError();
 
   invalidateSettingsCache(pid);
-  const current = await getPatientSettingsOrDefault(pid);
+  // Strict read on purpose: if the saved row cannot be read, falling back to the built-in defaults
+  // here would write those defaults over the fields this call does not touch (units, timezone, language).
+  const current = await getPatientSettings(pid);
   const merged: PatientSettings = {
     ...current,
     ...updates,

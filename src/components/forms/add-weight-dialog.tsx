@@ -1,13 +1,14 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useId, useState, type FormEvent } from "react";
 import { Scale } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useConfirm } from "@/components/ui/confirm-dialog";
 import { Field, NumberInput, TextInput } from "@/components/ui/form-field";
 import { Modal } from "@/components/ui/modal";
 import { useToast } from "@/components/ui/toast";
-import { MeasuredAtFields, nowIST, resolveMeasuredAt } from "@/components/forms/measured-at-fields";
+import { MeasuredAtFields, resolveMeasuredAt, useMeasuredAt } from "@/components/forms/measured-at-fields";
+import { fmtKg, parseDecimalInput } from "@/components/health/format";
 import { useAuth } from "@/context/auth-context";
 import { logWeight } from "@/services/patient-service";
 
@@ -20,20 +21,33 @@ type AddWeightDialogProps = {
   onSuccess?: () => void;
 };
 
-const FORM_ID = "weight-form";
 const MIN_KG = 20;
-const MAX_KG = 300;
+// The same ceiling the service enforces, so the message appears before the request.
+const MAX_KG = 350;
 /** A jump this large since the last weigh-in is more often a typo than a real change. */
 const BIG_CHANGE_KG = 5;
 
-function WeightDialogBody({ isOpen, onClose, patientId, currentWeight, onSuccess }: AddWeightDialogProps) {
+type WeightEntryProps = {
+  patientId: string;
+  /** "dialog" wraps the form in a Modal; "inline" is the form alone, for a panel. */
+  presentation: "dialog" | "inline";
+  /** Dialog: close the sheet. Inline: saved, start a fresh form. */
+  onDone: () => void;
+  currentWeight?: number | null;
+  onSuccess?: () => void;
+  isOpen?: boolean;
+};
+
+function WeightEntry({ patientId, presentation, onDone, currentWeight, onSuccess, isOpen = true }: WeightEntryProps) {
   const { canWrite } = useAuth();
   const toast = useToast();
   const confirm = useConfirm();
+  const formId = useId();
+  const inline = presentation === "inline";
 
   const [weight, setWeight] = useState("");
   const [notes, setNotes] = useState("");
-  const [when, setWhen] = useState(nowIST);
+  const at = useMeasuredAt();
   const [errors, setErrors] = useState<Partial<Record<"weight" | "measuredAt", string>>>({});
   const [formError, setFormError] = useState("");
   const [saving, setSaving] = useState(false);
@@ -44,18 +58,19 @@ function WeightDialogBody({ isOpen, onClose, patientId, currentWeight, onSuccess
     setFormError("");
 
     const next: typeof errors = {};
-    const kg = /^\d+(\.\d+)?$/.test(weight.trim()) ? parseFloat(weight) : NaN;
+    const kg = parseDecimalInput(weight);
     if (Number.isNaN(kg)) next.weight = "वजन kg में लिखें (Enter the weight in kg)";
     else if (kg < MIN_KG || kg > MAX_KG) next.weight = `वजन ${MIN_KG} से ${MAX_KG} kg के बीच होना चाहिए`;
-    const at = resolveMeasuredAt(when.date, when.time);
-    if (at.instant === null) next.measuredAt = at.error;
+    const when = at.current();
+    const measured = resolveMeasuredAt(when.date, when.time);
+    if (measured.instant === null) next.measuredAt = measured.error;
     setErrors(next);
-    if (Object.keys(next).length > 0 || at.instant === null) return;
+    if (Object.keys(next).length > 0 || measured.instant === null) return;
 
     if (currentWeight && Math.abs(kg - currentWeight) >= BIG_CHANGE_KG) {
       const ok = await confirm({
         title: "पिछले वजन से काफ़ी फ़र्क़ है — क्या यह सही है?",
-        message: `पिछला दर्ज वजन ${currentWeight} kg था, अब ${kg} kg लिख रहे हैं। एक बार फिर देख लें।`,
+        message: `पिछला दर्ज वजन ${fmtKg(currentWeight)} kg था, अब ${kg} kg लिख रहे हैं। एक बार फिर देख लें।`,
         confirmLabel: "हाँ, सही है",
         cancelLabel: "दोबारा जाँचता हूँ",
       });
@@ -67,12 +82,12 @@ function WeightDialogBody({ isOpen, onClose, patientId, currentWeight, onSuccess
       await logWeight({
         patient_id: patientId,
         weight_kg: kg,
-        measured_at: at.instant.toISOString(),
+        measured_at: measured.instant.toISOString(),
         notes: notes.trim() || null,
       });
       toast.success(`वजन ${kg} kg दर्ज हो गया`, "Weight saved");
       onSuccess?.();
-      onClose();
+      onDone();
     } catch (err) {
       setFormError(
         err instanceof Error && err.message ? err.message : "वजन सेव नहीं हो पाया। इंटरनेट जाँचकर दोबारा कोशिश करें।",
@@ -82,76 +97,125 @@ function WeightDialogBody({ isOpen, onClose, patientId, currentWeight, onSuccess
     }
   }
 
+  const submitButton = (
+    <Button
+      variant="primary"
+      type="submit"
+      form={formId}
+      loading={saving}
+      disabled={!canWrite}
+      className={inline ? "w-full sm:w-auto" : undefined}
+    >
+      <Scale aria-hidden className="h-4 w-4" />
+      <span lang="hi">वजन सेव करें</span>
+    </Button>
+  );
+
+  const form = (
+    <form id={formId} onSubmit={handleSubmit} noValidate className={inline ? "space-y-4" : "space-y-5"}>
+      {!canWrite ? (
+        <p role="status" lang="hi" className="rounded-card border border-info-line bg-info-soft p-3 text-sm text-info">
+          आपके पास केवल देखने का एक्सेस है, इसलिए वजन दर्ज नहीं हो सकता।
+        </p>
+      ) : null}
+      <div aria-live="polite">
+        {formError ? (
+          <p className="rounded-card border border-critical-line bg-critical-soft p-3 text-sm font-medium text-critical">
+            {formError}
+          </p>
+        ) : null}
+      </div>
+
+      <Field
+        label="वजन (Weight, kg)"
+        required
+        error={errors.weight}
+        hint={
+          currentWeight
+            ? `पिछला दर्ज वजन: ${fmtKg(currentWeight)} kg · सुबह खाली पेट सबसे सही रहता है`
+            : "अभी तक कोई वजन दर्ज नहीं है · सुबह खाली पेट सबसे सही रहता है"
+        }
+      >
+        <NumberInput
+          allowDecimal
+          placeholder="जैसे 78.5"
+          value={weight}
+          maxLength={6}
+          onChange={(e) => setWeight(e.target.value)}
+          className="text-center text-3xl font-semibold"
+        />
+      </Field>
+
+      <MeasuredAtFields
+        date={at.when.date}
+        time={at.when.time}
+        onDateChange={at.setDate}
+        onTimeChange={at.setTime}
+        error={errors.measuredAt}
+        compact={inline}
+      />
+
+      <Field label="टिप्पणी (Notes) — ऐच्छिक">
+        <TextInput
+          placeholder="जैसे सुबह खाली पेट, बिना जूते"
+          value={notes}
+          maxLength={200}
+          onChange={(e) => setNotes(e.target.value)}
+        />
+      </Field>
+
+      {inline ? <div className="pt-1">{submitButton}</div> : null}
+    </form>
+  );
+
+  if (inline) return form;
+
   return (
     <Modal
       isOpen={isOpen}
-      onClose={onClose}
+      onClose={onDone}
       title="Record Weight"
       hindiTitle="वजन दर्ज करें"
       description="मशीन पर जो वजन दिखे, वही लिखें।"
       footer={
         <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
-          <Button variant="secondary" onClick={onClose} disabled={saving}>
+          <Button variant="secondary" onClick={onDone} disabled={saving}>
             <span lang="hi">रद्द करें</span>
           </Button>
-          <Button variant="primary" type="submit" form={FORM_ID} loading={saving} disabled={!canWrite}>
-            <Scale aria-hidden className="h-4 w-4" />
-            <span lang="hi">वजन सेव करें</span>
-          </Button>
+          {submitButton}
         </div>
       }
     >
-      <form id={FORM_ID} onSubmit={handleSubmit} noValidate className="space-y-5">
-        {!canWrite ? (
-          <p role="status" lang="hi" className="rounded-card border border-info-line bg-info-soft p-3 text-sm text-info">
-            आपके पास केवल देखने का एक्सेस है, इसलिए वजन दर्ज नहीं हो सकता।
-          </p>
-        ) : null}
-        <div aria-live="polite">
-          {formError ? (
-            <p className="rounded-card border border-critical-line bg-critical-soft p-3 text-sm font-medium text-critical">
-              {formError}
-            </p>
-          ) : null}
-        </div>
-
-        <Field
-          label="वजन (Weight, kg)"
-          required
-          error={errors.weight}
-          hint={currentWeight ? `पिछला दर्ज वजन: ${currentWeight} kg` : "अभी तक कोई वजन दर्ज नहीं है"}
-        >
-          <NumberInput
-            allowDecimal
-            placeholder="जैसे 78.5"
-            value={weight}
-            maxLength={6}
-            onChange={(e) => setWeight(e.target.value)}
-            className="text-center text-3xl font-semibold"
-          />
-        </Field>
-
-        <MeasuredAtFields
-          date={when.date}
-          time={when.time}
-          onDateChange={(date) => setWhen((w) => ({ ...w, date }))}
-          onTimeChange={(time) => setWhen((w) => ({ ...w, time }))}
-          error={errors.measuredAt}
-        />
-
-        <Field label="टिप्पणी (Notes) — ऐच्छिक">
-          <TextInput
-            placeholder="जैसे सुबह खाली पेट, बिना जूते"
-            value={notes}
-            maxLength={200}
-            onChange={(e) => setNotes(e.target.value)}
-          />
-        </Field>
-      </form>
+      {form}
     </Modal>
   );
 }
 
-export function AddWeightDialog(props: AddWeightDialogProps) {
-  return props.isOpen ? <WeightDialogBody {...props} /> : null;
+/** The weight entry form on its own, for a panel. Starts blank again each time a weight is saved. */
+export function WeightEntryForm({
+  patientId,
+  currentWeight,
+  onSuccess,
+}: {
+  patientId: string;
+  currentWeight?: number | null;
+  onSuccess?: () => void;
+}) {
+  const [fresh, setFresh] = useState(0);
+  return (
+    <WeightEntry
+      key={fresh}
+      presentation="inline"
+      patientId={patientId}
+      currentWeight={currentWeight}
+      onSuccess={onSuccess}
+      onDone={() => setFresh((n) => n + 1)}
+    />
+  );
+}
+
+export function AddWeightDialog({ isOpen, onClose, patientId, currentWeight, onSuccess }: AddWeightDialogProps) {
+  return isOpen ? (
+    <WeightEntry presentation="dialog" patientId={patientId} currentWeight={currentWeight} onDone={onClose} onSuccess={onSuccess} />
+  ) : null;
 }

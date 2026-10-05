@@ -1,233 +1,355 @@
+import { ROLE, bi, type Bi } from "../format";
 import {
-  bullets,
+  C,
+  appBase,
   callout,
-  codeBlock,
-  emailShell,
+  codeBox,
+  ctaSection,
+  en,
   esc,
+  finish,
   heading,
-  kv,
-  openApp,
+  hi,
+  kvRows,
+  noteBox,
   pair,
-  sectionTitle,
-  toText,
+  pill,
+  section,
+  spacer,
+  stepRows,
+  successCallout,
+  title,
+  topBar,
 } from "../layout";
 import type {
   AccessChangedData,
   CaregiverInviteData,
   CaregiverJoinedData,
-  CaregiverRole,
   RenderOptions,
   RenderedEmail,
   TestEmailData,
   WelcomeData,
 } from "../types";
 
-const ROLE: Record<CaregiverRole, { hi: string; en: string; hiHelp: string; enHelp: string }> = {
-  editor: {
-    hi: "एडिटर",
-    en: "Editor",
-    hiHelp: "आप BP, दवा, खाना जैसी readings दर्ज और बदल सकेंगे।",
-    enHelp: "You will be able to add and edit readings such as BP, medicines and food.",
-  },
-  viewer: {
-    hi: "सिर्फ़ देखने वाले",
-    en: "Viewer",
-    hiHelp: "आप सिर्फ़ देख सकेंगे, कुछ बदल नहीं सकेंगे।",
-    enHelp: "You will be able to view everything but not change anything.",
-  },
-};
 
-function finish(
-  subject: string,
-  preheader: string,
-  body: string,
-  opts: RenderOptions,
-  reason?: { hi: string; en: string },
-): RenderedEmail {
-  const html = emailShell({
-    title: subject,
-    preheader,
-    body,
-    reasonHi: reason?.hi,
-    reasonEn: reason?.en,
-    sample: opts.sample,
-  });
-  return { subject, html, text: toText(html) };
+const EN_FONT = "font-family:'Segoe UI',Roboto,Arial,sans-serif;";
+const TBL = "border-collapse:collapse;border-spacing:0;mso-table-lspace:0pt;mso-table-rspace:0pt;width:100%;";
+const rule = `border-top:1px solid ${C.rule};`;
+
+/** Bold single-line value for detail rows (long addresses wrap instead of overflowing). */
+const detail = (text: string) =>
+  `<span style="${EN_FONT}font-size:12.5px;line-height:16px;font-weight:700;color:${C.ink};white-space:normal;word-break:break-all;">${esc(text)}</span>`;
+
+// ---- welcome ----------------------------------------------------------------
+
+const SCHEDULE: { name: Bi; when: Bi }[] = [
+  { name: { hi: "ज़रूरी अलर्ट", en: "Urgent alerts" }, when: { hi: "तुरंत", en: "Right away" } },
+  { name: { hi: "दैनिक रिपोर्ट", en: "Daily report" }, when: { hi: "रोज़ रात 9 बजे", en: "Every day, 9 PM" } },
+  { name: { hi: "साप्ताहिक रिपोर्ट", en: "Weekly report" }, when: { hi: "हर रविवार, रात 8 बजे", en: "Sundays, 8 PM" } },
+  { name: { hi: "मासिक रिपोर्ट", en: "Monthly report" }, when: { hi: "हर महीने की 1 तारीख, सुबह 9 बजे", en: "1st of the month, 9 AM" } },
+];
+
+function scheduleRows(): string {
+  return `<table role="presentation" width="100%" style="${TBL}">${SCHEDULE.map(
+    (r) =>
+      `<tr><td valign="middle" style="padding:7px 0;${rule}">${hi(r.name.hi, { size: 12.5, lh: 19, weight: 600 })}${en(r.name.en, { size: 11, lh: 15, color: C.muted })}</td><td align="right" valign="middle" style="padding:7px 0 7px 10px;${rule}">${hi(r.when.hi, { size: 12, lh: 18, weight: 600, align: "right" })}${en(r.when.en, { size: 11, lh: 15, color: C.muted, align: "right" })}</td></tr>`,
+  ).join("")}</table>`;
 }
 
 export function renderWelcomeEmail(d: WelcomeData, opts: RenderOptions = {}): RenderedEmail {
-  const body =
-    heading(`नमस्ते ${d.name}, SwasthTrack में स्वागत है`, `Welcome to SwasthTrack, ${d.name}`) +
-    pair(
-      d.patientName
-        ? `${d.patientName} का खाता तैयार है। हर दिन थोड़ा-थोड़ा दर्ज करें, बाकी हम संभाल लेंगे।`
-        : "आपका खाता तैयार है। हर दिन थोड़ा-थोड़ा दर्ज करें, बाकी हम संभाल लेंगे।",
-      d.patientName
-        ? `${d.patientName}'s profile is ready. Log a little every day and we will do the rest.`
-        : "Your account is ready. Log a little every day and we will do the rest.",
-    ) +
-    sectionTitle("शुरू कैसे करें", "Getting started") +
-    bullets([
-      "सुबह-शाम BP नापकर दर्ज करें (Log BP morning and evening)",
-      "दवाइयाँ जोड़ें और लेते ही टिक करें (Add medicines and tick them off)",
-      "खाना, कदम और नींद दर्ज करें (Log food, steps and sleep)",
-      "परिवार के किसी सदस्य को केयरगिवर बनाएं (Invite a family member as caregiver)",
-    ]) +
-    sectionTitle("आपको कौन से ईमेल मिलेंगे", "Emails you will get") +
-    bullets([
-      "ज़रूरी अलर्ट: ऊँचा/कम BP, छूटी दवाई, डेटा दर्ज न होना (Important alerts)",
-      "रोज़ रात की रिपोर्ट और हर हफ़्ते/महीने का सारांश (Daily, weekly and monthly reports)",
-    ]) +
-    openApp("/", "SwasthTrack खोलें · Open SwasthTrack");
+  const base = opts.base === undefined ? appBase() : opts.base;
+  const intro: Bi = d.patientName
+    ? {
+        hi: `${d.patientName} की प्रोफ़ाइल तैयार है। अब पूरा परिवार मिलकर उनकी सेहत का ध्यान एक जगह रख सकता है।`,
+        en: `${d.patientName}'s profile is ready. Now your whole family can look after their health together, in one place.`,
+      }
+    : {
+        hi: "आपका खाता तैयार है। अब पूरा परिवार मिलकर सेहत का ध्यान एक जगह रख सकता है।",
+        en: "Your account is ready. Now your whole family can look after health together, in one place.",
+      };
 
-  return finish(
-    `SwasthTrack में स्वागत है, ${d.name} · Welcome`,
-    "आपका खाता तैयार है · Your account is ready",
-    body,
-    opts,
-    { hi: "आपने SwasthTrack पर खाता बनाया है", en: "You created a SwasthTrack account" },
-  );
+  const sections = [
+    section(
+      topBar(pill("ok", "स्वागत है · Welcome")) +
+        title({ hi: `नमस्ते ${d.name}, SwasthTrack में आपका स्वागत है`, en: `Hello ${d.name}, welcome to SwasthTrack` }) +
+        pair(intro, { mt: 8 }),
+      { first: true },
+    ),
+    section(
+      heading({ hi: "शुरुआत के 4 आसान कदम", en: "4 quick-start tips" }) +
+        stepRows([
+          { hi: "सुबह और शाम बीपी दर्ज करें", en: "Log BP every morning and evening — the same time each day works best." },
+          { hi: "दवाएँ जोड़ें और लेने पर टिक करें", en: "Add medicines once, then tick each dose when it's taken." },
+          { hi: "खाना, कदम और नींद दर्ज करें", en: "Log food, steps and sleep to see the full picture." },
+          { hi: "परिवार के किसी सदस्य को केयरगिवर बनाएँ", en: "Invite a family member as a caregiver so you share the care." },
+        ]),
+    ),
+    section(
+      heading({ hi: "आपको ये ईमेल मिलेंगे", en: "Emails you'll receive" }) +
+        scheduleRows() +
+        hi("इन्हें आप कभी भी ईमेल सेटिंग्स में बदल सकते हैं।", { size: 11.5, lh: 18, color: C.muted, mt: 8 }) +
+        en("You can change these anytime in Email settings.", { size: 11, lh: 15, color: C.muted, mt: 1 }),
+    ),
+    ctaSection(base, "/", { hi: "SwasthTrack खोलें", en: "Open SwasthTrack" }),
+  ];
+
+  return finish({
+    subject: `SwasthTrack में आपका स्वागत है, ${d.name} · Welcome`,
+    title: "SwasthTrack · Welcome",
+    preheader: "आपका खाता तैयार है · Your account is ready",
+    sections,
+    reason: d.patientName
+      ? {
+          hi: `आपको यह ईमेल इसलिए मिला क्योंकि आपने SwasthTrack पर ${d.patientName} की प्रोफ़ाइल बनाई है।`,
+          en: `You're receiving this because you created ${d.patientName}'s profile on SwasthTrack.`,
+        }
+      : {
+          hi: "आपको यह ईमेल इसलिए मिला क्योंकि आपने SwasthTrack पर खाता बनाया है।",
+          en: "You're receiving this because you created a SwasthTrack account.",
+        },
+    ...opts,
+  });
 }
 
-/** Sent from Settings to prove the SMTP path works and show what to expect. */
+// ---- test -------------------------------------------------------------------
+
+/** Sent from Settings to prove delivery works. */
 export function renderTestEmail(d: TestEmailData, opts: RenderOptions = {}): RenderedEmail {
-  const body =
-    heading("टेस्ट ईमेल सफल रहा", "Your test email arrived") +
-    callout(
-      "ok",
-      "ईमेल सेटअप सही चल रहा है",
-      "Email delivery is working",
-      "अलर्ट और रिपोर्ट इसी पते पर आएंगे।",
-      "Alerts and reports will be sent to this address.",
-    ) +
-    kv([
-      { label: "भेजा गया · Sent to", value: esc(d.to) },
-      { label: "समय · Sent at", value: esc(d.sentAtLabel) },
-    ]) +
-    sectionTitle("अगर यह स्पैम में आया", "If this landed in spam") +
-    pair(
-      "ईमेल को 'Not spam' चिह्नित करें और भेजने वाले को कॉन्टैक्ट में जोड़ लें, ताकि ज़रूरी अलर्ट न छूटें।",
-      "Mark it 'Not spam' and add the sender to your contacts so important alerts are never missed.",
-    ) +
-    openApp("/settings");
+  const base = opts.base === undefined ? appBase() : opts.base;
+  const sections = [
+    section(
+      topBar(pill("ok", "टेस्ट ईमेल · Test email"), bi(d.sentAt)) +
+        title({ hi: "आपके ईमेल सही से काम कर रहे हैं", en: "Your emails are working" }) +
+        spacer(12) +
+        successCallout(
+          { hi: "बधाई हो! टेस्ट ईमेल सही तरह से पहुँच गया।", en: "Success! Your test email arrived safely." },
+          { hi: "अब SwasthTrack के अलर्ट और रिपोर्ट इसी पते पर आएँगे।", en: "SwasthTrack alerts and reports will reach this address." },
+        ),
+      { first: true, pad: "16px 22px 16px" },
+    ),
+    section(
+      heading({ hi: "जानकारी", en: "Details" }) +
+        kvRows([
+          { label: { hi: "भेजा गया पता", en: "Sent to" }, value: detail(d.to) },
+          { label: { hi: "भेजने का समय", en: "Sent at" }, value: detail(bi(d.sentAt)) },
+        ]),
+    ),
+    section(
+      noteBox(
+        "warn",
+        hi("सुझाव · Tip", { size: 12.5, lh: 19, weight: 700, color: C.attn }) +
+          hi("अगर यह ईमेल स्पैम में मिला, तो इसे “Not spam” चिह्नित करें और भेजने वाले को अपने कॉन्टैक्ट्स में जोड़ें, ताकि ज़रूरी अलर्ट न छूटें।", { size: 12, lh: 19, mt: 4 }) +
+          en("If this landed in spam, mark it “Not spam” and add the sender to your contacts so important alerts aren't missed.", { size: 11.5, lh: 16, color: C.muted, mt: 1 }),
+      ),
+    ),
+    ctaSection(base, "/settings", { hi: "ईमेल सेटिंग्स खोलें", en: "Open email settings" }),
+  ];
 
-  return finish(
-    "SwasthTrack test email · ईमेल टेस्ट",
-    "ईमेल सही चल रहा है · Email delivery is working",
-    body,
-    opts,
-    { hi: "आपने टेस्ट ईमेल भेजा था", en: "You asked for a test email" },
-  );
+  return finish({
+    subject: "SwasthTrack test email · ईमेल टेस्ट",
+    title: "SwasthTrack · Test email",
+    preheader: "ईमेल सही चल रहा है · Email delivery is working",
+    sections,
+    reason: {
+      hi: "आपको यह ईमेल इसलिए मिला क्योंकि आपने सेटिंग्स में “टेस्ट ईमेल भेजें” दबाया।",
+      en: "You're receiving this because you tapped “Send test email” in Settings.",
+    },
+    ...opts,
+  });
 }
+
+// ---- caregiver --------------------------------------------------------------
 
 export function renderCaregiverInviteEmail(d: CaregiverInviteData, opts: RenderOptions = {}): RenderedEmail {
+  const base = opts.base === undefined ? appBase() : opts.base;
   const role = ROLE[d.role];
-  const body =
-    heading(
-      `${d.inviterName} ने आपको ${d.patientName} की देखभाल में जोड़ा है`,
-      `${d.inviterName} invited you to help care for ${d.patientName}`,
-    ) +
-    codeBlock(d.code, "आपका इनवाइट कोड", "Your invite code") +
-    callout(
-      "warn",
-      `यह कोड ${d.minutesValid} मिनट में खत्म हो जाएगा (${d.expiresAtLabel})`,
-      `This code expires in ${d.minutesValid} minutes (${d.expiresAtLabel}). Ask for a new one if it stops working.`,
-    ) +
-    sectionTitle("कोड कैसे इस्तेमाल करें", "How to join") +
-    bullets([
-      "SwasthTrack खोलें और इसी ईमेल से साइन-अप / लॉग-इन करें (Sign up or log in with this email)",
-      "'मरीज़ जोड़ें' (Join patient) चुनें (Choose Join patient)",
-      "ऊपर दिया 8 अक्षरों का कोड डालें (Enter the 8-character code)",
-    ]) +
-    sectionTitle("आपका एक्सेस", "Your access") +
-    pair(`${role.hi}: ${role.hiHelp}`, `${role.en}: ${role.enHelp}`) +
-    callout(
-      "danger",
-      "यह कोड सिर्फ़ उसी को दें जिसे आप जानते हैं",
-      "Only share this code with someone you know and trust. Anyone with it can join as a caregiver until it expires.",
-    ) +
-    pair(
-      "अगर आप इन्हें नहीं जानते, तो इस ईमेल को अनदेखा करें। कुछ नहीं होगा।",
-      "If you do not know this person, just ignore this email. Nothing will happen.",
-    ) +
-    openApp("/", "SwasthTrack खोलें · Open SwasthTrack");
+  const legend = (["editor", "viewer"] as const)
+    .map(
+      (k) =>
+        `<tr><td valign="middle" style="padding:7px 0;${rule}">${hi(bi(ROLE[k].name), { size: 11.5, lh: 17, weight: 600 })}${en(bi(ROLE[k].short), { size: 11, lh: 15, color: C.muted })}</td></tr>`,
+    )
+    .join("");
 
-  return finish(
-    `${d.inviterName} invited you to ${d.patientName} on SwasthTrack · इनवाइट कोड ${d.code}`,
-    `आपका कोड ${d.code} · Your invite code is ${d.code}`,
-    body,
-    opts,
-    { hi: "किसी ने आपको केयरगिवर के रूप में बुलाया है", en: "Someone invited you as a caregiver" },
-  );
+  const sections = [
+    section(
+      topBar(pill("ok", "केयरगिवर आमंत्रण · Caregiver invite")) +
+        title({
+          hi: `${d.inviterName} ने आपको ${d.patientName} की देखभाल में जुड़ने के लिए बुलाया है`,
+          en: `${d.inviterName} invited you to help care for ${d.patientName}`,
+        }) +
+        spacer(14) +
+        codeBox({
+          label: { hi: "आपका आमंत्रण कोड", en: "Your invite code" },
+          code: d.code,
+          size: 30,
+          spacing: 7,
+          note: {
+            hi: `यह कोड ${d.minutesValid} मिनट के लिए मान्य है — ${d.validUntil} तक।`,
+            en: `Valid for ${d.minutesValid} minutes — until ${d.validUntil}.`,
+          },
+        }),
+      { first: true, pad: "16px 22px 16px" },
+    ),
+    section(
+      heading({ hi: "जुड़ने के 3 कदम", en: "3 steps to join" }) +
+        stepRows([
+          { hi: "SwasthTrack ऐप खोलें", en: "Open the SwasthTrack app." },
+          { hi: "इसी ईमेल पते से साइन अप या लॉग इन करें", en: "Sign up or log in with this email address." },
+          { hi: "“Join patient” चुनें और ऊपर दिया कोड डालें", en: "Choose “Join patient” and enter the code above." },
+        ]),
+    ),
+    section(
+      heading({ hi: "आपकी भूमिका", en: "Your role" }) +
+        noteBox(
+          "neutral",
+          `<p style="margin:0;line-height:20px;">${pill("ok", bi(role.name))}</p>` +
+            hi(role.can.hi, { size: 12.5, lh: 20, mt: 6 }) +
+            en(role.can.en, { size: 11.5, lh: 16, color: C.muted, mt: 1 }) +
+            `<table role="presentation" width="100%" style="${TBL}margin-top:8px;">${legend}</table>`,
+        ),
+    ),
+    section(
+      noteBox(
+        "warn",
+        hi("यह कोड सिर्फ़ भरोसेमंद लोगों के साथ साझा करें", { size: 13, lh: 20, weight: 700, color: C.attn }) +
+          en("Share this code only with people you trust", { size: 12, lh: 17, weight: 600, color: C.attn, mt: 1 }) +
+          hi(`इस कोड से ${d.patientName} की स्वास्थ्य जानकारी तक पहुँच मिलती है।`, { size: 12, lh: 19, mt: 4 }) +
+          en(`This code gives access to ${d.patientName}'s health information.`, { size: 11.5, lh: 16, color: C.muted, mt: 1 }),
+      ) +
+        hi(`अगर आप ${d.inviterName} को नहीं जानते, तो इस ईमेल को अनदेखा करें। कुछ नहीं बदलेगा।`, { size: 11.5, lh: 18, color: C.muted, mt: 10 }) +
+        en("If you don't know this person, ignore this email. Nothing will change.", { size: 11, lh: 15, color: C.muted, mt: 1 }),
+      { pad: "14px 22px 6px" },
+    ),
+    ctaSection(base, "/", { hi: "SwasthTrack खोलें", en: "Open SwasthTrack" }),
+  ];
+
+  return finish({
+    subject: `${d.inviterName} invited you to ${d.patientName} on SwasthTrack · इनवाइट कोड ${d.code}`,
+    title: "SwasthTrack · Caregiver invite",
+    preheader: `आपका कोड ${d.code} · Your invite code is ${d.code}`,
+    sections,
+    reason: {
+      hi: `आपको यह ईमेल इसलिए मिला क्योंकि ${d.inviterName} ने SwasthTrack पर यह पता केयरगिवर के रूप में जोड़ा।`,
+      en: `You're receiving this because ${d.inviterName} added this address as a caregiver on SwasthTrack.`,
+    },
+    ...opts,
+  });
 }
 
 export function renderCaregiverJoinedEmail(d: CaregiverJoinedData, opts: RenderOptions = {}): RenderedEmail {
+  const base = opts.base === undefined ? appBase() : opts.base;
   const role = ROLE[d.role];
-  const body =
-    heading(
-      `${d.caregiverName} अब ${d.patientName} की देखभाल से जुड़ गए हैं`,
-      `${d.caregiverName} joined ${d.patientName}'s care team`,
-    ) +
-    kv([
-      { label: "नाम · Name", value: esc(d.caregiverName) },
-      ...(d.caregiverEmail ? [{ label: "ईमेल · Email", value: esc(d.caregiverEmail) }] : []),
-      { label: "भूमिका · Role", value: `${esc(role.hi)} · ${esc(role.en)}` },
-      { label: "कब · When", value: esc(d.joinedAtLabel) },
-    ]) +
-    `<div style="height:10px;line-height:10px;font-size:0;">&nbsp;</div>` +
-    callout(
-      "warn",
-      "क्या आप इन्हें नहीं जानते?",
-      "Do not recognise this person?",
-      "सेटिंग्स में जाकर तुरंत इनका एक्सेस हटा दें।",
-      "Open Settings and remove their access right away.",
-    ) +
-    openApp("/settings", "एक्सेस देखें · Review access");
+  const sections = [
+    section(
+      topBar(pill("ok", "नया केयरगिवर · New caregiver"), bi(d.joinedAt)) +
+        title({
+          hi: `${d.caregiverName} अब ${d.patientName} की देखभाल से जुड़ गए हैं`,
+          en: `${d.caregiverName} has joined ${d.patientName}'s care circle`,
+        }),
+      { first: true },
+    ),
+    section(
+      heading({ hi: "जानकारी", en: "Details" }) +
+        kvRows([
+          { label: { hi: "नाम", en: "Name" }, value: detail(d.caregiverName) },
+          ...(d.caregiverEmail ? [{ label: { hi: "ईमेल", en: "Email" }, value: detail(d.caregiverEmail) }] : []),
+          { label: { hi: "भूमिका", en: "Role" }, value: detail(bi(role.name)) },
+          { label: { hi: "कब जुड़े", en: "Joined" }, value: detail(bi(d.joinedAt)) },
+        ]),
+    ),
+    section(
+      callout(
+        "warn",
+        { hi: "क्या आप इस व्यक्ति को नहीं पहचानते?", en: "Don't recognise this person?" },
+        { hi: "सेटिंग्स में जाकर तुरंत उनकी पहुँच हटा दें।", en: "Remove their access in Settings right away." },
+      ),
+    ),
+    ctaSection(base, "/settings", { hi: "पहुँच देखें", en: "Review access" }),
+  ];
 
-  return finish(
-    `${d.caregiverName} joined ${d.patientName} on SwasthTrack · नया केयरगिवर`,
-    `${d.caregiverName} · ${role.en}`,
-    body,
-    opts,
-    { hi: "आप इस मरीज़ के मालिक हैं", en: "You own this patient profile" },
-  );
+  return finish({
+    subject: `${d.caregiverName} joined ${d.patientName} on SwasthTrack · नया केयरगिवर`,
+    title: "SwasthTrack · New caregiver",
+    preheader: `${d.caregiverName} · ${role.name.en}`,
+    sections,
+    reason: {
+      hi: `आपको यह ईमेल इसलिए मिला क्योंकि आप SwasthTrack पर ${d.patientName} की प्रोफ़ाइल के मालिक हैं।`,
+      en: `You're receiving this because you own ${d.patientName}'s profile on SwasthTrack.`,
+    },
+    ...opts,
+  });
 }
 
 export function renderAccessChangedEmail(d: AccessChangedData, opts: RenderOptions = {}): RenderedEmail {
+  const base = opts.base === undefined ? appBase() : opts.base;
+  const reason: Bi = {
+    hi: "आपको यह ईमेल इसलिए मिला क्योंकि SwasthTrack पर आपकी पहुँच में बदलाव हुआ है।",
+    en: "You're receiving this because your access on SwasthTrack has changed.",
+  };
+
   if (d.change === "removed") {
-    const body =
-      heading("आपका एक्सेस हटा दिया गया है", "Your access was removed") +
-      pair(
-        `${d.ownerName} ने ${d.patientName} का आपका एक्सेस हटा दिया है। अब आप इनका डेटा नहीं देख पाएंगे।`,
-        `${d.ownerName} removed your access to ${d.patientName}. You can no longer see this patient's data.`,
-      ) +
-      pair(
-        "अगर यह गलती से हुआ है, तो उनसे नया इनवाइट कोड माँगें।",
-        "If this was a mistake, ask them for a new invite code.",
-      );
-    return finish(
-      `Your access to ${d.patientName} was removed · एक्सेस हटाया गया`,
-      "आपका एक्सेस हटा दिया गया · Your access was removed",
-      body,
-      opts,
-      { hi: "आप इस मरीज़ के केयरगिवर थे", en: "You were a caregiver for this patient" },
-    );
+    return finish({
+      subject: `Your access to ${d.patientName} was removed · पहुँच हटाई गई`,
+      title: "SwasthTrack · Access removed",
+      preheader: "आपकी पहुँच हटा दी गई · Your access was removed",
+      sections: [
+        section(
+          topBar(pill("attention", "पहुँच हटाई गई · Access removed")) +
+            title({
+              hi: `${d.ownerName} ने ${d.patientName} की प्रोफ़ाइल से आपकी पहुँच हटा दी है`,
+              en: `${d.ownerName} removed your access to ${d.patientName}'s profile`,
+            }) +
+            pair(
+              {
+                hi: `अब आप ${d.patientName} का स्वास्थ्य डेटा नहीं देख पाएँगे, और उनके अलर्ट या रिपोर्ट भी नहीं मिलेंगे।`,
+                en: `You can no longer see ${d.patientName}'s health data, and you won't receive their alerts or reports.`,
+              },
+              { mt: 8 },
+            ),
+          { first: true, pad: "16px 22px 14px" },
+        ),
+        section(
+          noteBox(
+            "neutral",
+            hi(`अगर यह गलती से हुआ है, तो ${d.ownerName} से नया आमंत्रण कोड माँगें।`, { size: 12.5, lh: 19 }) +
+              en(`If this was a mistake, ask ${d.ownerName} for a new invite code.`, { size: 11.5, lh: 16, color: C.muted, mt: 1 }),
+          ),
+          { pad: "0 22px 18px", rule: false },
+        ),
+      ],
+      reason,
+      ...opts,
+    });
   }
 
   const role = ROLE[d.newRole ?? "viewer"];
-  const body =
-    heading("आपकी भूमिका बदल गई है", "Your role was changed") +
-    pair(
-      `${d.ownerName} ने ${d.patientName} पर आपकी भूमिका बदलकर "${role.hi}" कर दी है।`,
-      `${d.ownerName} changed your role on ${d.patientName} to ${role.en}.`,
-    ) +
-    pair(role.hiHelp, role.enHelp) +
-    openApp("/", "SwasthTrack खोलें · Open SwasthTrack");
-  return finish(
-    `Your role on ${d.patientName} is now ${role.en} · भूमिका बदली`,
-    `${role.hi} · ${role.en}`,
-    body,
-    opts,
-    { hi: "आप इस मरीज़ के केयरगिवर हैं", en: "You are a caregiver for this patient" },
-  );
+  return finish({
+    subject: `Your role on ${d.patientName} is now ${role.name.en} · भूमिका बदली`,
+    title: "SwasthTrack · Role updated",
+    preheader: `${bi(role.name)}`,
+    sections: [
+      section(
+        topBar(pill("ok", "भूमिका बदली · Role updated")) +
+          title({
+            hi: `${d.patientName} के लिए आपकी भूमिका अब ${bi(role.name)} है`,
+            en: `Your role for ${d.patientName} is now ${role.name.en}`,
+          }),
+        { first: true },
+      ),
+      section(
+        heading({ hi: "अब आप क्या कर सकते हैं", en: "What you can do now" }) +
+          noteBox(
+            "neutral",
+            `<p style="margin:0;line-height:20px;">${pill("ok", bi(role.name))}</p>` +
+              hi(role.can.hi, { size: 12.5, lh: 20, mt: 6 }) +
+              en(role.can.en, { size: 11.5, lh: 16, color: C.muted, mt: 1 }),
+          ) +
+          hi(`यह बदलाव ${d.ownerName} ने किया है।`, { size: 11.5, lh: 18, color: C.muted, mt: 10 }) +
+          en(`This change was made by ${d.ownerName}.`, { size: 11, lh: 15, color: C.muted, mt: 1 }),
+      ),
+      ctaSection(base, "/", { hi: "SwasthTrack खोलें", en: "Open SwasthTrack" }),
+    ],
+    reason,
+    ...opts,
+  });
 }

@@ -91,13 +91,16 @@ function JoinForm({ onClose, onSuccess }: Pick<JoinPatientDialogProps, "onClose"
           maxLength={CODE_LENGTH}
           placeholder="------"
           value={code}
-          onChange={(e) => setCode(e.target.value.toUpperCase().replace(/[^A-HJ-NP-Z2-9]/g, "").slice(0, CODE_LENGTH))}
+          onChange={(e) => {
+            setCode(e.target.value.toUpperCase().replace(/[^A-HJ-NP-Z2-9]/g, "").slice(0, CODE_LENGTH));
+            if (error) setError("");
+          }}
           aria-describedby={`${codeId}-hint`}
           className="mt-1.5 text-center font-mono text-xl font-bold tracking-[0.4em]"
           required
         />
         <p id={`${codeId}-hint`} className="mt-1.5 text-xs text-ink-subtle">
-          मरीज़ के मालिक के फोन में Settings &gt; केयरगिवर जोड़ें से कोड मिलता है। कोड 15 मिनट तक चलता है।
+          मरीज़ के मालिक के फोन में Settings &gt; परिवार (Family) &gt; जोड़ें, या Caregiver पेज के “परिवार जोड़ें” से कोड मिलता है। कोड 15 मिनट तक चलता है।
         </p>
       </div>
 

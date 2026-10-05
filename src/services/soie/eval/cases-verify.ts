@@ -85,6 +85,29 @@ export function verifyCases(): EvalCase[] {
       const r = run(env, goodDraft(env));
       c.ok(r.ok, `should pass, got: ${codes(r)}`);
     }),
+    caseOf(G, "verify:off-topic", "a true BP answer to a WEIGHT question is rejected as off_topic", async (c) => {
+      const env = await verifyEnv("steady", "papa ka wajan kitna hai");
+      const r = run(env, goodDraft(env));
+      c.ok(!r.ok && r.violations.some((v) => v.code === "off_topic"), `should be off_topic, got: ${codes(r)}`);
+    }),
+    caseOf(G, "verify:off-topic-ok-by-words", "an answer that names the asked measure passes even if data_coverage omits it", async (c) => {
+      const env = await verifyEnv("steady", "papa ka BP kaisa raha");
+      const r = run(env, goodDraft(env, { data_coverage: { metrics: [], range: { from: "2026-09-28", to: T }, n: 11 } }));
+      c.ok(!r.violations.some((v) => v.code === "off_topic"), `BP is named in the text, got: ${codes(r)}`);
+    }),
+    caseOf(G, "verify:off-topic-exempt", "a declined question and a not-tracked question are not forced onto a metric", async (c) => {
+      const declined = await verifyEnv("steady", "papa ka wajan kitna hai");
+      const r = run(declined, goodDraft(declined, { refusal: "इस सवाल का जवाब नहीं दे सकता" }));
+      c.ok(!r.violations.some((v) => v.code === "off_topic"), `refusal exempt, got: ${codes(r)}`);
+      const sugar = await verifyEnv("steady", "papa ki sugar kitni hai");
+      const r2 = run(sugar, goodDraft(sugar));
+      c.ok(!r2.violations.some((v) => v.code === "off_topic"), `blood sugar is not a tracked measure, got: ${codes(r2)}`);
+    }),
+    caseOf(G, "verify:off-topic-advice", "an advice answer about food passes for a food question", async (c) => {
+      const env = await verifyEnv("steady", "kela kha sakte hain");
+      const r = run(env, goodDraft(env, { headline: "केला सीमित मात्रा में खाया जा सकता है", answer_hi: "केला फल है; डॉक्टर से मात्रा पूछें।", answer_en: "Banana is a fruit; ask the doctor about the amount.", key_points: [], numbers: [], data_coverage: { metrics: ["food"], range: { from: "2026-09-28", to: T }, n: 1 } }));
+      c.ok(!r.violations.some((v) => v.code === "off_topic"), `food answer for a food question, got: ${codes(r)}`);
+    }),
     caseOf(G, "verify:fabricated-mean", "FABRICATED mean BP in the prose is rejected", async (c) => {
       const env = await verifyEnv("steady");
       const r = run(env, goodDraft(env, { answer_en: "Over the last 7 days the mean BP was 151.3/97.4 mmHg." }));

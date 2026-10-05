@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Calendar, Edit2, Heart, Pill, Plus, Scale, ShieldCheck, Trash2, User, Utensils } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
+import { Calendar, Edit2, Heart, Lock, Pill, Plus, Ruler, Scale, ShieldCheck, Trash2, Utensils } from "lucide-react";
 import { AddConditionDialog } from "@/components/forms/add-condition-dialog";
 import { AddMedicineDialog } from "@/components/forms/add-medicine-dialog";
 import { EditPatientDialog } from "@/components/forms/edit-patient-dialog";
@@ -14,6 +15,7 @@ import { useConfirm } from "@/components/ui/confirm-dialog";
 import { EmptyState, ErrorState, PageBody, PageHeader } from "@/components/ui/page";
 import { useToast } from "@/components/ui/toast";
 import { useAuth } from "@/context/auth-context";
+import { frequencyLabel, mealRelationLabel } from "@/lib/medicine-format";
 import { cn } from "@/lib/utils";
 import {
   deleteMedicalCondition,
@@ -32,28 +34,45 @@ function InfoTile({
   value,
   helper,
 }: {
-  icon: typeof User;
+  icon: LucideIcon;
   tone: keyof typeof metricChipClasses;
   label: string;
   value: string;
   helper: string;
 }) {
   return (
-    <div className="rounded-card border border-line bg-surface-sunken p-4">
+    <div className="tile rounded-card p-3.5 sm:p-4">
       <div className="flex items-center gap-2 text-xs font-semibold text-ink-muted">
-        <span className={cn("grid h-7 w-7 place-items-center rounded-field", metricChipClasses[tone])}>
+        <span className={cn("grid h-7 w-7 shrink-0 place-items-center rounded-field", metricChipClasses[tone])}>
           <Icon aria-hidden className="h-4 w-4" />
         </span>
-        {label}
+        <span className="min-w-0 truncate">{label}</span>
       </div>
-      <p className="mt-2 text-lg font-semibold text-ink">{value}</p>
-      <p className="text-sm text-ink-muted">{helper}</p>
+      <p className="tabular mt-2 text-lg font-semibold leading-tight text-ink sm:text-xl">{value}</p>
+      <p lang="hi" className="mt-0.5 text-xs text-ink-muted sm:text-sm">
+        {helper}
+      </p>
     </div>
   );
 }
 
+/** "08:00:00" -> "8:00 am". A schedule is a clock time in India, so no timezone maths. */
+function clock12(scheduled: string): string {
+  const [h, m] = scheduled.split(":").map(Number);
+  if (!Number.isFinite(h) || !Number.isFinite(m)) return scheduled.slice(0, 5);
+  return `${h % 12 || 12}:${String(m).padStart(2, "0")} ${h >= 12 ? "pm" : "am"}`;
+}
+
+function initials(name: string): string {
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+  if (parts.length === 0) return "?";
+  return (parts[0][0] + (parts[1]?.[0] ?? "")).toUpperCase();
+}
+
+const ROLE_BADGE = { owner: "मालिक · Owner", editor: "एडिटर · Editor", viewer: "सिर्फ़ देखने वाला · Viewer" } as const;
+
 export default function ProfilePage() {
-  const { activePatientId, canWrite, loading: authLoading } = useAuth();
+  const { activePatientId, canWrite, memberRole, loading: authLoading } = useAuth();
   const toast = useToast();
   const confirm = useConfirm();
 
@@ -178,26 +197,56 @@ export default function ProfilePage() {
       ? Number((patient.current_weight_kg - patient.target_weight_kg).toFixed(1))
       : null;
 
+  // Running medicines first, then by the clock, so the list reads like the day.
+  const sortedMedicines = [...medicines].sort(
+    (x, y) => Number(y.active) - Number(x.active) || x.scheduled_time.localeCompare(y.scheduled_time),
+  );
+
+  const openAddMedicine = () => {
+    setMedicineToEdit(null);
+    setIsAddMedicineOpen(true);
+  };
+
   return (
     <PageBody>
       {header}
 
       {!canWrite ? (
-        <p lang="hi" className="rounded-card border border-info-line bg-info-soft p-3 text-sm text-ink-muted">
+        <p lang="hi" className="flex items-start gap-2.5 rounded-card border border-info-line bg-info-soft px-4 py-3 text-sm text-ink">
+          <Lock aria-hidden className="mt-0.5 h-4 w-4 shrink-0 text-info" />
           आपके पास सिर्फ़ देखने की अनुमति है, इसलिए यहाँ बदलाव बंद हैं।
         </p>
       ) : null}
 
-      <Card tone="premium">
-        <CardHeader>
-          <div className="min-w-0">
-            <div className="flex flex-wrap items-center gap-2">
-              <CardTitle>Personal information</CardTitle>
-              <Badge variant="brand" lang="hi">
-                व्यक्तिगत जानकारी
-              </Badge>
+      <Card tone="premium" className="space-y-5">
+        <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-3">
+          <div className="flex min-w-0 items-center gap-3.5 sm:gap-4">
+            <span
+              aria-hidden
+              className="grad-gold-button grid h-14 w-14 shrink-0 place-items-center rounded-full border border-gold-line text-xl font-bold text-gold-ink shadow-gold-button sm:h-16 sm:w-16 sm:text-2xl"
+            >
+              {initials(patient.name)}
+            </span>
+            <div className="min-w-0">
+              <h2 className="truncate text-xl font-semibold leading-tight text-ink sm:text-2xl">{patient.name}</h2>
+              <p lang="hi" className="mt-0.5 text-sm text-ink-muted">
+                {patient.age ? `${patient.age} साल` : "उम्र दर्ज नहीं"}
+                {patient.gender ? ` · ${patient.gender}` : ""}
+              </p>
+              <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
+                {memberRole ? (
+                  <Badge variant="brand">
+                    <span lang="hi">{ROLE_BADGE[memberRole]}</span>
+                  </Badge>
+                ) : null}
+                {conditions.slice(0, 3).map((c) => (
+                  <Badge key={c.id} variant="info">
+                    {c.condition_name}
+                  </Badge>
+                ))}
+                {conditions.length > 3 ? <Badge variant="neutral">+{conditions.length - 3}</Badge> : null}
+              </div>
             </div>
-            <CardDescription>नाम, उम्र, वजन, कद और कैलोरी का लक्ष्य</CardDescription>
           </div>
           {canWrite ? (
             <Button variant="secondary" onClick={() => setIsEditProfileOpen(true)}>
@@ -205,27 +254,27 @@ export default function ProfilePage() {
               संपादित करें (Edit)
             </Button>
           ) : null}
-        </CardHeader>
+        </div>
 
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          <InfoTile
-            icon={User}
-            tone="brand"
-            label="Name & age"
-            value={patient.name}
-            helper={`${patient.age ? `${patient.age} साल` : "उम्र दर्ज नहीं"}${patient.gender ? ` · ${patient.gender}` : ""}`}
-          />
+        <div className="grid grid-cols-2 gap-2.5 sm:gap-3 lg:grid-cols-4">
           <InfoTile
             icon={Scale}
             tone="weight"
-            label="Weight & height"
+            label="वजन · Weight"
             value={patient.current_weight_kg ? `${patient.current_weight_kg} kg` : "—"}
-            helper={`कद: ${patient.height_cm ? `${patient.height_cm} cm` : "दर्ज नहीं"}`}
+            helper={patient.current_weight_kg ? "अभी का वजन" : "दर्ज नहीं"}
+          />
+          <InfoTile
+            icon={Ruler}
+            tone="activity"
+            label="कद · Height"
+            value={patient.height_cm ? `${patient.height_cm} cm` : "—"}
+            helper={patient.height_cm ? "दर्ज कद" : "दर्ज नहीं"}
           />
           <InfoTile
             icon={Heart}
             tone="bp"
-            label="Target weight"
+            label="लक्ष्य · Target"
             value={patient.target_weight_kg ? `${patient.target_weight_kg} kg` : "—"}
             helper={
               weightGap === null
@@ -238,8 +287,8 @@ export default function ProfilePage() {
           <InfoTile
             icon={Utensils}
             tone="food"
-            label="Calorie target"
-            value={`${patient.daily_calorie_target} kcal/day`}
+            label="कैलोरी · Calories"
+            value={`${patient.daily_calorie_target} kcal`}
             helper="रोज़ का कैलोरी लक्ष्य"
           />
         </div>
@@ -267,14 +316,15 @@ export default function ProfilePage() {
         {conditions.length > 0 ? (
           <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {conditions.map((cond) => (
-              <li key={cond.id} className="flex flex-col justify-between rounded-card border border-line bg-surface p-4">
+              <li key={cond.id} className="tile flex flex-col justify-between rounded-card p-4">
                 <div>
                   <div className="flex items-start justify-between gap-2">
-                    <h3 className="text-base font-semibold text-ink">{cond.condition_name}</h3>
+                    <h3 className="min-w-0 text-base font-semibold text-ink">{cond.condition_name}</h3>
                     {canWrite ? (
                       <IconButton
                         variant="ghost"
                         size="sm"
+                        className="-mr-1.5 -mt-1.5"
                         aria-label={`हटाएँ (Remove) — ${cond.condition_name}`}
                         onClick={() => void handleDeleteCondition(cond.id, cond.condition_name)}
                       >
@@ -283,14 +333,14 @@ export default function ProfilePage() {
                     ) : null}
                   </div>
                   {cond.diagnosed_year ? (
-                    <p className="mt-2 flex items-center gap-1.5 text-xs font-medium text-ink-muted">
+                    <p lang="hi" className="mt-1.5 flex items-center gap-1.5 text-xs font-medium text-ink-muted">
                       <Calendar aria-hidden className="h-3.5 w-3.5" />
                       {cond.diagnosed_year} में पता चला
                     </p>
                   ) : null}
                   {cond.notes ? <p className="mt-2 text-xs leading-relaxed text-ink-muted">{cond.notes}</p> : null}
                 </div>
-                <p className="mt-4 flex items-center gap-1 border-t border-line pt-3 text-xs text-ink-subtle">
+                <p lang="hi" className="mt-4 flex items-center gap-1 border-t border-line pt-3 text-xs text-ink-subtle">
                   <ShieldCheck aria-hidden className="h-3.5 w-3.5" />
                   निगरानी में
                 </p>
@@ -326,94 +376,103 @@ export default function ProfilePage() {
             <CardDescription>समय, मात्रा, कितनी बार और खाने से पहले/बाद</CardDescription>
           </div>
           {canWrite ? (
-            <Button
-              variant="primary"
-              onClick={() => {
-                setMedicineToEdit(null);
-                setIsAddMedicineOpen(true);
-              }}
-            >
+            <Button variant="primary" onClick={openAddMedicine}>
               <Plus aria-hidden className="h-4 w-4" />
               दवाई जोड़ें (Add)
             </Button>
           ) : null}
         </CardHeader>
 
-        {medicines.length > 0 ? (
-          <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {medicines.map((med) => (
-              <li
-                key={med.id}
-                className={cn(
-                  "flex flex-col justify-between rounded-card border border-line p-4",
-                  med.active ? "bg-surface shadow-e1" : "bg-surface-sunken",
-                )}
-              >
-                <div>
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="flex min-w-0 items-center gap-2">
-                      <span
-                        className={cn(
-                          "grid h-9 w-9 shrink-0 place-items-center rounded-control",
-                          med.active ? metricChipClasses.meds : "bg-surface text-ink-subtle",
-                        )}
-                      >
-                        <Pill aria-hidden className="h-4 w-4" />
-                      </span>
-                      <div className="min-w-0">
-                        <h3 className="truncate text-base font-semibold text-ink">{med.medicine_name}</h3>
-                        <p className="text-xs font-medium text-ink-muted">{med.dose}</p>
+        {sortedMedicines.length > 0 ? (
+          <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {sortedMedicines.map((med) => {
+              const meal = mealRelationLabel(med.meal_relation);
+              return (
+                <li
+                  key={med.id}
+                  className={cn(
+                    "flex flex-col justify-between rounded-card p-4",
+                    med.active ? "tile" : "border border-line bg-surface-sunken",
+                  )}
+                >
+                  <div>
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex min-w-0 items-center gap-2.5">
+                        <span
+                          className={cn(
+                            "grid h-9 w-9 shrink-0 place-items-center rounded-control",
+                            med.active ? metricChipClasses.meds : "bg-surface text-ink-subtle",
+                          )}
+                        >
+                          <Pill aria-hidden className="h-4 w-4" />
+                        </span>
+                        <div className="min-w-0">
+                          <h3 className="truncate text-base font-semibold text-ink">{med.medicine_name}</h3>
+                          <p className="text-xs font-medium text-ink-muted">{med.dose}</p>
+                        </div>
+                      </div>
+                      <Badge variant={med.active ? "positive" : "neutral"}>
+                        <span lang="hi">{med.active ? "चालू" : "बंद"}</span>
+                      </Badge>
+                    </div>
+
+                    <dl className="mt-4 space-y-1.5 text-xs">
+                      <div className="flex items-center justify-between gap-3">
+                        <dt className="text-ink-muted">
+                          <span lang="hi">समय</span> (Time)
+                        </dt>
+                        <dd className="tabular font-semibold text-ink">{clock12(med.scheduled_time)}</dd>
+                      </div>
+                      <div className="flex items-center justify-between gap-3">
+                        <dt className="text-ink-muted">
+                          <span lang="hi">खाने से</span> (Food)
+                        </dt>
+                        <dd lang="hi" className="text-right font-semibold text-ink">
+                          {meal ?? "तय नहीं"}
+                        </dd>
+                      </div>
+                      <div className="flex items-center justify-between gap-3">
+                        <dt className="text-ink-muted">
+                          <span lang="hi">कितनी बार</span> (Frequency)
+                        </dt>
+                        <dd lang="hi" className="text-right font-semibold text-ink">
+                          {frequencyLabel(med.frequency) ?? "—"}
+                        </dd>
+                      </div>
+                    </dl>
+                  </div>
+
+                  {canWrite ? (
+                    <div className="mt-4 flex items-center justify-between gap-2 border-t border-line pt-3">
+                      <Button variant="ghost" size="sm" onClick={() => void handleToggleMedicineActive(med)}>
+                        {med.active ? "निष्क्रिय करें" : "सक्रिय करें"}
+                      </Button>
+                      <div className="flex items-center gap-1">
+                        <IconButton
+                          variant="ghost"
+                          size="sm"
+                          aria-label={`बदलें (Edit) — ${med.medicine_name}`}
+                          onClick={() => {
+                            setMedicineToEdit(med);
+                            setIsAddMedicineOpen(true);
+                          }}
+                        >
+                          <Edit2 aria-hidden className="h-4 w-4" />
+                        </IconButton>
+                        <IconButton
+                          variant="ghost"
+                          size="sm"
+                          aria-label={`हटाएँ (Delete) — ${med.medicine_name}`}
+                          onClick={() => void handleDeleteMedicine(med.id, med.medicine_name)}
+                        >
+                          <Trash2 aria-hidden className="h-4 w-4" />
+                        </IconButton>
                       </div>
                     </div>
-                    <Badge variant={med.active ? "positive" : "neutral"}>{med.active ? "चालू" : "बंद"}</Badge>
-                  </div>
-
-                  <dl className="mt-4 space-y-1.5 text-xs">
-                    <div className="flex items-center justify-between gap-2">
-                      <dt className="text-ink-subtle">समय (Time)</dt>
-                      <dd className="tabular font-semibold text-ink">{med.scheduled_time.slice(0, 5)}</dd>
-                    </div>
-                    <div className="flex items-center justify-between gap-2">
-                      <dt className="text-ink-subtle">खाने से (Food)</dt>
-                      <dd className="font-semibold text-ink">{med.meal_relation || "तय नहीं"}</dd>
-                    </div>
-                    <div className="flex items-center justify-between gap-2">
-                      <dt className="text-ink-subtle">कितनी बार (Frequency)</dt>
-                      <dd className="font-semibold capitalize text-ink">{med.frequency}</dd>
-                    </div>
-                  </dl>
-                </div>
-
-                {canWrite ? (
-                  <div className="mt-5 flex items-center justify-between gap-2 border-t border-line pt-3">
-                    <Button variant="ghost" size="sm" onClick={() => void handleToggleMedicineActive(med)}>
-                      {med.active ? "निष्क्रिय करें (Deactivate)" : "सक्रिय करें (Activate)"}
-                    </Button>
-                    <div className="flex items-center gap-1">
-                      <IconButton
-                        variant="ghost"
-                        size="sm"
-                        aria-label={`बदलें (Edit) — ${med.medicine_name}`}
-                        onClick={() => {
-                          setMedicineToEdit(med);
-                          setIsAddMedicineOpen(true);
-                        }}
-                      >
-                        <Edit2 aria-hidden className="h-4 w-4" />
-                      </IconButton>
-                      <IconButton
-                        variant="ghost"
-                        size="sm"
-                        aria-label={`हटाएँ (Delete) — ${med.medicine_name}`}
-                        onClick={() => void handleDeleteMedicine(med.id, med.medicine_name)}
-                      >
-                        <Trash2 aria-hidden className="h-4 w-4" />
-                      </IconButton>
-                    </div>
-                  </div>
-                ) : null}
-              </li>
-            ))}
+                  ) : null}
+                </li>
+              );
+            })}
           </ul>
         ) : (
           <EmptyState
@@ -422,13 +481,7 @@ export default function ProfilePage() {
             description="No medicines recorded yet. Add the prescription to get dose reminders and adherence."
             action={
               canWrite ? (
-                <Button
-                  variant="primary"
-                  onClick={() => {
-                    setMedicineToEdit(null);
-                    setIsAddMedicineOpen(true);
-                  }}
-                >
+                <Button variant="primary" onClick={openAddMedicine}>
                   <Plus aria-hidden className="h-4 w-4" />
                   पहली दवाई जोड़ें
                 </Button>

@@ -178,7 +178,9 @@ const controlBase =
   "shadow-inset-field transition-colors placeholder:text-ink-subtle " +
   "hover:border-line-strong " +
   "focus-visible:border-brand focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-brand " +
-  "read-only:bg-surface-sunken " +
+  // `:read-only` also matches <select>, which would make every dropdown look
+  // disabled; only text-like controls get the recessed read-only look.
+  "[&:read-only:not(select)]:bg-surface-sunken " +
   "disabled:cursor-not-allowed disabled:bg-surface-sunken disabled:text-ink-subtle " +
   "aria-[invalid=true]:border-critical aria-[invalid=true]:focus-visible:outline-critical";
 
@@ -325,14 +327,21 @@ export function ChoiceGroup<T extends string>({
               className={cn(
                 "pressable flex min-h-control cursor-pointer flex-col items-center justify-center",
                 "rounded-field border px-2 text-sm font-semibold whitespace-nowrap",
+                // Same selected look as Segmented: gold foil, dark ink.
                 active
-                  ? "border-brand bg-brand-soft text-brand-ink"
-                  : "border-line bg-surface text-ink-muted hover:border-brand-line",
+                  ? "grad-gold-button border-gold-line text-gold-ink shadow-gold-button"
+                  : "border-line bg-surface text-ink-muted shadow-e1 hover:border-gold-line hover:text-ink",
               )}
             >
               <span>{option.label}</span>
               {option.hindiLabel ? (
-                <span lang="hi" className="text-2xs font-normal text-ink-subtle">
+                <span
+                  lang="hi"
+                  className={cn(
+                    "text-2xs font-normal",
+                    active ? "text-gold-ink" : "text-ink-subtle",
+                  )}
+                >
                   {option.hindiLabel}
                 </span>
               ) : null}

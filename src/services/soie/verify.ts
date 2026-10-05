@@ -19,7 +19,7 @@
  * the deterministic engine takes over.
  */
 
-import { fold, normalizeDigits } from "./normalize";
+import { METRIC_LEXICON, detectMetrics, fold, matchesAny, normalizeDigits } from "./normalize";
 import { resolveTemporal } from "./temporal";
 import {
   METRICS,
@@ -47,7 +47,8 @@ export type ViolationCode =
   | "guarantee"
   | "replace_doctor"
   | "false_reassurance"
-  | "needs_doctor_missing";
+  | "needs_doctor_missing"
+  | "off_topic";
 
 export interface Violation {
   code: ViolationCode;
@@ -697,6 +698,27 @@ export function verifyAnswer(input: unknown, ctx: VerifyContext): VerifyResult {
       REASSURANCE.lastIndex = 0;
       const rm = REASSURANCE.exec(text);
       if (rm) out.push({ code: "false_reassurance", where, message: "Do not reassure ('nothing to worry') when the data carries an alert or a doctor visit is advised.", value: rm[0] });
+    }
+  }
+
+  // --- on topic ------------------------------------------------------------
+  // An answer about something else is wrong even when every number in it is true. If the question
+  // names a tracked measure (BP, weight, food, sleep, steps, medicines), the answer must be about at
+  // least one of them: in data_coverage.metrics, or in its own words. (A declined question is exempt.)
+  if (!draft.refusal.trim() && !ctx.medicineChangeRequest && !ctx.diagnosisRequest) {
+    const asked = detectMetrics(ctx.userMessage);
+    if (asked.length > 0) {
+      const covered = new Set<string>(draft.data_coverage.metrics);
+      const body = fold([draft.headline, draft.answer_hi, draft.answer_en, ...draft.key_points.map((k) => k.text)].join(" "));
+      const onTopic = asked.some((m) => covered.has(m === "pulse" ? "bp" : m) || matchesAny(body, METRIC_LEXICON[m]));
+      if (!onTopic) {
+        out.push({
+          code: "off_topic",
+          where: "answer_hi",
+          message: `The question is about ${asked.join(" / ")}, but the answer never covers it (data_coverage.metrics = [${draft.data_coverage.metrics.join(", ")}]). Answer the question that was asked, with the data for ${asked.join(" / ")}. If the app does not track it, say that plainly instead.`,
+          value: asked.join(","),
+        });
+      }
     }
   }
 

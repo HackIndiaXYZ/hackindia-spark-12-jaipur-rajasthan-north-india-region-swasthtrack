@@ -107,3 +107,12 @@ export function formatTimeIST(value: string | Date | null | undefined): string |
 export function hhmm(scheduledTime: string): string {
   return scheduledTime.slice(0, 5);
 }
+
+/** "12 मि", "3 घं", "3 घं 20 मि" from whole minutes (always positive). */
+export function formatMinutes(minutes: number): string {
+  const m = Math.max(0, Math.round(minutes));
+  if (m < 60) return `${m} मि`;
+  const h = Math.floor(m / 60);
+  const rest = m % 60;
+  return rest === 0 ? `${h} घं` : `${h} घं ${rest} मि`;
+}

@@ -8,7 +8,7 @@ import { Modal } from "@/components/ui/modal";
 import { useToast } from "@/components/ui/toast";
 import { MeasuredAtFields, hourOfTime, nowIST, resolveMeasuredAt } from "@/components/forms/measured-at-fields";
 import { useAuth } from "@/context/auth-context";
-import { mealTypes } from "@/lib/health-options";
+import { MEAL_SLOTS } from "@/components/food/food-math";
 import { cn, getExactFoodEmoji } from "@/lib/utils";
 import { logFood, searchFoodItems, type FoodItem } from "@/services/patient-service";
 import {
@@ -257,7 +257,12 @@ function FoodDialogBody({ isOpen, onClose, patientId, defaultMealType, onSuccess
     if (Number.isNaN(prot) || prot > 300) next.protein = "प्रोटीन 0 से 300 g के बीच लिखें, या खाली छोड़ें";
 
     setErrors(next);
-    return Object.keys(next).length > 0 ? null : { qty, kcal, prot };
+    if (Object.keys(next).length > 0) {
+      // Move focus to the first field that needs fixing (after the error state has rendered).
+      requestAnimationFrame(() => document.querySelector<HTMLElement>(`#${FORM_ID} [aria-invalid="true"]`)?.focus());
+      return null;
+    }
+    return { qty, kcal, prot };
   }
 
   function handleSaveAsMyFood() {
@@ -401,7 +406,7 @@ function FoodDialogBody({ isOpen, onClose, patientId, defaultMealType, onSuccess
                   >
                     <span className="flex min-w-0 items-center gap-2">
                       <span aria-hidden className="text-base">
-                        {getExactFoodEmoji(hit.name, hit.category)}
+                        {hit.item?.emoji ?? getExactFoodEmoji(hit.name, hit.category)}
                       </span>
                       <span className="min-w-0">
                         <span className="block truncate font-semibold">
@@ -540,9 +545,9 @@ function FoodDialogBody({ isOpen, onClose, patientId, defaultMealType, onSuccess
               hint={pickedMeal ? undefined : "समय के हिसाब से सुझाया गया है — बदल सकते हैं"}
             >
               <Select value={mealType} onChange={(e) => setPickedMeal(e.target.value)}>
-                {mealTypes.map((type) => (
-                  <option key={type} value={type}>
-                    {type}
+                {MEAL_SLOTS.map((slot) => (
+                  <option key={slot.id} value={slot.id}>
+                    {slot.label} ({slot.english})
                   </option>
                 ))}
               </Select>
