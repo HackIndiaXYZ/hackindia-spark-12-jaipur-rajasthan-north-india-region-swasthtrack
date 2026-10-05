@@ -76,7 +76,7 @@ itself and the results are the same on 5.7 and 8.
 
 ## Tests
 
-`npm run db:test` runs 46 checks against a REAL MySQL database: sign-up and codes, sessions, rate limits,
+`npm run db:test` runs 47 checks against a REAL MySQL database: sign-up and codes, sessions, rate limits,
 CRUD, filters and paging, upserts, embeds, caregiver invites, and above all the access rules and SQL
 injection attempts. It **drops every table** in the database it is given, so it refuses to run unless the
 database name contains `test`:

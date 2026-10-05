@@ -25,11 +25,17 @@ export function isDatabaseConfigured(): boolean {
 }
 
 function truthy(value: string | null | undefined): boolean {
-  return value !== null && value !== undefined && /^(1|true|yes|on|required|require|verify[-_]?(ca|full|identity))$/i.test(value);
+  if (value === null || value === undefined) return false;
+  // `{"rejectUnauthorized":true}` is the mysql2 spelling some providers copy into the URL.
+  return value.trim().startsWith("{") || /^(1|true|yes|on|required|require|strict|verify[-_]?(ca|full|identity))$/i.test(value);
 }
 
+// The spellings providers print in their connection strings: Aiven `ssl-mode=REQUIRED`, libpq `sslmode=require`,
+// Prisma `sslaccept=strict`, mysql2 `ssl=true`.
+const SSL_URL_PARAMS = ["ssl", "sslmode", "ssl-mode", "ssl_mode", "sslaccept"];
+
 function sslOptions(url: URL): PoolOptions["ssl"] | undefined {
-  const fromUrl = url.searchParams.get("ssl") ?? url.searchParams.get("sslmode");
+  const fromUrl = SSL_URL_PARAMS.map((name) => url.searchParams.get(name)).find((value) => value !== null) ?? null;
   const fromEnv = process.env.DATABASE_SSL;
   const explicit = fromUrl ?? fromEnv;
   const off = explicit !== null && explicit !== undefined && /^(0|false|no|off|disable|disabled)$/i.test(explicit);

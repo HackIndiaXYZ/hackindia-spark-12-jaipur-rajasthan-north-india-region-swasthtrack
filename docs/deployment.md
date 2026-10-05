@@ -62,7 +62,7 @@ npm run db:migrate
 again is harmless. It is also the file to paste into your host's SQL console if you
 cannot run the script.
 
-**Connecting with TLS.** Add `?ssl=true` to `DATABASE_URL`. The server certificate is checked. If your
+**Connecting with TLS.** Add `?ssl=true` to `DATABASE_URL`. A provider's own spelling works too (Aiven's `?ssl-mode=REQUIRED`, `?sslmode=require`, Prisma's `?sslaccept=strict`). The server certificate is checked. If your
 provider hands out a CA certificate (Aiven, DigitalOcean and Google Cloud SQL do), save it and set
 `DATABASE_SSL_CA=/path/to/ca.pem` (or paste the PEM text as the value, which is the easy way on Vercel).
 Keep the password URL-encoded (`@` becomes `%40`). The `db:*` scripts explain the usual connection

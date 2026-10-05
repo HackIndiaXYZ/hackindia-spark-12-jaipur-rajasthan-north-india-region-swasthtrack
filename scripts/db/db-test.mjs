@@ -597,6 +597,35 @@ await test("a response never exceeds 1000 rows even when asked for more", async 
   assert.equal(tail.count, 1101);
 });
 
+group("Connection strings (how hosted providers spell the TLS switch)");
+
+await test("TLS turns on for every provider spelling, stays off for plain and 'disabled', and verifies certificates", async () => {
+  const { poolOptions } = await import(src("lib/db/server/pool.ts"));
+  const base = "mysql://u:p%40ss@db.example.com:3306/app";
+  const saved = { ssl: process.env.DATABASE_SSL, ca: process.env.DATABASE_SSL_CA, verify: process.env.DATABASE_SSL_REJECT_UNAUTHORIZED };
+  delete process.env.DATABASE_SSL;
+  delete process.env.DATABASE_SSL_CA;
+  delete process.env.DATABASE_SSL_REJECT_UNAUTHORIZED;
+  try {
+    for (const q of ["ssl=true", "sslmode=require", "ssl-mode=REQUIRED", "ssl_mode=VERIFY_CA", "sslaccept=strict", "ssl-mode=VERIFY_IDENTITY", 'ssl={"rejectUnauthorized":true}']) {
+      const o = poolOptions(`${base}?${q}`);
+      assert.ok(o.ssl, `${q} should turn TLS on`);
+      assert.equal(o.ssl.rejectUnauthorized, true, `${q} must keep certificate checks on`);
+    }
+    for (const q of ["", "?ssl=false", "?ssl-mode=DISABLED", "?sslmode=disable"]) {
+      assert.equal(poolOptions(`${base}${q}`).ssl, undefined, `${q || "no query"} should not use TLS`);
+    }
+    assert.equal(poolOptions(base).password, "p@ss", "URL-encoded password is decoded");
+    process.env.DATABASE_SSL = "true";
+    assert.ok(poolOptions(base).ssl, "DATABASE_SSL=true turns TLS on");
+  } finally {
+    for (const [k, v] of [["DATABASE_SSL", saved.ssl], ["DATABASE_SSL_CA", saved.ca], ["DATABASE_SSL_REJECT_UNAUTHORIZED", saved.verify]]) {
+      if (v === undefined) delete process.env[k];
+      else process.env[k] = v;
+    }
+  }
+});
+
 // ---- done --------------------------------------------------------------------
 await admin.end();
 await closePool();
