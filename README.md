@@ -40,7 +40,7 @@ deterministic rules, and says so honestly when there is not enough data.
 
 - Next.js 16.3.2 (App Router, built with webpack), React 19, TypeScript
 - Tailwind CSS v4 with a design-token system in `src/app/globals.css`
-- Supabase: Auth, Postgres and Row Level Security (RLS)
+- MySQL (`mysql2`) with the app's own e-mail-code sign-in; every query is authorised on the server
 - recharts for charts, motion for animation, lucide-react for icons
 - Anthropic SDK for the SOIE language model (server side only)
 
@@ -53,8 +53,8 @@ writing Next-specific code, read the relevant guide in
 ## Quick start
 
 ```bash
-cp .env.example .env.local        # then fill in the values (never commit this file)
-# run the migrations in the Supabase SQL editor, in order (see below)
+cp .env.example .env.local        # then fill in DATABASE_URL and AUTH_SECRET (never commit this file)
+npm run db:migrate                # creates the tables in that MySQL database
 npm run dev
 ```
 
@@ -66,6 +66,12 @@ Open <http://localhost:3000>. Scripts in `package.json`:
 | `npm run build` | Production build (`next build --webpack`) |
 | `npm run start` | Serve the production build |
 | `npm run lint` | ESLint |
+| `npm run db:migrate` | Apply `db/mysql/schema.sql` to `DATABASE_URL` (safe to repeat) |
+| `npm run db:test` | 46 integration checks against a real MySQL test database (see `docs/database.md`) |
+| `npm run db:link` | Attach a patient to an account / make an admin |
+| `npm run db:import-supabase` | One-time copy of the old Supabase data into MySQL, with checksums |
+| `npm run food:import` | Optional: copy the bundled food catalogue into the database |
+| `npm run soie:eval`, `npm run soie:wire` | Ask-assistant checks (no database or key needed) |
 
 Dependencies are installed with `npm install` the first time.
 
@@ -73,32 +79,29 @@ Dependencies are installed with `npm install` the first time.
 
 | Name | Where | Notes |
 | :--- | :--- | :--- |
-| `NEXT_PUBLIC_SUPABASE_URL` | Browser + server | Supabase project URL |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Browser + server | Public anon key; RLS protects the data |
-| `ANTHROPIC_API_KEY` | Server only | SOIE language model |
-| `SUPABASE_SERVICE_ROLE_KEY` | Local script only | Food import only; never in the browser, never committed |
+| `DATABASE_URL` | Server only | `mysql://user:password@host:3306/swasthtrack` (`?ssl=true` for hosted databases) |
+| `AUTH_SECRET` | Server only | Random 32+ characters; keys the sign-in code hashes |
+| `SMTP_*` / `RESEND_API_KEY`, `EMAIL_FROM` | Server only | Sends the 6-digit sign-in codes and report e-mails |
+| `ANTHROPIC_API_KEY` | Server only | SOIE language model (optional) |
 
 `.env.example` lists every variable, including the optional SOIE settings. Full
 table: [`docs/deployment.md`](docs/deployment.md).
 
 ### Database and sign-in setup
 
-1. In the Supabase SQL editor run, in order:
-   `supabase/migrations/20260823000000_phase2_schema.sql`,
-   `20260824000000_phase3_food_schema.sql`,
-   `20260828000000_ask_mode_schema.sql`,
-   `20261004000000_secure_auth_rls_soie.sql`.
-   (`supabase/schema.sql` is only a pointer to these; it holds no SQL.)
-2. Configure Supabase Auth (email provider, custom SMTP, 6-digit OTP, the three
-   email templates in `supabase/email-templates/`, URLs) following
-   [`docs/auth-setup.md`](docs/auth-setup.md).
-3. Sign up in the app. If you already had patient data, link it to your account
-   with `supabase/scripts/link_existing_patient.sql`.
-4. Optional: copy the food catalogue into the database (needed only for food
-   favourites) with `node scripts/import-food-dataset.js --dry-run`, then without
-   `--dry-run` (needs `SUPABASE_SERVICE_ROLE_KEY` in `.env.local`; run it on your
-   own computer only). Search and calories do not need it: the catalogue is bundled
-   in the app, see [`docs/food-catalogue.md`](docs/food-catalogue.md).
+1. Create an empty MySQL 5.7 / 8.x / 9.x database and put its `DATABASE_URL` and an `AUTH_SECRET`
+   in `.env.local`, then `npm run db:migrate`.
+2. Set up the e-mail sender for sign-in codes (Resend, with a verified domain) following
+   [`docs/auth-setup.md`](docs/auth-setup.md). In development you can leave SMTP empty: the code is
+   printed in the terminal.
+3. Sign up in the app. If you already had patient data, copy it over with
+   `npm run db:import-supabase` and attach it to your account with `npm run db:link`
+   (see [`docs/deployment.md`](docs/deployment.md)).
+4. Optional: copy the food catalogue into the database (needed only for food favourites) with
+   `npm run food:import -- --dry-run`, then without `--dry-run`. Search and calories do not need it: the
+   catalogue is bundled in the app, see [`docs/food-catalogue.md`](docs/food-catalogue.md).
+
+How the data layer works and how to change the schema: [`docs/database.md`](docs/database.md).
 
 Deploying: see [`docs/deployment.md`](docs/deployment.md).
 
@@ -106,8 +109,9 @@ Deploying: see [`docs/deployment.md`](docs/deployment.md).
 
 ```
 src/app/                 App Router pages (one folder per route) and API routes
-  api/soie/              SOIE endpoint (bearer-token authenticated)
-  api/ask/               earlier Ask endpoint
+  api/auth/              sign-up, sign-in, e-mail codes, sessions (cookie)
+  api/db/                the data gateway: the browser's only way to the database
+  api/soie/              SOIE endpoint (session-cookie authenticated)
   manifest.ts            PWA manifest
 src/components/
   ask/ caregiver/ dashboard/ food/ forms/ health/ medicines/ reports/ timeline/
@@ -118,50 +122,45 @@ src/components/
 src/context/             auth-context (session, profile, active patient, role)
 src/lib/                 health-rules.ts (clinical rules + IST dates), active-patient.ts,
                          health-options.ts, utils.ts
-src/lib/supabase/        client.ts (browser), server.ts (API routes, as the user),
-                         auth-fetch.ts (bearer token for /api calls), database.types.ts
+src/lib/db/              builder.ts (query builder), client.ts (browser), auth-fetch.ts,
+                         database.types.ts, server/ (executor, policy = access rules, schema, rpc, pool)
+src/lib/auth/            accounts, e-mail codes, sessions (server) + client-session.ts (browser)
 src/services/            data layer and analytics (patient-service, settings-service,
                          reports, insights, wellness score, ...)
 src/services/soie/       SOIE types, normalisation and evaluation
 src/types/               shared TypeScript types
-supabase/migrations/     the database schema, in order
-supabase/email-templates/ bilingual email-code templates to paste into Supabase
-supabase/scripts/        one-off SQL (link an existing patient to an account)
-supabase/seed_data/      old food CSVs (superseded by src/data/food-catalogue.json, kept for history)
-scripts/                 import-food-dataset.js, food/ (catalogue build + checks)
+db/mysql/schema.sql      the database schema (idempotent)
+scripts/db/              migrate, db-test, link-patient, migrate-from-supabase, import-food-catalogue
+scripts/                 food/ (catalogue build + checks), soie-eval and soie-wire-check
 public/                  icons, logo and sw.js (service worker for the PWA shell)
-docs/                    auth-setup.md, deployment.md
+docs/                    database.md, auth-setup.md, deployment.md, ...
 ```
 
 ## Security model
 
-- **Real authentication only.** Supabase Auth with email + password. Signup is
-  verified by a 6-digit code sent by email; password reset also uses an email
-  code; there is an optional passwordless "sign in with email code". There are no
-  phone numbers, no SMS, no demo login and no accounts stored in the browser.
-- **Row Level Security on every table.** Access to a patient is granted by a
-  membership row in `patient_members` with a role: `owner` (manages caregivers,
-  full access), `editor` (can log data) or `viewer` (read only). The anon role
-  has no table access, so the public anon key alone reads nothing.
-- **Caregiver invite codes.** The owner creates an 8-character code in Settings
-  (alphabet without look-alike characters, valid 15 minutes, single use). The
-  caregiver redeems it through a database function that limits each user to 10
-  attempts per 15 minutes.
-- **Roles cannot be self-promoted.** Admin status and membership roles change
-  only through checked database functions or the SQL editor.
-- **API routes use the user's bearer token.** The browser sends
-  `Authorization: Bearer <access token>` to `/api/*` (see
-  `src/lib/supabase/auth-fetch.ts`); the server queries as that user, so RLS
-  applies. No service-role key is used in any request path.
-- **Health readings stay out of localStorage.** BP, weight, food, sleep, activity
-  and medicine logs are read from Supabase into short-lived in-memory caches only.
-  A few per-device UI preferences (last chosen patient, saved-food shortcuts,
-  quick-add counters, dismissed alerts, reminder de-dupe) are kept in
-  localStorage; they contain no readings and signing out clears them, together
-  with the PWA shell cache.
-- **Secrets.** The service-role key is for the food import script only. Never
-  commit secrets; rotate any key that was ever committed (see
-  `docs/deployment.md`).
+- **Real authentication only.** The app's own accounts in MySQL: email + password (stored as a salted
+  `scrypt` hash), signup verified by a 6-digit code sent by email, password reset by email code, and an
+  optional passwordless "sign in with email code". Codes are valid 10 minutes, work once and lock after 5 wrong
+  guesses; wrong passwords and code requests are rate limited. There are no phone numbers, no SMS, no demo
+  login and no accounts stored in the browser.
+- **The browser never touches the database.** Every query goes to `/api/db`, where the server checks it against
+  the signed-in person's access before running it (`src/lib/db/server/policy.ts`). Tables and columns come from
+  a fixed list, values are bound parameters, and a table without a policy cannot be reached at all.
+- **Access to a patient** is granted by a membership row in `patient_members` with a role: `owner` (manages
+  caregivers, full access), `editor` (can log data) or `viewer` (read only).
+- **Caregiver invite codes.** The owner creates an 8-character code in Settings (alphabet without look-alike
+  characters, valid 15 minutes, single use). The caregiver redeems it through a server function that limits each
+  user to 10 attempts per 15 minutes.
+- **Roles cannot be self-promoted.** Admin status and membership roles change only through checked server
+  functions or `npm run db:link`.
+- **Sessions** are random tokens in an `HttpOnly`, `SameSite=Lax` cookie (only their SHA-256 is stored), and every
+  state-changing request must come from the same site.
+- **Health readings stay out of localStorage.** BP, weight, food, sleep, activity and medicine logs are read from
+  the database into short-lived in-memory caches only. A few per-device UI preferences (last chosen patient,
+  saved-food shortcuts, quick-add counters, dismissed alerts, reminder de-dupe) are kept in localStorage; they
+  contain no readings and signing out clears them, together with the PWA shell cache.
+- **Secrets.** The database password, `AUTH_SECRET`, SMTP and AI keys are server-only. Never commit secrets;
+  rotate any key that was ever committed (see `docs/deployment.md`).
 
 ## Dates and clinical rules
 

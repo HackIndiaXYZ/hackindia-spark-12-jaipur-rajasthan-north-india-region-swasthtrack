@@ -23,7 +23,7 @@ const GROUPS = [
   { key: "alert", label: "Alerts" },
   { key: "report", label: "Reports" },
   { key: "account", label: "Account & caregivers" },
-  { key: "auth", label: "Login emails (sent by Supabase Auth)" },
+  { key: "auth", label: "Login emails (sign-up, sign-in and reset codes)" },
 ] as const;
 
 /**

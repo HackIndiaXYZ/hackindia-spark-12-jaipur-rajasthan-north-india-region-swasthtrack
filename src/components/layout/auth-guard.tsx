@@ -66,15 +66,14 @@ function SetupRequired() {
           सेटअप ज़रूरी है
         </p>
         <p className="mt-4 text-sm text-ink-muted">
-          SwasthTrack cannot reach its database because these environment variables are missing in{" "}
+          SwasthTrack cannot reach its database because this environment variable is missing in{" "}
           <code className="tile rounded px-1.5 py-0.5 text-xs text-ink">.env.local</code>:
         </p>
         <ul className="mt-3 space-y-1.5 text-left">
-          <li className="tile rounded-field px-3 py-2 font-mono text-xs text-ink">NEXT_PUBLIC_SUPABASE_URL</li>
-          <li className="tile rounded-field px-3 py-2 font-mono text-xs text-ink">NEXT_PUBLIC_SUPABASE_ANON_KEY</li>
+          <li className="tile rounded-field px-3 py-2 font-mono text-xs text-ink">DATABASE_URL=mysql://user:password@host:3306/swasthtrack</li>
         </ul>
         <p lang="hi" className="mt-4 text-xs text-ink-muted">
-          ऊपर के दोनों मान .env.local में भरें, फिर ऐप दोबारा शुरू करें। विवरण: docs/auth-setup.md
+          ऊपर का मान .env.local में भरें और AUTH_SECRET भी सेट करें, फिर ऐप दोबारा शुरू करें। विवरण: docs/deployment.md
         </p>
       </Card>
     </FullScreen>
@@ -125,7 +124,8 @@ export function AuthGuard({ children }: { children: ReactNode }) {
     user,
     loading,
     loadError,
-    supabaseConfigured,
+    sessionError,
+    databaseConfigured,
     authorizedPatients,
     activePatientId,
     refreshSession,
@@ -143,13 +143,15 @@ export function AuthGuard({ children }: { children: ReactNode }) {
   const isOnboarding = pathname === "/onboarding";
 
   let decision: Decision;
-  if (!supabaseConfigured) {
+  if (!databaseConfigured) {
     // No backend means no accounts: never pretend otherwise. Static legal pages still read fine.
     decision = isStaticPublic ? { kind: "render" } : { kind: "setup" };
   } else if (isLogin && flowHeld) {
     decision = { kind: "render" };
   } else if (loading) {
     decision = { kind: "splash" };
+  } else if (!user && sessionError && !isStaticPublic) {
+    decision = { kind: "failed", message: sessionError };
   } else if (!user) {
     decision = isPublic ? { kind: "render" } : { kind: "redirect", to: "login" };
   } else if (loadError && authorizedPatients.length === 0) {

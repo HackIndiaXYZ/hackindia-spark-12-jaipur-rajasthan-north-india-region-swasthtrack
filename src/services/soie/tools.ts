@@ -5,7 +5,7 @@
  * and we still validate server-side: dates are real IST calendar dates, ranges
  * are clamped to the loaded history (and the model is told when that happened),
  * list sizes are bounded. Executors are PURE except `save_memory`, which goes
- * through an injected `deps.saveMemory` (user-scoped Supabase client in prod,
+ * through an injected `deps.saveMemory` (user-scoped database client in prod,
  * an in-memory fake in tests).
  *
  * Why no `eager_input_streaming`: it disables the API's input validation, and

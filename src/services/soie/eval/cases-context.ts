@@ -1,12 +1,12 @@
 /**
  * Evaluation cases for the IO layer (context.ts, persist.ts) against an
- * in-memory fake of the Supabase client. They prove the loaders' LOGIC (paging
+ * in-memory fake of the database client. They prove the loaders' LOGIC (paging
  * past the 1000-row cap, IST range edges, truncation flags, defaults, feedback
  * scoping, rate-limit counting). They do not prove anything about the live
- * database or RLS policies.
+ * database or the access rules.
  */
 
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { DbClient } from "@/lib/db/builder";
 import { buildLedger } from "../ledger";
 import { buildSnapshot } from "../prompt";
 import { assessSafety } from "../safety";
@@ -15,14 +15,14 @@ import { countRecentEvents, ensureSession, loadHistory, rateLimitPerHour, record
 import { finalizeAnswer } from "../answer";
 import { answerWithRules } from "../fallback";
 import { caseOf, type EvalCase } from "./harness";
-import { FakeDb } from "./fake-supabase";
+import { FakeDb } from "./fake-db";
 import { FIXTURE_NOW, fixture } from "./fixtures";
 
 const G = "data loading";
 const PID = "00000000-0000-4000-8000-000000000001";
 const OTHER = "00000000-0000-4000-8000-0000000000ff";
 
-const asClient = (db: FakeDb) => db as unknown as SupabaseClient<never>;
+const asClient = (db: FakeDb) => db as unknown as DbClient;
 
 function seed(db: FakeDb, bpCount = 3): FakeDb {
   const bp = Array.from({ length: bpCount }, (_, i) => ({

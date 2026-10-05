@@ -10,10 +10,11 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import type { User } from "@supabase/supabase-js";
 import { getActivePatientId, setActivePatientId as setStoreActivePatientId } from "@/lib/active-patient";
-import { isSupabaseConfigured, supabase } from "@/lib/supabase/client";
-import type { MemberRole } from "@/lib/supabase/database.types";
+import type { AuthUser } from "@/lib/auth/constants";
+import { fetchSessionPayload, primeSession, refreshSession as refreshSessionCache, sessionEnded, subscribeSession } from "@/lib/auth/client-session";
+import { onSessionRejected } from "@/lib/db/client";
+import type { MemberRole } from "@/lib/db/database.types";
 import {
   clearLocalUserData,
   getAuthorizedPatients,
@@ -25,13 +26,16 @@ import {
 import { clearAllPatientCaches } from "@/services/patient-service";
 
 interface AuthContextType {
-  user: User | null;
+  user: AuthUser | null;
   profile: UserProfile | null;
   /** True until the session AND the user's memberships are known. */
   loading: boolean;
   /** Set when the session exists but profile/memberships could not be loaded. */
   loadError: string | null;
-  supabaseConfigured: boolean;
+  /** Set when the server could not be reached to learn whether anyone is signed in. */
+  sessionError: string | null;
+  /** False when the server has no DATABASE_URL (the app shows its setup screen). */
+  databaseConfigured: boolean;
   /** Null (never a placeholder id) when the user has no patient yet. */
   activePatientId: string | null;
   /** Every patient the user is an active member of. */
@@ -83,20 +87,21 @@ interface LoadedData {
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [authUser, setAuthUser] = useState<User | null>(null);
+  const [authUser, setAuthUser] = useState<AuthUser | null>(null);
   const [authResolved, setAuthResolved] = useState(false);
+  const [configured, setConfigured] = useState(true);
+  const [sessionError, setSessionError] = useState<string | null>(null);
   const [data, setData] = useState<LoadedData | null>(null);
 
   const lastUserIdRef = useRef<string | null>(null);
-  const resolvedRef = useRef(false);
   const patientsRef = useRef<AuthorizedPatient[]>([]);
 
   // Profile + memberships for one user. Writes the module-level active patient
   // BEFORE the state update, so pages mounting in the same commit already see it
   // (child effects run before this provider's effects).
-  const loadData = useCallback(async (user: User): Promise<void> => {
+  const loadData = useCallback(async (user: AuthUser): Promise<void> => {
     try {
-      const [profile, patients] = await Promise.all([getProfile(user), getAuthorizedPatients()]);
+      const [profile, patients] = await Promise.all([getProfile(), getAuthorizedPatients()]);
       patientsRef.current = patients;
       const activePatientId = pickActivePatient(patients, getActivePatientId() ?? readPreferredPatient());
       setStoreActivePatientId(activePatientId);
@@ -114,18 +119,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  // Session lifecycle. The callback only records the session: calling other
-  // Supabase methods (or awaiting) inside it can deadlock the auth client, so the
-  // profile/membership fetch lives in the effect below.
+  // Session lifecycle. The server owns the session (HttpOnly cookie); this keeps the UI in step:
+  // the first read, sign-in/sign-out from this tab or another one, and a 401 from the data gateway.
   useEffect(() => {
-    if (!isSupabaseConfigured) return;
+    let alive = true;
 
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((event, session) => {
-      const nextUser = session?.user ?? null;
+    const apply = (nextUser: AuthUser | null, event: "SIGNED_IN" | "SIGNED_OUT" | "SESSION_REFRESHED" | "INITIAL") => {
       const previousId = lastUserIdRef.current;
-
       if (event === "SIGNED_OUT") {
         // Includes a sign-out performed in another tab.
         clearAllPatientCaches();
@@ -136,24 +136,50 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         clearAllPatientCaches();
         setStoreActivePatientId(null);
       }
-
       lastUserIdRef.current = nextUser?.id ?? null;
-      resolvedRef.current = true;
-      // TOKEN_REFRESHED / repeated SIGNED_IN for the same user must not reload everything.
-      setAuthUser((prev) => (prev?.id === nextUser?.id && event !== "USER_UPDATED" ? prev : nextUser));
+      setSessionError(null);
+      setAuthUser((prev) => (prev?.id === nextUser?.id ? prev : nextUser));
       setAuthResolved(true);
+    };
+
+    const unsubscribe = subscribeSession((event, user) => {
+      if (alive) apply(user, event);
     });
 
-    // Safety net in case the INITIAL_SESSION event is not delivered.
-    void supabase.auth.getSession().then(({ data: { session } }) => {
-      if (resolvedRef.current) return;
-      resolvedRef.current = true;
-      lastUserIdRef.current = session?.user?.id ?? null;
-      setAuthUser(session?.user ?? null);
-      setAuthResolved(true);
-    });
+    const readSession = async (initial: boolean) => {
+      try {
+        const payload = await fetchSessionPayload();
+        if (!alive) return;
+        setConfigured(payload.configured);
+        if (initial) {
+          primeSession(payload.user);
+          apply(payload.user, "INITIAL");
+        }
+        else void refreshSessionCache();
+      } catch (err) {
+        if (!alive) return;
+        console.error("Session check failed:", err);
+        if (initial) {
+          setSessionError("सर्वर से जवाब नहीं मिला। इंटरनेट जांचें और फिर कोशिश करें। (We could not reach the server.)");
+          setAuthResolved(true);
+        }
+      }
+    };
+    void readSession(true);
 
-    return () => subscription.unsubscribe();
+    // The data gateway answered 401, or the tab came back after a while: re-check who is signed in.
+    onSessionRejected(() => void refreshSessionCache());
+    const onVisible = () => {
+      if (document.visibilityState === "visible") void readSession(false);
+    };
+    document.addEventListener("visibilitychange", onVisible);
+
+    return () => {
+      alive = false;
+      unsubscribe();
+      onSessionRejected(null);
+      document.removeEventListener("visibilitychange", onVisible);
+    };
   }, []);
 
   useEffect(() => {
@@ -174,15 +200,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const refreshSession = useCallback(async () => {
-    const {
-      data: { session },
-    } = await supabase.auth.getSession();
-    if (session?.user) await loadData(session.user);
+    setSessionError(null);
+    const payload = await refreshSessionCache();
+    if (payload === null) {
+      if (!lastUserIdRef.current) {
+        setSessionError("सर्वर से जवाब नहीं मिला। इंटरनेट जांचें और फिर कोशिश करें। (We could not reach the server.)");
+      }
+      return;
+    }
+    setConfigured(payload.configured);
+    setAuthResolved(true);
+    if (payload.user) {
+      lastUserIdRef.current = payload.user.id;
+      setAuthUser((prev) => (prev?.id === payload.user!.id ? prev : payload.user));
+      await loadData(payload.user);
+    }
   }, [loadData]);
 
   const signOut = useCallback(async () => {
     lastUserIdRef.current = null;
     await signOutService();
+    sessionEnded(false);
     setAuthUser(null);
     setData(null);
   }, []);
@@ -195,9 +233,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return {
       user: authUser,
       profile: current?.profile ?? null,
-      loading: isSupabaseConfigured && (!authResolved || (authUser !== null && current === null)),
+      loading: configured && !sessionError && (!authResolved || (authUser !== null && current === null)),
       loadError: current?.error ?? null,
-      supabaseConfigured: isSupabaseConfigured,
+      sessionError,
+      databaseConfigured: configured,
       activePatientId,
       authorizedPatients: patients,
       memberRole,
@@ -206,7 +245,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       refreshSession,
       signOut,
     };
-  }, [authUser, authResolved, data, setActivePatientId, refreshSession, signOut]);
+  }, [authUser, authResolved, configured, sessionError, data, setActivePatientId, refreshSession, signOut]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

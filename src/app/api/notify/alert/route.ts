@@ -5,7 +5,7 @@ import {
   errorResponse,
   requirePatientAccess,
   requireUser,
-} from "@/lib/supabase/server";
+} from "@/lib/db/server";
 import {
   buildBpAlertEmail,
   buildWeightAlertEmail,
@@ -37,15 +37,15 @@ async function build(
 }
 
 /**
- * POST { kind?: "bp" | "weight", patientId, readingId } with the user's bearer token
+ * POST { kind?: "bp" | "weight", patientId, readingId } with the user's session cookie
  * (authFetch) — called by the app right after a BP reading or weigh-in is saved.
  * The body only identifies the reading; subject, content and recipients are all
- * decided on the server. Reads run as the signed-in user, so RLS applies.
+ * decided on the server. Reads run as the signed-in user, so the access rules apply.
  */
 export async function POST(request: Request) {
   const key = { value: "" };
   try {
-    const { user, supabase } = await requireUser(request);
+    const { user, db } = await requireUser(request);
 
     let body: { kind?: unknown; patientId?: unknown; readingId?: unknown };
     try {
@@ -61,8 +61,8 @@ export async function POST(request: Request) {
       throw new HttpError(400, "patientId and readingId must be UUIDs");
     }
 
-    // Must be a member of this patient; RLS would also hide the rows from anyone else.
-    await requirePatientAccess(supabase, user.id, patientId);
+    // Must be a member of this patient; the access rules would also hide the rows from anyone else.
+    await requirePatientAccess(db, user.id, patientId);
 
     const config = getReportConfig();
     if (!config) return Response.json({ sent: false, reason: "email not configured" });
@@ -77,7 +77,7 @@ export async function POST(request: Request) {
     }
     alreadySent.add(key.value);
 
-    const outcome = await runEmailJob(supabase, patientId, () => build(kind, patientId, readingId));
+    const outcome = await runEmailJob(db, patientId, () => build(kind, patientId, readingId));
     if (!outcome.email) {
       alreadySent.delete(key.value);
       return Response.json({ sent: false, reason: outcome.reason });

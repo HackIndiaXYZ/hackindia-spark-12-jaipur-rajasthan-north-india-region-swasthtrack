@@ -7,10 +7,10 @@ UI: `/ask` · API: `POST /api/soie` · admin diagnostics: `/simulation-lab` · c
 ## What it does, step by step
 
 ```
-browser ──(Bearer token, SSE)──▶ POST /api/soie
-   1. requireUser + requirePatientAccess(read)       (auth, membership; RLS does the real scoping)
+browser ──(session cookie, SSE)──▶ POST /api/soie
+   1. requireUser + requirePatientAccess(read)       (auth, membership; the access rules do the real scoping)
    2. validate (1-1000 chars, control chars stripped) + hourly rate limit (counts soie_events)
-   3. loadPatientContext  ── user-scoped Supabase client, 120 IST days, paged past 1000 rows
+   3. loadPatientContext  ── user-scoped database client, 120 IST days, paged past 1000 rows
    4. fact ledger         ── ~350 facts, every one with window + n (pure code)
    5. safety gate         ── emergency? crisis reading? medicine/diagnosis request? injection?
    6a. emergency          ── fixed answer (112/108, FAST, last BP), NO model call
@@ -39,8 +39,8 @@ browser ──(Bearer token, SSE)──▶ POST /api/soie
 | `agent.ts` | The Claude loop over an injectable `LlmClient` | yes (no SDK values) |
 | `anthropic-client.ts` | The real `LlmClient` (official SDK, streaming) | server only |
 | `engine.ts` | One turn end to end (shared by the route and the eval harness) | yes |
-| `context.ts`, `persist.ts` | Supabase IO (paging, sessions, events) | server only |
-| `eval/` | Fixtures, 376 cases, scripted fake model, fake Supabase | test only |
+| `context.ts`, `persist.ts` | database IO (paging, sessions, events) | server only |
+| `eval/` | Fixtures, 376 cases, scripted fake model, fake database | test only |
 
 ## The accuracy guarantee (`verify.ts`)
 
@@ -72,7 +72,7 @@ Before an AI answer reaches the user, code checks it. A failure is returned to t
 3. **No dose / diagnosis advice.** Detected from the question, enforced by the verifier, repeated in the prompt.
 4. **Untrusted text.** The question, saved notes, free text in records and web results are data. Instruction-like phrases are removed from the question (English and Hindi), angle brackets are stripped so user text cannot close our delimiters, record text is sanitised on load, and `save_memory` is refused unless the user's own message asked to remember something (so injected web content cannot write memory).
 5. **Privacy.** The patient's **name is never sent to the model.** Web queries must be generic; queries that look like they contain readings or dates are flagged in the admin trace. Telemetry rows hold ids and counters only. No message text or health values are logged.
-6. **Auth.** Bearer token → `requireUser` → membership check → every query runs as the user (RLS). Assistant history comes from the database by session id, never from the client (a client could forge assistant turns).
+6. **Auth.** Session cookie → `requireUser` → membership check → every query runs as the user (the access rules in `src/lib/db/server/policy.ts`). Assistant history comes from the database by session id, never from the client (a client could forge assistant turns).
 
 ## Configuration (server environment)
 
@@ -85,7 +85,7 @@ Before an AI answer reaches the user, code checks it. A failure is returned to t
 | `SOIE_RATE_LIMIT_PER_HOUR` | `40` | Questions per user per rolling hour (429 beyond). |
 | `SOIE_TIMEOUT_MS` | `100000` | Whole-turn deadline (10 000 to 110 000); the route `maxDuration` is 120 s. |
 
-Database: run `supabase/migrations/20261004000000_secure_auth_rls_soie.sql` (tables `soie_sessions`, `soie_messages`, `soie_feedback`, `soie_events`, `soie_memories` + RLS). The older `ask_*` tables from `20260828000000_ask_mode_schema.sql` are no longer used.
+Database: `npm run db:migrate` creates the tables `soie_sessions`, `soie_messages`, `soie_feedback`, `soie_events` and `soie_memories` (see `db/mysql/schema.sql`); who may read or write them is in `src/lib/db/server/policy.ts`.
 
 ### Model request (current API shape, Claude Opus 5.5)
 
@@ -103,7 +103,7 @@ Nothing "learns" in the model. Two things are real: (1) notes the family saves (
 - routing (72 + 57 language cases): off-topic, small talk, not-tracked measures, advice in any word order (and not fooled by "kya aap bata sakte hain"), typed/spoken readings, medicine schedule vs adherence, typo'd medicine names, highest/lowest with oracles, symptoms, diagnosis vs "what to eat for diabetes", saved-note allergy lookup, empty patient;
 - verifier (38): fabricated numbers/dates/times/refs/URLs must fail, faithful answers (rounding, derived numbers, tool refs) must pass, an answer about another measure is `off_topic`;
 - agent loop + tools (scripted fake model, 35 cases): tools, all results in ONE user message, `pause_turn`, repair, 3 bad submissions → fallback, refusal, nudge, `max_tokens`, API error, timeout, crisis lead, injection removal, memory safety, request shape;
-- loaders (in-memory fake Supabase): 2,500 rows past a 1,000-row cap, a server cap below the page size, ceiling flag, IST range edges, defaults, scoping, rate-limit counter.
+- loaders (in-memory fake database): 2,500 rows past a 1,000-row cap, a server cap below the page size, ceiling flag, IST range edges, defaults, scoping, rate-limit counter.
 
 `/simulation-lab` runs the same suite in the browser and lists real failures. It does **not** call a real model or database.
 
@@ -119,7 +119,7 @@ Nothing "learns" in the model. Two things are real: (1) notes the family saves (
 
 ## Known limits
 
-- The AI path and the Supabase loaders are verified by tests against fakes and by reading the SDK types and docs; they were not exercised against the live API or database. First live run may surface request-shape surprises (strict schema acceptance, `cache_control`, `output_config`); they fall back visibly.
+- The AI path is verified by tests against fakes and by reading the SDK types and docs; they were not exercised against the live API or database. First live run may surface request-shape surprises (strict schema acceptance, `cache_control`, `output_config`); they fall back visibly.
 - History is the last 120 IST days (a hard ceiling of 20,000 rows per table, flagged if hit). "Last year" questions are answered with that stated limit.
 - Inactive medicines count only on days with a real log (their stop date is not stored). Medicine logs written by older app versions with a UTC-shifted time are re-aligned by matching the schedule.
 - Averages are over *logged* days only, and say so; sodium is a lower bound when items lack sodium data; "oil/fried" is counted by food name.

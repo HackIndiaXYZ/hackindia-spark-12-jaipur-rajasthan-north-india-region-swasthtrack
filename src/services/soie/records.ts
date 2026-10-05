@@ -1,7 +1,7 @@
 /**
  * Raw rows -> typed, ref-stamped records -> PatientContext. PURE.
  *
- * context.ts does the IO (Supabase, pagination) and hands the raw rows here;
+ * context.ts does the IO (database, pagination) and hands the raw rows here;
  * the eval fixtures build synthetic raw rows and call the same functions, so
  * the tests exercise the real normalisation (IST days, doses, refs).
  */

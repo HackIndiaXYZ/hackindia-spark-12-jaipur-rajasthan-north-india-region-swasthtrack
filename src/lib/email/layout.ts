@@ -1,6 +1,6 @@
 /**
  * Shared look for every e-mail SwasthTrack sends: the app's alerts, reports and
- * account mail, and (through templates/auth.ts) the Supabase login-code mails.
+ * account mail, and (through templates/auth.ts) the login-code mails.
  * It is the "SwasthTrack Email Templates" design: green header with the logo, gold
  * rule, white card made of ruled sections, Hindi first with English under it, and a
  * footer saying why the person got the mail. Table layout + inline styles only,

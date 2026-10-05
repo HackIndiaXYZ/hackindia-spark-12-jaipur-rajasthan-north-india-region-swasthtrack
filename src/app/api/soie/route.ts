@@ -1,4 +1,4 @@
-import { HttpError, errorResponse, requirePatientAccess, requireUser } from "@/lib/supabase/server";
+import { HttpError, errorResponse, requirePatientAccess, requireUser } from "@/lib/db/server";
 import { createAnthropicClient } from "@/services/soie/anthropic-client";
 import type { Effort, LlmClient } from "@/services/soie/agent";
 import { ContextLoadError, loadPatientContext, makeToolDeps } from "@/services/soie/context";
@@ -10,10 +10,10 @@ import type { ProgressEvent } from "@/services/soie/types";
 /**
  * POST /api/soie  — the SOIE assistant.
  *
- * Auth: `Authorization: Bearer <Supabase access token>` (see authFetch). The
- * patient is checked against `patient_members`, and every query then runs as the
- * user so RLS applies. The client never supplies assistant history: it is loaded
- * from the database by session id.
+ * Auth: the HttpOnly session cookie (see authFetch). The patient is checked
+ * against `patient_members`, and every query then runs as the user so the access
+ * rules apply. The client never supplies assistant history: it is loaded from the
+ * database by session id.
  *
  * Streams Server-Sent Events when `Accept: text/event-stream`:
  *   event: status  data: {stage, hi, en}
@@ -88,17 +88,17 @@ export async function POST(request: Request) {
   const started = Date.now();
   try {
     // Authenticate before reading the body, and refuse oversized bodies outright.
-    const { user, supabase } = await requireUser(request);
+    const { user, db } = await requireUser(request);
     if (Number(request.headers.get("content-length") ?? 0) > MAX_BODY_BYTES) throw new HttpError(413, "Request is too large");
     const { patientId, message, sessionId: requestedSession } = await readBody(request);
-    const { role } = await requirePatientAccess(supabase, user.id, patientId, false);
+    const { role } = await requirePatientAccess(db, user.id, patientId, false);
     const canWrite = role !== "viewer";
     const cfg = config();
 
     // Abuse / cost guard: count this user's questions in the last hour.
     const limit = rateLimitPerHour();
-    if ((await countRecentEvents(supabase, user.id)) >= limit) {
-      await recordEvent(supabase, { userId: user.id, sessionId: null, patientId, status: "rate_limited", telemetry: {}, latencyMs: 0, model: null }).catch(() => {});
+    if ((await countRecentEvents(db, user.id)) >= limit) {
+      await recordEvent(db, { userId: user.id, sessionId: null, patientId, status: "rate_limited", telemetry: {}, latencyMs: 0, model: null }).catch(() => {});
       return Response.json(
         { error: `आपने पिछले एक घंटे में बहुत सारे सवाल पूछ लिए हैं (सीमा ${limit})। कुछ देर बाद फिर कोशिश करें।`, code: "rate_limited", limit },
         { status: 429, headers: { "Retry-After": "600" } },
@@ -106,11 +106,7 @@ export async function POST(request: Request) {
     }
 
     // Admin-only developer trace.
-    const prof = await (supabase as unknown as { from: (t: string) => { select: (c: string) => { eq: (k: string, v: string) => { maybeSingle: () => Promise<{ data: { role?: string } | null }> } } } })
-      .from("profiles")
-      .select("role")
-      .eq("id", user.id)
-      .maybeSingle();
+    const prof = await db.from("profiles").select("role").eq("id", user.id).maybeSingle();
     const isAdmin = prof.data?.role === "admin";
 
     const wantsStream = (request.headers.get("accept") ?? "").includes("text/event-stream");
@@ -119,33 +115,33 @@ export async function POST(request: Request) {
       emit({ type: "status", stage: "reading", hi: "डेटा पढ़ रहा हूँ", en: "Reading the data" });
       let ctx;
       try {
-        ctx = await loadPatientContext(supabase, patientId);
+        ctx = await loadPatientContext(db, patientId);
       } catch (e) {
         if (e instanceof ContextLoadError) throw new HttpError(e.status, e.message);
         throw e;
       }
-      const sessionId = await ensureSession(supabase, user.id, patientId, requestedSession, message);
-      const history = sessionId ? await loadHistory(supabase, sessionId) : [];
+      const sessionId = await ensureSession(db, user.id, patientId, requestedSession, message);
+      const history = sessionId ? await loadHistory(db, sessionId) : [];
 
       let result: TurnResult;
       try {
         result = await runTurn(
           { ctx, message, history, canWrite },
-          { client: cfg.hasKey ? llmClient(cfg.apiKey) : null, model: cfg.model, effort: cfg.effort, webSearch: cfg.webSearch, deps: makeToolDeps(supabase, patientId), emit, signal: request.signal, deadlineMs: cfg.deadlineMs },
+          { client: cfg.hasKey ? llmClient(cfg.apiKey) : null, model: cfg.model, effort: cfg.effort, webSearch: cfg.webSearch, deps: makeToolDeps(db, patientId), emit, signal: request.signal, deadlineMs: cfg.deadlineMs },
         );
       } catch (err) {
         // The engine itself failed (a bug, not a model problem): record it and say so. Name only: never message text or data.
         console.error("SOIE turn failed:", err instanceof Error ? err.name : "unknown");
-        await recordEvent(supabase, { userId: user.id, sessionId, patientId, status: "error", telemetry: {}, latencyMs: Date.now() - started, model: null }).catch(() => {});
+        await recordEvent(db, { userId: user.id, sessionId, patientId, status: "error", telemetry: {}, latencyMs: Date.now() - started, model: null }).catch(() => {});
         throw new HttpError(500, "SOIE could not produce an answer. Please try again.");
       }
 
       let messageId: string | null = null;
       if (sessionId) {
-        const saved = await saveTurn(supabase, sessionId, message, result.answer).catch(() => null);
+        const saved = await saveTurn(db, sessionId, message, result.answer).catch(() => null);
         messageId = saved?.assistantMessageId ?? null;
       }
-      await recordEvent(supabase, { userId: user.id, sessionId, patientId, status: result.status as EventStatus, telemetry: result.telemetry, latencyMs: Date.now() - started, model: result.answer.model }).catch(() => {});
+      await recordEvent(db, { userId: user.id, sessionId, patientId, status: result.status as EventStatus, telemetry: result.telemetry, latencyMs: Date.now() - started, model: result.answer.model }).catch(() => {});
 
       return {
         sessionId,

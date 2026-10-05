@@ -1,4 +1,4 @@
-import { authFetch } from "@/lib/supabase/auth-fetch";
+import { authFetch } from "@/lib/db/auth-fetch";
 
 /** The e-mails a signed-in user can trigger from the app (see /api/email/send). */
 export type AppEmailRequest =

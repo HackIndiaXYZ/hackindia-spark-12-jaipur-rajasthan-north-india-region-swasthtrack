@@ -1,5 +1,5 @@
 import { timingSafeEqual } from "node:crypto";
-import { getNotifierClient } from "@/lib/supabase/notifier";
+import { systemClientFor } from "@/lib/db/server/system";
 import { runEmailJob } from "@/services/email-notification-service";
 import { fillRecipient } from "./layout";
 import { getReportConfig, sendMail } from "./mailer";
@@ -21,8 +21,8 @@ function isAuthorized(request: Request): boolean {
  * can use these URLs to make the server send mail. `?dryRun=1` (same auth)
  * returns the rendered HTML instead of sending, for previewing a template.
  *
- * The data is read as the "notifier" account when NOTIFY_USER_EMAIL/PASSWORD are
- * set (see lib/supabase/notifier.ts), so Row Level Security applies to cron too.
+ * The data is read as a READ-ONLY system identity scoped to REPORT_PATIENT_ID
+ * (see lib/db/server/system.ts), so the access rules apply to cron too.
  */
 export async function runCron(
   request: Request,
@@ -44,7 +44,7 @@ export async function runCron(
   }
 
   try {
-    const client = await getNotifierClient();
+    const client = systemClientFor([config.patientId]);
     const email = await runEmailJob(client, config.patientId, () => build(config.patientId));
     if (!email) return Response.json({ sent: false, reason: "nothing to report" });
 

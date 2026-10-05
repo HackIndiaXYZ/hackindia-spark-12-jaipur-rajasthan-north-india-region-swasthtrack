@@ -6,7 +6,7 @@
  * It executes the real engine modules (safety gate, IST date resolver, fact
  * ledger, answer verifier, rules engine, agent loop with a SCRIPTED fake model,
  * data loaders against an in-memory fake database) over synthetic patients.
- * It does not call Anthropic or Supabase.
+ * It does not call Anthropic or any database.
  */
 import { src } from "./soie-node-hooks.mjs";
 

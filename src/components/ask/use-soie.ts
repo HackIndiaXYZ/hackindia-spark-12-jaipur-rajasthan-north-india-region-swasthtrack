@@ -1,8 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { authFetch } from "@/lib/supabase/auth-fetch";
-import { supabase } from "@/lib/supabase/client";
+import { authFetch } from "@/lib/db/auth-fetch";
+import { db } from "@/lib/db/client";
 import type { Notice, SoieAnswer, Stage } from "@/services/soie/types";
 
 export interface UserMsg {
@@ -214,7 +214,7 @@ export function useSoie(patientId: string | null) {
       // A stored conversation replaces the screen: stop whatever is still streaming into the old one.
       stoppedRef.current = false;
       abortRef.current?.abort();
-      const { data, error } = await supabase.from("soie_messages").select("id,role,content,answer,created_at").eq("session_id", id).order("created_at", { ascending: true });
+      const { data, error } = await db.from("soie_messages").select("id,role,content,answer,created_at").eq("session_id", id).order("created_at", { ascending: true });
       if (error || !data) return false;
       sessionRef.current = id;
       setSessionId(id);
@@ -238,6 +238,6 @@ export function useSoie(patientId: string | null) {
 
 /** Saves thumbs up/down (+ optional comment) for an assistant message; one row per user and message. */
 export async function saveFeedback(messageId: string, rating: "helpful" | "not_helpful", comment: string | null): Promise<boolean> {
-  const { error } = await supabase.from("soie_feedback").upsert({ message_id: messageId, rating, comment: comment && comment.trim() ? comment.trim().slice(0, 500) : null }, { onConflict: "message_id,user_id" });
+  const { error } = await db.from("soie_feedback").upsert({ message_id: messageId, rating, comment: comment && comment.trim() ? comment.trim().slice(0, 500) : null }, { onConflict: "message_id,user_id" });
   return !error;
 }

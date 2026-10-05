@@ -15,11 +15,10 @@ import {
 } from "@/lib/health-rules";
 import { getCataloguePortions, loadCatalogue } from "@/lib/food/catalogue";
 import { buildIndex, searchIndex, type FoodIndex } from "@/lib/food/search";
-import { isSupabaseConfigured, supabase } from "@/lib/supabase/client";
-import type { Database } from "@/lib/supabase/database.types";
+import type { DbClient } from "@/lib/db/builder";
+import { db as remoteDb } from "@/lib/db/client";
+import type { Database } from "@/lib/db/database.types";
 import { notifyAbnormalBp, notifyWeightLogged } from "./alert-email-client";
-
-export { isSupabaseConfigured, supabase };
 
 export type PatientProfile = Database["public"]["Tables"]["patients"]["Row"];
 export type MedicalCondition = Database["public"]["Tables"]["medical_conditions"]["Row"];
@@ -115,13 +114,11 @@ export interface PatientFoodFavorite {
 // ERRORS
 // ----------------------------------------------------
 
-/** Supabase env vars are missing. We never invent data to cover for that. */
-export class SupabaseNotConfiguredError extends Error {
+/** The server has no DATABASE_URL. We never invent data to cover for that. */
+export class DatabaseNotConfiguredError extends Error {
   constructor() {
-    super(
-      "Supabase is not configured. Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY in .env.local.",
-    );
-    this.name = "SupabaseNotConfiguredError";
+    super("The database is not configured. Set DATABASE_URL (a mysql:// connection string) in .env.local and restart the server.");
+    this.name = "DatabaseNotConfiguredError";
   }
 }
 
@@ -140,7 +137,7 @@ export class PatientNotFoundError extends Error {
   }
 }
 
-/** Row Level Security refused the write, or the row does not exist. */
+/** The access rules refused the write, or the row does not exist. */
 export class PermissionDeniedError extends Error {
   constructor(message = "यह बदलाव करने की अनुमति नहीं है, या रिकॉर्ड नहीं मिला (view-only access or record not found).") {
     super(message);
@@ -151,8 +148,9 @@ export class PermissionDeniedError extends Error {
 type DbErrorLike = { message: string; code?: string };
 
 function dbError(context: string, error: DbErrorLike): Error {
-  console.error(`Supabase ${context} error:`, error);
+  console.error(`Database ${context} error:`, error);
   const code = error.code;
+  if (code === "DB_NOT_CONFIGURED") return new DatabaseNotConfiguredError();
   if (code === "42501" || code === "PGRST116" || /row-level security/i.test(error.message)) {
     return new PermissionDeniedError();
   }
@@ -175,20 +173,19 @@ function dbError(context: string, error: DbErrorLike): Error {
 }
 
 /**
- * Server-only hook (see lib/supabase/request-scope.ts): a route can run this
- * module as a specific RLS-scoped client for one async call chain. When it returns
- * undefined — always, in the browser — the shared client is used.
+ * Server-only hook (see lib/db/server/request-scope.ts): a route can run this
+ * module as a specific access-scoped client for one async call chain. When it returns
+ * undefined — always, in the browser — the shared browser client is used.
  */
-let dbResolver: (() => typeof supabase | undefined) | null = null;
+let dbResolver: (() => DbClient | undefined) | null = null;
 
-export function setDbResolver(resolver: (() => typeof supabase | undefined) | null): void {
+export function setDbResolver(resolver: (() => DbClient | undefined) | null): void {
   dbResolver = resolver;
 }
 
 /** The client every read and write goes through. */
-export function getDbClient(): typeof supabase {
-  if (!isSupabaseConfigured) throw new SupabaseNotConfiguredError();
-  return dbResolver?.() ?? supabase;
+export function getDbClient(): DbClient {
+  return dbResolver?.() ?? remoteDb;
 }
 
 function db() {
@@ -210,7 +207,7 @@ function resolvePatientId(patientId?: string | null): string {
 // ----------------------------------------------------
 
 /**
- * Health data lives only in Supabase. These two helpers remain for small UI
+ * Health data lives only in the database. These two helpers remain for small UI
  * preferences (dismissed banners, hidden quick-foods, ...). Anything written
  * here is wiped on sign-out (see auth-context) because it is per-browser.
  */
@@ -665,7 +662,7 @@ export async function getFoodPortions(foodItemId: string): Promise<FoodPortion[]
   const { data, error } = await db().from("food_portions").select("*").eq("food_item_id", foodItemId);
   if (error) {
     // Portions only refine a quantity; the entry form still works in grams without them.
-    console.warn("Supabase getFoodPortions error:", error);
+    console.warn("Database getFoodPortions error:", error);
     return [];
   }
   const rows = (data ?? []) as FoodPortion[];
@@ -725,7 +722,7 @@ export async function toggleFavorite(patientId: string, foodItemId: string, isFa
 export async function addCustomFood(
   food: Omit<FoodItem, "id" | "created_at" | "updated_at">,
 ): Promise<FoodItem> {
-  // RLS only accepts custom rows owned by the caller: is_custom must be true and
+  // The access rules only accept custom rows owned by the caller: is_custom must be true and
   // created_by (defaults to auth.uid() in the database) is left for Postgres to fill.
   const { data, error } = await db()
     .from("food_items")
@@ -1764,7 +1761,7 @@ export async function getDashboardOverview(patientId?: string): Promise<Dashboar
     todaySleep,
     trends,
     checklist,
-    isRealDatabaseConnected: isSupabaseConfigured,
+    isRealDatabaseConnected: true,
   };
 }
 

@@ -2,7 +2,7 @@
  * Single source of truth for clinical thresholds, India-time date handling and
  * the small statistics helpers shared by every analytics service and by SOIE.
  *
- * Pure functions only: no I/O, no React, no Supabase. Safe on server and client.
+ * Pure functions only: no I/O, no React, no database. Safe on server and client.
  *
  * Why this file exists: the same concept ("high BP", "weight stable", "today")
  * used to be defined differently in six services, and day boundaries mixed UTC,

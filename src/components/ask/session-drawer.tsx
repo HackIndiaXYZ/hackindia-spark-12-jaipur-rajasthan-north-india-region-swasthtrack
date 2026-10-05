@@ -7,7 +7,7 @@ import { Modal } from "@/components/ui/modal";
 import { EmptyState } from "@/components/ui/page";
 import { useConfirm } from "@/components/ui/confirm-dialog";
 import { useToast } from "@/components/ui/toast";
-import { supabase } from "@/lib/supabase/client";
+import { db } from "@/lib/db/client";
 import { cn } from "@/lib/utils";
 
 interface SessionRow {
@@ -22,7 +22,7 @@ function when(iso: string): string {
   return d.toLocaleString("en-IN", { timeZone: "Asia/Kolkata", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
 }
 
-/** Past conversations for the active patient (read straight from Supabase; RLS limits rows to the signed-in user). */
+/** Past conversations for the active patient (read through the data gateway; the server limits rows to the signed-in user). */
 export function SessionDrawer({
   isOpen,
   onClose,
@@ -47,7 +47,7 @@ export function SessionDrawer({
 
   const fetchRows = useCallback(async (): Promise<SessionRow[] | null> => {
     if (!patientId) return [];
-    const { data, error } = await supabase.from("soie_sessions").select("id,title,last_active_at").eq("patient_id", patientId).order("last_active_at", { ascending: false }).limit(40);
+    const { data, error } = await db.from("soie_sessions").select("id,title,last_active_at").eq("patient_id", patientId).order("last_active_at", { ascending: false }).limit(40);
     return error ? null : (data ?? []);
   }, [patientId]);
 
@@ -85,7 +85,7 @@ export function SessionDrawer({
   async function remove(id: string) {
     const ok = await confirm({ title: "यह बातचीत हटाएँ?", message: "इसके सवाल-जवाब हमेशा के लिए हट जाएँगे।", confirmLabel: "हटाएँ", tone: "danger" });
     if (!ok) return;
-    const { error } = await supabase.from("soie_sessions").delete().eq("id", id);
+    const { error } = await db.from("soie_sessions").delete().eq("id", id);
     if (error) {
       toast({ title: "हटाया नहीं जा सका", tone: "error" });
       return;

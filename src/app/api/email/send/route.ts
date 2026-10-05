@@ -1,4 +1,5 @@
-import type { SupabaseClient, User } from "@supabase/supabase-js";
+import type { DbClient } from "@/lib/db/builder";
+import type { AuthUser } from "@/lib/auth/constants";
 import { clock12, dateTimeBi } from "@/lib/email/format";
 import { sendMail } from "@/lib/email/mailer";
 import {
@@ -9,13 +10,12 @@ import {
   renderWelcomeEmail,
 } from "@/lib/email/templates";
 import type { RenderedEmail } from "@/lib/email/types";
-import type { Database } from "@/lib/supabase/database.types";
 import {
   HttpError,
   errorResponse,
   requirePatientAccess,
   requireUser,
-} from "@/lib/supabase/server";
+} from "@/lib/db/server";
 
 export const runtime = "nodejs";
 
@@ -43,19 +43,19 @@ function throttle(userId: string, type: string): void {
   sendLog.set(key, recent);
 }
 
-async function displayName(supabase: SupabaseClient<Database>, user: User): Promise<string> {
-  const { data } = await supabase.from("profiles").select("display_name").eq("id", user.id).maybeSingle();
+async function displayName(db: DbClient, user: AuthUser): Promise<string> {
+  const { data } = await db.from("profiles").select("display_name").eq("id", user.id).maybeSingle();
   return data?.display_name?.trim() || user.email?.split("@")[0] || "SwasthTrack user";
 }
 
-async function patientName(supabase: SupabaseClient<Database>, patientId: string): Promise<string> {
-  const { data } = await supabase.from("patients").select("name").eq("id", patientId).maybeSingle();
+async function patientName(db: DbClient, patientId: string): Promise<string> {
+  const { data } = await db.from("patients").select("name").eq("id", patientId).maybeSingle();
   if (!data) throw new HttpError(404, "Patient not found");
   return data.name;
 }
 
-async function requireOwner(supabase: SupabaseClient<Database>, userId: string, patientId: string): Promise<void> {
-  const { role } = await requirePatientAccess(supabase, userId, patientId);
+async function requireOwner(db: DbClient, userId: string, patientId: string): Promise<void> {
+  const { role } = await requirePatientAccess(db, userId, patientId);
   if (role !== "owner") throw new HttpError(403, "Only the patient's owner can do this");
 }
 
@@ -69,8 +69,8 @@ interface Built {
 async function build(
   type: string,
   body: Record<string, unknown>,
-  user: User,
-  supabase: SupabaseClient<Database>,
+  user: AuthUser,
+  db: DbClient,
 ): Promise<Built> {
   const str = (k: string) => (typeof body[k] === "string" ? (body[k] as string) : "");
   const userEmail = user.email;
@@ -89,10 +89,10 @@ async function build(
       const patientId = str("patientId");
       let name: string | null = null;
       if (patientId) {
-        await requirePatientAccess(supabase, user.id, patientId);
-        name = await patientName(supabase, patientId);
+        await requirePatientAccess(db, user.id, patientId);
+        name = await patientName(db, patientId);
       }
-      return { to: userEmail, mail: renderWelcomeEmail({ name: await displayName(supabase, user), patientName: name }) };
+      return { to: userEmail, mail: renderWelcomeEmail({ name: await displayName(db, user), patientName: name }) };
     }
 
     case "caregiver.invite": {
@@ -101,9 +101,9 @@ async function build(
       const to = str("to").trim().toLowerCase();
       if (!EMAIL_RE.test(to) || to.length > 254) throw new HttpError(400, "Enter a valid e-mail address");
       if (!inviteId) throw new HttpError(400, "inviteId is required");
-      await requireOwner(supabase, user.id, patientId);
+      await requireOwner(db, user.id, patientId);
 
-      const { data: invite, error } = await supabase
+      const { data: invite, error } = await db
         .from("caregiver_invites")
         .select("code, role, status, expires_at")
         .eq("id", inviteId)
@@ -119,8 +119,8 @@ async function build(
       return {
         to,
         mail: renderCaregiverInviteEmail({
-          inviterName: await displayName(supabase, user),
-          patientName: await patientName(supabase, patientId),
+          inviterName: await displayName(db, user),
+          patientName: await patientName(db, patientId),
           code: invite.code,
           role: invite.role,
           validUntil: `${clock12(expires)} IST`,
@@ -131,20 +131,18 @@ async function build(
 
     case "caregiver.joined": {
       const patientId = str("patientId");
-      const { role } = await requirePatientAccess(supabase, user.id, patientId);
+      const { role } = await requirePatientAccess(db, user.id, patientId);
       if (role === "owner") throw new HttpError(400, "Owners do not join their own patient");
 
-      // The owner's address comes from a database function that only answers a caregiver whose
-      // membership is minutes old (supabase/migrations/20261004010000_email_owner_contact.sql).
-      const { data, error } = await (supabase as unknown as SupabaseClient).rpc("get_patient_owner_contacts", {
-        p_patient: patientId,
-      });
+      // The owner's address comes from a server function that only answers a caregiver whose
+      // membership is minutes old (src/lib/db/server/rpc.ts getPatientOwnerContacts).
+      const { data, error } = await db.rpc("get_patient_owner_contacts", { p_patient: patientId });
       if (error) {
         throw error.code === "42501"
           ? new HttpError(409, "There is no recent join to announce")
           : new HttpError(500, "Could not look up the owner");
       }
-      const owners = ((data ?? []) as { owner_email: string | null }[])
+      const owners = (data ?? [])
         .map((o) => o.owner_email)
         .filter((e): e is string => Boolean(e));
       if (owners.length === 0) throw new HttpError(409, "The owner has no e-mail address on file");
@@ -153,8 +151,8 @@ async function build(
         to: owners,
         hideRecipient: true,
         mail: renderCaregiverJoinedEmail({
-          patientName: await patientName(supabase, patientId),
-          caregiverName: await displayName(supabase, user),
+          patientName: await patientName(db, patientId),
+          caregiverName: await displayName(db, user),
           caregiverEmail: user.email ?? null,
           role: role === "editor" ? "editor" : "viewer",
           joinedAt: dateTimeBi(new Date()),
@@ -167,10 +165,10 @@ async function build(
       const memberId = str("memberId");
       const change = str("change");
       if (change !== "removed" && change !== "role-changed") throw new HttpError(400, "change must be removed or role-changed");
-      await requireOwner(supabase, user.id, patientId);
+      await requireOwner(db, user.id, patientId);
 
       // The roster (and so the e-mail address) comes from the owner-only RPC, never from the request.
-      const { data: roster, error } = await supabase.rpc("list_patient_members", { p_patient: patientId });
+      const { data: roster, error } = await db.rpc("list_patient_members", { p_patient: patientId });
       if (error) throw new HttpError(500, "Could not load the caregiver list");
       const member = (roster ?? []).find((m) => m.member_id === memberId);
       if (!member) throw new HttpError(404, "Caregiver not found");
@@ -184,8 +182,8 @@ async function build(
       return {
         to: member.email,
         mail: renderAccessChangedEmail({
-          patientName: await patientName(supabase, patientId),
-          ownerName: await displayName(supabase, user),
+          patientName: await patientName(db, patientId),
+          ownerName: await displayName(db, user),
           change,
           newRole: member.role === "editor" ? "editor" : "viewer",
         }),
@@ -212,7 +210,7 @@ async function build(
  */
 export async function POST(request: Request) {
   try {
-    const { user, supabase } = await requireUser(request);
+    const { user, db } = await requireUser(request);
 
     let body: Record<string, unknown>;
     try {
@@ -223,7 +221,7 @@ export async function POST(request: Request) {
     const type = typeof body.type === "string" ? body.type : "";
     if (!LIMITS[type]) throw new HttpError(400, "Unknown e-mail type");
 
-    const { to, mail, hideRecipient } = await build(type, body, user, supabase);
+    const { to, mail, hideRecipient } = await build(type, body, user, db);
     throttle(user.id, type);
 
     const result = await sendMail(Array.isArray(to) ? to : [to], mail);

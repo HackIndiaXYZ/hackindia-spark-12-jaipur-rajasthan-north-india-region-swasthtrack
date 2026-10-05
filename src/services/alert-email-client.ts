@@ -1,5 +1,5 @@
 import { classifyBP } from "@/lib/health-rules";
-import { authFetch } from "@/lib/supabase/auth-fetch";
+import { authFetch } from "@/lib/db/auth-fetch";
 
 /**
  * Fire-and-forget: asks the server to e-mail an alert for a just-saved reading.

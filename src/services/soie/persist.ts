@@ -1,16 +1,15 @@
 /**
- * Persistence for SOIE conversations (server-side, user-scoped client; RLS
- * restricts every row to the signed-in user). Telemetry rows hold ids and
+ * Persistence for SOIE conversations (server-side, user-scoped client; the access
+ * rules restrict every row to the signed-in user). Telemetry rows hold ids and
  * counters only: never message text, never health values.
  */
 
-import type { SupabaseClient } from "@supabase/supabase-js";
-import type { Database } from "@/lib/supabase/database.types";
+import type { DbClient } from "@/lib/db/builder";
 import type { EventStatus } from "./engine";
 import type { HistoryTurn } from "./prompt";
 import type { SoieAnswer, TurnTelemetry } from "./types";
 
-type Db = SupabaseClient<Database>;
+type Db = DbClient;
 /* eslint-disable @typescript-eslint/no-explicit-any */
 type AnyDb = { from: (t: string) => any };
 const raw = (db: Db) => db as unknown as AnyDb;

@@ -1,7 +1,7 @@
 # SwasthTrack: Deployment Guide
 
-How to deploy SwasthTrack to Vercel with a Supabase backend, and how to install
-it as a mobile app (PWA).
+How to deploy SwasthTrack to Vercel with a hosted **MySQL** database, and how to
+install it as a mobile app (PWA).
 
 > No secrets live in this file or anywhere else in the repository. Environment
 > variables are listed by **name only**; the values stay in `.env.local` on your
@@ -10,134 +10,138 @@ it as a mobile app (PWA).
 ## 1. Architecture
 
 ```
-Git repository
-      |
-GitHub
-      |
-Vercel (Next.js 16 App Router, built with webpack)
-      |                         \
-Supabase (Auth + Postgres + RLS)  Anthropic API (SOIE "Ask" assistant, server side)
-      |
-Installable PWA (iOS Safari / Android Chrome)
+Browser (PWA)                      Vercel (Next.js 16, webpack)                MySQL (hosted)
+  |  HttpOnly session cookie          |                                             |
+  |--- /api/auth/*  sign-up, codes -->| src/lib/auth   (users, sessions, e-mail OTP)|
+  |--- /api/db      data queries ---->| src/lib/db     (access rules + SQL)  ------>|  db/mysql/schema.sql
+  |--- /api/soie    Ask assistant --->| SOIE engine ---> Anthropic API (optional)   |
+  |                                   | /api/cron/*    reports (read-only system)   |
+  |                                   | e-mail (SMTP, Resend) for codes + reports   |
 ```
+
+The browser never talks to MySQL. Every query goes through `/api/db`, where the
+server checks that the signed-in user may see or change that patient's rows
+(`src/lib/db/server/policy.ts`) before running it. More in
+[`docs/database.md`](database.md).
 
 ## 2. Environment variables
 
 Copy `.env.example` to `.env.local` for local work. Set the same names in
 **Vercel > Project > Settings > Environment Variables** for deployments.
 
-| Name | Where it runs | Required? | Notes |
-| :--- | :--- | :--- | :--- |
-| `NEXT_PUBLIC_SUPABASE_URL` | Browser + server | Yes | Project URL, shaped like `https://<project-ref>.supabase.co` |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Browser + server | Yes | Public anon key. Safe to expose because RLS blocks anything outside a signed-in member's patients |
-| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Browser + server | Optional | Newer name for the same public key. The app accepts either; set at least one of the two |
-| `NEXT_PUBLIC_APP_URL` | Browser + server | Optional | Public address of the site, for example `https://<your-domain>` |
-| `ANTHROPIC_API_KEY` | Server only | Recommended | Powers the LLM answers in Ask (SOIE). Without it the assistant answers from the rule-based engine and says so. Never prefix with `NEXT_PUBLIC_` |
-| `SOIE_MODEL` | Server only | Optional | Overrides the model name used by SOIE |
-| `SOIE_WEB_SEARCH` | Server only | Optional | `false` switches internet search off; default on |
-| `SOIE_RATE_LIMIT_PER_HOUR` | Server only | Optional | Max Ask questions per user per hour (cost and abuse guard) |
-| `CRON_SECRET`, `REPORT_PATIENT_ID`, `REPORT_EMAIL_TO`, `EMAIL_FROM`, `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS` (or `RESEND_API_KEY`) | Server only | Only if scheduled report emails are enabled | Read by `src/lib/email/` and the `/api/cron/*` routes scheduled in `vercel.json` (optional daily, weekly and missed-dose emails). These routes run without a signed-in user, so with RLS on, confirm they can actually read the patient's data before relying on them. This SMTP account is separate from the one configured inside Supabase for sign-in codes. Secrets, never `NEXT_PUBLIC_` |
-| `SUPABASE_SERVICE_ROLE_KEY` | Your computer only | Only for the food import | Used by `scripts/import-food-dataset.js`. Bypasses RLS. **Do not add it to Vercel, never use a `NEXT_PUBLIC_` name, never commit it** |
+| Name | Required? | Notes |
+| :--- | :--- | :--- |
+| `DATABASE_URL` | **Yes** | `mysql://user:password@host:3306/swasthtrack`. Add `?ssl=true` for hosted databases (TLS). Server only |
+| `AUTH_SECRET` | **Yes** (production) | A random string of 32+ characters (`openssl rand -hex 32`). Keys the hash of e-mailed codes and rate-limit counters. Sign-in refuses to work without it in production. Changing it invalidates codes that are in flight (users just ask for a new one), not passwords or sessions |
+| `DATABASE_SSL`, `DATABASE_SSL_CA`, `DATABASE_SSL_REJECT_UNAUTHORIZED`, `DATABASE_POOL_SIZE` | Optional | TLS switch (same as `?ssl=true`), a private CA certificate (PEM text or file path), `false` ONLY for a throwaway test, and the pool size (default 5; keep it small on serverless) |
+| `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS` (or `RESEND_API_KEY`), `EMAIL_FROM` | **Yes** (production) | Sends the 6-digit sign-in codes and the report e-mails. **Without SMTP nobody can sign up in production** (in development the code is printed in the server console instead). With Resend, `EMAIL_FROM` must be on a domain you verified in Resend: the free sandbox sender `onboarding@resend.dev` only delivers to the Resend account owner's own address |
+| `NEXT_PUBLIC_APP_URL` | Optional | Public address of the site, for the logo and links in e-mails |
+| `ANTHROPIC_API_KEY` | Recommended | Powers the LLM answers in Ask (SOIE). Without it the assistant answers from the rule-based engine and says so. Never prefix with `NEXT_PUBLIC_` |
+| `SOIE_MODEL`, `SOIE_WEB_SEARCH`, `SOIE_RATE_LIMIT_PER_HOUR`, `SOIE_EFFORT`, `SOIE_TIMEOUT_MS` | Optional | SOIE tuning, see `.env.example` |
+| `CRON_SECRET`, `REPORT_PATIENT_ID`, `REPORT_EMAIL_TO` | Only if scheduled report e-mails are on | Read by the `/api/cron/*` routes scheduled in `vercel.json`. The reports are built by a read-only system identity that can see only `REPORT_PATIENT_ID` (no login account needed) |
 
 Rules of thumb:
 
-- Anything starting with `NEXT_PUBLIC_` is shipped to every visitor's browser.
-  Only the Supabase URL and the public anon key belong there.
-- Request-handling code never uses the service-role key. API routes act as the
-  signed-in user, so RLS always applies.
+- Nothing database- or auth-related starts with `NEXT_PUBLIC_`: it would be shipped
+  to every visitor's browser. The database password lives only on the server.
 - `.env*.local` and `.env` are in `.gitignore`. Keep it that way.
 
-## 3. Supabase setup
+## 3. The database
 
-Do this before the first deploy. The full walk-through is in
-[`docs/auth-setup.md`](./auth-setup.md): email provider, "Confirm email", custom
-SMTP, OTP length 6 and expiry 3600 seconds, minimum password length 8, the three
-email templates in `supabase/email-templates/`, and URL configuration (Site URL
-and Redirect URLs for localhost and your production domain).
+Use any MySQL **5.7, 8.x or 9.x** compatible host that your Vercel deployment can reach
+over the internet and that offers TLS (for example Aiven, TiDB Cloud, Railway, a
+managed MySQL on DigitalOcean, AWS RDS / Aurora MySQL or Google Cloud SQL). Create an
+empty database and a user for it, then:
 
-### Migration order
+```bash
+# put DATABASE_URL (and AUTH_SECRET) in .env.local, then create the tables
+npm run db:migrate
+```
 
-Run these in the Supabase **SQL Editor**, in this order, each once (they are
-written to be safe to re-run):
+`db/mysql/schema.sql` is idempotent (`CREATE TABLE IF NOT EXISTS`), so running it
+again is harmless. It is also the file to paste into your host's SQL console if you
+cannot run the script.
 
-1. `supabase/migrations/20260823000000_phase2_schema.sql`
-2. `supabase/migrations/20260824000000_phase3_food_schema.sql`
-3. `supabase/migrations/20260828000000_ask_mode_schema.sql`
-4. `supabase/migrations/20261004000000_secure_auth_rls_soie.sql`
+**Connecting with TLS.** Add `?ssl=true` to `DATABASE_URL`. The server certificate is checked. If your
+provider hands out a CA certificate (Aiven, DigitalOcean and Google Cloud SQL do), save it and set
+`DATABASE_SSL_CA=/path/to/ca.pem` (or paste the PEM text as the value, which is the easy way on Vercel).
+Keep the password URL-encoded (`@` becomes `%40`). The `db:*` scripts explain the usual connection
+mistakes in words:
 
-The last one adds accounts, patient membership, caregiver invites, the SOIE
-tables and Row Level Security, and removes the old open anon policies. Existing
-patient rows stay hidden until linked to an account with
-`supabase/scripts/link_existing_patient.sql` (see the auth guide).
+| Message from the script | Meaning |
+| :--- | :--- |
+| `HANDSHAKE_SSL_ERROR ... self-signed certificate` | The CA is not trusted: set `DATABASE_SSL_CA` |
+| `ER_ACCESS_DENIED_ERROR` | Wrong user or password, **or** the user requires TLS and the URL has no `?ssl=true` (MySQL gives the same answer for both) |
+| `ER_BAD_DB_ERROR` | The database does not exist yet: `CREATE DATABASE <name> CHARACTER SET utf8mb4;` |
+| `ECONNREFUSED` / `ETIMEDOUT` | Wrong host or port, or the provider's IP allow-list blocks you |
 
-Heads-up: the first migration (`20260823000000_phase2_schema.sql`) still inserts
-one **demo patient** ("Mr. Rajiv Sharma", with sample conditions and medicines).
-After the secure migration nobody is a member of that row, so it is invisible in
-the app, but it is not real data. On a production database delete it once:
-`select id, name from public.patients;` to find it, then
-`delete from public.patients where id = '<demo-patient-id>';` (child rows are
-removed with it).
+Heads-up for managed hosts: allow connections from Vercel. Vercel does not have fixed
+IP addresses, so either allow all IPs (strong password + TLS), or use a provider that
+supports Vercel integration or private networking.
 
-`supabase/schema.sql` is **not** a setup script any more. It only documents
-that the migrations replaced it.
+### Moving the data from Supabase (one time)
+
+The old project's data can be copied across without any Supabase service key as long
+as its original open access rules are still in place (the old "secure auth / RLS"
+migration was never run). **Do not run that Supabase migration**: it would hide the
+data from this script (a service-role key would then be needed).
+
+```bash
+npm run db:import-supabase -- --dry-run      # read and convert only, writes nothing
+npm run db:import-supabase                   # copy into DATABASE_URL
+```
+
+It reads `NEXT_PUBLIC_SUPABASE_URL` and the public key from `.env.local` (or
+`SUPABASE_URL` / `SUPABASE_KEY`), copies every health table in dependency order, matches
+rows by id (so it is safe to repeat), and then **verifies** that row counts and the sum of
+every numeric column agree between Supabase and MySQL. Accounts are not copied: sign up
+in the app, then attach the patient to your account:
+
+```bash
+npm run db:link -- --list                                   # patients and accounts
+npm run db:link -- --email you@example.com --patient <patient id>
+npm run db:link -- --email you@example.com --make-admin     # optional: developer tools in the UI
+```
 
 ### Food catalogue (bundled in the app) and the optional database copy
 
-The Indian food catalogue (names in English and Hindi, spelling variants, state of
-origin, calories and macros per 100 g, household portions) ships **inside the app**
-as `src/data/food-catalogue.json`. Search, calories and emojis work straight after a
-deploy; nothing has to be seeded for them. How the data is built and checked is in
-[`docs/food-catalogue.md`](food-catalogue.md).
+The Indian food catalogue ships **inside the app** as `src/data/food-catalogue.json`.
+Search, calories and emojis work straight after a deploy. The database copy only exists
+so a food can be marked as a favourite and linked from a food log:
 
-The database copy only exists so a food can be marked as a favourite and linked from
-a food log. It is optional and safe to re-run (ids are stable):
+```bash
+npm run food:import -- --dry-run     # see what would change
+npm run food:import                  # apply (one transaction; safe to repeat)
+```
 
-1. Put `SUPABASE_SERVICE_ROLE_KEY` (and `NEXT_PUBLIC_SUPABASE_URL`) in
-   `.env.local` on your computer.
-2. See what would change first, then run it for real:
-
-   ```bash
-   node scripts/import-food-dataset.js --dry-run
-   node scripts/import-food-dataset.js
-   ```
-
-3. Do it from your own machine, not in CI and not on Vercel. The script refuses
-   to run without the service key. Remove the key from `.env.local` afterwards if
-   you do not need it again.
-
-The import also switches off (`is_active = false`, nothing is deleted) the rows an
-older seed left in `food_items`, and moves favourites that pointed at them to the
-matching new food. The old CSVs in `supabase/seed_data/` are no longer read.
+It retires the rows an older seed left in `food_items` (`is_active = 0`, nothing is
+deleted) and moves favourites that pointed at them to the matching new food. Run it from
+your own computer, not from CI. How the catalogue is built: [`docs/food-catalogue.md`](food-catalogue.md).
 
 ## 4. GitHub and Vercel
 
 1. Push the repository to GitHub (private is recommended).
 2. In Vercel choose **Add New > Project**, select the repository. Framework
    preset: Next.js. Root directory: `./`.
-3. Add the environment variables from the table in section 2 (everything except
-   `SUPABASE_SERVICE_ROLE_KEY`) for Production, and for Preview if you want
-   preview deployments to work.
-4. Deploy.
-5. Add your Vercel and custom domains to Supabase **Authentication > URL
-   Configuration** (Site URL and Redirect URLs) as described in the auth guide.
-
-The build script is `next build --webpack` (see `package.json`); Vercel runs it
-via `npm run build`.
+3. Add the environment variables from section 2 for Production (and for Preview if
+   you want preview deployments to work).
+4. Deploy. The build script is `next build --webpack`; Vercel runs it via `npm run build`.
+5. Run `npm run db:migrate` once against the production `DATABASE_URL` (from your computer).
 
 ### Custom domain (optional)
 
 1. Vercel > Project > **Settings > Domains** > add your domain.
 2. Create the DNS records Vercel displays at your registrar.
-3. Update Supabase **Site URL** to the new address.
-4. Update `NEXT_PUBLIC_APP_URL` if you set it.
+3. Update `NEXT_PUBLIC_APP_URL`, and the verified sender domain in Resend if needed.
 
 ## 5. PWA and the service worker
 
 SwasthTrack is an installable PWA (`src/app/manifest.ts`). `public/sw.js` caches
 the app shell (main pages, icons) so the app opens quickly and shows something
-offline. The service worker cache is cleared on sign-out so that a shared phone
-does not keep another person's cached pages. After a deployment, users may need to
-close and reopen the app once to pick up the new service worker.
+offline. It never caches `/api/*`, so health data and the session are never stored by
+the worker. The cache is cleared on sign-out so that a shared phone does not keep another
+person's cached pages. After a deployment, users may need to close and reopen the app once
+to pick up the new service worker.
 
 Install:
 
@@ -148,56 +152,44 @@ Install:
 
 ## 6. Post-deploy checklist
 
-- [ ] The site loads over HTTPS and `/login` shows email + password fields (no
-      phone number field).
+- [ ] The site loads over HTTPS and `/login` shows email + password fields.
 - [ ] **Sign up works:** a new email + password (8+ characters) is accepted.
-- [ ] **The OTP email arrives** within a minute, in Hindi and English, with a
-      6-digit code and no link. If not, see Troubleshooting in the auth guide.
-- [ ] Entering the code signs you in; onboarding creates a patient (or your
-      existing patient is linked and visible).
+- [ ] **The code e-mail arrives** within a minute, in Hindi and English, with a 6-digit
+      code. If it does not, see Troubleshooting in [`docs/auth-setup.md`](auth-setup.md).
+- [ ] Entering the code signs you in; onboarding creates a patient (or your existing
+      patient is linked and visible).
 - [ ] **Forgot password** sends a code and lets you set a new password.
-- [ ] **RLS check.** Using only the public anon key and no user session, a request
-      to the REST API must return nothing or "permission denied":
+- [ ] **Access check.** Not signed in, `POST /api/db` answers 401:
 
   ```bash
-  curl -s "https://<project-ref>.supabase.co/rest/v1/patients?select=id" \
-    -H "apikey: <your-anon-key>" \
-    -H "Authorization: Bearer <your-anon-key>"
+  curl -s -X POST https://<your-domain>/api/db -H 'Content-Type: application/json' \
+    -d '{"query":{"table":"patients","action":"select","filters":[],"order":[],"mode":"many"}}'
   ```
 
-  Expected: a permission-denied error or an empty list `[]`. If you see patient
-  rows, the secure migration has not run; stop and run it.
+  Expected: `{"data":null,"error":{"message":"Sign in required","code":"401"},"count":null}`.
 - [ ] A second account that is not a member of the patient sees no patient data.
+- [ ] The database accepts connections only with TLS and a strong password.
 - [ ] Ask (`/ask`) answers. If `ANTHROPIC_API_KEY` is missing the page says the
       rule-based engine is answering.
-- [ ] Signing out returns to `/login` and the browser back button does not show
-      health data.
+- [ ] Signing out returns to `/login` and the browser back button does not show health data.
 
-## 7. Rotate any key that was ever committed
+## 7. Secrets
 
-An earlier version of this document was committed with a real project URL and
-API keys in it. Those values are still in git history even though they are gone
-from the current file. Because of that:
-
-1. **Always rotate any service-role key that was ever exposed** (Supabase >
-   Project Settings > API > reset the `service_role` key). It bypasses RLS, so an
-   exposed copy is full database access.
-2. Rotating the **anon** key is recommended too, but less urgent: with the secure
-   migration in place the anon role has no table access. If you rotate it, update
-   `NEXT_PUBLIC_SUPABASE_ANON_KEY` (and the publishable key variable, if you use
-   it) in `.env.local` and in Vercel, then redeploy.
-3. Rotate the database password if it was ever shared.
-4. Consider rewriting git history (or creating a fresh repository) if you need
-   the old values gone from clones and forks.
-5. Never paste real keys into docs, issues, chat or screenshots.
+1. Never commit `.env.local`. Rotate any key or password that was ever committed or pasted
+   into a chat, an issue or a screenshot (the database password, the Resend key, the
+   Anthropic key, `CRON_SECRET`, `AUTH_SECRET`).
+2. The old Supabase project is no longer used by the app. Once you have verified the copy
+   in MySQL, remove its keys from `.env.local`, and pause or delete that project.
+3. Rotating `AUTH_SECRET` is safe (users only need new e-mail codes). Rotating the database
+   password means updating `DATABASE_URL` in Vercel and redeploying.
 
 ## 8. Rollback and backups
 
-**Instant rollback (Vercel):** Vercel Dashboard > **Deployments** > pick the last
-good deployment > **Instant Rollback**. Database migrations are not rolled back
-by this; test migrations on a copy first.
+**Instant rollback (Vercel):** Vercel Dashboard > **Deployments** > pick the last good
+deployment > **Instant Rollback**. The schema only ever gains tables with
+`CREATE TABLE IF NOT EXISTS`, so older code keeps working against a newer schema.
 
-**Database backups:** Supabase > **Database > Backups** keeps automated backups
-(the retention depends on your plan). For a manual copy use `pg_dump` or the
-Table Editor export. Take a backup before running a migration on a database that
-holds real health data.
+**Database backups:** turn on your host's automated backups and test a restore once. For a
+manual copy: `mysqldump --single-transaction --set-gtid-purged=OFF -h <host> -u <user> -p
+swasthtrack > backup.sql`. Take a backup before any change to a database that holds real
+health data.

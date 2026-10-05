@@ -9,9 +9,8 @@
  * what the app itself shows.
  */
 
-import type { SupabaseClient } from "@supabase/supabase-js";
-import type { Database } from "@/lib/supabase/database.types";
-import { runAsClient } from "@/lib/supabase/request-scope";
+import type { DbClient } from "@/lib/db/builder";
+import { runAsClient } from "@/lib/db/server/request-scope";
 import {
   DUE_AT_MIN,
   LOGGING_GAP_DAYS,
@@ -71,16 +70,16 @@ const FRESH_READING_MS = 30 * 60 * 1000;
 // ----------------------------------------------------
 
 /**
- * Runs an e-mail build with every read going through `client` (an RLS-scoped user:
- * the signed-in person for alerts, the notifier account for cron). With no client it
- * uses the shared one, which only works while the database still has open policies.
+ * Runs an e-mail build with every read going through `client` (an access-scoped user:
+ * the signed-in person for alerts, a read-only system identity for cron). With no client it
+ * uses the shared browser client, which only works inside a signed-in browser session.
  *
  * The data services keep a short-lived server-side cache keyed by patient only, so it
  * is cleared before and after: a build never reads rows another caller cached, and
  * never leaves this patient's rows behind in memory.
  */
 export async function runEmailJob<T>(
-  client: SupabaseClient<Database> | null,
+  client: DbClient | null,
   patientId: string,
   job: () => Promise<T>,
 ): Promise<T> {

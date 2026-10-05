@@ -1,4 +1,4 @@
-import type { MemberRole } from "@/lib/supabase/database.types";
+import type { MemberRole } from "@/lib/db/database.types";
 
 /** Bilingual labels for the signed-in user's role on a patient. */
 export const memberRoleLabel: Record<MemberRole, { en: string; hi: string }> = {

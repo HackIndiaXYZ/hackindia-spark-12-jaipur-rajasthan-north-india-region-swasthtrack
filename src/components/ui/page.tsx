@@ -173,7 +173,7 @@ export function EmptyState({
 }
 
 /**
- * Error state. Human-readable message plus a retry — raw Supabase/API errors
+ * Error state. Human-readable message plus a retry — raw database/API errors
  * are never shown to the reader (§42). `onRetry` may be async: the button
  * shows a spinner and ignores further presses until it settles.
  */

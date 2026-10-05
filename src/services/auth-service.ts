@@ -1,39 +1,31 @@
-import type { User } from "@supabase/supabase-js";
 import { setActivePatientId } from "@/lib/active-patient";
-import { isSupabaseConfigured, supabase } from "@/lib/supabase/client";
-import type { MemberRole } from "@/lib/supabase/database.types";
+import { MIN_PASSWORD_LENGTH, OTP_LENGTH, type AuthErrorCode, type AuthUser, type SessionPayload, type UserProfile, type UserRole } from "@/lib/auth/constants";
+import { fetchSessionPayload, knownUser, refreshSession, sessionEnded, sessionStarted } from "@/lib/auth/client-session";
+import { db } from "@/lib/db/client";
+import type { MemberRole } from "@/lib/db/database.types";
 import {
-  SupabaseNotConfiguredError,
+  DatabaseNotConfiguredError,
   clearAllPatientCaches,
   invalidatePatientCache,
   type PatientProfile,
 } from "./patient-service";
 
 /**
- * Authentication and caregiver membership, on top of Supabase Auth.
+ * Authentication and caregiver membership (browser side), on top of the app's own
+ * MySQL-backed auth API (/api/auth/*, src/lib/auth/service.ts).
  *
- *  - email + password, with a 6-digit email OTP (sent by Supabase) to verify the
- *    address at sign-up;
+ *  - email + password, with a 6-digit email code to verify the address at sign-up;
  *  - password reset by emailed code;
  *  - optional passwordless "sign in with email code".
  *
- * There are no accounts, password hashes, OTPs or memberships in localStorage.
- * Who may see which patient is decided by Postgres Row Level Security
- * (supabase/migrations/20261004000000_secure_auth_rls_soie.sql); this file only
- * calls the RPCs and tables that migration defines.
+ * The session is an HttpOnly cookie the browser cannot read, so there are no tokens,
+ * accounts, password hashes or OTPs anywhere in browser storage. Who may see which
+ * patient is decided on the server (src/lib/db/server/policy.ts); this file only calls
+ * the API routes and RPCs.
  */
 
-export const MIN_PASSWORD_LENGTH = 8;
-export const OTP_LENGTH = 6;
-
-export type UserRole = "member" | "admin";
-
-export interface UserProfile {
-  id: string;
-  email: string | null;
-  display_name: string | null;
-  role: UserRole;
-}
+export { MIN_PASSWORD_LENGTH, OTP_LENGTH };
+export type { AuthErrorCode, UserProfile, UserRole };
 
 /** A patient the signed-in user is an active member of, with their role on it. */
 export type AuthorizedPatient = PatientProfile & { member_role: MemberRole };
@@ -63,27 +55,13 @@ export interface AuthorizedCaregiver {
 // Errors
 // ---------------------------------------------------------------------------
 
-export type AuthErrorCode =
-  | "invalid_credentials"
-  | "email_not_confirmed"
-  | "rate_limited"
-  | "weak_password"
-  | "user_exists"
-  | "invalid_code"
-  | "invalid_input"
-  | "same_password"
-  | "not_signed_in"
-  | "network"
-  | "unknown";
-
 /** Carries a stable `code` so the UI can branch (e.g. send the user to the code step). */
 export class AuthServiceError extends Error {
-  constructor(
-    public code: AuthErrorCode,
-    message: string,
-  ) {
+  code: AuthErrorCode;
+  constructor(code: AuthErrorCode, message: string) {
     super(message);
     this.name = "AuthServiceError";
+    this.code = code;
   }
 }
 
@@ -100,6 +78,8 @@ const MESSAGES: Record<AuthErrorCode, string> = {
   invalid_input: "कृपया जानकारी जांचें। (Please check your details.)",
   same_password: "नया पासवर्ड पुराने से अलग रखें। (Choose a password different from the old one.)",
   not_signed_in: "कृपया पहले लॉगिन करें। (Please sign in first.)",
+  email_failed:
+    "कोड वाला ईमेल भेजा नहीं जा सका। कुछ देर बाद फिर कोशिश करें, या सहायता से संपर्क करें। (We could not send the e-mail. Try again shortly, or contact support.)",
   network: "इंटरनेट कनेक्शन जांचें और फिर कोशिश करें। (Check your connection and try again.)",
   unknown: "कुछ गड़बड़ हो गई। कृपया फिर कोशिश करें। (Something went wrong. Please try again.)",
 };
@@ -108,44 +88,39 @@ function authError(code: AuthErrorCode, message?: string): AuthServiceError {
   return new AuthServiceError(code, message ?? MESSAGES[code]);
 }
 
-type SupabaseAuthLike = { code?: string; message?: string; status?: number; name?: string };
-
-function mapAuthError(error: SupabaseAuthLike): AuthServiceError {
-  const code = error.code ?? "";
-  const text = error.message ?? "";
-
-  if (code === "invalid_credentials" || /invalid login credentials/i.test(text)) return authError("invalid_credentials");
-  if (code === "email_not_confirmed" || /email not confirmed/i.test(text)) return authError("email_not_confirmed");
-  if (
-    code === "over_email_send_rate_limit" ||
-    code === "over_request_rate_limit" ||
-    code === "over_sms_send_rate_limit" ||
-    error.status === 429 ||
-    /rate limit|too many requests|after \d+ seconds|security purposes/i.test(text)
-  ) {
-    return authError("rate_limited");
-  }
-  if (code === "weak_password" || /password should be at least|weak password/i.test(text)) return authError("weak_password");
-  if (code === "user_already_exists" || code === "email_exists" || /already registered|already exists/i.test(text)) {
-    return authError("user_exists");
-  }
-  if (code === "same_password" || /different from the old password/i.test(text)) return authError("same_password");
-  if (code === "otp_expired" || code === "validation_failed" || /token has expired|otp.*(expired|invalid)|invalid.*token/i.test(text)) {
-    return authError("invalid_code");
-  }
-  if (code === "session_not_found" || code === "refresh_token_not_found" || /auth session missing/i.test(text)) {
-    return authError("not_signed_in");
-  }
-  if (/failed to fetch|networkerror|load failed|fetch failed/i.test(text)) return authError("network");
-  return authError("unknown");
+function isAuthErrorCode(value: unknown): value is AuthErrorCode {
+  return typeof value === "string" && Object.prototype.hasOwnProperty.call(MESSAGES, value);
 }
 
-function requireConfigured(): void {
-  if (!isSupabaseConfigured) throw new SupabaseNotConfiguredError();
+/** POST to /api/auth/<action>. Throws AuthServiceError with the server's code. */
+async function call<T = Record<string, unknown>>(action: string, body: Record<string, unknown> = {}): Promise<T> {
+  let res: Response;
+  try {
+    res = await fetch(`/api/auth/${action}`, {
+      method: "POST",
+      credentials: "same-origin",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+  } catch {
+    throw authError("network");
+  }
+  let json = null as { error?: { code?: unknown } } | null;
+  try {
+    json = (await res.json()) as { error?: { code?: unknown } } | null;
+  } catch {
+    // not JSON
+  }
+  if (!res.ok) {
+    if (res.status === 503) throw new DatabaseNotConfiguredError();
+    const code = json?.error?.code;
+    throw authError(isAuthErrorCode(code) ? code : res.status === 429 ? "rate_limited" : "unknown");
+  }
+  return (json ?? {}) as T;
 }
 
 // ---------------------------------------------------------------------------
-// Input checks
+// Input checks (the server checks again; these give instant, friendly messages)
 // ---------------------------------------------------------------------------
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
@@ -174,84 +149,52 @@ function requireCode(input: string): string {
   return code;
 }
 
+/** A call that signs the user in: tell the rest of the app once the server accepted it. */
+async function signedIn(action: string, body: Record<string, unknown>): Promise<void> {
+  const { user } = await call<{ user: AuthUser }>(action, body);
+  sessionStarted(user);
+}
+
 // ---------------------------------------------------------------------------
 // Sign up / sign in
 // ---------------------------------------------------------------------------
 
 /**
- * Create an account. Supabase emails a 6-digit code (the "Confirm signup"
- * template must contain `{{ .Token }}`); the account cannot sign in until it is
- * verified with `verifySignupOtp`.
+ * Create an account. A 6-digit code is e-mailed; the account cannot sign in until it
+ * is verified with `verifySignupOtp`.
  */
 export async function signUpWithEmail(
   email: string,
   password: string,
   displayName?: string,
 ): Promise<{ status: "verify" | "signed_in" }> {
-  requireConfigured();
   const cleanEmail = requireEmail(email);
   requirePassword(password);
-
-  const name = displayName?.trim();
-  const { data, error } = await supabase.auth.signUp({
-    email: cleanEmail,
-    password,
-    options: name ? { data: { display_name: name } } : undefined,
-  });
-  if (error) throw mapAuthError(error);
-
-  // Supabase hides "already registered" by returning a user with no identities.
-  if (data.user && Array.isArray(data.user.identities) && data.user.identities.length === 0) {
-    throw authError("user_exists");
-  }
-  // "Confirm email" switched off in the dashboard: the account is live immediately.
-  return { status: data.session ? "signed_in" : "verify" };
+  await call("signup", { email: cleanEmail, password, displayName: displayName?.trim() || undefined });
+  return { status: "verify" };
 }
 
 export async function verifySignupOtp(email: string, code: string): Promise<void> {
-  requireConfigured();
-  const { error } = await supabase.auth.verifyOtp({ email: requireEmail(email), token: requireCode(code), type: "signup" });
-  if (error) throw mapAuthError(error);
+  await signedIn("verify-signup", { email: requireEmail(email), code: requireCode(code) });
 }
 
 export async function resendSignupOtp(email: string): Promise<void> {
-  requireConfigured();
-  const { error } = await supabase.auth.resend({ type: "signup", email: requireEmail(email) });
-  if (error) throw mapAuthError(error);
+  await call("resend-signup", { email: requireEmail(email) });
 }
 
 export async function signInWithPassword(email: string, password: string): Promise<void> {
-  requireConfigured();
   const cleanEmail = requireEmail(email);
   if (!password) throw authError("invalid_credentials");
-  const { error } = await supabase.auth.signInWithPassword({ email: cleanEmail, password });
-  if (error) throw mapAuthError(error);
-}
-
-// Errors that only say "this email has no account". The caller must not learn that.
-function isUnknownAccountError(error: SupabaseAuthLike): boolean {
-  return (
-    error.code === "otp_disabled" ||
-    error.code === "signup_disabled" ||
-    error.code === "user_not_found" ||
-    /signups not allowed|user not found/i.test(error.message ?? "")
-  );
+  await signedIn("login", { email: cleanEmail, password });
 }
 
 /** Passwordless sign-in: emails a code. Succeeds quietly for unknown addresses. */
 export async function sendLoginCode(email: string): Promise<void> {
-  requireConfigured();
-  const { error } = await supabase.auth.signInWithOtp({
-    email: requireEmail(email),
-    options: { shouldCreateUser: false },
-  });
-  if (error && !isUnknownAccountError(error)) throw mapAuthError(error);
+  await call("login-code", { email: requireEmail(email) });
 }
 
 export async function verifyLoginCode(email: string, code: string): Promise<void> {
-  requireConfigured();
-  const { error } = await supabase.auth.verifyOtp({ email: requireEmail(email), token: requireCode(code), type: "email" });
-  if (error) throw mapAuthError(error);
+  await signedIn("login-verify", { email: requireEmail(email), code: requireCode(code) });
 }
 
 // ---------------------------------------------------------------------------
@@ -260,18 +203,14 @@ export async function verifyLoginCode(email: string, code: string): Promise<void
 
 /** Emails a recovery code. Always looks successful, so it never reveals whether an account exists. */
 export async function sendPasswordResetCode(email: string): Promise<void> {
-  requireConfigured();
-  const { error } = await supabase.auth.resetPasswordForEmail(requireEmail(email));
-  if (error && !isUnknownAccountError(error)) throw mapAuthError(error);
+  await call("reset-code", { email: requireEmail(email) });
 }
 
 /**
- * Verifying a recovery code signs the user in *before* the new password is set.
- * While that is in flight the login screen must stay mounted: if the guard
- * redirected a "signed-in" visitor to the dashboard, a rejected password
- * (same as the old one, too weak, offline) would have nowhere to show its error
- * and the user would just bounce back to an empty login form.
- * `AuthGuard` subscribes to this.
+ * Resetting a password signs the user in at the end. While that request is in flight the
+ * login screen must stay mounted: if the guard redirected a "signed-in" visitor to the
+ * dashboard first, a rejected password (same as the old one, too weak, offline) would have
+ * nowhere to show its error. `AuthGuard` subscribes to this.
  */
 let pendingSessionFlows = 0;
 const holdListeners = new Set<() => void>();
@@ -293,83 +232,45 @@ export function isAuthFlowHeld(): boolean {
   return pendingSessionFlows > 0;
 }
 
-/** Verify the emailed code, then set the new password. The user ends up signed in. */
+/** Verify the emailed code and set the new password in one step. The user ends up signed in. */
 export async function resetPasswordWithCode(email: string, code: string, newPassword: string): Promise<void> {
-  requireConfigured();
   const cleanEmail = requireEmail(email);
   const token = requireCode(code);
   requirePassword(newPassword);
 
   setHold(1);
   try {
-    const { error: verifyError } = await supabase.auth.verifyOtp({ email: cleanEmail, token, type: "recovery" });
-    if (verifyError) throw mapAuthError(verifyError);
-
-    const { error: updateError } = await supabase.auth.updateUser({ password: newPassword });
-    if (updateError) {
-      // Do not leave a half-finished recovery session behind (this device only).
-      await supabase.auth.signOut({ scope: "local" });
-      throw mapAuthError(updateError);
-    }
+    await signedIn("reset-confirm", { email: cleanEmail, code: token, newPassword });
   } finally {
     setHold(-1);
   }
 }
 
-/** Change the password of the signed-in user. */
+/** Change the password of the signed-in user (other devices are signed out). */
 export async function updatePassword(newPassword: string): Promise<void> {
-  requireConfigured();
   requirePassword(newPassword);
-  const { error } = await supabase.auth.updateUser({ password: newPassword });
-  if (error) throw mapAuthError(error);
+  await call("password", { newPassword });
 }
 
 // ---------------------------------------------------------------------------
 // Session + profile
 // ---------------------------------------------------------------------------
 
-export async function getProfile(user?: User | null): Promise<UserProfile | null> {
-  requireConfigured();
-  const authUser = user ?? (await supabase.auth.getSession()).data.session?.user ?? null;
-  if (!authUser) return null;
-
-  try {
-    const { data, error } = await supabase
-      .from("profiles")
-      .select("id,email,display_name,role")
-      .eq("id", authUser.id)
-      .maybeSingle();
-
-    if (!error && data) return data;
-  } catch (err) {
-    console.warn("profiles query notice:", err);
-  }
-
-  // The sign-up trigger creates this row; until it exists, describe the user from Auth itself.
-  const metaName = (authUser.user_metadata as { display_name?: string } | undefined)?.display_name;
-  return {
-    id: authUser.id,
-    email: authUser.email ?? null,
-    display_name: metaName || (authUser.email ? authUser.email.split("@")[0] : "Papa"),
-    role: "member",
-  };
+export async function getProfile(): Promise<UserProfile | null> {
+  const payload = await fetchSessionPayload();
+  return payload.profile;
 }
 
-export async function getCurrentAuthSession(): Promise<{ user: User | null; profile: UserProfile | null }> {
-  if (!isSupabaseConfigured) return { user: null, profile: null };
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-  if (!session?.user) return { user: null, profile: null };
-  return { user: session.user, profile: await getProfile(session.user) };
+/** The server's view of who is signed in (and whether the database is configured). */
+export async function getCurrentAuthSession(): Promise<SessionPayload> {
+  const payload = await refreshSession();
+  return payload ?? { configured: true, user: knownUser() ?? null, profile: null };
 }
 
-export async function updateDisplayName(userId: string, displayName: string): Promise<void> {
-  requireConfigured();
+export async function updateDisplayName(_userId: string, displayName: string): Promise<void> {
   const name = displayName.trim();
   if (!name) throw authError("invalid_input", "नाम खाली नहीं हो सकता। (Name cannot be empty.)");
-  const { error } = await supabase.from("profiles").update({ display_name: name }).eq("id", userId);
-  if (error) throw authError("unknown", error.message);
+  await call("profile", { displayName: name });
 }
 
 /**
@@ -411,26 +312,33 @@ export async function clearLocalUserData(): Promise<void> {
   }
 }
 
+/** Signs out THIS device only; the account's other sessions stay valid. */
 export async function signOut(): Promise<void> {
   try {
-    // `local`: sign out THIS device. The default (`global`) revokes every session
-    // of the account, so a caregiver leaving the laptop would log the parent out
-    // of their own phone.
-    if (isSupabaseConfigured) await supabase.auth.signOut({ scope: "local" });
+    await fetch("/api/auth/logout", {
+      method: "POST",
+      credentials: "same-origin",
+      headers: { "Content-Type": "application/json" },
+      body: "{}",
+    });
+  } catch {
+    // offline: the cookie is cleared on the next successful call; local data is wiped regardless
   } finally {
+    sessionEnded();
     await clearLocalUserData();
   }
 }
 
 // ---------------------------------------------------------------------------
-// Patients, invites and caregivers (RLS + RPCs)
+// Patients, invites and caregivers (access rules + RPCs on the server)
 // ---------------------------------------------------------------------------
 
 function friendlyRpcError(error: { message: string; code?: string }): Error {
   const text = error.message;
+  if (error.code === "DB_NOT_CONFIGURED") return new DatabaseNotConfiguredError();
   if (error.code === "PGRST202" || /could not find the function/i.test(text)) {
     return new Error(
-      "डेटाबेस अपडेट अधूरा है। Supabase में नया migration चलाएं (see docs/auth-setup.md). (Database migration not applied yet.)",
+      "डेटाबेस अपडेट अधूरा है। सर्वर पर `node scripts/db/migrate.mjs` चलाएं। (Database schema is not up to date: run `node scripts/db/migrate.mjs` on the server.)",
     );
   }
   if (/invalid or already used invite code/i.test(text)) {
@@ -448,81 +356,46 @@ function friendlyRpcError(error: { message: string; code?: string }): Error {
   if (/cannot change your own membership/i.test(text)) {
     return new Error("आप अपना खुद का एक्सेस नहीं बदल सकते। (You cannot change your own access.)");
   }
-  if (/not authenticated/i.test(text) || error.code === "28000") return authError("not_signed_in");
+  if (/not authenticated/i.test(text) || error.code === "28000" || error.code === "401") return authError("not_signed_in");
   if (/patient name is required/i.test(text)) return new Error("मरीज़ का नाम ज़रूरी है। (Patient name is required.)");
   if (/failed to fetch|networkerror|load failed/i.test(text)) return authError("network");
-  console.error("Supabase RPC error:", error);
+  console.error("Database RPC error:", error);
   return new Error(text || MESSAGES.unknown);
 }
 
 async function currentUserId(): Promise<string> {
-  requireConfigured();
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-  if (!session?.user) throw authError("not_signed_in");
-  return session.user.id;
+  const known = knownUser();
+  if (known) return known.id;
+  const payload = await refreshSession();
+  if (payload && !payload.configured) throw new DatabaseNotConfiguredError();
+  const user = payload?.user ?? knownUser();
+  if (!user) throw authError("not_signed_in");
+  return user.id;
 }
 
 /**
- * Every patient the user is an active member of (Postgres RLS decides; this just
- * reads the memberships), oldest membership first, each with the user's role.
+ * Every patient the user is an active member of (the server decides; this just reads the
+ * memberships), oldest membership first, each with the user's role.
  */
 export async function getAuthorizedPatients(): Promise<AuthorizedPatient[]> {
-  if (!isSupabaseConfigured) return [];
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-  if (!session?.user) return [];
+  const known = knownUser();
+  const userId = known?.id ?? (await refreshSession())?.user?.id;
+  if (!userId) return [];
 
-  try {
-    const { data: members, error: membersError } = await supabase
-      .from("patient_members")
-      .select("patient_id, role, created_at")
-      .eq("user_id", session.user.id)
-      .eq("status", "active")
-      .order("created_at", { ascending: true });
+  const { data, error } = await db
+    .from("patient_members")
+    .select("role, created_at, patients(*)")
+    .eq("user_id", userId)
+    .eq("status", "active")
+    .order("created_at", { ascending: true });
+  if (error) throw friendlyRpcError(error);
 
-    if (!membersError && members && members.length > 0) {
-      const patientIds = members.map((m) => m.patient_id);
-      const { data: patients } = await supabase
-        .from("patients")
-        .select("*")
-        .in("id", patientIds);
-
-      const patientMap = new Map((patients ?? []).map((p) => [p.id, p as PatientProfile]));
-      const out: AuthorizedPatient[] = [];
-      for (const m of members) {
-        const p = patientMap.get(m.patient_id);
-        if (p) {
-          out.push({ ...p, member_role: m.role as MemberRole });
-        }
-      }
-      if (out.length > 0) return out;
-    }
-  } catch (e) {
-    console.warn("patient_members fetch notice:", e);
+  const out: AuthorizedPatient[] = [];
+  for (const row of data ?? []) {
+    const patient = row.patients as PatientProfile | null;
+    if (patient) out.push({ ...patient, member_role: row.role as MemberRole });
   }
-
-  // Fallback: If no membership row linked yet, load the primary patient profile directly
-  try {
-    const { data: fallbackPatients } = await supabase
-      .from("patients")
-      .select("*")
-      .order("created_at", { ascending: true })
-      .limit(1);
-
-    if (fallbackPatients && fallbackPatients.length > 0) {
-      return fallbackPatients.map((p) => ({
-        ...(p as PatientProfile),
-        member_role: "owner" as MemberRole,
-      }));
-    }
-  } catch (e) {
-    console.warn("Fallback patients query notice:", e);
-  }
-
-  return [];
+  return out;
 }
 
 export interface NewPatientInput {
@@ -535,14 +408,14 @@ export interface NewPatientInput {
   daily_calorie_target?: number | null;
 }
 
-/** Create a patient; the database makes the caller its owner in the same transaction. */
+/** Create a patient; the server makes the caller its owner in the same transaction. */
 export async function createPatientForCurrentUser(input: NewPatientInput): Promise<PatientProfile> {
   await currentUserId();
   const name = input.name.trim();
   if (!name) throw new Error("मरीज़ का नाम ज़रूरी है। (Patient name is required.)");
 
-  // Only send what was actually entered; the database applies its own defaults for the rest.
-  const { data, error } = await supabase.rpc("create_patient", {
+  // Only send what was actually entered; the server applies its own defaults for the rest.
+  const { data, error } = await db.rpc("create_patient", {
     p_name: name,
     ...(input.age != null ? { p_age: input.age } : {}),
     ...(input.gender ? { p_gender: input.gender } : {}),
@@ -551,7 +424,7 @@ export async function createPatientForCurrentUser(input: NewPatientInput): Promi
     ...(input.target_weight_kg != null ? { p_target_weight_kg: input.target_weight_kg } : {}),
     ...(input.daily_calorie_target != null ? { p_daily_calorie_target: input.daily_calorie_target } : {}),
   });
-  if (error) throw friendlyRpcError(error);
+  if (error || !data) throw friendlyRpcError(error ?? { message: "" });
   invalidatePatientCache(data.id);
   return data;
 }
@@ -562,8 +435,8 @@ export async function generateCaregiverInviteCode(
   role: "editor" | "viewer" = "viewer",
 ): Promise<CaregiverInvitation> {
   await currentUserId();
-  const { data, error } = await supabase.rpc("create_caregiver_invite", { p_patient: patientId, p_role: role });
-  if (error) throw friendlyRpcError(error);
+  const { data, error } = await db.rpc("create_caregiver_invite", { p_patient: patientId, p_role: role });
+  if (error || !data) throw friendlyRpcError(error ?? { message: "" });
   return {
     id: data.id,
     patient_id: data.patient_id,
@@ -584,8 +457,8 @@ export async function acceptCaregiverInviteCode(
   if (!/^[A-HJ-NP-Z2-9]{8}$/.test(code)) {
     throw new Error("कृपया पूरा 8 अक्षरों का कोड दर्ज करें। (Enter the full 8-character code.)");
   }
-  const { data, error } = await supabase.rpc("accept_caregiver_invite", { p_code: code });
-  if (error) throw friendlyRpcError(error);
+  const { data, error } = await db.rpc("accept_caregiver_invite", { p_code: code });
+  if (error || !data) throw friendlyRpcError(error ?? { message: "" });
   invalidatePatientCache(data);
   return {
     success: true,
@@ -597,7 +470,7 @@ export async function acceptCaregiverInviteCode(
 /** Owner only: the patient's whole roster (active and revoked), oldest first. */
 export async function getAuthorizedCaregivers(patientId: string): Promise<AuthorizedCaregiver[]> {
   await currentUserId();
-  const { data, error } = await supabase.rpc("list_patient_members", { p_patient: patientId });
+  const { data, error } = await db.rpc("list_patient_members", { p_patient: patientId });
   if (error) throw friendlyRpcError(error);
   return (data ?? []).map((m) => ({
     member_id: m.member_id,
@@ -613,13 +486,13 @@ export async function getAuthorizedCaregivers(patientId: string): Promise<Author
 /** Owner only: remove someone's access immediately. */
 export async function revokeCaregiverAccess(memberId: string): Promise<void> {
   await currentUserId();
-  const { error } = await supabase.rpc("set_patient_member", { p_member: memberId, p_status: "revoked" });
+  const { error } = await db.rpc("set_patient_member", { p_member: memberId, p_status: "revoked" });
   if (error) throw friendlyRpcError(error);
 }
 
 /** Owner only: change a member between viewer and editor. */
 export async function setCaregiverRole(memberId: string, role: "editor" | "viewer"): Promise<void> {
   await currentUserId();
-  const { error } = await supabase.rpc("set_patient_member", { p_member: memberId, p_role: role });
+  const { error } = await db.rpc("set_patient_member", { p_member: memberId, p_role: role });
   if (error) throw friendlyRpcError(error);
 }

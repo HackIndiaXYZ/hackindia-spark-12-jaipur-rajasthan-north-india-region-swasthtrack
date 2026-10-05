@@ -11,13 +11,18 @@
     "food:validate": "node scripts/food/validate-catalogue.mjs src/data/food-catalogue.json",
     "food:check": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/food/check-catalogue.mjs",
     "soie:eval": "node scripts/soie-eval.mjs",
-    "soie:wire": "node scripts/soie-wire-check.mjs"
+    "soie:wire": "node scripts/soie-wire-check.mjs",
+    "db:migrate": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/db/migrate.mjs",
+    "db:test": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/db/db-test.mjs",
+    "db:link": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/db/link-patient.mjs",
+    "db:import-supabase": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/db/migrate-from-supabase.mjs",
+    "food:import": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/db/import-food-catalogue.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.127.0",
-    "@supabase/supabase-js": "^2.112.3",
     "lucide-react": "^1.33.0",
     "motion": "^13.2.0",
+    "mysql2": "^3.24.5",
     "next": "16.3.2",
     "nodemailer": "^10.0.14",
     "react": "19.2.8",

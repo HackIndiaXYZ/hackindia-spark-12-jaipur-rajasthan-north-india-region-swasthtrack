@@ -1,8 +1,7 @@
 /**
- * The three Supabase Auth mails (confirm sign-up, sign-in code, password reset) in the
- * same look as the app's own mail. Supabase fills the Go-template variables, so these
- * render with `{{ .Token }}`, `{{ .Email }}` and `{{ .SiteURL }}` left in place; see
- * scripts/build-auth-email-templates.mjs, which writes them to supabase/email-templates/.
+ * The three sign-in mails (confirm sign-up, sign-in code, password reset) in the same
+ * look as the app's own mail. They carry the real 6-digit one-time code that
+ * src/lib/auth/service.ts generates.
  */
 import type { Bi } from "../format";
 import { C, codeBox, en, finish, hi, noteBox, pill, section, spacer, title, topBar } from "../layout";
@@ -57,8 +56,8 @@ function render(k: AuthKind, d: AuthCodeData, opts: RenderOptions): RenderedEmai
           size: 34,
           spacing: 10,
           note: {
-            hi: "यह कोड 1 घंटे तक मान्य है और सिर्फ़ एक बार इस्तेमाल हो सकता है।",
-            en: "Valid for 1 hour and can be used only once.",
+            hi: `यह कोड ${d.validMinutes ?? 10} मिनट तक मान्य है और सिर्फ़ एक बार इस्तेमाल हो सकता है।`,
+            en: `Valid for ${d.validMinutes ?? 10} minutes and can be used only once.`,
           },
         }),
       { first: true, pad: "16px 22px 16px" },

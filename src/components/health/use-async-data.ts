@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import {
   NoActivePatientError,
   PatientNotFoundError,
-  SupabaseNotConfiguredError,
+  DatabaseNotConfiguredError,
 } from "@/services/patient-service";
 
 type Settled<T> = { key: string; nonce: number; data: T | null; error: unknown };
@@ -76,7 +76,7 @@ export function isNoPatientError(error: unknown): boolean {
 
 /** Plain-language cause for an ErrorState; raw service errors are never shown. */
 export function loadErrorMessage(error: unknown): string | undefined {
-  if (error instanceof SupabaseNotConfiguredError) {
+  if (error instanceof DatabaseNotConfiguredError) {
     return "ऐप का डेटाबेस कनेक्शन तय नहीं है। (The app is not connected to its database.)";
   }
   if (typeof navigator !== "undefined" && navigator.onLine === false) {

@@ -146,8 +146,10 @@ export interface AccessChangedData {
   newRole?: CaregiverRole;
 }
 
-// ---- Supabase Auth mails (code is a literal or a Go-template variable) -------
+// ---- Sign-in mails (sent by src/lib/auth with a real one-time code) ---------
 
 export interface AuthCodeData {
   code: string;
+  /** How long the code works. Defaults to 10 (src/lib/auth/constants.ts OTP_VALID_MINUTES). */
+  validMinutes?: number;
 }

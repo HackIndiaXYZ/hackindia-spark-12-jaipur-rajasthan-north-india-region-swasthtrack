@@ -25,8 +25,8 @@ export default function PrivacyPolicyPage() {
         <LegalSection title="2. Information we store">
           <LegalList>
             <li>
-              <strong className="text-ink">Account</strong>: your email address, a display name, and your sign-in credentials, which are
-              handled by Supabase Authentication. Passwords are never stored by the app in readable form.
+              <strong className="text-ink">Account</strong>: your email address, a display name, and your sign-in credentials. Your password is
+              stored only as a salted one-way hash (never in readable form), and sign-in codes are sent to your e-mail address.
             </li>
             <li>
               <strong className="text-ink">Patient profile</strong>: name, age, gender, height, weight, target weight and daily calorie
@@ -93,10 +93,11 @@ export default function PrivacyPolicyPage() {
         </LegalSection>
 
         <LegalSection title="6. Storage and security" icon={<Lock aria-hidden className="h-4 w-4 text-brand" />}>
-          <p>Records are kept in a cloud database hosted by Supabase. The app uses:</p>
+          <p>Records are kept in a MySQL database run by the app operator. The app uses:</p>
           <LegalList>
             <li>
-              <strong className="text-ink">Row-level security</strong>: each query only returns rows the signed-in person is allowed to
+              <strong className="text-ink">Access checks on the server</strong>: the browser never talks to the database directly; every
+              request is checked against the signed-in person&apos;s access to that patient, so a query only returns rows they are allowed to
               see.
             </li>
             <li>
@@ -121,7 +122,7 @@ export default function PrivacyPolicyPage() {
 
         <LegalSection title="8. Service providers">
           <p>
-            We use Supabase for the database and sign-in, a web host to serve the app, and, only if enabled, Anthropic for AI answers. If
+            We use a database host to store the records, a web host to serve the app, an e-mail delivery service for sign-in codes, and, only if enabled, Anthropic for AI answers. If
             e-mail alerts or reports are switched on by the app operator, the summaries are delivered through an e-mail delivery service.
             These providers process data only to run the app.
           </p>

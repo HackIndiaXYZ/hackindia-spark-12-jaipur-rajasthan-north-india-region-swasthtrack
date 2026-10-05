@@ -1,13 +1,12 @@
 /**
  * Patient context loader (IO). Server-side only.
  *
- * Runs through the USER-SCOPED Supabase client from `requireUser`, so Row Level
- * Security (not this code) decides what is visible. Nothing here uses a
- * service-role key.
+ * Runs through the USER-SCOPED database client from `requireUser`, so the access
+ * rules (src/lib/db/server/policy.ts), not this code, decide what is visible.
  *
  * Exactness rules:
  *  - IST day boundaries for every range (never `toISOString().split("T")[0]`);
- *  - NO silent truncation: PostgREST caps a response (1000 rows by default), so
+ *  - NO silent truncation: the data gateway caps a response (1000 rows), so
  *    every table is read page by page with `.range()` until the exact count is
  *    reached. Only a hard ceiling stops it, and then `truncated[metric]` is set
  *    and the answer says so;
@@ -17,9 +16,8 @@
  * It deliberately does not import patient-service (browser oriented).
  */
 
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { DbClient } from "@/lib/db/builder";
 import { addDaysIST, istDayBounds, istRangeBounds, todayIST } from "@/lib/health-rules";
-import type { Database } from "@/lib/supabase/database.types";
 import { cleanFreeText, buildContext, type ActivityRow, type BPRow, type FoodRow, type MedicineLogRow, type MedicineRow, type RawPatientData, type SleepRow, type WeightRow } from "./records";
 import type { MemoryKind, Metric, PatientContext } from "./types";
 import type { SaveMemoryResult, ToolDeps } from "./tools";
@@ -37,7 +35,7 @@ export class ContextLoadError extends Error {
   }
 }
 
-type Db = SupabaseClient<Database>;
+type Db = DbClient;
 
 interface PageResult<R> {
   data: R[] | null;
@@ -84,7 +82,7 @@ export interface LoadOptions {
 /* eslint-disable @typescript-eslint/no-explicit-any */
 type AnyQuery = any;
 
-/** One table, read page by page. `apply` adds filters and ordering AFTER select(), as PostgREST builders require. */
+/** One table, read page by page. `apply` adds filters and ordering AFTER select(), as the query builder requires. */
 function paged<R>(db: { from: (t: string) => AnyQuery }, table: string, columns: string, apply: (q: AnyQuery) => AnyQuery, opts: LoadOptions) {
   return fetchAllPages<R>(
     (from, to, wantCount) => apply(db.from(table).select(columns, wantCount ? { count: "exact" } : undefined)).range(from, to) as PromiseLike<PageResult<R>>,
@@ -93,12 +91,12 @@ function paged<R>(db: { from: (t: string) => AnyQuery }, table: string, columns:
 }
 
 /** Loads one patient's data and builds the typed, ref-stamped context. */
-export async function loadPatientContext(supabase: Db, patientId: string, opts: LoadOptions = {}): Promise<PatientContext> {
+export async function loadPatientContext(client: Db, patientId: string, opts: LoadOptions = {}): Promise<PatientContext> {
   const now = opts.now ?? new Date();
   const days = opts.days ?? DEFAULT_HISTORY_DAYS;
   const today = todayIST(now);
   const range = istRangeBounds(days, today);
-  const db = supabase as unknown as { from: (t: string) => AnyQuery };
+  const db = client as unknown as { from: (t: string) => AnyQuery };
   const truncated: Partial<Record<Metric, boolean>> = {};
 
   // Medicine logs get one extra day each side: older app versions stored times shifted by the UTC offset.
@@ -191,9 +189,9 @@ export async function loadFeedbackNotes(db: { from: (t: string) => AnyQuery }, p
   }
 }
 
-/** Tool dependencies backed by the user-scoped client (RLS enforces owner/editor on soie_memories). */
-export function makeToolDeps(supabase: Db, patientId: string): ToolDeps {
-  const db = supabase as unknown as { from: (t: string) => AnyQuery };
+/** Tool dependencies backed by the user-scoped client (the policy enforces owner/editor on soie_memories). */
+export function makeToolDeps(client: Db, patientId: string): ToolDeps {
+  const db = client as unknown as { from: (t: string) => AnyQuery };
   return {
     async saveMemory(kind: MemoryKind, content: string): Promise<SaveMemoryResult> {
       const { data, error } = await db.from("soie_memories").insert({ patient_id: patientId, kind, content }).select("id").single();

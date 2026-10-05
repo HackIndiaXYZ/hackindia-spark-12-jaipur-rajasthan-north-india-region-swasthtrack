@@ -1,5 +1,5 @@
 /**
- * One SOIE turn, end to end, independent of HTTP and Supabase.
+ * One SOIE turn, end to end, independent of HTTP and the database.
  *
  *   ledger -> safety gate -> (emergency answer | AI agent | rules engine) -> final answer
  *

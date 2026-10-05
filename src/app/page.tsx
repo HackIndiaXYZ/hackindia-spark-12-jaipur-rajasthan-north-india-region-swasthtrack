@@ -41,7 +41,7 @@ import { AddWeightDialog } from "@/components/forms/add-weight-dialog";
 import { EditPatientDialog } from "@/components/forms/edit-patient-dialog";
 import {
   NoActivePatientError,
-  SupabaseNotConfiguredError,
+  DatabaseNotConfiguredError,
   getBloodPressureLogs,
   getDashboardOverview,
   getPatientProfile,
@@ -190,7 +190,7 @@ export default function DashboardPage() {
         setLoadError(
           result.error instanceof NoActivePatientError
             ? "no-patient"
-            : result.error instanceof SupabaseNotConfiguredError
+            : result.error instanceof DatabaseNotConfiguredError
               ? "not-configured"
               : "generic",
         );
@@ -316,7 +316,7 @@ export default function DashboardPage() {
         <ErrorState
           title="डेटाबेस सेटअप अधूरा है"
           englishTitle="The database is not configured"
-          description="Supabase की कुंजियाँ (NEXT_PUBLIC_SUPABASE_URL और NEXT_PUBLIC_SUPABASE_ANON_KEY) जोड़ें। तब तक कोई स्वास्थ्य डेटा नहीं दिखाया जाएगा।"
+          description="सर्वर पर DATABASE_URL (mysql:// कनेक्शन) जोड़ें। तब तक कोई स्वास्थ्य डेटा नहीं दिखाया जाएगा।"
         />
       </PageBody>
     );

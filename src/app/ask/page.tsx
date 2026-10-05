@@ -35,7 +35,7 @@ import { Field, Select } from "@/components/ui/form-field";
 import { EmptyState, PageBody, PageHeader } from "@/components/ui/page";
 import { useToast } from "@/components/ui/toast";
 import { useAuth } from "@/context/auth-context";
-import { authFetch } from "@/lib/supabase/auth-fetch";
+import { authFetch } from "@/lib/db/auth-fetch";
 import { cn } from "@/lib/utils";
 
 const QUICK_PROMPTS: Array<{ icon: LucideIcon; tone: MetricTone; text: string }> = [

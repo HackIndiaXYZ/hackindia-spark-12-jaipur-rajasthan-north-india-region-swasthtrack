@@ -1,14 +1,14 @@
 # E-mail alerts, reports and account mail
 
-Everything SwasthTrack e-mails, how it is triggered, and how to preview it. Login codes
-(confirm sign-up, sign-in code, password reset) are separate: they are sent by Supabase Auth
-using `supabase/email-templates/*` — see `docs/auth-setup.md`.
+Everything SwasthTrack e-mails, how it is triggered, and how to preview it. The login codes
+(confirm sign-up, sign-in code, password reset) are sent by `src/lib/auth/service.ts` through the
+same SMTP account — see `docs/auth-setup.md`.
 
 ## The templates (14 kinds, 18 variants)
 
 The look comes from the **SwasthTrack Email Templates** design (green header with the logo, gold rule, ruled
 white card, Hindi first / English under it, footer saying why you got the mail). One shared layout renders all of
-them, so the app's mail and the Supabase login mail cannot drift apart.
+them, so the report mail and the login-code mail cannot drift apart.
 
 | # | Key(s) | What | Sent when | To |
 |---|---|---|---|---|
@@ -21,9 +21,9 @@ them, so the app's mail and the Supabase login mail cannot drift apart.
 | 7 | `account.welcome` | Welcome + what to expect | After a user creates their first patient | the user |
 | 8 | `account.test` | "Email works" check | Settings → *Send test email* | the user |
 | 9 | `caregiver.invite` | Invite code + how to join | Caregiver dialog → *Send by email* | address the owner types |
-| 10 | `caregiver.joined` | "X joined your care team" | Right after a caregiver redeems an invite (needs migration `20261004010000_email_owner_contact.sql`) | the owner |
+| 10 | `caregiver.joined` | "X joined your care team" | Right after a caregiver redeems an invite | the owner |
 | 11 | `caregiver.access-removed` / `.role-changed` | Access removed / role changed | Owner removes a caregiver or changes their role | that caregiver |
-| 12-14 | `auth.confirm-signup` / `.sign-in-code` / `.password-reset` | 6-digit login codes | **Sent by Supabase Auth**, not by the app | the person logging in |
+| 12-14 | `auth.confirm-signup` / `.sign-in-code` / `.password-reset` | 6-digit login codes | Sent by the sign-in API (`/api/auth/*`) with a real one-time code | the person logging in |
 
 Thresholds are never hard-coded here: BP lines come from the patient's `bp_targets` (defaults 160/100 alert,
 180/120 crisis, 90/60 low), weight rules, the 4-hour missed-dose rule, "due at" times and the logging-gap days all
@@ -36,18 +36,11 @@ The header logo is `public/email/logo.png`, and the buttons / footer links point
 `NEXT_PUBLIC_APP_URL` to the public address of the deployed app** (it must serve `/email/logo.png`). Without it
 the mails still work: the logo falls back to a plain "ST" tile and the buttons and links are left out.
 
-## Login emails (Supabase)
+## Login emails
 
-`supabase/email-templates/{confirm-signup,magic-link,reset-password}.html` are **generated** from
-`src/lib/email/templates/auth.ts`:
-
-```bash
-node scripts/build-auth-email-templates.mjs
-```
-
-Paste each file into Supabase → Authentication → Email Templates (the subject to use is the first comment in each
-file). They keep Supabase's variables (`{{ .Token }}`, `{{ .Email }}`, `{{ .SiteURL }}`); the logo and footer links
-use `{{ .SiteURL }}`, so set Authentication → URL Configuration → Site URL to the public address of the app.
+The three code mails come from `src/lib/email/templates/auth.ts` and carry the real 6-digit code, valid for
+10 minutes. `src/lib/auth/service.ts` sends them with `sendMail`. With no SMTP configured, development prints the
+code in the server console instead (production treats a missing SMTP as an error).
 
 ## Code map
 
@@ -55,11 +48,10 @@ use `{{ .SiteURL }}`, so set Authentication → URL Configuration → Site URL t
 - `src/lib/email/format.ts` — Hindi + English dates, clock times, meal names and role labels, all in India time.
 - `src/lib/email/templates/{alerts,reports,account,auth}.ts` — one `render…` function per template.
 - `src/lib/email/registry.ts` — every variant, with the design's sample data. Add one here and it appears in the preview.
-- `scripts/build-auth-email-templates.mjs` — regenerates the three Supabase login-mail files.
 - `src/lib/email/mailer.ts` — SMTP (nodemailer → Resend) and `REPORT_*` config.
 - `src/services/email-notification-service.ts` — builds the alert/report content from patient data (IST-aware).
-- `src/app/api/notify/alert` — BP / weight alerts (called by `logBloodPressure` / `logWeight`). Needs the user's token; reads run as that user.
-- `src/lib/supabase/{als-scope,request-scope,notifier}.ts` — run the data services as a specific RLS-scoped client (see "Running under RLS").
+- `src/app/api/notify/alert` — BP / weight alerts (called by `logBloodPressure` / `logWeight`). Needs the user's session; reads run as that user.
+- `src/lib/db/server/{als-scope,request-scope,system}.ts` — run the data services as a specific access-scoped client (see "Who the jobs run as").
 - `src/app/api/cron/*` — the four scheduled mails; schedules in `vercel.json` (UTC).
 - `src/app/api/email/send` — mail the signed-in user triggers (test, welcome, invite, access changed).
 - `src/app/api/email/preview` — gallery + preview + "send me the samples".
@@ -67,7 +59,7 @@ use `{{ .SiteURL }}`, so set Authentication → URL Configuration → Site URL t
 ## Environment
 
 See `.env.example`: `SMTP_*` / `RESEND_API_KEY`, `EMAIL_FROM`, `REPORT_EMAIL_TO` (comma-separated),
-`REPORT_PATIENT_ID`, `CRON_SECRET`, `NOTIFY_USER_EMAIL` / `NOTIFY_USER_PASSWORD` (see below), and
+`REPORT_PATIENT_ID`, `CRON_SECRET`, and
 `NEXT_PUBLIC_APP_URL` (without it the mails have no "open app" links).
 On Vercel set the same variables; the cron jobs send `Authorization: Bearer $CRON_SECRET` automatically.
 
@@ -87,25 +79,19 @@ curl -X POST localhost:3000/api/email/preview -H "Authorization: Bearer $CRON_SE
 curl -H "Authorization: Bearer $CRON_SECRET" "localhost:3000/api/cron/daily-report?dryRun=1"
 ```
 
-## Running under RLS (no service-role key)
+## Who the jobs run as
 
-`SUPABASE_SERVICE_ROLE_KEY` is deliberately not used anywhere in the app (docs/deployment.md), so e-mail jobs
-read data as a real user and Row Level Security still applies:
+E-mail jobs read data through the same access rules as everything else (`src/lib/db/server/policy.ts`):
 
-- **BP / weight alerts** run as the **signed-in person who saved the reading**. The route needs their token
-  (`authFetch`), checks they belong to the patient, and reads the rows with their own session.
-- **Cron mails** (reminders, daily, weekly, monthly) have no signed-in person, so they sign in as a **notifier
-  account**: an ordinary account added to the patient as a **Viewer** caregiver. It can read only that patient
-  and cannot change anything.
-  1. Create an account for the robot (a real inbox you control, e.g. `you+swasthtrack-bot@gmail.com`) and confirm its e-mail.
-  2. As the patient's owner, create a *Viewer* invite and redeem it from the bot account.
-  3. Set `NOTIFY_USER_EMAIL` and `NOTIFY_USER_PASSWORD` (server env only, never `NEXT_PUBLIC_`).
-  Until both are set the cron jobs use the anonymous client, which only sees data while the database still has the
-  old open policies — i.e. **before** the RLS migration. After it, set them or the jobs will find no data.
+- **BP / weight alerts** run as the **signed-in person who saved the reading**. The route needs their session
+  cookie (`authFetch`), checks they belong to the patient, and reads the rows as that person.
+- **Cron mails** (reminders, daily, weekly, monthly) have no signed-in person, so they run as a **read-only system
+  identity** that can see only the patient in `REPORT_PATIENT_ID` and cannot change anything. No login account or
+  password is needed (the old `NOTIFY_USER_*` variables are gone).
 - The data services keep a short per-patient cache; every e-mail job clears it before and after running.
-- **`caregiver.joined`** uses the database function `get_patient_owner_contacts` (migration
-  `20261004010000_email_owner_contact.sql`), which answers only a caregiver whose membership is less than 10
-  minutes old. The owner's address is used to send the mail and is never returned to the browser.
+- **`caregiver.joined`** uses the server function `get_patient_owner_contacts` (`src/lib/db/server/rpc.ts`), which
+  answers only a caregiver whose membership is less than 10 minutes old. The owner's address is used to send the mail
+  and is never returned to the browser.
 
 ## Known limits
 
@@ -113,6 +99,5 @@ read data as a real user and Row Level Security still applies:
   Per-person addresses and per-person preferences need a table in the database.
 - Vercel Hobby runs each cron once a day at an unspecified minute within the scheduled hour.
 - While Resend has no verified domain, mail from `onboarding@resend.dev` is only delivered to the Resend account's own address.
-- Not exercised against a live signed-in session yet (the live database has not had the auth/RLS migrations run):
-  `/api/email/send`, `/api/notify/alert`, the notifier sign-in and `get_patient_owner_contacts`. Everything else
-  (all 11 renders, escaping, the four cron mails on real data, scoped-client isolation) was run.
+- Verified on MySQL with the real data: the four cron mails (rendered, not sent) and `get_patient_owner_contacts`.
+  Not verified: an actual delivery through Resend (no key was used in testing).

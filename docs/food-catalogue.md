@@ -116,7 +116,7 @@ package. The INDB working copy used for cross-checks is not stored in the reposi
 
 ## Database copy (optional)
 
-Search, calories and emojis do **not** need the database. The copy in Supabase exists so a food can
+Search, calories and emojis do **not** need the database. The copy in MySQL (`npm run food:import`) exists so a food can
 be a favourite and be linked from a food log. See "Food catalogue" in
 [`deployment.md`](deployment.md). Every food keeps the same id (UUID v5 of its slug) on every
 import, so re-running is safe and favourites survive.

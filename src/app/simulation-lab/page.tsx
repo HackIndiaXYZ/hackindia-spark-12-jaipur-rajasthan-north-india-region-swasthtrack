@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { EmptyState, PageBody, PageHeader, Section } from "@/components/ui/page";
 import { useAuth } from "@/context/auth-context";
-import { authFetch } from "@/lib/supabase/auth-fetch";
+import { authFetch } from "@/lib/db/auth-fetch";
 import type { EvalReport } from "@/services/soie/eval/harness";
 
 interface ServerInfo {

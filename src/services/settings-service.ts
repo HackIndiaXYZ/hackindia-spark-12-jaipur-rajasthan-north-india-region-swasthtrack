@@ -7,15 +7,12 @@ import {
   resolveBPThresholds,
   type BPThresholds,
 } from "@/lib/health-rules";
-import type { Database } from "@/lib/supabase/database.types";
+import type { Database } from "@/lib/db/database.types";
 import {
   NoActivePatientError,
   PermissionDeniedError,
-  SupabaseNotConfiguredError,
   getDbClient,
   getPatientProfile,
-  isSupabaseConfigured,
-  supabase,
 } from "./patient-service";
 
 type SettingsRow = Database["public"]["Tables"]["patient_settings"]["Row"];
@@ -176,19 +173,12 @@ function resolvePatientId(patientId?: string): string | null {
 }
 
 async function loadSettings(pid: string): Promise<PatientSettings> {
-  let row: SettingsRow | null = null;
-  if (isSupabaseConfigured) {
-    const { data, error } = await getDbClient()
-      .from("patient_settings")
-      .select("*")
-      .eq("patient_id", pid)
-      .maybeSingle();
-    if (error) {
-      // Not cached: a transient failure must not pin defaults for the TTL.
-      throw new Error(error.message || "patient_settings read failed");
-    }
-    row = data ?? null;
+  const { data, error } = await getDbClient().from("patient_settings").select("*").eq("patient_id", pid).maybeSingle();
+  if (error) {
+    // Not cached: a transient failure must not pin defaults for the TTL.
+    throw new Error(error.message || "patient_settings read failed");
   }
+  const row: SettingsRow | null = data ?? null;
   let fallbackCalories: number | null = null;
   if (!row) {
     // No saved row yet: the patient profile's own calorie target is the best default.
@@ -277,9 +267,7 @@ export async function updatePatientSettings(
     is_default: false,
   };
 
-  if (!isSupabaseConfigured) throw new SupabaseNotConfiguredError();
-
-  const { error } = await supabase.from("patient_settings").upsert(
+  const { error } = await getDbClient().from("patient_settings").upsert(
     {
       patient_id: pid,
       daily_calorie_target: Math.round(merged.daily_calorie_target),
@@ -298,7 +286,7 @@ export async function updatePatientSettings(
     { onConflict: "patient_id" },
   );
   if (error) {
-    // 42501 = Row Level Security refused: a viewer cannot change settings.
+    // 42501 = the access rules refused: a viewer cannot change settings.
     if (error.code === "42501" || /row-level security/i.test(error.message)) throw new PermissionDeniedError();
     throw new Error(error.message || "Could not save settings");
   }

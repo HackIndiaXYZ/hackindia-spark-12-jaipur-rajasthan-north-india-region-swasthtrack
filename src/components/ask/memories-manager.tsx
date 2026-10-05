@@ -10,7 +10,7 @@ import { EmptyState } from "@/components/ui/page";
 import { Segmented } from "@/components/ui/segmented";
 import { useConfirm } from "@/components/ui/confirm-dialog";
 import { useToast } from "@/components/ui/toast";
-import { supabase } from "@/lib/supabase/client";
+import { db } from "@/lib/db/client";
 import { MAX_MEMORIES_PER_PATIENT, MAX_MEMORY_CHARS, MEMORY_KINDS, type MemoryKind } from "@/services/soie/types";
 
 const KIND_HI: Record<MemoryKind, string> = { allergy: "एलर्जी", preference: "पसंद", routine: "दिनचर्या", goal: "लक्ष्य", note: "नोट" };
@@ -34,7 +34,7 @@ export function MemoriesManager({ isOpen, onClose, patientId, canWrite }: { isOp
 
   const fetchRows = useCallback(async (): Promise<Row[] | null> => {
     if (!patientId) return [];
-    const { data, error } = await supabase.from("soie_memories").select("id,kind,content,created_at").eq("patient_id", patientId).order("created_at", { ascending: false });
+    const { data, error } = await db.from("soie_memories").select("id,kind,content,created_at").eq("patient_id", patientId).order("created_at", { ascending: false });
     return error ? null : ((data ?? []) as Row[]);
   }, [patientId]);
 
@@ -62,7 +62,7 @@ export function MemoriesManager({ isOpen, onClose, patientId, canWrite }: { isOp
       return;
     }
     setBusy(true);
-    const { error } = await supabase.from("soie_memories").insert({ patient_id: patientId, kind, content: text.slice(0, MAX_MEMORY_CHARS) });
+    const { error } = await db.from("soie_memories").insert({ patient_id: patientId, kind, content: text.slice(0, MAX_MEMORY_CHARS) });
     setBusy(false);
     if (error) {
       toast({ title: "सेव नहीं हो सका", tone: "error" });
@@ -76,7 +76,7 @@ export function MemoriesManager({ isOpen, onClose, patientId, canWrite }: { isOp
   async function remove(id: string) {
     const ok = await confirm({ title: "यह बात हटाएँ?", message: "SOIE आगे इसे इस्तेमाल नहीं करेगा।", confirmLabel: "हटाएँ", tone: "danger" });
     if (!ok) return;
-    const { error } = await supabase.from("soie_memories").delete().eq("id", id);
+    const { error } = await db.from("soie_memories").delete().eq("id", id);
     if (error) {
       toast({ title: "हटाया नहीं जा सका", tone: "error" });
       return;
