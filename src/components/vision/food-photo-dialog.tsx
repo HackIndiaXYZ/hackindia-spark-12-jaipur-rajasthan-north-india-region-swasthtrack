@@ -115,6 +115,8 @@ function FoodPhotoDialogBody({ isOpen, onClose, patientId, mealType, logDate, co
     pickedRef.current = picked;
   }, [picked]);
   const keySeq = useRef(0);
+  // Everything logged for this photo so far, across a retry after a partial failure.
+  const savedRef = useRef<FoodPhotoFood[]>([]);
 
   useEffect(() => {
     let active = true;
@@ -148,6 +150,7 @@ function FoodPhotoDialogBody({ isOpen, onClose, patientId, mealType, logDate, co
   async function handlePhoto(file: File) {
     setError("");
     setStep("analysing");
+    savedRef.current = [];
     try {
       setStage(isFoodModelLoaded() ? "फोटो तैयार हो रही है…" : "पहली बार: खाना पहचानने वाला मॉडल डाउनलोड हो रहा है (लगभग 15 MB, एक ही बार)…");
       const canvas = await decodePhoto(file, 1280);
@@ -315,16 +318,20 @@ function FoodPhotoDialogBody({ isOpen, onClose, patientId, mealType, logDate, co
           consumed_at: consumedAt ?? consumedAtFor(logDate, mealType, todayIST()),
           notes: null,
         });
-        saved.push({ food_item_id: isCatalogueId(p.food.id) ? p.food.id : null, name: p.food.name, quantity: qty, unit, calories: e.kcal });
+        const item: FoodPhotoFood = { food_item_id: isCatalogueId(p.food.id) ? p.food.id : null, name: p.food.name, quantity: qty, unit, calories: e.kcal };
+        saved.push(item);
+        savedRef.current.push(item);
         // Off the list as soon as it is in the database, so a retry after a failure logs only the rest.
         setPicked((list) => list.filter((x) => x.key !== p.key));
       }
-      // Remember the plate so the next photo of it is recognised at once.
+      // Remember the whole plate (including anything logged before a retry) so the next photo of it is recognised at once.
+      const plate = savedRef.current;
+      const plateKcal = plate.reduce((n, f) => n + f.calories, 0);
       try {
-        await rememberFoodPhoto({ patientId, mealType, foods: saved, embedding: analysis.embedding, thumbnail: thumbnailDataUrl(photo, 64) });
-        toast.success(`${saved.length} चीज़ें दर्ज हुईं · ~${totalKcal} kcal`, "यह खाना याद रख लिया: अगली बार फोटो से तुरंत पहचान जाएगा।");
+        await rememberFoodPhoto({ patientId, mealType, foods: plate, embedding: analysis.embedding, thumbnail: thumbnailDataUrl(photo, 64) });
+        toast.success(`${plate.length} चीज़ें दर्ज हुईं · ~${plateKcal} kcal`, "यह खाना याद रख लिया: अगली बार फोटो से तुरंत पहचान जाएगा।");
       } catch {
-        toast.success(`${saved.length} चीज़ें दर्ज हुईं · ~${totalKcal} kcal`, "फोटो याद नहीं रखी जा सकी (खाना दर्ज हो गया है)।");
+        toast.success(`${plate.length} चीज़ें दर्ज हुईं · ~${plateKcal} kcal`, "फोटो याद नहीं रखी जा सकी (खाना दर्ज हो गया है)।");
       }
       onLogged();
       onClose();

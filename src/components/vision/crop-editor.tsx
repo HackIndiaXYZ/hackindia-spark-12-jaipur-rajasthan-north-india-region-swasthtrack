@@ -25,13 +25,15 @@ const MIN_SIDE_PX = 24;
  * that only the inside is read. Works with a finger (44 px handles) or a mouse.
  */
 export function CropEditor({ src, naturalWidth, naturalHeight, box, onChange, label }: CropEditorProps) {
-  const frameRef = useRef<HTMLDivElement>(null);
+  const imgRef = useRef<HTMLImageElement>(null);
   const [scale, setScale] = useState(1);
   const drag = useRef<Drag | null>(null);
 
+  // The photo is shown no taller than about half the screen, so on a phone the whole
+  // picture and all four corner handles sit above the dialog's pinned buttons.
   const measure = useCallback(() => {
-    const el = frameRef.current;
-    if (!el) return;
+    const el = imgRef.current;
+    if (!el || !el.clientWidth) return;
     setScale(el.clientWidth / naturalWidth);
   }, [naturalWidth]);
 
@@ -100,9 +102,10 @@ export function CropEditor({ src, naturalWidth, naturalHeight, box, onChange, la
   const handle = "absolute h-11 w-11 -m-[22px] cursor-pointer touch-none before:absolute before:left-1/2 before:top-1/2 before:h-5 before:w-5 before:-translate-x-1/2 before:-translate-y-1/2 before:rounded-full before:border-2 before:border-ink before:bg-surface before:shadow-e1";
 
   return (
-    <div ref={frameRef} className="relative w-full select-none overflow-hidden rounded-card bg-ink" role="group" aria-label={label}>
-      {/* eslint-disable-next-line @next/next/no-img-element -- a data URL of the just-taken photo */}
-      <img src={src} alt="" className="block w-full" draggable={false} onLoad={measure} />
+    <div className="flex justify-center">
+      <div className="relative inline-block max-w-full select-none overflow-hidden rounded-card bg-ink leading-none" role="group" aria-label={label}>
+        {/* eslint-disable-next-line @next/next/no-img-element -- a data URL of the just-taken photo */}
+        <img ref={imgRef} src={src} alt="" className="block h-auto max-h-[50dvh] w-auto max-w-full" draggable={false} onLoad={measure} />
       <div
         className="absolute touch-none cursor-move rounded-sm border-2 border-gold-line shadow-[0_0_0_9999px_rgba(29,26,18,0.55)]"
         style={{ left, top, width, height }}
@@ -123,6 +126,7 @@ export function CropEditor({ src, naturalWidth, naturalHeight, box, onChange, la
             onPointerCancel={end}
           />
         ))}
+        </div>
       </div>
     </div>
   );
