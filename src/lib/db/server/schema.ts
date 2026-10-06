@@ -377,6 +377,22 @@ export const TABLES: Record<string, TableDef> = {
     rules: { role: { oneOf: ["editor", "viewer"] }, status: { oneOf: ["pending", "accepted", "expired", "cancelled"] } },
   },
 
+  food_photo_examples: {
+    pk: "id",
+    genId: true,
+    cols: {
+      id: "uuid",
+      patient_id: "uuid",
+      meal_type: "text",
+      foods: "json",
+      embedding: "json",
+      thumbnail: "text",
+      created_by: "uuid",
+      created_at: "ts",
+    },
+    rules: { meal_type: { maxLen: 30 }, thumbnail: { maxLen: 12000 } },
+  },
+
   soie_sessions: {
     pk: "id",
     genId: true,

@@ -7,6 +7,7 @@ import { Card } from "@/components/ui/card";
 import { useToast } from "@/components/ui/toast";
 import { exportAllDataAsCsv, exportAllDataAsJson } from "@/services/export-data-service";
 import type { PatientProfile } from "@/services/patient-service";
+import { LearnedPhotosCard } from "@/components/vision/learned-photos-card";
 import { SettingsCard } from "./settings-ui";
 
 type Format = "csv" | "json";
@@ -19,7 +20,7 @@ const LEGAL_LINKS = [
   { href: "/medical-disclaimer", label: "Medical Disclaimer" },
 ];
 
-export function DataPanel({ patient }: { patient: PatientProfile }) {
+export function DataPanel({ patient, canWrite = false }: { patient: PatientProfile; canWrite?: boolean }) {
   const toast = useToast();
   const [busy, setBusy] = useState<Format | null>(null);
 
@@ -76,6 +77,8 @@ export function DataPanel({ patient }: { patient: PatientProfile }) {
           फ़ाइल सीधे आपके फ़ोन / कंप्यूटर में सेव होती है। इसे किसी को भेजने से पहले सोच लें: इसमें स्वास्थ्य की निजी जानकारी है।
         </p>
       </SettingsCard>
+
+      <LearnedPhotosCard patientId={patient.id} canWrite={canWrite} />
 
       <Card tone="sunken" className="space-y-3 text-sm text-ink-muted">
         <div className="flex items-center gap-1.5 font-semibold text-ink">

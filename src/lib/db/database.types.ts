@@ -21,6 +21,16 @@ export type MedicineLogStatus = "taken" | "late" | "missed" | "pending";
 export type ChecklistStatus = "completed" | "pending" | "late" | "missed";
 export type CalorieConfidence = "High" | "Medium" | "Low";
 
+/** One food the family confirmed for a meal photo (what the photo matcher suggests again). */
+export type FoodPhotoFood = {
+  /** Catalogue id when the food came from the catalogue; null for a typed name. */
+  food_item_id: string | null;
+  name: string;
+  quantity: number;
+  unit: string;
+  calories: number;
+};
+
 export type AlertsEnabled = {
   bp: boolean;
   medicine: boolean;
@@ -1014,6 +1024,43 @@ export type Database = {
           created_at?: string;
         };
         Relationships: [];
+      };
+      food_photo_examples: {
+        Row: {
+          id: string;
+          patient_id: string;
+          meal_type: string | null;
+          foods: FoodPhotoFood[];
+          embedding: number[];
+          thumbnail: string | null;
+          created_by: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          patient_id: string;
+          meal_type?: string | null;
+          foods: FoodPhotoFood[];
+          embedding: number[];
+          thumbnail?: string | null;
+          created_by?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          meal_type?: string | null;
+          foods?: FoodPhotoFood[];
+          thumbnail?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "food_photo_examples_patient_id_fkey";
+            columns: ["patient_id"];
+            isOneToOne: false;
+            referencedRelation: "patients";
+            referencedColumns: ["id"];
+          },
+        ];
       };
       soie_memories: {
         Row: {

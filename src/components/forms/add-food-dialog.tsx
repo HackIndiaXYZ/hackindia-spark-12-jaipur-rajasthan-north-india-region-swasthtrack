@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, type FormEvent } from "react";
-import { Bookmark, BookmarkPlus, Plus, Search, Sparkles, Trash2, Utensils, X } from "lucide-react";
+import { Bookmark, BookmarkPlus, Camera, Plus, Search, Sparkles, Trash2, Utensils, X } from "lucide-react";
 import { Button, IconButton } from "@/components/ui/button";
 import { Field, NumberInput, Select, TextInput } from "@/components/ui/form-field";
 import { Modal } from "@/components/ui/modal";
@@ -9,6 +9,8 @@ import { useToast } from "@/components/ui/toast";
 import { MeasuredAtFields, hourOfTime, nowIST, resolveMeasuredAt } from "@/components/forms/measured-at-fields";
 import { useAuth } from "@/context/auth-context";
 import { MEAL_SLOTS } from "@/components/food/food-math";
+import { FoodPhotoDialog } from "@/components/vision/food-photo-dialog";
+import { todayIST } from "@/lib/health-rules";
 import { cn, getExactFoodEmoji } from "@/lib/utils";
 import { logFood, searchFoodItems, type FoodItem } from "@/services/patient-service";
 import {
@@ -96,6 +98,7 @@ function FoodDialogBody({ isOpen, onClose, patientId, defaultMealType, onSuccess
 
   const [quickFoods, setQuickFoods] = useState<PersonalizedQuickFoodItem[]>([]);
   const [savedFoods, setSavedFoods] = useState<SavedFoodItem[]>(() => getSavedFoods(patientId));
+  const [photoOpen, setPhotoOpen] = useState(false);
 
   const mealType = pickedMeal ?? mealForHour(hourOfTime(when.time));
   const query = searchQuery.trim();
@@ -358,6 +361,25 @@ function FoodDialogBody({ isOpen, onClose, patientId, defaultMealType, onSuccess
             आपके पास केवल देखने का एक्सेस है, इसलिए भोजन दर्ज नहीं हो सकता।
           </p>
         ) : null}
+
+        {canWrite ? (
+          <Button variant="secondary" block onClick={() => setPhotoOpen(true)}>
+            <Camera aria-hidden className="h-4 w-4" />
+            <span lang="hi">खाने की फोटो से दर्ज करें</span>
+          </Button>
+        ) : null}
+        <FoodPhotoDialog
+          isOpen={photoOpen}
+          onClose={() => setPhotoOpen(false)}
+          patientId={patientId}
+          mealType={mealType}
+          logDate={when.date || todayIST()}
+          consumedAt={resolveMeasuredAt(when.date, when.time).instant?.toISOString()}
+          onLogged={() => {
+            onSuccess?.();
+            onClose();
+          }}
+        />
 
         {/* SEARCH */}
         <div className="space-y-2">

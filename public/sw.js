@@ -17,11 +17,14 @@
  * to retire the old caches.
  */
 
-const VERSION = "v3";
+const VERSION = "v4";
 const PREFIX = "swasthtrack-";
 const STATIC_CACHE = `${PREFIX}static-${VERSION}`;
 const RUNTIME_CACHE = `${PREFIX}runtime-${VERSION}`;
-const KNOWN_CACHES = [STATIC_CACHE, RUNTIME_CACHE];
+// The on-device food model and its runtime: a handful of large, versioned files that
+// must not be pushed out by the stream of hashed bundles, so they get their own cache.
+const MODEL_CACHE = `${PREFIX}models-${VERSION}`;
+const KNOWN_CACHES = [STATIC_CACHE, RUNTIME_CACHE, MODEL_CACHE];
 
 const OFFLINE_URL = "/offline.html";
 // Static brand assets only. No routes, no data.
@@ -35,7 +38,7 @@ const PRECACHE = [
   "/icons/apple-touch-icon.png",
 ];
 
-const RUNTIME_MAX_ENTRIES = 120;
+const RUNTIME_MAX_ENTRIES = 140;
 
 // Last-resort page if even the precached offline page is missing.
 const FALLBACK_HTML =
@@ -128,14 +131,17 @@ function isCacheableStatic(url) {
     url.pathname.startsWith("/_next/static/") ||
     url.pathname.startsWith("/icons/") ||
     url.pathname.startsWith("/brand/") ||
+    // The on-device food model and its WASM runtime (about 15 MB, versioned by file name).
+    url.pathname.startsWith("/models/") ||
     url.pathname === "/favicon.png"
   );
 }
 
-// Content-hashed files never change, so a cache hit is always right. Anything
-// else (icons, logo) is served from cache and refreshed in the background.
+// Content-hashed files never change, so a cache hit is always right; the model
+// files are versioned by name. Anything else (icons, logo) is served from cache
+// and refreshed in the background.
 function isHashed(url) {
-  return url.pathname.startsWith("/_next/static/");
+  return url.pathname.startsWith("/_next/static/") || url.pathname.startsWith("/models/");
 }
 
 function storeIfSafe(event, request, response) {
@@ -150,11 +156,12 @@ function storeIfSafe(event, request, response) {
     return;
   }
   const copy = response.clone();
+  const isModel = new URL(request.url).pathname.startsWith("/models/");
   event.waitUntil(
     caches
-      .open(RUNTIME_CACHE)
+      .open(isModel ? MODEL_CACHE : RUNTIME_CACHE)
       .then((cache) => cache.put(request, copy))
-      .then(() => trimCache(RUNTIME_CACHE, RUNTIME_MAX_ENTRIES))
+      .then(() => (isModel ? undefined : trimCache(RUNTIME_CACHE, RUNTIME_MAX_ENTRIES)))
       .catch(() => {}),
   );
 }

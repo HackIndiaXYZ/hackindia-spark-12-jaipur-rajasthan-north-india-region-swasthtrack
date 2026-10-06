@@ -1,13 +1,14 @@
 "use client";
 
 import { useId, useState, type FormEvent } from "react";
-import { Scale } from "lucide-react";
+import { Camera, Scale } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useConfirm } from "@/components/ui/confirm-dialog";
 import { Field, NumberInput, TextInput } from "@/components/ui/form-field";
 import { Modal } from "@/components/ui/modal";
 import { useToast } from "@/components/ui/toast";
 import { MeasuredAtFields, resolveMeasuredAt, useMeasuredAt } from "@/components/forms/measured-at-fields";
+import { DisplayPhotoDialog } from "@/components/vision/display-photo-dialog";
 import { fmtKg, parseDecimalInput } from "@/components/health/format";
 import { useAuth } from "@/context/auth-context";
 import { logWeight } from "@/services/patient-service";
@@ -51,6 +52,9 @@ function WeightEntry({ patientId, presentation, onDone, currentWeight, onSuccess
   const [errors, setErrors] = useState<Partial<Record<"weight" | "measuredAt", string>>>({});
   const [formError, setFormError] = useState("");
   const [saving, setSaving] = useState(false);
+  // The camera: a photo of the scale's screen pre-fills the weight; the person confirms it.
+  const [photoOpen, setPhotoOpen] = useState(false);
+  const [fromPhoto, setFromPhoto] = useState(false);
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -125,6 +129,30 @@ function WeightEntry({ patientId, presentation, onDone, currentWeight, onSuccess
           </p>
         ) : null}
       </div>
+
+      {canWrite ? (
+        <div className="space-y-1">
+          <Button variant="secondary" block onClick={() => setPhotoOpen(true)}>
+            <Camera aria-hidden className="h-4 w-4" />
+            <span lang="hi">वजन मशीन की फोटो से भरें</span>
+          </Button>
+          {fromPhoto ? (
+            <p lang="hi" role="status" className="text-xs text-ink-muted">
+              वजन फोटो से भरा गया है; सेव करने से पहले मशीन से मिला लें।
+            </p>
+          ) : null}
+        </div>
+      ) : null}
+      <DisplayPhotoDialog
+        kind="weight"
+        isOpen={photoOpen}
+        onClose={() => setPhotoOpen(false)}
+        onResult={(v) => {
+          setWeight(String(v.kg));
+          setErrors({});
+          setFromPhoto(true);
+        }}
+      />
 
       <Field
         label="वजन (Weight, kg)"

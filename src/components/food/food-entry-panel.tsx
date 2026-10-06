@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useId, useMemo, useRef, useState, type FormEvent, type KeyboardEvent } from "react";
-import { AlertTriangle, Bookmark, BookmarkPlus, CalendarClock, ChevronRight, ExternalLink, History, Plus, Search, Sparkles, Star, Trash2, UtensilsCrossed, X } from "lucide-react";
+import { AlertTriangle, Bookmark, BookmarkPlus, CalendarClock, Camera, ChevronRight, ExternalLink, History, Plus, Search, Sparkles, Star, Trash2, UtensilsCrossed, X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button, IconButton } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -22,6 +22,7 @@ import {
   oilCalories,
   type Confidence,
 } from "@/components/food/food-math";
+import { FoodPhotoDialog } from "@/components/vision/food-photo-dialog";
 import { categoryLabel, foodSubtitle, loggedUnit } from "@/lib/food/catalogue";
 import { todayIST } from "@/lib/health-rules";
 import { cn, getExactFoodEmoji, readLocalPref, writeLocalPref } from "@/lib/utils";
@@ -748,6 +749,7 @@ export function FoodEntryPanel({
   const [picked, setPicked] = useState<Picked | null>(null);
   const [custom, setCustom] = useState<{ name: string; sourceType: "user_entered" | "web_reference" } | null>(null);
   const [savedFoods, setSavedFoods] = useState<SavedFoodItem[]>(() => getSavedFoods(patientId));
+  const [photoOpen, setPhotoOpen] = useState(false);
   const quickLock = useRef(false);
 
   // Viewers never see the entry form, so they do not pay for these reads either.
@@ -899,6 +901,20 @@ export function FoodEntryPanel({
           </div>
           <Segmented options={MEAL_OPTIONS} value={mealType} onChange={setMealType} ariaLabel="Meal slot — कौन सा भोजन" size="sm" />
         </div>
+
+        {!picked && !custom ? (
+          <div className="tile flex flex-col gap-2 rounded-card p-3 sm:flex-row sm:items-center sm:justify-between">
+            <p className="min-w-0 text-sm text-ink">
+              <span lang="hi" className="font-semibold">थाली की फोटो लें, ऐप खाना पहचानेगा।</span>{" "}
+              <span lang="hi" className="text-ink-muted">फोटो फ़ोन पर ही पहचानी जाती है; जो आप दर्ज करेंगे, वह याद रहेगा।</span>
+            </p>
+            <Button variant="primary" className="shrink-0" onClick={() => setPhotoOpen(true)}>
+              <Camera aria-hidden className="h-4 w-4" />
+              <span lang="hi">खाने की फोटो से दर्ज करें</span>
+            </Button>
+          </div>
+        ) : null}
+        <FoodPhotoDialog isOpen={photoOpen} onClose={() => setPhotoOpen(false)} patientId={patientId} mealType={mealType} logDate={targetDate} onLogged={finishEntry} />
 
         {picked ? (
           <SelectedFoodEditor

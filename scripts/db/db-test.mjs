@@ -539,6 +539,39 @@ await test("memories are patient-scoped, writable by editors/owners only, create
   assert.equal((await dbA.from("soie_memories").delete().eq("id", mem.data.id)).error, null);
 });
 
+await test("learned meal photos: members read, strangers refused, bad shapes refused, embedding/foods immutable, created_by forced", async () => {
+  const embedding = Array.from({ length: 1024 }, (_, i) => (i % 7 === 0 ? 0.1 : 0.01));
+  const foods = [{ food_item_id: null, name: "Dal Tadka", quantity: 1, unit: "katori", calories: 180 }];
+  const ex = await dbA.from("food_photo_examples").insert({ patient_id: P.id, meal_type: "Lunch", foods, embedding, thumbnail: "data:image/jpeg;base64,/9j/", created_by: C.user.id }).select().single();
+  assert.equal(ex.error, null, ex.error && ex.error.message);
+  assert.equal(ex.data.created_by, A.user.id, "created_by is the caller, whatever was sent");
+  assert.deepEqual(ex.data.foods, foods, "JSON columns round-trip");
+  assert.equal(ex.data.embedding.length, 1024);
+  assert.deepEqual((await dbC.from("food_photo_examples").select("id").eq("patient_id", P.id)).data, [], "stranger sees nothing");
+  assert.equal((await dbC.from("food_photo_examples").insert({ patient_id: P.id, foods, embedding })).error.code, "42501", "stranger cannot write");
+  assert.equal((await dbA.from("food_photo_examples").select("id,foods").eq("patient_id", P.id)).data.length, 1, "members read");
+  assert.equal((await dbA.from("food_photo_examples").update({ embedding: [0] }).eq("id", ex.data.id)).error.code, "42501", "embedding never changes");
+  assert.equal((await dbA.from("food_photo_examples").update({ meal_type: "Dinner" }).eq("id", ex.data.id)).error, null);
+  assert.equal((await dbA.from("food_photo_examples").update({ foods: [] }).eq("id", ex.data.id)).error.code, "42501", "foods never change");
+  assert.equal((await dbA.from("food_photo_examples").insert({ patient_id: P.id, foods, embedding, thumbnail: "x".repeat(12001) })).error.code, "23514", "thumbnail size is capped");
+  assert.equal((await dbA.from("food_photo_examples").insert({ patient_id: P.id, foods, embedding, thumbnail: "https://evil.example/pixel.gif" })).error.code, "23514", "thumbnail must be an inline image");
+  assert.equal((await dbA.from("food_photo_examples").insert({ patient_id: P.id, foods, embedding: [1, 2, 3] })).error.code, "23514", "embedding must be 1024 numbers");
+  assert.equal((await dbA.from("food_photo_examples").insert({ patient_id: P.id, foods: [{ name: "x", quantity: -1, unit: "k", calories: 1, food_item_id: null }], embedding })).error.code, "23514", "food shape is checked");
+  assert.deepEqual((await dbC.from("food_photo_examples").delete().eq("id", ex.data.id).select("id")).data, []);
+  assert.equal((await dbA.from("food_photo_examples").delete().eq("id", ex.data.id)).error, null);
+});
+
+await test("a late table (food_photo_examples) is created on first use when a database predates it", async () => {
+  const { resetLateTables } = await import(src("lib/db/server/late-tables.ts"));
+  await getPool().query("DROP TABLE IF EXISTS food_photo_examples");
+  resetLateTables();
+  const read = await dbA.from("food_photo_examples").select("id").eq("patient_id", P.id);
+  assert.equal(read.error, null, read.error && read.error.message);
+  assert.deepEqual(read.data, []);
+  const [[{ n }]] = await getPool().query("SELECT COUNT(*) AS n FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = 'food_photo_examples'");
+  assert.equal(Number(n), 1, "table exists again");
+});
+
 await test("profiles: read and rename your own; role and other people's rows are out of reach", async () => {
   assert.equal((await dbA.from("profiles").select("id,email,display_name,role").eq("id", A.user.id).maybeSingle()).data.email, "a@test.dev");
   assert.equal((await dbA.from("profiles").update({ display_name: "Anita Ji" }).eq("id", A.user.id)).error, null);
@@ -584,7 +617,7 @@ await test("SQL injection, unknown tables/columns/operators and sensitive tables
   bad(await dbA.rpc("create_patient", { p_name: "x", p_age: "1; DROP TABLE patients" }), "22P02");
   bad(await dbA.rpc("list_patient_members", { p_patient: "not-a-uuid" }), "22P02");
   const [[{ n }]] = await getPool().query("SELECT COUNT(*) AS n FROM information_schema.tables WHERE table_schema = DATABASE()");
-  assert.equal(n, 27, "no table may have been dropped");
+  assert.equal(n, 28, "no table may have been dropped");
 });
 
 await test("a response never exceeds 1000 rows even when asked for more", async () => {

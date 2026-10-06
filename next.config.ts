@@ -25,6 +25,11 @@ const nextConfig: NextConfig = {
     return [
       { source: "/:path*", headers: securityHeaders },
       {
+        // Model and WASM files are versioned by file name: cache them for a year.
+        source: "/models/:path*",
+        headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }],
+      },
+      {
         // A cached worker script would pin users to an old version of it.
         source: "/sw.js",
         headers: [

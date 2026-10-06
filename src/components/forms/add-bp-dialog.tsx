@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useId, useState, type FormEvent } from "react";
-import { AlertTriangle, HeartPulse } from "lucide-react";
+import { AlertTriangle, Camera, HeartPulse } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useConfirm } from "@/components/ui/confirm-dialog";
 import { ChoiceGroup, Field, NumberInput, TextInput } from "@/components/ui/form-field";
@@ -10,6 +10,7 @@ import { useToast } from "@/components/ui/toast";
 import { BPChip } from "@/components/health/bp-chip";
 import { parseIntegerInput } from "@/components/health/format";
 import { MeasuredAtFields, hourOfTime, resolveMeasuredAt, useMeasuredAt } from "@/components/forms/measured-at-fields";
+import { DisplayPhotoDialog } from "@/components/vision/display-photo-dialog";
 import { useAuth } from "@/context/auth-context";
 import { DEFAULT_BP_THRESHOLDS, classifyBP, isPlausibleBP, type BPThresholds } from "@/lib/health-rules";
 import { getBPThresholds } from "@/services/settings-service";
@@ -63,6 +64,9 @@ function BPEntry({ patientId, presentation, onDone, onSuccess, thresholds: thres
   const [formError, setFormError] = useState("");
   const [saving, setSaving] = useState(false);
   const [safetyNote, setSafetyNote] = useState<{ category: "crisis" | "low"; text: string; reading: string } | null>(null);
+  // The camera: a photo of the machine's screen pre-fills the three numbers; the person confirms them.
+  const [photoOpen, setPhotoOpen] = useState(false);
+  const [fromPhoto, setFromPhoto] = useState(false);
 
   useEffect(() => {
     if (thresholdsProp) return;
@@ -234,6 +238,32 @@ function BPEntry({ patientId, presentation, onDone, onSuccess, thresholds: thres
           </p>
         ) : null}
       </div>
+
+      {canWrite ? (
+        <div className="space-y-1">
+          <Button variant="secondary" block onClick={() => setPhotoOpen(true)}>
+            <Camera aria-hidden className="h-4 w-4" />
+            <span lang="hi">BP मशीन की फोटो से अंक भरें</span>
+          </Button>
+          {fromPhoto ? (
+            <p lang="hi" role="status" className="text-xs text-ink-muted">
+              अंक फोटो से भरे गए हैं; सेव करने से पहले मशीन से मिला लें।
+            </p>
+          ) : null}
+        </div>
+      ) : null}
+      <DisplayPhotoDialog
+        kind="bp"
+        isOpen={photoOpen}
+        onClose={() => setPhotoOpen(false)}
+        onResult={(v) => {
+          setSystolic(String(v.systolic));
+          setDiastolic(String(v.diastolic));
+          setPulse(v.pulse === null ? "" : String(v.pulse));
+          setErrors({});
+          setFromPhoto(true);
+        }}
+      />
 
       <div className="grid grid-cols-2 gap-3">
         <Field label="ऊपर वाला (Systolic)" required error={errors.systolic} hint="mmHg">

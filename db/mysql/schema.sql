@@ -500,3 +500,21 @@ CREATE TABLE IF NOT EXISTS soie_memories (
   CONSTRAINT fk_memories_creator FOREIGN KEY (created_by) REFERENCES auth_users (id) ON DELETE SET NULL,
   CONSTRAINT ck_memories_kind CHECK (kind IN ('allergy', 'preference', 'routine', 'goal', 'note'))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- A meal photo the family confirmed: the model's image embedding plus the foods that
+-- were logged for it. New photos are matched against these, so the app learns the
+-- family's own dishes. No photo is stored, only a 64 px thumbnail for the review list.
+CREATE TABLE IF NOT EXISTS food_photo_examples (
+  id          CHAR(36) CHARACTER SET ascii NOT NULL,
+  patient_id  CHAR(36) CHARACTER SET ascii NOT NULL,
+  meal_type   VARCHAR(30) NULL,
+  foods       JSON NOT NULL,
+  embedding   JSON NOT NULL,
+  thumbnail   TEXT NULL,
+  created_by  CHAR(36) CHARACTER SET ascii NULL,
+  created_at  DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  PRIMARY KEY (id),
+  KEY idx_food_photo_examples_patient (patient_id, created_at),
+  CONSTRAINT fk_fpe_patient FOREIGN KEY (patient_id) REFERENCES patients (id) ON DELETE CASCADE,
+  CONSTRAINT fk_fpe_creator FOREIGN KEY (created_by) REFERENCES auth_users (id) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

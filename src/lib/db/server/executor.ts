@@ -4,6 +4,7 @@ import { DbClient } from "../builder";
 import type { DbResponse, Filter, QuerySpec, RpcSpec } from "../types";
 import { POLICIES, patientCondition, type CheckContext, type Policy, type Principal, type Sql } from "./policy";
 import { QueryError, getPool, toDbError, withTransaction } from "./pool";
+import { ensureLateTable } from "./late-tables";
 import { executeRpc } from "./rpc";
 import { TABLES, tableDef, type ColType, type TableDef } from "./schema";
 import { checkRule, fromDbValue, isUuid, toDbValue } from "./values";
@@ -511,6 +512,7 @@ export async function executeQuery(spec: QuerySpec, principal: Principal): Promi
     if (!spec || typeof spec !== "object" || typeof spec.table !== "string") throw new QueryError("invalid query", "PGRST100");
     if (!Array.isArray(spec.filters) || !Array.isArray(spec.order)) throw new QueryError("invalid query", "PGRST100");
     resolveTable(spec.table);
+    await ensureLateTable(spec.table);
 
     switch (spec.action) {
       case "select": {

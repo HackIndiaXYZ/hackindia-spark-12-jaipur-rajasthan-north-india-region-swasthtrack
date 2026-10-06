@@ -9,6 +9,8 @@
  * and only for the patients it was created for.
  */
 
+import { QueryError } from "./pool";
+
 export type Principal =
   | { kind: "user"; userId: string }
   | { kind: "system"; patientIds: string[] };
@@ -108,6 +110,21 @@ export const POLICIES: Record<string, Policy> = {
   },
 
   soie_memories: { ...patientScoped(), forced: ["created_by"], immutable: ["id", "patient_id", "created_by"] },
+  // A learned meal photo: the shape of the JSON columns is checked here (MySQL cannot), and
+  // only the meal label may change afterwards.
+  food_photo_examples: {
+    ...patientScoped(),
+    insert: {
+      level: "writer",
+      scopeCol: "patient_id",
+      check: async (_ctx, row) => {
+        validateFoodPhotoExample(row);
+        return true;
+      },
+    },
+    forced: ["created_by"],
+    immutable: ["id", "patient_id", "created_by", "embedding", "foods", "thumbnail"],
+  },
 
   // --- patients: created through the create_patient RPC only ------------
   patients: {
@@ -203,6 +220,34 @@ export const POLICIES: Record<string, Policy> = {
     forced: ["user_id"],
   },
 };
+
+const FOOD_PHOTO_EMBEDDING = 1024;
+const FOOD_PHOTO_MAX_FOODS = 20;
+const DATA_IMAGE_RE = /^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/]+=*$/;
+
+/** The JSON columns of food_photo_examples, as the app writes them; anything else is refused with 23514. */
+function validateFoodPhotoExample(row: Record<string, unknown>): void {
+  const fail = (what: string): never => {
+    throw new QueryError(`new row violates check constraint on "${what}"`, "23514");
+  };
+  const embedding = row.embedding;
+  if (!Array.isArray(embedding) || embedding.length !== FOOD_PHOTO_EMBEDDING) fail("embedding");
+  for (const v of embedding as unknown[]) if (typeof v !== "number" || !Number.isFinite(v) || Math.abs(v) > 10) fail("embedding");
+  const foods = row.foods;
+  if (!Array.isArray(foods) || foods.length === 0 || foods.length > FOOD_PHOTO_MAX_FOODS) fail("foods");
+  for (const f of foods as unknown[]) {
+    if (!f || typeof f !== "object") fail("foods");
+    const { food_item_id, name, quantity, unit, calories } = f as Record<string, unknown>;
+    if (food_item_id !== null && !(typeof food_item_id === "string" && /^[0-9a-f-]{36}$/i.test(food_item_id))) fail("foods");
+    if (typeof name !== "string" || name.trim() === "" || name.length > 255) fail("foods");
+    if (typeof quantity !== "number" || !(quantity > 0) || quantity > 1000) fail("foods");
+    if (typeof unit !== "string" || unit.length > 60) fail("foods");
+    if (typeof calories !== "number" || !(calories >= 0) || calories > 100000) fail("foods");
+  }
+  const thumbnail = row.thumbnail;
+  if (thumbnail !== null && thumbnail !== undefined && !(typeof thumbnail === "string" && DATA_IMAGE_RE.test(thumbnail))) fail("thumbnail");
+  if (row.meal_type !== null && row.meal_type !== undefined && typeof row.meal_type !== "string") fail("meal_type");
+}
 
 function ownSessionRows(p: Principal): Sql | null {
   if (p.kind !== "user") return null;

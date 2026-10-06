@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Third-party WASM loader scripts copied from @tensorflow/tfjs-tflite (see docs/photo-recognition.md).
+    "public/models/**",
   ]),
 ]);
 

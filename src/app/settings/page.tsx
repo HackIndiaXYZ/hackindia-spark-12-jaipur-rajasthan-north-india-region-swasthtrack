@@ -424,7 +424,7 @@ function SettingsView() {
       <div role="tabpanel" id={segmentedPanelId(tabsId, tab)} aria-labelledby={segmentedTabId(tabsId, tab)} className="space-y-4">
         {tab === "account" ? <AccountPanel patient={patient} onJoin={() => setIsJoinOpen(true)} /> : null}
         {tab === "family" ? <FamilyPanel patient={patient} /> : null}
-        {tab === "data" ? <DataPanel patient={patient} /> : null}
+        {tab === "data" ? <DataPanel patient={patient} canWrite={canWrite} /> : null}
 
         {FORM_TABS.includes(tab) ? (
           <form onSubmit={handleSave} noValidate aria-label="सेटिंग्स" className="space-y-4">
